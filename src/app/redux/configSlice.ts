@@ -9,6 +9,8 @@ export interface ConfigState {
     condenseShots: boolean;
     unlimitedSpells: boolean;
     infiniteSpells: boolean;
+    infiniteMoney: boolean;
+    infiniteHp: boolean;
     showDivides: boolean;
     showGreekSpells: boolean;
     showDirectActionCalls: boolean;
@@ -25,6 +27,9 @@ export interface ConfigState {
     unlocks: {
       [key: string]: boolean;
     };
+    var_money: number;
+    var_hp: number;
+    var_hp_max: number;
     requirements: {
       enemies: boolean;
       projectiles: boolean;
@@ -45,6 +50,8 @@ export const initialState: ConfigState = {
     condenseShots: true,
     unlimitedSpells: true,
     infiniteSpells: false,
+    infiniteMoney: true,
+    infiniteHp: true,
     showDivides: true,
     showGreekSpells: true,
     showDirectActionCalls: true,
@@ -92,6 +99,9 @@ export const initialState: ConfigState = {
       card_unlocked_homing_wand: false,
       card_unlocked_fish: false,
     },
+    var_money: 10000,
+    var_hp: 100,
+    var_hp_max: 100,
     requirements: {
       enemies: false,
       projectiles: false,

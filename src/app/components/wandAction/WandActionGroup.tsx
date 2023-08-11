@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { DEFAULT_SIZE, WandAction } from './WandAction';
+import { NextActionArrow } from '../shotResult/TreeArrows';
 import {
   GroupedObject,
   isArrayObject,
@@ -17,7 +18,6 @@ const MainDiv = styled.div`
   font-family: monospace;
   font-weight: bold;
   font-size: 12px;
-  background-color: rgba(64, 128, 64, 0.3);
 `;
 
 const GroupDiv = styled.div`
@@ -37,13 +37,14 @@ const CountDiv = styled.div<{
   flex: 1 1 auto;
   justify-content: center;
   color: white;
-  background-color: green;
+  background-color: black;
   height: ${(props) => props.size / 3}px;
   font-family: monospace;
   font-weight: bold;
   font-size: 12px;
   border: 1px solid #aaa;
   line-height: ${(props) => props.size / 3}px;
+  font-family: var(--font-family-noita-default);
 `;
 
 const SpacerDiv = styled.div<{
@@ -54,6 +55,18 @@ const SpacerDiv = styled.div<{
   min-width: 5px;
   max-width: ${(props) => props.size / 4}px;
   height: ${(props) => props.size / 4}px;
+`;
+/*
+  background-image: url(/data/inventory/action_tree_box.png);
+ */
+const WandActionGroupWandActionBorder = styled(WandActionBorder)`
+  padding: 3px;
+  border: 3px dotted #656565;
+  border-radius: 12px;
+  background-image: none;
+  background-color: rgba(108, 76, 34, 0.1);
+  margin: 4px 0 4px 48px;
+  position: relative;
 `;
 
 type Props = {
@@ -68,9 +81,10 @@ export function WandActionGroup(props: Props) {
 
   if (isRawObject(group)) {
     return (
-      <WandActionBorder size={size}>
+      <WandActionGroupWandActionBorder size={size}>
+        <NextActionArrow />
         <WandAction {...group} size={size} />
-      </WandActionBorder>
+      </WandActionGroupWandActionBorder>
     );
   } else if (isArrayObject(group)) {
     return (
@@ -88,7 +102,7 @@ export function WandActionGroup(props: Props) {
         </GroupDiv>
         <CountParentDiv>
           <SpacerDiv size={size} />
-          <CountDiv size={size}>x{group.count}</CountDiv>
+          <CountDiv size={size}>x {group.count}</CountDiv>
           <SpacerDiv size={size} />
         </CountParentDiv>
       </MainDiv>

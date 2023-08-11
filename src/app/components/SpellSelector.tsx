@@ -7,26 +7,65 @@ import { WandAction } from './wandAction/WandAction';
 import WandActionBorder from './wandAction/WandActionBorder';
 import { useAppSelector } from '../redux/hooks';
 import { ConfigState, selectConfig } from '../redux/configSlice';
-import { Action } from '../calc/extra/types';
+import { Action, actionTypeInfoMap } from '../calc/extra/types';
+import { groupBy, objectEntries } from '../util/util';
+import { Tabs } from './generic';
 import {
-  ActionType,
-  ActionTypeId,
-  groupBy,
-  actionTypeToIdMap,
-  actionTypeInfoMap,
-  objectEntries,
-} from '../util/util';
-import { Tabs } from './generic/Tabs';
+  ExportButton,
+  LoadButton,
+  ResetButton,
+  UndoButton,
+  RedoButton,
+} from './buttons';
 
 const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1 1;
+  background-color: #100e0e;
+`;
+
+const SpellCategorySpellsDiv = styled.div<{
+  size: number;
+}>`
+  display: grid;
+  flex-wrap: wrap;
+  flex: 1;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(${({ size }) => size}px, 1fr)
+  );
+  gap: ${({ size }) => size * 0.16}px;
+  padding: 7px 6px;
+`;
+
+const SpellSelectorWandActionBorder = styled(WandActionBorder)`
+  background-image: url(/data/inventory/grid_box.png);
+  padding-left: 0px;
+  padding-top: 0px;
+`;
+
+const SpellShortcuts = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-self: center;
   width: 100%;
 `;
 
-const SpellCategorySpellsDiv = styled.div`
+const EditButtons = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-self: center;
+`;
+
+const SpellHotbar = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-self: center;
+  background-color: black;
 `;
 
 const isSpellUnlocked = (
@@ -49,17 +88,19 @@ type WandActionSelectProps = {
 };
 
 const WandActionSelect = (props: WandActionSelectProps) => (
-  <WandActionDragSource actionId={props.action.id} key={props.action.id}>
-    <WandActionBorder size={props.size}>
+  <SpellSelectorWandActionBorder size={props.size}>
+    <WandActionDragSource actionId={props.action.id} key={props.action.id}>
       <WandAction action={props.action} size={props.size} />
-    </WandActionBorder>
-  </WandActionDragSource>
+    </WandActionDragSource>
+  </SpellSelectorWandActionBorder>
 );
 
 type Props = {};
 
 export function SpellSelector(props: Props) {
   const { config } = useAppSelector(selectConfig);
+
+  const spellSize = 40;
 
   const unlockedActions = useMemo(
     () =>
@@ -70,11 +111,9 @@ export function SpellSelector(props: Props) {
       ),
     [config.unlocks, config.showBeta],
   );
+
   const actionsByType = useMemo(() => {
-    return groupBy(
-      unlockedActions,
-      ({ type }) => actionTypeToIdMap.get(type as ActionTypeId) as ActionType,
-    );
+    return groupBy(unlockedActions, ({ type }) => type);
   }, [unlockedActions]);
 
   const tabPerType = useMemo(() => {
@@ -87,9 +126,13 @@ export function SpellSelector(props: Props) {
           title: actionTypeMapping?.name,
           iconSrc: actionTypeMapping?.src,
           content: (
-            <SpellCategorySpellsDiv>
-              {actions.map((a) => (
-                <WandActionSelect action={a} size={32} key={a.id} />
+            <SpellCategorySpellsDiv size={spellSize}>
+              {actions.map((action) => (
+                <WandActionSelect
+                  action={action}
+                  size={spellSize}
+                  key={action.id}
+                />
               ))}
             </SpellCategorySpellsDiv>
           ),
@@ -103,9 +146,13 @@ export function SpellSelector(props: Props) {
         title: 'All Spells',
         iconSrc: '',
         content: (
-          <SpellCategorySpellsDiv>
-            {actions.map((a) => (
-              <WandActionSelect action={a} size={32} key={a.id} />
+          <SpellCategorySpellsDiv size={spellSize}>
+            {actions.map((action) => (
+              <WandActionSelect
+                action={action}
+                size={spellSize}
+                key={action.id}
+              />
             ))}
           </SpellCategorySpellsDiv>
         ),
@@ -125,6 +172,16 @@ export function SpellSelector(props: Props) {
     <MainDiv>
       <SectionHeader title={'Spells'} />
       <Tabs tabs={tabs} />
+      <SpellShortcuts>
+        <EditButtons>
+          <UndoButton />
+          <RedoButton />
+          <ResetButton />
+          <LoadButton />
+          <ExportButton />
+        </EditButtons>
+        <SpellHotbar></SpellHotbar>
+      </SpellShortcuts>
     </MainDiv>
   );
 }
