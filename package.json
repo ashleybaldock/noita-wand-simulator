@@ -40,7 +40,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
+      "plugin:@typescript-eslint/recommended",
       "react-app/jest"
     ]
   },

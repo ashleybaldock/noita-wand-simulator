@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 const MainDiv = styled.div`
   padding: 3px;
@@ -74,6 +74,17 @@ const ContentDiv = styled.div`
   border-radius: 2px 6px;
 `;
 
+const HiddenContentDiv = styled.div`
+  visibility: hidden;
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  top: 0;
+  left: -200vw;
+  z-index: -100000px;
+`;
+
 export type Tab = {
   title: string;
   content: React.ReactElement;
@@ -110,6 +121,7 @@ export function Tabs(props: React.PropsWithChildren<Props>) {
             key={t.title}
           >
             {t.title}
+            <HiddenContentDiv>{tabs[index].content}</HiddenContentDiv>
           </TitleDiv>
         ))}
       </TabTitlesDiv>
