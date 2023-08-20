@@ -49,7 +49,7 @@ export const initialState: ConfigState = {
   config: {
     condenseShots: true,
     unlimitedSpells: true,
-    infiniteSpells: false,
+    infiniteSpells: true,
     infiniteMoney: true,
     infiniteHp: true,
     showDivides: true,
@@ -62,9 +62,9 @@ export const initialState: ConfigState = {
     showDontDraw: true,
     swapOnMove: true,
     showActionTree: true,
-    showSpellsInCategories: false,
+    showSpellsInCategories: true,
     endSimulationOnRefresh: true,
-    showBeta: false,
+    showBeta: true,
     unlocks: {
       card_unlocked_black_hole: false,
       card_unlocked_everything: false,
