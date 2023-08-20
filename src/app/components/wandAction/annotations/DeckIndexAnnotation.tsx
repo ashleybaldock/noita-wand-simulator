@@ -1,6 +1,9 @@
 import styled from 'styled-components';
+import { ActionCall, GroupedProjectile } from '../../../calc/eval/types';
 import { useAppSelector } from '../../../redux/hooks';
 import { selectConfig } from '../../../redux/configSlice';
+
+const DEFAULT_SIZE = 48;
 
 /*
   height: ${(props) => props.size / 4}px;
@@ -37,19 +40,23 @@ const IndexDiv = styled.div<{
 `;
 
 type Props = {
-  size: number;
+  size?: number;
   deckIndex?: number | string;
-};
+} & Partial<ActionCall> &
+  Partial<GroupedProjectile>;
 
 export function DeckIndexAnnotation(props: Props) {
+  const { deckIndex } = props;
+  const size = props.size ?? DEFAULT_SIZE;
   const { config } = useAppSelector(selectConfig);
-  if (props.deckIndex === undefined || !config.showDeckIndexes) {
+
+  if (deckIndex === undefined || !config.showDeckIndexes) {
     return null;
   }
 
-  if (typeof props.deckIndex === 'number') {
-    return <IndexDiv size={props.size}>{props.deckIndex + 1}</IndexDiv>;
+  if (typeof deckIndex === 'number') {
+    return <IndexDiv size={size}>{deckIndex + 1}</IndexDiv>;
   } else {
-    return <IndexDiv size={props.size}>{props.deckIndex}</IndexDiv>;
+    return <IndexDiv size={size}>{deckIndex}</IndexDiv>;
   }
 }

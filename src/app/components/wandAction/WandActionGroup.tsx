@@ -8,6 +8,14 @@ import {
   isRawObject,
   simplifyMultipleObject,
 } from '../../util/combineGroups';
+import {
+  ActionProxyAnnotation,
+  ActionSourceAnnotation,
+  DeckIndexAnnotation,
+  DontDrawAnnotation,
+  FriendlyFireAnnotation,
+  RecursionAnnotation,
+} from './annotations/';
 import WandActionBorder from './WandActionBorder';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 
@@ -79,7 +87,7 @@ type Props = {
 };
 
 export function WandActionGroup(props: Props) {
-  const size = props.size || DEFAULT_SIZE;
+  const size = props.size ?? DEFAULT_SIZE;
 
   const group = simplifyMultipleObject(props.group);
 
@@ -88,6 +96,23 @@ export function WandActionGroup(props: Props) {
       <WandActionGroupWandActionBorder size={size}>
         <NextActionArrow />
         <WandAction {...group} size={size} />
+        <RecursionAnnotation size={size} {...group} />
+        <ActionSourceAnnotation
+          size={size}
+          {...group} /*source={props.source}*/
+        />
+        <ActionProxyAnnotation size={size} {...group} /*proxy={props.proxy}*/ />
+        <DontDrawAnnotation
+          size={size}
+          {...group}
+          // dontDrawActions={props.dont_draw_actions}
+        />
+        <DeckIndexAnnotation
+          size={size}
+          {...group}
+          // deckIndex={props.deckIndex}
+        />
+        <FriendlyFireAnnotation size={size} />
       </WandActionGroupWandActionBorder>
     );
   } else if (isArrayObject(group)) {

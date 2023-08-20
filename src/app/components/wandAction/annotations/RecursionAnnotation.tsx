@@ -1,6 +1,10 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
+import { ActionCall, GroupedProjectile } from '../../../calc/eval/types';
+import { iterativeActions, recursiveActions } from '../../../calc/eval/lookups';
 import { useAppSelector } from '../../../redux/hooks';
 import { selectConfig } from '../../../redux/configSlice';
+
+const DEFAULT_SIZE = 48;
 
 const RecursionDiv = styled.div<{
   size: number;
@@ -9,13 +13,13 @@ const RecursionDiv = styled.div<{
   position: absolute;
   bottom: -7px;
   left: 0;
-  width: ${(props) => props.size / 4}px;
-  height: ${(props) => props.size / 4}px;
+  width: ${({ size }) => size / 4}px;
+  height: ${({ size }) => size / 4}px;
   border: 1px solid #999;
   color: black;
   background-color: #3bb;
   font-size: 10px;
-  line-height: ${(props) => props.size / 3 - 2}px;
+  line-height: ${({ size }) => size / 3 - 2}px;
   text-align: center;
   font-family: var(--font-family-noita-default);
 `;
@@ -26,44 +30,45 @@ const IterationDiv = styled.div<{
 }>`
   position: absolute;
   bottom: -7px;
-  left: ${(props) =>
-    (props.size * props.offset) / 4 + (props.offset > 0 ? 1 : 0)}px;
-  width: ${(props) => props.size / 4}px;
-  height: ${(props) => props.size / 4}px;
+  left: ${({ size, offset }) => (size * offset) / 4 + (offset > 0 ? 1 : 0)}px;
+  width: ${({ size }) => size / 4}px;
+  height: ${({ size }) => size / 4}px;
   border: 1px solid #999;
   color: black;
   background-color: #a5e;
   font-size: 10px;
-  line-height: ${(props) => props.size / 3 - 2}px;
+  line-height: ${({ size }) => size / 3 - 2}px;
   text-align: center;
   font-family: var(--font-family-noita-default);
 `;
 
 type Props = {
-  size: number;
-  recursive: boolean;
-  iterative: boolean;
-  recursion?: number | string;
-  iteration?: number | string;
-};
+  size?: number;
+} & Partial<ActionCall> &
+  Partial<GroupedProjectile>;
 
 export function RecursionAnnotation(props: Props) {
+  const { action, recursion, iteration } = props;
+  const size = props.size ?? DEFAULT_SIZE;
   const { config } = useAppSelector(selectConfig);
+
   if (!config.showRecursion) {
     return null;
   }
 
-  const rec =
-    props.recursion !== undefined &&
-    (props.recursive || (props.iterative && props.recursion > 0));
-  const itr = props.iteration !== undefined && props.iterative;
+  const recursive = action && recursiveActions().includes(action?.id);
+  const iterative = action && iterativeActions().includes(action?.id);
+
+  const showRecursion =
+    recursion !== undefined && (recursive || (iterative && recursion > 0));
+  const showIteration = iteration !== undefined && iterative;
 
   return (
     <>
-      {rec && <RecursionDiv size={props.size}>{props.recursion}</RecursionDiv>}
-      {itr && (
-        <IterationDiv size={props.size} offset={rec ? 1 : 0}>
-          {props.iteration}
+      {showRecursion && <RecursionDiv size={size}>{recursion}</RecursionDiv>}
+      {showIteration && (
+        <IterationDiv size={size} offset={showRecursion ? 1 : 0}>
+          {iteration}
         </IterationDiv>
       )}
     </>

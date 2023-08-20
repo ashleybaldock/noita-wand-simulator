@@ -1,6 +1,9 @@
 import styled from 'styled-components';
+import { ActionCall, GroupedProjectile } from '../../../calc/eval/types';
 import { useAppSelector } from '../../../redux/hooks';
 import { selectConfig } from '../../../redux/configSlice';
+
+const DEFAULT_SIZE = 48;
 
 const DontDrawDiv = styled.div<{
   size: number;
@@ -25,13 +28,16 @@ const DontDrawDiv = styled.div<{
 type Props = {
   size: number;
   dontDrawActions?: boolean;
-};
+} & Partial<ActionCall> &
+  Partial<GroupedProjectile>;
 
 export function DontDrawAnnotation(props: Props) {
+  const { dontDrawActions } = props;
+  const size = props.size ?? DEFAULT_SIZE;
   const { config } = useAppSelector(selectConfig);
-  if (!props.dontDrawActions || !config.showDontDraw) {
+  if (!dontDrawActions || !config.showDontDraw) {
     return null;
   }
 
-  return <DontDrawDiv size={props.size}>D</DontDrawDiv>;
+  return <DontDrawDiv size={size}>D</DontDrawDiv>;
 }

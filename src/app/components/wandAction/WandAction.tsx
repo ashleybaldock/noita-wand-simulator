@@ -1,18 +1,7 @@
 import styled from 'styled-components/macro';
 import { useState } from 'react';
 import { actionTypeInfoMap } from '../../calc/extra/types';
-import {
-  ActionProxyAnnotation,
-  ActionSourceAnnotation,
-  DeckIndexAnnotation,
-  DeleteSpellAnnotation,
-  DontDrawAnnotation,
-  FriendlyFireAnnotation,
-  NoManaAnnotation,
-  RecursionAnnotation,
-} from './annotations/';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
-import { iterativeActions, recursiveActions } from '../../calc/eval/lookups';
 
 export const DEFAULT_SIZE = 48;
 
@@ -51,7 +40,7 @@ type Props = {
 export function WandAction(props: Props) {
   const [mouseOver, setMouseOver] = useState(false);
 
-  const size = props.size || DEFAULT_SIZE;
+  const size = props.size ?? DEFAULT_SIZE;
 
   if (!props.action) {
     return (
@@ -73,28 +62,6 @@ export function WandAction(props: Props) {
       onMouseEnter={() => setMouseOver(true)}
       onMouseLeave={() => setMouseOver(false)}
       mouseOver={mouseOver}
-    >
-      <DeckIndexAnnotation size={size} deckIndex={props.deckIndex} />
-      <RecursionAnnotation
-        size={size}
-        recursive={recursiveActions().includes(props.action?.id)}
-        iterative={iterativeActions().includes(props.action?.id)}
-        recursion={props.recursion}
-        iteration={props.iteration}
-      />
-      <ActionSourceAnnotation size={size} source={props.source} />
-      <ActionProxyAnnotation size={size} proxy={props.proxy} />
-      <DeleteSpellAnnotation
-        size={size}
-        visible={mouseOver}
-        deleteSpell={props.onDeleteSpell}
-      />
-      <NoManaAnnotation size={size} />
-      <FriendlyFireAnnotation size={size} />
-      <DontDrawAnnotation
-        size={size}
-        dontDrawActions={props.dont_draw_actions}
-      />
-    </ImageBackgroundDiv>
+    ></ImageBackgroundDiv>
   );
 }

@@ -1,10 +1,16 @@
+import { useState } from 'react';
 import styled from 'styled-components/macro';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { selectWand, setSpellAtIndex } from '../redux/wandSlice';
 import { getActionById } from '../calc/eval/util';
 import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
+import {
+  DeckIndexAnnotation,
+  DeleteSpellAnnotation,
+  FriendlyFireAnnotation,
+  NoManaAnnotation,
+} from './wandAction/annotations/';
 import { DEFAULT_SIZE, WandAction } from './wandAction/WandAction';
-// import { WandBorder } from './WandBorder';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import WandActionBorder from './wandAction/WandActionBorder';
 import { Action } from '../calc/extra/types';
@@ -26,64 +32,78 @@ const StyledListItem = styled.li`
   list-style-type: none;
 `;
 
-type Props = {};
+type Props = {
+  spellAction: Action;
+  wandIndex: number;
+  deckIndex: number;
+  size: number;
+};
 
-export function WandActionEditor(props: Props) {
+function ActionComponent(props: Props) {
+  const { spellAction, wandIndex, deckIndex, size } = props;
   const dispatch = useAppDispatch();
-  const { spells } = useAppSelector(selectWand);
-
-  const spellActions = spells.map((s) => (s ? getActionById(s) : null));
-
-  const size = DEFAULT_SIZE;
+  const [mouseOver, setMouseOver] = useState(false);
 
   const handleDeleteSpell = (wandIndex: number) => {
     dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
   };
 
-  const createActionComponent = (
-    spellAction: Action | null,
-    wandIndex: number,
-    deckIndex: number,
-  ) => {
-    if (spellAction) {
-      return (
-        <WandActionDropTarget wandIndex={wandIndex}>
-          <WandActionBorder size={size}>
-            <WandActionDragSource
-              actionId={spellAction.id}
-              sourceWandIndex={wandIndex}
-            >
-              <WandAction
-                action={spellAction}
-                deckIndex={deckIndex}
-                onDeleteSpell={() => handleDeleteSpell(wandIndex)}
-              />
-            </WandActionDragSource>
-          </WandActionBorder>
-        </WandActionDropTarget>
-      );
-    } else {
-      return (
-        <WandActionDropTarget wandIndex={wandIndex}>
-          <WandActionBorder size={size} />
-        </WandActionDropTarget>
-      );
-    }
-  };
+  return (
+    <WandActionDropTarget wandIndex={wandIndex}>
+      <WandActionBorder
+        size={size}
+        onMouseEnter={() => setMouseOver(true)}
+        onMouseLeave={() => setMouseOver(false)}
+      >
+        <WandActionDragSource
+          actionId={spellAction.id}
+          sourceWandIndex={wandIndex}
+        >
+          <WandAction
+            action={spellAction}
+            deckIndex={deckIndex}
+            onDeleteSpell={() => handleDeleteSpell(wandIndex)}
+          />
+          <DeleteSpellAnnotation
+            size={size}
+            visible={mouseOver}
+            deleteSpell={() => handleDeleteSpell(wandIndex)}
+          />
+        </WandActionDragSource>
+        <DeckIndexAnnotation size={size} deckIndex={deckIndex} />
+        <NoManaAnnotation size={size} />
+        <FriendlyFireAnnotation size={size} />
+      </WandActionBorder>
+    </WandActionDropTarget>
+  );
+}
+
+export function WandActionEditor() {
+  const { spells } = useAppSelector(selectWand);
+
+  const size = DEFAULT_SIZE;
+  const spellActions = spells.map((s) => (s ? getActionById(s) : null));
 
   let deckIndex = 0;
-  let result: ReturnType<typeof createActionComponent>[] = [];
 
-  spellActions.forEach((sa, index) => {
-    result.push(
-      <StyledListItem key={index}>
-        {createActionComponent(sa, index, deckIndex)}
-      </StyledListItem>,
-    );
-    if (sa) {
-      deckIndex += 1;
-    }
-  });
-
-  return <StyledList>{result}</StyledList>;
+  return (
+    <StyledList>
+      {spellActions.map((spellAction, wandIndex) => (
+        <StyledListItem key={wandIndex}>
+          <WandActionDropTarget wandIndex={wandIndex}>
+            <WandActionBorder size={size}>
+              {spellAction && (
+                <ActionComponent
+                  size={size}
+                  spellAction={spellAction}
+                  wandIndex={wandIndex}
+                  deckIndex={++deckIndex}
+                />
+              )}
+            </WandActionBorder>
+          </WandActionDropTarget>
+        </StyledListItem>
+      ))}
+    </StyledList>
+  );
 }

@@ -1,4 +1,7 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
+import { useDrag } from 'react-dnd';
+
+const DEFAULT_SIZE = 48;
 
 const DeleteDiv = styled.div<{
   size: number;
@@ -6,30 +9,38 @@ const DeleteDiv = styled.div<{
   position: absolute;
   top: 0;
   right: 0;
-  width: ${(props) => props.size / 4}px;
-  height: ${(props) => props.size / 4}px;
+  width: ${({ size }) => size / 4}px;
+  height: ${({ size }) => size / 4}px;
   border: 1px solid #999;
   color: black;
   background-color: #a33;
   font-size: 10px;
-  line-height: ${(props) => props.size / 3 - 2}px;
+  line-height: ${({ size }) => size / 3 - 2}px;
   text-align: center;
   font-family: var(--font-family-noita-default);
 `;
 
 type Props = {
-  size: number;
+  size?: number;
   visible: boolean;
   deleteSpell?: () => void;
 };
 
 export function DeleteSpellAnnotation(props: Props) {
-  if (!props.visible || !props.deleteSpell) {
+  const { visible, deleteSpell } = props;
+  const size = props.size ?? DEFAULT_SIZE;
+  const [{ isDragging }] = useDrag(() => ({
+    type: 'action',
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
+  if (isDragging || !visible || !deleteSpell) {
     return null;
   }
 
   return (
-    <DeleteDiv size={props.size} onClick={props.deleteSpell}>
+    <DeleteDiv size={size} onClick={deleteSpell}>
       X
     </DeleteDiv>
   );
