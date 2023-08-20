@@ -28,14 +28,14 @@ export function observeStore<T>(
   let currentState: T;
 
   function handleChange() {
-    let nextState = select(store.getState());
+    const nextState = select(store.getState());
     if (nextState !== currentState) {
       currentState = nextState;
       onChange(currentState);
     }
   }
 
-  let unsubscribe = store.subscribe(handleChange);
+  const unsubscribe = store.subscribe(handleChange);
   handleChange();
   return unsubscribe;
 }

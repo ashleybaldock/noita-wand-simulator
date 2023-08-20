@@ -39,9 +39,14 @@
     "generate-entity-map": "python scripts/generate_entity_map.py"
   },
   "eslintConfig": {
+    "root": true,
+    "env": {
+      "es6": true,
+      "node": true
+    },
     "extends": [
-      "plugin:@typescript-eslint/recommended",
-      "react-app/jest"
+      "react-app/jest",
+      "react-app"
     ]
   },
   "prettier": {
