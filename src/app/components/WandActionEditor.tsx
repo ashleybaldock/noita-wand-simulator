@@ -3,17 +3,18 @@ import styled from 'styled-components/macro';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { selectWand, setSpellAtIndex } from '../redux/wandSlice';
 import { getActionById } from '../calc/eval/util';
+import { DEFAULT_SIZE } from '../util';
 import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
 import {
   DeckIndexAnnotation,
   DeleteSpellAnnotation,
   FriendlyFireAnnotation,
   NoManaAnnotation,
-} from './wandAction/annotations/';
-import { DEFAULT_SIZE, WandAction } from './wandAction/WandAction';
+} from './Annotations/';
+import { WandAction } from './wandAction/WandAction';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import WandActionBorder from './wandAction/WandActionBorder';
-import { Action } from '../calc/extra/types';
+import { Action } from '../calc';
 
 const StyledList = styled.ul`
   display: flex;
@@ -90,18 +91,14 @@ export function WandActionEditor() {
     <StyledList>
       {spellActions.map((spellAction, wandIndex) => (
         <StyledListItem key={wandIndex}>
-          <WandActionDropTarget wandIndex={wandIndex}>
-            <WandActionBorder size={size}>
-              {spellAction && (
-                <ActionComponent
-                  size={size}
-                  spellAction={spellAction}
-                  wandIndex={wandIndex}
-                  deckIndex={++deckIndex}
-                />
-              )}
-            </WandActionBorder>
-          </WandActionDropTarget>
+          {spellAction && (
+            <ActionComponent
+              size={size}
+              spellAction={spellAction}
+              wandIndex={wandIndex}
+              deckIndex={++deckIndex}
+            />
+          )}
         </StyledListItem>
       ))}
     </StyledList>

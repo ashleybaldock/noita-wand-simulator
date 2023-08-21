@@ -1,22 +1,19 @@
 import styled from 'styled-components/macro';
-import { useState } from 'react';
-import { actionTypeInfoMap } from '../../calc/extra/types';
-import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
-
-export const DEFAULT_SIZE = 48;
+import { DEFAULT_SIZE } from '../../util';
+import {
+  actionTypeInfoMap,
+  Action,
+  ActionCall,
+  GroupedProjectile,
+} from '../../calc';
 
 const ImageBackgroundDiv = styled.div<{
   size: number;
-  actionImgUrl: string;
-  typeImgUrl?: string;
-  mouseOver: boolean;
 }>`
   position: relative;
   min-width: ${({ size }) => size}px;
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
-  background-image: url(/${({ actionImgUrl }) => actionImgUrl})
-    ${({ typeImgUrl }) => (typeImgUrl ? `, url(/${typeImgUrl})` : ``)};
   background-size: cover;
   font-family: monospace;
   font-weight: bold;
@@ -38,30 +35,26 @@ type Props = {
   Partial<GroupedProjectile>;
 
 export function WandAction(props: Props) {
-  const [mouseOver, setMouseOver] = useState(false);
+  const { size = DEFAULT_SIZE, action } = props;
+  // const [mouseOver, setMouseOver] = useState(false);
 
-  const size = props.size ?? DEFAULT_SIZE;
+  const actionToBackgroundImage = (action?: Action) => {
+    if (!action) {
+      return '';
+    }
+    const typeImgUrl = actionTypeInfoMap[action.type]?.src ?? '';
+    return `url("/${action.sprite}"), ${typeImgUrl && `url("/${typeImgUrl}")`}`;
+  };
 
-  if (!props.action) {
-    return (
-      <ImageBackgroundDiv
-        size={size}
-        onMouseEnter={() => setMouseOver(true)}
-        onMouseLeave={() => setMouseOver(false)}
-        actionImgUrl=""
-        mouseOver={mouseOver}
-      />
-    );
-  }
+  const style = { backgroundImage: actionToBackgroundImage(action) };
+  console.log(style);
 
   return (
     <ImageBackgroundDiv
+      style={style}
       size={size}
-      actionImgUrl={props.action.sprite}
-      typeImgUrl={actionTypeInfoMap[props.action.type]?.src}
-      onMouseEnter={() => setMouseOver(true)}
-      onMouseLeave={() => setMouseOver(false)}
-      mouseOver={mouseOver}
-    ></ImageBackgroundDiv>
+      // onMouseEnter={() => setMouseOver(true)}
+      // onMouseLeave={() => setMouseOver(false)}
+    />
   );
 }

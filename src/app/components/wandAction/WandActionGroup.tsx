@@ -1,13 +1,14 @@
 import styled from 'styled-components/macro';
-import { DEFAULT_SIZE, WandAction } from './WandAction';
+import { WandAction } from './WandAction';
 import { NextActionArrow } from '../shotResult/TreeArrows';
 import {
+  DEFAULT_SIZE,
   GroupedObject,
   isArrayObject,
   isMultipleObject,
   isRawObject,
   simplifyMultipleObject,
-} from '../../util/combineGroups';
+} from '../../util';
 import {
   ActionProxyAnnotation,
   ActionSourceAnnotation,
@@ -15,9 +16,9 @@ import {
   DontDrawAnnotation,
   FriendlyFireAnnotation,
   RecursionAnnotation,
-} from './annotations/';
+} from '../Annotations/';
 import WandActionBorder from './WandActionBorder';
-import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
+import { ActionCall, GroupedProjectile } from '../../calc';
 
 const MainDiv = styled.div.attrs({
   className: 'MainDiv',
@@ -50,12 +51,12 @@ const CountDiv = styled.div<{
   justify-content: center;
   color: white;
   background-color: black;
-  height: ${(props) => props.size / 3}px;
+  height: ${({ size }) => size / 3}px;
   font-family: monospace;
   font-weight: bold;
   font-size: 12px;
   border: 1px solid #aaa;
-  line-height: ${(props) => props.size / 3}px;
+  line-height: ${({ size }) => size / 3}px;
   font-family: var(--font-family-noita-default);
 `;
 
@@ -65,8 +66,8 @@ const SpacerDiv = styled.div<{
   display: flex;
   flex: 1 1 auto;
   min-width: 5px;
-  max-width: ${(props) => props.size / 4}px;
-  height: ${(props) => props.size / 4}px;
+  max-width: ${({ size }) => size / 4}px;
+  height: ${({ size }) => size / 4}px;
 `;
 /*
   background-image: url(/data/inventory/action_tree_box.png);
@@ -87,7 +88,7 @@ type Props = {
 };
 
 export function WandActionGroup(props: Props) {
-  const size = props.size ?? DEFAULT_SIZE;
+  const { size = DEFAULT_SIZE } = props;
 
   const group = simplifyMultipleObject(props.group);
 

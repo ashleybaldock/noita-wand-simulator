@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro';
-import { Action } from '../../../calc/extra/types';
-import { DEFAULT_SIZE } from '../../wandAction/WandAction';
+import { Action } from '../../../calc';
+import { DEFAULT_SIZE } from '../../../util';
 import { ActionTreeShotResultNodeDiv } from '../../shotResult/ActionTreeShotResult';
 
 const LineDiv = styled.div<{
@@ -90,8 +90,7 @@ type Props = {
 };
 
 export function NextActionArrow(props: Props) {
-  const size = props.size || DEFAULT_SIZE;
-  const swept = props.swept || false;
+  const { size = DEFAULT_SIZE, swept = false } = props;
 
   return (
     <>

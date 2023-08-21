@@ -58,37 +58,10 @@ import {
   GlobalsGetValue,
   GlobalsSetValue,
 } from "../extra/ext_functions";
-import { Random, SetRandomSeed, GameGetFrameNum } from "../extra/util";
-import { ActionSource } from "../eval/types";
+import { Random, SetRandomSeed, GameGetFrameNum, ipairs, luaFor } from "../extra/util";
+import { ActionSource } from "../eval";
 
 """
-
-lua_utils = """
-function* luaFor(start: number, count: number, step: number = 1) {
-  let cur = start, n = count;
-  while (--n >= 0) {
-    yield cur += step;
-  }
-}
-
-function* ipairs<T>(arr: T[], tag: string = ''): Generator<[number,T]> {
-  let i = -1;
-  while (++i < arr.length) {
-    //console.log(`${tag}(${i}) ${(arr as unknown as Action[]).map(({id}, idx) => idx === i ? `[${id}]` : `${id}`).join(', ')}`);
-    yield [i, arr[i]];
-  }
-}
-
-"""
-# # Note how this version a) copies the input array
-# function* ipairs<T>([...arr]: T[]): Generator<[number,T]> {
-  # const len = arr.length;
-  # let i = -1;
-  # # and b) compares against the original length
-  # while (++i < len) {
-  #   yield [i, arr[i]];
-  # }
-# }
 
 # In practice, there are two signatures for actions
 # action = function()
@@ -260,8 +233,8 @@ def processFile(srcFile):
     for variance in variances:
       print(f'{variance}')
 
-  # insert imports & lua utils
-  content = imports + lua_utils + content
+  # insert imports
+  content = imports + content
 
   return content
 

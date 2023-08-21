@@ -1,10 +1,7 @@
 import styled from 'styled-components/macro';
-import { ActionCall, GroupedProjectile } from '../../../calc/eval/types';
-import { Action } from '../../../calc/extra/types';
-import { useAppSelector } from '../../../redux/hooks';
-import { selectConfig } from '../../../redux/configSlice';
-
-const DEFAULT_SIZE = 48;
+import { Action, ActionCall, GroupedProjectile } from '../../calc';
+import { useConfig } from '../../redux';
+import { DEFAULT_SIZE } from '../../util';
 
 export const ProxyDiv = styled.div<{
   size: number;
@@ -24,15 +21,15 @@ export const ProxyDiv = styled.div<{
 `;
 
 type Props = {
-  size: number;
+  size?: number;
   proxy?: Action;
 } & Partial<ActionCall> &
   Partial<GroupedProjectile>;
 
 export function ActionProxyAnnotation(props: Props) {
-  const { proxy } = props;
-  const size = props.size ?? DEFAULT_SIZE;
-  const { config } = useAppSelector(selectConfig);
+  const { size = DEFAULT_SIZE, proxy } = props;
+  const { config } = useConfig();
+
   if (proxy === undefined || !config.showProxies) {
     return null;
   }

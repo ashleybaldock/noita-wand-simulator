@@ -1,7 +1,6 @@
 import styled from 'styled-components/macro';
 import { useDrag } from 'react-dnd';
-
-const DEFAULT_SIZE = 48;
+import { DEFAULT_SIZE } from '../../util';
 
 const DeleteDiv = styled.div<{
   size: number;
@@ -27,8 +26,7 @@ type Props = {
 };
 
 export function DeleteSpellAnnotation(props: Props) {
-  const { visible, deleteSpell } = props;
-  const size = props.size ?? DEFAULT_SIZE;
+  const { size = DEFAULT_SIZE, visible, deleteSpell } = props;
   const [{ isDragging }] = useDrag(() => ({
     type: 'action',
     collect: (monitor) => ({

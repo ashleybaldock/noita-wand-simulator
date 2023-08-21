@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { useAppSelector } from './hooks';
 import { RootState } from './store';
 import { loadState } from '../localStorage';
 import _ from 'lodash';
@@ -134,5 +135,9 @@ export const configSlice = createSlice({
 export const { updateConfig } = configSlice.actions;
 
 export const selectConfig = (state: RootState): ConfigState => state.config;
+
+export function useConfig() {
+  return useAppSelector(selectConfig);
+}
 
 export default configSlice.reducer;
