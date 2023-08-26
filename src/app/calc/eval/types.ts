@@ -33,12 +33,9 @@ export type GroupedProjectile = {
   deckIndex?: string | number;
 };
 
-export enum ActionSource {
-  DRAW = 'draw',
-  ACTION = 'action',
-  PERK = 'perk',
-  MULTIPLE = 'multiple',
-}
+export const actionSources = ['draw', 'action', 'perk', 'multiple'] as const;
+
+export type ActionSource = typeof actionSources[number];
 
 export type ActionCall = {
   action: Action;

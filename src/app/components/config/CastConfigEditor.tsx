@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { selectConfig, updateConfig } from '../../redux/configSlice';
 import { WandAction } from '../wandAction/WandAction';
-import { getActionById } from '../../calc/eval/util';
+import { getActionById } from '../../calc';
 import styled from 'styled-components';
 import { ChangeEvent } from 'react';
 import SectionHeader from '../SectionHeader';

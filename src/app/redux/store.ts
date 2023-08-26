@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { default as wandReducer, selectWand } from './wandSlice';
-import { default as presetsReducer } from './presetsSlice';
-import { default as configReducer, selectConfig } from './configSlice';
 import undoable from 'redux-undo';
+import { wandReducer, selectWand } from './wandSlice';
+import { presetsReducer } from './presetsSlice';
+import { configReducer, selectConfig } from './configSlice';
 import { saveState } from '../localStorage';
 import { generateSearchFromWandState } from './util';
 

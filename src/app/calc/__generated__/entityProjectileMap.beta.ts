@@ -1,4 +1,5 @@
-export const entityToActionId: {[key: string]: string[]} = {
+import { ActionId } from '../';
+export const entityToActionId: {[key: string]: ActionId[]} = {
   'data/entities/projectiles/bomb.xml': ['BOMB'],
   'data/entities/projectiles/deck/light_bullet.xml': ['LIGHT_BULLET','LIGHT_BULLET_TRIGGER','LIGHT_BULLET_TIMER'],
   'data/entities/projectiles/deck/light_bullet_blue.xml': ['LIGHT_BULLET_TRIGGER_2'],

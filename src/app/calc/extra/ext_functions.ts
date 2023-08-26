@@ -332,7 +332,7 @@ export function OnActionPlayed(action_id: any) {
 
 export function OnActionCalled(
   source: string,
-  action: Action,
+  action: Readonly<Action>,
   c: GunActionState,
   ...args: number[]
 ) {

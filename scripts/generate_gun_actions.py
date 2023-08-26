@@ -58,8 +58,8 @@ import {
   GlobalsGetValue,
   GlobalsSetValue,
 } from "../extra/ext_functions";
-import { Random, SetRandomSeed, GameGetFrameNum, ipairs, luaFor } from "../extra/util";
-import { ActionSource } from "../eval";
+import { Random, SetRandomSeed, GameGetFrameNum } from "../extra/ext_random";
+import { ipairs, luaFor } from "../luaHelpers";
 
 """
 
@@ -143,7 +143,7 @@ patterns = [
   PatternReplace(r' and ', r' && ', flags=re.MULTILINE),
   PatternReplace(r' or ', r' || ', flags=re.MULTILINE),
   PatternReplace(r'if \(?\s*not (.*?)\s*\)? {', r'if (!\1) {', flags=re.MULTILINE),
-  PatternReplace(r'(data\d?|v).action\((.*?)\)', r'call_action(ActionSource.ACTION, \1, c, \2)', flags=re.MULTILINE),
+  PatternReplace(r'(data\d?|v).action\((.*?)\)', r'call_action("action", \1, c, \2)', flags=re.MULTILINE),
   PatternReplace(r'let (\w+)\s*,\s*(\w+) =', r'let [\1, \2] =', flags=re.MULTILINE),
   PatternReplace(r'let (data) = \[]', r'let \1: Action | null = null', flags=re.MULTILINE),
   PatternReplace(r'let (\w+) = \[]', r'let \1: any = []', flags=re.MULTILINE),
@@ -208,6 +208,11 @@ def processFile(srcFile):
   with open(srcFile) as inFile:
     content = inFile.read()
 
+  action_id_pattern = r'\t+{\s*id\s*=\s*\"(\w+)\"'
+  action_ids = list(dict.fromkeys(re.findall(action_id_pattern, content, re.DOTALL)))
+  joined = ",\n".join(f'"{i}"' for i in action_ids)
+  action_id_type = f'export const actionIds = [\n{joined}\n] as const;\n\nexport type ActionId = typeof actionIds[number];\n\n'
+
   variances = []
 
   content = re.sub(r'actions =\s*{(.*)}', r'export const actions: Action[] = [\1]', content, flags=re.DOTALL)
@@ -234,7 +239,7 @@ def processFile(srcFile):
       print(f'{variance}')
 
   # insert imports
-  content = imports + content
+  content = imports + action_id_type + content
 
   return content
 

@@ -46,8 +46,466 @@ import {
   GlobalsGetValue,
   GlobalsSetValue,
 } from "../extra/ext_functions";
-import { Random, SetRandomSeed, GameGetFrameNum, ipairs, luaFor } from "../extra/util";
-import { ActionSource } from "../eval";
+import { Random, SetRandomSeed, GameGetFrameNum } from "../extra/ext_random";
+import { ipairs, luaFor } from "../luaHelpers";
+
+export const actionIds = [
+"BOMB",
+"LIGHT_BULLET",
+"LIGHT_BULLET_TRIGGER",
+"LIGHT_BULLET_TRIGGER_2",
+"LIGHT_BULLET_TIMER",
+"BULLET",
+"BULLET_TRIGGER",
+"BULLET_TIMER",
+"HEAVY_BULLET",
+"HEAVY_BULLET_TRIGGER",
+"HEAVY_BULLET_TIMER",
+"AIR_BULLET",
+"SLOW_BULLET",
+"SLOW_BULLET_TRIGGER",
+"SLOW_BULLET_TIMER",
+"BLACK_HOLE",
+"BLACK_HOLE_DEATH_TRIGGER",
+"BLACK_HOLE_BIG",
+"BLACK_HOLE_GIGA",
+"TENTACLE_PORTAL",
+"DECOY_TRIGGER",
+"SPITTER",
+"SPITTER_TIMER",
+"SPITTER_TIER_2",
+"SPITTER_TIER_2_TIMER",
+"SPITTER_TIER_3",
+"SPITTER_TIER_3_TIMER",
+"BUBBLESHOT",
+"BUBBLESHOT_TRIGGER",
+"DISC_BULLET",
+"DISC_BULLET_BIG",
+"DISC_BULLET_BIGGER",
+"BOUNCY_ORB",
+"BOUNCY_ORB_TIMER",
+"RUBBER_BALL",
+"ARROW",
+"POLLEN",
+"LANCE",
+"ROCKET",
+"ROCKET_TIER_2",
+"ROCKET_TIER_3",
+"GRENADE",
+"GRENADE_TRIGGER",
+"GRENADE_TIER_2",
+"GRENADE_TIER_3",
+"GRENADE_ANTI",
+"GRENADE_LARGE",
+"MINE",
+"MINE_DEATH_TRIGGER",
+"PIPE_BOMB",
+"PIPE_BOMB_DEATH_TRIGGER",
+"EXPLODING_DEER",
+"EXPLODING_DUCKS",
+"WORM_SHOT",
+"PIPE_BOMB_DETONATOR",
+"BOMB_DETONATOR",
+"LASER",
+"MEGALASER",
+"LIGHTNING",
+"BALL_LIGHTNING",
+"LASER_EMITTER",
+"LASER_EMITTER_FOUR",
+"LASER_EMITTER_CUTTER",
+"DIGGER",
+"POWERDIGGER",
+"CHAINSAW",
+"LUMINOUS_DRILL",
+"LASER_LUMINOUS_DRILL",
+"TENTACLE",
+"TENTACLE_TIMER",
+"BLOODTENTACLE",
+"HEAL_BULLET",
+"SPIRAL_SHOT",
+"MAGIC_SHIELD",
+"BIG_MAGIC_SHIELD",
+"CHAIN_BOLT",
+"FIREBALL",
+"METEOR",
+"FLAMETHROWER",
+"ICEBALL",
+"ICETHROWER",
+"SLIMEBALL",
+"DARKFLAME",
+"MISSILE",
+"FUNKY_SPELL",
+"PEBBLE",
+"DYNAMITE",
+"GLITTER_BOMB",
+"BUCKSHOT",
+"FREEZING_GAZE",
+"GLOWING_BOLT",
+"BOMB_LEGACY",
+"SPORE_POD",
+"GLUE_SHOT",
+"BOMB_HOLY",
+"BOMB_HOLY_GIGA",
+"PROPANE_TANK",
+"BOMB_CART",
+"CURSED_ORB",
+"EXPANDING_ORB",
+"CRUMBLING_EARTH",
+"SUMMON_ROCK",
+"SUMMON_EGG",
+"SUMMON_HOLLOW_EGG",
+"TNTBOX",
+"TNTBOX_BIG",
+"SWARM_FLY",
+"SWARM_FIREBUG",
+"SWARM_WASP",
+"FRIEND_FLY",
+"KNIFE",
+"CIRCLESHOT_A",
+"CIRCLESHOT_B",
+"ACIDSHOT",
+"THUNDERBALL",
+"BLOOMSHOT",
+"ICECIRCLE",
+"FIREBOMB",
+"SOILBALL",
+"PINK_ORB",
+"DEATH_CROSS",
+"DEATH_CROSS_BIG",
+"INFESTATION",
+"WALL_HORIZONTAL",
+"WALL_VERTICAL",
+"WALL_SQUARE",
+"TEMPORARY_WALL",
+"TEMPORARY_PLATFORM",
+"PURPLE_EXPLOSION_FIELD",
+"DELAYED_SPELL",
+"LONG_DISTANCE_CAST",
+"TELEPORT_CAST",
+"SUPER_TELEPORT_CAST",
+"COMMANDER_BULLET",
+"PLASMA_FLARE",
+"KEYSHOT",
+"MANA",
+"SKULL",
+"MATERIAL_DEBUG",
+"MATERIAL_LIQUID",
+"MIST_RADIOACTIVE",
+"MIST_ALCOHOL",
+"MIST_SLIME",
+"MIST_BLOOD",
+"CIRCLE_FIRE",
+"CIRCLE_ACID",
+"CIRCLE_OIL",
+"CIRCLE_WATER",
+"MATERIAL_WATER",
+"MATERIAL_OIL",
+"MATERIAL_BLOOD",
+"MATERIAL_ACID",
+"MATERIAL_CEMENT",
+"MATERIAL_LAVA",
+"MATERIAL_GUNPOWDER_EXPLOSIVE",
+"MATERIAL_DIRT",
+"BUILDING_BOARD_WOOD",
+"BUILDING_BACK_WALL_ROCK",
+"BUILDING_PRESSURE_PLATE",
+"BUILDING_PHYSICS_TEMPLEDOOR",
+"TELEPORT_PROJECTILE",
+"TELEPORT_PROJECTILE_SHORT",
+"TELEPORT_PROJECTILE_STATIC",
+"SWAPPER_PROJECTILE",
+"TELEPORT_PROJECTILE_CLOSER",
+"TELEPORT_HOME",
+"LEVITATION_PROJECTILE",
+"NUKE",
+"NUKE_GIGA",
+"HIGH_EXPLOSIVE",
+"DRONE",
+"BAAB_ALL",
+"BAAB_EMPTY",
+"BAAB_LAVA",
+"BAAB_WATER",
+"BAAB_POOP",
+"BAAB_LOVE",
+"FIREWORK",
+"SUMMON_WANDGHOST",
+"TOUCH_GOLD",
+"TOUCH_WATER",
+"TOUCH_OIL",
+"TOUCH_ALCOHOL",
+"TOUCH_BLOOD",
+"TOUCH_SMOKE",
+"DESTRUCTION",
+"BURST_2",
+"BURST_3",
+"BURST_4",
+"BURST_8",
+"BURST_X",
+"SCATTER_2",
+"SCATTER_3",
+"SCATTER_4",
+"I_SHAPE",
+"Y_SHAPE",
+"T_SHAPE",
+"W_SHAPE",
+"CIRCLE_SHAPE",
+"PENTAGRAM_SHAPE",
+"SPREAD_REDUCE",
+"HEAVY_SPREAD",
+"RECHARGE",
+"LIFETIME",
+"LIFETIME_DOWN",
+"NOLLA",
+"SLOW_BUT_STEADY",
+"EXPLOSION_REMOVE",
+"EXPLOSION_TINY",
+"LASER_EMITTER_WIDER",
+"LIFETIME_INFINITE",
+"MANA_REDUCE",
+"BLOOD_MAGIC",
+"MONEY_MAGIC",
+"BLOOD_TO_POWER",
+"DUPLICATE",
+"QUANTUM_SPLIT",
+"GRAVITY",
+"GRAVITY_ANTI",
+"PENETRATE_WALLS",
+"SINEWAVE",
+"CHAOTIC_ARC",
+"PINGPONG_PATH",
+"AVOIDING_ARC",
+"FLOATING_ARC",
+"FLY_DOWNWARDS",
+"FLY_UPWARDS",
+"HORIZONTAL_ARC",
+"LINE_ARC",
+"ORBIT_SHOT",
+"SPIRALING_SHOT",
+"PHASING_ARC",
+"BOUNCE",
+"REMOVE_BOUNCE",
+"HOMING",
+"HOMING_SHORT",
+"HOMING_ROTATE",
+"HOMING_SHOOTER",
+"AUTOAIM",
+"HOMING_ACCELERATING",
+"HOMING_CURSOR",
+"HOMING_AREA",
+"HOMING_PROJECTILE",
+"PIERCING_SHOT",
+"CLIPPING_SHOT",
+"DAMAGE",
+"DAMAGE_RANDOM",
+"BLOODLUST",
+"DAMAGE_FOREVER",
+"CRITICAL_HIT",
+"AREA_DAMAGE",
+"SPELLS_TO_POWER",
+"ESSENCE_TO_POWER",
+"HEAVY_SHOT",
+"LIGHT_SHOT",
+"SHORTLIVED_SHOT",
+"KNOCKBACK",
+"RECOIL",
+"RECOIL_DAMPER",
+"SPEED",
+"ACCELERATING_SHOT",
+"DECELERATING_SHOT",
+"GORE",
+"EXPLOSIVE_PROJECTILE",
+"WATER_TO_POISON",
+"BLOOD_TO_ACID",
+"LAVA_TO_BLOOD",
+"LIQUID_TO_EXPLOSION",
+"TOXIC_TO_ACID",
+"STATIC_TO_SAND",
+"TRANSMUTATION",
+"RANDOM_EXPLOSION",
+"NECROMANCY",
+"LIGHT",
+"EXPLOSION",
+"EXPLOSION_LIGHT",
+"FIRE_BLAST",
+"POISON_BLAST",
+"ALCOHOL_BLAST",
+"THUNDER_BLAST",
+"CHARM_FIELD",
+"BERSERK_FIELD",
+"POLYMORPH_FIELD",
+"CHAOS_POLYMORPH_FIELD",
+"ELECTROCUTION_FIELD",
+"FREEZE_FIELD",
+"REGENERATION_FIELD",
+"TELEPORTATION_FIELD",
+"LEVITATION_FIELD",
+"SHIELD_FIELD",
+"PROJECTILE_TRANSMUTATION_FIELD",
+"PROJECTILE_THUNDER_FIELD",
+"PROJECTILE_GRAVITY_FIELD",
+"VACUUM_POWDER",
+"VACUUM_LIQUID",
+"VACUUM_ENTITIES",
+"SEA_LAVA",
+"SEA_ALCOHOL",
+"SEA_OIL",
+"SEA_WATER",
+"SEA_ACID",
+"SEA_ACID_GAS",
+"CLOUD_WATER",
+"CLOUD_OIL",
+"CLOUD_BLOOD",
+"CLOUD_ACID",
+"CLOUD_THUNDER",
+"ELECTRIC_CHARGE",
+"MATTER_EATER",
+"FREEZE",
+"HITFX_BURNING_CRITICAL_HIT",
+"HITFX_CRITICAL_WATER",
+"HITFX_CRITICAL_OIL",
+"HITFX_CRITICAL_BLOOD",
+"HITFX_TOXIC_CHARM",
+"HITFX_EXPLOSION_SLIME",
+"HITFX_EXPLOSION_SLIME_GIGA",
+"HITFX_EXPLOSION_ALCOHOL",
+"HITFX_EXPLOSION_ALCOHOL_GIGA",
+"HITFX_PETRIFY",
+"ROCKET_DOWNWARDS",
+"ROCKET_OCTAGON",
+"FIZZLE",
+"BOUNCE_EXPLOSION",
+"BOUNCE_SPARK",
+"BOUNCE_LASER",
+"BOUNCE_LASER_EMITTER",
+"BOUNCE_LARPA",
+"FIREBALL_RAY",
+"LIGHTNING_RAY",
+"TENTACLE_RAY",
+"LASER_EMITTER_RAY",
+"FIREBALL_RAY_LINE",
+"FIREBALL_RAY_ENEMY",
+"LIGHTNING_RAY_ENEMY",
+"TENTACLE_RAY_ENEMY",
+"GRAVITY_FIELD_ENEMY",
+"CURSE",
+"CURSE_WITHER_PROJECTILE",
+"CURSE_WITHER_EXPLOSION",
+"CURSE_WITHER_MELEE",
+"CURSE_WITHER_ELECTRICITY",
+"ORBIT_DISCS",
+"ORBIT_FIREBALLS",
+"ORBIT_NUKES",
+"ORBIT_LASERS",
+"ORBIT_LARPA",
+"CHAIN_SHOT",
+"HITFX_OILED_FREEZE",
+"ALCOHOL_SHOT",
+"FREEZE_IF_WET_SHOOTER",
+"BLINDNESS",
+"TELEPORTATION",
+"TELEPATHY",
+"ARC_ELECTRIC",
+"ARC_FIRE",
+"ARC_GUNPOWDER",
+"ARC_POISON",
+"CRUMBLING_EARTH_PROJECTILE",
+"POLYMORPH",
+"BERSERK",
+"CHARM",
+"X_RAY",
+"X_RAY_MODIFIER",
+"ACID",
+"UNSTABLE_GUNPOWDER",
+"ACID_TRAIL",
+"POISON_TRAIL",
+"OIL_TRAIL",
+"WATER_TRAIL",
+"BLOOD_TRAIL",
+"GUNPOWDER_TRAIL",
+"FIRE_TRAIL",
+"BURN_TRAIL",
+"TORCH",
+"TORCH_ELECTRIC",
+"ENERGY_SHIELD",
+"ENERGY_SHIELD_SECTOR",
+"ENERGY_SHIELD_SHOT",
+"TINY_GHOST",
+"DUCK",
+"DUPLICATE_ON_DEATH",
+"BEE",
+"SHEEP",
+"MISFIRE",
+"MISFIRE_CRITICAL",
+"GENERATE_RANDOM_DECK_5",
+"OCARINA_A",
+"OCARINA_B",
+"OCARINA_C",
+"OCARINA_D",
+"OCARINA_E",
+"OCARINA_F",
+"OCARINA_GSHARP",
+"OCARINA_A2",
+"KANTELE_A",
+"KANTELE_D",
+"KANTELE_DIS",
+"KANTELE_E",
+"KANTELE_G",
+"RANDOM_SPELL",
+"RANDOM_PROJECTILE",
+"RANDOM_MODIFIER",
+"RANDOM_STATIC_PROJECTILE",
+"DRAW_RANDOM",
+"DRAW_RANDOM_X3",
+"DRAW_3_RANDOM",
+"ALL_NUKES",
+"ALL_DISCS",
+"ALL_ROCKETS",
+"ALL_DEATHCROSSES",
+"ALL_BLACKHOLES",
+"ALL_ACID",
+"ALL_SPELLS",
+"SUMMON_PORTAL",
+"ADD_TRIGGER",
+"ADD_TIMER",
+"ADD_DEATH_TRIGGER",
+"LARPA_CHAOS",
+"LARPA_DOWNWARDS",
+"LARPA_UPWARDS",
+"LARPA_CHAOS_2",
+"LARPA_DEATH",
+"ALPHA",
+"GAMMA",
+"TAU",
+"OMEGA",
+"MU",
+"PHI",
+"SIGMA",
+"ZETA",
+"DIVIDE_2",
+"DIVIDE_3",
+"DIVIDE_4",
+"DIVIDE_10",
+"METEOR_RAIN",
+"WORM_RAIN",
+"RESET",
+"IF_ENEMY",
+"IF_PROJECTILE",
+"IF_HP",
+"IF_HALF",
+"IF_END",
+"IF_ELSE",
+"COLOUR_RED",
+"COLOUR_ORANGE",
+"COLOUR_GREEN",
+"COLOUR_YELLOW",
+"COLOUR_PURPLE",
+"COLOUR_BLUE",
+"COLOUR_RAINBOW",
+"COLOUR_INVIS",
+"RAINBOW_TRAIL"
+] as const;
+
+export type ActionId = typeof actionIds[number];
 
 export const actions: Action[] = [
 	
@@ -3756,7 +4214,7 @@ export const actions: Action[] = [
 			for (const [i, v] of ipairs(hand, 'hand')) {
 				let rec = check_recursion( v, recursion_level )
 				if (( v.id !== "DUPLICATE" ) && ( i < hand_count ) && ( rec > -1 ))  {
-					call_action(ActionSource.ACTION, v, c,  rec )
+					call_action("action", v, c,  rec )
 				}
 			}
 			
@@ -6923,7 +7381,7 @@ export const actions: Action[] = [
 				safety = safety + 1
 			}
 			
-			call_action(ActionSource.ACTION, data, c,  rec )
+			call_action("action", data, c,  rec )
 		},
 	},
 	{
@@ -6955,7 +7413,7 @@ export const actions: Action[] = [
 				safety = safety + 1
 			}
 			
-			call_action(ActionSource.ACTION, data, c,  rec )
+			call_action("action", data, c,  rec )
 		},
 	},
 	{
@@ -6987,7 +7445,7 @@ export const actions: Action[] = [
 				safety = safety + 1
 			}
 			
-			call_action(ActionSource.ACTION, data, c,  rec )
+			call_action("action", data, c,  rec )
 		},
 	},
 	{
@@ -7019,7 +7477,7 @@ export const actions: Action[] = [
 				safety = safety + 1
 			}
 			
-			call_action(ActionSource.ACTION, data, c,  rec )
+			call_action("action", data, c,  rec )
 		},
 	},
 	{
@@ -7065,7 +7523,7 @@ export const actions: Action[] = [
 			}
 			
 			if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
-				call_action(ActionSource.ACTION, data, c,  rec )
+				call_action("action", data, c,  rec )
 				
 				if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 					data.uses_remaining = data.uses_remaining - 1
@@ -7122,7 +7580,7 @@ export const actions: Action[] = [
 			
 			if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
 				for (const i of luaFor(1, 3)) {
-					call_action(ActionSource.ACTION, data, c,  rec )
+					call_action("action", data, c,  rec )
 				}
 				
 				if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
@@ -7181,7 +7639,7 @@ export const actions: Action[] = [
 				}
 				
 				if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
-					call_action(ActionSource.ACTION, data, c,  rec )
+					call_action("action", data, c,  rec )
 					
 					if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 						data.uses_remaining = data.uses_remaining - 1
@@ -7388,7 +7846,7 @@ export const actions: Action[] = [
 					if (( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ) && ( data.id !== "ADD_TRIGGER" ) && ( data.id !== "ADD_TIMER" ) && ( data.id !== "ADD_DEATH_TRIGGER" ))  {
 						if ( data.type === "modifier" )  {
 							setDontDrawActions(true)
-							call_action(ActionSource.ACTION, data, c, )
+							call_action("action", data, c, )
 							setDontDrawActions(false)
 						}
 					}
@@ -7432,7 +7890,7 @@ export const actions: Action[] = [
 						}
 					} else {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c, )
+						call_action("action", data, c, )
 						setDontDrawActions(false)
 					}
 				}
@@ -7468,7 +7926,7 @@ export const actions: Action[] = [
 					if (( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ) && ( data.id !== "ADD_TRIGGER" ) && ( data.id !== "ADD_TIMER" ) && ( data.id !== "ADD_DEATH_TRIGGER" ))  {
 						if ( data.type === "modifier" )  {
 							setDontDrawActions(true)
-							call_action(ActionSource.ACTION, data, c, )
+							call_action("action", data, c, )
 							setDontDrawActions(false)
 						}
 					}
@@ -7512,7 +7970,7 @@ export const actions: Action[] = [
 						}
 					} else {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c, )
+						call_action("action", data, c, )
 						setDontDrawActions(false)
 					}
 				}
@@ -7548,7 +8006,7 @@ export const actions: Action[] = [
 					if (( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ) && ( data.id !== "ADD_TRIGGER" ) && ( data.id !== "ADD_TIMER" ) && ( data.id !== "ADD_DEATH_TRIGGER" ))  {
 						if ( data.type === "modifier" )  {
 							setDontDrawActions(true)
-							call_action(ActionSource.ACTION, data, c, )
+							call_action("action", data, c, )
 							setDontDrawActions(false)
 						}
 					}
@@ -7592,7 +8050,7 @@ export const actions: Action[] = [
 						}
 					} else {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c, )
+						call_action("action", data, c, )
 						setDontDrawActions(false)
 					}
 				}
@@ -7726,7 +8184,7 @@ export const actions: Action[] = [
 			let rec = check_recursion( data, recursion_level )
 			
 			if (( data != null ) && ( rec > -1 ))  {
-				call_action(ActionSource.ACTION, data, c,  rec )
+				call_action("action", data, c,  rec )
 			}
 			
 			
@@ -7761,7 +8219,7 @@ export const actions: Action[] = [
 			let rec = check_recursion( data, recursion_level )
 			
 			if (( data != null ) && ( rec > -1 ))  {
-				call_action(ActionSource.ACTION, data, c,  rec )
+				call_action("action", data, c,  rec )
 			}
 			
 			
@@ -7808,12 +8266,12 @@ export const actions: Action[] = [
 			
 			if (( data1 != null ) && ( rec1 > -1 ))  {
 				
-				call_action(ActionSource.ACTION, data1, c,  rec1 )
+				call_action("action", data1, c,  rec1 )
 			}
 			
 			if (( data2 != null ) && ( rec2 > -1 ))  {
 				
-				call_action(ActionSource.ACTION, data2, c,  rec2 )
+				call_action("action", data2, c,  rec2 )
 			}
 			
 			
@@ -7840,7 +8298,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( rec > -1 ) && ( data.id !== "RESET" ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -7851,7 +8309,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( ( data.recursive == null ) || ( data.recursive === false ) ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -7862,7 +8320,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( rec > -1 ) && ( data.id !== "RESET" ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -7894,7 +8352,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === "modifier" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -7905,7 +8363,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === "modifier" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -7916,7 +8374,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === "modifier" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -7954,7 +8412,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === "projectile" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -7965,7 +8423,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === "projectile" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -7976,7 +8434,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === "projectile" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -8012,7 +8470,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === "static" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -8023,7 +8481,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === "static" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -8034,7 +8492,7 @@ export const actions: Action[] = [
 					let rec = check_recursion( data, recursion_level )
 					if (( data != null ) && ( data.type === "static" ) && ( rec > -1 ))  {
 						setDontDrawActions(true)
-						call_action(ActionSource.ACTION, data, c,  rec )
+						call_action("action", data, c,  rec )
 						setDontDrawActions(false)
 					}
 				}
@@ -8110,7 +8568,7 @@ export const actions: Action[] = [
 						let rec = check_recursion( data, recursion_level )
 						if ( rec > -1 )  {
 							setDontDrawActions(true)
-							call_action(ActionSource.ACTION, data, c,  rec )
+							call_action("action", data, c,  rec )
 							setDontDrawActions(false)
 						}
 						break
@@ -8162,7 +8620,7 @@ export const actions: Action[] = [
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
-					let imax = call_action(ActionSource.ACTION, data, c,  rec, iter + 1 )
+					let imax = call_action("action", data, c,  rec, iter + 1 )
 					setDontDrawActions(false)
 					if (imax != null)  {
 						iter_max = imax
@@ -8244,7 +8702,7 @@ export const actions: Action[] = [
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
-					let imax = call_action(ActionSource.ACTION, data, c,  rec, iter + 1 )
+					let imax = call_action("action", data, c,  rec, iter + 1 )
 					setDontDrawActions(false)
 					if (imax != null)  {
 						iter_max = imax
@@ -8326,7 +8784,7 @@ export const actions: Action[] = [
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
-					let imax = call_action(ActionSource.ACTION, data, c,  rec, iter + 1 )
+					let imax = call_action("action", data, c,  rec, iter + 1 )
 					setDontDrawActions(false)
 					if (imax != null)  {
 						iter_max = imax
@@ -8410,7 +8868,7 @@ export const actions: Action[] = [
 					if ( i === 1 )  {
 						setDontDrawActions(true)
 					}
-					let imax = call_action(ActionSource.ACTION, data, c,  rec, iter + 1 )
+					let imax = call_action("action", data, c,  rec, iter + 1 )
 					setDontDrawActions(false)
 					if (imax != null)  {
 						iter_max = imax

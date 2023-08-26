@@ -1,5 +1,11 @@
-import { Gun } from './calc/extra/types';
+import { ActionId, Gun, isValidActionId } from './calc';
 import { ConfigState } from './redux/configSlice';
+
+export type SpellId = ActionId | string | null;
+
+export function isKnownSpell(spellId: SpellId): spellId is ActionId {
+  return spellId !== null && isValidActionId(spellId);
+}
 
 export type Wand = Gun & {
   cast_delay: number;
@@ -14,7 +20,7 @@ export type Wand = Gun & {
 export type Preset = {
   name: string;
   wand: Wand;
-  spells: string[];
+  spells: SpellId[];
 };
 
 export type PresetGroup = {

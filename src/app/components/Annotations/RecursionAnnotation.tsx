@@ -2,7 +2,7 @@ import styled from 'styled-components/macro';
 import {
   ActionCall,
   GroupedProjectile,
-  iterativeActions,
+  isIterativeActionId,
   recursiveActions,
 } from '../../calc';
 import { useConfig } from '../../redux';
@@ -57,8 +57,8 @@ export function RecursionAnnotation(props: Props) {
     return null;
   }
 
-  const recursive = action && recursiveActions().includes(action?.id);
-  const iterative = action && iterativeActions().includes(action?.id);
+  const recursive = action && recursiveActions.includes(action?.id);
+  const iterative = action && isIterativeActionId(action?.id);
 
   const showRecursion =
     recursion !== undefined && (recursive || (iterative && recursion > 0));

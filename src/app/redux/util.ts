@@ -1,6 +1,7 @@
 import { WandState } from './wandSlice';
-import { Wand } from '../types';
-import { trimArray, objectKeys } from '../util/util';
+import { Wand, SpellId } from '../types';
+import { isValidActionId } from '../calc';
+import { trimArray, objectKeys } from '../util';
 import { defaultWand } from './presets';
 
 const decodeQueryParamAsString = (
@@ -61,7 +62,7 @@ export function generateSearchFromWandState(state: WandState) {
 
 export interface ParsedWandState {
   wand: Wand;
-  spells: (string | null)[];
+  spells: SpellId[];
   messages: string[];
 }
 
@@ -106,7 +107,7 @@ export function generateWandStateFromSearch(search: string): ParsedWandState {
       spells: trimArray(
         (params.get('spells') ?? '')
           .split(',')
-          .map((s) => (s.length === 0 ? null : s)),
+          .map((s) => (s.length === 0 ? null : isValidActionId(s))),
         (s) => !s,
       ),
       messages: [],

@@ -1,4 +1,4 @@
-import { getActionById } from '../../calc/eval/util';
+import { getActionById, isGreekActionId } from '../../calc';
 import { useAppSelector } from '../../redux/hooks';
 import { selectWand } from '../../redux/wandSlice';
 import { ProjectileTreeShotResult } from './ProjectileTreeShotResult';
@@ -6,16 +6,14 @@ import styled from 'styled-components';
 import { ActionCalledShotResult } from './ActionCalledShotResult';
 import React, { useMemo, useRef } from 'react';
 import SectionHeader from '../SectionHeader';
-import { notNull } from '../../util/util';
+import { isKnownSpell } from '../../types';
 import { clickWand } from '../../calc/eval/clickWand';
 import { selectConfig } from '../../redux/configSlice';
 import { ActionTreeShotResult } from './ActionTreeShotResult';
 import { condenseActionsAndProjectiles } from '../../calc/eval/condense';
-import { ActionSource } from '../../calc/eval/types';
 import { ShotMetadata } from './ShotMetadata';
 import { SaveImageButton, ScrollWrapper } from '../generic';
 import { IterationLimitWarning } from './IterationLimitWarning';
-import { GREEK_SPELLS } from '../../calc/eval/lookups';
 
 const ParentDiv = styled.div``;
 
@@ -53,7 +51,7 @@ export function ShotResultList(props: Props) {
   const actionCallTreeRef = useRef<HTMLDivElement>();
 
   const spellActions = useMemo(
-    () => spells.filter(notNull).map(getActionById),
+    () => spells.filter(isKnownSpell).map(getActionById),
     [spells],
   );
 
@@ -110,8 +108,8 @@ export function ShotResultList(props: Props) {
     if (!props.showGreekSpells) {
       return shots.map((s) => ({
         ...s,
-        calledActions: s.calledActions.filter(
-          (ac) => !GREEK_SPELLS().includes(ac.action.id),
+        calledActions: s.calledActions.filter(({ action: { id } }) =>
+          isGreekActionId(id),
         ),
       }));
     } else {
@@ -123,9 +121,7 @@ export function ShotResultList(props: Props) {
     if (!props.showDirectActionCalls) {
       return shots.map((s) => ({
         ...s,
-        calledActions: s.calledActions.filter(
-          (ac) => ac.source !== ActionSource.ACTION,
-        ),
+        calledActions: s.calledActions.filter((ac) => ac.source !== 'action'),
       }));
     } else {
       return shots;

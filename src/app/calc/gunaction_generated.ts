@@ -2,7 +2,7 @@ import { GunActionState } from './extra/types';
 import { RegisterGunAction } from './extra/ext_functions';
 
 export const defaultGunActionState: GunActionState = {
-  action_id: '',
+  // action_id: '',
   action_name: '',
   action_description: '',
   action_sprite_filename: '',
@@ -80,13 +80,13 @@ export function ConfigGunActionInfo_PassToGame(value: GunActionState) {
 }
 
 // ext function
-function ConfigGunActionInfo_ReadToLua(...args: any[]) {}
+// function ConfigGunActionInfo_ReadToLua(...args: any[]) {}
 
 export function ConfigGunActionInfo_Copy<T extends GunActionState>(
   source: T,
   dest: T,
 ): void {
-  dest.action_id = source.action_id;
+  // dest.action_id = source.action_id;
   dest.action_name = source.action_name;
   dest.action_description = source.action_description;
   dest.action_sprite_filename = source.action_sprite_filename;

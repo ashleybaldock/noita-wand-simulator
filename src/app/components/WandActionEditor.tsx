@@ -2,19 +2,19 @@ import { useState } from 'react';
 import styled from 'styled-components/macro';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { selectWand, setSpellAtIndex } from '../redux/wandSlice';
-import { getActionById } from '../calc/eval/util';
+import { Action, getActionById } from '../calc';
+import { isKnownSpell } from '../types';
 import { DEFAULT_SIZE } from '../util';
-import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
 import {
   DeckIndexAnnotation,
   DeleteSpellAnnotation,
   FriendlyFireAnnotation,
   NoManaAnnotation,
 } from './Annotations/';
+import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
 import { WandAction } from './wandAction/WandAction';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import WandActionBorder from './wandAction/WandActionBorder';
-import { Action } from '../calc';
 
 const StyledList = styled.ul`
   display: flex;
@@ -34,14 +34,13 @@ const StyledListItem = styled.li`
 `;
 
 type Props = {
-  spellAction: Action;
+  spellAction?: Action;
   wandIndex: number;
-  deckIndex: number;
   size: number;
 };
 
 function ActionComponent(props: Props) {
-  const { spellAction, wandIndex, deckIndex, size } = props;
+  const { spellAction, wandIndex, size } = props;
   const dispatch = useAppDispatch();
   const [mouseOver, setMouseOver] = useState(false);
 
@@ -56,24 +55,31 @@ function ActionComponent(props: Props) {
         onMouseEnter={() => setMouseOver(true)}
         onMouseLeave={() => setMouseOver(false)}
       >
-        <WandActionDragSource
-          actionId={spellAction.id}
-          sourceWandIndex={wandIndex}
-        >
-          <WandAction
-            action={spellAction}
-            deckIndex={deckIndex}
-            onDeleteSpell={() => handleDeleteSpell(wandIndex)}
-          />
-          <DeleteSpellAnnotation
-            size={size}
-            visible={mouseOver}
-            deleteSpell={() => handleDeleteSpell(wandIndex)}
-          />
-        </WandActionDragSource>
-        <DeckIndexAnnotation size={size} deckIndex={deckIndex} />
-        <NoManaAnnotation size={size} />
-        <FriendlyFireAnnotation size={size} />
+        {spellAction && (
+          <>
+            <WandActionDragSource
+              actionId={spellAction.id}
+              sourceWandIndex={wandIndex}
+            >
+              <WandAction
+                action={spellAction}
+                deckIndex={spellAction.deck_index}
+                onDeleteSpell={() => handleDeleteSpell(wandIndex)}
+              />
+              <DeleteSpellAnnotation
+                size={size}
+                visible={mouseOver}
+                deleteSpell={() => handleDeleteSpell(wandIndex)}
+              />
+            </WandActionDragSource>
+            <DeckIndexAnnotation
+              size={size}
+              deckIndex={spellAction.deck_index}
+            />
+            <NoManaAnnotation size={size} />
+            <FriendlyFireAnnotation size={size} />
+          </>
+        )}
       </WandActionBorder>
     </WandActionDropTarget>
   );
@@ -83,22 +89,22 @@ export function WandActionEditor() {
   const { spells } = useAppSelector(selectWand);
 
   const size = DEFAULT_SIZE;
-  const spellActions = spells.map((s) => (s ? getActionById(s) : null));
-
-  let deckIndex = 0;
+  const spellActions = spells.map((spellId, index) => {
+    if (isKnownSpell(spellId)) {
+      return getActionById(spellId);
+    }
+    return undefined;
+  });
 
   return (
     <StyledList>
       {spellActions.map((spellAction, wandIndex) => (
         <StyledListItem key={wandIndex}>
-          {spellAction && (
-            <ActionComponent
-              size={size}
-              spellAction={spellAction}
-              wandIndex={wandIndex}
-              deckIndex={++deckIndex}
-            />
-          )}
+          <ActionComponent
+            size={size}
+            spellAction={spellAction}
+            wandIndex={wandIndex}
+          />
         </StyledListItem>
       ))}
     </StyledList>

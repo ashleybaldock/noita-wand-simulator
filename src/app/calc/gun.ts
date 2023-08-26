@@ -8,6 +8,7 @@ import {
   ConfigGunShotEffects_Init,
   ConfigGunShotEffects_PassToGame,
 } from './gunshoteffects_generated';
+import { extra_modifiers } from './gun_extra_modifiers';
 import {
   Action,
   Gun,
@@ -15,9 +16,10 @@ import {
   ModifierName,
   Shot,
   ShotEffects,
-} from './extra/types';
-import { Random } from './extra/util';
-import { extra_modifiers } from './gun_extra_modifiers';
+  getActionById,
+  ActionId,
+  ActionSource,
+} from './';
 import {
   ActionUsed,
   ActionUsesRemainingChanged,
@@ -37,9 +39,8 @@ import {
   SetProjectileConfigs,
   StartReload,
 } from './extra/ext_functions';
+import { Random } from './extra/ext_random';
 import { init_state_from_game } from './extra/init';
-import { actions } from './gun_actions';
-import { ActionSource } from './eval/types';
 
 // constants
 export const ACTION_DRAW_RELOAD_TIME_INCREASE = 0;
@@ -145,8 +146,8 @@ function register_gunshoteffects(effects: ShotEffects) {
 
 // call this when current action changes
 
-function set_current_action(action: Action) {
-  c.action_id = action.id;
+function set_current_action(action: Readonly<Action>) {
+  // c.action_id = action.id;
   c.action_name = action.name;
   c.action_description = action.description;
   c.action_sprite_filename = action.sprite;
@@ -178,7 +179,7 @@ function set_current_action(action: Action) {
   current_action = action;
 }
 
-function clone_action(source: Action, target: Action) {
+function clone_action(source: Readonly<Action>, target: Action) {
   target.id = source.id;
   target.name = source.name;
   target.type = source.type;
@@ -257,13 +258,13 @@ export function order_deck() {
   }
 }
 
-function play_action(action: Action) {
+function play_action(action: Readonly<Action>) {
   OnActionPlayed(action.id);
 
   hand.push(action);
 
   set_current_action(action);
-  call_action(ActionSource.DRAW, action, c);
+  call_action('draw', action, c);
 
   let is_projectile = false;
 
@@ -447,13 +448,13 @@ export function add_projectile_trigger_death(
   EndProjectile();
 }
 
-function baab_instruction(name: string) {
-  if (reflecting) {
-    return;
-  }
+// function baab_instruction(name: string) {
+//   if (reflecting) {
+//     return;
+//   }
 
-  BaabInstruction(name);
-}
+//   BaabInstruction(name);
+// }
 
 export function move_discarded_to_deck() {
   discarded.forEach((action) => {
@@ -513,7 +514,7 @@ function move_hand_to_discarded() {
   clearHand();
 }
 
-export function check_recursion(data: Action | null, rec_: number) {
+export function check_recursion(data: Readonly<Action> | null, rec_: number) {
   let rec = rec_ || 0;
 
   if (data != null) {
@@ -616,70 +617,72 @@ export function _clear_deck(use_game_log_: boolean) {
 
 // this can be used to build a new deck
 export function _add_card_to_deck(
-  action_id: string,
+  action_id: ActionId,
   inventoryitem_id: number,
   uses_remaining: number | undefined | null,
   is_identified: boolean,
 ) {
-  for (let i = 0; i < actions.length; i++) {
-    let action = actions[i];
-    if (action.id === action_id) {
-      let action_clone = {} as Action;
-      clone_action(action, action_clone);
-      action_clone.inventoryitem_id = inventoryitem_id;
-      action_clone.uses_remaining =
-        uses_remaining != null ? uses_remaining : undefined;
-      action_clone.deck_index = deck.length;
-      action_clone.is_identified = is_identified;
-      deck.push(action_clone);
-      break;
-    }
-  }
+  // for (let i = 0; i < actions.length; i++) {
+  // let action = actions[i];
+  const action = getActionById(action_id);
+  // if (action.id === action_id) {
+  let action_clone = {} as Action;
+  clone_action(action, action_clone);
+  action_clone.inventoryitem_id = inventoryitem_id;
+  action_clone.uses_remaining =
+    uses_remaining != null ? uses_remaining : undefined;
+  action_clone.deck_index = deck.length;
+  action_clone.is_identified = is_identified;
+  deck.push(action_clone);
+  // break;
+  // }
+  // }
 }
 
-function _play_permanent_card(action_id: string) {
-  for (let i = 0; i < actions.length; i++) {
-    let action = actions[i];
-    if (action.id === action_id) {
-      let action_clone = {} as Action;
-      playing_permanent_card = true;
-      clone_action(action, action_clone);
-      action_clone.permanently_attached = true;
-      action_clone.uses_remaining = -1;
-      handle_mana_addition(action_clone);
-      play_action(action_clone);
+function _play_permanent_card(action_id: ActionId) {
+  // for (let i = 0; i < actions.length; i++) {
+  // let action = actions[i];
+  const action = getActionById(action_id);
+  // if (action.id === action_id) {
+  let action_clone = {} as Action;
+  playing_permanent_card = true;
+  clone_action(action, action_clone);
+  action_clone.permanently_attached = true;
+  action_clone.uses_remaining = -1;
+  handle_mana_addition(action_clone);
+  play_action(action_clone);
 
-      playing_permanent_card = false;
-      break;
-    }
-  }
+  playing_permanent_card = false;
+  // break;
+  // }
+  // }
 }
 
-function _change_action_uses_remaining(
-  inventoryitem_id: number,
-  uses_remaining: number,
-) {
-  let applied = false;
+// function _change_action_uses_remaining(
+//   inventoryitem_id: number,
+//   uses_remaining: number,
+// ) {
+//   let applied = false;
 
-  const apply = (arr: Action[]) => {
-    if (applied) {
-      return;
-    }
+//   const apply = (arr: Action[]) => {
+//     if (applied) {
+//       return;
+//     }
 
-    for (let i = 0; i < actions.length; i++) {
-      let action = arr[i];
-      if (action.inventoryitem_id === inventoryitem_id) {
-        action.uses_remaining = uses_remaining;
-        applied = true;
-        break;
-      }
-    }
-  };
-
-  apply(deck);
-  apply(discarded);
-  apply(hand);
-}
+//     for (let i = 0; i < actions.length; i++) {
+//       let action = arr[i];
+//       if (action.inventoryitem_id === inventoryitem_id) {
+//         action.uses_remaining = uses_remaining;
+//         applied = true;
+//         break;
+//       }
+//     }
+//   };
+//
+//   apply(deck);
+//   apply(discarded);
+//   apply(hand);
+// }
 
 function _add_extra_modifier_to_shot(name: ModifierName) {
   if (!extra_modifiers[name]) {

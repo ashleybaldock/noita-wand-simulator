@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
-import { Wand } from '../types';
+import { Wand, SpellId } from '../types';
 import { defaultWand } from './presets';
 import { generateWandStateFromSearch } from './util';
 import { fixArraySize } from '../util/util';
 
 export interface WandState {
   wand: Wand;
-  spells: (string | null)[];
+  spells: SpellId[];
   messages: string[];
 }
 
@@ -21,7 +21,10 @@ const initialState: WandState = {
     ...defaultWand,
     ...stateFromUrl.wand,
   },
-  spells: fixArraySize(stateFromUrl.spells, stateFromUrl.wand.deck_capacity ?? defaultWand.deck_capacity),
+  spells: fixArraySize(
+    stateFromUrl.spells,
+    stateFromUrl.wand.deck_capacity ?? defaultWand.deck_capacity,
+  ),
   messages: stateFromUrl.messages || [],
 };
 
@@ -31,7 +34,7 @@ export const wandSlice = createSlice({
   reducers: {
     setWand: (
       state,
-      action: PayloadAction<{ wand: Wand; spells?: string[] }>,
+      action: PayloadAction<{ wand: Wand; spells?: SpellId[] }>,
     ) => {
       const { wand, spells } = action.payload;
       state.wand = wand;
@@ -42,14 +45,14 @@ export const wandSlice = createSlice({
 
       state.spells = fixArraySize(state.spells, wand.deck_capacity);
     },
-    setSpells: (state, action: PayloadAction<string[]>) => {
+    setSpells: (state, action: PayloadAction<SpellId[]>) => {
       state.spells = action.payload;
 
       state.spells = fixArraySize(state.spells, state.wand.deck_capacity);
     },
     setSpellAtIndex: (
       state,
-      action: PayloadAction<{ spell: string | null; index: number }>,
+      action: PayloadAction<{ spell: SpellId | null; index: number }>,
     ) => {
       const { spell, index } = action.payload;
       state.spells[index] = spell;
@@ -83,4 +86,4 @@ export const { setWand, setSpells, setSpellAtIndex, moveSpell, swapSpells } =
 
 export const selectWand = (state: RootState): WandState => state.wand.present;
 
-export default wandSlice.reducer;
+export const wandReducer = wandSlice.reducer;

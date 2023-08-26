@@ -1,8 +1,8 @@
+import _ from 'lodash';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useAppSelector } from './hooks';
 import { RootState } from './store';
 import { loadState } from '../localStorage';
-import _ from 'lodash';
 
 // Define a type for the slice state
 export interface ConfigState {
@@ -140,4 +140,4 @@ export function useConfig() {
   return useAppSelector(selectConfig);
 }
 
-export default configSlice.reducer;
+export const configReducer = configSlice.reducer;

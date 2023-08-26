@@ -14,7 +14,7 @@ export const defaultWand: Wand = {
   speed: 1,
 } as const;
 
-const defaultPresets = [
+export const defaultPresets = [
   {
     name: 'Advanced Guide: Introduction to Greek Letter Spells',
     presets: [
@@ -362,5 +362,3 @@ const defaultPresets = [
     ],
   },
 ];
-
-export default defaultPresets;

@@ -55,19 +55,11 @@ export function notNullOrUndefined<T>(x: T | null | undefined): x is T {
   return x !== null && x !== undefined;
 }
 
-export const lazy = <T>(callback: () => T) => {
-  let val: T | undefined = undefined;
-  return () => {
-    if (val === undefined) {
-      val = callback();
-    }
-    return val;
-  };
-};
-
 export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
   Object.keys(obj) as (keyof T)[];
+
 export type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
+
 export const objectEntries = <T extends object>(obj: T): Entries<T>[] =>
   Object.entries(obj) as Entries<T>[];
 
@@ -102,7 +94,7 @@ export function trimArray<T>(arr: T[], predicate: (o: T) => boolean): T[] {
   return result;
 }
 
-export function fixArraySize<T>(arr: T[], size: number): (T | null)[] {
+export function fixArraySize<T>(arr: T[], size: number): T[] {
   if (size > arr.length) {
     return [...arr, ...Array(size - arr.length).fill(null)];
   } else if (size < arr.length) {
@@ -173,4 +165,25 @@ export function hashString(s: string) {
     hash |= 0; // Convert to 32bit integer
   }
   return hash;
+}
+
+type Maybe<T> =
+  | {
+      ok: true;
+      val: T;
+    }
+  | {
+      ok: false;
+    };
+
+export function* mapIter<TI, TO>(
+  iterable: IterableIterator<TI>,
+  callback: (input: TI) => Maybe<TO>,
+): IterableIterator<TO> {
+  for (let x of iterable) {
+    const result = callback(x);
+    if (result.ok) {
+      yield result.val;
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import { extra_modifiers } from '../gun_extra_modifiers';
+import { ActionId } from '../';
 
 const ActionTypeInfoMapDefinition = {
   projectile: {
@@ -54,7 +55,7 @@ export const actionTypeInfoMap =
   ActionTypeInfoMapDefinition as ActionTypeInfoMap;
 
 export type GunActionState = {
-  action_id: string;
+  // action_id: ActionId;
   action_name: string;
   action_description: string;
   action_sprite_filename: string;
@@ -126,7 +127,7 @@ export type GunActionState = {
 };
 
 export type Action = {
-  id: string;
+  id: ActionId;
   name: string;
   description: string;
   beta?: boolean;

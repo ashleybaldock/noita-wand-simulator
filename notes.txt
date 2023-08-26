@@ -1,3 +1,8 @@
+
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+
+
 * use a single "deck" array, and just move pointers to indicate where the
   discard-hand and hand-deck boundaries are
   * might be complicated by divide by spells, which can discard directly from deck

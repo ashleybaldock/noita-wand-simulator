@@ -1,4 +1,4 @@
-import { Random } from './extra/util';
+import { Random } from './extra/ext_random';
 import {
   call_action,
   current_reload_time,
@@ -7,7 +7,6 @@ import {
   shot_effects,
 } from './gun';
 import { GunActionState } from './extra/types';
-import { ActionSource } from './eval/types';
 
 export const extra_modifiers = {
   critical_hit_boost: (c: GunActionState) => {
@@ -125,7 +124,7 @@ export const extra_modifiers = {
     // SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() - 523 )
 
     if (data !== null && Random(1, 2) === 1) {
-      call_action(ActionSource.PERK, data, c);
+      call_action('perk', data, c);
     }
   },
   high_spread: (c: GunActionState) => {

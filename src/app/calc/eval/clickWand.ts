@@ -10,7 +10,10 @@ import {
   mana as gunMana,
   state_from_game,
 } from '../gun';
-import { entityToAction, iterativeActions } from './lookups';
+import {
+  getActionsForEntityId as entityToAction,
+  isIterativeActionId,
+} from '../';
 import { ActionCall, Requirements, TreeNode, WandShot } from './types';
 
 export function clickWand(
@@ -122,22 +125,22 @@ export function clickWand(
 
         if (!sourceAction) {
           // fallback to most likely entity source if no action
-          if (!entityToAction()[entity]) {
+          if (!entityToAction[entity]) {
             throw Error(`missing entity: ${entity}`);
           }
-          sourceAction = entityToAction()[entity][0];
+          sourceAction = entityToAction[entity][0];
         }
 
         if (entity !== sourceAction.related_projectiles?.[0]) {
-          if (!entityToAction()[entity]) {
+          if (!entityToAction[entity]) {
             throw Error(`missing entity: ${entity}`);
           }
 
           // check for bugged actions (missing the correct related_projectile)
-          if (entityToAction()[entity][0].id !== sourceAction.id) {
+          if (entityToAction[entity][0].id !== sourceAction.id) {
             // this probably means another action caused this projectile (like ADD_TRIGGER)
             proxy = sourceAction;
-            sourceAction = entityToAction()[entity][0];
+            sourceAction = entityToAction[entity][0];
           }
         }
 
@@ -176,7 +179,7 @@ export function clickWand(
           currentMana: gunMana,
           deckIndex: args[1].deck_index,
           recursion: args[1].recursive ? args?.[3] || 0 : args?.[3],
-          iteration: iterativeActions().includes(args[1].id)
+          iteration: isIterativeActionId(args[1].id)
             ? args?.[4] || 1
             : undefined,
           dont_draw_actions: dont_draw_actions,
