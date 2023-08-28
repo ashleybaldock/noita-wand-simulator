@@ -1,20 +1,18 @@
-import { LocalStorageState } from './types';
+import { ConfigState } from './redux/configSlice';
 
-//https://medium.com/@jrcreencia/persisting-redux-state-to-local-storage-f81eb0b90e7e
-
-export const loadState = (): LocalStorageState | undefined => {
+export const loadState = (defaultState: ConfigState): ConfigState => {
   try {
     const serializedState = localStorage.getItem('state');
     if (serializedState === null) {
-      return undefined;
+      return defaultState;
     }
     return JSON.parse(serializedState);
   } catch (err) {
-    return undefined;
+    return defaultState;
   }
 };
 
-export const saveState = (state: LocalStorageState) => {
+export const saveState = (state: ConfigState) => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem('state', serializedState);

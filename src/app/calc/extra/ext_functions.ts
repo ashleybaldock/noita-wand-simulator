@@ -1,4 +1,6 @@
-import { Action, ComponentID, EntityID, GunActionState } from './types';
+import { Random as RandomExt } from '../lua';
+import { Action, GunActionState } from '../';
+import { ComponentID, EntityID } from './types';
 
 // listener logic
 
@@ -360,4 +362,17 @@ export function OnActionFinished(
   if (result !== undefined) {
     return result;
   }
+}
+
+export function Random(min: number, max: number) {
+  return RandomExt(min, max);
+}
+
+export function SetRandomSeed(a: number, b: number) {
+  // SetRandomSeedExt(store.getState().config.config.random.worldSeed, a, b);
+}
+
+export function GameGetFrameNum() {
+  return 0;
+  // return store.getState().config.config.random.frameNumber;
 }

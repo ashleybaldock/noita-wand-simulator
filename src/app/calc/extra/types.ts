@@ -1,179 +1,85 @@
 import { extra_modifiers } from '../gun_extra_modifiers';
-import { ActionId } from '../';
 
-const ActionTypeInfoMapDefinition = {
-  projectile: {
-    name: 'Projectile',
-    src: 'data/spelltypes/item_bg_projectile.png',
-  } as const,
-  static: {
-    name: 'Static',
-    src: 'data/spelltypes/item_bg_static_projectile.png',
-  } as const,
-  modifier: {
-    name: 'Modifier',
-    src: 'data/spelltypes/item_bg_modifier.png',
-  } as const,
-  multicast: {
-    name: 'Multicast',
-    src: 'data/spelltypes/item_bg_draw_many.png',
-  } as const,
-  material: {
-    name: 'Material',
-    src: 'data/spelltypes/item_bg_material.png',
-  } as const,
-  other: {
-    name: 'Other',
-    src: 'data/spelltypes/item_bg_other.png',
-  } as const,
-  utility: {
-    name: 'Utility',
-    src: 'data/spelltypes/item_bg_utility.png',
-  } as const,
-  passive: {
-    name: 'Passive',
-    src: 'data/spelltypes/item_bg_passive.png',
-  } as const,
-} as const;
+export function ConfigGunActionInfo_Init<T extends GunActionState>(source: T) {
+  return ConfigGunActionInfo_Copy(source, defaultGunActionState);
+}
 
-export type ActionType = keyof typeof ActionTypeInfoMapDefinition;
-
-export type ActionTypeInfo = typeof ActionTypeInfoMapDefinition[ActionType];
-
-export type ActionTypeName =
-  typeof ActionTypeInfoMapDefinition[ActionType]['name'];
-
-export type ActionTypeSrc =
-  typeof ActionTypeInfoMapDefinition[ActionType]['src'];
-
-export type ActionTypeInfoKey =
-  keyof typeof ActionTypeInfoMapDefinition[ActionType];
-
-export type ActionTypeInfoMap = Record<ActionType, ActionTypeInfo>;
-
-export const actionTypeInfoMap =
-  ActionTypeInfoMapDefinition as ActionTypeInfoMap;
-
-export type GunActionState = {
-  // action_id: ActionId;
-  action_name: string;
-  action_description: string;
-  action_sprite_filename: string;
-  action_unidentified_sprite_filename?: string;
-  action_type: ActionType;
-  action_spawn_level: string;
-  action_spawn_probability: string;
-  action_spawn_requires_flag?: string;
-  action_spawn_manual_unlock: boolean;
-  action_max_uses?: number;
-  custom_xml_file?: string;
-  action_mana_drain?: number;
-  action_is_dangerous_blast?: boolean;
-  action_draw_many_count: number;
-  action_ai_never_uses?: boolean;
-  action_never_unlimited?: boolean;
-  state_shuffled: boolean;
-  state_cards_drawn: number;
-  state_discarded_action: boolean;
-  state_destroyed_action: boolean;
-  fire_rate_wait: number;
-  speed_multiplier: number;
-  child_speed_multiplier: number;
-  dampening: number;
-  explosion_radius: number;
-  spread_degrees: number;
-  pattern_degrees: number;
-  screenshake: number;
-  recoil: number;
-  damage_melee_add: number;
-  damage_projectile_add: number;
-  damage_electricity_add: number;
-  damage_fire_add: number;
-  damage_explosion_add: number;
-  damage_explosion: number;
-  damage_ice_add: number;
-  damage_slice_add: number;
-  damage_healing_add: number;
-  damage_curse_add: number;
-  damage_drill_add: number;
-  damage_critical_chance: number;
-  damage_critical_multiplier: number;
-  explosion_damage_to_materials: number;
-  knockback_force: number;
-  reload_time: number;
-  lightning_count: number;
-  material: string;
-  material_amount: number;
-  trail_material: string;
-  trail_material_amount: number;
-  bounces: number;
-  gravity: number;
-  light: number;
-  blood_count_multiplier: number;
-  gore_particles: number;
-  ragdoll_fx: number;
-  friendly_fire: boolean;
-  physics_impulse_coeff: number;
-  lifetime_add: number;
-  sprite: string;
-  extra_entities: string;
-  game_effect_entities: string;
-  sound_loop_tag?: string;
-  projectile_file: string;
-  damage_null_all: number;
-
-  action_recursive?: boolean;
-  damage_projectile_mul?: number;
-};
-
-export type Action = {
-  id: ActionId;
-  name: string;
-  description: string;
-  beta?: boolean;
-  sprite: string;
-  sprite_unidentified?: string;
-  related_projectiles?: [string, number?];
-  type: ActionType;
-  spawn_level: string;
-  spawn_probability: string;
-  price: number;
-  mana?: number;
-  max_uses?: number;
-  custom_xml_file?: string;
-  action: (
-    c: GunActionState,
-    recursion_level?: number,
-    iteration?: number,
-  ) => number | void;
-  never_unlimited?: boolean;
-  spawn_requires_flag?: string;
-  sound_loop_tag?: string;
-  spawn_manual_unlock?: boolean;
-  recursive?: boolean;
-  ai_never_uses?: boolean;
-  related_extra_entities?: string[];
-  is_dangerous_blast?: boolean;
-
-  // deck properties
-  deck_index?: number;
-  custom_uses_logic?: never;
-  uses_remaining?: number;
-  is_identified?: boolean;
-  inventoryitem_id?: number;
-  permanently_attached?: boolean;
-};
+export function ConfigGunActionInfo_Copy<T extends GunActionState>(
+  source: T,
+  dest: T,
+): void {
+  // dest.action_id = source.action_id;
+  dest.action_name = source.action_name;
+  dest.action_description = source.action_description;
+  dest.action_sprite_filename = source.action_sprite_filename;
+  dest.action_unidentified_sprite_filename =
+    source.action_unidentified_sprite_filename;
+  dest.action_type = source.action_type;
+  dest.action_spawn_level = source.action_spawn_level;
+  dest.action_spawn_probability = source.action_spawn_probability;
+  dest.action_spawn_requires_flag = source.action_spawn_requires_flag;
+  dest.action_spawn_manual_unlock = source.action_spawn_manual_unlock;
+  dest.action_max_uses = source.action_max_uses;
+  dest.custom_xml_file = source.custom_xml_file;
+  dest.action_mana_drain = source.action_mana_drain;
+  dest.action_is_dangerous_blast = source.action_is_dangerous_blast;
+  dest.action_draw_many_count = source.action_draw_many_count;
+  dest.action_ai_never_uses = source.action_ai_never_uses;
+  dest.action_never_unlimited = source.action_never_unlimited;
+  dest.state_shuffled = source.state_shuffled;
+  dest.state_cards_drawn = source.state_cards_drawn;
+  dest.state_discarded_action = source.state_discarded_action;
+  dest.state_destroyed_action = source.state_destroyed_action;
+  dest.fire_rate_wait = source.fire_rate_wait;
+  dest.speed_multiplier = source.speed_multiplier;
+  dest.child_speed_multiplier = source.child_speed_multiplier;
+  dest.dampening = source.dampening;
+  dest.explosion_radius = source.explosion_radius;
+  dest.spread_degrees = source.spread_degrees;
+  dest.pattern_degrees = source.pattern_degrees;
+  dest.screenshake = source.screenshake;
+  dest.recoil = source.recoil;
+  dest.damage_melee_add = source.damage_melee_add;
+  dest.damage_projectile_add = source.damage_projectile_add;
+  dest.damage_electricity_add = source.damage_electricity_add;
+  dest.damage_fire_add = source.damage_fire_add;
+  dest.damage_explosion_add = source.damage_explosion_add;
+  dest.damage_explosion = source.damage_explosion;
+  dest.damage_ice_add = source.damage_ice_add;
+  dest.damage_slice_add = source.damage_slice_add;
+  dest.damage_healing_add = source.damage_healing_add;
+  dest.damage_curse_add = source.damage_curse_add;
+  dest.damage_drill_add = source.damage_drill_add;
+  dest.damage_critical_chance = source.damage_critical_chance;
+  dest.damage_critical_multiplier = source.damage_critical_multiplier;
+  dest.damage_null_all = source.damage_null_all;
+  dest.explosion_damage_to_materials = source.explosion_damage_to_materials;
+  dest.knockback_force = source.knockback_force;
+  dest.reload_time = source.reload_time;
+  dest.lightning_count = source.lightning_count;
+  dest.material = source.material;
+  dest.material_amount = source.material_amount;
+  dest.trail_material = source.trail_material;
+  dest.trail_material_amount = source.trail_material_amount;
+  dest.bounces = source.bounces;
+  dest.gravity = source.gravity;
+  dest.light = source.light;
+  dest.blood_count_multiplier = source.blood_count_multiplier;
+  dest.gore_particles = source.gore_particles;
+  dest.ragdoll_fx = source.ragdoll_fx;
+  dest.friendly_fire = source.friendly_fire;
+  dest.physics_impulse_coeff = source.physics_impulse_coeff;
+  dest.lifetime_add = source.lifetime_add;
+  dest.sprite = source.sprite;
+  dest.extra_entities = source.extra_entities;
+  dest.game_effect_entities = source.game_effect_entities;
+  dest.sound_loop_tag = source.sound_loop_tag;
+  dest.projectile_file = source.projectile_file;
+}
 
 export type Shot = {
   num_of_cards_to_draw: number;
   state: GunActionState;
-};
-
-export type Gun = {
-  actions_per_round: number;
-  shuffle_deck_when_empty: boolean;
-  reload_time: number;
-  deck_capacity: number;
 };
 
 export type ModifierName = keyof typeof extra_modifiers;

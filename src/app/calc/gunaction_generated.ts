@@ -71,8 +71,12 @@ export const defaultGunActionState: GunActionState = {
   projectile_file: '',
 };
 
-export function ConfigGunActionInfo_Init(value: GunActionState) {
-  Object.assign(value, defaultGunActionState);
+export function init_state_from_game() {
+  return Object.assign({}, defaultGunActionState);
+}
+
+export function ConfigGunActionInfo_Init<T extends GunActionState>(source: T) {
+  return ConfigGunActionInfo_Copy(source, defaultGunActionState);
 }
 
 export function ConfigGunActionInfo_PassToGame(value: GunActionState) {
@@ -80,8 +84,6 @@ export function ConfigGunActionInfo_PassToGame(value: GunActionState) {
 }
 
 // ext function
-// function ConfigGunActionInfo_ReadToLua(...args: any[]) {}
-
 export function ConfigGunActionInfo_Copy<T extends GunActionState>(
   source: T,
   dest: T,

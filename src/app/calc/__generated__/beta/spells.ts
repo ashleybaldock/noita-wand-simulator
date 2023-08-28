@@ -23,7 +23,7 @@ import {
   move_discarded_to_deck,
   order_deck,
   call_action,
-} from "../gun";
+} from "../../gun";
 import {
   EntityGetWithTag,
   GetUpdatedEntityID,
@@ -45,11 +45,10 @@ import {
   Random,
   SetRandomSeed,
   GameGetFrameNum
-} from "../extra/ext_functions";
-import { ipairs, luaFor } from "../lua";
-import { ActionId } from './gun_actionIds.beta';
+} from "../../extra/ext_functions";
+import { ipairs, luaFor } from "../../lua";
 
-export const actions = [
+export const actions: Action[] = [
 	
 	
 	{
@@ -57,12 +56,12 @@ export const actions = [
 		name: "$action_bomb",
 		description: "$actiondesc_bomb",
 		sprite: "data/ui_gfx/gun_actions/bomb.png",
-		// sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
+		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/bomb.xml"],
 		type: "projectile",
-		// spawn_level: "0,1,2,3,4,5,6",
-		// spawn_probability: "1,1,1,1,0.5,0.5,0.1",
-		// price: 200,
+		spawn_level: "0,1,2,3,4,5,6",
+		spawn_probability: "1,1,1,1,0.5,0.5,0.1",
+		price: 200,
 		mana: 25,
 		max_uses: 3,
 		custom_xml_file: "data/entities/misc/custom_cards/bomb.xml",

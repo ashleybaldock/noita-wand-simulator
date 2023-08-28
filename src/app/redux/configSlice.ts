@@ -117,11 +117,9 @@ export const initialState: ConfigState = {
   },
 };
 
-const loadedInitialState = loadState();
-
 export const configSlice = createSlice({
   name: 'config',
-  initialState: _.merge(initialState, loadedInitialState || {}),
+  initialState: () => loadState(initialState),
   reducers: {
     updateConfig: (
       state,
@@ -129,6 +127,7 @@ export const configSlice = createSlice({
     ) => {
       state.config = { ...state.config, ...action.payload };
     },
+    updateKey: (state, action) => {},
   },
 });
 

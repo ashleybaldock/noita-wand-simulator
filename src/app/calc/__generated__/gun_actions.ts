@@ -45,9 +45,11 @@ import {
   EntityGetInRadiusWithTag,
   GlobalsGetValue,
   GlobalsSetValue,
+  Random,
+  SetRandomSeed,
+  GameGetFrameNum
 } from "../extra/ext_functions";
-import { Random, SetRandomSeed, GameGetFrameNum } from "../extra/ext_random";
-import { ipairs, luaFor } from "../luaHelpers";
+import { ipairs, luaFor } from "../lua";
 
 export const actionIds = [
 "BOMB",

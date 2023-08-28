@@ -5,14 +5,20 @@ from re import Match
 
 srcFile = 'data/scripts/gun/gun_actions.lua'
 srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
-dstFile = 'src/app/calc/__generated__/gun_actions.ts'
-dstFileBeta = 'src/app/calc/__generated__/gun_actions.beta.ts'
 
-os.makedirs(os.path.dirname(dstFile), exist_ok=True)
+#dstFile = 'src/app/calc/__generated__/gun_actions.ts'
+#dstFileBeta = 'src/app/calc/__generated__/gun_actions.beta.ts'
+#os.makedirs(os.path.dirname(dstFile), exist_ok=True)
 
-imports = """
-import { GunActionState, Action } from "../extra/types";
-import {
+dst = {
+  'actionIds': {
+    'main': 'src/app/calc/__generated__/main/actionIds.ts',
+    'beta': 'src/app/calc/__generated__/beta/actionIds.ts',
+  },
+  'spells': {
+    'main': 'src/app/calc/__generated__/main/spells.ts',
+    'beta': 'src/app/calc/__generated__/beta/spells.ts',
+    'before': """import {
   hand,
   deck,
   discarded,
@@ -36,9 +42,8 @@ import {
   ACTION_DRAW_RELOAD_TIME_INCREASE,
   move_discarded_to_deck,
   order_deck,
-  reflecting,
   call_action,
-} from "../gun";
+} from "../../gun";
 import {
   EntityGetWithTag,
   GetUpdatedEntityID,
@@ -57,11 +62,24 @@ import {
   EntityGetInRadiusWithTag,
   GlobalsGetValue,
   GlobalsSetValue,
-} from "../extra/ext_functions";
-import { Random, SetRandomSeed, GameGetFrameNum } from "../extra/ext_random";
-import { ipairs, luaFor } from "../luaHelpers";
+  Random,
+  SetRandomSeed,
+  GameGetFrameNum
+} from "../../extra/ext_functions";
+import { ipairs, luaFor } from "../../lua";
 
-"""
+""",
+  },
+  'actions': {
+    'main': 'src/app/calc/__generated__/main/actions.ts',
+    'beta': 'src/app/calc/__generated__/beta/actions.ts',
+  },
+}
+
+
+os.makedirs(os.path.dirname('src/app/calc/__generated__/main/'), exist_ok=True)
+os.makedirs(os.path.dirname('src/app/calc/__generated__/beta/'), exist_ok=True)
+
 
 # In practice, there are two signatures for actions
 # action = function()
@@ -103,7 +121,7 @@ patterns = [
     flags=re.DOTALL,
   ),
 
-  # remove comments
+  # remove comment
   PatternReplace(r'--\[\[.*?]]--', '', flags=re.MULTILINE | re.DOTALL),
   PatternReplace(r'--.*?$', '', flags=re.MULTILINE),
 
@@ -204,7 +222,7 @@ patterns = [
 
 
 
-def processFile(srcFile):
+def processFile(srcFile, branch = 'main'):
   with open(srcFile) as inFile:
     content = inFile.read()
 
@@ -212,6 +230,9 @@ def processFile(srcFile):
   action_ids = list(dict.fromkeys(re.findall(action_id_pattern, content, re.DOTALL)))
   joined = ",\n".join(f'"{i}"' for i in action_ids)
   action_id_type = f'export const actionIds = [\n{joined}\n] as const;\n\nexport type ActionId = typeof actionIds[number];\n\n'
+  with open(dst['actionIds'][branch], 'w') as outFileActionIds:
+    outFileActionIds.write(action_id_type)
+
 
   variances = []
 
@@ -239,13 +260,12 @@ def processFile(srcFile):
       print(f'{variance}')
 
   # insert imports
-  content = imports + action_id_type + content
+  content = dst['spells']['before'] + content
 
-  return content
+  with open(dst['spells'][branch], 'w') as outFileActionIds:
+    outFileActionIds.write(content)
 
 
-with open(dstFile, 'w') as outFile:
-  outFile.write(processFile(srcFile))
+processFile(srcFile, 'main')
+processFile(srcFileBeta, 'beta')
 
-with open(dstFileBeta, 'w') as outFile:
-  outFile.write(processFile(srcFileBeta))

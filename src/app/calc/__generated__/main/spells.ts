@@ -23,7 +23,7 @@ import {
   move_discarded_to_deck,
   order_deck,
   call_action,
-} from "../gun";
+} from "../../gun";
 import {
   EntityGetWithTag,
   GetUpdatedEntityID,
@@ -45,11 +45,10 @@ import {
   Random,
   SetRandomSeed,
   GameGetFrameNum
-} from "../extra/ext_functions";
-import { ipairs, luaFor } from "../lua";
-import { ActionId } from './gun_actionIds.beta';
+} from "../../extra/ext_functions";
+import { ipairs, luaFor } from "../../lua";
 
-export const actions = [
+export const actions: Spell[] = [
 	
 	
 	{
@@ -57,12 +56,12 @@ export const actions = [
 		name: "$action_bomb",
 		description: "$actiondesc_bomb",
 		sprite: "data/ui_gfx/gun_actions/bomb.png",
-		// sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
+		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/bomb.xml"],
 		type: "projectile",
-		// spawn_level: "0,1,2,3,4,5,6",
-		// spawn_probability: "1,1,1,1,0.5,0.5,0.1",
-		// price: 200,
+		spawn_level: "0,1,2,3,4,5,6",
+		spawn_probability: "1,1,1,1,1,1,1",
+		price: 200,
 		mana: 25,
 		max_uses: 3,
 		custom_xml_file: "data/entities/misc/custom_cards/bomb.xml",
@@ -140,7 +139,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/light_bullet.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3",
-		spawn_probability: "0.5,0.5,0.75",
+		spawn_probability: "0.5,0.5,0.5",
 		price: 140,
 		mana: 10,
 		
@@ -160,7 +159,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/bullet.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "1,1,1,0.8,0.5",
+		spawn_probability: "1,1,1,1,1",
 		price: 150,
 		mana: 20,
 		
@@ -182,7 +181,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/bullet.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.5,0.5,0.5,0.6,0.5",
+		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 190,
 		mana: 35,
 		
@@ -204,7 +203,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/bullet.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.5,0.5,0.5,0.5,0.6",
+		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 190,
 		mana: 35,
 		
@@ -249,7 +248,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/bullet_heavy.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.5,0.5,0.5,0.7,0.5",
+		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 240,
 		mana: 40,
 		
@@ -272,7 +271,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/bullet_heavy.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.5,0.5,0.5,0.5,0.7",
+		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 240,
 		mana: 40,
 		
@@ -374,25 +373,6 @@ export const actions = [
 		},
 	},
 	{
-		id: "HOOK",
-		name: "$action_hook",
-		description: "$actiondesc_hook",
-		sprite: "data/ui_gfx/gun_actions/hook.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/bullet_unidentified.png",
-		related_projectiles: ["data/entities/projectiles/deck/hook.xml"],
-		type: "projectile",
-		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.1,0.3,0.4,0.2,0.1",
-		price: 120,
-		mana: 30,
-		
-		action: (c: GunActionState) => {
-			add_projectile("data/entities/projectiles/deck/hook.xml")
-			c.fire_rate_wait = c.fire_rate_wait + 12
-			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
-		},
-	},
-	{
 		id: "BLACK_HOLE",
 		name: "$action_black_hole",
 		description: "$actiondesc_black_hole",
@@ -455,26 +435,6 @@ export const actions = [
 		},
 	},
 	{
-		id: "WHITE_HOLE_BIG",
-		name: "$action_white_hole_big",
-		description: "$actiondesc_white_hole_big",
-		sprite: "data/ui_gfx/gun_actions/white_hole_big.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_big_unidentified.png",
-		related_projectiles: ["data/entities/projectiles/deck/white_hole_big.xml"],
-		type: "static",
-		spawn_level: "1,3,5,6,10",
-		spawn_probability: "0.1,0.1,0.1,0.4,0.2",
-		price: 320,
-		mana: 240,
-		max_uses: 6,
-		custom_xml_file: "data/entities/misc/custom_cards/white_hole_big.xml",
-		action: (c: GunActionState) => {
-			add_projectile("data/entities/projectiles/deck/white_hole_big.xml")
-			c.fire_rate_wait = c.fire_rate_wait + 80
-			c.screenshake = c.screenshake + 10
-		},
-	},
-	{
 		id: "BLACK_HOLE_GIGA",
 		name: "$action_black_hole_giga",
 		description: "$actiondesc_black_hole_giga",
@@ -510,7 +470,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/tentacle_portal.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3,4,10",
-		spawn_probability: "0.4,0.4,0.4,0.5,0.2",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.2",
 		price: 220,
 		mana: 140,
 		max_uses: 5,
@@ -639,7 +599,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/spitter_tier_3.xml"],
 		type: "projectile",
 		spawn_level: "4,5,6",
-		spawn_probability: "0.5,0.65,0.5",
+		spawn_probability: "0.5,0.5,0.5",
 		price: 260,
 		mana: 45,
 		
@@ -661,7 +621,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/bubbleshot.xml"],
 		type: "projectile",
 		spawn_level: "0,1,2,3",
-		spawn_probability: "1,0.6,1,0.5",
+		spawn_probability: "1,1,1,0.5",
 		price: 100,
 		mana: 5,
 		
@@ -701,7 +661,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/disc_bullet.xml"],
 		type: "projectile",
 		spawn_level: "0,2,4",
-		spawn_probability: "1,1,0.6",
+		spawn_probability: "1,1,1",
 		price: 120,
 		mana: 20,
 		
@@ -721,8 +681,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/disc_bullet_big.xml"],
 		type: "projectile",
-		spawn_level: "0,2,4",
-		spawn_probability: "0.6,0.7,0.8",
+		spawn_level: "0,2,4,10",
+		spawn_probability: "0.6,0.6,0.6,0.1",
 		price: 180,
 		mana: 38,
 		
@@ -744,7 +704,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/disc_bullet_bigger.xml"],
 		type: "projectile",
 		spawn_level: "2,3,5,10",
-		spawn_probability: "0.1,0.6,1,0.4",
+		spawn_probability: "0.1,0.6,1.0,0.1",
 		price: 270,
 		mana: 70,
 		
@@ -806,7 +766,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/rubber_ball.xml"],
 		type: "projectile",
 		spawn_level: "0,1,6",
-		spawn_probability: "1,1,0.2",
+		spawn_probability: "1,1,1",
 		price: 60,
 		mana: 5,
 		
@@ -826,7 +786,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/arrow.xml"],
 		type: "projectile",
 		spawn_level: "1,2,4,5",
-		spawn_probability: "1,1,0.6,0.3",
+		spawn_probability: "1,1,1,1",
 		price: 140,
 		mana: 15,
 		
@@ -847,7 +807,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/pollen.xml"],
 		type: "projectile",
 		spawn_level: "0,1,3,4",
-		spawn_probability: "0.6,1,1,0.6",
+		spawn_probability: "0.6,1,1,0.8",
 		price: 110,
 		mana: 10,
 		
@@ -867,7 +827,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/lance.xml"],
 		type: "projectile",
 		spawn_level: "1,2,5,6",
-		spawn_probability: "0.9,1,0.8,1",
+		spawn_probability: "1,1,1,1",
 		price: 180,
 		mana: 30,
 		
@@ -889,7 +849,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/rocket.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "1,1,1,0.5,0.3",
+		spawn_probability: "1,1,1,0.5,0.5",
 		price: 220,
 		mana: 70,
 		max_uses: 10,
@@ -911,7 +871,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/rocket_tier_2.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.5,1,1,0.8,0.5",
+		spawn_probability: "0.5,1,1,1,1",
 		price: 240,
 		mana: 90,
 		max_uses: 8,
@@ -955,7 +915,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/grenade.xml"],
 		type: "projectile",
 		spawn_level: "0,1,2,3,4",
-		spawn_probability: "1,1,0.5,0.25,0.2",
+		spawn_probability: "1,1,0.5,0.25,0.25",
 		price: 170,
 		mana: 50,
 		max_uses: 25,
@@ -978,7 +938,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/grenade.xml"],
 		type: "projectile",
 		spawn_level: "0,1,2,3,4,5",
-		spawn_probability: "0.5,0.5,0.2,0.5,0.5,1",
+		spawn_probability: "0.5,0.5,0.5,0.5,0.5,1",
 		price: 210,
 		max_uses: 25,
 		custom_xml_file: "data/entities/misc/custom_cards/grenade_trigger.xml",
@@ -1001,7 +961,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/grenade_tier_2.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.5,1,1,1,0.5",
+		spawn_probability: "0.5,1,1,1,1",
 		price: 220,
 		mana: 90,
 		max_uses: 20,
@@ -1047,7 +1007,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/grenade_anti.xml"],
 		type: "projectile",
 		spawn_level: "0,1,2,3,4,5",
-		spawn_probability: "0.4,0.4,0.7,0.4,0.4,0.4",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 170,
 		mana: 50,
 		max_uses: 25,
@@ -1093,7 +1053,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/mine.xml"],
 		type: "projectile",
 		spawn_level: "1,3,4,6",
-		spawn_probability: "1,0.75,1,0.5",
+		spawn_probability: "1,1,1,1",
 		price: 200,
 		mana: 20,
 		max_uses: 15,
@@ -1147,7 +1107,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/pipe_bomb.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4",
-		spawn_probability: "1,1,0.6",
+		spawn_probability: "1,1,1",
 		price: 200,
 		mana: 20,
 		max_uses: 20,
@@ -1173,7 +1133,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/pipe_bomb.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4,5",
-		spawn_probability: "0.6,0.8,1,0.8",
+		spawn_probability: "1,1,1,1",
 		price: 230,
 		mana: 20,
 		max_uses: 20,
@@ -1189,25 +1149,6 @@ export const actions = [
 			} else if ( c.speed_multiplier < 0 )  {
 				c.speed_multiplier = 0
 			}
-		},
-	},
-	{
-		id: "FISH",
-		name: "$action_fish",
-		description: "$actiondesc_fish",
-		spawn_requires_flag: "card_unlocked_fish",
-		sprite: "data/ui_gfx/gun_actions/fish.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/fish_unidentified.png",
-		related_projectiles: ["data/entities/projectiles/deck/fish.xml"],
-		type: "projectile",
-		spawn_level: "3,4,5",
-		spawn_probability: "0.01,0.01,0.01",
-		price: 250,
-		mana: 90,
-		max_uses: 20,
-		action: (c: GunActionState) => {
-			add_projectile("data/entities/projectiles/deck/fish.xml")
-			c.fire_rate_wait = c.fire_rate_wait + 80
 		},
 	},
 	{
@@ -1239,7 +1180,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/duck.xml", 3],
 		type: "projectile",
 		spawn_level: "3,4,5",
-		spawn_probability: "0.8,0.5,0.6",
+		spawn_probability: "0.6,0.8,0.6",
 		price: 200,
 		mana: 100,
 		max_uses: 20,
@@ -1260,8 +1201,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/exploding_deer_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/worm_shot.xml"],
 		type: "projectile",
-		spawn_level: "3,4,5,6,10",
-		spawn_probability: "0.6,0.8,0.6,0.4,0.6",
+		spawn_level: "3,4,5",
+		spawn_probability: "0.6,0.8,0.6",
 		price: 200,
 		mana: 150,
 		max_uses: 10,
@@ -1283,7 +1224,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/bomb_detonator.xml"],
 		type: "static",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.5,1,0.4,0.5,1",
+		spawn_probability: "1,1,1,1,1",
 		price: 120,
 		mana: 50,
 		action: (c: GunActionState) => {
@@ -1320,7 +1261,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/megalaser.xml"],
 		type: "projectile",
 		spawn_level: "3,4,5,6,10",
-		spawn_probability: "0.6,0.6,0.8,0.6,0.3",
+		spawn_probability: "0.6,0.6,0.6,0.6,0.1",
 		price: 300,
 		mana: 110,
 		action: (c: GunActionState) => {
@@ -1346,7 +1287,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/lightning.xml"],
 		type: "projectile",
 		spawn_level: "1,2,5,6",
-		spawn_probability: "1,0.9,0.7,1",
+		spawn_probability: "1,1,1,1",
 		price: 250,
 		mana: 70,
 		
@@ -1366,7 +1307,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/ball_lightning.xml",3],
 		type: "projectile",
 		spawn_level: "1,2,4,5",
-		spawn_probability: "0.2,0.4,1,1",
+		spawn_probability: "0.2,0.2,1,1",
 		price: 250,
 		mana: 70,
 		custom_xml_file: "data/entities/misc/custom_cards/electric_charge.xml",
@@ -1387,7 +1328,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/orb_laseremitter.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3,4",
-		spawn_probability: "0.2,0.8,1,0.5",
+		spawn_probability: "0.2,1,1,0.5",
 		price: 180,
 		mana: 60,
 		action: (c: GunActionState) => {
@@ -1406,7 +1347,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/orb_laseremitter.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.2,0.9,0.3,0.5,1",
+		spawn_probability: "0.2,1,0.2,0.5,1",
 		price: 200,
 		mana: 80,
 		action: (c: GunActionState) => {
@@ -1462,7 +1403,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/powerdigger.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.5,1,0.8",
+		spawn_probability: "0.5,1,1",
 		price: 110,
 		mana: 0,
 		sound_loop_tag: "sound_digger",
@@ -1501,8 +1442,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/chainsaw_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/luminous_drill.xml"],
 		type: "projectile",
-		spawn_level: "0,2,10",
-		spawn_probability: "1,1,0.1",
+		spawn_level: "0,2",
+		spawn_probability: "1,1",
 		price: 150,
 		mana: 10,
 		
@@ -1521,8 +1462,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/chainsaw_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/luminous_drill.xml"],
 		type: "projectile",
-		spawn_level: "0,2,6,10",
-		spawn_probability: "1,1,0.2,0.1",
+		spawn_level: "0,2",
+		spawn_probability: "1,1",
 		price: 220,
 		mana: 30,
 		
@@ -1543,7 +1484,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/tentacle.xml"],
 		type: "projectile",
 		spawn_level: "3,4,5,6",
-		spawn_probability: "1,0.5,1,0.8",
+		spawn_probability: "1,1,1,1",
 		price: 200,
 		mana: 20,
 		
@@ -1563,7 +1504,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/tentacle.xml"],
 		type: "projectile",
 		spawn_level: "3,4,5,6",
-		spawn_probability: "0.6,0.8,0.6,0.7",
+		spawn_probability: "0.6,0.6,0.6,0.6",
 		price: 250,
 		mana: 20,
 		
@@ -1583,7 +1524,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/heal_bullet.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4",
-		spawn_probability: "1,1,0.6",
+		spawn_probability: "1,1,1",
 		price: 60,
 		mana: 15,
 		max_uses: 20,
@@ -1605,7 +1546,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/spiral_shot.xml"],
 		type: "projectile",
 		spawn_level: "4,5,6",
-		spawn_probability: "0.7,0.8,0.7",
+		spawn_probability: "1,1,1",
 		price: 190,
 		mana: 50,
 		max_uses: 15,
@@ -1624,7 +1565,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/magic_shield_start.xml"],
 		type: "projectile",
 		spawn_level: "2,4,5,6",
-		spawn_probability: "0.5,0.6,0.7,1",
+		spawn_probability: "0.5,0.5,1,1",
 		price: 100,
 		mana: 40,
 		action: (c: GunActionState) => {
@@ -1641,7 +1582,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/big_magic_shield_start.xml"],
 		type: "projectile",
 		spawn_level: "2,4,5,6,10",
-		spawn_probability: "0.2,0.4,0.5,0.6,0.2",
+		spawn_probability: "0.2,0.2,0.5,0.5,0.1",
 		price: 120,
 		mana: 60,
 		action: (c: GunActionState) => {
@@ -1657,7 +1598,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/chain_bolt.xml"],
 		type: "projectile",
 		spawn_level: "0,4,5,6",
-		spawn_probability: "0.75,1,0.8,0.6",
+		spawn_probability: "1,1,1,1",
 		price: 240,
 		mana: 80,
 		action: (c: GunActionState) => {
@@ -1675,7 +1616,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/fireball.xml"],
 		type: "projectile",
 		spawn_level: "0,3,4,6",
-		spawn_probability: "1,0.7,1,0.5",
+		spawn_probability: "1,1,1,1",
 		price: 220,
 		mana: 70,
 		max_uses: 15,
@@ -1696,7 +1637,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/meteor.xml"],
 		type: "projectile",
 		spawn_level: "4,5,6,10",
-		spawn_probability: "0.6,0.6,0.7,0.5",
+		spawn_probability: "0.6,0.6,0.6,0.5",
 		price: 280,
 		mana: 150,
 		max_uses: 10,
@@ -1712,8 +1653,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/flamethrower_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/flamethrower.xml"],
 		type: "projectile",
-		spawn_level: "2,3,4,6",
-		spawn_probability: "0.8,0.9,0.9,0.6",
+		spawn_level: "2,3,6",
+		spawn_probability: "1,1,1",
 		price: 220,
 		mana: 20,
 		max_uses: 60,
@@ -1732,7 +1673,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/iceball.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4,6",
-		spawn_probability: "0.8,0.9,0.9,0.6",
+		spawn_probability: "1,1,1,1",
 		price: 260,
 		mana: 90,
 		max_uses: 15,
@@ -1754,7 +1695,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/slime.xml"],
 		type: "projectile",
 		spawn_level: "0,3,4",
-		spawn_probability: "1,1,0.7",
+		spawn_probability: "1,1,1",
 		price: 130,
 		mana: 20,
 		
@@ -1781,7 +1722,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/darkflame.xml"],
 		type: "projectile",
 		spawn_level: "3,5,6",
-		spawn_probability: "1,0.9,0.8",
+		spawn_probability: "1,1,1",
 		price: 180,
 		mana: 90,
 		custom_xml_file: "data/entities/misc/custom_cards/darkflame.xml",
@@ -1840,7 +1781,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/pebble_player.xml"],
 		type: "projectile",
 		spawn_level: "1,2,4,6",
-		spawn_probability: "0.9,1,0.9,0.6",
+		spawn_probability: "1,1,1,1",
 		price: 200,
 		mana: 120,
 		max_uses: 10,
@@ -1858,7 +1799,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/tnt.xml"],
 		type: "projectile",
 		spawn_level: "0,1,2,3,4",
-		spawn_probability: "1,0.9,0.8,0.7,0.6",
+		spawn_probability: "1,1,1,1,1",
 		price: 160,
 		mana: 50,
 		max_uses: 16,
@@ -1878,7 +1819,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/glitter_bomb.xml"],
 		type: "projectile",
 		spawn_level: "0,1,2,3,4",
-		spawn_probability: "0.8,0.9,0.8,0.7,0.6",
+		spawn_probability: "0.8,0.8,0.8,0.8,0.8",
 		price: 200,
 		mana: 70,
 		max_uses: 16,
@@ -1898,7 +1839,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/buckshot_player.xml",3],
 		type: "projectile",
 		spawn_level: "0,1,2,3,4",
-		spawn_probability: "1,1,0.9,0.9,0.6",
+		spawn_probability: "1,1,1,1,1",
 		price: 160,
 		mana: 25,
 		action: (c: GunActionState) => {
@@ -1918,7 +1859,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/freezing_gaze_beam.xml",12],
 		type: "projectile",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.9,1,1",
+		spawn_probability: "1,1,1",
 		price: 180,
 		mana: 45,
 		max_uses: 20,
@@ -1948,7 +1889,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/glowing_bolt.xml"],
 		type: "projectile",
 		spawn_level: "3,4,5,10",
-		spawn_probability: "0.8,0.9,1,0.1",
+		spawn_probability: "1,1,1,0.1",
 		price: 220,
 		mana: 65,
 		action: (c: GunActionState) => {
@@ -1967,7 +1908,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/spore_pod.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.7,0.8,0.9,0.8,0.6",
+		spawn_probability: "0.8,0.8,0.8,0.8,0.8",
 		price: 200,
 		mana: 20,
 		action: (c: GunActionState) => {
@@ -1985,7 +1926,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/glue_shot.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4,5",
-		spawn_probability: "0.7,0.4,0.2,0.5",
+		spawn_probability: "0.6,0.2,0.2,0.6",
 		price: 140,
 		mana: 25,
 		action: (c: GunActionState) => {
@@ -2047,8 +1988,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/propane_tank.xml"],
 		type: "projectile",
-		spawn_level: "2,3,4,5,6",
-		spawn_probability: "1,1,0.8,0.8,0.7",
+		spawn_level: "0,1,2,3,4,5,6",
+		spawn_probability: "0,0,1,1,1,1,1",
 		price: 200,
 		mana: 75,
 		max_uses: 10,
@@ -2066,8 +2007,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/bomb_cart.xml"],
 		type: "projectile",
-		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.6,0.6,0.5,0.8,0.6",
+		spawn_level: "0,1,2,3,4,5,6",
+		spawn_probability: "0,0,0.6,0.6,0.6,0.6,0.6",
 		price: 200,
 		mana: 75,
 		max_uses: 6,
@@ -2104,7 +2045,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/orb_expanding.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.5,0.5,1,1,0.5",
+		spawn_probability: "0.5,0.5,1.0,1.0,1.0",
 		price: 200,
 		mana: 70,
 		action: (c: GunActionState) => {
@@ -2123,7 +2064,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/crumbling_earth.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.4,0.3,0.5,0.6,0.9",
+		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 300,
 		mana: 240,
 		max_uses: 3,
@@ -2140,7 +2081,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/rock.xml"],
 		type: "projectile",
 		spawn_level: "0,1,2,3,4,5,6",
-		spawn_probability: "0.8,0.8,0.6,0.6,0.3,0.7,0.7",
+		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 160,
 		mana: 100,
 		max_uses: 3,
@@ -2158,7 +2099,7 @@ export const actions = [
 		related_projectiles: ["data/entities/items/pickup/egg_monster.xml"],
 		type: "projectile",
 		spawn_level: "0,1,2,3,4,5,6",
-		spawn_probability: "0.7,0.8,0.8,0.7,0.6,0.6,0.5",
+		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 220,
 		mana: 100,
 		max_uses: 2,
@@ -2178,8 +2119,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/items/pickup/egg_hollow.xml"],
 		type: "projectile",
-		spawn_level: "0,1,2,5,6",
-		spawn_probability: "0.6,0.8,0.7,0.8,0.3",
+		spawn_level: "0,1,2,3,4,5,6",
+		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 140,
 		mana: 30,
 		action: (c: GunActionState) => {
@@ -2195,8 +2136,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/tntbox.xml"],
 		type: "projectile",
-		spawn_level: "1,2,3,5",
-		spawn_probability: "0.8,0.9,0.5,0.4",
+		spawn_level: "1,2,3,4,5",
+		spawn_probability: "0.8,0.8,0.8,0.8,0.8",
 		price: 150,
 		mana: 40,
 		max_uses: 15,
@@ -2213,8 +2154,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/tntbox_big.xml"],
 		type: "projectile",
-		spawn_level: "2,4,5",
-		spawn_probability: "0.8,1,0.7",
+		spawn_level: "1,2,3,4,5",
+		spawn_probability: "0.8,0.8,0.8,0.8,0.8",
 		price: 170,
 		mana: 40,
 		max_uses: 15,
@@ -2231,11 +2172,12 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/swarm_fly.xml",5],
 		type: "static",
-		spawn_level: "2,4,5",
-		spawn_probability: "0.3,0.4,0.5",
+		spawn_level: "2,4,5,6",
+		spawn_probability: "0.2,0.2,0.5,0.5",
 		price: 90,
-		mana: 60,
+		mana: 70,
 		action: (c: GunActionState) => {
+			add_projectile("data/entities/projectiles/deck/swarm_fly.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_fly.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_fly.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_fly.xml")
@@ -2253,11 +2195,12 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/swarm_firebug.xml",4],
 		type: "static",
-		spawn_level: "2,5,6",
-		spawn_probability: "0.2,0.4,0.5",
+		spawn_level: "2,4,5,6",
+		spawn_probability: "0.2,0.2,0.5,0.5",
 		price: 100,
-		mana: 70,
+		mana: 80,
 		action: (c: GunActionState) => {
+			add_projectile("data/entities/projectiles/deck/swarm_firebug.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_firebug.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_firebug.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_firebug.xml")
@@ -2274,11 +2217,12 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/swarm_wasp.xml",6],
 		type: "static",
-		spawn_level: "4,5,6",
-		spawn_probability: "0.2,0.5,0.6",
+		spawn_level: "2,4,5,6",
+		spawn_probability: "0.2,0.2,0.5,0.5",
 		price: 120,
-		mana: 80,
+		mana: 90,
 		action: (c: GunActionState) => {
+			add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
@@ -2298,7 +2242,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/friend_fly.xml"],
 		type: "static",
 		spawn_level: "4,5,6",
-		spawn_probability: "0.2,0.6,0.5",
+		spawn_probability: "0.2,0.5,0.5",
 		price: 160,
 		mana: 120,
 		action: (c: GunActionState) => {
@@ -2318,7 +2262,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/acidshot.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3,4",
-		spawn_probability: "1,1,0.9,0.6",
+		spawn_probability: "1,1,1,1",
 		price: 180,
 		mana: 20,
 		max_uses: 20,
@@ -2337,7 +2281,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/thunderball.xml"],
 		type: "projectile",
 		spawn_level: "2,4,6,10",
-		spawn_probability: "0.9,1,0.7,0.2",
+		spawn_probability: "1,1,1,0.2",
 		price: 300,
 		mana: 120,
 		max_uses: 3,
@@ -2357,7 +2301,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/firebomb.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3",
-		spawn_probability: "1,0.9,0.7",
+		spawn_probability: "1,1,1",
 		price: 90,
 		mana: 10,
 		
@@ -2375,7 +2319,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/chunk_of_soil.xml"],
 		type: "material",
 		spawn_level: "1,2,3,5",
-		spawn_probability: "0.8,0.8,1,0.75",
+		spawn_probability: "1,1,1,1",
 		price: 10,
 		mana: 5,
 		action: (c: GunActionState) => {
@@ -2392,7 +2336,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/death_cross.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3,4,5,6",
-		spawn_probability: "1,0.8,0.6,0.5,0.5,0.3",
+		spawn_probability: "1,0.6,0.6,0.6,0.6,0.6",
 		price: 210,
 		mana: 80,
 		custom_xml_file: "data/entities/misc/custom_cards/death_cross.xml",
@@ -2410,7 +2354,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/death_cross_big.xml"],
 		type: "projectile",
 		spawn_level: "2,3,4,5,6,10",
-		spawn_probability: "0.4,0.5,0.55,0.3,0.4,0.2",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.2",
 		price: 310,
 		mana: 150,
 		max_uses: 8,
@@ -2430,7 +2374,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/infestation.xml",10],
 		type: "projectile",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.1,0.3,0.4",
+		spawn_probability: "0.1,0.3,0.3",
 		price: 160,
 		mana: 40,
 		
@@ -2451,8 +2395,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/wall_horizontal.xml"],
 		type: "static",
-		spawn_level: "0,1,2,4,5",
-		spawn_probability: "0.4,0.4,0.6,0.5,0.2",
+		spawn_level: "0,1,2,4,5,6",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 160,
 		mana: 70,
 		
@@ -2469,8 +2413,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/wall_vertical.xml"],
 		type: "static",
-		spawn_level: "0,1,2,4,5",
-		spawn_probability: "0.4,0.4,0.6,0.5,0.2",
+		spawn_level: "0,1,2,4,5,6",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 160,
 		mana: 70,
 		
@@ -2488,7 +2432,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/wall_square.xml"],
 		type: "static",
 		spawn_level: "0,1,2,4,5,6",
-		spawn_probability: "0.3,0.2,0.6,0.5,0.4,0.4",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 160,
 		mana: 70,
 		max_uses: 20,
@@ -2505,8 +2449,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/temporary_wall.xml"],
 		type: "utility",
-		spawn_level: "0,1,2,4,5",
-		spawn_probability: "0.1,0.1,0.3,0.4,0.2",
+		spawn_level: "0,1,2,4,5,6",
+		spawn_probability: "0.1,0.1,0.3,0.4,0.2,0.1",
 		price: 100,
 		mana: 40,
 		max_uses: 20,
@@ -2523,8 +2467,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/temporary_platform.xml"],
 		type: "utility",
-		spawn_level: "0,1,2,4,5",
-		spawn_probability: "0.1,0.1,0.3,0.4,0.2",
+		spawn_level: "0,1,2,4,5,6",
+		spawn_probability: "0.1,0.1,0.3,0.4,0.2,0.1",
 		price: 90,
 		mana: 30,
 		max_uses: 20,
@@ -2542,7 +2486,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/purple_explosion_field.xml"],
 		type: "static",
 		spawn_level: "0,1,2,4,5,6",
-		spawn_probability: "0.7,1,0.7,0.5,0.5,0.3",
+		spawn_probability: "1,1,1,1,1,1",
 		price: 160,
 		mana: 90,
 		max_uses: 20,
@@ -2567,7 +2511,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/delayed_spell.xml"],
 		type: "static",
 		spawn_level: "0,1,2,4,5,6",
-		spawn_probability: "0.8,0.8,1,0.7,0.5,0.4",
+		spawn_probability: "1,1,1,1,1,1",
 		price: 240,
 		mana: 20,
 		action: (c: GunActionState) => {
@@ -2584,7 +2528,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/long_distance_cast.xml"],
 		type: "utility",
 		spawn_level: "0,1,2,4,5,6",
-		spawn_probability: "0.6,0.7,0.8,0.6,0.3,0.4",
+		spawn_probability: "0.6,0.6,0.6,0.6,0.6,0.6",
 		price: 90,
 		mana: 0,
 		action: (c: GunActionState) => {
@@ -2600,8 +2544,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/teleport_cast.xml"],
 		type: "utility",
-		spawn_level: "1,2,4,5,6",
-		spawn_probability: "0.6,0.6,0.6,0.8,1",
+		spawn_level: "0,1,2,4,5,6",
+		spawn_probability: "0.6,0.6,0.6,0.6,0.6,0.6",
 		price: 190,
 		mana: 100,
 		action: (c: GunActionState) => {
@@ -2618,32 +2562,14 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/super_teleport_cast.xml"],
 		type: "utility",
-		spawn_level: "2,4,5,6",
-		spawn_probability: "0.2,0.6,0.8,0.8",
+		spawn_level: "0,1,2,4,5,6",
+		spawn_probability: "0.2,0.2,0.2,0.6,0.6,0.6",
 		price: 160,
 		mana: 20,
 		action: (c: GunActionState) => {
 			add_projectile_trigger_death("data/entities/projectiles/deck/super_teleport_cast.xml", 1)
 			c.fire_rate_wait = c.fire_rate_wait + 10
 			c.spread_degrees = c.spread_degrees - 6
-		},
-	},
-	{
-		id: "CASTER_CAST",
-		name: "$action_caster_cast",
-		description: "$actiondesc_caster_cast",
-		sprite: "data/ui_gfx/gun_actions/caster_cast.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
-		related_projectiles: ["data/entities/projectiles/deck/caster_cast.xml"],
-		type: "utility",
-		spawn_level: "2,4,5,6,10",
-		spawn_probability: "0.2,0.2,0.4,0.4,0.2",
-		price: 70,
-		mana: 10,
-		action: (c: GunActionState) => {
-			c.spread_degrees = c.spread_degrees - 24
-			c.extra_entities = c.extra_entities + "data/entities/misc/caster_cast.xml,"
-			draw_actions( 1, true )
 		},
 	},
 	
@@ -2967,7 +2893,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/swapper.xml"],
 		type: "projectile",
 		spawn_level: "0,1,2,4,5,6",
-		spawn_probability: "0.05,0.05,0.1,0.4,0.4,0.1",
+		spawn_probability: "0.05,0.05,0.05,0.05,0.05,0.05",
 		price: 100,
 		mana: 5,
 		
@@ -2988,7 +2914,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/teleport_projectile_closer.xml"],
 		type: "projectile",
 		spawn_level: "0,1,2,4,5,6",
-		spawn_probability: "0.4,0.6,0.6,0.7,0.4,0.4",
+		spawn_probability: "0.6,0.6,0.6,0.4,0.4,0.4",
 		price: 130,
 		mana: 20,
 		action: (c: GunActionState) => {
@@ -3083,7 +3009,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/fireworks/firework_pink.xml"],
 		type: "projectile",
 		spawn_level: "1,2,3,4,5,6",
-		spawn_probability: "1,0.8,1,1,0.5,0.3",
+		spawn_probability: "1,1,1,1,1,1",
 		price: 220,
 		mana: 70,
 		max_uses: 25,
@@ -3108,7 +3034,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/wand_ghost_player.xml"],
 		type: "utility",
 		spawn_level: "2,4,5,6,10",
-		spawn_probability: "0.08,0.1,0.3,0.3,0.1",
+		spawn_probability: "0.08,0.1,0.1,0.1,0.1",
 		price: 420,
 		mana: 300,
 		max_uses: 1,
@@ -3145,7 +3071,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/touch_water.xml"],
 		type: "material",
 		spawn_level: "1,2,3,4,5,6,7,10",
-		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.4",
+		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.1",
 		price: 420,
 		mana: 280,
 		max_uses: 5,
@@ -3162,7 +3088,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/touch_oil.xml"],
 		type: "material",
 		spawn_level: "1,2,3,4,5,6,7,10",
-		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.4",
+		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.1",
 		price: 380,
 		mana: 260,
 		max_uses: 5,
@@ -3179,7 +3105,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/touch_alcohol.xml"],
 		type: "material",
 		spawn_level: "1,2,3,4,5,6,7,10",
-		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.4",
+		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.1",
 		price: 360,
 		mana: 240,
 		max_uses: 5,
@@ -3213,7 +3139,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/touch_smoke.xml"],
 		type: "material",
 		spawn_level: "1,2,3,4,5,6,7,10",
-		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.4",
+		spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.1",
 		price: 350,
 		mana: 230,
 		max_uses: 5,
@@ -3283,7 +3209,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/burst_4_unidentified.png",
 		type: "multicast",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.4,0.5,0.6,0.6,0.6",
+		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 180,
 		mana: 5,
 		
@@ -3336,7 +3262,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/scatter_2_unidentified.png",
 		type: "multicast",
 		spawn_level: "0,1,2",
-		spawn_probability: "0.8,0.8,0.7",
+		spawn_probability: "0.8,0.8,0.8",
 		price: 100,
 		mana: 0,
 		
@@ -3353,7 +3279,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/scatter_3_unidentified.png",
 		type: "multicast",
 		spawn_level: "0,1,2,3",
-		spawn_probability: "0.6,0.7,0.7,0.8",
+		spawn_probability: "0.7,0.7,0.7,0.8",
 		price: 120,
 		mana: 1,
 		
@@ -3370,7 +3296,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/scatter_4_unidentified.png",
 		type: "multicast",
 		spawn_level: "1,2,3,4,5,6",
-		spawn_probability: "0.5,0.6,0.7,0.8,0.8,0.6",
+		spawn_probability: "0.6,0.6,0.7,0.8,0.8,0.8",
 		price: 140,
 		mana: 2,
 		
@@ -3386,8 +3312,8 @@ export const actions = [
 		sprite: "data/ui_gfx/gun_actions/i_shape.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/i_shape_unidentified.png",
 		type: "multicast",
-		spawn_level: "1,2,3",
-		spawn_probability: "0.4,0.5,0.3",
+		spawn_level: "1,2,3,4",
+		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 80,
 		mana: 0,
 		
@@ -3403,8 +3329,8 @@ export const actions = [
 		sprite: "data/ui_gfx/gun_actions/y_shape.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/y_shape_unidentified.png",
 		type: "multicast",
-		spawn_level: "0,1,2,3",
-		spawn_probability: "0.8,0.5,0.4,0.3",
+		spawn_level: "0,1,2,3,4",
+		spawn_probability: "0.8,0.4,0.4,0.4,0.4",
 		price: 100,
 		mana: 2,
 		
@@ -3420,8 +3346,8 @@ export const actions = [
 		sprite: "data/ui_gfx/gun_actions/t_shape.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/t_shape_unidentified.png",
 		type: "multicast",
-		spawn_level: "1,2,3,4",
-		spawn_probability: "0.4,0.5,0.4,0.3",
+		spawn_level: "1,2,3,4,5",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 120,
 		mana: 3,
 		
@@ -3438,7 +3364,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/w_shape_unidentified.png",
 		type: "multicast",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.4,0.3,0.5,0.3,0.3",
+		spawn_probability: "0.4,0.3,0.3,0.3,0.3",
 		price: 160,
 		mana: 3,
 		
@@ -3491,7 +3417,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		type: "modifier",
 		spawn_level: "1,2,3,4,5,6",
-		spawn_probability: "0.8,0.8,0.8,0.8,0.7,0.6",
+		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 100,
 		mana: 1,
 		
@@ -3508,7 +3434,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
 		type: "modifier",
 		spawn_level: "0,1,2,4,5,6",
-		spawn_probability: "0.6,0.7,0.8,0.8,0.8,0.6",
+		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 100,
 		mana: 2,
 		action: (c: GunActionState) => {
@@ -3526,7 +3452,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		type: "modifier",
 		spawn_level: "1,2,3,4,5,6",
-		spawn_probability: "0.8,0.9,1,0.8,0.9,1",
+		spawn_probability: "1,1,1,1,1,1",
 		price: 200,
 		mana: 12,
 		
@@ -3544,7 +3470,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		type: "modifier",
 		spawn_level: "3,4,5,6,10",
-		spawn_probability: "0.5,0.5,0.5,0.75,0.1",
+		spawn_probability: "0.5,0.5,0.5,0.5,0.1",
 		price: 250,
 		mana: 40,
 		
@@ -3563,7 +3489,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		type: "modifier",
 		spawn_level: "3,4,5,6,10",
-		spawn_probability: "0.5,0.5,0.75,0.5,0.1",
+		spawn_probability: "0.5,0.5,0.5,0.5,0.1",
 		price: 90,
 		mana: 10,
 		
@@ -3603,7 +3529,7 @@ export const actions = [
 		spawn_requires_flag: "card_unlocked_maths",
 		type: "modifier",
 		spawn_level: "3,4,5,6,10",
-		spawn_probability: "0.1,0.2,0.6,0.6,0.4",
+		spawn_probability: "0.1,0.2,0.3,0.4,0.4",
 		price: 50,
 		mana: 0,
 		action: (c: GunActionState) => {
@@ -3663,7 +3589,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/laser_emitter_wider.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.3,0.3,0.4",
+		spawn_probability: "0.3,0.3,0.3",
 		price: 40,
 		mana: 10,
 		
@@ -3681,7 +3607,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
 		type: "modifier",
 		spawn_level: "1,2,3,4,5,6",
-		spawn_probability: "0.7,0.9,1,1,1,1",
+		spawn_probability: "1,1,1,1,1,1",
 		price: 250,
 		mana: -30,
 		
@@ -3700,7 +3626,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/blood_sparks.xml" ],
 		type: "utility",
 		spawn_level: "5,6,10",
-		spawn_probability: "0.3,0.7,0.5",
+		spawn_probability: "0.1,0.7,0.5",
 		price: 150,
 		mana: -100,
 		custom_xml_file: "data/entities/misc/custom_cards/blood_magic.xml",
@@ -3732,7 +3658,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/gold_sparks.xml" ],
 		type: "utility",
 		spawn_level: "3,5,6,10",
-		spawn_probability: "0.2,0.8,0.3,0.5",
+		spawn_probability: "0.2,0.8,0.1,0.5",
 		price: 200,
 		mana: 30,
 		custom_xml_file: "data/entities/misc/custom_cards/money_magic.xml",
@@ -3782,7 +3708,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/blood_sparks.xml" ],
 		type: "utility",
 		spawn_level: "2,5,6,10",
-		spawn_probability: "0.2,0.8,0.2,0.5",
+		spawn_probability: "0.2,0.8,0.1,0.5",
 		price: 150,
 		mana: 20,
 		custom_xml_file: "data/entities/misc/custom_cards/blood_to_power.xml",
@@ -3820,7 +3746,7 @@ export const actions = [
 		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
-		spawn_probability: "0.1,0.2,1",
+		spawn_probability: "0.1,0.1,1",
 		price: 250,
 		mana: 250,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -3848,7 +3774,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/quantum_split.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.5,0.6,0.5,0.5,1",
+		spawn_probability: "0.5,0.5,0.5,0.5,1",
 		price: 200,
 		mana: 10,
 		action: (c: GunActionState) => {
@@ -3865,7 +3791,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/w_shape_unidentified.png",
 		type: "modifier",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.5,0.4,0.4,0.3,0.3",
+		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 50,
 		mana: 1,
 		
@@ -3882,7 +3808,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/w_shape_unidentified.png",
 		type: "modifier",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.5,0.4,0.4,0.3,0.3",
+		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 50,
 		mana: 1,
 		
@@ -3901,7 +3827,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/sinewave.xml" ],
 		type: "modifier",
 		spawn_level: "2,4,6",
-		spawn_probability: "0.4,0.55,0.4",
+		spawn_probability: "0.4,0.4,0.4",
 		price: 10,
 		mana: 0,
 		
@@ -3927,7 +3853,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/chaotic_arc.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,5",
-		spawn_probability: "0.4,0.55,0.4",
+		spawn_probability: "0.4,0.4,0.4",
 		price: 10,
 		mana: 0,
 		
@@ -3953,7 +3879,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/pingpong_path.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,5",
-		spawn_probability: "0.4,0.5,0.4",
+		spawn_probability: "0.4,0.4,0.4",
 		price: 20,
 		mana: 0,
 		
@@ -3972,7 +3898,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/avoiding_arc.xml" ],
 		type: "modifier",
 		spawn_level: "2,4,6",
-		spawn_probability: "0.5,0.4,0.4",
+		spawn_probability: "0.4,0.4,0.4",
 		price: 30,
 		mana: 0,
 		
@@ -3991,7 +3917,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/floating_arc.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,5",
-		spawn_probability: "0.4,0.4,0.5",
+		spawn_probability: "0.4,0.4,0.4",
 		price: 30,
 		mana: 0,
 		
@@ -4010,7 +3936,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/fly_downwards.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,5",
-		spawn_probability: "0.3,0.45,0.3",
+		spawn_probability: "0.4,0.4,0.4",
 		price: 30,
 		mana: 0,
 		
@@ -4029,7 +3955,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/fly_upwards.xml" ],
 		type: "modifier",
 		spawn_level: "2,4,6",
-		spawn_probability: "0.3,0.45,0.3",
+		spawn_probability: "0.4,0.4,0.4",
 		price: 20,
 		mana: 0,
 		
@@ -4068,7 +3994,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/line_arc.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,5",
-		spawn_probability: "0.3,0.4,0.5",
+		spawn_probability: "0.4,0.4,0.4",
 		price: 30,
 		mana: 0,
 		
@@ -4088,7 +4014,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/spiraling_shot.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4",
-		spawn_probability: "0.2,0.4,0.4,0.3",
+		spawn_probability: "0.2,0.3,0.4,0.1",
 		price: 30,
 		mana: 0,
 		
@@ -4109,7 +4035,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/orbit_shot.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4",
-		spawn_probability: "0.2,0.3,0.4,0.5",
+		spawn_probability: "0.2,0.3,0.4,0.1",
 		price: 30,
 		mana: 0,
 		
@@ -4150,35 +4076,14 @@ export const actions = [
 		},
 	},
 	{
-		id: "TRUE_ORBIT",
-		name: "$action_true_orbit",
-		description: "$actiondesc_true_orbit",
-		sprite: "data/ui_gfx/gun_actions/true_orbit.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
-		related_extra_entities: [ "data/entities/misc/true_orbit.xml" ],
-		type: "modifier",
-		spawn_level: "2,3,4",
-		spawn_probability: "0.2,0.3,0.4",
-		price: 40,
-		mana: 2,
-		
-		action: (c: GunActionState) => {
-			c.extra_entities = c.extra_entities + "data/entities/misc/true_orbit.xml,"
-			draw_actions( 1, true )
-			c.damage_projectile_add = c.damage_projectile_add + 0.1
-			c.fire_rate_wait    = c.fire_rate_wait - 20
-			c.lifetime_add 		= c.lifetime_add + 80
-		},
-	},
-	{
 		id: "BOUNCE",
 		name: "$action_bounce",
 		description: "$actiondesc_bounce",
 		sprite: "data/ui_gfx/gun_actions/bounce.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bounce_unidentified.png",
 		type: "modifier",
-		spawn_level: "2,3,4,6",
-		spawn_probability: "1,1,0.4,0.2",
+		spawn_level: "2,3,4,5,6",
+		spawn_probability: "1,1,0.4,0.2,0.2",
 		price: 50,
 		mana: 0,
 		
@@ -4194,8 +4099,8 @@ export const actions = [
 		sprite: "data/ui_gfx/gun_actions/remove_bounce.png",
 		sprite_unidentified: "data/ui_gfx/gun_actions/bounce_unidentified.png",
 		type: "modifier",
-		spawn_level: "2,3,4,5",
-		spawn_probability: "0.2,0.2,1,1",
+		spawn_level: "2,3,4,5,6",
+		spawn_probability: "0.2,0.2,1,1,1",
 		price: 50,
 		mana: 0,
 		
@@ -4224,44 +4129,6 @@ export const actions = [
 		},
 	},
 	{
-		id: "ANTI_HOMING",
-		name: "$action_anti_homing",
-		description: "$actiondesc_anti_homing",
-		sprite: "data/ui_gfx/gun_actions/anti_homing.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/anti_homing_unidentified.png",
-		related_extra_entities: [ "data/entities/misc/anti_homing.xml", "data/entities/particles/tinyspark_white.xml" ],
-		type: "modifier",
-		spawn_level: "1,2,3,4,5,6",
-		spawn_probability: "0.05,0.3,0.3,0.1,0.1,0.01",
-		price: 110,
-		mana: 1,
-		
-		action: (c: GunActionState) => {
-			c.extra_entities = c.extra_entities + "data/entities/misc/anti_homing.xml,data/entities/particles/tinyspark_white.xml,"
-			c.fire_rate_wait    = c.fire_rate_wait - 20
-			draw_actions( 1, true )
-		},
-	},
-	{
-		id: "HOMING_WAND",
-		name: "$action_homing_wand",
-		description: "$actiondesc_homing_wand",
-		sprite: "data/ui_gfx/gun_actions/homing_wand.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
-		spawn_requires_flag: "card_unlocked_homing_wand",
-		related_extra_entities: [ "data/entities/misc/homing_wand.xml", "data/entities/particles/tinyspark_white.xml" ],
-		type: "modifier",
-		spawn_level: "1,2,4,5,6,10",
-		spawn_probability: "0.00001,0.08,0.08,0.25,0.25,0.2",
-		price: 500,
-		mana: 200,
-		
-		action: (c: GunActionState) => {
-			c.extra_entities = c.extra_entities + "data/entities/misc/homing_wand.xml,data/entities/particles/tinyspark_white.xml,"
-			draw_actions( 1, true )
-		},
-	},
-	{
 		id: "HOMING_SHORT",
 		name: "$action_homing_short",
 		description: "$actiondesc_homing_short",
@@ -4270,7 +4137,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/homing_short.xml", "data/entities/particles/tinyspark_white_weak.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5,6",
-		spawn_probability: "0.4,0.8,1,0.4,0.3,0.1",
+		spawn_probability: "0.4,0.8,1,0.4,0.1,0.1",
 		price: 160,
 		mana: 40,
 		
@@ -4288,7 +4155,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/homing_rotate.xml", "data/entities/particles/tinyspark_white.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.2,0.4,0.6,0.4,0.4",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 175,
 		mana: 40,
 		
@@ -4305,8 +4172,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/homing_shooter.xml", "data/entities/particles/tinyspark_white.xml" ],
 		type: "modifier",
-		spawn_level: "2,3,4,6",
-		spawn_probability: "0.2,0.3,0.2,0.2",
+		spawn_level: "2,3,4,5,6",
+		spawn_probability: "0.2,0.2,0.2,0.2,0.2",
 		price: 100,
 		mana: 10,
 		
@@ -4359,7 +4226,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/homing_cursor.xml", "data/entities/particles/tinyspark_white.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.7,0.7,0.4,0.4,1",
+		spawn_probability: "0.7,0.7,0.4,0.4,1.0",
 		price: 175,
 		mana: 30,
 		
@@ -4406,7 +4273,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/piercing_shot.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.4,0.5,0.6,0.6,0.4",
+		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 190,
 		mana: 140,
 		
@@ -4426,7 +4293,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/clipping_shot.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.2,0.3,0.6,0.4,0.6",
+		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 200,
 		mana: 160,
 		
@@ -4446,7 +4313,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/tinyspark_yellow.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.6,0.6,0.8,0.6,0.6",
+		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 140,
 		mana: 5,
 		
@@ -4470,7 +4337,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/tinyspark_yellow.xml" ],
 		type: "modifier",
 		spawn_level: "3,4,5",
-		spawn_probability: "0.7,0.6,0.6",
+		spawn_probability: "0.6,0.6,0.6",
 		price: 200,
 		mana: 15,
 		
@@ -4498,7 +4365,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,4,5,6",
-		spawn_probability: "0.2,0.3,0.6,0.7,0.3",
+		spawn_probability: "0.2,0.3,0.6,0.6,0.3",
 		price: 160,
 		mana: 2,
 		
@@ -4521,8 +4388,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml" ],
 		type: "modifier",
-		spawn_level: "2,3,4,5,6,10",
-		spawn_probability: "0.2,0.3,0.6,0.5,0.2,0.2",
+		spawn_level: "2,3,4,5,6",
+		spawn_probability: "0.2,0.4,0.6,0.4,0.2",
 		price: 240,
 		mana: 0,
 		max_uses: 20,
@@ -4551,7 +4418,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.5,0.6,0.6,0.7,0.6",
+		spawn_probability: "0.6,0.6,0.6,0.6,0.6",
 		price: 140,
 		mana: 5,
 		
@@ -4570,7 +4437,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/area_damage.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.4,0.5,0.5,0.5,0.6",
+		spawn_probability: "0.5,0.5,0.5,0.5,0.5",
 		price: 140,
 		mana: 30,
 		
@@ -4588,7 +4455,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/spells_to_power.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4,5,6,10",
-		spawn_probability: "0.3,0.3,0.5,0.5,0.5,0.1",
+		spawn_probability: "0.5,0.5,0.5,0.5,0.5,0.1",
 		price: 140,
 		mana: 110,
 		
@@ -4606,43 +4473,14 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/essence_to_power.xml" ],
 		type: "modifier",
-		spawn_level: "1,2,3,6,10",
-		spawn_probability: "0.2,0.5,0.5,0.5,0.1",
+		spawn_level: "1,2,3,10",
+		spawn_probability: "0.2,0.5,0.5,0.1",
 		price: 120,
 		mana: 110,
 		
 		action: (c: GunActionState) => {
 			c.extra_entities = c.extra_entities + "data/entities/misc/essence_to_power.xml,"
 			c.fire_rate_wait    = c.fire_rate_wait + 20
-			draw_actions( 1, true )
-		},
-	},
-	{
-		id: "ZERO_DAMAGE",
-		name: "$action_zero_damage",
-		description: "$actiondesc_zero_damage",
-		sprite: "data/ui_gfx/gun_actions/zero_damage.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
-		related_extra_entities: [ "data/entities/particles/tinyspark_white_small.xml", "data/entities/misc/zero_damage.xml" ],
-		type: "modifier",
-		spawn_level: "3,4,5,10",
-		spawn_probability: "0.3,0.3,0.6,0.3",
-		price: 50,
-		mana: 5,
-		
-		action: (c: GunActionState) => {
-			c.damage_electricity_add = 0
-			c.damage_explosion_add = 0
-			c.damage_explosion = 0
-			c.damage_critical_chance = 0
-			c.damage_ice_add = 0
-			c.damage_projectile_add = 0
-			c.damage_null_all = 1
-			c.gore_particles    = 0
-			c.fire_rate_wait    = c.fire_rate_wait - 5
-			c.extra_entities    = c.extra_entities + "data/entities/particles/tinyspark_white_small.xml,data/entities/misc/zero_damage.xml,"
-			shot_effects.recoil_knockback = shot_effects.recoil_knockback - 10.0
-			c.lifetime_add 		= c.lifetime_add + 280
 			draw_actions( 1, true )
 		},
 	},
@@ -4656,7 +4494,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/heavy_shot.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.4,0.4,0.5",
+		spawn_probability: "0.4,0.4,0.4",
 		price: 150,
 		mana: 7,
 		
@@ -4687,7 +4525,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/light_shot.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.3,0.5,0.4",
+		spawn_probability: "0.4,0.4,0.4",
 		price: 60,
 		mana: 5,
 		
@@ -4722,7 +4560,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/knockback_unidentified.png",
 		type: "modifier",
 		spawn_level: "3,5",
-		spawn_probability: "0.7,0.6",
+		spawn_probability: "0.6,0.6",
 		price: 100,
 		mana: 5,
 		
@@ -4739,7 +4577,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/recoil_unidentified.png",
 		type: "modifier",
 		spawn_level: "2,4",
-		spawn_probability: "0.6,0.7",
+		spawn_probability: "0.6,0.6",
 		price: 100,
 		mana: 5,
 		
@@ -4756,7 +4594,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/recoil_damper_unidentified.png",
 		type: "modifier",
 		spawn_level: "3,6",
-		spawn_probability: "0.6,0.7",
+		spawn_probability: "0.6,0.6",
 		price: 100,
 		mana: 5,
 		
@@ -4799,7 +4637,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/accelerating_shot.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.5,0.4,1",
+		spawn_probability: "0.5,0.5,1",
 		price: 190,
 		mana: 20,
 		
@@ -4828,7 +4666,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/decelerating_shot.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.4,0.1,0.7",
+		spawn_probability: "0.3,0.3,0.5",
 		price: 80,
 		mana: 10,
 		
@@ -4857,7 +4695,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "1,1,0.8",
+		spawn_probability: "1,1,1",
 		price: 120,
 		mana: 30,
 		
@@ -4981,8 +4819,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/static_to_sand.xml", "data/entities/particles/tinyspark_yellow.xml" ],
 		type: "modifier",
-		spawn_level: "2,3,4,10",
-		spawn_probability: "0.3,0.3,0.3,0.2",
+		spawn_level: "2,3,4",
+		spawn_probability: "0.3,0.3,0.3",
 		price: 140,
 		mana: 70,
 		max_uses: 8,
@@ -5039,7 +4877,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		type: "modifier",
 		spawn_level: "2,3,4,5",
-		spawn_probability: "0.4,0.6,0.6,0.3",
+		spawn_probability: "0.6,0.6,0.6,0.6",
 		price: 80,
 		mana: 20,
 		
@@ -5074,7 +4912,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/explosion.xml"],
 		type: "static",
 		spawn_level: "0,2,4,5",
-		spawn_probability: "0.5,1,1,0.7",
+		spawn_probability: "0.5,1,1,1",
 		price: 160,
 		mana: 80,
 		
@@ -5095,7 +4933,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/explosion_light.xml"],
 		type: "static",
 		spawn_level: "2,3,5,6",
-		spawn_probability: "0.5,1,0.7,0.5",
+		spawn_probability: "0.5,1,1,1",
 		price: 160,
 		mana: 80,
 		
@@ -5116,7 +4954,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/fireblast.xml"],
 		type: "static",
 		spawn_level: "0,1,3,5",
-		spawn_probability: "0.5,0.7,0.6,0.4",
+		spawn_probability: "0.5,0.5,0.6,0.6",
 		price: 120,
 		mana: 10,
 		
@@ -5137,7 +4975,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/poison_blast.xml"],
 		type: "static",
 		spawn_level: "1,2,4,6",
-		spawn_probability: "0.5,0.8,0.4,0.3",
+		spawn_probability: "0.5,0.6,0.6,0.5",
 		price: 140,
 		mana: 30,
 		
@@ -5158,7 +4996,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/alcohol_blast.xml"],
 		type: "static",
 		spawn_level: "1,2,4,6",
-		spawn_probability: "0.5,0.6,0.65,0.3",
+		spawn_probability: "0.5,0.6,0.6,0.5",
 		price: 140,
 		mana: 30,
 		
@@ -5179,7 +5017,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/thunder_blast.xml"],
 		type: "static",
 		spawn_level: "1,3,5,6,10",
-		spawn_probability: "0.5,0.6,0.7,0.5,0.1",
+		spawn_probability: "0.5,0.6,0.6,0.5,0.1",
 		price: 180,
 		mana: 110,
 		
@@ -5292,7 +5130,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/regeneration_field.xml"],
 		type: "static",
 		spawn_level: "1,2,3,4",
-		spawn_probability: "0.3,0.3,0.4,0.3",
+		spawn_probability: "0.3,0.3,0.3,0.3",
 		price: 250,
 		mana: 80,
 		max_uses: 2,
@@ -5348,7 +5186,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/shield_field.xml"],
 		type: "static",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.3,0.3,0.4,0.5,0.3",
+		spawn_probability: "0.3,0.3,0.3,0.3,0.3",
 		price: 160,
 		mana: 20,
 		max_uses: 10,
@@ -5366,7 +5204,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/projectile_transmutation_field.xml"],
 		type: "static",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.3,0.4,0.4,0.3,0.3",
+		spawn_probability: "0.3,0.3,0.3,0.3,0.3",
 		price: 250,
 		mana: 120,
 		max_uses: 6,
@@ -5384,7 +5222,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/projectile_thunder_field.xml"],
 		type: "static",
 		spawn_level: "3,4,5,6",
-		spawn_probability: "0.3,0.3,0.5,0.3",
+		spawn_probability: "0.3,0.3,0.3,0.3",
 		price: 300,
 		mana: 140,
 		max_uses: 6,
@@ -5402,7 +5240,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/projectile_gravity_field.xml"],
 		type: "static",
 		spawn_level: "2,5,6",
-		spawn_probability: "0.6,0.3,0.3",
+		spawn_probability: "0.3,0.3,0.3",
 		price: 250,
 		mana: 120,
 		max_uses: 6,
@@ -5420,7 +5258,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/vacuum_powder.xml"],
 		type: "static",
 		spawn_level: "2,3,5,6",
-		spawn_probability: "0.3,0.7,0.3,0.4",
+		spawn_probability: "0.3,1,0.3,0.3",
 		price: 150,
 		mana: 40,
 		max_uses: 20,
@@ -5437,8 +5275,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
 		related_projectiles: ["data/entities/projectiles/deck/vacuum_liquid.xml"],
 		type: "static",
-		spawn_level: "2,4,5,6",
-		spawn_probability: "0.3,0.7,0.4,0.3",
+		spawn_level: "2,3,5,6",
+		spawn_probability: "0.3,1,0.3,0.3",
 		price: 150,
 		mana: 40,
 		max_uses: 20,
@@ -5456,7 +5294,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/vacuum_liquid.xml"],
 		type: "static",
 		spawn_level: "2,3,5,6",
-		spawn_probability: "0.3,0.7,0.3,0.4",
+		spawn_probability: "0.3,1,0.3,0.3",
 		price: 200,
 		mana: 50,
 		max_uses: 20,
@@ -5475,7 +5313,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/sea_lava.xml"],
 		type: "material",
 		spawn_level: "0,4,5,6",
-		spawn_probability: "0.2,0.2,0.5,0.6",
+		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 350,
 		mana: 140,
 		max_uses: 3,
@@ -5493,7 +5331,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/sea_alcohol.xml"],
 		type: "material",
 		spawn_level: "0,4,5,6",
-		spawn_probability: "0.3,0.5,0.6,0.3",
+		spawn_probability: "0.3,0.3,0.3,0.3",
 		price: 350,
 		mana: 140,
 		max_uses: 3,
@@ -5511,7 +5349,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/sea_oil.xml"],
 		type: "material",
 		spawn_level: "0,4,5,6",
-		spawn_probability: "0.3,0.5,0.6,0.3",
+		spawn_probability: "0.3,0.3,0.3,0.3",
 		price: 350,
 		mana: 140,
 		max_uses: 3,
@@ -5529,30 +5367,12 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/sea_water.xml"],
 		type: "material",
 		spawn_level: "0,4,5,6",
-		spawn_probability: "0.5,0.4,0.3,0.2",
+		spawn_probability: "0.4,0.4,0.4,0.4",
 		price: 350,
 		mana: 140,
 		max_uses: 3,
 		action: (c: GunActionState) => {
 			add_projectile("data/entities/projectiles/deck/sea_water.xml")
-			c.fire_rate_wait = c.fire_rate_wait + 15
-		},
-	},
-	{
-		id: "SEA_SWAMP",
-		name: "$action_sea_swamp",
-		description: "$actiondesc_sea_swamp",
-		sprite: "data/ui_gfx/gun_actions/sea_swamp.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/sea_swamp_unidentified.png",
-		related_projectiles: ["data/entities/projectiles/deck/sea_swamp.xml"],
-		type: "material",
-		spawn_level: "0",
-		spawn_probability: "0",
-		price: 350,
-		mana: 140,
-		max_uses: 3,
-		action: (c: GunActionState) => {
-			add_projectile("data/entities/projectiles/deck/sea_swamp.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
 	},
@@ -5565,7 +5385,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/sea_acid.xml"],
 		type: "material",
 		spawn_level: "0,4,5,6",
-		spawn_probability: "0.2,0.2,0.4,0.5",
+		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 350,
 		mana: 140,
 		max_uses: 3,
@@ -5583,7 +5403,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/sea_acid_gas.xml"],
 		type: "material",
 		spawn_level: "0,4,5,6",
-		spawn_probability: "0.3,0.4,0.4,0.3",
+		spawn_probability: "0.3,0.3,0.3,0.3",
 		price: 200,
 		mana: 140,
 		max_uses: 3,
@@ -5601,7 +5421,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/cloud_water.xml"],
 		type: "static",
 		spawn_level: "0,1,2,3,4,5",
-		spawn_probability: "0.2,0.3,0.4,0.4,0.3,0.2",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 140,
 		mana: 30,
 		max_uses: 10,
@@ -5619,7 +5439,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/cloud_oil.xml"],
 		type: "static",
 		spawn_level: "0,1,2,3,4,5",
-		spawn_probability: "0.2,0.3,0.4,0.4,0.3,0.2",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
 		price: 100,
 		mana: 20,
 		max_uses: 15,
@@ -5637,7 +5457,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/cloud_blood.xml"],
 		type: "static",
 		spawn_level: "0,1,2,3,4,5",
-		spawn_probability: "0.2,0.3,0.3,0.4,0.3,0.2",
+		spawn_probability: "0.3,0.3,0.3,0.3,0.3,0.3",
 		price: 200,
 		mana: 60,
 		max_uses: 3,
@@ -5655,7 +5475,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/cloud_acid.xml"],
 		type: "static",
 		spawn_level: "0,1,2,3,4,5",
-		spawn_probability: "0.2,0.2,0.4,0.2,0.2,0.5",
+		spawn_probability: "0.2,0.2,0.2,0.2,0.2,0.2",
 		price: 180,
 		mana: 90,
 		max_uses: 8,
@@ -5674,7 +5494,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/cloud_thunder.xml"],
 		type: "static",
 		spawn_level: "0,1,2,3,4,5",
-		spawn_probability: "0.3,0.3,0.2,0.3,0.4,0.5",
+		spawn_probability: "0.3,0.3,0.3,0.3,0.3,0.3",
 		price: 190,
 		mana: 90,
 		max_uses: 5,
@@ -5692,7 +5512,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/electricity.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,4,5",
-		spawn_probability: "1,1,0.8,0.7",
+		spawn_probability: "1,1,1,1",
 		price: 150,
 		mana: 8,
 		
@@ -5713,7 +5533,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/matter_eater.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,4,5,10",
-		spawn_probability: "0.1,0.9,0.1,0.2,0.2",
+		spawn_probability: "0.1,1,0.1,0.1,0.2",
 		price: 280,
 		mana: 120,
 		max_uses: 10,
@@ -5732,7 +5552,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/freeze_charge.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,4,5",
-		spawn_probability: "1,1,0.9,0.8",
+		spawn_probability: "1,1,1,1",
 		price: 140,
 		mana: 10,
 		
@@ -5753,7 +5573,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/freeze_charge.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,4,5",
-		spawn_probability: "0.2,0.4,0.2,0.2",
+		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 70,
 		mana: 10,
 		
@@ -5771,7 +5591,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_critical_water.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,4,5",
-		spawn_probability: "0.2,0.2,0.4,0.2",
+		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 70,
 		mana: 10,
 		
@@ -5789,7 +5609,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_critical_oil.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,4,5",
-		spawn_probability: "0.2,0.4,0.2,0.2",
+		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 70,
 		mana: 10,
 		
@@ -5807,7 +5627,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_critical_blood.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,4,5",
-		spawn_probability: "0.2,0.2,0.2,0.4",
+		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 70,
 		mana: 10,
 		
@@ -5825,7 +5645,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_toxic_charm.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,4,5",
-		spawn_probability: "0.2,0.2,0.3,0.2",
+		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 150,
 		mana: 70,
 		
@@ -5843,7 +5663,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_explode_slime.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,4,5",
-		spawn_probability: "0.2,0.3,0.2,0.2",
+		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 140,
 		mana: 20,
 		
@@ -5861,7 +5681,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_explode_slime_giga.xml", "data/entities/particles/tinyspark_purple.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,4,5",
-		spawn_probability: "0.1,0.1,0.3,0.1",
+		spawn_probability: "0.1,0.1,0.1,0.1",
 		price: 300,
 		mana: 200,
 		max_uses: 20,
@@ -5879,7 +5699,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_explode_alcohol.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,4,5",
-		spawn_probability: "0.3,0.2,0.2,0.2",
+		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 140,
 		mana: 20,
 		
@@ -5897,7 +5717,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_explode_alcohol_giga.xml", "data/entities/particles/tinyspark_orange.xml" ],
 		type: "modifier",
 		spawn_level: "1,3,4,5",
-		spawn_probability: "0.1,0.1,0.1,0.3",
+		spawn_probability: "0.1,0.1,0.1,0.1",
 		price: 300,
 		mana: 200,
 		max_uses: 20,
@@ -5914,7 +5734,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
 		type: "modifier",
 		spawn_level: "2,3,5,6",
-		spawn_probability: "0.2,0.3,0.2,0.3",
+		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 140,
 		mana: 10,
 		action: (c: GunActionState) => {
@@ -5932,7 +5752,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/rocket_downwards.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4",
-		spawn_probability: "0.2,0.5,0.7,0.7",
+		spawn_probability: "0.2,1,1,1",
 		price: 200,
 		mana: 90,
 		action: (c: GunActionState) => {
@@ -5950,7 +5770,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/rocket_octagon.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.5,0.6,0.3",
+		spawn_probability: "0.5,0.5,0.5",
 		price: 200,
 		mana: 100,
 		action: (c: GunActionState) => {
@@ -5968,7 +5788,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/fizzle.xml" ],
 		type: "modifier",
 		spawn_level: "3,4,5",
-		spawn_probability: "0.4,0.3,0.1",
+		spawn_probability: "0.1,0.1,0.1",
 		price: 0,
 		mana: 0,
 		
@@ -6092,70 +5912,6 @@ export const actions = [
 		},
 	},
 	{
-		id: "BOUNCE_SMALL_EXPLOSION",
-		name: "$action_bounce_small_explosion",
-		description: "$actiondesc_bounce_small_explosion",
-		sprite: "data/ui_gfx/gun_actions/bounce_small_explosion.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
-		related_extra_entities: [ "data/entities/misc/bounce_small_explosion.xml" ],
-		type: "modifier",
-		spawn_level: "0,1,2",
-		spawn_probability: "0.5,0.3,0.3",
-		price: 100,
-		mana: 10,
-		
-		action: (c: GunActionState) => {
-			c.extra_entities = c.extra_entities + "data/entities/misc/bounce_small_explosion.xml,"
-			c.bounces = c.bounces + 1
-			c.fire_rate_wait = c.fire_rate_wait + 9
-			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
-			draw_actions( 1, true )
-		},
-	},
-	{
-		id: "BOUNCE_LIGHTNING",
-		name: "$action_bounce_lightning",
-		description: "$actiondesc_bounce_lightning",
-		sprite: "data/ui_gfx/gun_actions/bounce_lightning.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
-		related_extra_entities: [ "data/entities/misc/bounce_lightning.xml" ],
-		type: "modifier",
-		spawn_level: "1,3,5",
-		spawn_probability: "0.1,0.3,0.6",
-		price: 180,
-		mana: 40,
-		
-		action: (c: GunActionState) => {
-			c.extra_entities = c.extra_entities + "data/entities/misc/bounce_lightning.xml,"
-			c.bounces = c.bounces + 1
-			c.fire_rate_wait = c.fire_rate_wait + 25
-			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
-			draw_actions( 1, true )
-		},
-	},
-	{
-		id: "BOUNCE_HOLE",
-		name: "$action_bounce_hole",
-		description: "$actiondesc_bounce_hole",
-		sprite: "data/ui_gfx/gun_actions/bounce_hole.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
-		related_extra_entities: [ "data/entities/misc/bounce_hole.xml" ],
-		type: "modifier",
-		spawn_level: "2,4,6,10",
-		spawn_probability: "0.1,0.4,0.4,0.1",
-		price: 220,
-		mana: 60,
-		max_uses: 20,
-		never_unlimited: true,
-		action: (c: GunActionState) => {
-			c.extra_entities = c.extra_entities + "data/entities/misc/bounce_hole.xml,"
-			c.bounces = c.bounces + 1
-			c.fire_rate_wait = c.fire_rate_wait + 40
-			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
-			draw_actions( 1, true )
-		},
-	},
-	{
 		id: "FIREBALL_RAY",
 		name: "$action_fireball_ray",
 		description: "$actiondesc_fireball_ray",
@@ -6182,7 +5938,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/lightning_ray.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0,0.2,0.4,0.4,0.4",
+		spawn_probability: "0,0,0.4,0.4,0.4",
 		price: 180,
 		mana: 110,
 		max_uses: 16,
@@ -6201,7 +5957,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/tentacle_ray.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.1,0,0.4,0.4,0.4",
+		spawn_probability: "0,0,0.4,0.4,0.4",
 		price: 150,
 		mana: 110,
 		max_uses: 16,
@@ -6219,7 +5975,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/laser_emitter_ray.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0,0.1,0.4,0.4,0.4",
+		spawn_probability: "0,0,0.4,0.4,0.4",
 		price: 150,
 		mana: 110,
 		max_uses: 16,
@@ -6255,7 +6011,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_fireball_ray_enemy.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,4,5",
-		spawn_probability: "0.5,0.6,0.4,0.3",
+		spawn_probability: "0.6,0.6,0.4,0.4",
 		price: 100,
 		mana: 90,
 		max_uses: 20,
@@ -6273,7 +6029,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_lightning_ray_enemy.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0,0.2,0.4,0.4,0.5",
+		spawn_probability: "0,0,0.4,0.4,0.4",
 		price: 150,
 		mana: 90,
 		max_uses: 20,
@@ -6292,7 +6048,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_tentacle_ray_enemy.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0,0.1,0.4,0.5,0.4",
+		spawn_probability: "0,0,0.4,0.4,0.4",
 		price: 150,
 		mana: 90,
 		max_uses: 20,
@@ -6310,7 +6066,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/hitfx_gravity_field_enemy.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,4,5",
-		spawn_probability: "0.5,0.6,0.4,0.4",
+		spawn_probability: "0.6,0.6,0.4,0.4",
 		price: 250,
 		mana: 110,
 		max_uses: 20,
@@ -6327,8 +6083,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_curse.xml" ],
 		type: "modifier",
-		spawn_level: "2,3,5,10",
-		spawn_probability: "0.6,0.7,0.4,0.1",
+		spawn_level: "2,3,5",
+		spawn_probability: "0.6,0.8,0.4",
 		price: 140,
 		mana: 30,
 		action: (c: GunActionState) => {
@@ -6344,8 +6100,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_projectile.xml" ],
 		type: "modifier",
-		spawn_level: "3,4,5,6,10",
-		spawn_probability: "0.2,0.4,0.7,0.7,0.1",
+		spawn_level: "3,4,5,6",
+		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
 		mana: 50,
 		action: (c: GunActionState) => {
@@ -6361,8 +6117,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_explosion.xml" ],
 		type: "modifier",
-		spawn_level: "2,3,4,5,10",
-		spawn_probability: "0.2,0.4,0.7,0.7,0.1",
+		spawn_level: "2,3,4,5",
+		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
 		mana: 50,
 		action: (c: GunActionState) => {
@@ -6378,8 +6134,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_melee.xml" ],
 		type: "modifier",
-		spawn_level: "3,4,5,6,10",
-		spawn_probability: "0.2,0.4,0.7,0.7,0.1",
+		spawn_level: "3,4,5,6",
+		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
 		mana: 50,
 		action: (c: GunActionState) => {
@@ -6395,8 +6151,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_electricity.xml" ],
 		type: "modifier",
-		spawn_level: "1,4,5,6,10",
-		spawn_probability: "0.2,0.4,0.7,0.7,0.1",
+		spawn_level: "1,4,5,6",
+		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
 		mana: 50,
 		action: (c: GunActionState) => {
@@ -6414,7 +6170,7 @@ export const actions = [
 		spawn_requires_flag: "card_unlocked_dragon",
 		type: "modifier",
 		spawn_level: "1,2,4,5",
-		spawn_probability: "0.3,0.65,0.4,0.3",
+		spawn_probability: "0.2,0.8,0.4,0.2",
 		price: 200,
 		mana: 70,
 		action: (c: GunActionState) => {
@@ -6432,7 +6188,7 @@ export const actions = [
 		spawn_requires_flag: "card_unlocked_dragon",
 		type: "modifier",
 		spawn_level: "0,1,2,4,5",
-		spawn_probability: "0.2,0.3,0.7,0.4,0.2",
+		spawn_probability: "0.5,0.2,0.8,0.4,0.2",
 		price: 140,
 		mana: 40,
 		action: (c: GunActionState) => {
@@ -6451,7 +6207,7 @@ export const actions = [
 		type: "modifier",
 		ai_never_uses: true,
 		spawn_level: "2,4,5,6,10",
-		spawn_probability: "0.1,0.2,0.1,0.2,1",
+		spawn_probability: "0.1,0.1,0.1,0.2,1",
 		price: 400,
 		mana: 250,
 		max_uses: 3,
@@ -6470,7 +6226,7 @@ export const actions = [
 		spawn_requires_flag: "card_unlocked_dragon",
 		type: "modifier",
 		spawn_level: "1,2,4,5,10",
-		spawn_probability: "0.2,0.7,0.4,0.3,0.2",
+		spawn_probability: "0.2,0.8,0.4,0.2,0.2",
 		price: 200,
 		mana: 100,
 		action: (c: GunActionState) => {
@@ -6488,7 +6244,7 @@ export const actions = [
 		spawn_requires_flag: "card_unlocked_dragon",
 		type: "modifier",
 		spawn_level: "3,4,6,10",
-		spawn_probability: "0.2,0.2,0.8,0.2",
+		spawn_probability: "0.2,0.2,0.8,0.1",
 		price: 240,
 		mana: 90,
 		action: (c: GunActionState) => {
@@ -6552,7 +6308,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/arc_fire.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.4,0.2,0.2,0.5,0.2",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 160,
 		
 		mana: 15,
@@ -6571,7 +6327,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/arc_gunpowder.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.4,0.4,0.2,0.4,0.2",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 160,
 		
 		mana: 15,
@@ -6590,7 +6346,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/arc_poison.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.4,0.2,0.4,0.2,0.4",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 160,
 		
 		mana: 15,
@@ -6609,7 +6365,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/crumbling_earth_projectile.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.2,0.3,0.4,0.4,0.3",
+		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 200,
 		max_uses: 15,
 		mana: 45,
@@ -6629,7 +6385,7 @@ export const actions = [
 		related_projectiles: ["data/entities/projectiles/deck/xray.xml"],
 		type: "utility",
 		spawn_level: "0,1,2,3,4,5,6",
-		spawn_probability: "0.8,1,1,0.7,0.5,0.3,0.2",
+		spawn_probability: "0.8,1,1,0.8,0.6,0.4,0.2",
 		price: 230,
 		max_uses: 10,
 		mana: 100,
@@ -6647,7 +6403,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/unstable_gunpowder_unidentified.png",
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.3,0.4,0.4",
+		spawn_probability: "0.3,0.3,0.3",
 		price: 140,
 		mana: 15,
 		
@@ -6667,7 +6423,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/acid_trail_unidentified.png",
 		type: "modifier",
 		spawn_level: "1,2,3,4,5",
-		spawn_probability: "0.3,0.2,0.3,0.3,0.4",
+		spawn_probability: "0.3,0.3,0.3,0.3,0.3",
 		price: 160,
 		mana: 15,
 		
@@ -6771,7 +6527,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/fire_trail_unidentified.png",
 		type: "modifier",
 		spawn_level: "0,1,2,3,4",
-		spawn_probability: "0.4,0.5,0.3,0.3,0.2",
+		spawn_probability: "0.3,0.3,0.3,0.3,0.3",
 		price: 130,
 		mana: 10,
 		
@@ -6792,7 +6548,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/burn.xml" ],
 		type: "modifier",
 		spawn_level: "0,1,2",
-		spawn_probability: "0.4,0.3,0.3",
+		spawn_probability: "0.3,0.3,0.3",
 		price: 100,
 		mana: 5,
 		
@@ -6811,7 +6567,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/torch_unidentified.png",
 		type: "passive",
 		spawn_level: "0,1,2",
-		spawn_probability: "1,0.6,0.5",
+		spawn_probability: "1,1,1",
 		price: 100,
 		mana: 0,
 		
@@ -6828,7 +6584,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/torch_unidentified.png",
 		type: "passive",
 		spawn_level: "0,1,2",
-		spawn_probability: "0.8,0.6,0.4",
+		spawn_probability: "1,1,1",
 		price: 150,
 		mana: 0,
 		
@@ -6845,7 +6601,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/energy_shield_unidentified.png",
 		type: "passive",
 		spawn_level: "1,2,3,4,5,6",
-		spawn_probability: "0.05,0.4,0.8,0.4,0.4,0.6",
+		spawn_probability: "0.05,0.6,0.6,0.6,0.6,0.6",
 		price: 220,
 		custom_xml_file: "data/entities/misc/custom_cards/energy_shield.xml",
 		action: (c: GunActionState) => {
@@ -6861,7 +6617,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/energy_shield_sector_unidentified.png",
 		type: "passive",
 		spawn_level: "0,1,2,3,4,5",
-		spawn_probability: "0.1,0.5,0.6,0.8,0.5,0.4",
+		spawn_probability: "0.05,0.6,0.6,0.6,0.6,0.6",
 		price: 160,
 		custom_xml_file: "data/entities/misc/custom_cards/energy_shield_sector.xml",
 		action: (c: GunActionState) => {
@@ -6878,7 +6634,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/energy_shield_shot.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4,5,6",
-		spawn_probability: "0.3,0.3,0.5,0.4,0.3",
+		spawn_probability: "0.3,0.3,0.3,0.3,0.3",
 		price: 180,
 		mana: 5,
 		action: (c: GunActionState) => {
@@ -6902,7 +6658,7 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/torch_unidentified.png",
 		type: "passive",
 		spawn_level: "1,2,3,4,5,6",
-		spawn_probability: "0.1,0.5,1,0.8,0.7,0.5",
+		spawn_probability: "0.1,0.5,1,1,1,1",
 		price: 160,
 		mana: 0,
 		custom_xml_file: "data/entities/misc/custom_cards/tiny_ghost.xml",
@@ -7147,7 +6903,7 @@ export const actions = [
 		type: "other",
 		recursive: true,
 		spawn_level: "3,4,5,6,10",
-		spawn_probability: "0.2,0.3,0.2,0.1,0.5",
+		spawn_probability: "0.2,0.3,0.1,0.1,0.5",
 		price: 100,
 		mana: 5,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -7179,7 +6935,7 @@ export const actions = [
 		type: "projectile",
 		recursive: true,
 		spawn_level: "2,4,5,6,10",
-		spawn_probability: "0.2,0.4,0.1,0.2,0.5",
+		spawn_probability: "0.2,0.4,0.1,0.1,0.5",
 		price: 150,
 		mana: 20,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -7211,7 +6967,7 @@ export const actions = [
 		type: "modifier",
 		recursive: true,
 		spawn_level: "4,5,6,10",
-		spawn_probability: "0.3,0.2,0.1,0.5",
+		spawn_probability: "0.3,0.1,0.1,0.5",
 		price: 120,
 		mana: 20,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -7243,7 +6999,7 @@ export const actions = [
 		type: "static",
 		recursive: true,
 		spawn_level: "3,5,6,10",
-		spawn_probability: "0.2,0.1,0.2,0.5",
+		spawn_probability: "0.2,0.1,0.1,0.5",
 		price: 160,
 		mana: 20,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -7870,7 +7626,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/larpa_downwards.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4,5,10",
-		spawn_probability: "0.1,0.3,0.4,0.2,0.2",
+		spawn_probability: "0.1,0.3,0.2,0.2,0.2",
 		price: 290,
 		mana: 120,
 		
@@ -7928,7 +7684,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/misc/larpa_death.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4,5,10",
-		spawn_probability: "0.1,0.1,0.3,0.4,0.2",
+		spawn_probability: "0.1,0.1,0.3,0.2,0.2",
 		price: 150,
 		mana: 90,
 		max_uses: 30,
@@ -7948,7 +7704,7 @@ export const actions = [
 		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
-		spawn_probability: "0.1,0.2,1",
+		spawn_probability: "0.1,0.1,1",
 		price: 200,
 		mana: 30,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -7985,7 +7741,7 @@ export const actions = [
 		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
-		spawn_probability: "0.1,0.2,1",
+		spawn_probability: "0.1,0.1,1",
 		price: 200,
 		mana: 30,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -8020,7 +7776,7 @@ export const actions = [
 		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
-		spawn_probability: "0.1,0.2,1",
+		spawn_probability: "0.1,0.1,1",
 		price: 200,
 		mana: 80,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -8122,7 +7878,7 @@ export const actions = [
 		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
-		spawn_probability: "0.1,0.2,1",
+		spawn_probability: "0.1,0.1,1",
 		price: 500,
 		mana: 120,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -8182,7 +7938,7 @@ export const actions = [
 		type: "other",
 		recursive: true,
 		spawn_level: "5,6,10",
-		spawn_probability: "0.1,0.2,1",
+		spawn_probability: "0.1,0.1,1",
 		price: 500,
 		mana: 120,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -8240,7 +7996,7 @@ export const actions = [
 		type: "other",
 		recursive: true,
 		spawn_level: "4,5,10",
-		spawn_probability: "0.1,0.2,1",
+		spawn_probability: "0.1,0.1,1",
 		price: 500,
 		mana: 120,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -8300,8 +8056,8 @@ export const actions = [
 		type: "other",
 		spawn_manual_unlock: true,
 		recursive: true,
-		spawn_level: "2,5,10",
-		spawn_probability: "0.2,0.4,0.5",
+		spawn_level: "1,2,3,10",
+		spawn_probability: "0.2,0.8,0.6,0.1",
 		price: 200,
 		mana: 10,
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
@@ -9174,7 +8930,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_red.xml" ],
 		type: "modifier",
 		spawn_level: "1,2,3,4,5,6",
-		spawn_probability: "0.2,0.2,0.4,0.2,0.2,0.2",
+		spawn_probability: "0.2,0.2,0.2,0.2,0.2,0.2",
 		spawn_requires_flag: "card_unlocked_paint",
 		price: 40,
 		mana: 0,
@@ -9198,7 +8954,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_orange.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.1,0.1,0.4",
+		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
 		price: 40,
 		mana: 0,
@@ -9222,7 +8978,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_green.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.4,0.1,0.1",
+		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
 		price: 40,
 		mana: 0,
@@ -9246,7 +9002,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_yellow.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.1,0.4,0.1",
+		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
 		price: 40,
 		mana: 0,
@@ -9270,7 +9026,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_purple.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.1,0.1,0.4",
+		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
 		price: 40,
 		mana: 0,
@@ -9294,7 +9050,7 @@ export const actions = [
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_blue.xml" ],
 		type: "modifier",
 		spawn_level: "2,3,4",
-		spawn_probability: "0.4,0.1,0.1",
+		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
 		price: 40,
 		mana: 0,
@@ -9317,8 +9073,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_rainbow.xml" ],
 		type: "modifier",
-		spawn_level: "2,3,4,10",
-		spawn_probability: "0.1,0.1,0.1,0.2",
+		spawn_level: "2,3,4",
+		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
 		price: 40,
 		mana: 0,
@@ -9341,8 +9097,8 @@ export const actions = [
 		sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
 		related_extra_entities: [ "data/entities/misc/colour_invis.xml" ],
 		type: "modifier",
-		spawn_level: "2,3,4,10",
-		spawn_probability: "0.1,0.1,0.1,0.1",
+		spawn_level: "2,3,4",
+		spawn_probability: "0.1,0.1,0.1",
 		spawn_requires_flag: "card_unlocked_paint",
 		price: 40,
 		mana: 0,

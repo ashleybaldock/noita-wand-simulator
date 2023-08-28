@@ -1,8 +1,6 @@
-import { ConfigGun_Init } from './gun_generated';
 import {
   ConfigGunActionInfo_Copy,
   ConfigGunActionInfo_Init,
-  ConfigGunActionInfo_PassToGame,
 } from './gunaction_generated';
 import {
   ConfigGunShotEffects_Init,
@@ -23,7 +21,6 @@ import {
 import {
   ActionUsed,
   ActionUsesRemainingChanged,
-  BaabInstruction,
   BeginProjectile,
   BeginTriggerDeath,
   BeginTriggerHitWorld,
@@ -35,12 +32,10 @@ import {
   OnActionFinished,
   OnActionPlayed,
   OnNotEnoughManaForAction,
-  Reflection_RegisterProjectile,
   SetProjectileConfigs,
   StartReload,
+  Random,
 } from './extra/ext_functions';
-import { Random } from './extra/ext_random';
-import { init_state_from_game } from './extra/init';
 
 // constants
 export const ACTION_DRAW_RELOAD_TIME_INCREASE = 0;
@@ -48,39 +43,49 @@ const ACTION_MANA_DRAIN_DEFAULT = 10;
 const ACTION_UNIDENTIFIED_SPRITE_DEFAULT =
   'data/ui_gfx/gun_actions/unidentified.png';
 
-// passing data to C++ code (reflection)
-export let reflecting = false;
 let current_action: Action | null = null;
 
-// gun current state
+const initialGunActionState = {
+  actions_per_round: 1,
+  shuffle_deck_when_empty: false,
+  reload_time: 40,
+  deck_capacity: 2,
+} as const;
 
+// gun current state
 let first_shot = true;
 let reloading = false;
 let start_reload = false;
 let got_projectiles = false;
 
-export let state_from_game: GunActionState = init_state_from_game();
+export const state_from_game: Partial<GunActionState> = {
+  ...initialGunActionState,
+};
 
+/* Beware - Many small quirks of individual spell behaviour rely on
+ * exactly how arrays are traversed and cleared. Refer closely to the
+ * source lua files when making changes */
 export let discarded: Action[] = [];
+export let deck: Action[] = [];
+export let hand: Action[] = [];
 
 export function clearDiscarded() {
+  /* This MUST be a new array assignment! */
   discarded = [];
 }
 
-export let deck: Action[] = [];
-
 export function clearDeck() {
+  /* This MUST be a new array assignment! */
   deck = [];
 }
 
-export let hand: Action[] = [];
-
 export function clearHand() {
+  /* This MUST be a new array assignment! */
   hand = [];
 }
 
 export let c: GunActionState;
-let current_projectile = null;
+// let current_projectile = null;
 export let current_reload_time = 0;
 
 export function setCurrentReloadTime(crt: number) {
@@ -99,7 +104,6 @@ export function setMana(m: number) {
   mana = m;
 }
 
-let state_shuffled = false;
 let state_cards_drawn = 0;
 let state_discarded_action = false;
 let state_destroyed_action = false;
@@ -128,8 +132,6 @@ export function setForceStopDraws(fsd: boolean) {
 
 let shot_structure = {};
 let recursion_limit = 2;
-
-// action effect reflection stuff
 
 function reset_modifiers(state: GunActionState) {
   ConfigGunActionInfo_Init(state);
@@ -199,7 +201,7 @@ function clone_action(source: Readonly<Action>, target: Action) {
 // various utilities
 
 function create_shot(num_of_cards_to_draw: number): Shot {
-  let shot: any = {};
+  const shot: any = {};
   shot.state = {};
   reset_modifiers(shot.state);
   shot.num_of_cards_to_draw = num_of_cards_to_draw;
@@ -297,9 +299,9 @@ export function draw_action(instant_reload_if_empty: boolean) {
 
   state_cards_drawn = state_cards_drawn + 1;
 
-  if (reflecting) {
-    return;
-  }
+  // if (reflecting) {
+  //   return;
+  // }
 
   if (deck.length <= 0) {
     if (instant_reload_if_empty && !force_stop_draws) {
@@ -390,10 +392,10 @@ export function draw_actions(
 }
 
 export function add_projectile(entity_filename: string) {
-  if (reflecting) {
-    Reflection_RegisterProjectile(entity_filename);
-    return;
-  }
+  // if (reflecting) {
+  //   Reflection_RegisterProjectile(entity_filename);
+  //   return;
+  // }
 
   BeginProjectile(entity_filename);
   EndProjectile();
@@ -404,10 +406,10 @@ export function add_projectile_trigger_timer(
   delay_frames: number,
   action_draw_count: number,
 ) {
-  if (reflecting) {
-    Reflection_RegisterProjectile(entity_filename);
-    return;
-  }
+  // if (reflecting) {
+  //   Reflection_RegisterProjectile(entity_filename);
+  //   return;
+  // }
 
   BeginProjectile(entity_filename);
   BeginTriggerTimer(delay_frames);
@@ -420,10 +422,10 @@ export function add_projectile_trigger_hit_world(
   entity_filename: string,
   action_draw_count: number,
 ) {
-  if (reflecting) {
-    Reflection_RegisterProjectile(entity_filename);
-    return;
-  }
+  // if (reflecting) {
+  //   Reflection_RegisterProjectile(entity_filename);
+  //   return;
+  // }
 
   BeginProjectile(entity_filename);
   BeginTriggerHitWorld();
@@ -436,10 +438,10 @@ export function add_projectile_trigger_death(
   entity_filename: string,
   action_draw_count: number,
 ) {
-  if (reflecting) {
-    Reflection_RegisterProjectile(entity_filename);
-    return;
-  }
+  // if (reflecting) {
+  //   Reflection_RegisterProjectile(entity_filename);
+  //   return;
+  // }
 
   BeginProjectile(entity_filename);
   BeginTriggerDeath();
@@ -447,14 +449,6 @@ export function add_projectile_trigger_death(
   EndTrigger();
   EndProjectile();
 }
-
-// function baab_instruction(name: string) {
-//   if (reflecting) {
-//     return;
-//   }
-
-//   BaabInstruction(name);
-// }
 
 export function move_discarded_to_deck() {
   discarded.forEach((action) => {
@@ -533,7 +527,7 @@ export function check_recursion(data: Readonly<Action> | null, rec_: number) {
 // -- exported functions. called by the C++ code --
 
 // call this to do one shot (or round, or turn)
-let root_shot: Shot | null = null;
+const root_shot: Shot | null = null;
 
 export function _start_shot(current_mana: number) {
   // debug checks
@@ -551,6 +545,7 @@ export function _start_shot(current_mana: number) {
 
   // set up the initial state for the selected gun
   ConfigGunActionInfo_Copy(state_from_game, c);
+
   ConfigGunShotEffects_Init(shot_effects);
 
   root_shot.num_of_cards_to_draw = gun.actions_per_round;

@@ -44,7 +44,7 @@ export type IterativeAction = Extract<
 const iterativeActionIdSet: Set<string> = new Set(
   iterativeActionIds.filter(isValidActionId),
 );
-console.log(iterativeActionIdSet);
+// console.log(iterativeActionIdSet);
 
 export function isIterativeActionId(
   actionId: ActionId,
@@ -69,7 +69,6 @@ export type GreekActionId = Extract<typeof greekActionIds[number], ActionId>;
 const greekActionIdSet: Set<string> = new Set(
   greekActionIds.filter(isValidActionId),
 );
-console.log(greekActionIdSet);
 
 export function isGreekActionId(actionId: ActionId): actionId is GreekActionId {
   return greekActionIdSet.has(actionId);

@@ -1,5 +1,4 @@
 import { ActionId, Gun, isValidActionId } from './calc';
-import { ConfigState } from './redux/configSlice';
 
 export type SpellId = ActionId | string | null;
 
@@ -32,5 +31,3 @@ export type WandActionDragItem = {
   actionId?: string;
   sourceWandIndex?: number;
 };
-
-export type LocalStorageState = ConfigState;
