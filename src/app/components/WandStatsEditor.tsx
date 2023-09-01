@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { selectWand, setWand } from '../redux/wandSlice';
+import { useAppDispatch } from '../redux/hooks';
+import { useWand, setWand } from '../redux/wandSlice';
 import { Wand } from '../types';
 import styled from 'styled-components';
 import { AppDispatch } from '../redux/store';
@@ -163,7 +163,7 @@ const StyledValue = styled.span`
 type Props = {};
 
 export function WandStatsEditor(props: Props) {
-  const { wand } = useAppSelector(selectWand);
+  const wand = useWand();
   const dispatch = useAppDispatch();
 
   return (

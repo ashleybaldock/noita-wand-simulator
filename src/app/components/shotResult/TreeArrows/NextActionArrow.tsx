@@ -1,5 +1,5 @@
 import styled from 'styled-components/macro';
-import { Action } from '../../../calc';
+import { Spell } from '../../../calc/spell';
 import { DEFAULT_SIZE } from '../../../util';
 import { ActionTreeShotResultNodeDiv } from '../../shotResult/ActionTreeShotResult';
 
@@ -85,7 +85,7 @@ const ArrowHeadDiv = styled.div<{
 
 type Props = {
   size?: number;
-  proxy?: Action;
+  proxy?: Spell;
   swept?: boolean;
 };
 

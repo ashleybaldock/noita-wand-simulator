@@ -225,6 +225,7 @@ export function ConfigEditor(props: Props) {
   const makeUpdateFunction =
     <T extends any>(set: (config: ConfigState['config'], value: T) => void) =>
     (v: T) => {
+      /****** TODO remove lodash ******/
       let newConfig = _.cloneDeep(config);
       set(newConfig, v);
       dispatch(updateConfig(newConfig));

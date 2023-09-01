@@ -1,14 +1,14 @@
 import styled from 'styled-components/macro';
 import { WandAction } from './WandAction';
 import { NextActionArrow } from '../shotResult/TreeArrows';
+import { DEFAULT_SIZE } from '../../util/constants';
 import {
-  DEFAULT_SIZE,
   GroupedObject,
   isArrayObject,
   isMultipleObject,
   isRawObject,
   simplifyMultipleObject,
-} from '../../util';
+} from '../../calc/grouping/combineGroups';
 import {
   ActionProxyAnnotation,
   ActionSourceAnnotation,
@@ -18,7 +18,7 @@ import {
   RecursionAnnotation,
 } from '../Annotations/';
 import WandActionBorder from './WandActionBorder';
-import { ActionCall, GroupedProjectile } from '../../calc';
+import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 
 const MainDiv = styled.div.attrs({
   className: 'MainDiv',

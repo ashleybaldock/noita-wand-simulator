@@ -1,5 +1,5 @@
 import styled from 'styled-components/macro';
-import { Action, ActionCall, GroupedProjectile } from '../../calc';
+import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 import { useConfig } from '../../redux';
 import { DEFAULT_SIZE } from '../../util';
 
@@ -22,7 +22,6 @@ export const ProxyDiv = styled.div<{
 
 type Props = {
   size?: number;
-  proxy?: Action;
 } & Partial<ActionCall> &
   Partial<GroupedProjectile>;
 

@@ -1,6 +1,8 @@
-import { Action, Gun } from '../extra/types';
-import { override, subscribe } from '../extra/ext_functions';
+import { Spell } from '../spell';
+import { getSpellById } from '../spells';
+import { override, subscribe } from './wandObserver';
 import {
+  Gun,
   _add_card_to_deck,
   _clear_deck,
   _draw_actions_for_shot,
@@ -10,15 +12,13 @@ import {
   mana as gunMana,
   state_from_game,
 } from '../gun';
-import {
-  getActionsForEntityId as entityToAction,
-  isIterativeActionId,
-} from '../';
+import { isValidEntityPath, entityToActions } from '../entityLookup';
+import { isIterativeActionId } from '../actionId';
 import { ActionCall, Requirements, TreeNode, WandShot } from './types';
 
 export function clickWand(
   wand: Gun,
-  spells: Action[],
+  spells: Spell[],
   mana: number,
   castDelay: number,
   fireUntilReload: boolean,
@@ -114,39 +114,43 @@ export function clickWand(
             'material',
             'other',
             'utility',
-          ].includes(a.action.type);
+          ].includes(a.spell.type);
         });
 
         const entity: string = args[0];
 
         let sourceAction =
-          validSourceActionCalls[validSourceActionCalls.length - 1]?.action;
-        let proxy: Action | undefined = undefined;
+          validSourceActionCalls[validSourceActionCalls.length - 1]?.spell;
+        let proxy: Spell | undefined = undefined;
 
         if (!sourceAction) {
           // fallback to most likely entity source if no action
-          if (!entityToAction[entity]) {
+          // if (!entityToActions(entity)) {
+          if (
+            !isValidEntityPath(entity) ||
+            entityToActions(entity) === undefined
+          ) {
             throw Error(`missing entity: ${entity}`);
           }
-          sourceAction = entityToAction[entity][0];
+          sourceAction = getSpellById(entityToActions(entity)?.[0]);
         }
 
         if (entity !== sourceAction.related_projectiles?.[0]) {
-          if (!entityToAction[entity]) {
+          if (!entityToActions(entity)) {
             throw Error(`missing entity: ${entity}`);
           }
 
           // check for bugged actions (missing the correct related_projectile)
-          if (entityToAction[entity][0].id !== sourceAction.id) {
+          if (entityToActions(entity)[0] !== sourceAction.id) {
             // this probably means another action caused this projectile (like ADD_TRIGGER)
             proxy = sourceAction;
-            sourceAction = entityToAction[entity][0];
+            sourceAction = getSpellById(entityToActions(entity)?.[0]);
           }
         }
 
         currentShot.projectiles.push({
           entity: args[0],
-          action: sourceAction,
+          spell: sourceAction,
           proxy: proxy,
           deckIndex: proxy?.deck_index || sourceAction?.deck_index,
         });
@@ -174,7 +178,7 @@ export function clickWand(
         break;
       case 'OnActionCalled':
         lastCalledAction = {
-          action: args[1],
+          spell: args[1],
           source: args[0],
           currentMana: gunMana,
           deckIndex: args[1].deck_index,
@@ -239,7 +243,7 @@ export function clickWand(
     if (
       !fireUntilReload ||
       calledActions!.length === 0 ||
-      (endOnRefresh && calledActions!.some((a) => a.action.id === 'RESET'))
+      (endOnRefresh && calledActions!.some((a) => a.spell.id === 'RESET'))
     ) {
       break;
     }

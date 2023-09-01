@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { selectConfig, updateConfig } from '../../redux/configSlice';
 import { WandAction } from '../wandAction/WandAction';
-import { getActionById } from '../../calc';
 import styled from 'styled-components';
 import { ChangeEvent } from 'react';
 import SectionHeader from '../SectionHeader';
+import { getSpellById } from '../../calc/spells';
 
 const MainDiv = styled.div`
   display: flex;
@@ -345,10 +345,7 @@ export function CastConfigEditor(props: Props) {
           </SubSectionTitle>
           <SubSectionContent>
             <CheckboxInputWrapper>
-              <WandAction
-                action={getActionById('IF_ENEMY')}
-                size={actionSize}
-              />
+              <WandAction spell={getSpellById('IF_ENEMY')} size={actionSize} />
               <input
                 type="checkbox"
                 checked={reqs.enemies}
@@ -357,7 +354,7 @@ export function CastConfigEditor(props: Props) {
             </CheckboxInputWrapper>
             <CheckboxInputWrapper>
               <WandAction
-                action={getActionById('IF_PROJECTILE')}
+                spell={getSpellById('IF_PROJECTILE')}
                 size={actionSize}
               />
               <input
@@ -367,7 +364,7 @@ export function CastConfigEditor(props: Props) {
               />
             </CheckboxInputWrapper>
             <CheckboxInputWrapper>
-              <WandAction action={getActionById('IF_HP')} size={actionSize} />
+              <WandAction spell={getSpellById('IF_HP')} size={actionSize} />
               <input
                 type="checkbox"
                 checked={reqs.hp}
@@ -375,7 +372,7 @@ export function CastConfigEditor(props: Props) {
               />
             </CheckboxInputWrapper>
             <CheckboxInputWrapper>
-              <WandAction action={getActionById('IF_HALF')} size={actionSize} />
+              <WandAction spell={getSpellById('IF_HALF')} size={actionSize} />
               <input
                 type="checkbox"
                 checked={reqs.half}

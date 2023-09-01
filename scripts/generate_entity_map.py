@@ -3,8 +3,8 @@ from collections import OrderedDict
 
 srcFile = "data/scripts/gun/gun_actions.lua"
 srcFileBeta = "data/scripts/gun/gun_actions.beta.lua"
-dstFile = "./src/app/calc/__generated__/entityProjectileMap.ts"
-dstFileBeta = "./src/app/calc/__generated__/entityProjectileMap.beta.ts"
+dstFile = "./src/app/calc/__generated__/main/entityMap.ts"
+dstFileBeta = "./src/app/calc/__generated__/beta/entityMap.ts"
 
 multiline_comment_pattern = r'--\[\[.*?]]--'
 singleline_comment_pattern = r'--.*?$'
@@ -15,7 +15,7 @@ related_pattern = r'related_projectiles\s*=\s*\{([\s\w/.,"]*)\}'
 related_proj_pattern = r'\s*\"([\w/.]*)\"'
 
 
-def processFile(srcFile, dstFile):
+def processFile(srcFile):
   with open(srcFile) as inFile:
     content = inFile.read()
 
@@ -86,7 +86,7 @@ def processFile(srcFile, dstFile):
     add_entity_action(f'data/entities/items/pickup/egg_{types}.xml', 'SUMMON_EGG', True)
 
   lines = list()
-  lines.append('export const entityToActionId: {[key: string]: string[]} = {')
+  lines.append('export const entityToActionIds = {')
 
   for k, vs in entity_map.items():
     v_str = ','.join([f'\'{v}\'' for v in list(OrderedDict.fromkeys(vs))])
@@ -100,4 +100,4 @@ with open(dstFile, 'w') as outFile:
   outFile.write(processFile(srcFile))
 
 with open(dstFileBeta, 'w') as outFile:
-  outFile.write(processFile(srcFileBeta))
+  outFile.write(processFile(srcFileBeta)

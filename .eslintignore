@@ -1,3 +1,4 @@
 src/app/calc/evaluate_lua/__generated__
 
 src/app/calc/__generated__/*.ts
+src/app/calc/__generated__/**/*.ts

@@ -2,8 +2,7 @@ import styled from 'styled-components';
 import React, { useMemo, useState } from 'react';
 import { ProcessingModal } from './ProcessingModal';
 import { exportComponentAsPNG } from 'react-component-export-image';
-import { useAppSelector } from '../../redux/hooks';
-import { selectWand } from '../../redux/wandSlice';
+import { useWandState } from '../../redux/wandSlice';
 import { hashString } from '../../util/util';
 
 const StyledSpan = styled.span<{ enabled: boolean }>`
@@ -22,7 +21,7 @@ type Props = {
 
 export function SaveImageButton(props: Props) {
   const [isProcessing, setIsProcessing] = useState(false);
-  const wandState = useAppSelector(selectWand);
+  const wandState = useWandState();
 
   const stateHash = useMemo(() => {
     return Math.abs(hashString(JSON.stringify(wandState))).toString(36);

@@ -1,12 +1,9 @@
 import styled from 'styled-components/macro';
-import {
-  ActionCall,
-  GroupedProjectile,
-  isIterativeActionId,
-  recursiveActions,
-} from '../../calc';
+import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
+import { isIterativeActionId } from '../../calc/actionId';
 import { useConfig } from '../../redux';
 import { DEFAULT_SIZE } from '../../util';
+import { recursiveActionIds } from '../../calc/spells';
 
 const RecursionDiv = styled.div<{
   size: number;
@@ -50,15 +47,15 @@ type Props = {
   Partial<GroupedProjectile>;
 
 export function RecursionAnnotation(props: Props) {
-  const { size = DEFAULT_SIZE, action, recursion, iteration } = props;
+  const { size = DEFAULT_SIZE, spell, recursion, iteration } = props;
   const { config } = useConfig();
 
   if (!config.showRecursion) {
     return null;
   }
 
-  const recursive = action && recursiveActions.includes(action?.id);
-  const iterative = action && isIterativeActionId(action?.id);
+  const recursive = spell && recursiveActionIds.includes(spell?.id);
+  const iterative = spell && isIterativeActionId(spell?.id);
 
   const showRecursion =
     recursion !== undefined && (recursive || (iterative && recursion > 0));

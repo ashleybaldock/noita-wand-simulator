@@ -1,4 +1,6 @@
-import { actions } from '../calc/gun_actions';
+import { Spell } from '../calc/spell';
+import { spells } from '../calc/spells';
+import { spellTypeInfoMap } from '../calc/spellTypes';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import styled from 'styled-components';
 import { useMemo } from 'react';
@@ -7,7 +9,6 @@ import { WandAction } from './wandAction/WandAction';
 import WandActionBorder from './wandAction/WandActionBorder';
 import { useAppSelector } from '../redux/hooks';
 import { ConfigState, selectConfig } from '../redux/configSlice';
-import { Action, actionTypeInfoMap } from '../calc/extra/types';
 import { groupBy, objectEntries } from '../util/util';
 import { Tabs } from './generic';
 import {
@@ -70,27 +71,27 @@ const SpellHotbar = styled.div`
 
 const isSpellUnlocked = (
   unlocks: ConfigState['config']['unlocks'],
-  spell: Action,
+  spell: Spell,
 ) => {
   return !spell.spawn_requires_flag || unlocks[spell.spawn_requires_flag];
 };
 
 const isBetaEnabled = (
   configBetaEnabled: ConfigState['config']['showBeta'],
-  spell: Action,
+  spell: Spell,
 ) => {
   return !spell.beta || configBetaEnabled;
 };
 
 type WandActionSelectProps = {
-  action: Action;
+  spell: Spell;
   size: number;
 };
 
 const WandActionSelect = (props: WandActionSelectProps) => (
   <SpellSelectorWandActionBorder size={props.size}>
-    <WandActionDragSource actionId={props.action.id} key={props.action.id}>
-      <WandAction action={props.action} size={props.size} />
+    <WandActionDragSource actionId={props.spell.id} key={props.spell.id}>
+      <WandAction spell={props.spell} size={props.size} />
     </WandActionDragSource>
   </SpellSelectorWandActionBorder>
 );
@@ -104,7 +105,7 @@ export function SpellSelector(props: Props) {
 
   const unlockedActions = useMemo(
     () =>
-      actions.filter(
+      spells.filter(
         (a) =>
           isSpellUnlocked(config.unlocks, a) &&
           isBetaEnabled(config.showBeta, a),
@@ -112,33 +113,33 @@ export function SpellSelector(props: Props) {
     [config.unlocks, config.showBeta],
   );
 
-  const actionsByType = useMemo(() => {
+  const spellsByType = useMemo(() => {
     return groupBy(unlockedActions, ({ type }) => type);
   }, [unlockedActions]);
 
   const tabPerType = useMemo(() => {
-    return objectEntries(actionsByType)
+    return objectEntries(spellsByType)
       .reverse()
       .map(([actionType, actions]) => {
-        const actionTypeMapping = actionTypeInfoMap[actionType];
+        const spellTypeMapping = spellTypeInfoMap[actionType];
 
         return {
-          title: actionTypeMapping?.name,
-          iconSrc: actionTypeMapping?.src,
+          title: spellTypeMapping?.name,
+          iconSrc: spellTypeMapping?.src,
           content: (
             <SpellCategorySpellsDiv size={spellSize}>
-              {actions.map((action) => (
+              {actions.map((spell) => (
                 <WandActionSelect
-                  action={action}
+                  spell={spell}
                   size={spellSize}
-                  key={action.id}
+                  key={spell.id}
                 />
               ))}
             </SpellCategorySpellsDiv>
           ),
         };
       });
-  }, [actionsByType]);
+  }, [spellsByType]);
 
   const allInOneTab = useMemo(() => {
     return [
@@ -147,12 +148,8 @@ export function SpellSelector(props: Props) {
         iconSrc: '',
         content: (
           <SpellCategorySpellsDiv size={spellSize}>
-            {actions.map((action) => (
-              <WandActionSelect
-                action={action}
-                size={spellSize}
-                key={action.id}
-              />
+            {spells.map((spell) => (
+              <WandActionSelect spell={spell} size={spellSize} key={spell.id} />
             ))}
           </SpellCategorySpellsDiv>
         ),

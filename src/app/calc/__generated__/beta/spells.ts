@@ -22,6 +22,7 @@ import {
   ACTION_DRAW_RELOAD_TIME_INCREASE,
   move_discarded_to_deck,
   order_deck,
+  reflecting,
   call_action,
 } from "../../gun";
 import {
@@ -45,10 +46,12 @@ import {
   Random,
   SetRandomSeed,
   GameGetFrameNum
-} from "../../extra/ext_functions";
-import { ipairs, luaFor } from "../../lua";
+} from "../../eval/wandObserver";
+import { Spell } from '../../spell';
+import { GunActionState } from '../../actionState';
+import { ipairs, luaFor } from "../../lua/loops";
 
-export const actions: Action[] = [
+const actions: Spell[] = [
 	
 	
 	{
@@ -7282,7 +7285,7 @@ export const actions: Action[] = [
 			let datasize = deck.length + discarded.length
 			let rnd = Random( 1, datasize )
 			
-			let data: Action | null = null
+			let data: Spell | null = null
 				
 			if ( rnd <= deck.length )  {
 				data = deck[rnd - 1]
@@ -7338,7 +7341,7 @@ export const actions: Action[] = [
 			let datasize = deck.length + discarded.length
 			let rnd = Random( 1, datasize )
 			
-			let data: Action | null = null
+			let data: Spell | null = null
 				
 			if ( rnd <= deck.length )  {
 				data = deck[rnd - 1]
@@ -7398,7 +7401,7 @@ export const actions: Action[] = [
 			for (const i of luaFor(1, 3)) {
 				let rnd = Random( 1, datasize )
 				
-				let data: Action | null = null
+				let data: Spell | null = null
 				
 				if ( rnd <= deck.length )  {
 					data = deck[rnd - 1]
@@ -7615,7 +7618,7 @@ export const actions: Action[] = [
 		mana: 10,
 		
 		action: (c: GunActionState) => {
-			let data: Action | null = null
+			let data: Spell | null = null
 			
 			let how_many = 1
 			
@@ -7695,7 +7698,7 @@ export const actions: Action[] = [
 		mana: 20,
 		
 		action: (c: GunActionState) => {
-			let data: Action | null = null
+			let data: Spell | null = null
 			
 			let how_many = 1
 			
@@ -7775,7 +7778,7 @@ export const actions: Action[] = [
 		mana: 20,
 		
 		action: (c: GunActionState) => {
-			let data: Action | null = null
+			let data: Spell | null = null
 			
 			let how_many = 1
 			
@@ -7953,7 +7956,7 @@ export const actions: Action[] = [
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
 			c.fire_rate_wait = c.fire_rate_wait + 15
 			
-			let data: Action | null = null
+			let data: Spell | null = null
 			
 			if ( discarded.length > 0 )  {
 				data = discarded[1 - 1]
@@ -7990,7 +7993,7 @@ export const actions: Action[] = [
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
 			c.fire_rate_wait = c.fire_rate_wait + 15
 			
-			let data: Action | null = null
+			let data: Spell | null = null
 			
 			if ( deck.length > 0 )  {
 				data = deck[deck.length - 1]
@@ -8378,7 +8381,7 @@ export const actions: Action[] = [
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
 			c.fire_rate_wait = c.fire_rate_wait + 20
 			
-			let data: Action | null = null
+			let data: Spell | null = null
 			
 			let iter = iteration || 1
 			let iter_max = iteration || 1
@@ -8460,7 +8463,7 @@ export const actions: Action[] = [
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
 			c.fire_rate_wait = c.fire_rate_wait + 35
 			
-			let data: Action | null = null
+			let data: Spell | null = null
 			
 			let iter = iteration || 1
 			let iter_max = iteration || 1
@@ -8542,7 +8545,7 @@ export const actions: Action[] = [
 		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			
-			let data: Action | null = null
+			let data: Spell | null = null
 			
 			let iter = iteration || 1
 			let iter_max = iteration || 1
@@ -8626,7 +8629,7 @@ export const actions: Action[] = [
 			c.fire_rate_wait = c.fire_rate_wait + 80
 			setCurrentReloadTime(current_reload_time + 20)
 			
-			let data: Action | null = null
+			let data: Spell | null = null
 			
 			let iter = iteration || 1
 			let iter_max = iteration || 1
@@ -9380,3 +9383,4 @@ export const actions: Action[] = [
 	},
 ]
 
+export const spells = actions;

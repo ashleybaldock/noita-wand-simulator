@@ -1,14 +1,15 @@
+import { combineGroups, isRawObject, mergeProperties } from './combineGroups';
 import {
-  combineGroups,
-  isRawObject,
-  mergeProperties,
-} from '../../util/combineGroups';
-import { ActionCall, GroupedWandShot, Projectile, WandShot } from './types';
+  ActionCall,
+  GroupedWandShot,
+  Projectile,
+  WandShot,
+} from '../eval/types';
 
 function condenseActions(calledActions: ActionCall[]) {
   return combineGroups(
     calledActions,
-    (a) => a.action.id,
+    (a) => a.spell.id,
     (o) => {
       // deck index and source
       if (o.map(isRawObject).every((v) => v)) {

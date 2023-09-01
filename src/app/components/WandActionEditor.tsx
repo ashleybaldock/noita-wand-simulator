@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components/macro';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { selectWand, setSpellAtIndex } from '../redux/wandSlice';
-import { Action, getActionById } from '../calc';
+import { Spell } from '../calc/spell';
+import { getSpellById } from '../calc/spells';
+import { useAppDispatch } from '../redux/hooks';
+import { useSpells, setSpellAtIndex } from '../redux/wandSlice';
 import { isKnownSpell } from '../types';
 import { DEFAULT_SIZE } from '../util';
 import {
@@ -34,7 +35,7 @@ const StyledListItem = styled.li`
 `;
 
 type Props = {
-  spellAction?: Action;
+  spellAction?: Spell;
   wandIndex: number;
   size: number;
 };
@@ -62,7 +63,7 @@ function ActionComponent(props: Props) {
               sourceWandIndex={wandIndex}
             >
               <WandAction
-                action={spellAction}
+                spell={spellAction}
                 deckIndex={spellAction.deck_index}
                 onDeleteSpell={() => handleDeleteSpell(wandIndex)}
               />
@@ -86,12 +87,12 @@ function ActionComponent(props: Props) {
 }
 
 export function WandActionEditor() {
-  const { spells } = useAppSelector(selectWand);
+  const spellIds = useSpells();
 
   const size = DEFAULT_SIZE;
-  const spellActions = spells.map((spellId, index) => {
+  const spellActions = spellIds.map((spellId) => {
     if (isKnownSpell(spellId)) {
-      return getActionById(spellId);
+      return getSpellById(spellId);
     }
     return undefined;
   });

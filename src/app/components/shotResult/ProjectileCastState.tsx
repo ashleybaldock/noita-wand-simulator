@@ -1,6 +1,5 @@
-import { GunActionState } from '../../calc/extra/types';
-import { defaultGunActionState } from '../../calc/gunaction_generated';
 import styled from 'styled-components';
+import { defaultGunActionState, GunActionState } from '../../calc/actionState';
 import { numSign, round } from '../../util/util';
 
 const StyledList = styled.div`

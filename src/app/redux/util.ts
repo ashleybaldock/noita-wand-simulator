@@ -1,6 +1,4 @@
-import { WandState } from './wandSlice';
-import { Wand, SpellId } from '../types';
-import { isValidActionId } from '../calc';
+import { WandState, isKnownSpell } from '../types';
 import { trimArray, objectKeys } from '../util';
 import { defaultWand } from './presets';
 
@@ -46,7 +44,7 @@ const encodeQueryParam = (p: string) => encodeURIComponent(p);
 export function generateSearchFromWandState(state: WandState) {
   const simplifiedState = {
     ...state,
-    spells: trimArray(state.spells, (o) => o === null),
+    spells: trimArray(state.spellIds, (o) => o === null),
   };
   const params = new URLSearchParams();
   Object.entries(simplifiedState.wand).forEach(([k, v]) => {
@@ -60,17 +58,11 @@ export function generateSearchFromWandState(state: WandState) {
   );
 }
 
-export interface ParsedWandState {
-  wand: Wand;
-  spells: SpellId[];
-  messages: string[];
-}
-
-export function generateWandStateFromSearch(search: string): ParsedWandState {
+export function generateWandStateFromSearch(search: string): WandState {
   const params = new URLSearchParams(search);
 
   return objectKeys(defaultWand).reduce(
-    (acc: ParsedWandState, key) => {
+    (acc: WandState, key: keyof typeof defaultWand) => {
       if (params.has(key)) {
         const rawParam = params.get(key);
         const defaultValue = defaultWand[key];
@@ -103,14 +95,14 @@ export function generateWandStateFromSearch(search: string): ParsedWandState {
       return acc;
     },
     {
-      wand: { ...defaultWand } as Wand,
-      spells: trimArray(
+      wand: { ...defaultWand },
+      spellIds: trimArray(
         (params.get('spells') ?? '')
           .split(',')
-          .map((s) => (s.length === 0 ? null : isValidActionId(s))),
+          .map((s) => (s.length === 0 ? null : isKnownSpell(s))),
         (s) => !s,
       ),
       messages: [],
-    } as ParsedWandState,
+    } as WandState,
   );
 }

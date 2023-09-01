@@ -1,4 +1,4 @@
-import { ActionId, Gun, isValidActionId } from './calc';
+import { ActionId, isValidActionId } from './calc/actionId';
 
 export type SpellId = ActionId | string | null;
 
@@ -6,7 +6,7 @@ export function isKnownSpell(spellId: SpellId): spellId is ActionId {
   return spellId !== null && isValidActionId(spellId);
 }
 
-export type Wand = Gun & {
+export type Wand = {
   cast_delay: number;
   mana_max: number;
   mana_charge_speed: number;
@@ -14,6 +14,16 @@ export type Wand = Gun & {
   name: string;
   pic: string;
   speed: number;
+  actions_per_round: number;
+  shuffle_deck_when_empty: boolean;
+  reload_time: number;
+  deck_capacity: number;
+};
+
+export type WandState = {
+  wand: Wand;
+  spellIds: SpellId[];
+  messages: string[];
 };
 
 export type Preset = {

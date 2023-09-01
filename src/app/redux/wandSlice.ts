@@ -1,31 +1,33 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 import { RootState } from './store';
-import { Wand, SpellId } from '../types';
+import { SpellId, Wand, WandState } from '../types';
 import { defaultWand } from './presets';
 import { generateWandStateFromSearch } from './util';
-import { fixArraySize } from '../util/util';
 
-export interface WandState {
-  wand: Wand;
-  spells: SpellId[];
-  messages: string[];
+export function fixedLengthCopy<T>(arr: T[], size: number): T[] {
+  return size > arr.length
+    ? [...arr, ...Array(size - arr.length).fill(null)]
+    : arr.slice(0, size);
 }
 
-const stateFromUrl = generateWandStateFromSearch(window.location.search);
+const { wand, spellIds, messages } = generateWandStateFromSearch(
+  window.location.search,
+);
 
 // TODO these could be surfaced in the UI for debugging wand urls
-console.debug(stateFromUrl.messages);
+console.debug(messages);
 
 const initialState: WandState = {
   wand: {
     ...defaultWand,
-    ...stateFromUrl.wand,
+    ...wand,
   },
-  spells: fixArraySize(
-    stateFromUrl.spells,
-    stateFromUrl.wand.deck_capacity ?? defaultWand.deck_capacity,
+  spellIds: fixedLengthCopy(
+    spellIds,
+    wand.deck_capacity ?? defaultWand.deck_capacity,
   ),
-  messages: stateFromUrl.messages || [],
+  messages: messages || [],
 };
 
 export const wandSlice = createSlice({
@@ -40,43 +42,46 @@ export const wandSlice = createSlice({
       state.wand = wand;
 
       if (spells) {
-        state.spells = spells;
+        state.spellIds = spells;
       }
 
-      state.spells = fixArraySize(state.spells, wand.deck_capacity);
+      state.spellIds = fixedLengthCopy(state.spellIds, wand.deck_capacity);
     },
     setSpells: (state, action: PayloadAction<SpellId[]>) => {
-      state.spells = action.payload;
+      state.spellIds = action.payload;
 
-      state.spells = fixArraySize(state.spells, state.wand.deck_capacity);
+      state.spellIds = fixedLengthCopy(
+        state.spellIds,
+        state.wand.deck_capacity,
+      );
     },
     setSpellAtIndex: (
       state,
       action: PayloadAction<{ spell: SpellId | null; index: number }>,
     ) => {
       const { spell, index } = action.payload;
-      state.spells[index] = spell;
+      state.spellIds[index] = spell;
     },
     moveSpell: (
       state,
       action: PayloadAction<{ fromIndex: number; toIndex: number }>,
     ) => {
       const { fromIndex, toIndex } = action.payload;
-      const sourceSpell = state.spells[fromIndex];
+      const sourceSpell = state.spellIds[fromIndex];
 
-      state.spells[toIndex] = sourceSpell;
-      state.spells[fromIndex] = null;
+      state.spellIds[toIndex] = sourceSpell;
+      state.spellIds[fromIndex] = null;
     },
     swapSpells: (
       state,
       action: PayloadAction<{ fromIndex: number; toIndex: number }>,
     ) => {
       const { fromIndex, toIndex } = action.payload;
-      const sourceSpell = state.spells[fromIndex];
-      const targetSpell = state.spells[toIndex];
+      const sourceSpell = state.spellIds[fromIndex];
+      const targetSpell = state.spellIds[toIndex];
 
-      state.spells[toIndex] = sourceSpell;
-      state.spells[fromIndex] = targetSpell;
+      state.spellIds[toIndex] = sourceSpell;
+      state.spellIds[fromIndex] = targetSpell;
     },
   },
 });
@@ -84,6 +89,18 @@ export const wandSlice = createSlice({
 export const { setWand, setSpells, setSpellAtIndex, moveSpell, swapSpells } =
   wandSlice.actions;
 
-export const selectWand = (state: RootState): WandState => state.wand.present;
+export const selectWandState = (state: RootState): WandState =>
+  state.wand.present;
+const selectWand = (state: RootState): Wand => state.wand.present.wand;
+const selectSpells = (state: RootState): SpellId[] =>
+  state.wand.present.spellIds;
+const selectMessages = (state: RootState): string[] =>
+  state.wand.present.messages;
 
 export const wandReducer = wandSlice.reducer;
+
+export const useWandState = () => useSelector(selectWandState);
+
+export const useWand = () => useSelector(selectWand);
+export const useSpells = () => useSelector(selectSpells);
+export const useMessages = () => useSelector(selectMessages);

@@ -1,20 +1,26 @@
-import { Wand } from '../types';
+import { Preset, PresetGroup } from '../types';
 
-export const defaultWand: Wand = {
-  actions_per_round: 1,
-  deck_capacity: 26,
-  reload_time: 0,
-  shuffle_deck_when_empty: false,
-  cast_delay: 0,
-  mana_charge_speed: 20000,
-  mana_max: 20000,
-  spread: 0,
+const defaultPreset: Readonly<Preset> = {
   name: '',
-  pic: '',
-  speed: 1,
-} as const;
+  wand: {
+    actions_per_round: 1,
+    deck_capacity: 26,
+    reload_time: 0,
+    shuffle_deck_when_empty: false,
+    cast_delay: 0,
+    mana_charge_speed: 20000,
+    mana_max: 20000,
+    spread: 0,
+    name: '',
+    pic: '',
+    speed: 1,
+  },
+  spells: [],
+};
 
-export const defaultPresets = [
+export const defaultWand = defaultPreset.wand;
+
+export const defaultPresets: Array<Preset | PresetGroup> = [
   {
     name: 'Advanced Guide: Introduction to Greek Letter Spells',
     presets: [

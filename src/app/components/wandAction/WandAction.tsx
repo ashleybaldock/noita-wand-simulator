@@ -1,11 +1,8 @@
 import styled from 'styled-components/macro';
 import { DEFAULT_SIZE } from '../../util';
-import {
-  actionTypeInfoMap,
-  Action,
-  ActionCall,
-  GroupedProjectile,
-} from '../../calc';
+import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
+import { Spell } from '../../calc/spell';
+import { spellTypeInfoMap } from '../../calc/spellTypes';
 
 const ImageBackgroundDiv = styled.div<{
   size: number;
@@ -31,22 +28,23 @@ const ImageBackgroundDiv = styled.div<{
 type Props = {
   size?: number;
   onDeleteSpell?: () => void;
+  spell?: Readonly<Spell>;
 } & Partial<ActionCall> &
   Partial<GroupedProjectile>;
 
 export function WandAction(props: Props) {
-  const { size = DEFAULT_SIZE, action } = props;
+  const { size = DEFAULT_SIZE, spell } = props;
   // const [mouseOver, setMouseOver] = useState(false);
 
-  const actionToBackgroundImage = (action?: Action) => {
-    if (!action) {
+  const actionToBackgroundImage = (spell?: Spell) => {
+    if (!spell) {
       return '';
     }
-    const typeImgUrl = actionTypeInfoMap[action.type]?.src ?? '';
-    return `url("/${action.sprite}"), ${typeImgUrl && `url("/${typeImgUrl}")`}`;
+    const typeImgUrl = spellTypeInfoMap[spell.type]?.src ?? '';
+    return `url("/${spell.sprite}"), ${typeImgUrl && `url("/${typeImgUrl}")`}`;
   };
 
-  const style = { backgroundImage: actionToBackgroundImage(action) };
+  const style = { backgroundImage: actionToBackgroundImage(spell) };
   console.log(style);
 
   return (

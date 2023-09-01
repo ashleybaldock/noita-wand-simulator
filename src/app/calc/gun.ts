@@ -1,23 +1,18 @@
+import { ActionId } from './actionId';
+import { Spell } from './spell';
+import { getSpellById } from './spells';
 import {
+  defaultGunActionState,
+  GunActionState,
   ConfigGunActionInfo_Copy,
   ConfigGunActionInfo_Init,
-} from './gunaction_generated';
+} from './actionState';
+import { ActionSource } from './actionSources';
 import {
   ConfigGunShotEffects_Init,
   ConfigGunShotEffects_PassToGame,
 } from './gunshoteffects_generated';
-import { extra_modifiers } from './gun_extra_modifiers';
-import {
-  Action,
-  Gun,
-  GunActionState,
-  ModifierName,
-  Shot,
-  ShotEffects,
-  getActionById,
-  ActionId,
-  ActionSource,
-} from './';
+import { ExtraModifier, extraModifiers } from './extraModifiers';
 import {
   ActionUsed,
   ActionUsesRemainingChanged,
@@ -35,7 +30,7 @@ import {
   SetProjectileConfigs,
   StartReload,
   Random,
-} from './extra/ext_functions';
+} from './eval/wandObserver';
 
 // constants
 export const ACTION_DRAW_RELOAD_TIME_INCREASE = 0;
@@ -43,9 +38,36 @@ const ACTION_MANA_DRAIN_DEFAULT = 10;
 const ACTION_UNIDENTIFIED_SPRITE_DEFAULT =
   'data/ui_gfx/gun_actions/unidentified.png';
 
-let current_action: Action | null = null;
+/* Does (almost) nothing in the sim - leave as false */
+export const reflecting = false;
+// let current_action: Action | null = null;
 
-const initialGunActionState = {
+export type Gun = {
+  actions_per_round: number;
+  shuffle_deck_when_empty: boolean;
+  reload_time: number;
+  deck_capacity: number;
+};
+
+export function ConfigGun_Init(): Gun {
+  return {
+    actions_per_round: 1,
+    shuffle_deck_when_empty: false,
+    reload_time: 40,
+    deck_capacity: 2,
+  };
+}
+
+export type Shot = {
+  num_of_cards_to_draw: number;
+  state: GunActionState;
+};
+
+export type ShotEffects = {
+  recoil_knockback: number;
+};
+
+const initialGunState: Gun = {
   actions_per_round: 1,
   shuffle_deck_when_empty: false,
   reload_time: 40,
@@ -58,16 +80,17 @@ let reloading = false;
 let start_reload = false;
 let got_projectiles = false;
 
-export const state_from_game: Partial<GunActionState> = {
-  ...initialGunActionState,
+export const state_from_game: GunActionState = {
+  ...defaultGunActionState,
+  ...initialGunState,
 };
 
 /* Beware - Many small quirks of individual spell behaviour rely on
  * exactly how arrays are traversed and cleared. Refer closely to the
  * source lua files when making changes */
-export let discarded: Action[] = [];
-export let deck: Action[] = [];
-export let hand: Action[] = [];
+export let discarded: Spell[] = [];
+export let deck: Spell[] = [];
+export let hand: Spell[] = [];
 
 export function clearDiscarded() {
   /* This MUST be a new array assignment! */
@@ -96,7 +119,7 @@ export let shot_effects: ShotEffects = {
   recoil_knockback: 0,
 };
 
-let active_extra_modifiers: ModifierName[] = [];
+let active_extra_modifiers: ExtraModifier[] = [];
 
 export let mana = 0.0;
 
@@ -105,8 +128,8 @@ export function setMana(m: number) {
 }
 
 let state_cards_drawn = 0;
-let state_discarded_action = false;
-let state_destroyed_action = false;
+// let state_discarded_action = false;
+// let state_destroyed_action = false;
 
 let playing_permanent_card = false;
 
@@ -130,6 +153,7 @@ export function setForceStopDraws(fsd: boolean) {
   force_stop_draws = fsd;
 }
 
+// eslint-disable-next-line
 let shot_structure = {};
 let recursion_limit = 2;
 
@@ -139,7 +163,7 @@ function reset_modifiers(state: GunActionState) {
 
 function register_action(state: GunActionState) {
   state.reload_time = current_reload_time;
-  ConfigGunActionInfo_PassToGame(state);
+  // ConfigGunActionInfo_PassToGame(state);
 }
 
 function register_gunshoteffects(effects: ShotEffects) {
@@ -148,7 +172,7 @@ function register_gunshoteffects(effects: ShotEffects) {
 
 // call this when current action changes
 
-function set_current_action(action: Readonly<Action>) {
+function set_current_action(action: Readonly<Spell>) {
   // c.action_id = action.id;
   c.action_name = action.name;
   c.action_description = action.description;
@@ -178,10 +202,10 @@ function set_current_action(action: Readonly<Action>) {
     c.action_unidentified_sprite_filename = ACTION_UNIDENTIFIED_SPRITE_DEFAULT;
   }
 
-  current_action = action;
+  // current_action = action;
 }
 
-function clone_action(source: Readonly<Action>, target: Action) {
+function clone_action(source: Readonly<Spell>, target: Spell) {
   target.id = source.id;
   target.name = source.name;
   target.type = source.type;
@@ -227,11 +251,11 @@ export function order_deck() {
   if (gun.shuffle_deck_when_empty) {
     // SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() )
     // shuffle the deck
-    state_shuffled = true;
+    // state_shuffled = true;
 
     let rand = Random;
     let iterations = deck.length;
-    let new_deck: Action[] = [];
+    let new_deck: Spell[] = [];
 
     for (let i = iterations - 1; i >= 0; i--) {
       // looping from iterations to 1 (inclusive)
@@ -260,34 +284,34 @@ export function order_deck() {
   }
 }
 
-function play_action(action: Readonly<Action>) {
-  OnActionPlayed(action.id);
+function play_action(spell: Readonly<Spell>) {
+  OnActionPlayed(spell.id);
 
-  hand.push(action);
+  hand.push(spell);
 
-  set_current_action(action);
-  call_action('draw', action, c);
+  set_current_action(spell);
+  call_action('draw', spell, c);
 
   let is_projectile = false;
 
-  if (action.type === 'projectile') {
+  if (spell.type === 'projectile') {
     is_projectile = true;
     got_projectiles = true;
   }
 
-  if (action.type === 'static') {
+  if (spell.type === 'static') {
     is_projectile = true;
     got_projectiles = true;
   }
 
-  if (action.type === 'material') {
+  if (spell.type === 'material') {
     is_projectile = true;
     got_projectiles = true;
   }
 
   if (is_projectile) {
     active_extra_modifiers.forEach((modifier) => {
-      extra_modifiers[modifier](c);
+      extraModifiers[modifier](c);
     });
   }
 
@@ -348,7 +372,7 @@ export function draw_action(instant_reload_if_empty: boolean) {
   return true;
 }
 
-function handle_mana_addition(action: Action) {
+function handle_mana_addition(action: Spell) {
   if (action !== null) {
     let action_mana_required = action.mana || 0;
 
@@ -508,7 +532,7 @@ function move_hand_to_discarded() {
   clearHand();
 }
 
-export function check_recursion(data: Readonly<Action> | null, rec_: number) {
+export function check_recursion(data: Readonly<Spell> | null, rec_: number) {
   let rec = rec_ || 0;
 
   if (data != null) {
@@ -527,7 +551,7 @@ export function check_recursion(data: Readonly<Action> | null, rec_: number) {
 // -- exported functions. called by the C++ code --
 
 // call this to do one shot (or round, or turn)
-const root_shot: Shot | null = null;
+let root_shot: Shot | null = null;
 
 export function _start_shot(current_mana: number) {
   // debug checks
@@ -619,27 +643,28 @@ export function _add_card_to_deck(
 ) {
   // for (let i = 0; i < actions.length; i++) {
   // let action = actions[i];
-  const action = getActionById(action_id);
+  const spell = getSpellById(action_id);
   // if (action.id === action_id) {
-  let action_clone = {} as Action;
-  clone_action(action, action_clone);
-  action_clone.inventoryitem_id = inventoryitem_id;
-  action_clone.uses_remaining =
+  let spell_clone = {} as Spell;
+  clone_action(spell, spell_clone);
+  spell_clone.inventoryitem_id = inventoryitem_id;
+  spell_clone.uses_remaining =
     uses_remaining != null ? uses_remaining : undefined;
-  action_clone.deck_index = deck.length;
-  action_clone.is_identified = is_identified;
-  deck.push(action_clone);
+  spell_clone.deck_index = deck.length;
+  spell_clone.is_identified = is_identified;
+  deck.push(spell_clone);
   // break;
   // }
   // }
 }
 
+// eslint-disable-next-line
 function _play_permanent_card(action_id: ActionId) {
   // for (let i = 0; i < actions.length; i++) {
   // let action = actions[i];
-  const action = getActionById(action_id);
+  const action = getSpellById(action_id);
   // if (action.id === action_id) {
-  let action_clone = {} as Action;
+  let action_clone = {} as Spell;
   playing_permanent_card = true;
   clone_action(action, action_clone);
   action_clone.permanently_attached = true;
@@ -679,8 +704,9 @@ function _play_permanent_card(action_id: ActionId) {
 //   apply(hand);
 // }
 
-function _add_extra_modifier_to_shot(name: ModifierName) {
-  if (!extra_modifiers[name]) {
+// eslint-disable-next-line
+function _add_extra_modifier_to_shot(name: ExtraModifier) {
+  if (!extraModifiers[name]) {
     console.log(
       "_add_extra_modifier_to_shot() - function '" +
         name +
@@ -695,12 +721,12 @@ function _add_extra_modifier_to_shot(name: ModifierName) {
 // custom
 export function call_action(
   source: ActionSource,
-  action: Action,
+  spell: Spell,
   c: GunActionState,
   ...args: number[]
 ) {
-  OnActionCalled(source, action, c, ...args);
-  const returnValue = action.action(c, ...args);
-  OnActionFinished(source, action, c, returnValue, ...args);
+  OnActionCalled(source, spell.action, c, ...args);
+  const returnValue = spell.action(c, ...args);
+  OnActionFinished(source, spell.action, c, returnValue, ...args);
   return returnValue;
 }

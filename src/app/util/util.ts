@@ -8,16 +8,6 @@ export function union<T, U>(setA: Set<T>, setB: Set<U>) {
   return _union;
 }
 
-export function chunk<T>(arr: T[], chunkSize: number) {
-  if (chunkSize <= 0) {
-    throw Error('Invalid chunk size');
-  }
-  let result = [];
-  for (let i = 0; i < arr.length; i += chunkSize)
-    result.push(arr.slice(i, i + chunkSize));
-  return result;
-}
-
 export function range(n: number) {
   return [...Array(n).keys()];
 }
@@ -92,16 +82,6 @@ export function trimArray<T>(arr: T[], predicate: (o: T) => boolean): T[] {
     result.pop();
   }
   return result;
-}
-
-export function fixArraySize<T>(arr: T[], size: number): T[] {
-  if (size > arr.length) {
-    return [...arr, ...Array(size - arr.length).fill(null)];
-  } else if (size < arr.length) {
-    return arr.slice(0, size);
-  } else {
-    return arr;
-  }
 }
 
 export type TypedProperties<T, U> = Pick<

@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import undoable from 'redux-undo';
-import { wandReducer, selectWand } from './wandSlice';
+import { wandReducer, selectWandState } from './wandSlice';
 import { presetsReducer } from './presetsSlice';
 import { configReducer, selectConfig } from './configSlice';
 import { saveState } from '../localStorage';
@@ -40,7 +40,7 @@ export function observeStore<T>(
   return unsubscribe;
 }
 
-observeStore(selectWand, (state) => {
+observeStore(selectWandState, (state) => {
   const newSearch = generateSearchFromWandState(state);
   const currentSearch = window.location.search;
 

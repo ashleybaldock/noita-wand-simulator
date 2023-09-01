@@ -1,5 +1,6 @@
 import styled from 'styled-components/macro';
-import { ActionSource, ActionCall, GroupedProjectile } from '../../calc';
+import { ActionSource } from '../../calc/actionSources';
+import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 import { useConfig } from '../../redux';
 import { DEFAULT_SIZE } from '../../util';
 

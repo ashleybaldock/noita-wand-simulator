@@ -1,9 +1,11 @@
-import { Random as RandomExt } from '../lua';
-import { Action, GunActionState } from '../';
-import { ComponentID, EntityID } from './types';
+import { Random as RandomExt } from '../lua/random';
+import { Action } from '../action';
+import { GunActionState } from '../actionState';
+
+export type ComponentID = string;
+export type EntityID = string;
 
 // listener logic
-
 type Callback = (eventType: string, ...args: any[]) => void;
 
 let listeners: Callback[] = [];

@@ -6,19 +6,7 @@ from re import Match
 srcFile = 'data/scripts/gun/gun_actions.lua'
 srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
 
-#dstFile = 'src/app/calc/__generated__/gun_actions.ts'
-#dstFileBeta = 'src/app/calc/__generated__/gun_actions.beta.ts'
-#os.makedirs(os.path.dirname(dstFile), exist_ok=True)
-
-dst = {
-  'actionIds': {
-    'main': 'src/app/calc/__generated__/main/actionIds.ts',
-    'beta': 'src/app/calc/__generated__/beta/actionIds.ts',
-  },
-  'spells': {
-    'main': 'src/app/calc/__generated__/main/spells.ts',
-    'beta': 'src/app/calc/__generated__/beta/spells.ts',
-    'before': """import {
+spellsBefore = """import {
   hand,
   deck,
   discarded,
@@ -42,6 +30,7 @@ dst = {
   ACTION_DRAW_RELOAD_TIME_INCREASE,
   move_discarded_to_deck,
   order_deck,
+  reflecting,
   call_action,
 } from "../../gun";
 import {
@@ -65,27 +54,48 @@ import {
   Random,
   SetRandomSeed,
   GameGetFrameNum
-} from "../../extra/ext_functions";
-import { ipairs, luaFor } from "../../lua";
+} from "../../eval/wandObserver";
+import { Spell } from '../../spell';
+import { GunActionState } from '../../actionState';
+import { ipairs, luaFor } from "../../lua/loops";
 
-""",
+"""
+
+config = {
+  'main': {
+    'actionIds':
+    {
+      'src': 'data/scripts/gun/gun_actions.lua',
+      'dst': 'src/app/calc/__generated__/main/actionIds.ts'
+    },
+    'spells':
+    {
+      'src': 'data/scripts/gun/gun_actions.lua',
+      'dst': 'src/app/calc/__generated__/main/spells.ts',
+      'before': spellsBefore,
+      'after': 'export const spells = actions;',
+    },
   },
-  'actions': {
-    'main': 'src/app/calc/__generated__/main/actions.ts',
-    'beta': 'src/app/calc/__generated__/beta/actions.ts',
+  'beta': {
+      'actionIds':
+    {
+      'src': 'data/scripts/gun/gun_actions.beta.lua',
+      'dst': 'src/app/calc/__generated__/beta/actionIds.ts'
+    },
+    'spells':
+    {
+      'src': 'data/scripts/gun/gun_actions.beta.lua',
+      'dst': 'src/app/calc/__generated__/beta/spells.ts',
+      'before': spellsBefore,
+      'after': 'export const spells = actions;',
+    },
   },
 }
 
 
-os.makedirs(os.path.dirname('src/app/calc/__generated__/main/'), exist_ok=True)
-os.makedirs(os.path.dirname('src/app/calc/__generated__/beta/'), exist_ok=True)
 
-
-# In practice, there are two signatures for actions
-# action = function()
-# action = function( recursion_level, iteration )
-#
-# convert action function to ts+commented lua
+# Convert action functions,
+# replacing cast state global with param
 # action\s*=\s*function\((.*?)\)(\s*)(.*?)end,(\s*},)
 # action: (c: C, \1) => {\1\1},\1
 actionArgTypes = {
@@ -117,7 +127,7 @@ patterns = [
   # fix syntax for top level actions array
   PatternReplace(
     r'actions =\s*{(.*)}',
-    r'export const actions: Action[] = [\1]',
+    r'const actions: Spell[] = [\1]',
     flags=re.DOTALL,
   ),
 
@@ -163,7 +173,7 @@ patterns = [
   PatternReplace(r'if \(?\s*not (.*?)\s*\)? {', r'if (!\1) {', flags=re.MULTILINE),
   PatternReplace(r'(data\d?|v).action\((.*?)\)', r'call_action("action", \1, c, \2)', flags=re.MULTILINE),
   PatternReplace(r'let (\w+)\s*,\s*(\w+) =', r'let [\1, \2] =', flags=re.MULTILINE),
-  PatternReplace(r'let (data) = \[]', r'let \1: Action | null = null', flags=re.MULTILINE),
+  PatternReplace(r'let (data) = \[]', r'let \1: Spell | null = null', flags=re.MULTILINE),
   PatternReplace(r'let (\w+) = \[]', r'let \1: any = []', flags=re.MULTILINE),
 
   PatternReplace(r'table.insert\(\s*(\w+)\s*,\s*(\w+)\s*\)', r'\1.push(\2)', flags=re.MULTILINE),
@@ -222,23 +232,24 @@ patterns = [
 
 
 
-def processFile(srcFile, branch = 'main'):
-  with open(srcFile) as inFile:
+def processActionIds(src, dst, before = '', after = ''):
+  with open(src) as inFile:
     content = inFile.read()
 
   action_id_pattern = r'\t+{\s*id\s*=\s*\"(\w+)\"'
   action_ids = list(dict.fromkeys(re.findall(action_id_pattern, content, re.DOTALL)))
   joined = ",\n".join(f'"{i}"' for i in action_ids)
-  action_id_type = f'export const actionIds = [\n{joined}\n] as const;\n\nexport type ActionId = typeof actionIds[number];\n\n'
-  with open(dst['actionIds'][branch], 'w') as outFileActionIds:
-    outFileActionIds.write(action_id_type)
+  content = f'export const actionIds = [\n{joined}\n] as const;\n\nexport type ActionId = typeof actionIds[number];\n\n'
 
+  with open(dst, 'w') as outFile:
+    outFile.write(before + content + after)
+
+
+def processSpells(src, dst, before = '', after = ''):
+  with open(src) as inFile:
+    content = inFile.read()
 
   variances = []
-
-  content = re.sub(r'actions =\s*{(.*)}', r'export const actions: Action[] = [\1]', content, flags=re.DOTALL)
-
-  # content = re.sub(actionPattern.pattern, actionReplaceFn, content, flags=actionPattern.flags)
 
   for pattern in patterns:
     content, subCount = re.subn(pattern.pattern, pattern.replace, content, flags=pattern.flags)
@@ -259,13 +270,19 @@ def processFile(srcFile, branch = 'main'):
     for variance in variances:
       print(f'{variance}')
 
-  # insert imports
-  content = dst['spells']['before'] + content
-
-  with open(dst['spells'][branch], 'w') as outFileActionIds:
-    outFileActionIds.write(content)
+  with open(dst, 'w') as outFile:
+    outFile.write(before + content + after)
 
 
-processFile(srcFile, 'main')
-processFile(srcFileBeta, 'beta')
+os.makedirs(os.path.dirname('src/app/calc/__generated__/main/'), exist_ok=True)
+os.makedirs(os.path.dirname('src/app/calc/__generated__/beta/'), exist_ok=True)
 
+process = {
+  'actionIds': processActionIds,
+  'spells': processSpells,
+}
+
+for branch, tasks in config.items():
+  print(branch, tasks)
+  for task, args in tasks.items():
+    process[task](**args)

@@ -190,6 +190,7 @@ export const entityToActionIds = {
   'data/entities/projectiles/deck/summon_portal.xml': ['SUMMON_PORTAL'],
   'data/entities/projectiles/deck/meteor_rain.xml': ['METEOR_RAIN'],
   'data/entities/projectiles/deck/worm_rain.xml': ['WORM_RAIN'],
+  'data/entities/projectiles/deck/worm_big.xml': ['WORM_RAIN'],
   'data/entities/projectiles/deck/fireworks/firework_pink.xml': ['FIREWORK'],
   'data/entities/projectiles/deck/fireworks/firework_green.xml': ['FIREWORK'],
   'data/entities/projectiles/deck/fireworks/firework_blue.xml': ['FIREWORK'],

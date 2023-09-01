@@ -1,4 +1,4 @@
-import { Random } from './extra/ext_random';
+import { Random } from './lua/random';
 import {
   call_action,
   current_reload_time,
@@ -6,9 +6,9 @@ import {
   setCurrentReloadTime,
   shot_effects,
 } from './gun';
-import { GunActionState } from './extra/types';
+import { GunActionState } from './actionState';
 
-export const extra_modifiers = {
+export const extraModifiers = {
   critical_hit_boost: (c: GunActionState) => {
     c.damage_critical_chance = c.damage_critical_chance + 5;
   },
@@ -141,3 +141,5 @@ export const extra_modifiers = {
     setCurrentReloadTime(current_reload_time + 5);
   },
 } as const;
+
+export type ExtraModifier = keyof typeof extraModifiers;

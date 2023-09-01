@@ -1,5 +1,14 @@
-import { chunk } from './util';
 import _ from 'lodash';
+
+export function chunk<T>(arr: T[], chunkSize: number) {
+  if (chunkSize <= 0) {
+    throw Error('Invalid chunk size');
+  }
+  let result = [];
+  for (let i = 0; i < arr.length; i += chunkSize)
+    result.push(arr.slice(i, i + chunkSize));
+  return result;
+}
 
 export type MultipleObject<T extends Object> = {
   first: GroupedObject<T>;
@@ -126,6 +135,8 @@ export function _combineGroups<T extends Object>(
           // index within comparison
           const cmpA = k(result[i + cmpi]);
           const cmpB = k(result[i + matchi * seqLen + cmpi]);
+
+          /****** TODO remove lodash ******/
           if (cmpA === null || cmpB === null || !_.isEqual(cmpA, cmpB)) {
             match = false;
             break;

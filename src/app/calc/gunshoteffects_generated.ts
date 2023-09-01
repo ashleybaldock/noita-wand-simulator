@@ -1,4 +1,4 @@
-import { RegisterGunShotEffects } from './extra/ext_functions';
+import { RegisterGunShotEffects } from './eval/wandObserver';
 
 export function ConfigGunShotEffects_Init(value: any) {
   value.recoil_knockback = 0;
