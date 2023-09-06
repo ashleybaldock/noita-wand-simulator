@@ -100,4 +100,6 @@ with open(dstFile, 'w') as outFile:
   outFile.write(processFile(srcFile))
 
 with open(dstFileBeta, 'w') as outFile:
-  outFile.write(processFile(srcFileBeta)
+  outFile.write(processFile(srcFileBeta))
+
+

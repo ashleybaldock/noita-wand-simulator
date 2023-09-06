@@ -86,6 +86,7 @@ config = {
     {
       'src': 'data/scripts/gun/gun_actions.beta.lua',
       'dst': 'src/app/calc/__generated__/beta/actionIds.ts'
+    },
     'unlockFlags':
     {
       'src': 'data/scripts/gun/gun_actions.beta.lua',
