@@ -1,7 +1,7 @@
 import { WandBuilder } from './WandBuilder';
 import { ShotResultList } from './shotResult/ShotResultList';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { selectConfig } from '../redux/configSlice';
+import { useAppDispatch } from '../redux/hooks';
+import { useUIConfig } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
 import SectionHeader from './SectionHeader';
 import { SpellSelector } from './SpellSelector';
@@ -29,7 +29,7 @@ const Row = styled.div`
 type Props = {};
 
 export function WandSimulator(props: Props) {
-  const { config } = useAppSelector(selectConfig);
+  const { pauseCalculations } = useUIConfig();
   useAppDispatch();
 
   useEffect(() => {
@@ -53,10 +53,10 @@ export function WandSimulator(props: Props) {
         </DndProvider>
       </Column>
       <SectionHeader
-        title={`Simulation${config.pauseCalculations ? ' (Paused)' : ''}`}
+        title={`Simulation${pauseCalculations ? ' (Paused)' : ''}`}
         rightChildren={<div>Status: Running</div>}
       />
-      {!config.pauseCalculations && <ShotResultList {...config} />}
+      {!pauseCalculations && <ShotResultList />}
     </Column>
   );
 }

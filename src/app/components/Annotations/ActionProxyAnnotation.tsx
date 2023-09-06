@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
-import { useConfig } from '../../redux';
+import { useResultsConfig } from '../../redux';
 import { DEFAULT_SIZE } from '../../util';
 
 export const ProxyDiv = styled.div<{
@@ -27,9 +27,10 @@ type Props = {
 
 export function ActionProxyAnnotation(props: Props) {
   const { size = DEFAULT_SIZE, proxy } = props;
-  const { config } = useConfig();
 
-  if (proxy === undefined || !config.showProxies) {
+  const { showProxies } = useResultsConfig();
+
+  if (proxy === undefined || !showProxies) {
     return null;
   }
 

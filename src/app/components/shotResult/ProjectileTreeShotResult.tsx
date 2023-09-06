@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { ProjectileCastState } from './ProjectileCastState';
 import { WandActionGroup } from '../wandAction/WandActionGroup';
 import { GroupedWandShot } from '../../calc/eval/types';
@@ -50,13 +50,13 @@ type Props = {
 
 // list of all actions played, and sub-ShotResults for triggers
 export function ProjectileTreeShotResult(props: Props) {
-  const { shot } = props;
+  const { shot, indent } = props;
 
   return (
     <StyledShotDiv>
       <div>
-        <StyledMetadataDiv indent={props.indent}>
-          {!props.indent && (
+        <StyledMetadataDiv indent={indent}>
+          {!indent && (
             <ShotMetadata
               manaDrain={shot.manaDrain}
               castDelay={shot.castState?.fire_rate_wait}
@@ -75,7 +75,7 @@ export function ProjectileTreeShotResult(props: Props) {
           );
         }
         return (
-          <StyledProjectileDiv key={index} indent={props.indent}>
+          <StyledProjectileDiv key={index} indent={indent}>
             <WandActionGroup group={p} />
             {triggerComponent}
           </StyledProjectileDiv>

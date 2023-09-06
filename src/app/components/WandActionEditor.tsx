@@ -35,13 +35,13 @@ const StyledListItem = styled.li`
 `;
 
 type Props = {
-  spellAction?: Spell;
+  spell?: Spell;
   wandIndex: number;
   size: number;
 };
 
 function ActionComponent(props: Props) {
-  const { spellAction, wandIndex, size } = props;
+  const { spell, wandIndex, size } = props;
   const dispatch = useAppDispatch();
   const [mouseOver, setMouseOver] = useState(false);
 
@@ -56,15 +56,15 @@ function ActionComponent(props: Props) {
         onMouseEnter={() => setMouseOver(true)}
         onMouseLeave={() => setMouseOver(false)}
       >
-        {spellAction && (
+        {spell && (
           <>
             <WandActionDragSource
-              actionId={spellAction.id}
+              actionId={spell.id}
               sourceWandIndex={wandIndex}
             >
               <WandAction
-                spell={spellAction}
-                deckIndex={spellAction.deck_index}
+                spell={spell}
+                deckIndex={spell.deck_index}
                 onDeleteSpell={() => handleDeleteSpell(wandIndex)}
               />
               <DeleteSpellAnnotation
@@ -73,10 +73,7 @@ function ActionComponent(props: Props) {
                 deleteSpell={() => handleDeleteSpell(wandIndex)}
               />
             </WandActionDragSource>
-            <DeckIndexAnnotation
-              size={size}
-              deckIndex={spellAction.deck_index}
-            />
+            <DeckIndexAnnotation size={size} deckIndex={spell.deck_index} />
             <NoManaAnnotation size={size} />
             <FriendlyFireAnnotation size={size} />
           </>
@@ -99,13 +96,9 @@ export function WandActionEditor() {
 
   return (
     <StyledList>
-      {spellActions.map((spellAction, wandIndex) => (
+      {spellActions.map((spell, wandIndex) => (
         <StyledListItem key={wandIndex}>
-          <ActionComponent
-            size={size}
-            spellAction={spellAction}
-            wandIndex={wandIndex}
-          />
+          <ActionComponent size={size} spell={spell} wandIndex={wandIndex} />
         </StyledListItem>
       ))}
     </StyledList>

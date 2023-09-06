@@ -33,6 +33,13 @@ export function isIterativeActionId(
   return (iterativeActionIdSet as Set<ActionId>).has(actionId);
 }
 
+export const spellIterationLimits: Record<IterativeActionId, number> = {
+  DIVIDE_2: 4,
+  DIVIDE_3: 3,
+  DIVIDE_4: 3,
+  DIVIDE_10: 2,
+} as const;
+
 export const greekActionIds = [
   'ALPHA',
   'GAMMA',

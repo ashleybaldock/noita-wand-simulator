@@ -1,9 +1,9 @@
-import { mapIter } from '../../app/util';
+import { flatMapIter } from '../../app/util';
 // It would be ideal to be able to switch between the beta and release versions of actions at runtime, but that seems like excessive complexity given the current changes mostly add entirely new spells
 // import * as main from './__generated__/main/spells';
 import * as beta from './__generated__/beta/spells';
 
-import { ActionId } from './actionId';
+import { ActionId, isValidActionId } from './actionId';
 import { Spell } from './spell';
 
 export const spells = beta.spells as ReadonlyArray<Spell>;
@@ -20,30 +20,25 @@ export function getSpellById(id: Readonly<ActionId>) {
   return spellByIdMap[id];
 }
 
-export const unlockFlags = [
-  ...new Set<string>(
-    mapIter<Spell, string>(spells.values(), ({ spawn_requires_flag }) =>
-      spawn_requires_flag !== undefined
-        ? {
-            val: spawn_requires_flag ?? '',
-            ok: true,
-          }
-        : { ok: false },
-    ),
-  ),
-] as const;
+export const unlockFlagMap = spells.reduce(
+  (map, { id, spawn_requires_flag = 'none' }) =>
+    map.set(spawn_requires_flag, [
+      ...(map.get(spawn_requires_flag)?.values() ?? []),
+    ]),
+  new Map<string, ActionId[]>(),
+);
+export const unlockFlags = [...unlockFlagMap.keys()] as const;
+export type UnlockFlag = typeof unlockFlags[number];
 
-export const recursiveActionIds = [
-  ...new Set<string>(
-    mapIter<Spell, string>(spells.values(), ({ recursive, id }) =>
-      recursive === true
-        ? {
-            val: id,
-            ok: true,
-          }
-        : {
-            ok: false,
-          },
-    ),
+export const recursiveActionIdSet: Set<ActionId> = new Set<ActionId>(
+  flatMapIter<Spell, ActionId>(spells.values(), (spell: Spell) =>
+    isValidActionId(spell.id) && spell?.recursive ? [spell.id] : [],
   ),
-] as const;
+);
+
+export const recursiveActionIds = [...recursiveActionIdSet] as const;
+
+export type RecursiveActionId = Extract<
+  typeof recursiveActionIds[number],
+  ActionId
+>;

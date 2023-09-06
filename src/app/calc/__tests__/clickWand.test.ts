@@ -1,7 +1,7 @@
-import { getActionById } from '../eval/util';
 import { clickWand } from '../eval/clickWand';
 import { WandShot } from '../eval/types';
-import { Gun } from '../extra/types';
+import { Gun } from '../gun';
+import { getSpellById } from '../spells';
 
 type SimpleProjectile = {
   entity: string;
@@ -29,9 +29,7 @@ export const defaultGun: Gun = {
 };
 describe('clickWand', () => {
   it('simple trigger', () => {
-    const spells = ['DAMAGE', 'LIGHT_BULLET_TRIGGER', 'BOMB'].map(
-      getActionById,
-    );
+    const spells = ['DAMAGE', 'LIGHT_BULLET_TRIGGER', 'BOMB'].map(getSpellById);
     const expected = [
       [
         {
@@ -63,7 +61,7 @@ describe('clickWand', () => {
       'LIGHT_BULLET_TRIGGER',
       'BOMB',
       'LIGHT_BULLET',
-    ].map(getActionById);
+    ].flatMap((i) => getSpellById);
     const expected = [
       [
         {
@@ -94,3 +92,13 @@ describe('clickWand', () => {
     expect(processed).toEqual(expected);
   });
 });
+function getSpellById(value: string, index: number, array: string[]): unknown {
+  function getSpellById(
+    value: string,
+    index: number,
+    array: string[],
+  ): unknown {
+    throw new Error('Function not implemented.');
+  }
+  throw new Error('Function not implemented.');
+}

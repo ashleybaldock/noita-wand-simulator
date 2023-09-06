@@ -1,9 +1,7 @@
 import styled from 'styled-components/macro';
-import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
-import { isIterativeActionId } from '../../calc/actionId';
-import { useConfig } from '../../redux';
+import { Spell } from '../../calc/spell';
+import { useResultsConfig } from '../../redux';
 import { DEFAULT_SIZE } from '../../util';
-import { recursiveActionIds } from '../../calc/spells';
 
 const RecursionDiv = styled.div<{
   size: number;
@@ -41,34 +39,56 @@ const IterationDiv = styled.div<{
   font-family: var(--font-family-noita-default);
 `;
 
-type Props = {
+type IterationAnnotationProps = {
   size?: number;
-} & Partial<ActionCall> &
-  Partial<GroupedProjectile>;
+  spell: Spell;
+  iteration?: 0;
+};
 
-export function RecursionAnnotation(props: Props) {
-  const { size = DEFAULT_SIZE, spell, recursion, iteration } = props;
-  const { config } = useConfig();
+type RecursionAnnotationProps = {
+  size?: number;
+  spell: Spell;
+  recursion?: 0;
+};
+// export type ActionCall = {
+// * spell: Spell;
+//   source: ActionSource;
+//   currentMana: number;
+// * deckIndex?: string | number;
+//   recursion?: number;
+//   iteration?: number;
+//   dont_draw_actions?: boolean;
+// };
 
-  if (!config.showRecursion) {
+// export type GroupedProjectile = {
+//   entity: string;
+// * spell?: Spell;
+//   proxy?: Spell;
+//   trigger?: GroupedWandShot;
+// * deckIndex?: string | number;
+// };
+
+export function IterationAnnotation(props: IterationAnnotationProps) {
+  const { size = DEFAULT_SIZE, spell, iteration } = props;
+  const { showIteration } = useResultsConfig();
+
+  if (!showIteration || !spell.iterative) {
     return null;
   }
 
-  const recursive = spell && recursiveActionIds.includes(spell?.id);
-  const iterative = spell && isIterativeActionId(spell?.id);
-
-  const showRecursion =
-    recursion !== undefined && (recursive || (iterative && recursion > 0));
-  const showIteration = iteration !== undefined && iterative;
-
   return (
-    <>
-      {showRecursion && <RecursionDiv size={size}>{recursion}</RecursionDiv>}
-      {showIteration && (
-        <IterationDiv size={size} offset={showRecursion ? 1 : 0}>
-          {iteration}
-        </IterationDiv>
-      )}
-    </>
+    <IterationDiv size={size} offset={0}>
+      {iteration}
+    </IterationDiv>
   );
+}
+export function RecursionAnnotation(props: RecursionAnnotationProps) {
+  const { size = DEFAULT_SIZE, spell, recursion } = props;
+  const { showRecursion } = useResultsConfig();
+
+  if (!showRecursion || !spell.recursive) {
+    return null;
+  }
+
+  return <RecursionDiv size={size}>{recursion}</RecursionDiv>;
 }

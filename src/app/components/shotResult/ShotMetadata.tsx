@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { round } from '../../util/util';
 
 const StyledList = styled.div`

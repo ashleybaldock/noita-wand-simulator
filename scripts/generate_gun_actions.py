@@ -68,6 +68,11 @@ config = {
       'src': 'data/scripts/gun/gun_actions.lua',
       'dst': 'src/app/calc/__generated__/main/actionIds.ts'
     },
+    'unlockFlags':
+    {
+      'src': 'data/scripts/gun/gun_actions.lua',
+      'dst': 'src/app/calc/__generated__/main/unlockFlags.ts'
+    },
     'spells':
     {
       'src': 'data/scripts/gun/gun_actions.lua',
@@ -77,10 +82,14 @@ config = {
     },
   },
   'beta': {
-      'actionIds':
+    'actionIds':
     {
       'src': 'data/scripts/gun/gun_actions.beta.lua',
       'dst': 'src/app/calc/__generated__/beta/actionIds.ts'
+    'unlockFlags':
+    {
+      'src': 'data/scripts/gun/gun_actions.beta.lua',
+      'dst': 'src/app/calc/__generated__/beta/unlockFlags.ts'
     },
     'spells':
     {
@@ -244,6 +253,17 @@ def processActionIds(src, dst, before = '', after = ''):
   with open(dst, 'w') as outFile:
     outFile.write(before + content + after)
 
+def processUnlockFlags(src, dst, before = '', after = ''):
+  with open(src) as inFile:
+    content = inFile.read()
+
+  spawn_requires_flag_pattern = r'\t+{\s*id\s*=\s*\"(\w+)\"'
+  spawn_requires_flags = list(dict.fromkeys(re.findall(spawn_requires_flag_pattern, content, re.DOTALL)))
+  joined = ",\n".join(f'"{i}"' for i in spawn_requires_flags)
+  content = f'export const unlockFlags = [\n{joined}\n] as const;\n\nexport type UnlockFlag = typeof unlockFlags[number];\n\n'
+
+  with open(dst, 'w') as outFile:
+    outFile.write(before + content + after)
 
 def processSpells(src, dst, before = '', after = ''):
   with open(src) as inFile:
@@ -279,6 +299,7 @@ os.makedirs(os.path.dirname('src/app/calc/__generated__/beta/'), exist_ok=True)
 
 process = {
   'actionIds': processActionIds,
+  'unlockFlags': processUnlockFlags,
   'spells': processSpells,
 }
 

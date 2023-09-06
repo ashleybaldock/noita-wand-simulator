@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
-import { useConfig } from '../../redux';
+import { useResultsConfig } from '../../redux';
 import { DEFAULT_SIZE } from '../../util';
 
 const DontDrawDiv = styled.div<{
@@ -31,9 +31,9 @@ type Props = {
 
 export function DontDrawAnnotation(props: Props) {
   const { size = DEFAULT_SIZE, dont_draw_actions = false } = props;
-  const { config } = useConfig();
+  const { showDontDraw } = useResultsConfig();
 
-  if (!dont_draw_actions || !config.showDontDraw) {
+  if (!dont_draw_actions || !showDontDraw) {
     return null;
   }
 

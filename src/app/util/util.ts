@@ -1,5 +1,3 @@
-import { Preset, PresetGroup } from '../types';
-
 export function union<T, U>(setA: Set<T>, setB: Set<U>) {
   let _union = new Set<T | U>(setA);
   for (let elem of setB) {
@@ -29,26 +27,10 @@ export function diff<T extends object>(a: T, b: T) {
   return result as DiffResult<T>;
 }
 
-export function isSinglePreset(p: Preset | PresetGroup): p is Preset {
-  return p.hasOwnProperty('spells');
-}
-
-export function isPresetGroup(p: Preset | PresetGroup): p is PresetGroup {
-  return p.hasOwnProperty('presets');
-}
-
-export function notNull<T>(x: T | null): x is T {
-  return x !== null;
-}
-
-export function notNullOrUndefined<T>(x: T | null | undefined): x is T {
-  return x !== null && x !== undefined;
-}
-
 export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
   Object.keys(obj) as (keyof T)[];
 
-export type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
+type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
 
 export const objectEntries = <T extends object>(obj: T): Entries<T>[] =>
   Object.entries(obj) as Entries<T>[];
@@ -83,13 +65,6 @@ export function trimArray<T>(arr: T[], predicate: (o: T) => boolean): T[] {
   }
   return result;
 }
-
-export type TypedProperties<T, U> = Pick<
-  T,
-  {
-    [K in keyof T]: T[K] extends U ? K : never;
-  }[keyof T]
->;
 
 export function numSign(v: any, round?: number) {
   if (round !== undefined) {
@@ -145,25 +120,4 @@ export function hashString(s: string) {
     hash |= 0; // Convert to 32bit integer
   }
   return hash;
-}
-
-type Maybe<T> =
-  | {
-      ok: true;
-      val: T;
-    }
-  | {
-      ok: false;
-    };
-
-export function* mapIter<TI, TO>(
-  iterable: IterableIterator<TI>,
-  callback: (input: TI) => Maybe<TO>,
-): IterableIterator<TO> {
-  for (let x of iterable) {
-    const result = callback(x);
-    if (result.ok) {
-      yield result.val;
-    }
-  }
 }

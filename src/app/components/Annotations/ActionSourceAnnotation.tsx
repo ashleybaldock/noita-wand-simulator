@@ -1,7 +1,7 @@
 import styled from 'styled-components/macro';
 import { ActionSource } from '../../calc/actionSources';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
-import { useConfig } from '../../redux';
+import { useResultsConfig } from '../../redux';
 import { DEFAULT_SIZE } from '../../util';
 
 const SourceDiv = styled.div<{
@@ -28,6 +28,7 @@ const sourceDisplayMap: Record<ActionSource, [string, [string, string]]> = {
   perk: ['P', ['#ddd', '#995']],
   action: ['A', ['#ddd', '#955']],
   draw: ['D', ['#ddd', '#559']],
+  unknown: ['?', ['#ddd', '#747']],
   multiple: ['*', ['#ddd', '#747']],
 };
 
@@ -39,9 +40,10 @@ type Props = {
 
 export function ActionSourceAnnotation(props: Props) {
   const { size = DEFAULT_SIZE, source } = props;
-  const { config } = useConfig();
 
-  if (source === undefined || !config.showSources) {
+  const { showSources } = useResultsConfig();
+
+  if (source === undefined || !showSources) {
     return null;
   }
 

@@ -1,7 +1,6 @@
-import { Preset, PresetGroup } from '../../types';
+import { isPresetGroup, Preset, PresetGroup } from '../../types';
 import React from 'react';
-import styled from 'styled-components';
-import { isPresetGroup } from '../../util/util';
+import styled from 'styled-components/macro';
 
 const PresetGroupNameDiv = styled.div`
   font-weight: bold;

@@ -1,12 +1,16 @@
 import { isValidActionId, isGreekActionId } from '../../calc/actionId';
-import { useAppSelector } from '../../redux/hooks';
 import { ProjectileTreeShotResult } from './ProjectileTreeShotResult';
 import styled from 'styled-components';
 import { ActionCalledShotResult } from './ActionCalledShotResult';
 import React, { useMemo, useRef } from 'react';
 import SectionHeader from '../SectionHeader';
 import { clickWand } from '../../calc/eval/clickWand';
-import { selectConfig } from '../../redux/configSlice';
+import {
+  useUIConfig,
+  useResultsConfig,
+  useWorldConfig,
+  useRequirementsConfig,
+} from '../../redux/configSlice';
 import { ActionTreeShotResult } from './ActionTreeShotResult';
 import { condenseActionsAndProjectiles } from '../../calc/grouping/condense';
 import { ShotMetadata } from './ShotMetadata';
@@ -35,22 +39,20 @@ const StyledHr = styled.hr`
   margin: 2px 0;
 `;
 
-type Props = {
-  pauseCalculations: boolean;
-  condenseShots: boolean;
-  unlimitedSpells: boolean;
-  infiniteSpells: boolean;
-  showDivides: boolean;
-  showGreekSpells: boolean;
-  showDirectActionCalls: boolean;
-};
-
 // list of several ShotResults, generally from clicking/holding until reload, but also for one click
-export function ShotResultList(props: Props) {
-  const { infiniteSpells, unlimitedSpells } = props;
+export function ShotResultList() {
   const wand = useWand();
   const spellIds = useSpells();
-  const { config } = useAppSelector(selectConfig);
+  const { infiniteSpells, unlimitedSpells } = useWorldConfig();
+  const {
+    showDivides,
+    showGreekSpells,
+    showDirectActionCalls,
+    condenseShots,
+    endSimulationOnRefresh,
+  } = useResultsConfig();
+  const { showActionTree } = useUIConfig();
+  const requirements = useRequirementsConfig();
 
   const projectilesRef = useRef<HTMLDivElement>();
   const actionsCalledRef = useRef<HTMLDivElement>();
@@ -86,19 +88,14 @@ export function ShotResultList(props: Props) {
         wand.mana_max,
         wand.cast_delay,
         true,
-        config.endSimulationOnRefresh,
-        config.requirements,
+        endSimulationOnRefresh,
+        requirements,
       ),
-    [
-      config.endSimulationOnRefresh,
-      config.requirements,
-      spellActionsWithUses,
-      wand,
-    ],
+    [endSimulationOnRefresh, requirements, spellActionsWithUses, wand],
   );
 
   shots = useMemo(() => {
-    if (!props.showDivides) {
+    if (!showDivides) {
       return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter(
@@ -108,10 +105,10 @@ export function ShotResultList(props: Props) {
     } else {
       return shots;
     }
-  }, [props.showDivides, shots]);
+  }, [showDivides, shots]);
 
   shots = useMemo(() => {
-    if (!props.showGreekSpells) {
+    if (!showGreekSpells) {
       return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter(
@@ -121,10 +118,10 @@ export function ShotResultList(props: Props) {
     } else {
       return shots;
     }
-  }, [props.showGreekSpells, shots]);
+  }, [showGreekSpells, shots]);
 
   shots = useMemo(() => {
-    if (!props.showDirectActionCalls) {
+    if (!showDirectActionCalls) {
       return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter((ac) => ac.source !== 'action'),
@@ -132,15 +129,15 @@ export function ShotResultList(props: Props) {
     } else {
       return shots;
     }
-  }, [props.showDirectActionCalls, shots]);
+  }, [showDirectActionCalls, shots]);
 
   const groupedShots = useMemo(() => {
-    if (props.condenseShots) {
+    if (condenseShots) {
       return shots.map(condenseActionsAndProjectiles);
     } else {
       return shots;
     }
-  }, [props.condenseShots, shots]);
+  }, [condenseShots, shots]);
 
   return (
     <ParentDiv>
@@ -190,7 +187,7 @@ export function ShotResultList(props: Props) {
           ))}
         </SectionDiv>
       </ScrollWrapper>
-      {config.showActionTree && (
+      {showActionTree && (
         <>
           <SectionHeader
             title={'Action Call Tree'}

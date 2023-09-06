@@ -37,6 +37,14 @@ export type PresetGroup = {
   presets: (Preset | PresetGroup)[];
 };
 
+export function isSinglePreset(p: Preset | PresetGroup): p is Preset {
+  return p.hasOwnProperty('spells');
+}
+
+export function isPresetGroup(p: Preset | PresetGroup): p is PresetGroup {
+  return p.hasOwnProperty('presets');
+}
+
 export type WandActionDragItem = {
   actionId?: string;
   sourceWandIndex?: number;

@@ -6,6 +6,12 @@ import { ActionSource } from '../actionSources';
 /*
  * Evaluation & visualisation
  */
+export type TreeNode<T> = {
+  value: T;
+  parent?: TreeNode<T>;
+  children: TreeNode<T>[];
+};
+
 export type ActionCall = {
   spell: Spell;
   source: ActionSource;
@@ -14,12 +20,6 @@ export type ActionCall = {
   recursion?: number;
   iteration?: number;
   dont_draw_actions?: boolean;
-};
-
-export type TreeNode<T> = {
-  value: T;
-  parent?: TreeNode<T>;
-  children: TreeNode<T>[];
 };
 
 export type WandShot = {
@@ -45,7 +45,6 @@ export type Projectile = {
   trigger?: WandShot;
   deckIndex?: string | number;
 };
-
 export type GroupedProjectile = {
   entity: string;
   spell?: Spell;

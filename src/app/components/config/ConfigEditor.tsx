@@ -5,6 +5,7 @@ import {
   selectConfig,
   updateConfig,
 } from '../../redux/configSlice';
+import { NestedKeyOf } from '../../util';
 import styled from 'styled-components';
 import _ from 'lodash';
 import { constToDisplayString } from '../../util/util';
@@ -218,6 +219,14 @@ const ConfigSubtitle = styled.div`
 
 type Props = {};
 
+type ConfigSection = keyof ConfigState;
+
+type ConfigItemPath = Exclude<NestedKeyOf<ConfigState>, ConfigSection>;
+
+export function ConfigItem(props: { path: ConfigItemPath }) {
+  return <></>;
+}
+
 export function ConfigEditor(props: Props) {
   const { config } = useAppSelector(selectConfig);
   const dispatch = useAppDispatch();
@@ -268,6 +277,7 @@ export function ConfigEditor(props: Props) {
           false,
         )}
       </ConfigDiv>
+      <ConfigItem path={'results.showDivides'} />
     </MainDiv>
   );
 }
