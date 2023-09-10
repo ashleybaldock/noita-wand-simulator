@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import styled from 'styled-components';
 import { WandBuilder } from './WandBuilder';
 import { ShotResultList } from './shotResult/ShotResultList';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -7,11 +9,10 @@ import SectionHeader from './SectionHeader';
 import { SpellSelector } from './SpellSelector';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import styled from 'styled-components';
 import { ConfigButton } from './buttons';
-import { useEffect } from 'react';
 import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
+import { ReleaseInfo } from './ReleaseInfo';
 
 const Column = styled.div`
   display: flex;
@@ -26,9 +27,7 @@ const Row = styled.div`
   width: 100%;
 `;
 
-type Props = {};
-
-export function WandSimulator(props: Props) {
+export function WandSimulator() {
   const { config } = useAppSelector(selectConfig);
   useAppDispatch();
 
@@ -38,6 +37,7 @@ export function WandSimulator(props: Props) {
 
   return (
     <Column>
+      <ReleaseInfo />
       <MainHeader>
         <Row>
           <ConfigButton />

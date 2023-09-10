@@ -45,7 +45,6 @@ export function WandAction(props: Props) {
   };
 
   const style = { backgroundImage: actionToBackgroundImage(spell) };
-  console.log(style);
 
   return (
     <ImageBackgroundDiv
