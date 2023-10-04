@@ -1,4 +1,4 @@
-import { Preset, PresetGroup } from '../types';
+import { Preset, PresetGroup } from '../../types';
 
 const defaultPreset: Readonly<Preset> = {
   name: '',
@@ -16,6 +16,7 @@ const defaultPreset: Readonly<Preset> = {
     speed: 1,
   },
   spells: [],
+  always: [],
 };
 
 export const defaultWand = defaultPreset.wand;
@@ -28,6 +29,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
         name: 'Wand Refresh',
         wand: { ...defaultWand, deck_capacity: 5 },
         spells: ['BURST_2', 'BLACK_HOLE', 'RESET', 'LARPA_CHAOS', 'NUKE'],
+        always: [],
       },
       {
         name: 'Gamma',
@@ -42,6 +44,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'RESET',
           'BLACK_HOLE_BIG',
         ],
+        always: [],
       },
       {
         name: 'Mu 1',
@@ -52,6 +55,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'MU',
           'LIGHT_BULLET',
         ],
+        always: [],
       },
       {
         name: 'Mu 2',
@@ -72,6 +76,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'EXPLOSIVE_PROJECTILE',
           'MU',
         ],
+        always: [],
       },
       {
         name: 'Alpha',
@@ -89,6 +94,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'LARPA_DEATH',
           'MU',
         ],
+        always: [],
       },
       {
         name: 'Tau',
@@ -109,6 +115,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'RESET',
           'TAU',
         ],
+        always: [],
       },
     ],
   },
@@ -129,6 +136,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'LIGHT_BULLET',
           'NUKE',
         ],
+        always: [],
       },
       {
         name: 'Wrapping 1',
@@ -140,6 +148,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'LIGHT_BULLET',
           'LIGHT',
         ],
+        always: [],
       },
       {
         name: 'Wrapping 2',
@@ -153,6 +162,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'LIGHT_BULLET',
           'LIGHT_BULLET',
         ],
+        always: [],
       },
       {
         name: 'Wrapping 3',
@@ -167,6 +177,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'LIGHT_BULLET',
           'LIGHT',
         ],
+        always: [],
       },
       {
         name: 'Triggers',
@@ -181,6 +192,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'DIGGER',
           'DIGGER',
         ],
+        always: [],
       },
     ],
   },
@@ -191,11 +203,13 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
         name: 'Simple Divides',
         wand: { ...defaultWand, deck_capacity: 2 },
         spells: ['DIVIDE_10', 'LIGHT_BULLET'],
+        always: [],
       },
       {
         name: 'Dividing a Modifier',
         wand: { ...defaultWand, deck_capacity: 3 },
         spells: ['DIVIDE_10', 'DAMAGE', 'LIGHT_BULLET'],
+        always: [],
       },
       {
         name: 'Discard Displacement',
@@ -208,16 +222,19 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'LIGHT_BULLET',
           'RESET',
         ],
+        always: [],
       },
       {
         name: 'Mechanics of Multiple Divides',
         wand: { ...defaultWand, deck_capacity: 3 },
         spells: ['DIVIDE_10', 'DIVIDE_4', 'LIGHT_BULLET'],
+        always: [],
       },
       {
         name: 'Multiple Divides on a Modifier',
         wand: { ...defaultWand, deck_capacity: 4 },
         spells: ['DIVIDE_10', 'DIVIDE_4', 'DAMAGE', 'LIGHT_BULLET'],
+        always: [],
       },
       {
         name: 'Iteration limit',
@@ -230,6 +247,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'DAMAGE',
           'LIGHT_BULLET',
         ],
+        always: [],
       },
       {
         name: 'Wrapping Strangeness',
@@ -242,6 +260,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'DAMAGE',
           'LIGHT_BULLET',
         ],
+        always: [],
       },
     ],
   },
@@ -252,11 +271,13 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
         name: 'Tau Example',
         wand: { ...defaultWand, deck_capacity: 3 },
         spells: ['TAU', 'TAU', 'LIGHT_BULLET'],
+        always: [],
       },
       {
         name: 'Omega example',
         wand: { ...defaultWand, deck_capacity: 5 },
         spells: ['GAMMA', 'RESET', 'LIGHT_BULLET', 'OMEGA', 'OMEGA'],
+        always: [],
       },
     ],
   },
@@ -287,6 +308,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'DIVIDE_10',
           'RUBBER_BALL',
         ],
+        always: [],
       },
       {
         name: 'Crit',
@@ -319,6 +341,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'DIVIDE_2',
           'HITFX_CRITICAL_WATER',
         ],
+        always: [],
       },
       {
         name: 'Velocity Damage 1',
@@ -332,6 +355,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'BLOOD_TO_POWER',
           'RUBBER_BALL',
         ],
+        always: [],
       },
       {
         name: 'Velocity Damage 2',
@@ -364,6 +388,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
           'DIVIDE_4',
           'HITFX_CRITICAL_WATER',
         ],
+        always: [],
       },
     ],
   },

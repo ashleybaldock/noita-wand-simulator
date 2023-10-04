@@ -1,5 +1,17 @@
 import { Preset, PresetGroup } from '../types';
 
+export const isString = (x: unknown): x is string => typeof '' === typeof x;
+export const isNumber = (x: unknown): x is number => typeof 42 === typeof x;
+export const isBoolean = (x: unknown): x is boolean =>
+  typeof false === typeof x;
+
+export const parseBooleanFromString = (
+  str: string,
+  defaultTo: boolean = false,
+  truthy: RegExp = /(?:^1$|^y$|^Y$|^t$|^T$|^true|^yes)/,
+  falsey: RegExp = /(?:^0$|^n$|^N$|^f$|^F$|^false|^no)/,
+) => truthy.test(str) || !falsey.test(str) || defaultTo;
+
 export function union<T, U>(setA: Set<T>, setB: Set<U>) {
   let _union = new Set<T | U>(setA);
   for (let elem of setB) {
@@ -37,24 +49,21 @@ export function isPresetGroup(p: Preset | PresetGroup): p is PresetGroup {
   return p.hasOwnProperty('presets');
 }
 
-export function notNull<T>(x: T | null): x is T {
-  return x !== null;
-}
+export const isNotNull = <T>(x: T | null): x is T => x !== null;
 
-export function notNullOrUndefined<T>(x: T | null | undefined): x is T {
-  return x !== null && x !== undefined;
-}
+export const isNotNullOrUndefined = <T>(x: T | null | undefined): x is T =>
+  x !== null && x !== undefined;
 
 export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
   Object.keys(obj) as (keyof T)[];
 
-export type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
+export type ObjectEntries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
 
-export const objectEntries = <T extends object>(obj: T): Entries<T>[] =>
-  Object.entries(obj) as Entries<T>[];
+export const objectEntries = <T extends object>(obj: T): ObjectEntries<T>[] =>
+  Object.entries(obj) as ObjectEntries<T>[];
 
-export function groupBy<T, K extends string>(arr: T[], keyFn: (x: T) => K) {
-  return arr.reduce((acc, cur) => {
+export const groupBy = <T, K extends string>(arr: T[], keyFn: (x: T) => K) =>
+  arr.reduce((acc, cur) => {
     const k = keyFn(cur);
     if (!acc[k]) {
       acc[k] = [];
@@ -62,7 +71,32 @@ export function groupBy<T, K extends string>(arr: T[], keyFn: (x: T) => K) {
     acc[k].push(cur);
     return acc;
   }, {} as Record<K, T[]>);
-}
+
+/**
+ * Typed inverse of a Record
+ * e.g. Record<K,V> => Record<V,K>
+ */
+export const invertRecord = <
+  K extends string | number | symbol,
+  V extends string | number | symbol,
+>(
+  obj: Record<K, V>,
+): Record<V, K> => {
+  const result = {} as Record<V, K>;
+  objectEntries(obj).forEach(([key, value]) => {
+    result[value] = key;
+  });
+  return result;
+};
+
+/**
+ * Typed inverse of a Map
+ * e.g. Map<K,V> => Map<V,K>
+ */
+export const invertMap = <K, V>(obj: Map<K, V>): Map<V, K> =>
+  new Map<V, K>(
+    mapIter(obj.entries(), ([key, value]) => ({ ok: true, val: [value, key] })),
+  );
 
 export function constToDisplayString(c: string) {
   return c.replace(/_/g, ' ').replace(/\w\S*/g, function (txt) {
@@ -70,19 +104,18 @@ export function constToDisplayString(c: string) {
   });
 }
 
-export function omit<T extends object, K extends keyof T>(obj: T, keys: K[]) {
-  return Object.fromEntries(
+export const omit = <T extends object, K extends keyof T>(obj: T, keys: K[]) =>
+  Object.fromEntries(
     Object.entries(obj).filter(([k, v]) => !keys.includes(k as K)),
   ) as Partial<T>;
-}
 
-export function trimArray<T>(arr: T[], predicate: (o: T) => boolean): T[] {
+export const trimArray = <T>(arr: T[], predicate: (o: T) => boolean): T[] => {
   let result = [...arr];
   while (result.length > 0 && predicate(result[result.length - 1])) {
     result.pop();
   }
   return result;
-}
+};
 
 export type TypedProperties<T, U> = Pick<
   T,
@@ -91,22 +124,17 @@ export type TypedProperties<T, U> = Pick<
   }[keyof T]
 >;
 
-export function numSign(v: any, round?: number) {
+export const numSign = (v: any, round?: number) => {
   if (round !== undefined) {
     v = Math.round(Number(v) * Math.pow(10, round)) / Math.pow(10, round);
   }
   return (v < 0 ? '' : '+') + v;
-}
+};
 
-export function round(v: any, position: number) {
-  return (
-    Math.round(Number(v) * Math.pow(10, position)) / Math.pow(10, position)
-  );
-}
+export const round = (v: any, position: number) =>
+  Math.round(Number(v) * Math.pow(10, position)) / Math.pow(10, position);
 
-export function sign(v: number) {
-  return (v < 0 ? '' : '+') + v;
-}
+export const sign = (v: number) => (v < 0 ? '' : '+') + v;
 
 export function forceDisableCanvasSmoothing() {
   // https://stackoverflow.com/a/22018649

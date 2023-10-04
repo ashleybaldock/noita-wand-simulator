@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
-import { SpellId, Wand, WandState } from '../types';
-import { defaultWand } from './presets';
-import { generateWandStateFromSearch } from './util';
+import { SpellEditMode, SpellId, Wand, WandState } from '../types';
+import { defaultWand } from './Wand/presets';
+import { useSliceWrapper } from './useSlice';
+import { generateWandStateFromSearch } from './Wand/fromSearch';
+import { MAX_ALWAYS } from '../util';
 
 export function fixedLengthCopy<T>(arr: T[], size: number): T[] {
   return size > arr.length
@@ -11,12 +13,15 @@ export function fixedLengthCopy<T>(arr: T[], size: number): T[] {
     : arr.slice(0, size);
 }
 
-const { wand, spellIds, messages } = generateWandStateFromSearch(
-  window.location.search,
-);
+const {
+  wand,
+  spellIds = [],
+  alwaysIds = [],
+  messages = [],
+} = generateWandStateFromSearch(window.location.search);
 
 // TODO these could be surfaced in the UI for debugging wand urls
-console.debug(messages);
+// console.debug(messages);
 
 const initialState: WandState = {
   wand: {
@@ -27,17 +32,21 @@ const initialState: WandState = {
     spellIds,
     wand.deck_capacity ?? defaultWand.deck_capacity,
   ),
+  alwaysIds: fixedLengthCopy(alwaysIds, MAX_ALWAYS),
   messages: messages || [],
-};
+} as const;
 
 export const wandSlice = createSlice({
   name: 'wand',
   initialState,
   reducers: {
+    resetWand: (state) => {
+      return initialState;
+    },
     setWand: (
       state,
       action: PayloadAction<{ wand: Wand; spells?: SpellId[] }>,
-    ) => {
+    ): void => {
       const { wand, spells } = action.payload;
       state.wand = wand;
 
@@ -47,7 +56,15 @@ export const wandSlice = createSlice({
 
       state.spellIds = fixedLengthCopy(state.spellIds, wand.deck_capacity);
     },
-    setSpells: (state, action: PayloadAction<SpellId[]>) => {
+    setSpellAtIndex: (
+      state,
+      {
+        payload: { spell, index },
+      }: PayloadAction<{ index: number; spell: SpellId | null }>,
+    ): void => {
+      state.spellIds[index] = spell;
+    },
+    setSpells: (state, action: PayloadAction<SpellId[]>): void => {
       state.spellIds = action.payload;
 
       state.spellIds = fixedLengthCopy(
@@ -55,39 +72,48 @@ export const wandSlice = createSlice({
         state.wand.deck_capacity,
       );
     },
-    setSpellAtIndex: (
+    clearSpells: (state): void => {
+      state.spellIds = fixedLengthCopy([], state.spellIds.length);
+    },
+    clearSpellAtIndex: (
       state,
-      action: PayloadAction<{ spell: SpellId | null; index: number }>,
-    ) => {
-      const { spell, index } = action.payload;
-      state.spellIds[index] = spell;
+      { payload: { index } }: PayloadAction<{ index: number }>,
+    ): void => {
+      state.spellIds[index] = null;
     },
     moveSpell: (
       state,
-      action: PayloadAction<{ fromIndex: number; toIndex: number }>,
-    ) => {
-      const { fromIndex, toIndex } = action.payload;
-      const sourceSpell = state.spellIds[fromIndex];
+      {
+        payload: { fromIndex, toIndex, mode = 'swap' },
+      }: PayloadAction<{
+        fromIndex: number;
+        toIndex: number;
+        mode?: SpellEditMode;
+      }>,
+    ): void => {
+      if (mode === 'swap') {
+        const temp = state.spellIds[fromIndex];
+        state.spellIds[fromIndex] = state.spellIds[toIndex];
+        state.spellIds[toIndex] = temp;
+      }
+      if (mode === 'overwrite') {
+        const sourceSpell = state.spellIds[fromIndex];
 
-      state.spellIds[toIndex] = sourceSpell;
-      state.spellIds[fromIndex] = null;
-    },
-    swapSpells: (
-      state,
-      action: PayloadAction<{ fromIndex: number; toIndex: number }>,
-    ) => {
-      const { fromIndex, toIndex } = action.payload;
-      const sourceSpell = state.spellIds[fromIndex];
-      const targetSpell = state.spellIds[toIndex];
-
-      state.spellIds[toIndex] = sourceSpell;
-      state.spellIds[fromIndex] = targetSpell;
+        state.spellIds[toIndex] = sourceSpell;
+        state.spellIds[fromIndex] = null;
+      }
     },
   },
 });
 
-export const { setWand, setSpells, setSpellAtIndex, moveSpell, swapSpells } =
-  wandSlice.actions;
+export const {
+  setWand,
+  resetWand,
+  clearSpells,
+  setSpells,
+  setSpellAtIndex,
+  moveSpell,
+} = wandSlice.actions;
 
 export const selectWandState = (state: RootState): WandState =>
   state.wand.present;
@@ -104,3 +130,5 @@ export const useWandState = () => useSelector(selectWandState);
 export const useWand = () => useSelector(selectWand);
 export const useSpells = () => useSelector(selectSpells);
 export const useMessages = () => useSelector(selectMessages);
+
+export const useWandSlice = () => useSliceWrapper(wandSlice, 'wand');

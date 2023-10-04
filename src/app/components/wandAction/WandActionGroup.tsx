@@ -96,7 +96,7 @@ export function WandActionGroup(props: Props) {
     return (
       <WandActionGroupWandActionBorder size={size}>
         <NextActionArrow />
-        <WandAction {...group} size={size} />
+        <WandAction {...group} />
         <RecursionAnnotation size={size} {...group} />
         <ActionSourceAnnotation
           size={size}

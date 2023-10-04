@@ -67,6 +67,5 @@ export type SpellTypeInfoMap = Record<SpellType, Readonly<SpellTypeInfo>>;
 
 export const spellTypeInfoMap = SpellTypeInfoMapDefinition as SpellTypeInfoMap;
 
-export function isValidSpellType(x: string): x is SpellType {
-  return Object.prototype.hasOwnProperty.call(spellTypeInfoMap, x);
-}
+export const isValidSpellType = (x: string): x is SpellType =>
+  Object.prototype.hasOwnProperty.call(spellTypeInfoMap, x);

@@ -4,7 +4,7 @@ import { wandReducer, selectWandState } from './wandSlice';
 import { presetsReducer } from './presetsSlice';
 import { configReducer, selectConfig } from './configSlice';
 import { saveState } from '../localStorage';
-import { generateSearchFromWandState } from './util';
+import { generateSearchFromWandState } from './Wand/toSearch';
 
 export const store = configureStore({
   reducer: {

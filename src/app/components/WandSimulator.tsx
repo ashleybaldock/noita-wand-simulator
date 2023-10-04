@@ -17,6 +17,7 @@ import { ReleaseInfo } from './ReleaseInfo';
 const Column = styled.div`
   display: flex;
   flex-direction: column;
+  scroll-snap-stop: start;
 `;
 
 const Row = styled.div`
@@ -45,18 +46,21 @@ export function WandSimulator() {
       </MainHeader>
       <Column>
         <DndProvider backend={HTML5Backend}>
+          <SectionHeader title={'Wand Editor'} />
+          <WandBuilder />
           <Row>
             <SpellSelector />
           </Row>
-          <WandBuilder />
           <CastConfigEditor />
         </DndProvider>
       </Column>
-      <SectionHeader
-        title={`Simulation${config.pauseCalculations ? ' (Paused)' : ''}`}
-        rightChildren={<div>Status: Running</div>}
-      />
-      {!config.pauseCalculations && <ShotResultList {...config} />}
+      <Column>
+        <SectionHeader
+          title={`Simulation${config.pauseCalculations ? ' (Paused)' : ''}`}
+          rightChildren={<div>Status: Running</div>}
+        />
+        {!config.pauseCalculations && <ShotResultList {...config} />}
+      </Column>
     </Column>
   );
 }

@@ -12,20 +12,17 @@ import { condenseActionsAndProjectiles } from '../../calc/grouping/condense';
 import { ShotMetadata } from './ShotMetadata';
 import { SaveImageButton, ScrollWrapper } from '../generic';
 import { IterationLimitWarning } from './IterationLimitWarning';
-import { useSpells, useWand } from '../../redux';
-import { notNullOrUndefined } from '../../util';
+import { useWandSlice } from '../../redux';
+import { isNotNullOrUndefined } from '../../util';
 import { getSpellById } from '../../calc/spells';
 
-const ParentDiv = styled.div`
-  background-color: #333;
-`;
+const ParentDiv = styled.div``;
 
 const SectionDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  background-color: #333;
   width: fit-content;
 `;
 
@@ -46,10 +43,18 @@ type Props = {
 };
 
 // list of several ShotResults, generally from clicking/holding until reload, but also for one click
-export function ShotResultList(props: Props) {
-  const { infiniteSpells, unlimitedSpells } = props;
-  const wand = useWand();
-  const spellIds = useSpells();
+export function ShotResultList({
+  pauseCalculations,
+  condenseShots,
+  unlimitedSpells,
+  infiniteSpells,
+  showDivides,
+  showGreekSpells,
+  showDirectActionCalls,
+}: Props) {
+  const { wand: wandSlice } = useWandSlice();
+  const { spellIds, wand } = wandSlice.present;
+
   const { config } = useAppSelector(selectConfig);
 
   const projectilesRef = useRef<HTMLDivElement>();
@@ -60,7 +65,7 @@ export function ShotResultList(props: Props) {
   const spells = useMemo(
     () =>
       spellIds.flatMap((id) =>
-        notNullOrUndefined(id) && isValidActionId(id) ? getSpellById(id) : [],
+        isNotNullOrUndefined(id) && isValidActionId(id) ? getSpellById(id) : [],
       ),
     [spellIds],
   );
@@ -98,7 +103,7 @@ export function ShotResultList(props: Props) {
   );
 
   shots = useMemo(() => {
-    if (!props.showDivides) {
+    if (!showDivides) {
       return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter(
@@ -108,10 +113,10 @@ export function ShotResultList(props: Props) {
     } else {
       return shots;
     }
-  }, [props.showDivides, shots]);
+  }, [showDivides, shots]);
 
   shots = useMemo(() => {
-    if (!props.showGreekSpells) {
+    if (!showGreekSpells) {
       return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter(
@@ -121,10 +126,10 @@ export function ShotResultList(props: Props) {
     } else {
       return shots;
     }
-  }, [props.showGreekSpells, shots]);
+  }, [showGreekSpells, shots]);
 
   shots = useMemo(() => {
-    if (!props.showDirectActionCalls) {
+    if (!showDirectActionCalls) {
       return shots.map((s) => ({
         ...s,
         calledActions: s.calledActions.filter((ac) => ac.source !== 'action'),
@@ -132,15 +137,15 @@ export function ShotResultList(props: Props) {
     } else {
       return shots;
     }
-  }, [props.showDirectActionCalls, shots]);
+  }, [showDirectActionCalls, shots]);
 
   const groupedShots = useMemo(() => {
-    if (props.condenseShots) {
+    if (condenseShots) {
       return shots.map(condenseActionsAndProjectiles);
     } else {
       return shots;
     }
-  }, [props.condenseShots, shots]);
+  }, [condenseShots, shots]);
 
   return (
     <ParentDiv>

@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { WandActionDragItem } from '../../types';
 import styled from 'styled-components';
-import { moveSpell, setSpellAtIndex, swapSpells } from '../../redux/wandSlice';
+import { moveSpell, setSpellAtIndex } from '../../redux/wandSlice';
 import { selectConfig } from '../../redux/configSlice';
 
 const TargetDiv = styled.div`
@@ -33,9 +33,12 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
   const handleDrop = useCallback(
     (item: WandActionDragItem) => {
       if (item.actionId && item.sourceWandIndex !== undefined) {
-        const moveFunction = config.swapOnMove ? swapSpells : moveSpell;
         dispatch(
-          moveFunction({ fromIndex: item.sourceWandIndex, toIndex: wandIndex }),
+          moveSpell({
+            fromIndex: item.sourceWandIndex,
+            toIndex: wandIndex,
+            mode: config.swapOnMove ? 'swap' : 'overwrite',
+          }),
         );
       } else if (item.actionId) {
         dispatch(setSpellAtIndex({ spell: item.actionId, index: wandIndex }));

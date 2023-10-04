@@ -238,8 +238,6 @@ export function CastConfigEditor(props: Props) {
       );
     };
 
-  const actionSize = 24;
-
   return (
     <>
       <SectionHeader title={'Cast Config'} />
@@ -247,7 +245,7 @@ export function CastConfigEditor(props: Props) {
         <SubSectionDiv>
           <SubSectionTitle>
             <InputImageLabel size={24} imgUrl={'data/config/heart2.png'} />
-            <span>Health:</span>
+            <span>Health</span>
           </SubSectionTitle>
           <SubSectionContent>
             <CheckboxInputWrapper>
@@ -284,7 +282,7 @@ export function CastConfigEditor(props: Props) {
         <SubSectionDiv>
           <SubSectionTitle>
             <InputImageLabel size={20} imgUrl={'data/config/goldnugget2.png'} />
-            <span>Money:</span>
+            <span>Money</span>
           </SubSectionTitle>
           <SubSectionContent>
             <CheckboxInputWrapper>
@@ -318,7 +316,7 @@ export function CastConfigEditor(props: Props) {
           </SubSectionTitle>
           <SubSectionContent wrapq={true} maxWidth={'calc(100% - 2.2em)'}>
             <RandomInputWrapper>
-              <span>Seed:</span>
+              <span>Seed</span>
               <input
                 type="text"
                 inputMode="numeric"
@@ -341,11 +339,15 @@ export function CastConfigEditor(props: Props) {
         </SubSectionDiv>
         <SubSectionDiv>
           <SubSectionTitle>
-            <span>Requirements:</span>
+            <span>Requirements</span>
           </SubSectionTitle>
           <SubSectionContent>
             <CheckboxInputWrapper>
-              <WandAction spell={getSpellById('IF_ENEMY')} size={actionSize} />
+              <InputImageLabel
+                leftMargin={'6px'}
+                size={32}
+                imgUrl={'data/ui_gfx/gun_actions/if_enemy.png'}
+              />
               <input
                 type="checkbox"
                 checked={reqs.enemies}
@@ -353,9 +355,10 @@ export function CastConfigEditor(props: Props) {
               />
             </CheckboxInputWrapper>
             <CheckboxInputWrapper>
-              <WandAction
-                spell={getSpellById('IF_PROJECTILE')}
-                size={actionSize}
+              <InputImageLabel
+                leftMargin={'6px'}
+                size={32}
+                imgUrl={'data/ui_gfx/gun_actions/if_projectile.png'}
               />
               <input
                 type="checkbox"
@@ -364,7 +367,11 @@ export function CastConfigEditor(props: Props) {
               />
             </CheckboxInputWrapper>
             <CheckboxInputWrapper>
-              <WandAction spell={getSpellById('IF_HP')} size={actionSize} />
+              <InputImageLabel
+                leftMargin={'6px'}
+                size={32}
+                imgUrl={'data/ui_gfx/gun_actions/if_hp.png'}
+              />
               <input
                 type="checkbox"
                 checked={reqs.hp}
@@ -372,7 +379,11 @@ export function CastConfigEditor(props: Props) {
               />
             </CheckboxInputWrapper>
             <CheckboxInputWrapper>
-              <WandAction spell={getSpellById('IF_HALF')} size={actionSize} />
+              <InputImageLabel
+                leftMargin={'6px'}
+                size={32}
+                imgUrl={'data/ui_gfx/gun_actions/if_half.png'}
+              />
               <input
                 type="checkbox"
                 checked={reqs.half}
