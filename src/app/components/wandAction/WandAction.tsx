@@ -1,16 +1,13 @@
 import styled from 'styled-components/macro';
-import { DEFAULT_SIZE } from '../../util';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 import { Spell } from '../../calc/spell';
 import { spellTypeInfoMap } from '../../calc/spellTypes';
 
-const ImageBackgroundDiv = styled.div<{
-  size: number;
-}>`
+const ImageBackgroundDiv = styled.div`
   position: relative;
-  min-width: ${({ size }) => size}px;
-  width: ${({ size }) => size}px;
-  height: ${({ size }) => size}px;
+  min-width: var(--sizes-spell-base);
+  width: var(--sizes-spell-base);
+  height: var(--sizes-spell-base);
   background-size: cover;
   font-family: monospace;
   font-weight: bold;
@@ -26,14 +23,13 @@ const ImageBackgroundDiv = styled.div<{
 `;
 
 type Props = {
-  size?: number;
   onDeleteSpell?: () => void;
   spell?: Readonly<Spell>;
 } & Partial<ActionCall> &
   Partial<GroupedProjectile>;
 
 export function WandAction(props: Props) {
-  const { size = DEFAULT_SIZE, spell } = props;
+  const { spell } = props;
   // const [mouseOver, setMouseOver] = useState(false);
 
   const actionToBackgroundImage = (spell?: Spell) => {
@@ -49,7 +45,6 @@ export function WandAction(props: Props) {
   return (
     <ImageBackgroundDiv
       style={style}
-      size={size}
       // onMouseEnter={() => setMouseOver(true)}
       // onMouseLeave={() => setMouseOver(false)}
     />

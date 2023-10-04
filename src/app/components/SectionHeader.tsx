@@ -26,20 +26,20 @@ const HeaderDiv = styled.div`
 
 const RightSideChildDiv = styled.div`
   font-size: 14px;
-  background-color: #333;
+  background-color: var(--color-button-border);
   height: 2px;
   width: 10%;
 `;
 
 const LeftSideChildDiv = styled.div`
   font-size: 14px;
-  background-color: #333;
+  background-color: var(--color-button-border);
   height: 2px;
   width: 80%;
 `;
 
 const ShortDivider = styled.div`
-  background-color: #333;
+  background-color: var(--color-button-border);
   height: 2px;
   width: 1em;
 `;

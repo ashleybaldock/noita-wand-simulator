@@ -19,6 +19,8 @@ const Row = styled.div<{
   color: #aaa;
   ${({ isRelease }) => (isRelease ? `opacity: 0;` : `opacity: 0.6;`)}
 
+  scroll-snap-align: start;
+
   &:hover {
     opacity: 1;
   }
