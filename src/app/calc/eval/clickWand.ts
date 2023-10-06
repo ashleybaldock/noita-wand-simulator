@@ -49,6 +49,7 @@ export function clickWand(
 
   const resetState = () => {
     currentShot = {
+      _typeName: 'WandShot',
       projectiles: [],
       calledActions: [],
       actionTree: [],
@@ -149,6 +150,7 @@ export function clickWand(
         }
 
         currentShot.projectiles.push({
+          _typeName: 'Projectile',
           entity: args[0],
           spell: sourceAction,
           proxy: proxy,
@@ -161,6 +163,7 @@ export function clickWand(
         parentShot = currentShot;
         currentShotStack.push(currentShot);
         currentShot = {
+          _typeName: 'WandShot',
           projectiles: [],
           calledActions: [],
           actionTree: [],
@@ -176,16 +179,18 @@ export function clickWand(
       case 'RegisterGunAction':
         currentShot.castState = Object.assign({}, args[0]);
         break;
-      case 'OnActionCalled':
+      case 'OnActionCalled': {
+        console.log(args);
+        const [source, spell /*, c */, , recursion, iteration] = args;
+        const { id, deckIndex, recursive } = spell;
         lastCalledAction = {
-          spell: args[1],
-          source: args[0],
+          _typeName: 'ActionCall',
+          spell,
+          source,
           currentMana: gunMana,
-          deckIndex: args[1].deck_index,
-          recursion: args[1].recursive ? args?.[3] || 0 : args?.[3],
-          iteration: isIterativeActionId(args[1].id)
-            ? args?.[4] || 1
-            : undefined,
+          deckIndex,
+          recursion: recursive ? recursion ?? 0 : recursion,
+          iteration: isIterativeActionId(id) ? iteration ?? 1 : undefined,
           dont_draw_actions: dont_draw_actions,
         };
 
@@ -206,9 +211,12 @@ export function clickWand(
         }
         calledActions.push(lastCalledAction);
         break;
-      case 'OnActionFinished':
+      }
+      case 'OnActionFinished': {
+        // const [source, spell, c, recursion, iteration, returnValue] = args;
         currentNode = currentNode?.parent;
         break;
+      }
       case 'StartReload':
         reloaded = true;
         reloadTime = args[0];

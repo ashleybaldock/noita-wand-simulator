@@ -82,7 +82,7 @@ const HiddenContentDiv = styled.div`
   height: 1px;
   top: 0;
   left: -200vw;
-  z-index: -100000px;
+  z-index: -1000;
 `;
 
 export type Tab = {

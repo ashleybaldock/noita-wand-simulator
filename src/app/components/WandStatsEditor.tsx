@@ -1,7 +1,7 @@
 import { useAppDispatch } from '../redux/hooks';
 import { useWand, setWand } from '../redux/wandSlice';
 import { Wand } from '../types';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { AppDispatch } from '../redux/store';
 import { EditableInteger } from './generic';
 import { round, TypedProperties } from '../util/util';
@@ -138,7 +138,6 @@ const StyledListItem = styled.div<{
   flex-direction: row;
   background-image: url(/${({ imgUrl }) => imgUrl});
   background-position: 0.6em 50%;
-  background-origin: padding-box;
   background-size: 1em;
   background-repeat: no-repeat;
   image-rendering: pixelated;

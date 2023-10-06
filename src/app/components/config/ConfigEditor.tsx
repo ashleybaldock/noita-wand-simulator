@@ -5,7 +5,7 @@ import {
   selectConfig,
   updateConfig,
 } from '../../redux/configSlice';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import _ from 'lodash';
 import { constToDisplayString } from '../../util/util';
 

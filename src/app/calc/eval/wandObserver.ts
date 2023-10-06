@@ -1,6 +1,7 @@
 import { Random as RandomExt } from '../lua/random';
 import { Action } from '../action';
 import { GunActionState } from '../actionState';
+import { Spell } from '../spell';
 
 export type ComponentID = string;
 export type EntityID = string;
@@ -336,11 +337,19 @@ export function OnActionPlayed(action_id: any) {
 
 export function OnActionCalled(
   source: string,
-  action: Readonly<Action>,
+  spell: Readonly<Spell>,
   c: GunActionState,
-  ...args: number[]
+  recursion?: number,
+  iteration?: number,
 ) {
-  const result = onEvent('OnActionCalled', source, action, c, ...args);
+  const result = onEvent(
+    'OnActionCalled',
+    source,
+    spell,
+    c,
+    recursion,
+    iteration,
+  );
   if (result !== undefined) {
     return result;
   }
@@ -348,18 +357,20 @@ export function OnActionCalled(
 
 export function OnActionFinished(
   source: string,
-  action: Action,
+  spell: Readonly<Spell>,
   c: GunActionState,
-  returnValue: any,
-  ...args: number[]
+  recursion?: number,
+  iteration?: number,
+  returnValue?: number,
 ) {
   const result = onEvent(
     'OnActionFinished',
     source,
-    action,
+    spell,
     c,
+    recursion,
+    iteration,
     returnValue,
-    ...args,
   );
   if (result !== undefined) {
     return result;

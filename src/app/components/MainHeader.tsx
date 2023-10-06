@@ -28,7 +28,6 @@ const HeaderDiv = styled.div<{
   height: 60px;
   image-rendering: pixelated;
   margin: 14px 16px;
-  scroll-snap-align: start;
 `;
 
 const SpacerDiv = styled.div`

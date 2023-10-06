@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import React, { useMemo, useState } from 'react';
 import { ProcessingModal } from './ProcessingModal';
 import { exportComponentAsPNG } from 'react-component-export-image';

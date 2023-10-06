@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { defaultGunActionState, GunActionState } from '../../calc/actionState';
 import { numSign, round } from '../../util/util';
 

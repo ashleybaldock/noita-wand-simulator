@@ -93,29 +93,28 @@ export function WandActionGroup(props: Props) {
   const group = simplifyMultipleObject(props.group);
 
   if (isRawObject(group)) {
-    return (
-      <WandActionGroupWandActionBorder size={size}>
-        <NextActionArrow />
-        <WandAction {...group} />
-        <RecursionAnnotation size={size} {...group} />
-        <ActionSourceAnnotation
-          size={size}
-          {...group} /*source={props.source}*/
-        />
-        <ActionProxyAnnotation size={size} {...group} /*proxy={props.proxy}*/ />
-        <DontDrawAnnotation
-          size={size}
-          {...group}
-          // dontDrawActions={props.dont_draw_actions}
-        />
-        <DeckIndexAnnotation
-          size={size}
-          {...group}
-          // deckIndex={props.deckIndex}
-        />
-        <FriendlyFireAnnotation size={size} />
-      </WandActionGroupWandActionBorder>
-    );
+    if (group._typeName === 'ActionCall') {
+      return (
+        <WandActionGroupWandActionBorder>
+          <NextActionArrow />
+          <WandAction {...group} />
+          <RecursionAnnotation {...group} />
+          <ActionSourceAnnotation {...group} />
+          <ActionProxyAnnotation {...group} /*proxy={props.proxy}*/ />
+          <DontDrawAnnotation
+            {...group}
+            dont_draw_actions={group.dont_draw_actions}
+          />
+          <DeckIndexAnnotation
+            {...group}
+            // deckIndex={props.deckIndex}
+          />
+          <FriendlyFireAnnotation />
+        </WandActionGroupWandActionBorder>
+      );
+    } else {
+      return <div>grouped</div>;
+    }
   } else if (isArrayObject(group)) {
     return (
       <GroupDiv>

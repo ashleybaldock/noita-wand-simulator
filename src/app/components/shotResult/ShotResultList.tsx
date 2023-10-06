@@ -1,7 +1,7 @@
 import { isValidActionId, isGreekActionId } from '../../calc/actionId';
 import { useAppSelector } from '../../redux/hooks';
 import { ProjectileTreeShotResult } from './ProjectileTreeShotResult';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { ActionCalledShotResult } from './ActionCalledShotResult';
 import React, { useMemo, useRef } from 'react';
 import SectionHeader from '../SectionHeader';
@@ -102,7 +102,7 @@ export function ShotResultList({
     ],
   );
 
-  shots = useMemo(() => {
+  /*shots = useMemo(() => {
     if (!showDivides) {
       return shots.map((s) => ({
         ...s,
@@ -137,7 +137,7 @@ export function ShotResultList({
     } else {
       return shots;
     }
-  }, [showDirectActionCalls, shots]);
+    }, [showDirectActionCalls, shots]);*/
 
   const groupedShots = useMemo(() => {
     if (condenseShots) {

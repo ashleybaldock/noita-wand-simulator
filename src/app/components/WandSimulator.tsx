@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { WandBuilder } from './WandBuilder';
 import { ShotResultList } from './shotResult/ShotResultList';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -17,7 +17,6 @@ import { ReleaseInfo } from './ReleaseInfo';
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-  scroll-snap-stop: start;
 `;
 
 const Row = styled.div`

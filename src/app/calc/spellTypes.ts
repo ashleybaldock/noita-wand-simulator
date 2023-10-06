@@ -69,3 +69,59 @@ export const spellTypeInfoMap = SpellTypeInfoMapDefinition as SpellTypeInfoMap;
 
 export const isValidSpellType = (x: string): x is SpellType =>
   Object.prototype.hasOwnProperty.call(spellTypeInfoMap, x);
+
+const groups = ['prj', 'mod', 'umo', 'smp'] as const;
+
+export type SpellTypeGroup = typeof groups[number];
+
+type SpellTypeGroupInfo = {
+  contains: readonly SpellType[];
+  name: string;
+  src: string;
+  description: string;
+  url: string;
+};
+
+export const spellTypeGroupInfoMap: Record<SpellTypeGroup, SpellTypeGroupInfo> =
+  {
+    prj: {
+      contains: ['projectile'],
+      name: 'Projectile',
+      src: 'data/spelltypes/item_bg_projectile.png',
+      description: '',
+      url: '',
+    },
+    mod: {
+      contains: ['modifier'],
+      name: 'Modifier',
+      src: 'data/spelltypes/item_bg_modifier.png',
+      description: 'Modifier type spells',
+      url: '',
+    },
+    umo: {
+      contains: ['utility', 'multicast', 'other'],
+      // name: 'Utl/Mlt/Oth',
+      name: 'Utility/Multicast/Other',
+      src: 'data/spelltypes/item_bg_draw_many.png',
+      description: 'Utility, Multicast and Other type spells',
+      url: '',
+    },
+    smp: {
+      contains: ['static', 'material', 'passive'],
+      name: 'Static Projectile/Material/Passive',
+      src: 'data/spelltypes/item_bg_material.png',
+      description: 'Static Projectile, Material and Passive type spells',
+      url: '',
+    },
+  } as const;
+
+export const mapSpellTypeToGroup: Record<SpellType, SpellTypeGroup> = {
+  projectile: 'prj',
+  modifier: 'mod',
+  multicast: 'umo',
+  other: 'umo',
+  utility: 'umo',
+  static: 'smp',
+  material: 'smp',
+  passive: 'smp',
+} as const;

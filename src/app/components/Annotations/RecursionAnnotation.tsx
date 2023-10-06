@@ -1,53 +1,51 @@
 import styled from 'styled-components/macro';
-import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
+import { ActionCall } from '../../calc/eval/types';
 import { isIterativeActionId } from '../../calc/actionId';
 import { useConfig } from '../../redux';
-import { DEFAULT_SIZE } from '../../util';
 import { recursiveActionIds } from '../../calc/spells';
 
-const RecursionDiv = styled.div<{
-  size: number;
-}>`
+const RecursionDiv = styled.div`
   pointer-events: none;
   position: absolute;
   bottom: -7px;
   left: 0;
-  width: ${({ size }) => size / 4}px;
-  height: ${({ size }) => size / 4}px;
+  width: calc(var(--sizes-spell-base) / 4);
+  height: calc(var(--sizes-spell-base) / 4);
   border: 1px solid #999;
   color: black;
   background-color: #3bb;
   font-size: 10px;
-  line-height: ${({ size }) => size / 3 - 2}px;
+  line-height: calc(var(--sizes-spell-base) / 3 - 2px);
   text-align: center;
   font-family: var(--font-family-noita-default);
 `;
 
 const IterationDiv = styled.div<{
-  size: number;
-  offset: number;
+  offset: boolean;
 }>`
   position: absolute;
   bottom: -7px;
-  left: ${({ size, offset }) => (size * offset) / 4 + (offset > 0 ? 1 : 0)}px;
-  width: ${({ size }) => size / 4}px;
-  height: ${({ size }) => size / 4}px;
+  left: ${({ offset }) =>
+    offset ? `0` : `calc(var(--sizes-spell-base) / 4 + 1px)`};
+
+  width: calc(var(--sizes-spell-base) / 4);
+  height: calc(var(--sizes-spell-base) / 4);
+
   border: 1px solid #999;
   color: black;
   background-color: #a5e;
   font-size: 10px;
-  line-height: ${({ size }) => size / 3 - 2}px;
+  line-height: calc(var(--sizes-spell-base) / 3 - 2px);
   text-align: center;
   font-family: var(--font-family-noita-default);
 `;
 
 type Props = {
   size?: number;
-} & Partial<ActionCall> &
-  Partial<GroupedProjectile>;
+} & Partial<ActionCall>;
 
 export function RecursionAnnotation(props: Props) {
-  const { size = DEFAULT_SIZE, spell, recursion, iteration } = props;
+  const { spell, recursion, iteration } = props;
   const { config } = useConfig();
 
   if (!config.showRecursion) {
@@ -63,11 +61,9 @@ export function RecursionAnnotation(props: Props) {
 
   return (
     <>
-      {showRecursion && <RecursionDiv size={size}>{recursion}</RecursionDiv>}
+      {showRecursion && <RecursionDiv>{recursion}</RecursionDiv>}
       {showIteration && (
-        <IterationDiv size={size} offset={showRecursion ? 1 : 0}>
-          {iteration}
-        </IterationDiv>
+        <IterationDiv offset={showRecursion ?? false}>{iteration}</IterationDiv>
       )}
     </>
   );

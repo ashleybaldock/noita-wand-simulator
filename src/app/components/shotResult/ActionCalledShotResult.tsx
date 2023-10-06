@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { WandActionGroup } from '../wandAction/WandActionGroup';
 import { GroupedWandShot } from '../../calc/eval/types';
 
