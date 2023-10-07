@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Button } from './Button';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 const StaticValue = styled.div`
   height: 15px;

@@ -723,10 +723,18 @@ export function call_action(
   source: ActionSource,
   spell: Spell,
   c: GunActionState,
-  ...args: number[]
+  recursion?: number,
+  iteration?: number,
 ) {
-  OnActionCalled(source, spell.action, c, ...args);
-  const returnValue = spell.action(c, ...args);
-  OnActionFinished(source, spell.action, c, returnValue, ...args);
+  OnActionCalled(source, spell, c, recursion, iteration);
+  const returnValue = spell.action(c, recursion, iteration);
+  OnActionFinished(
+    source,
+    spell,
+    c,
+    recursion,
+    iteration,
+    returnValue as number | undefined,
+  );
   return returnValue;
 }

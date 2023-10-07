@@ -1,17 +1,15 @@
 import styled from 'styled-components/macro';
-import { DEFAULT_SIZE } from '../../util';
 
 const SourceDiv = styled.div<{
-  size: number;
   colors: [string, string];
 }>`
   pointer-events: none;
   position: absolute;
   top: 10%;
   transform: translateY(-50%);
-  left: -${({ size }) => size / 4 + 12}px;
-  width: ${({ size }) => size / 4}px;
-  height: ${({ size }) => size / 4}px;
+  left: calc(-1 * var(--sizes-spell-base) / 4 + 12px);
+  width: calc(var(--sizes-spell-base) / 4);
+  height: calc(var(--sizes-spell-base) / 4);
   border: 1px solid #999;
   border: none;
   color: ${({ colors }) => colors[0]};
@@ -19,19 +17,16 @@ const SourceDiv = styled.div<{
   background-color: transparent;
   background-image: url(/data/warnings/icon_danger.png);
   font-size: 12px;
-  line-height: ${({ size }) => size / 3 - 2}px;
+  line-height: calc(var(--sizes-spell-base) / 3 - 2px);
   text-align: center;
   font-family: var(--font-family-noita-default);
   opacity: 0;
 `;
 
-type Props = {
-  size: number;
-};
+type Props = {};
 
 export function FriendlyFireAnnotation(props: Props) {
-  const { size = DEFAULT_SIZE } = props;
   // const { config } = useConfig();
 
-  return <SourceDiv size={size} colors={['#000', '#fff']}></SourceDiv>;
+  return <SourceDiv colors={['#000', '#fff']}></SourceDiv>;
 }

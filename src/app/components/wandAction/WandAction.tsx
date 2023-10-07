@@ -1,35 +1,15 @@
 import styled from 'styled-components/macro';
-import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 import { Spell } from '../../calc/spell';
 import { spellTypeInfoMap } from '../../calc/spellTypes';
-
-const ImageBackgroundDiv = styled.div`
-  position: relative;
-  min-width: var(--sizes-spell-base);
-  width: var(--sizes-spell-base);
-  height: var(--sizes-spell-base);
-  background-size: cover;
-  font-family: monospace;
-  font-weight: bold;
-  user-select: none;
-  image-rendering: pixelated;
-
-  &:hover {
-    transform-origin: center;
-    transform: scale(109%);
-    transition: transform var(--anim-basic-in);
-    cursor: move;
-  }
-`;
 
 type Props = {
   onDeleteSpell?: () => void;
   spell?: Readonly<Spell>;
-} & Partial<ActionCall> &
-  Partial<GroupedProjectile>;
+  className?: string;
+};
 
-export function WandAction(props: Props) {
-  const { spell } = props;
+function _WandAction(props: Props) {
+  const { spell, className } = props;
   // const [mouseOver, setMouseOver] = useState(false);
 
   const actionToBackgroundImage = (spell?: Spell) => {
@@ -43,10 +23,31 @@ export function WandAction(props: Props) {
   const style = { backgroundImage: actionToBackgroundImage(spell) };
 
   return (
-    <ImageBackgroundDiv
+    <div
+      className={className}
       style={style}
       // onMouseEnter={() => setMouseOver(true)}
       // onMouseLeave={() => setMouseOver(false)}
     />
   );
 }
+
+export const WandAction = styled(_WandAction)`
+  position: relative;
+  min-width: var(--sizes-spell-base);
+  width: var(--sizes-spell-base);
+  height: var(--sizes-spell-base);
+  background-size: cover;
+  font-family: monospace;
+  font-weight: bold;
+  user-select: none;
+  image-rendering: pixelated;
+  transform-origin: center;
+  transition: transform var(--transition-hover-out);
+
+  &:hover {
+    transform: scale(109%);
+    transition: transform var(--transition-hover-in);
+    cursor: move;
+  }
+`;

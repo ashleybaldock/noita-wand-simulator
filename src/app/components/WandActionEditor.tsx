@@ -5,7 +5,6 @@ import { getSpellById } from '../calc/spells';
 import { useAppDispatch } from '../redux/hooks';
 import { useSpells, setSpellAtIndex } from '../redux/wandSlice';
 import { isKnownSpell } from '../types';
-import { DEFAULT_SIZE } from '../util';
 import {
   DeckIndexAnnotation,
   DeleteSpellAnnotation,
@@ -37,11 +36,11 @@ const StyledListItem = styled.li`
 type Props = {
   spellAction?: Spell;
   wandIndex: number;
-  size: number;
+  deckIndex?: number;
 };
 
 function ActionComponent(props: Props) {
-  const { spellAction, wandIndex, size } = props;
+  const { spellAction, wandIndex, deckIndex } = props;
   const dispatch = useAppDispatch();
   const [mouseOver, setMouseOver] = useState(false);
 
@@ -52,7 +51,6 @@ function ActionComponent(props: Props) {
   return (
     <WandActionDropTarget wandIndex={wandIndex}>
       <WandActionBorder
-        size={size}
         onMouseEnter={() => setMouseOver(true)}
         onMouseLeave={() => setMouseOver(false)}
       >
@@ -64,21 +62,16 @@ function ActionComponent(props: Props) {
             >
               <WandAction
                 spell={spellAction}
-                deckIndex={spellAction.deck_index}
                 onDeleteSpell={() => handleDeleteSpell(wandIndex)}
               />
               <DeleteSpellAnnotation
-                size={size}
                 visible={mouseOver}
                 deleteSpell={() => handleDeleteSpell(wandIndex)}
               />
             </WandActionDragSource>
-            <DeckIndexAnnotation
-              size={size}
-              deckIndex={spellAction.deck_index}
-            />
-            <NoManaAnnotation size={size} />
-            <FriendlyFireAnnotation size={size} />
+            <DeckIndexAnnotation deckIndex={deckIndex} />
+            <NoManaAnnotation />
+            <FriendlyFireAnnotation />
           </>
         )}
       </WandActionBorder>
@@ -88,23 +81,22 @@ function ActionComponent(props: Props) {
 
 export function WandActionEditor() {
   const spellIds = useSpells();
+  console.log(spellIds);
 
-  const size = DEFAULT_SIZE;
-  const spellActions = spellIds.map((spellId) => {
-    if (isKnownSpell(spellId)) {
-      return getSpellById(spellId);
-    }
-    return undefined;
-  });
+  const spellActions = spellIds.map((spellId) =>
+    isKnownSpell(spellId) ? getSpellById(spellId) : undefined,
+  );
+  console.log(spellActions);
+  let deckIndex = 0;
 
   return (
     <StyledList>
       {spellActions.map((spellAction, wandIndex) => (
         <StyledListItem key={wandIndex}>
           <ActionComponent
-            size={size}
             spellAction={spellAction}
             wandIndex={wandIndex}
+            deckIndex={spellAction !== undefined ? deckIndex++ : undefined}
           />
         </StyledListItem>
       ))}

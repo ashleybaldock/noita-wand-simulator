@@ -4,6 +4,7 @@ import { WandStatsEditor } from './WandStatsEditor';
 import { WandBorder } from './WandBorder';
 import { SaveImageButton } from './generic';
 import React, { useRef } from 'react';
+import SectionHeader from './SectionHeader';
 
 const MainDiv = styled.div`
   display: flex;
@@ -12,6 +13,7 @@ const MainDiv = styled.div`
   margin: 10px 6px;
 `;
 const ContentDiv = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -20,13 +22,14 @@ const ContentDiv = styled.div`
 `;
 
 const CopySpells = styled.div`
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
   display: flex;
   flex-direction: row;
   justify-content: end;
   align-items: end;
   font-family: 'noita', '04b03', sans-serif;
-  font-variant: small-caps;
-  color: #929292;
 `;
 
 const WandActionEditorWrapper = styled.div`
@@ -42,6 +45,16 @@ export function WandBuilder(props: Props) {
 
   return (
     <MainDiv>
+      <SectionHeader
+        title={'Wand Editor'}
+        rightChildren={
+          <SaveImageButton
+            targetRef={spellsRef}
+            fileName={'spells'}
+            enabled={true}
+          />
+        }
+      />
       <WandBorder>
         <ContentDiv ref={wandRef as any} className={'saveImageRoot'}>
           <WandStatsEditor />
@@ -51,18 +64,9 @@ export function WandBuilder(props: Props) {
           >
             <WandActionEditor />
           </WandActionEditorWrapper>
+          <CopySpells></CopySpells>
         </ContentDiv>
       </WandBorder>
-      <CopySpells>
-        <SaveImageButton
-          targetRef={spellsRef}
-          fileName={'spells'}
-          enabled={true}
-        />
-        <span>Spells</span>
-        <SaveImageButton targetRef={wandRef} fileName={'wand'} enabled={true} />
-        <span>Wand</span>
-      </CopySpells>
     </MainDiv>
   );
 }

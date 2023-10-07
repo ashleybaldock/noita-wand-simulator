@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { WandBuilder } from './WandBuilder';
 import { ShotResultList } from './shotResult/ShotResultList';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -13,11 +13,11 @@ import { ConfigButton } from './buttons';
 import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
 import { ReleaseInfo } from './ReleaseInfo';
+import { SaveImageButton } from './generic';
 
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-  scroll-snap-stop: start;
 `;
 
 const Row = styled.div`
@@ -46,7 +46,6 @@ export function WandSimulator() {
       </MainHeader>
       <Column>
         <DndProvider backend={HTML5Backend}>
-          <SectionHeader title={'Wand Editor'} />
           <WandBuilder />
           <Row>
             <SpellSelector />

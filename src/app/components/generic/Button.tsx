@@ -2,10 +2,15 @@ import styled from 'styled-components/macro';
 
 const StyledButton = styled.button<{
   imgUrl: string;
+  imgDataUrl: string;
+  minimal: boolean;
 }>`
   border: 1px solid var(--color-button-border);
   border-radius: 5px;
-  background-image: url(/${({ imgUrl }) => imgUrl});
+  ${({ imgUrl }) =>
+    imgUrl.length > 0 ? `background-image: url(/${imgUrl})` : ''};
+  ${({ imgDataUrl }) =>
+    imgDataUrl.length > 0 ? `background-image: url("${imgDataUrl}")` : ''};
   background-position: 0.6em 50%;
   background-origin: padding-box;
   background-size: 1em;
@@ -38,20 +43,41 @@ const StyledButton = styled.button<{
     transition: var(--transition-activate);
     transition-property: border-color, color;
   }
+
+  ${({ minimal }) =>
+    minimal
+      ? `
+    margin: 3px;
+    cursor: pointer;
+    background-position: 0.26em 50%;
+    background-size: 1.64em;
+    padding: 0.4em 0.27em 0.2em 2.2em;
+    font-size: 0.7em;
+    `
+      : ``};
 `;
 
 type Props = {
   onClick?: () => void;
   imgUrl?: string;
+  imgDataUrl?: string;
+  minimal?: boolean;
 };
 
 export const Button = ({
   onClick = () => {},
   imgUrl = '',
+  imgDataUrl = '',
+  minimal = false,
   children,
 }: React.PropsWithChildren<Props>) => {
   return (
-    <StyledButton imgUrl={imgUrl} onClick={onClick}>
+    <StyledButton
+      minimal={minimal}
+      imgUrl={imgUrl}
+      imgDataUrl={imgDataUrl}
+      onClick={onClick}
+    >
       {children}
     </StyledButton>
   );

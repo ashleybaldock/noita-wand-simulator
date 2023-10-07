@@ -7,6 +7,7 @@ import { ActionSource } from '../actionSources';
  * Evaluation & visualisation
  */
 export type ActionCall = {
+  _typeName: 'ActionCall';
   spell: Spell;
   source: ActionSource;
   currentMana: number;
@@ -23,6 +24,7 @@ export type TreeNode<T> = {
 };
 
 export type WandShot = {
+  _typeName: 'WandShot';
   projectiles: Projectile[];
   calledActions: ActionCall[];
   actionTree: TreeNode<ActionCall>[];
@@ -31,6 +33,7 @@ export type WandShot = {
 };
 
 export type GroupedWandShot = {
+  _typeName: 'WandShot';
   projectiles: GroupedObject<GroupedProjectile>[];
   calledActions: GroupedObject<ActionCall>[];
   actionTree: TreeNode<ActionCall>[];
@@ -39,6 +42,7 @@ export type GroupedWandShot = {
 };
 
 export type Projectile = {
+  _typeName: 'Projectile';
   entity: string;
   spell?: Spell;
   proxy?: Spell;
@@ -47,6 +51,7 @@ export type Projectile = {
 };
 
 export type GroupedProjectile = {
+  _typeName: 'Projectile';
   entity: string;
   spell?: Spell;
   proxy?: Spell;

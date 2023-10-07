@@ -1,25 +1,21 @@
 import styled from 'styled-components/macro';
 import { ActionSource } from '../../calc/actionSources';
-import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
+import { ActionCall } from '../../calc/eval/types';
 import { useConfig } from '../../redux';
-import { DEFAULT_SIZE } from '../../util';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const SourceDiv = styled.div<{
-  size: number;
+const SourceDiv = styled(BaseAnnotation)<{
   colors: [string, string];
 }>`
   pointer-events: none;
   position: absolute;
   top: 10%;
   transform: translateY(-50%);
-  left: -${({ size }) => size / 4 + 12}px;
-  width: ${({ size }) => size / 4}px;
-  height: ${({ size }) => size / 4}px;
+  right: unset;
   border: 1px solid #999;
   color: ${({ colors }) => colors[0]};
   background-color: ${({ colors }) => colors[1]};
   font-size: 12px;
-  line-height: ${({ size }) => size / 3 - 2}px;
   text-align: center;
   font-family: var(--font-family-noita-default);
 `;
@@ -32,13 +28,11 @@ const sourceDisplayMap: Record<ActionSource, [string, [string, string]]> = {
 };
 
 type Props = {
-  size?: number;
   source?: ActionSource;
-} & Partial<ActionCall> &
-  Partial<GroupedProjectile>;
+} & Partial<ActionCall>;
 
 export function ActionSourceAnnotation(props: Props) {
-  const { size = DEFAULT_SIZE, source } = props;
+  const { source } = props;
   const { config } = useConfig();
 
   if (source === undefined || !config.showSources) {
@@ -46,7 +40,7 @@ export function ActionSourceAnnotation(props: Props) {
   }
 
   return (
-    <SourceDiv size={size} colors={sourceDisplayMap[source][1]}>
+    <SourceDiv colors={sourceDisplayMap[source][1]}>
       {sourceDisplayMap[source][0]}
     </SourceDiv>
   );

@@ -1,6 +1,6 @@
 import { Preset, PresetGroup } from '../../types';
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { isPresetGroup } from '../../util/util';
 
 const PresetGroupNameDiv = styled.div`

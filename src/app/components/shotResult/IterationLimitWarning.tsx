@@ -1,9 +1,9 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 const StyledSpan = styled.span`
   font-weight: bold;
   color: red;
-  background-color: #555;
+  background-color: #000;
   padding: 2px;
 `;
 

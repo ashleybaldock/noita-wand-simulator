@@ -1,18 +1,17 @@
 import styled from 'styled-components/macro';
-import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
+import { ActionCall } from '../../calc/eval/types';
+import { Spell } from '../../calc/spell';
 import { useConfig } from '../../redux';
-import { DEFAULT_SIZE } from '../../util';
 
 export const ProxyDiv = styled.div<{
-  size: number;
   imgUrl: string;
 }>`
   pointer-events: none;
   position: absolute;
   top: 0;
   left: 0;
-  width: ${({ size }) => size / 3}px;
-  height: ${({ size }) => size / 3}px;
+  width: calc(var(--sizes-spell-base) / 3);
+  height: calc(var(--sizes-spell-base) / 3);
   border: 1px solid #999;
   background-image: url(/${({ imgUrl }) => imgUrl});
   background-size: cover;
@@ -21,17 +20,16 @@ export const ProxyDiv = styled.div<{
 `;
 
 type Props = {
-  size?: number;
-} & Partial<ActionCall> &
-  Partial<GroupedProjectile>;
+  proxy?: Spell;
+};
 
 export function ActionProxyAnnotation(props: Props) {
-  const { size = DEFAULT_SIZE, proxy } = props;
+  const { proxy } = props;
   const { config } = useConfig();
 
   if (proxy === undefined || !config.showProxies) {
     return null;
   }
 
-  return <ProxyDiv size={size} imgUrl={proxy.sprite} />;
+  return <ProxyDiv imgUrl={proxy.sprite} />;
 }

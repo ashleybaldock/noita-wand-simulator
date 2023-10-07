@@ -2,7 +2,7 @@ import { useDrop } from 'react-dnd';
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { WandActionDragItem } from '../../types';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { moveSpell, setSpellAtIndex } from '../../redux/wandSlice';
 import { selectConfig } from '../../redux/configSlice';
 

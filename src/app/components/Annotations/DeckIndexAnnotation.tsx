@@ -1,11 +1,7 @@
 import styled from 'styled-components/macro';
-import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 import { useConfig } from '../../redux';
-import { DEFAULT_SIZE } from '../../util';
 
-const IndexDiv = styled.div<{
-  size: number;
-}>`
+const IndexDiv = styled.div`
   pointer-events: none;
   position: absolute;
   bottom: -6px;
@@ -25,13 +21,11 @@ const IndexDiv = styled.div<{
 `;
 
 type Props = {
-  size?: number;
   deckIndex?: number | string;
-} & Partial<ActionCall> &
-  Partial<GroupedProjectile>;
+};
 
 export function DeckIndexAnnotation(props: Props) {
-  const { size = DEFAULT_SIZE, deckIndex } = props;
+  const { deckIndex } = props;
   const { config } = useConfig();
 
   if (deckIndex === undefined || !config.showDeckIndexes) {
@@ -39,8 +33,8 @@ export function DeckIndexAnnotation(props: Props) {
   }
 
   if (typeof deckIndex === 'number') {
-    return <IndexDiv size={size}>{deckIndex + 1}</IndexDiv>;
+    return <IndexDiv>{deckIndex + 1}</IndexDiv>;
   } else {
-    return <IndexDiv size={size}>{deckIndex}</IndexDiv>;
+    return <IndexDiv>{deckIndex}</IndexDiv>;
   }
 }
