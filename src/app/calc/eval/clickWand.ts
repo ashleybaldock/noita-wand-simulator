@@ -182,13 +182,13 @@ export function clickWand(
       case 'OnActionCalled': {
         console.log(args);
         const [source, spell /*, c */, , recursion, iteration] = args;
-        const { id, deckIndex, recursive } = spell;
+        const { id, deck_index, recursive } = spell;
         lastCalledAction = {
           _typeName: 'ActionCall',
           spell,
           source,
           currentMana: gunMana,
-          deckIndex,
+          deckIndex: deck_index,
           recursion: recursive ? recursion ?? 0 : recursion,
           iteration: isIterativeActionId(id) ? iteration ?? 1 : undefined,
           dont_draw_actions: dont_draw_actions,

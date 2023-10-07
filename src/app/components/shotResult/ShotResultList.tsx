@@ -102,7 +102,7 @@ export function ShotResultList({
     ],
   );
 
-  /*shots = useMemo(() => {
+  shots = useMemo(() => {
     if (!showDivides) {
       return shots.map((s) => ({
         ...s,
@@ -137,7 +137,7 @@ export function ShotResultList({
     } else {
       return shots;
     }
-    }, [showDirectActionCalls, shots]);*/
+  }, [showDirectActionCalls, shots]);
 
   const groupedShots = useMemo(() => {
     if (condenseShots) {

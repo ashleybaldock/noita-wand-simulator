@@ -36,10 +36,11 @@ const StyledListItem = styled.li`
 type Props = {
   spellAction?: Spell;
   wandIndex: number;
+  deckIndex?: number;
 };
 
 function ActionComponent(props: Props) {
-  const { spellAction, wandIndex } = props;
+  const { spellAction, wandIndex, deckIndex } = props;
   const dispatch = useAppDispatch();
   const [mouseOver, setMouseOver] = useState(false);
 
@@ -68,7 +69,7 @@ function ActionComponent(props: Props) {
                 deleteSpell={() => handleDeleteSpell(wandIndex)}
               />
             </WandActionDragSource>
-            <DeckIndexAnnotation deckIndex={spellAction.deck_index} />
+            <DeckIndexAnnotation deckIndex={deckIndex} />
             <NoManaAnnotation />
             <FriendlyFireAnnotation />
           </>
@@ -80,19 +81,23 @@ function ActionComponent(props: Props) {
 
 export function WandActionEditor() {
   const spellIds = useSpells();
+  console.log(spellIds);
 
-  const spellActions = spellIds.map((spellId) => {
-    if (isKnownSpell(spellId)) {
-      return getSpellById(spellId);
-    }
-    return undefined;
-  });
+  const spellActions = spellIds.map((spellId) =>
+    isKnownSpell(spellId) ? getSpellById(spellId) : undefined,
+  );
+  console.log(spellActions);
+  let deckIndex = 0;
 
   return (
     <StyledList>
       {spellActions.map((spellAction, wandIndex) => (
         <StyledListItem key={wandIndex}>
-          <ActionComponent spellAction={spellAction} wandIndex={wandIndex} />
+          <ActionComponent
+            spellAction={spellAction}
+            wandIndex={wandIndex}
+            deckIndex={spellAction !== undefined ? deckIndex++ : undefined}
+          />
         </StyledListItem>
       ))}
     </StyledList>

@@ -1,5 +1,4 @@
 import styled from 'styled-components/macro';
-import { ActionCall } from '../../calc/eval/types';
 import { useConfig } from '../../redux';
 
 const IndexDiv = styled.div`
@@ -22,9 +21,8 @@ const IndexDiv = styled.div`
 `;
 
 type Props = {
-  size?: number;
   deckIndex?: number | string;
-} & Partial<ActionCall>;
+};
 
 export function DeckIndexAnnotation(props: Props) {
   const { deckIndex } = props;

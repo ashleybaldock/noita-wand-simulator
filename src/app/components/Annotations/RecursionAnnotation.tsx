@@ -1,8 +1,8 @@
 import styled from 'styled-components/macro';
-import { ActionCall } from '../../calc/eval/types';
 import { isIterativeActionId } from '../../calc/actionId';
 import { useConfig } from '../../redux';
 import { recursiveActionIds } from '../../calc/spells';
+import { Spell } from '../../calc/spell';
 
 const RecursionDiv = styled.div`
   pointer-events: none;
@@ -42,7 +42,10 @@ const IterationDiv = styled.div<{
 
 type Props = {
   size?: number;
-} & Partial<ActionCall>;
+  spell: Spell;
+  recursion?: number;
+  iteration?: number;
+};
 
 export function RecursionAnnotation(props: Props) {
   const { spell, recursion, iteration } = props;

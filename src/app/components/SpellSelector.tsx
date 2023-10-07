@@ -4,6 +4,7 @@ import { spells } from '../calc/spells';
 import {
   mapSpellTypeToGroup,
   spellTypeGroupInfoMap,
+  spellTypeGroupsOrdered,
   spellTypeInfoMap,
 } from '../calc/spellTypes';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
@@ -27,21 +28,19 @@ const MainDiv = styled.div`
   flex-direction: column;
   flex: 1 1;
   background-color: #100e0e;
+  --sizes-spell-base: 40px;
+  --gap-multiplier: 0.12;
+  min-height: calc(6 * var(--sizes-spell-base) * (1 + var(--gap-multiplier)));
 `;
 
 const SpellCategorySpellsDiv = styled.div`
-  --sizes-spell-base: 40px;
-  --gap-multiplier: 0.12;
+  padding: 7px 6px;
   display: grid;
-  flex-wrap: wrap;
-  flex: 1;
   grid-template-columns: repeat(
     auto-fill,
     minmax(var(--sizes-spell-base), 1fr)
   );
   gap: calc(var(--sizes-spell-base) * var(--gap-multiplier));
-  min-height: calc(6 * var(--sizes-spell-base) * (1 + var(--gap-multiplier)));
-  padding: 7px 6px;
   align-content: start;
 `;
 
@@ -151,49 +150,35 @@ export function SpellSelector() {
     [config.unlocks, config.showBeta],
   );
 
-  const spellsByGroupedType = useMemo(() => {
-    return groupBy(unlockedActions, ({ type }) => mapSpellTypeToGroup[type]);
-  }, [unlockedActions]);
-
   const spellsByType = useMemo(() => {
     return groupBy(unlockedActions, ({ type }) => type);
   }, [unlockedActions]);
 
-  const spellsByTypeGrouped = useMemo(() => {
-    const entries = objectEntries(spellsByType);
-    return groupBy(
-      entries,
-      ([actionType, spells]) => mapSpellTypeToGroup[actionType],
-    );
-  }, [spellsByType]);
-
-  const tabPerGroupedType = useMemo(() => {
-    return (
-      objectEntries(spellsByTypeGrouped)
-        // .reverse()
-        .map(([actionTypeGroup, spellTypes]) => {
-          const { name, src } = spellTypeGroupInfoMap[actionTypeGroup];
-          return {
-            title: name,
-            iconSrc: src,
-            content: (
-              <>
-                {spellTypes.map(([spellType, spells]) => {
-                  // const { name, src } = spellTypeInfoMap[spellType];
-                  return (
-                    <SpellCategorySpellsDiv>
-                      {spells.map((spell) => (
-                        <WandActionSelect spell={spell} key={spell.id} />
-                      ))}
-                    </SpellCategorySpellsDiv>
-                  );
-                })}
-              </>
-            ),
-          };
-        })
-    );
-  }, [spellsByTypeGrouped]);
+  const tabPerGroupedType = useMemo(
+    () =>
+      spellTypeGroupsOrdered.map((spellTypeGroup) => {
+        const { contains, name, src } = spellTypeGroupInfoMap[spellTypeGroup];
+        return {
+          title: name,
+          iconSrc: src,
+          content: (
+            <>
+              {contains.map((spellType) => {
+                // const { name, src } = spellTypeInfoMap[spellType];
+                return (
+                  <SpellCategorySpellsDiv key={spellType}>
+                    {spellsByType[spellType].map((spell) => (
+                      <WandActionSelect spell={spell} key={spell.id} />
+                    ))}
+                  </SpellCategorySpellsDiv>
+                );
+              })}
+            </>
+          ),
+        };
+      }),
+    [spellsByType],
+  );
 
   const tabPerType = useMemo(() => {
     return (

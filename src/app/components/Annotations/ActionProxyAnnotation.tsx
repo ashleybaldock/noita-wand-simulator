@@ -21,7 +21,7 @@ export const ProxyDiv = styled.div<{
 
 type Props = {
   proxy?: Spell;
-} & Partial<ActionCall>;
+};
 
 export function ActionProxyAnnotation(props: Props) {
   const { proxy } = props;

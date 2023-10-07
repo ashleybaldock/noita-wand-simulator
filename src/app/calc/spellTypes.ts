@@ -82,6 +82,9 @@ type SpellTypeGroupInfo = {
   url: string;
 };
 
+export const spellTypeGroupsOrdered = [
+  ...groups,
+].reverse() as readonly SpellTypeGroup[];
 export const spellTypeGroupInfoMap: Record<SpellTypeGroup, SpellTypeGroupInfo> =
   {
     prj: {

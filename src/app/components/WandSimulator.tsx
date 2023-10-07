@@ -13,6 +13,7 @@ import { ConfigButton } from './buttons';
 import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
 import { ReleaseInfo } from './ReleaseInfo';
+import { SaveImageButton } from './generic';
 
 const Column = styled.div`
   display: flex;
@@ -45,7 +46,6 @@ export function WandSimulator() {
       </MainHeader>
       <Column>
         <DndProvider backend={HTML5Backend}>
-          <SectionHeader title={'Wand Editor'} />
           <WandBuilder />
           <Row>
             <SpellSelector />

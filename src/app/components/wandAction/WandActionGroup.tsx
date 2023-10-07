@@ -90,48 +90,52 @@ type Props = {
 export function WandActionGroup(props: Props) {
   const { size = DEFAULT_SIZE } = props;
 
-  const group = simplifyMultipleObject(props.group);
+  const simplified = simplifyMultipleObject(props.group);
 
-  if (isRawObject(group)) {
-    if (group._typeName === 'ActionCall') {
+  if (isRawObject(simplified)) {
+    if (simplified._typeName === 'ActionCall') {
       return (
         <WandActionGroupWandActionBorder>
           <NextActionArrow />
-          <WandAction {...group} />
-          <RecursionAnnotation {...group} />
-          <ActionSourceAnnotation {...group} />
-          <ActionProxyAnnotation {...group} /*proxy={props.proxy}*/ />
+          <WandAction {...simplified} />
+          <RecursionAnnotation {...simplified} />
+          <ActionSourceAnnotation {...simplified} />
           <DontDrawAnnotation
-            {...group}
-            dont_draw_actions={group.dont_draw_actions}
+            {...simplified}
+            dont_draw_actions={simplified.dont_draw_actions}
           />
-          <DeckIndexAnnotation
-            {...group}
-            // deckIndex={props.deckIndex}
-          />
+          <DeckIndexAnnotation deckIndex={simplified.deckIndex} />
           <FriendlyFireAnnotation />
         </WandActionGroupWandActionBorder>
       );
     } else {
-      return <div>grouped</div>;
+      return (
+        <WandActionGroupWandActionBorder>
+          <NextActionArrow />
+          <WandAction {...simplified} />
+          <ActionProxyAnnotation proxy={simplified.proxy} />
+          <DeckIndexAnnotation deckIndex={simplified.deckIndex} />
+          <FriendlyFireAnnotation />
+        </WandActionGroupWandActionBorder>
+      );
     }
-  } else if (isArrayObject(group)) {
+  } else if (isArrayObject(simplified)) {
     return (
       <GroupDiv>
-        {group.map((g, i) => (
+        {simplified.map((g, i) => (
           <WandActionGroup group={g} key={i} size={size} />
         ))}
       </GroupDiv>
     );
-  } else if (isMultipleObject(group)) {
+  } else if (isMultipleObject(simplified)) {
     return (
       <MainDiv>
         <GroupDiv>
-          <WandActionGroup group={group.first} size={size} />
+          <WandActionGroup group={simplified.first} size={size} />
         </GroupDiv>
         <CountParentDiv>
           <SpacerDiv size={size} />
-          <CountDiv size={size}>x {group.count}</CountDiv>
+          <CountDiv size={size}>x {simplified.count}</CountDiv>
           <SpacerDiv size={size} />
         </CountParentDiv>
       </MainDiv>
