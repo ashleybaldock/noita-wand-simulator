@@ -97,7 +97,10 @@ export function WandActionGroup(props: Props) {
       return (
         <WandActionGroupWandActionBorder>
           <NextActionArrow />
-          <WandAction {...simplified} />
+          <WandAction
+            spellType={simplified.spell.type}
+            spellSprite={simplified.spell.sprite}
+          />
           <RecursionAnnotation {...simplified} />
           <ActionSourceAnnotation {...simplified} />
           <DontDrawAnnotation
@@ -112,7 +115,11 @@ export function WandActionGroup(props: Props) {
       return (
         <WandActionGroupWandActionBorder>
           <NextActionArrow />
-          <WandAction {...simplified} />
+          <WandAction
+            spellType={simplified.spell?.type ?? 'projectile'}
+            spellSprite={simplified.spell?.sprite}
+          />
+
           <ActionProxyAnnotation proxy={simplified.proxy} />
           <DeckIndexAnnotation deckIndex={simplified.deckIndex} />
           <FriendlyFireAnnotation />

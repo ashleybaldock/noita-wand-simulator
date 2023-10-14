@@ -61,7 +61,8 @@ function ActionComponent(props: Props) {
               sourceWandIndex={wandIndex}
             >
               <WandAction
-                spell={spellAction}
+                spellType={spellAction.type}
+                spellSprite={spellAction.sprite}
                 onDeleteSpell={() => handleDeleteSpell(wandIndex)}
               />
               <DeleteSpellAnnotation

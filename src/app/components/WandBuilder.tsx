@@ -9,7 +9,7 @@ import SectionHeader from './SectionHeader';
 const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #0f0e0e;
+  background-color: var(--color-base-background);
   margin: 10px 6px;
 `;
 const ContentDiv = styled.div`
@@ -17,7 +17,7 @@ const ContentDiv = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: #000;
+  background-color: var(--color-button-background);
   padding: 10px;
 `;
 

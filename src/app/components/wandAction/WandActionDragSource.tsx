@@ -14,6 +14,7 @@ const StyledDiv = styled.div<{
   ${({ isDragging }) =>
     isDragging
       ? `
+      --parent
     `
       : `
     &&:hover > div > div {

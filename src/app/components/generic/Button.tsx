@@ -8,7 +8,7 @@ const StyledButton = styled.button<{
   border: 1px solid var(--color-button-border);
   border-radius: 5px;
   ${({ imgUrl }) =>
-    imgUrl.length > 0 ? `background-image: url(/${imgUrl})` : ''};
+    imgUrl.length > 0 ? `background-image: url('/${imgUrl}')` : ''};
   ${({ imgDataUrl }) =>
     imgDataUrl.length > 0 ? `background-image: url("${imgDataUrl}")` : ''};
   background-position: 0.6em 50%;
@@ -47,12 +47,13 @@ const StyledButton = styled.button<{
   ${({ minimal }) =>
     minimal
       ? `
-    margin: 3px;
+    margin: 0;
     cursor: pointer;
-    background-position: 0.26em 50%;
     background-size: 1.64em;
-    padding: 0.4em 0.27em 0.2em 2.2em;
-    font-size: 0.7em;
+    background-position: 0.36em 50%;
+    padding: 0.6em 0.4em 0.3em 2.3em;
+    font-size: 0.6em;
+    line-height: 1.1em;
     `
       : ``};
 `;
