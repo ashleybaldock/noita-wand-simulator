@@ -16,6 +16,8 @@ const TabTitlesDiv = styled.div`
   justify-content: start;
   margin-right: 0.7em;
   padding: 0 0.7em;
+  align-items: end;
+  overflow: hidden;
 `;
 
 /* TODO
@@ -35,46 +37,47 @@ const TitleDiv = styled.div<{
   background-color: var(--bg-color-tab);
   align-items: center;
   font-family: var(--font-family-noita-default);
-  border-radius: 0.5em 0.5em 0 0;
   max-width: 8em;
   min-width: fit-content;
-  border-block-end-style: hidden;
 
-  padding: 0.36em 0.7em 0.22em 0.7em;
-  margin: 0.16em 0 0 -0.16em;
+  border-radius: 0.5em 0.5em 0 0;
+  border-style: solid;
+  border-block-end-style: hidden;
+  border-bottom-style: hidden;
+  border-width: 0.16em;
+  border-bottom-width: 0;
 
   @media screen and (max-width: 900px) {
     height: 3em;
   }
 
   @media screen and (max-width: 720px) {
-    font-size: 14px;
   }
 
   ${({ selected }) =>
     selected
       ? `
-    border: 0.16em solid var(--color-tab-border-active);
-    border-bottom: 0em none;
     color: var(--color-tab-active);
-    padding: 0.56em 0.7em 0.12em 0.7em;
-    margin: 0 0 -0.16em -0.16em;
+    border-color: var(--color-tab-border-active);
+    border-bottom-color: var(--bg-color-tab);
+
+    padding: 0.5em 0.7em 0.5em 0.7em;
+    margin: 0 0 0 -0.16em;
+
     cursor: default;
     z-index: var(--zindex-tabs-selected);
 
     flex: 10 1;
-    border-bottom: 0;
-    margin: 0 0 0 -0.16em;
-    padding: 0.2em 0.7em 0.22em 0.7em;
 
     &:hover {
     }
   `
       : `
-    border: 0.16em solid var(--color-tab-border-inactive);
-    border-bottom: 0em none;
     color: var(--color-tab-inactive);
-    padding: 0.56em 0.7em 0.12em 0.7em;
+    border-color: var(--color-tab-border-inactive);
+    border-bottom-color: transparent;
+
+    padding: 0.36em 0.7em 0.32em 0.7em;
     margin: 0 0 0 -0.16em;
     cursor: pointer;
     transition: var(--transition-hover-out);
@@ -149,7 +152,10 @@ const TabsWandAction = styled(WandAction)`
 const ContentDiv = styled.div`
   background-color: var(--bg-color-tab);
   border: 0.16em solid var(--color-tab-border-active);
-  border-radius: 0.16em 0.48px;
+  border-radius: 0.26em 0.46em;
+  padding: 0.26em;
+  top: -0.16em;
+  position: relative;
 `;
 
 const HiddenContentDiv = styled.div`
@@ -166,7 +172,8 @@ const HiddenContentDiv = styled.div`
 type TabTitlePart = {
   text: string;
   type?: SpellType;
-  imgSrc?: string;
+  bgSrc?: string;
+  egSrc?: string;
   style?: React.CSSProperties;
 };
 
@@ -206,10 +213,8 @@ export function Tabs(props: React.PropsWithChildren<Props>) {
             key={titleParts.reduce((acc, { text }) => `${acc}-${text}`, 'tab-')}
           >
             <HiddenContentDiv>{tabs[index].content}</HiddenContentDiv>
-            {titleParts.map(({ text, type, imgSrc }) => (
-              <TitleText key={`titleText-${text}`} spellType={type}>
-                {text}
-              </TitleText>
+            {titleParts.map(({ text, type, bgSrc, egSrc }) => (
+              <TabsWandAction spellType={type} spellSprite={egSrc} />
             ))}
           </TitleDiv>
         ))}

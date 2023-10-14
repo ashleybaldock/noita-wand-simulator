@@ -35,7 +35,7 @@ const MainDiv = styled.div`
 `;
 
 const SpellCategorySpellsDiv = styled.div`
-  padding: 0.16em 0.16em;
+  padding: 0.26em 0.16em;
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
@@ -158,11 +158,12 @@ export function SpellSelector() {
         const { contains } = spellTypeGroupInfoMap[spellTypeGroup];
         return {
           titleParts: contains.map((spellType) => {
-            const { name, src } = spellTypeInfoMap[spellType];
+            const { name, src, egSrc } = spellTypeInfoMap[spellType];
             return {
               text: name,
               type: spellType,
-              imgSrc: src,
+              bgSrc: src,
+              egSrc: egSrc,
               key: `part-${name}`,
             };
           }),
