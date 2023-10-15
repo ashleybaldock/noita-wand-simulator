@@ -17,7 +17,7 @@ import {
   FriendlyFireAnnotation,
   RecursionAnnotation,
 } from '../Annotations/';
-import WandActionBorder from './WandActionBorder';
+import { WandActionBorder } from './WandActionBorder';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 
 const MainDiv = styled.div.attrs({

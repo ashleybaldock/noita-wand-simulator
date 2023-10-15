@@ -1,9 +1,9 @@
+import React, { useRef } from 'react';
 import styled from 'styled-components/macro';
 import { WandActionEditor } from './WandActionEditor';
 import { WandStatsEditor } from './WandStatsEditor';
 import { WandBorder } from './WandBorder';
 import { SaveImageButton } from './generic';
-import React, { useRef } from 'react';
 import SectionHeader from './SectionHeader';
 
 const MainDiv = styled.div`
@@ -44,7 +44,7 @@ export function WandBuilder(props: Props) {
   const spellsRef = useRef<HTMLDivElement>();
 
   return (
-    <MainDiv>
+    <>
       <SectionHeader
         title={'Wand Editor'}
         rightChildren={
@@ -55,18 +55,20 @@ export function WandBuilder(props: Props) {
           />
         }
       />
-      <WandBorder>
-        <ContentDiv ref={wandRef as any} className={'saveImageRoot'}>
-          <WandStatsEditor />
-          <WandActionEditorWrapper
-            ref={spellsRef as any}
-            className={'saveImageRoot'}
-          >
-            <WandActionEditor />
-          </WandActionEditorWrapper>
-          <CopySpells></CopySpells>
-        </ContentDiv>
-      </WandBorder>
-    </MainDiv>
+      <MainDiv>
+        <WandBorder>
+          <ContentDiv ref={wandRef as any} className={'saveImageRoot'}>
+            <WandStatsEditor />
+            <WandActionEditorWrapper
+              ref={spellsRef as any}
+              className={'saveImageRoot'}
+            >
+              <WandActionEditor />
+            </WandActionEditorWrapper>
+            <CopySpells></CopySpells>
+          </ContentDiv>
+        </WandBorder>
+      </MainDiv>
+    </>
   );
 }

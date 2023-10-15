@@ -10,7 +10,7 @@ import {
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import { useMemo } from 'react';
 import { WandAction } from './wandAction/WandAction';
-import WandActionBorder from './wandAction/WandActionBorder';
+import { WandActionBorder } from './wandAction/WandActionBorder';
 import { useAppSelector } from '../redux/hooks';
 import { ConfigState, selectConfig } from '../redux/configSlice';
 import { groupBy, objectEntries } from '../util/util';

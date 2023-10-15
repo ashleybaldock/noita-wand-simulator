@@ -1,5 +1,5 @@
 import { useDrop } from 'react-dnd';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { WandActionDragItem } from '../../types';
 import styled from 'styled-components/macro';
@@ -23,10 +23,12 @@ const MarkerDiv = styled.div<{ isOver: boolean }>`
 
 type Props = {
   wandIndex: number;
+  marker?: boolean;
+  onDragChange: (isDrag: boolean) => void;
 };
 
 export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
-  const { wandIndex } = props;
+  const { onDragChange, wandIndex, marker = false } = props;
   const dispatch = useAppDispatch();
   const { config } = useAppSelector(selectConfig);
 
@@ -60,9 +62,11 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
     [handleDrop],
   );
 
+  useEffect(() => onDragChange(isOver), [isOver, onDragChange]);
+
   return (
     <TargetDiv ref={drop}>
-      <MarkerDiv isOver={isOver} />
+      {marker && <MarkerDiv isOver={isOver} />}
       {props.children}
     </TargetDiv>
   );

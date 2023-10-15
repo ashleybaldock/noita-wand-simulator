@@ -92,44 +92,6 @@ const TitleDiv = styled.div<{
   `}
 `;
 
-const TitleText = styled(SpellTypeBorder)`
-  display: block;
-
-  width: 100%;
-  border-image-slice: 1 2 1 2;
-  border-image-outset: 0em;
-  border-image-width: 2.4em 0em 0.3em 0em;
-  padding: 0.36em 1.2em 0.32em 0.7em;
-  border-radius: 0em;
-  text-overflow: clip;
-  text-align: center;
-  border-image-width: 0;
-  font-size: 12px;
-
-  @media screen and (max-width: 900px) {
-    display: none;
-  }
-
-  &::first-letter {
-    font-size: 34px;
-    color: white;
-    border-image-source: url('/data/spelltypes/item_bg_utility.png');
-    background-size: cover;
-    image-rendering: pixelated;
-    border-image-width: 0.54em;
-    border-image-slice: 2 2 2 2;
-    border-image-outset: 0.2em;
-    border-image-width: 0.2em 0.2em 0.2em 0.2em;
-  }
-  &::after {
-    content: '/';
-    content: unset;
-  }
-  &:last-child::after {
-    content: none;
-  }
-`;
-
 const TabsWandAction = styled(WandAction)`
   --transition-props: opacity;
   --sizes-spell: 2em;

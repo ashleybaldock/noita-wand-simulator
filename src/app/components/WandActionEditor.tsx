@@ -14,7 +14,7 @@ import {
 import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
 import { WandAction } from './wandAction/WandAction';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
-import WandActionBorder from './wandAction/WandActionBorder';
+import { WandActionBorder } from './wandAction/WandActionBorder';
 
 const StyledList = styled.ul`
   display: flex;
@@ -43,14 +43,19 @@ function ActionComponent(props: Props) {
   const { spellAction, wandIndex, deckIndex } = props;
   const dispatch = useAppDispatch();
   const [mouseOver, setMouseOver] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
 
   const handleDeleteSpell = (wandIndex: number) => {
     dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
   };
 
   return (
-    <WandActionDropTarget wandIndex={wandIndex}>
+    <WandActionDropTarget
+      wandIndex={wandIndex}
+      onDragChange={(dragOver: boolean) => setDragOver(dragOver)}
+    >
       <WandActionBorder
+        highlight={dragOver}
         onMouseEnter={() => setMouseOver(true)}
         onMouseLeave={() => setMouseOver(false)}
       >
