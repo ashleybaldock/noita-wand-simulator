@@ -5,27 +5,32 @@ import { ShotResultList } from './shotResult/ShotResultList';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { selectConfig } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
-import SectionHeader from './SectionHeader';
+import { SectionHeader } from './SectionHeader';
 import { SpellSelector } from './SpellSelector';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { ConfigButton } from './buttons';
 import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
-import { ReleaseInfo } from './ReleaseInfo';
-import { SaveImageButton } from './generic';
 
 const Column = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const Row = styled.div`
+const SpellShortcuts = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-self: center;
+  width: 100%;
+`;
+
+const SpellHotbar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-self: center;
-  width: 100%;
+  background-color: black;
 `;
 
 export function WandSimulator() {
@@ -38,27 +43,25 @@ export function WandSimulator() {
 
   return (
     <Column>
-      <ReleaseInfo />
-      <MainHeader>
-        <Row>
-          <ConfigButton />
-        </Row>
-      </MainHeader>
+      <MainHeader></MainHeader>
       <Column>
         <DndProvider backend={HTML5Backend}>
           <WandBuilder />
-          <Row>
-            <SpellSelector />
-          </Row>
-          <CastConfigEditor />
+          <SpellShortcuts>
+            <SpellHotbar></SpellHotbar>
+          </SpellShortcuts>
+          <SpellSelector />
         </DndProvider>
+      </Column>
+      <Column>
+        <CastConfigEditor />
       </Column>
       <Column>
         <SectionHeader
           title={`Simulation${config.pauseCalculations ? ' (Paused)' : ''}`}
-          rightChildren={<div>Status: Running</div>}
         />
         {!config.pauseCalculations && <ShotResultList {...config} />}
+        <div>Status: Running</div>
       </Column>
     </Column>
   );

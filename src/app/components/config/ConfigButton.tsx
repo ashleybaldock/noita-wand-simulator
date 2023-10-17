@@ -12,7 +12,7 @@ export function ConfigButton(props: Props) {
   };
 
   return (
-    <div>
+    <>
       <Button
         imgUrl={'data/sampo-config.png'}
         onClick={() => setModalVisible(!modalVisible)}
@@ -22,6 +22,6 @@ export function ConfigButton(props: Props) {
       <Modal visible={modalVisible} onClose={handleClose} title="Configuration">
         <ConfigEditor />
       </Modal>
-    </div>
+    </>
   );
 }

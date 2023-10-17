@@ -2,7 +2,7 @@ import styled from 'styled-components/macro';
 import { Spell } from '../calc/spell';
 import { spells } from '../calc/spells';
 import {
-  mapSpellTypeToGroup,
+  getBackgroundUrlForSpellType,
   spellTypeGroupInfoMap,
   spellTypeGroupsOrdered,
   spellTypeInfoMap,
@@ -10,31 +10,25 @@ import {
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import { useMemo } from 'react';
 import { WandAction } from './wandAction/WandAction';
-import WandActionBorder from './wandAction/WandActionBorder';
+import { WandActionBorder } from './wandAction/WandActionBorder';
 import { useAppSelector } from '../redux/hooks';
 import { ConfigState, selectConfig } from '../redux/configSlice';
 import { groupBy, objectEntries } from '../util/util';
 import { Tabs } from './generic';
-import {
-  ExportButton,
-  LoadButton,
-  ResetButton,
-  UndoButton,
-  RedoButton,
-} from './buttons';
 
 const MainDiv = styled.div`
+  --sizes-spell-base: 40px;
+
   display: flex;
   flex-direction: column;
   flex: 1 1;
   background-color: #100e0e;
-  --sizes-spell-base: 40px;
   --gap-multiplier: 0.12;
   min-height: calc(6 * var(--sizes-spell-base) * (1 + var(--gap-multiplier)));
 `;
 
 const SpellCategorySpellsDiv = styled.div`
-  padding: 7px 6px;
+  padding: 0.26em 0.16em;
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
@@ -46,19 +40,19 @@ const SpellCategorySpellsDiv = styled.div`
 
 const SpellSelectorWandActionBorder = styled(WandActionBorder)`
   position: relative;
-  background-image: url(/data/inventory/grid_box_unknown.png);
+  background-image: url('/data/inventory/grid_box_unknown.png');
   padding-left: 0px;
   padding-top: 0px;
 
   &::before {
     content: '';
     height: 100%;
-    background-image: url(/data/inventory/grid_box.png);
+    background-image: url('/data/inventory/grid_box.png');
     position: absolute;
     width: 100%;
     background-size: cover;
     image-rendering: pixelated;
-    opacity: 0.4;
+    opacity: 1em;
     transition: opacity var(--transition-hover-out);
   }
 
@@ -72,40 +66,15 @@ const SpellSelectorWandActionDragSource = styled(WandActionDragSource)`
 `;
 
 const SpellSelectorWandAction = styled(WandAction)`
+  --transition-props: opacity, transform;
+
   opacity: 0.84;
   padding: 0.04em;
   transform-origin: 0.8em 0.8em;
-  transition: opacity var(--transition-hover-in),
-    transform var(--transition-hover-in);
 
   &:hover {
     opacity: 0.9;
-    transition: opacity var(--transition-hover-out),
-      transform var(--transition-hover-out);
   }
-`;
-
-const SpellShortcuts = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-self: center;
-  width: 100%;
-`;
-
-const EditButtons = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-self: center;
-`;
-
-const SpellHotbar = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-self: center;
-  background-color: black;
 `;
 
 const isSpellUnlocked = (
@@ -126,13 +95,12 @@ type WandActionSelectProps = {
   spell: Spell;
 };
 
-const WandActionSelect = (props: WandActionSelectProps) => (
+const WandActionSelect = ({
+  spell: { id, type, sprite },
+}: WandActionSelectProps) => (
   <SpellSelectorWandActionBorder>
-    <SpellSelectorWandActionDragSource
-      actionId={props.spell.id}
-      key={props.spell.id}
-    >
-      <SpellSelectorWandAction spell={props.spell} />
+    <SpellSelectorWandActionDragSource actionId={id} key={id}>
+      <SpellSelectorWandAction spellType={type} spellSprite={sprite} />
     </SpellSelectorWandActionDragSource>
   </SpellSelectorWandActionBorder>
 );
@@ -157,14 +125,23 @@ export function SpellSelector() {
   const tabPerGroupedType = useMemo(
     () =>
       spellTypeGroupsOrdered.map((spellTypeGroup) => {
-        const { contains, name, src } = spellTypeGroupInfoMap[spellTypeGroup];
+        const { contains } = spellTypeGroupInfoMap[spellTypeGroup];
         return {
-          title: name,
-          iconSrc: src,
+          titleParts: contains.map((spellType) => {
+            const { name, src, egSrc } = spellTypeInfoMap[spellType];
+            return {
+              text: name,
+              type: spellType,
+              bgSrc: src,
+              egSrc: egSrc,
+              key: `part-${name}`,
+            };
+          }),
+          key: `tab-${spellTypeGroup}`,
+          iconSrc: '',
           content: (
             <>
               {contains.map((spellType) => {
-                // const { name, src } = spellTypeInfoMap[spellType];
                 return (
                   <SpellCategorySpellsDiv key={spellType}>
                     {spellsByType[spellType].map((spell) => (
@@ -184,11 +161,19 @@ export function SpellSelector() {
     return (
       objectEntries(spellsByType)
         // .reverse()
-        .map(([actionType, actions]) => {
-          const { name, src } = spellTypeInfoMap[actionType];
+        .map(([spellType, actions]) => {
+          const { name, src } = spellTypeInfoMap[spellType];
 
           return {
-            title: name,
+            titleParts: [
+              {
+                text: name,
+                type: spellType,
+                style: {
+                  backgroundImage: getBackgroundUrlForSpellType(spellType),
+                },
+              },
+            ],
             iconSrc: src,
             content: (
               <SpellCategorySpellsDiv>
@@ -205,18 +190,30 @@ export function SpellSelector() {
   const allInOneTab = useMemo(() => {
     return [
       {
-        title: 'All Spells',
+        titleParts: [
+          {
+            text: 'All Spells',
+            imgSrc: '',
+            spellSprite: '',
+          },
+        ],
         iconSrc: '',
         content: (
-          <SpellCategorySpellsDiv>
-            {spells.map((spell) => (
-              <WandActionSelect spell={spell} key={spell.id} />
-            ))}
-          </SpellCategorySpellsDiv>
+          <>
+            {objectEntries(spellsByType).map(([spellType, spells]) => {
+              return (
+                <SpellCategorySpellsDiv key={spellType}>
+                  {spellsByType[spellType].map((spell) => (
+                    <WandActionSelect spell={spell} key={spell.id} />
+                  ))}
+                </SpellCategorySpellsDiv>
+              );
+            })}
+          </>
         ),
       },
     ];
-  }, []);
+  }, [spellsByType]);
 
   const tabs = useMemo(() => {
     if (config.showSpellsInCategories) {
@@ -230,16 +227,6 @@ export function SpellSelector() {
   return (
     <MainDiv>
       <Tabs tabs={tabs} />
-      <SpellShortcuts>
-        <EditButtons>
-          <UndoButton />
-          <RedoButton />
-          <ResetButton />
-          <LoadButton />
-          <ExportButton />
-        </EditButtons>
-        <SpellHotbar></SpellHotbar>
-      </SpellShortcuts>
     </MainDiv>
   );
 }

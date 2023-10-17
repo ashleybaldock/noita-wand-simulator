@@ -124,11 +124,32 @@ const fields = [
 ];
 
 const StyledList = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 1px;
+  display: grid;
+  grid-auto-flow: row;
+  grid-auto-rows: 1.3em;
+  grid-template-columns: repeat(1, 1fr);
+  width: min-content;
+
+  @media screen and (max-width: 900px) {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(3, 1fr);
+    min-width: 30vw;
+  }
+
+  @media screen and (max-width: 700px) {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(5, 1fr);
+    min-width: 40vw;
+  }
+
+  @media screen and (max-width: 500px) {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(9, 1fr);
+    min-width: 60vw;
+  }
 `;
 const StyledListItem = styled.div<{
   imgUrl: string;
@@ -141,10 +162,13 @@ const StyledListItem = styled.div<{
   background-size: 1em;
   background-repeat: no-repeat;
   image-rendering: pixelated;
-  font-family: 'noita', '04b03', sans-serif;
+  font-family: var(--font-family-noita-default);
   font-size: 16px;
   color: var(--color-button);
   padding: 0.1em 0.6em 0em 2.2em;
+
+  @media screen and (max-width: 700px) {
+  }
 `;
 const StyledName = styled.span`
   text-align: left;
@@ -156,12 +180,10 @@ const StyledValue = styled.span`
   text-align: left;
   flex: 1 0;
   white-space: nowrap;
-  width: 7.4em;
+  width: 3.4em;
 `;
 
-type Props = {};
-
-export function WandStatsEditor(props: Props) {
+export function WandStatsEditor() {
   const wand = useWand();
   const dispatch = useAppDispatch();
 

@@ -12,49 +12,56 @@
 
 /* see also GlobalStyle.tsx */
 :root {
-  --input-border: 2px solid #555;
+  --input-border: 2px solid #555555;
   --input-border-radius: 0 2px 0 2px;
 
   --config-topleft-border: #323232;
   --config-bottomright-border: #616060;
 
-  --color-base: #eee;
+  --color-base: #eeeeee;
   --color-base-background: #0c0c0c;
 
-  --color-tab-active: #eee;
+  --color-tab-active: #eeeeee;
   --color-tab-inactive: #918f96;
   --color-tab-inactive-hover: #c7c7c7;
   --color-tab-border-active: #918167;
   --color-tab-border-inactive: #686358;
   --color-tab-border-inactive-hover: #c7c7c7;
+  --bg-color-tab: #100e0e;
 
   --color-button: #c7c7c7;
   --color-button-hover: #c7c7c7;
-  --color-button-active: #eee;
+  --color-button-active: #eeeeee;
   --color-button-disabled: #5b5b66;
-  --color-button-border: #333;
-  --color-button-border-hover: #aaa;
-  --color-button-background: rgba(0, 0, 0, 1);
+  --color-button-border: #333333;
+  --color-button-border-hover: #aaaaaa;
+  --color-button-background: #000000;
 
-  --color-note-recursion: #000;
-  --color-note-recursion-bg: #3bb;
+  --color-note-recursion: #000000;
+  --color-note-recursion-bg: #33bbbb;
 
   --color-arrow-action: #ffbf00;
-  --color-arrow-action-text: #ddd;
+  --color-arrow-action-text: #dddddd;
   --color-arrow-action-highlight: #ffe29c;
+
+  --color-wand-editor-bg: #000000;
 
   --font-family-noita-default: 'noita', sans-serif;
   --font-family-noita-glyphs: 'glyphs', sans-serif;
 
   --zindex-tabs-hover: 90;
   --zindex-tabs-selected: 100;
+  --zindex-stickyheader-behind: 200;
+  --zindex-stickyheader-title: 210;
+  --zindex-stickyheader-controls: 220;
   --zindex-modal-window: 1000;
+  --zindex-devinfo: 999;
 
   --anim-basic-in: 20ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   --transition-hover-in: 80ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 
   --transition-hover-out: 120ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  --transition-activate: none 30ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  --transition-activate: 30ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
 html {
@@ -63,6 +70,7 @@ html {
 }
 
 body {
+  min-width: 320px;
   margin: 5px;
   font-family: 'noita', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
     'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',

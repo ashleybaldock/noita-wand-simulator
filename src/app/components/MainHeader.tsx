@@ -22,7 +22,7 @@ const HeaderDiv = styled.div<{
   flex-direction: row;
   color: #eee;
   justify-content: space-between;
-  background-image: url(${({ imgUrl = '/logo/logo.png' }) => imgUrl});
+  background-image: url('${({ imgUrl = '/logo/logo.png' }) => imgUrl}');
   background-size: contain;
   background-repeat: no-repeat;
   height: 60px;

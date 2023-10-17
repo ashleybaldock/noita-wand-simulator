@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
+import { SpellType } from '../../calc/spellTypes';
+import { SpellTypeBorder } from '../Spells/SpellTypeBorder';
+import { WandAction } from '../wandAction/WandAction';
 
 const MainDiv = styled.div`
-  padding: 3px;
+  font-size: 14px;
+  padding: 0.3em;
 `;
 
 const TabTitlesDiv = styled.div`
@@ -10,51 +14,71 @@ const TabTitlesDiv = styled.div`
   flex-direction: row-reverse;
   flex-wrap: wrap-reverse;
   justify-content: start;
-  margin-right: 10px;
-  padding: 0 10px;
+  margin-right: 0.7em;
+  padding: 0 0.7em;
+  align-items: end;
+  overflow: hidden;
 `;
 
+/* TODO
+ * Use spell icons instead of tab text below 720w
+ * Switch to two rows for wand spells + wand stats below 900w
+ * * Side-by-side for spell selector on wide screen
+ */
 const TitleDiv = styled.div<{
   selected: boolean;
 }>`
+  font-size: 14px;
+
   display: flex;
   flex: 1 1;
   justify-content: center;
   user-select: none;
-  background-color: #100e0e;
-  height: 1.6em;
+  background-color: var(--bg-color-tab);
   align-items: center;
   font-family: var(--font-family-noita-default);
-  border-radius: 7px 7px 0 0;
-  font-size: 14px;
   max-width: 8em;
   min-width: fit-content;
+
+  border-radius: 0.5em 0.5em 0 0;
+  border-style: solid;
   border-block-end-style: hidden;
+  border-bottom-style: hidden;
+  border-width: 0.16em;
+  border-bottom-width: 0;
+
+  @media screen and (max-width: 900px) {
+    height: 3em;
+  }
 
   @media screen and (max-width: 720px) {
-    font-size: 14px;
   }
 
   ${({ selected }) =>
     selected
       ? `
-    border: 2px solid var(--color-tab-border-active);
-    border-bottom: 0px none;
     color: var(--color-tab-active);
-    padding: 8px 10px 6px 10px;
-    margin: 0 0 -2px -2px;
+    border-color: var(--color-tab-border-active);
+    border-bottom-color: var(--bg-color-tab);
+
+    padding: 0.5em 0.7em 0.5em 0.7em;
+    margin: 0 0 0 -0.16em;
+
     cursor: default;
     z-index: var(--zindex-tabs-selected);
+
+    flex: 10 1;
 
     &:hover {
     }
   `
       : `
-    border: 2px solid var(--color-tab-border-inactive);
-    border-bottom: 0px none;
     color: var(--color-tab-inactive);
-    padding: 5px 10px 2px 10px;
-    margin: 0 0 0 -2px;
+    border-color: var(--color-tab-border-inactive);
+    border-bottom-color: transparent;
+
+    padding: 0.36em 0.7em 0.32em 0.7em;
+    margin: 0 0 0 -0.16em;
     cursor: pointer;
     transition: var(--transition-hover-out);
     transition-property: border-color, color;
@@ -68,10 +92,32 @@ const TitleDiv = styled.div<{
   `}
 `;
 
+const TabsWandAction = styled(WandAction)`
+  --transition-props: opacity;
+  --sizes-spell: 2em;
+
+  transform: none;
+  opacity: 0.94;
+  cursor: default;
+  transform: none;
+  opacity: 1;
+  cursor: default;
+  margin-right: 0.2em;
+
+  &:hover {
+    transform: none;
+    opacity: 1;
+    cursor: pointer;
+  }
+`;
+
 const ContentDiv = styled.div`
-  background-color: #100e0e;
-  border: 2px solid #918167;
-  border-radius: 2px 6px;
+  background-color: var(--bg-color-tab);
+  border: 0.16em solid var(--color-tab-border-active);
+  border-radius: 0.26em 0.46em;
+  padding: 0.26em;
+  top: -0.16em;
+  position: relative;
 `;
 
 const HiddenContentDiv = styled.div`
@@ -85,8 +131,16 @@ const HiddenContentDiv = styled.div`
   z-index: -1000;
 `;
 
+type TabTitlePart = {
+  text: string;
+  type?: SpellType;
+  bgSrc?: string;
+  egSrc?: string;
+  style?: React.CSSProperties;
+};
+
 export type Tab = {
-  title: string;
+  titleParts: TabTitlePart[];
   content: React.ReactElement;
 };
 
@@ -114,14 +168,16 @@ export function Tabs(props: React.PropsWithChildren<Props>) {
   return (
     <MainDiv>
       <TabTitlesDiv>
-        {tabs.map((t, index) => (
+        {tabs.map(({ titleParts }, index) => (
           <TitleDiv
             selected={selectedTabIndex === index}
             onClick={() => setSelectedTabIndex(index)}
-            key={t.title}
+            key={titleParts.reduce((acc, { text }) => `${acc}-${text}`, 'tab-')}
           >
-            {t.title}
             <HiddenContentDiv>{tabs[index].content}</HiddenContentDiv>
+            {titleParts.map(({ text, type, bgSrc, egSrc }) => (
+              <TabsWandAction spellType={type} spellSprite={egSrc} />
+            ))}
           </TitleDiv>
         ))}
       </TabTitlesDiv>
