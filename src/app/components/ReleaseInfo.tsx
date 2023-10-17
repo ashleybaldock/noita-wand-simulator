@@ -8,16 +8,20 @@ const Row = styled.div<{
   flex-direction: row;
   justify-content: end;
   align-self: center;
-  font-size: small;
+  font-size: 10px;
   font-weight: 400;
-  margin: 3px 1em;
-  position: absolute;
-  height: 40px;
-  padding-left: 20px;
-  top: 0;
-  right: 0;
+  position: fixed;
   color: #aaa;
   ${({ isRelease }) => (isRelease ? `opacity: 0;` : `opacity: 0.6;`)}
+  padding: 0.2em 0.2em 0.4em 0.4em;
+  z-index: var(--zindex-devinfo, 999999);
+  background-color: var(--color-base-background);
+  border-radius: 0;
+   start;
+  font-size: 10px;
+  bottom: 3px;
+  right: 3px;
+  padding: 0;
 
   &:hover {
     opacity: 1;

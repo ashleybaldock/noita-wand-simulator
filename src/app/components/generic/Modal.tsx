@@ -16,7 +16,7 @@ const MainDiv = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-  background-color: #555;
+  background-color: var(--bg-color-tab);
   color: #eee;
   max-height: 100%;
   overflow-y: auto;
@@ -27,7 +27,7 @@ const HeaderDiv = styled.div`
   display: flex;
   flex-direction: row;
   color: #111;
-  background-color: #999;
+  background-color: var(--color-base-background);
   font-weight: bold;
   text-align: center;
   justify-content: space-between;

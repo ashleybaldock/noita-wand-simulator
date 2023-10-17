@@ -15,13 +15,6 @@ import { useAppSelector } from '../redux/hooks';
 import { ConfigState, selectConfig } from '../redux/configSlice';
 import { groupBy, objectEntries } from '../util/util';
 import { Tabs } from './generic';
-import {
-  ExportButton,
-  LoadButton,
-  ResetButton,
-  UndoButton,
-  RedoButton,
-} from './buttons';
 
 const MainDiv = styled.div`
   --sizes-spell-base: 40px;
@@ -82,29 +75,6 @@ const SpellSelectorWandAction = styled(WandAction)`
   &:hover {
     opacity: 0.9;
   }
-`;
-
-const SpellShortcuts = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-self: center;
-  width: 100%;
-`;
-
-const EditButtons = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-self: center;
-`;
-
-const SpellHotbar = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-self: center;
-  background-color: black;
 `;
 
 const isSpellUnlocked = (
@@ -257,16 +227,6 @@ export function SpellSelector() {
   return (
     <MainDiv>
       <Tabs tabs={tabs} />
-      <SpellShortcuts>
-        <EditButtons>
-          <UndoButton />
-          <RedoButton />
-          <ResetButton />
-          <LoadButton />
-          <ExportButton />
-        </EditButtons>
-        <SpellHotbar></SpellHotbar>
-      </SpellShortcuts>
     </MainDiv>
   );
 }

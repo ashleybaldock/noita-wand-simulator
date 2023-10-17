@@ -27,7 +27,7 @@ export function WandPresetButton(props: Props) {
   };
 
   return (
-    <div>
+    <>
       <Button
         imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
         onClick={() => setMenuVisible(!menuVisible)}
@@ -37,6 +37,6 @@ export function WandPresetButton(props: Props) {
       <Modal visible={menuVisible} onClose={handleClose} title="Presets">
         <WandPresetMenu presets={presets} onSelect={handleSelect} />
       </Modal>
-    </div>
+    </>
   );
 }

@@ -1,162 +1,76 @@
 import styled from 'styled-components/macro';
 import { ReactNode } from 'react';
 
-const ParentDiv = styled.div`
-  --color-fg-section-header: var(--color-button-border);
+const StickyHeaderBackground = styled.div`
   position: sticky;
-  top: -0.6em;
-  z-index: 100;
+  top: -0.36em;
+  z-index: var(--zindex-stickyheader-behind, 200);
+
   display: flex;
   align-items: center;
 
   background-color: transparent;
-  border-top: 1px solid var(--color-fg-section-header);
-  padding: 0.8em 0 0.6em 0;
-
-  &::before,
-  &::after {
-    content: '';
-    width: 1em;
-    border-bottom: 1px solid red;
-    border-top: 1px solid red;
-    align-self: stretch;
-  }
-  &::before {
-    position: absolute;
-    top: 0;
-    right: 5em;
-    left: 3em;
-    font-size: 14px;
-    height: 0.12em;
-    width: unset;
-    margin-bottom: 0;
-    background-color: var(--color-fg-section-header);
-    border-bottom: 0em solid var(--color-base-background);
-    border-top: 0px solid var(--color-base-background);
-    z-index: 1;
-    opacity: 1;
-  }
+  border-top: 0.16em solid var(--color-base-background);
+  border-bottom: 0.16em solid var(--color-tab-border-inactive);
 `;
 
-const LeftHeaderDiv = styled.div`
-  position: relative;
+const StickyTitleHeader = styled.h2`
+  --color-fg-section-header: var(--color-button-border);
+
+  position: sticky;
+  top: 0em;
+  left: 0;
+  width: fit-content;
+  z-index: var(--zindex-stickyheader-title, 210);
+
   display: flex;
-  align-items: last baseline;
+  align-items: center;
 
-  --sheader-base-height: 1em;
-  font-size: 16px;
-  height: calc(var(--sheader-base-height) * 1.75);
-  line-height: calc(var(--sheader-base-height) * 1.26);
-  border: 0.45em solid var(--color-base-background);
-
-  font-weight: bold;
-  font-family: var(--font-family-noita-default);
-  font-variant-caps: small-caps;
-  font-weight: 600;
-  text-align: center;
-  white-space: nowrap;
-
-  color: var(--color-tab-active);
+  background-color: transparent;
+  background-color: blue;
   background-color: var(--color-base-background);
+  border-top: 1px solid var(--color-fg-section-header);
+  padding: 0.8em 0 0.2em 0;
+  padding: 0.8em 0.2em 0.4em 0.2em;
 
-  padding: 0 0.8em 0 0.8em;
   margin: 0;
+  padding: 0.8em 0.6em 0.8em 0.2em;
+  font-size: 16px;
+  margin: 0;
+  font-weight: normal;
+  border-radius: 0em 0em 20em 0em / 0 0em 2.1em 0em;
+  border: 0.16em solid var(--color-tab-border-active);
+  border-top-style: hidden;
+  border-left-style: hidden;
 
-  border-radius: 0em 0em 1.6em 0em;
-  border-top: 0 solid transparent;
-  border-right: 0.36em solid var(--color-base-background);
-  border-bottom-width: 0.8em;
-  border: 0.31em solid var(--color-base-background);
+  padding: 0.5em 0.6em 6.8px 0.2em;
 
-  &::after {
-    content: '';
-    position: absolute;
-    right: 0em;
-    left: -0.5em;
-    bottom: -0.5em;
-    width: inherit;
-    height: 100%;
-
-    border-radius: 0em 9em 15em 0em;
-    border-left: 0 solid transparent;
-    border-top: 0em dashed transparent;
-    border-right: 0.2em solid var(--color-fg-section-header);
-    border-bottom: 0.34em double var(--color-fg-section-header);
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0em;
-    right: 0em;
-    left: 0em;
-    height: 100%;
-    width: inherit;
-    padding-left: 1em;
-
-    border-radius: 13em 0em 0em 9em;
-    border-top: 0.12em solid var(--color-fg-section-header);
-    border-right: 0em solid transparent;
-    border-bottom: 0em dashed transparent;
-    border-left: 0.2em solid var(--color-fg-section-header);
-  }
-`;
-
-
-const RightHeaderDiv = styled(LeftHeaderDiv)`
-  margin-left: auto;
-
-  &::after {
-    border-radius: 26px 0px 34px 10px;
-    border-top: 0 solid transparent;
-    border-bottom: 1px solid var(--color-fg-section-header);
-    top: 2px;
-    right: 0;
-    left: -4px;
-    right: -4px;
-    top: -2px;
-  }
-
-  &::before {
-    position: absolute;
-    top: 0;
-    right: 0px;
-    bottom: unset;
-    left: 0;
-
-    border-radius: 0px 26px 10px 34px;
-    border-radius: 0px 26px 10px 0px;
-    border-top: 1px solid var(--color-fg-section-header);
-    border-right: 3px solid var(--color-fg-section-header);
-    border-bottom: 0 solid transparent;
-  }
-`;
-
-const Seperator = styled.div`
-  margin-left: auto;
+  font-size: 16px;
+  margin: 0;
+  font-weight: normal;
+  border-radius: 1em 0.8em 19em 0em / 0 2.8em 4em 1em;
+  border: 0.16em solid var(--color-tab-border-active);
+  border-top-style: solid;
+  border-left-style: hidden;
+  border-bottom-width: 0.5em;
+  border-right-style: solid;
+  border-bottom-style: double;
+  border-right-width: 0.6em;
+  border-top-color: black;
+  border-top-width: 0em;
+  bottom: -1em;
 `;
 
 type SectionHeaderProps = {
   title: string | ReactNode;
-  leftChildren?: ReactNode;
-  rightChildren?: ReactNode;
+  subtitle?: string;
 };
 
-export default function SectionHeader({
-  leftChildren,
-  rightChildren,
-  title,
-}: SectionHeaderProps) {
+export const SectionHeader = ({ title }: SectionHeaderProps) => {
   return (
-    <ParentDiv>
-      <LeftHeaderDiv>{title}</LeftHeaderDiv>
-      {leftChildren && <LeftHeaderDiv>{leftChildren}</LeftHeaderDiv>}
-      <Seperator></Seperator>
-      {rightChildren && (
-        <>
-          <RightHeaderDiv>{rightChildren}</RightHeaderDiv>
-        </>
-      )}
-    </ParentDiv>
+    <>
+      <StickyHeaderBackground></StickyHeaderBackground>
+      <StickyTitleHeader>{title}</StickyTitleHeader>
+    </>
   );
-}
+};

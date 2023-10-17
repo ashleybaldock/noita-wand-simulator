@@ -2,6 +2,7 @@ import { Preset, PresetGroup } from '../../types';
 import React from 'react';
 import styled from 'styled-components/macro';
 import { isPresetGroup } from '../../util/util';
+import { Button } from '../generic';
 
 const PresetGroupNameDiv = styled.div`
   font-weight: bold;
@@ -21,16 +22,16 @@ const PresetGroupListDiv = styled.ul`
 const FirstPresetGroupDiv = styled.div``;
 
 const PresetGroupDiv = styled.li`
-  border-left: 2px solid #000;
+  border-left: 2px solid var(--color-base);
   margin-left: 1em;
   padding-left: 1em;
   position: relative;
 
   &:before {
     content: '┗';
-    color: #000;
+    color: var(--color-base);
     position: absolute;
-    top: -5px;
+    top: 0;
     left: -9px;
   }
 
@@ -39,16 +40,16 @@ const PresetGroupDiv = styled.li`
   }
 `;
 const PresetButtonDiv = styled.li`
-  border-left: 2px solid #000;
+  border-left: 2px solid var(--color-base);
   margin-left: 1em;
   padding-left: 1em;
   position: relative;
 
   &:before {
     content: '┗';
-    color: #000;
+    color: var(--color-base);
     position: absolute;
-    top: -5px;
+    top: 0;
     left: -9px;
   }
 `;
@@ -74,8 +75,10 @@ export function WandPresetMenu(props: Props) {
               return createPresetList(p, false);
             } else {
               return (
-                <PresetButtonDiv key={index}>
-                  <button onClick={(e) => onSelect(p)}>{p.name}</button>
+                <PresetButtonDiv>
+                  <Button key={p.name} onClick={() => onSelect(p)}>
+                    {p.name}
+                  </Button>
                 </PresetButtonDiv>
               );
             }

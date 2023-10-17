@@ -1,10 +1,8 @@
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { selectConfig, updateConfig } from '../../redux/configSlice';
-import { WandAction } from '../wandAction/WandAction';
 import styled from 'styled-components/macro';
 import { ChangeEvent } from 'react';
-import SectionHeader from '../SectionHeader';
-import { getSpellById } from '../../calc/spells';
+import { SectionHeader } from '../SectionHeader';
 
 const MainDiv = styled.div`
   display: flex;

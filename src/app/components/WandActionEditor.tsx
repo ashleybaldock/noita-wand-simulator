@@ -15,16 +15,38 @@ import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
 import { WandAction } from './wandAction/WandAction';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import { WandActionBorder } from './wandAction/WandActionBorder';
+import { ReleaseInfo } from './ReleaseInfo';
 
 const StyledList = styled.ul`
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+  --grid-layout-gap: 8;
+  --grid-max-column-count: 8;
+  --grid-item-width: 88;
+  --unit-dim: 0.04em;
+
   margin: 0;
   padding: 0;
-  gap: 6px;
   padding: 12px 16px;
-  background-color: #000;
+  background-color: var(--color-wand-editor-bg);
+
+  @media screen and (max-width: 500px) {
+    padding: 12px 4px;
+  }
+
+  --gap-count: calc(var(--grid-max-column-count) - 1);
+  --total-gap-width: calc(
+    var(--gap-count) * var(--grid-layout-gap) * var(--unit-dim, 1px)
+  );
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      calc(var(--grid-item-width) * var(--unit-dim, 1px)),
+      calc(var(--grid-item-width) * var(--unit-dim, 1px))
+    )
+  );
+  grid-gap: calc(var(--grid-layout-gap) * var(--unit-dim, 1px));
+  justify-content: center;
+  align-items: center;
 `;
 
 const StyledListItem = styled.li`
@@ -106,6 +128,7 @@ export function WandActionEditor() {
           />
         </StyledListItem>
       ))}
+      <ReleaseInfo />
     </StyledList>
   );
 }

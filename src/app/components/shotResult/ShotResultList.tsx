@@ -4,7 +4,7 @@ import { ProjectileTreeShotResult } from './ProjectileTreeShotResult';
 import styled from 'styled-components/macro';
 import { ActionCalledShotResult } from './ActionCalledShotResult';
 import React, { useMemo, useRef } from 'react';
-import SectionHeader from '../SectionHeader';
+import { SectionHeader } from '../SectionHeader';
 import { clickWand } from '../../calc/eval/clickWand';
 import { selectConfig } from '../../redux/configSlice';
 import { ActionTreeShotResult } from './ActionTreeShotResult';
@@ -149,19 +149,7 @@ export function ShotResultList({
 
   return (
     <ParentDiv>
-      <SectionHeader
-        title={'Projectiles'}
-        leftChildren={
-          <IterationLimitWarning hitIterationLimit={hitIterationLimit} />
-        }
-        rightChildren={
-          <SaveImageButton
-            targetRef={projectilesRef}
-            fileName={'projectiles'}
-            enabled={groupedShots.length > 0}
-          />
-        }
-      />
+      <SectionHeader title={'Simulation: Projectiles'} />
       <ScrollWrapper>
         <SectionDiv ref={projectilesRef as any} className={'saveImageRoot'}>
           {groupedShots.length > 0 && (
@@ -173,18 +161,10 @@ export function ShotResultList({
               <ProjectileTreeShotResult shot={shot} indent={false} />
             </React.Fragment>
           ))}
+          <IterationLimitWarning hitIterationLimit={hitIterationLimit} />
         </SectionDiv>
       </ScrollWrapper>
-      <SectionHeader
-        title={'Actions Called'}
-        rightChildren={
-          <SaveImageButton
-            targetRef={actionsCalledRef}
-            fileName={'actions_called'}
-            enabled={groupedShots.length > 0}
-          />
-        }
-      />
+      <SectionHeader title={'Simulation: Actions Called'} />
       <ScrollWrapper>
         <SectionDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>
           {groupedShots.map((shot, index) => (
@@ -193,20 +173,15 @@ export function ShotResultList({
               <ActionCalledShotResult key={index} shot={shot} />
             </React.Fragment>
           ))}
+          <SaveImageButton
+            targetRef={actionsCalledRef}
+            fileName={'actions_called'}
+            enabled={groupedShots.length > 0}
+          />
         </SectionDiv>
       </ScrollWrapper>
       {config.showActionTree && (
         <>
-          <SectionHeader
-            title={'Action Call Tree'}
-            rightChildren={
-              <SaveImageButton
-                targetRef={actionCallTreeRef}
-                fileName={'action_tree'}
-                enabled={groupedShots.length > 0}
-              />
-            }
-          />
           <ScrollWrapper>
             <SectionDiv
               ref={actionCallTreeRef as any}
@@ -218,6 +193,16 @@ export function ShotResultList({
                   <ActionTreeShotResult key={index} shot={shot} />
                 </React.Fragment>
               ))}
+              <SaveImageButton
+                targetRef={actionCallTreeRef}
+                fileName={'action_tree'}
+                enabled={groupedShots.length > 0}
+              />
+              <SaveImageButton
+                targetRef={projectilesRef}
+                fileName={'projectiles'}
+                enabled={groupedShots.length > 0}
+              />
             </SectionDiv>
           </ScrollWrapper>
         </>
