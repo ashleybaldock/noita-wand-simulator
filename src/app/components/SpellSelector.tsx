@@ -124,36 +124,38 @@ export function SpellSelector() {
 
   const tabPerGroupedType = useMemo(
     () =>
-      spellTypeGroupsOrdered.map((spellTypeGroup) => {
-        const { contains } = spellTypeGroupInfoMap[spellTypeGroup];
-        return {
-          titleParts: contains.map((spellType) => {
-            const { name, src, egSrc } = spellTypeInfoMap[spellType];
-            return {
-              text: name,
-              type: spellType,
-              bgSrc: src,
-              egSrc: egSrc,
-              key: `part-${name}`,
-            };
-          }),
-          key: `tab-${spellTypeGroup}`,
-          iconSrc: '',
-          content: (
-            <>
-              {contains.map((spellType) => {
-                return (
-                  <SpellCategorySpellsDiv key={spellType}>
-                    {spellsByType[spellType].map((spell) => (
-                      <WandActionSelect spell={spell} key={spell.id} />
-                    ))}
-                  </SpellCategorySpellsDiv>
-                );
-              })}
-            </>
-          ),
-        };
-      }),
+      spellTypeGroupsOrdered
+        .map((spellTypeGroup) => {
+          const { contains } = spellTypeGroupInfoMap[spellTypeGroup];
+          return {
+            titleParts: contains.map((spellType) => {
+              const { name, src, egSrc } = spellTypeInfoMap[spellType];
+              return {
+                text: name,
+                type: spellType,
+                bgSrc: src,
+                egSrc: egSrc,
+                key: `part-${name}`,
+              };
+            }),
+            key: `tab-${spellTypeGroup}`,
+            iconSrc: '',
+            content: (
+              <>
+                {contains.map((spellType) => {
+                  return (
+                    <SpellCategorySpellsDiv key={spellType}>
+                      {spellsByType[spellType].map((spell) => (
+                        <WandActionSelect spell={spell} key={spell.id} />
+                      ))}
+                    </SpellCategorySpellsDiv>
+                  );
+                })}
+              </>
+            ),
+          };
+        })
+        .reverse(),
     [spellsByType],
   );
 
@@ -184,6 +186,7 @@ export function SpellSelector() {
             ),
           };
         })
+        .reverse()
     );
   }, [spellsByType]);
 

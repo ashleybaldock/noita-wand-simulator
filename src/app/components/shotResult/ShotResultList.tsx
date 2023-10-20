@@ -162,7 +162,7 @@ export function ShotResultList({
             <ShotMetadata rechargeDelay={reloadTime} />
           )}
           {groupedShots.map((shot, index) => (
-            <ProjectileTreeShotResult shot={shot} indent={false} />
+            <ProjectileTreeShotResult shot={shot} key={index} indent={false} />
           ))}
         </SectionDiv>
       </ScrollWrapper>

@@ -1,6 +1,7 @@
 import styled from 'styled-components/macro';
 import { PropsWithChildren } from 'react';
 
+/* rotate() makes the scrollbar be at the top */
 const ParentDiv = styled.div`
   padding: 12px 8px;
   overflow-x: auto;

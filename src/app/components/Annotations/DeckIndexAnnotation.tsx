@@ -4,8 +4,8 @@ import { useConfig } from '../../redux';
 const IndexDiv = styled.div`
   pointer-events: none;
   position: absolute;
-  bottom: -6px;
-  right: -6px;
+  bottom: -4px;
+  right: -4px;
   color: rgb(255, 255, 255);
   font-size: 14px;
   font-family: var(--font-family-noita-default);

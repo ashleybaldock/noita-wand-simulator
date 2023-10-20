@@ -6,6 +6,7 @@ type Props = {
   className?: string;
   spellType?: SpellType;
   spellSprite?: string;
+  keyHint?: string;
 };
 
 function _WandAction({ spellType, spellSprite, className }: Props) {

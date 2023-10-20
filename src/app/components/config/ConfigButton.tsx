@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal } from '../generic';
 import { ConfigEditor } from './ConfigEditor';
 
-type Props = {};
-
-export function ConfigButton(props: Props) {
+export function ConfigButton() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleClose = () => {

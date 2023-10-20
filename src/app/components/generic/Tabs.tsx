@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import styled from 'styled-components/macro';
 import { SpellType } from '../../calc/spellTypes';
-import { SpellTypeBorder } from '../Spells/SpellTypeBorder';
 import { WandAction } from '../wandAction/WandAction';
 
 const MainDiv = styled.div`
@@ -11,7 +11,6 @@ const MainDiv = styled.div`
 
 const TabTitlesDiv = styled.div`
   display: flex;
-  flex-direction: row-reverse;
   flex-wrap: wrap-reverse;
   justify-content: start;
   margin-right: 0.7em;
@@ -161,6 +160,14 @@ export function Tabs(props: React.PropsWithChildren<Props>) {
     }
   }, [displayIndex, selectedTabIndex]);
 
+  useHotkeys('1,2,3,4,5,6,7,8', (_, kEv) => {
+    const tabIdx = Number.parseInt(kEv.keys?.join('') ?? '', 10);
+    if (!Number.isNaN(tabIdx) && tabIdx > 0 && tabIdx <= tabs.length) {
+      setSelectedTabIndex(tabIdx - 1);
+    }
+    console.log(`tabs:${kEv.keys?.join()}`);
+  });
+
   if (tabs.length === 0) {
     return null;
   }
@@ -176,7 +183,12 @@ export function Tabs(props: React.PropsWithChildren<Props>) {
           >
             <HiddenContentDiv>{tabs[index].content}</HiddenContentDiv>
             {titleParts.map(({ text, type, bgSrc, egSrc }) => (
-              <TabsWandAction spellType={type} spellSprite={egSrc} />
+              <TabsWandAction
+                key={type}
+                spellType={type}
+                spellSprite={egSrc}
+                keyHint={`Shortcut: ${index}`}
+              />
             ))}
           </TitleDiv>
         ))}

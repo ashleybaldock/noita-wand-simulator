@@ -15,7 +15,6 @@ import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
 import { WandAction } from './wandAction/WandAction';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import { WandActionBorder } from './wandAction/WandActionBorder';
-import { ReleaseInfo } from './ReleaseInfo';
 
 const StyledList = styled.ul`
   --grid-layout-gap: 8;
@@ -128,7 +127,6 @@ export function WandActionEditor() {
           />
         </StyledListItem>
       ))}
-      <ReleaseInfo />
     </StyledList>
   );
 }
