@@ -26,9 +26,11 @@ function generateSearchFromWandStateV2({
       encodeQueryParam(wand[v1param]),
     ]),
   );
-  params.append('s', spellIds.join(','));
-  params.append('w', alwaysIds.join(','));
-  return '?' + params.toString();
+  // params.append('s', spellIds.join(','));
+  // params.append('w', alwaysIds.join(','));
+  return `?${params.toString()}&w=${alwaysIds.join(',')}&s=${spellIds.join(
+    ',',
+  )}`;
 }
 
 function generateSearchFromWandStateV1(state: WandState) {

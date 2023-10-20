@@ -152,57 +152,49 @@ export function ShotResultList({
       <SectionHeader title={'Simulation: Projectiles'} />
       <ScrollWrapper>
         <SectionDiv ref={projectilesRef as any} className={'saveImageRoot'}>
+          <SaveImageButton
+            targetRef={projectilesRef}
+            fileName={'projectiles'}
+            enabled={groupedShots.length > 0}
+          />
+          <IterationLimitWarning hitIterationLimit={hitIterationLimit} />
           {groupedShots.length > 0 && (
             <ShotMetadata rechargeDelay={reloadTime} />
           )}
           {groupedShots.map((shot, index) => (
-            <React.Fragment key={index}>
-              {index > 0 && <StyledHr />}
-              <ProjectileTreeShotResult shot={shot} indent={false} />
-            </React.Fragment>
+            <ProjectileTreeShotResult shot={shot} indent={false} />
           ))}
-          <IterationLimitWarning hitIterationLimit={hitIterationLimit} />
         </SectionDiv>
       </ScrollWrapper>
-      <SectionHeader title={'Simulation: Actions Called'} />
+      <SectionHeader title={'Simulation: Action Call Sequence'} />
       <ScrollWrapper>
         <SectionDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>
-          {groupedShots.map((shot, index) => (
-            <React.Fragment key={index}>
-              {index > 0 && <StyledHr />}
-              <ActionCalledShotResult key={index} shot={shot} />
-            </React.Fragment>
-          ))}
           <SaveImageButton
             targetRef={actionsCalledRef}
             fileName={'actions_called'}
             enabled={groupedShots.length > 0}
           />
+          {groupedShots.map((shot, index) => (
+            <ActionCalledShotResult key={index} shot={shot} />
+          ))}
         </SectionDiv>
       </ScrollWrapper>
       {config.showActionTree && (
         <>
+          <SectionHeader title={'Simulation: Action Call Tree'} />
           <ScrollWrapper>
             <SectionDiv
               ref={actionCallTreeRef as any}
               className={'saveImageRoot'}
             >
-              {groupedShots.map((shot, index) => (
-                <React.Fragment key={index}>
-                  {index > 0 && <StyledHr />}
-                  <ActionTreeShotResult key={index} shot={shot} />
-                </React.Fragment>
-              ))}
               <SaveImageButton
                 targetRef={actionCallTreeRef}
                 fileName={'action_tree'}
                 enabled={groupedShots.length > 0}
               />
-              <SaveImageButton
-                targetRef={projectilesRef}
-                fileName={'projectiles'}
-                enabled={groupedShots.length > 0}
-              />
+              {groupedShots.map((shot, index) => (
+                <ActionTreeShotResult key={index} shot={shot} />
+              ))}
             </SectionDiv>
           </ScrollWrapper>
         </>

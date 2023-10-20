@@ -45,17 +45,29 @@ export function generateWandStateFromSearch(search: string): WandState {
   return {
     messages: log,
     wand,
-    spellIds: trimArray(
-      (params.get('s') ?? params.get('spells') ?? '')
-        .split(',')
-        .map((s) => (isKnownSpell(s) ? s : null)),
-      (s) => !s,
-    ),
-    alwaysIds: trimArray(
-      (params.get('w') ?? '')
-        .split(',')
-        .map((s) => (isKnownSpell(s) ? s : null)),
-      (s) => !s,
-    ),
+    spellIds: (() => {
+      const raw = params.get('s') ?? params.get('spells');
+      if (isNotNullOrUndefined(raw)) {
+        return trimArray(
+          decodeParamAsString(raw, '', log.push)
+            .split(',')
+            .map((s) => (isKnownSpell(s) ? s : null)),
+          (s) => !s,
+        );
+      }
+      return [];
+    })(),
+    alwaysIds: (() => {
+      const raw = params.get('w') ?? params.get('always');
+      if (isNotNullOrUndefined(raw)) {
+        return trimArray(
+          decodeParamAsString(raw, '', log.push)
+            .split(',')
+            .map((s) => (isKnownSpell(s) ? s : null)),
+          (s) => !s,
+        );
+      }
+      return [];
+    })(),
   } as WandState;
 }

@@ -11,6 +11,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
+import { ReleaseInfo } from './ReleaseInfo';
 
 const Column = styled.div`
   display: flex;
@@ -61,8 +62,8 @@ export function WandSimulator() {
           title={`Simulation${config.pauseCalculations ? ' (Paused)' : ''}`}
         />
         {!config.pauseCalculations && <ShotResultList {...config} />}
-        <div>Status: Running</div>
       </Column>
+      <ReleaseInfo />
     </Column>
   );
 }
