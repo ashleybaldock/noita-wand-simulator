@@ -10,10 +10,7 @@ export function RedoButton() {
   useHotkeys('shift+mod+z, ctrl+r', redo);
 
   return (
-    <Button
-      imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
-      onClick={() => redo()}
-    >
+    <Button imgUrl={'data/redo.png'} onClick={() => redo()}>
       Redo
     </Button>
   );

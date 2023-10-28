@@ -44,13 +44,18 @@
   --color-arrow-action-text: #dddddd;
   --color-arrow-action-highlight: #ffe29c;
 
+  --arrow-action-bdcolor: #ffbf00;
+
   --color-wand-editor-bg: #000000;
+  --color-wand-edit-cursor: #ffff66;
+  --color-wand-edit-cursor-active: #ffff66;
 
   --font-family-noita-default: 'noita', sans-serif;
   --font-family-noita-glyphs: 'glyphs', sans-serif;
 
   --zindex-tabs-hover: 90;
   --zindex-tabs-selected: 100;
+  --zindex-copy-png: 140;
   --zindex-stickyheader-behind: 200;
   --zindex-stickyheader-title: 210;
   --zindex-stickyheader-controls: 220;

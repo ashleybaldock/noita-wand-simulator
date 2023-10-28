@@ -9,13 +9,13 @@ const RecursionDiv = styled.div`
   position: absolute;
   bottom: -7px;
   left: 0;
-  width: calc(var(--sizes-spell-base) / 4);
-  height: calc(var(--sizes-spell-base) / 4);
+  width: calc(var(--bsize-spell) / 4);
+  height: calc(var(--bsize-spell) / 4);
   border: 1px solid #999;
   color: black;
   background-color: #3bb;
   font-size: 10px;
-  line-height: calc(var(--sizes-spell-base) / 3 - 2px);
+  line-height: calc(var(--bsize-spell) / 3 - 2px);
   text-align: center;
   font-family: var(--font-family-noita-default);
 `;
@@ -26,16 +26,16 @@ const IterationDiv = styled.div<{
   position: absolute;
   bottom: -7px;
   left: ${({ offset }) =>
-    offset ? `0` : `calc(var(--sizes-spell-base) / 4 + 1px)`};
+    offset ? `0` : `calc(var(--bsize-spell) / 4 + 1px)`};
 
-  width: calc(var(--sizes-spell-base) / 4);
-  height: calc(var(--sizes-spell-base) / 4);
+  width: calc(var(--bsize-spell) / 4);
+  height: calc(var(--bsize-spell) / 4);
 
   border: 1px solid #999;
   color: black;
   background-color: #a5e;
   font-size: 10px;
-  line-height: calc(var(--sizes-spell-base) / 3 - 2px);
+  line-height: calc(var(--bsize-spell) / 3 - 2px);
   text-align: center;
   font-family: var(--font-family-noita-default);
 `;

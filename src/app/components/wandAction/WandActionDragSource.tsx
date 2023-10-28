@@ -1,6 +1,7 @@
 import { useDrag } from 'react-dnd';
 
 import styled from 'styled-components/macro';
+import { ActionId } from '../../calc/actionId';
 
 const StyledDiv = styled.div<{
   isDragging: boolean;
@@ -13,9 +14,7 @@ const StyledDiv = styled.div<{
 
   ${({ isDragging }) =>
     isDragging
-      ? `
-      --parent
-    `
+      ? ``
       : `
     &&:hover > div > div {
       z-index: 1000;
@@ -24,22 +23,28 @@ const StyledDiv = styled.div<{
 `;
 
 type Props = {
-  actionId: string;
+  actionId: ActionId;
   sourceWandIndex?: number;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
-export function WandActionDragSource(props: React.PropsWithChildren<Props>) {
+export function WandActionDragSource({
+  children,
+  onClick,
+  actionId,
+  sourceWandIndex,
+}: React.PropsWithChildren<Props>) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'action',
-    item: { actionId: props.actionId, sourceWandIndex: props.sourceWandIndex },
+    item: { actionId: actionId, sourceWandIndex: sourceWandIndex },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   }));
 
   return (
-    <StyledDiv ref={drag} isDragging={isDragging}>
-      {props.children}
+    <StyledDiv ref={drag} isDragging={isDragging} onClick={onClick}>
+      {children}
     </StyledDiv>
   );
 }

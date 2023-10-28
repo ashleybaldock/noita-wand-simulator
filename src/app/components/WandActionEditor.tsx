@@ -3,7 +3,12 @@ import styled from 'styled-components/macro';
 import { Spell } from '../calc/spell';
 import { getSpellById } from '../calc/spells';
 import { useAppDispatch } from '../redux/hooks';
-import { useSpells, setSpellAtIndex } from '../redux/wandSlice';
+import {
+  useSpells,
+  setSpellAtIndex,
+  useCursor,
+  moveCursor,
+} from '../redux/wandSlice';
 import { isKnownSpell } from '../types';
 import {
   DeckIndexAnnotation,
@@ -15,6 +20,7 @@ import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
 import { WandAction } from './wandAction/WandAction';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import { WandActionBorder } from './wandAction/WandActionBorder';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 const StyledList = styled.ul`
   --grid-layout-gap: 8;
@@ -24,7 +30,7 @@ const StyledList = styled.ul`
 
   margin: 0;
   padding: 0;
-  padding: 12px 16px;
+  padding: 0 16px;
   background-color: var(--color-wand-editor-bg);
 
   @media screen and (max-width: 500px) {
@@ -57,11 +63,12 @@ const StyledListItem = styled.li`
 type Props = {
   spellAction?: Spell;
   wandIndex: number;
+  cursorIndex: number;
   deckIndex?: number;
 };
 
 function ActionComponent(props: Props) {
-  const { spellAction, wandIndex, deckIndex } = props;
+  const { spellAction, wandIndex, deckIndex, cursorIndex } = props;
   const dispatch = useAppDispatch();
   const [mouseOver, setMouseOver] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -70,10 +77,18 @@ function ActionComponent(props: Props) {
     dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
   };
 
+  const cursor =
+    cursorIndex === wandIndex
+      ? 'before'
+      : cursorIndex === wandIndex + 1
+      ? 'after'
+      : 'none';
+
   return (
     <WandActionDropTarget
       wandIndex={wandIndex}
       onDragChange={(dragOver: boolean) => setDragOver(dragOver)}
+      cursor={cursor}
     >
       <WandActionBorder
         highlight={dragOver}
@@ -107,13 +122,18 @@ function ActionComponent(props: Props) {
 }
 
 export function WandActionEditor() {
+  const dispatch = useAppDispatch();
+
   const spellIds = useSpells();
-  console.log(spellIds);
+  const { position: cursorPosition } = useCursor();
+
+  useHotkeys('w', (_, kEv) => {
+    dispatch(moveCursor({ moveBy: -10 }));
+  });
 
   const spellActions = spellIds.map((spellId) =>
     isKnownSpell(spellId) ? getSpellById(spellId) : undefined,
   );
-  console.log(spellActions);
   let deckIndex = 0;
 
   return (
@@ -124,6 +144,7 @@ export function WandActionEditor() {
             spellAction={spellAction}
             wandIndex={wandIndex}
             deckIndex={spellAction !== undefined ? deckIndex++ : undefined}
+            cursorIndex={cursorPosition}
           />
         </StyledListItem>
       ))}

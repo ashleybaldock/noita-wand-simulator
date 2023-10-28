@@ -31,7 +31,6 @@ const StyledButton = styled.button<{
   shape: ButtonShape;
 }>`
   color: var(--color-button);
-  border: 1px solid var(--color-button-border);
   background-color: var(--color-button-background);
   border: 0.16em solid var(--color-button-border);
   font-family: var(--font-family-noita-default);
@@ -47,9 +46,10 @@ const StyledButton = styled.button<{
     imgUrl.length > 0 ? `background-image: url('/${imgUrl}')` : ''};
   ${({ imgDataUrl }) =>
     imgDataUrl.length > 0 ? `background-image: url("${imgDataUrl}")` : ''};
+  padding-left: 2.2em;
   background-position: 0.4em 50%;
   background-origin: padding-box;
-  background-size: 1.6em;
+  background-size: 1.4em;
   background-repeat: no-repeat;
   image-rendering: pixelated;
 
@@ -94,6 +94,7 @@ type Props = {
   imgDataUrl?: string;
   minimal?: boolean;
   shape?: ButtonShape;
+  bgScale?: 1;
 };
 
 const noop = () => {};
@@ -107,6 +108,7 @@ export const Button = ({
   imgDataUrl = '',
   minimal = false,
   shape = 'pill',
+  bgScale = 1,
   children,
 }: React.PropsWithChildren<Props>) => {
   return (

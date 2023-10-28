@@ -165,7 +165,6 @@ export function Tabs(props: React.PropsWithChildren<Props>) {
     if (!Number.isNaN(tabIdx) && tabIdx > 0 && tabIdx <= tabs.length) {
       setSelectedTabIndex(tabIdx - 1);
     }
-    console.log(`tabs:${kEv.keys?.join()}`);
   });
 
   if (tabs.length === 0) {

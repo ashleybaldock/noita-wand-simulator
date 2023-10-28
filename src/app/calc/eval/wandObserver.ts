@@ -1,5 +1,4 @@
 import { Random as RandomExt } from '../lua/random';
-import { Action } from '../action';
 import { GunActionState } from '../actionState';
 import { Spell } from '../spell';
 

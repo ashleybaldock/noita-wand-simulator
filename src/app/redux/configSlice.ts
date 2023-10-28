@@ -6,6 +6,9 @@ import { loadState } from '../localStorage';
 // Define a type for the slice state
 export interface ConfigState {
   config: {
+    debug: {
+      dragHint: boolean;
+    };
     condenseShots: boolean;
     unlimitedSpells: boolean;
     infiniteSpells: boolean;
@@ -47,6 +50,9 @@ export interface ConfigState {
 // Define the initial state using that type
 export const initialState: ConfigState = {
   config: {
+    debug: {
+      dragHint: false,
+    },
     condenseShots: true,
     unlimitedSpells: true,
     infiniteSpells: true,

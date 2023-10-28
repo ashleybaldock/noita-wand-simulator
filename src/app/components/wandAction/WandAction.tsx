@@ -31,10 +31,13 @@ export const WandAction = styled(_WandAction)`
   --transition-out: var(--transition-hover-out);
   --transition-props: transform;
 
+  --size-spell: var(--bsize-spell, 1em);
+
   position: relative;
-  min-width: var(--sizes-spell, var(--sizes-spell-base, 1em));
-  width: var(--sizes-spell, var(--sizes-spell-base, 1em));
-  height: var(--sizes-spell, var(--sizes-spell-base, 1em));
+  min-width: var(--size-spell);
+  width: var(--size-spell);
+  height: var(--size-spell);
+
   background-size: cover;
   font-family: monospace;
   font-weight: bold;

@@ -27,13 +27,13 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
     presets: [
       {
         name: 'Wand Refresh',
-        wand: { ...defaultWand, deck_capacity: 5 },
+        wand: { ...defaultWand },
         spells: ['BURST_2', 'BLACK_HOLE', 'RESET', 'LARPA_CHAOS', 'NUKE'],
         always: [],
       },
       {
         name: 'Gamma',
-        wand: { ...defaultWand, deck_capacity: 8 },
+        wand: { ...defaultWand },
         spells: [
           'MANA_REDUCE',
           'MANA_REDUCE',
@@ -48,7 +48,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Mu 1',
-        wand: { ...defaultWand, deck_capacity: 4 },
+        wand: { ...defaultWand },
         spells: [
           'EXPLOSIVE_PROJECTILE',
           'EXPLOSIVE_PROJECTILE',
@@ -59,7 +59,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Mu 2',
-        wand: { ...defaultWand, deck_capacity: 14 },
+        wand: { ...defaultWand },
         spells: [
           'MANA_REDUCE',
           'BURST_2',
@@ -80,7 +80,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Alpha',
-        wand: { ...defaultWand, deck_capacity: 11 },
+        wand: { ...defaultWand },
         spells: [
           'ROCKET_TIER_3',
           'GAMMA',
@@ -98,7 +98,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Tau',
-        wand: { ...defaultWand, deck_capacity: 14 },
+        wand: { ...defaultWand },
         spells: [
           'BURST_2',
           'LONG_DISTANCE_CAST',
@@ -124,7 +124,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
     presets: [
       {
         name: 'Spell Evaluation',
-        wand: { ...defaultWand, deck_capacity: 9 },
+        wand: { ...defaultWand },
         spells: [
           'DAMAGE',
           'BURST_2',
@@ -140,7 +140,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Wrapping 1',
-        wand: { ...defaultWand, deck_capacity: 7 },
+        wand: { ...defaultWand },
         spells: [
           'BURST_2',
           'LIGHT_BULLET',
@@ -152,7 +152,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Wrapping 2',
-        wand: { ...defaultWand, deck_capacity: 7 },
+        wand: { ...defaultWand },
         spells: [
           'LIGHT_BULLET',
           'LIGHT_BULLET',
@@ -166,7 +166,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Wrapping 3',
-        wand: { ...defaultWand, deck_capacity: 8 },
+        wand: { ...defaultWand },
         spells: [
           'LIGHT_BULLET',
           'LIGHT_BULLET',
@@ -181,7 +181,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Triggers',
-        wand: { ...defaultWand, deck_capacity: 8 },
+        wand: { ...defaultWand },
         spells: [
           'HOMING',
           'PIERCING_SHOT',
@@ -201,19 +201,19 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
     presets: [
       {
         name: 'Simple Divides',
-        wand: { ...defaultWand, deck_capacity: 2 },
+        wand: { ...defaultWand },
         spells: ['DIVIDE_10', 'LIGHT_BULLET'],
         always: [],
       },
       {
         name: 'Dividing a Modifier',
-        wand: { ...defaultWand, deck_capacity: 3 },
+        wand: { ...defaultWand },
         spells: ['DIVIDE_10', 'DAMAGE', 'LIGHT_BULLET'],
         always: [],
       },
       {
         name: 'Discard Displacement',
-        wand: { ...defaultWand, deck_capacity: 6 },
+        wand: { ...defaultWand },
         spells: [
           'BURST_2',
           'DIVIDE_2',
@@ -226,19 +226,19 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Mechanics of Multiple Divides',
-        wand: { ...defaultWand, deck_capacity: 3 },
+        wand: { ...defaultWand },
         spells: ['DIVIDE_10', 'DIVIDE_4', 'LIGHT_BULLET'],
         always: [],
       },
       {
         name: 'Multiple Divides on a Modifier',
-        wand: { ...defaultWand, deck_capacity: 4 },
+        wand: { ...defaultWand },
         spells: ['DIVIDE_10', 'DIVIDE_4', 'DAMAGE', 'LIGHT_BULLET'],
         always: [],
       },
       {
         name: 'Iteration limit',
-        wand: { ...defaultWand, deck_capacity: 6 },
+        wand: { ...defaultWand },
         spells: [
           'BURST_2',
           'DIVIDE_10',
@@ -251,7 +251,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Wrapping Strangeness',
-        wand: { ...defaultWand, deck_capacity: 6 },
+        wand: { ...defaultWand },
         spells: [
           'BURST_4',
           'DIVIDE_10',
@@ -269,13 +269,13 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
     presets: [
       {
         name: 'Tau Example',
-        wand: { ...defaultWand, deck_capacity: 3 },
+        wand: { ...defaultWand },
         spells: ['TAU', 'TAU', 'LIGHT_BULLET'],
         always: [],
       },
       {
         name: 'Omega example',
-        wand: { ...defaultWand, deck_capacity: 5 },
+        wand: { ...defaultWand },
         spells: ['GAMMA', 'RESET', 'LIGHT_BULLET', 'OMEGA', 'OMEGA'],
         always: [],
       },
@@ -286,7 +286,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
     presets: [
       {
         name: 'Spells to Power',
-        wand: { ...defaultWand, deck_capacity: 19 },
+        wand: { ...defaultWand },
         spells: [
           'BURST_3',
           'DIVIDE_10',
@@ -312,7 +312,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Crit',
-        wand: { ...defaultWand, deck_capacity: 26 },
+        wand: { ...defaultWand },
         spells: [
           'BURST_3',
           'DIVIDE_10',
@@ -345,7 +345,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Velocity Damage 1',
-        wand: { ...defaultWand, deck_capacity: 7 },
+        wand: { ...defaultWand },
         spells: [
           'DIVIDE_10',
           'ACCELERATING_SHOT',
@@ -359,7 +359,7 @@ export const defaultPresets: Array<Preset | PresetGroup> = [
       },
       {
         name: 'Velocity Damage 2',
-        wand: { ...defaultWand, deck_capacity: 26 },
+        wand: { ...defaultWand },
         spells: [
           'BURST_3',
           'DIVIDE_10',

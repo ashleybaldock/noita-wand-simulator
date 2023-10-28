@@ -66,11 +66,16 @@ export const v2WandStateMapping: v2WandStateRecord = {
 export const v2SpellsMapping = 's' as const;
 export const v2AlwaysMapping = 'w' as const;
 
+export type Cursor = {
+  position: number;
+};
+
 export type WandState = {
   wand: Wand;
   spellIds: SpellId[];
   alwaysIds: SpellId[];
   messages: string[];
+  cursor: Cursor;
   fromQuery?: WandQueryVersion;
 };
 
@@ -87,7 +92,7 @@ export type PresetGroup = {
 };
 
 export type WandActionDragItem = {
-  actionId?: string;
+  actionId: ActionId;
   sourceWandIndex?: number;
 };
 

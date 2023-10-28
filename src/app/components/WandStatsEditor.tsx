@@ -129,11 +129,14 @@ const StyledList = styled.div`
   grid-auto-rows: 1.3em;
   grid-template-columns: repeat(1, 1fr);
   width: min-content;
+  max-height: calc(var(--sizes-spelledit-spell-total) * 4);
+  height: min-content;
 
   @media screen and (max-width: 900px) {
     display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     min-width: 30vw;
   }
 

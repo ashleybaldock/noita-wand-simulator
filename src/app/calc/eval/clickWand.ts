@@ -180,7 +180,6 @@ export function clickWand(
         currentShot.castState = Object.assign({}, args[0]);
         break;
       case 'OnActionCalled': {
-        console.log(args);
         const [source, spell /*, c */, , recursion, iteration] = args;
         const { id, deck_index, recursive } = spell;
         lastCalledAction = {

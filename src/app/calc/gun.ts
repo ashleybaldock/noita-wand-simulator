@@ -416,11 +416,6 @@ export function draw_actions(
 }
 
 export function add_projectile(entity_filename: string) {
-  // if (reflecting) {
-  //   Reflection_RegisterProjectile(entity_filename);
-  //   return;
-  // }
-
   BeginProjectile(entity_filename);
   EndProjectile();
 }
@@ -430,11 +425,6 @@ export function add_projectile_trigger_timer(
   delay_frames: number,
   action_draw_count: number,
 ) {
-  // if (reflecting) {
-  //   Reflection_RegisterProjectile(entity_filename);
-  //   return;
-  // }
-
   BeginProjectile(entity_filename);
   BeginTriggerTimer(delay_frames);
   draw_shot(create_shot(action_draw_count), true);
@@ -446,11 +436,6 @@ export function add_projectile_trigger_hit_world(
   entity_filename: string,
   action_draw_count: number,
 ) {
-  // if (reflecting) {
-  //   Reflection_RegisterProjectile(entity_filename);
-  //   return;
-  // }
-
   BeginProjectile(entity_filename);
   BeginTriggerHitWorld();
   draw_shot(create_shot(action_draw_count), true);
@@ -462,11 +447,6 @@ export function add_projectile_trigger_death(
   entity_filename: string,
   action_draw_count: number,
 ) {
-  // if (reflecting) {
-  //   Reflection_RegisterProjectile(entity_filename);
-  //   return;
-  // }
-
   BeginProjectile(entity_filename);
   BeginTriggerDeath();
   draw_shot(create_shot(action_draw_count), true);

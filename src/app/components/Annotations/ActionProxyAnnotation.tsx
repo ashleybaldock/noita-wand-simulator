@@ -10,8 +10,8 @@ export const ProxyDiv = styled.div<{
   position: absolute;
   top: 0;
   left: 0;
-  width: calc(var(--sizes-spell-base) / 3);
-  height: calc(var(--sizes-spell-base) / 3);
+  width: calc(var(--size-spell) / 3);
+  height: calc(var(--size-spell) / 3);
   border: 1px solid #999;
   background-image: url(/${({ imgUrl }) => imgUrl});
   background-size: cover;

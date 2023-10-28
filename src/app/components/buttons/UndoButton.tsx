@@ -10,10 +10,7 @@ export function UndoButton() {
   useHotkeys('mod+z, u', undo);
 
   return (
-    <Button
-      imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
-      onClick={() => undo()}
-    >
+    <Button imgUrl={'data/undo.png'} onClick={() => undo()}>
       Undo
     </Button>
   );

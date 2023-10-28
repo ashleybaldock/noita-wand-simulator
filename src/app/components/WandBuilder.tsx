@@ -48,11 +48,12 @@ const CopySpells = styled.div`
   justify-content: end;
   align-items: end;
   font-family: var(--font-family-noita-default);
+  z-index: var(--zindex-copy-png);
 `;
 
 const WandActionEditorWrapper = styled.div`
   position: relative;
-  height: fit-content;
+  height: auto;
   flex: 1 1 auto;
 `;
 
