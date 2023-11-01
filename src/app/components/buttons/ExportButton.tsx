@@ -1,11 +1,10 @@
-import { useAppDispatch } from '../../redux/hooks';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Button, Modal } from '../generic';
+import { ExportAs } from '../Export';
 import { useState } from 'react';
 
 export function ExportButton() {
   const [modalVisible, setModalVisible] = useState(false);
-  const dispatch = useAppDispatch();
 
   const handleClose = () => {
     setModalVisible(false);
@@ -13,6 +12,7 @@ export function ExportButton() {
 
   const openExportDialog = () => {
     console.log('todo:exportAction');
+    setModalVisible(!modalVisible);
   };
 
   useHotkeys('e', openExportDialog);
@@ -25,11 +25,9 @@ export function ExportButton() {
       >
         Export
       </Button>
-      <Modal
-        visible={modalVisible}
-        onClose={handleClose}
-        title="Configuration"
-      ></Modal>
+      <Modal visible={modalVisible} onClose={handleClose} title="Export as...">
+        <ExportAs />
+      </Modal>
     </>
   );
 }

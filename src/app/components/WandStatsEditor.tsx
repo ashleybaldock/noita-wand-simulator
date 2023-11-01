@@ -4,7 +4,7 @@ import { Wand } from '../types';
 import styled from 'styled-components/macro';
 import { AppDispatch } from '../redux/store';
 import { EditableInteger } from './generic';
-import { round, TypedProperties } from '../util/util';
+import { round, toFrames, toSeconds, TypedProperties } from '../util/util';
 
 const CheckboxField = styled.input`
   margin: 1px;
@@ -74,9 +74,9 @@ const fields = [
     render: renderNumberField({
       field: 'cast_delay',
       step: 0.01,
-      formatValue: (v) => `${round(Number(v) / 60, 2)} s`,
-      convertRawValue: (v) => round(v / 60, 2),
-      convertDisplayValue: (v) => round(v * 60, 2),
+      formatValue: (v) => `${toSeconds(v)} s`,
+      convertRawValue: toSeconds,
+      convertDisplayValue: toFrames,
     }),
   },
   {
@@ -85,9 +85,9 @@ const fields = [
     render: renderNumberField({
       field: 'reload_time',
       step: 0.01,
-      formatValue: (v) => `${round(Number(v) / 60, 2)} s`,
-      convertRawValue: (v) => round(v / 60, 2),
-      convertDisplayValue: (v) => round(v * 60, 2),
+      formatValue: (v) => `${toSeconds(v)} s`,
+      convertRawValue: toSeconds,
+      convertDisplayValue: toFrames,
     }),
   },
   {

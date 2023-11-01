@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
 import { Cursor, SpellEditMode, SpellId, Wand, WandState } from '../types';
@@ -6,6 +6,7 @@ import { defaultWand } from './Wand/presets';
 import { useSliceWrapper } from './useSlice';
 import { generateWandStateFromSearch } from './Wand/fromSearch';
 import { MAX_ALWAYS } from '../util';
+import { generateWikiWandV2 } from './Wand/toWiki';
 
 export function fixedLengthCopy<T>(
   arr: readonly T[],
@@ -15,81 +16,6 @@ export function fixedLengthCopy<T>(
     ? [...arr, ...Array(size - arr.length).fill(null)]
     : arr.slice(0, size);
 }
-
-// /* Produces a copy of the input array with the requested change */
-// const moveSpell = (
-//   spellIds: readonly SpellId[],
-//   fromIndex: number | null,
-//   toIndex: number | null,
-//   mode: SpellEditMode,
-// ): SpellId[] => {
-//   const indexToSpell = (
-//     spellIds: readonly SpellId[],
-//     s: SpellId | number,
-//   ): SpellId => {
-//     if (typeof s === 'number') {
-//       return spellIds[s];
-//     }
-//     return s;
-//   };
-
-//   // const source = indexToSpell(spellIds, from);
-//   // const destination = indexToSpellindexToSpell(spellIds, to);
-
-//   if (
-//     fromIndex === toIndex ||
-//     (fromIndex !== null && (fromIndex < 0 || fromIndex >= spellIds.length)) ||
-//     (toIndex !== null && (toIndex < 0 || toIndex >= spellIds.length))
-//   ) {
-//     return fixedLengthCopy(spellIds, spellIds.length);
-//   }
-//   if (mode === 'swap') {
-//     const result = fixedLengthCopy(spellIds);
-//     if (fromIndex !== null && toIndex !== null) {
-//       result[toIndex] = spellIds[fromIndex];
-//       result[fromIndex] = spellIds[toIndex];
-//     }
-//     return result;
-//   }
-//   if (mode === 'overwrite') {
-//     const result = fixedLengthCopy(spellIds);
-//     if (fromIndex !== null) {
-//       result[fromIndex] = null;
-//     }
-//     if (toIndex !== null) {
-//       if (fromIndex !== null) {
-//         result[toIndex] = spellIds[fromIndex];
-//       } else {
-//         result[toIndex] = null;
-//       }
-//     }
-//     return result;
-//   }
-//   if (mode === 'before') {
-//     const from = spellIds[fromIndex];
-//     const result = fixedLengthCopy(
-//       [
-//         ...spellIds.slice(0, fromIndex),
-//         ...spellIds.slice(fromIndex + 1, toIndex),
-//         spellIds[fromIndex],
-//         ...spellIds.slice(toIndex),
-//       ],
-//       spellIds.length,
-//     );
-//     if (fromIndex < toIndex) {
-//     } else {
-//       const result = fixedLengthCopy(
-//         [
-//           ...spellIds.slice(0, toIndex),
-//           spellIds[fromIndex],
-//           ...spellIds.slice(toIndex, fromIndex),
-//           ...spellIds.slice(fromIndex + 1),
-//         ],
-//         spellIds.length,
-//       );
-//     }
-//   }
-// };
 
 const {
   wand,
@@ -152,11 +78,6 @@ export const wandSlice = createSlice({
         state.wand.deck_capacity,
       );
     },
-    insertSpellBeforeCursor: (state, { payload }): void =>
-      wandSlice.caseReducers.insertSpellBefore(state, {
-        ...payload,
-        index: state.cursor.position + 1,
-      }),
     insertSpellAfter: (
       state,
       {
@@ -172,10 +93,32 @@ export const wandSlice = createSlice({
         state.wand.deck_capacity,
       );
     },
-    insertSpellAfterCursor: (state, { payload }): void =>
-      wandSlice.caseReducers.insertSpellAfter(state, {
-        ...payload,
-        index: state.cursor.position,
+    /* Cursor shifts to the right, along with the rest of the spells on the wand
+     * Permits multiple sequential insertions */
+    insertSpellBeforeCursor: (
+      state,
+      { payload: { spell } }: PayloadAction<{ spell: SpellId }>,
+    ): void => {
+      wandSlice.caseReducers.insertSpellBefore(state, {
+        payload: {
+          spell,
+          index: state.cursor.position,
+        },
+        type: '',
+      });
+      state.cursor.position += 1;
+    },
+    /* Cursor appears to stay in same place, spells shift to the right */
+    insertSpellAfterCursor: (
+      state,
+      { payload: { spell } }: PayloadAction<{ spell: SpellId }>,
+    ): void =>
+      wandSlice.caseReducers.insertSpellBefore(state, {
+        payload: {
+          spell,
+          index: state.cursor.position,
+        },
+        type: '',
       }),
     setSpellAtIndex: (
       state,
@@ -287,10 +230,13 @@ const selectSpells = (state: RootState): SpellId[] =>
 const selectMessages = (state: RootState): string[] =>
   state.wand.present.messages;
 const selectCursor = (state: RootState): Cursor => state.wand.present.cursor;
+const selectWikiExport = createSelector(selectWandState, generateWikiWandV2);
 
 export const wandReducer = wandSlice.reducer;
 
 export const useWandState = () => useSelector(selectWandState);
+
+export const useWikiExport = () => useSelector(selectWikiExport);
 
 export const useWand = () => useSelector(selectWand);
 export const useSpells = () => useSelector(selectSpells);

@@ -44,24 +44,21 @@ const v2ParamNames = [
   'w',
 ] as const;
 export type V2ParamName = typeof v2ParamNames[number];
-export type V2ParamInfo = {
-  name: V2ParamName;
-  defaultValue: WandParamValue;
-};
-export type v2WandStateRecord = Record<keyof Wand, V2ParamInfo>;
-// [ v1param, v2param, defaultValue ]
+export type v2WandStateRecord = Record<keyof Wand, V2ParamName>;
+
+// [ v1param, v2param ]
 export const v2WandStateMapping: v2WandStateRecord = {
-  cast_delay: { name: 'd', defaultValue: 0.5 },
-  mana_max: { name: 'm', defaultValue: 20000 },
-  mana_charge_speed: { name: 'c', defaultValue: 20000 },
-  spread: { name: 'q', defaultValue: -2 },
-  name: { name: 'n', defaultValue: '' },
-  pic: { name: 'p', defaultValue: '' },
-  speed: { name: 'v', defaultValue: 1.2 },
-  actions_per_round: { name: 'a', defaultValue: 1 },
-  shuffle_deck_when_empty: { name: 'x', defaultValue: false },
-  reload_time: { name: 'r', defaultValue: 1.0 },
-  deck_capacity: { name: 'l', defaultValue: 12 },
+  cast_delay: 'd',
+  mana_max: 'm',
+  mana_charge_speed: 'c',
+  spread: 'q',
+  name: 'n',
+  pic: 'p',
+  speed: 'v',
+  actions_per_round: 'a',
+  shuffle_deck_when_empty: 'x',
+  reload_time: 'r',
+  deck_capacity: 'l',
 } as const;
 export const v2SpellsMapping = 's' as const;
 export const v2AlwaysMapping = 'w' as const;

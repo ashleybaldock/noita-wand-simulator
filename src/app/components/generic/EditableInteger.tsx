@@ -21,16 +21,16 @@ const EditingValue = styled.input`
   font-size: 16px;
   color: #fff;
   text-align: left;
-
-  &:focus,
-  &:focus-visible {
-    border: none;
-    outline: 0px solid #dea71bcf;
-    background-color: #000;
-    outline-style: none;
-    border-style: none;
-  }
 `;
+// &:focus,
+// &:focus-visible {
+//   border: none;
+//   outline: 0px solid #dea71bcf;
+//   background-color: #000;
+//   outline-style: none;
+//   border-style: none;
+// }
+// `;
 
 type EditableIntegerProps = {
   value: number;

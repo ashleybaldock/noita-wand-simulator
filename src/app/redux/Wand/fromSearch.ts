@@ -21,8 +21,7 @@ export function generateWandStateFromSearch(search: string): WandState {
   const wand = { ...defaultWand };
 
   objectEntries(wand).forEach(([v1param, defaultValue]) => {
-    const raw =
-      params.get(v2WandStateMapping[v1param].name) ?? params.get(v1param);
+    const raw = params.get(v2WandStateMapping[v1param]) ?? params.get(v1param);
     if (isNotNullOrUndefined(raw)) {
       if (isString(defaultValue)) {
         Object.assign(wand, {

@@ -21,7 +21,7 @@ function generateSearchFromWandStateV2({
   alwaysIds,
 }: Readonly<WandState>) {
   const params = new URLSearchParams(
-    objectEntries(v2WandStateMapping).map(([v1param, { name: v2param }]) => [
+    objectEntries(v2WandStateMapping).map(([v1param, v2param]) => [
       v2param,
       encodeQueryParam(wand[v1param]),
     ]),

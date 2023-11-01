@@ -131,10 +131,16 @@ export const numSign = (v: any, round?: number) => {
   return (v < 0 ? '' : '+') + v;
 };
 
-export const round = (v: any, position: number) =>
+export const round = (v: number, position: number) =>
   Math.round(Number(v) * Math.pow(10, position)) / Math.pow(10, position);
 
 export const sign = (v: number) => (v < 0 ? '' : '+') + v;
+
+export const toFrames = (durationInSeconds: number, fps: number = 60) =>
+  round(durationInSeconds * fps, 2);
+
+export const toSeconds = (durationInFrames: number, fps: number = 60) =>
+  round(durationInFrames / fps, 2);
 
 export function forceDisableCanvasSmoothing() {
   // https://stackoverflow.com/a/22018649

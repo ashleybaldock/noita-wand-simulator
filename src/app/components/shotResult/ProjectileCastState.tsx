@@ -86,7 +86,7 @@ const fields: FieldDescription[] = [
   {
     field: 'speed_multiplier',
     displayName: 'Speed',
-    render: (v) => `${round(v, 5)}x`,
+    render: (v) => `${round(Number(v), 5)}x`,
   },
   {
     field: 'child_speed_multiplier',

@@ -26,12 +26,6 @@ const SectionDiv = styled.div`
   width: fit-content;
 `;
 
-const StyledHr = styled.hr`
-  width: 98%;
-  border-color: #666;
-  margin: 2px 0;
-`;
-
 type Props = {
   pauseCalculations: boolean;
   condenseShots: boolean;

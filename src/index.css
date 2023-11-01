@@ -53,14 +53,21 @@
   --font-family-noita-default: 'noita', sans-serif;
   --font-family-noita-glyphs: 'glyphs', sans-serif;
 
+  --zindex-deckidx-note: 50;
+
   --zindex-tabs-hover: 90;
   --zindex-tabs-selected: 100;
   --zindex-copy-png: 140;
-  --zindex-stickyheader-behind: 200;
-  --zindex-stickyheader-title: 210;
-  --zindex-stickyheader-controls: 220;
-  --zindex-modal-window: 1000;
+
+  --zindex-keyhint: 300;
+
+  --zindex-stickyheader-behind: 400;
+  --zindex-stickyheader-title: 410;
+  --zindex-stickyheader-controls: 420;
+
   --zindex-devinfo: 999;
+
+  --zindex-modal-window: 1000;
 
   --anim-basic-in: 20ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   --transition-hover-in: 80ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;

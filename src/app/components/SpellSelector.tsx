@@ -102,15 +102,12 @@ const WandActionSelect = ({
   const dispatch = useAppDispatch();
 
   const dragSourceOnClick = (clickEvent: React.MouseEvent<HTMLDivElement>) => {
-    console.log('click');
+    clickEvent.preventDefault();
+
     if (clickEvent.shiftKey) {
-      clickEvent.preventDefault();
-      console.log('shiftclick');
-      // shift to replace? spell after cursor
-      dispatch(insertSpellAfterCursor({ payload: { spell: id } }));
+      dispatch(insertSpellAfterCursor({ spell: id }));
     } else {
-      clickEvent.preventDefault();
-      dispatch(insertSpellBeforeCursor({ payload: { spell: id } }));
+      dispatch(insertSpellBeforeCursor({ spell: id }));
     }
   };
   return (

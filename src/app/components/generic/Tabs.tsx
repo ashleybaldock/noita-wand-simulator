@@ -27,6 +27,7 @@ const TabTitlesDiv = styled.div`
 const TitleDiv = styled.div<{
   selected: boolean;
 }>`
+  position: relative;
   font-size: 14px;
 
   display: flex;
@@ -89,6 +90,23 @@ const TitleDiv = styled.div<{
       color: var(--color-tab-border-inactive-hover);
     }
   `}
+`;
+
+const TabKeyHint = styled.div`
+  z-index: var(--zindex-keyhint);
+  position: absolute;
+  top: -2px;
+  right: 2px;
+  font-size: 16px;
+  border: 0.12em dotted var(--arrow-action-bdcolor);
+  border-radius: 50%;
+  width: 1.4em;
+  height: 1.4em;
+  text-align: center;
+  line-height: 1.6em;
+  background-color: black;
+  font-weight: 300;
+  color: var(--arrow-action-bdcolor);
 `;
 
 const TabsWandAction = styled(WandAction)`
@@ -189,6 +207,7 @@ export function Tabs(props: React.PropsWithChildren<Props>) {
                 keyHint={`Shortcut: ${index}`}
               />
             ))}
+            <TabKeyHint>{index + 1}</TabKeyHint>
           </TitleDiv>
         ))}
       </TabTitlesDiv>

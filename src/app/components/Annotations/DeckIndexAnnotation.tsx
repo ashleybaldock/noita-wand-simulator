@@ -6,6 +6,7 @@ const IndexDiv = styled.div`
   position: absolute;
   bottom: -4px;
   right: -4px;
+  z-index: var(--zindex-deckidx-note);
   color: rgb(255, 255, 255);
   font-size: 14px;
   font-family: var(--font-family-noita-default);
