@@ -55,13 +55,13 @@
   --font-family-noita-default: 'noita', sans-serif;
   --font-family-noita-glyphs: 'glyphs', sans-serif;
 
-  --zindex-deckidx-note: 50;
-
   --zindex-insert-after: 58;
   --zindex-insert-before: 60;
   --zindex-cursor-select-from: 65;
   --zindex-cursor-select-to: 68;
   --zindex-cursor-current: 70;
+
+  --zindex-deckidx-note: 80;
 
   --zindex-tabs-hover: 90;
   --zindex-tabs-selected: 100;

@@ -20,7 +20,10 @@ export const GlobalStyle = createGlobalStyle<{ keyHints: boolean }>`
     --bsize-spell-border-width: calc(var(--bsize-spell) * var(--bxsize-spell-border));
 
     --sizes-spelledit-spell-total: calc(var(--bsize-spell) + (var(--bsize-spell-border-width) * 2));
-    --sizes-spelledit-grid-layout-gap: 8;
+    --sizes-spelledit-grid-layout-gap: 8px;
+
+    --sizes-before-droptarget-width: 30px;
+    --sizes-after-droptarget-width: 30px;
 
     ${({ keyHints }) =>
       keyHints ? '--display-keyhints: none;' : '--display-keyhints: block;'}

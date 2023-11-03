@@ -26,10 +26,9 @@ import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import { WandActionBorder } from './wandAction/WandActionBorder';
 
 const StyledList = styled.ul`
-  --grid-layout-gap: 8;
+  --grid-layout-gap: var(--sizes-spelledit-grid-layout-gap, 8px);
   --grid-max-column-count: 8;
-  --grid-item-width: 88;
-  --unit-dim: 0.04em;
+  --grid-item-width: var(--sizes-spelledit-spell-total, 54px);
 
   margin: 0;
   padding: 0;
@@ -41,18 +40,13 @@ const StyledList = styled.ul`
   }
 
   --gap-count: calc(var(--grid-max-column-count) - 1);
-  --total-gap-width: calc(
-    var(--gap-count) * var(--grid-layout-gap) * var(--unit-dim, 1px)
-  );
+  --total-gap-width: calc(var(--grid-layout-gap) * var(--gap-count));
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
-    minmax(
-      calc(var(--grid-item-width) * var(--unit-dim, 1px)),
-      calc(var(--grid-item-width) * var(--unit-dim, 1px))
-    )
+    minmax(var(--grid-item-width), var(--grid-item-width))
   );
-  grid-gap: calc(var(--grid-layout-gap) * var(--unit-dim, 1px));
+  grid-gap: var(--grid-layout-gap);
   justify-content: center;
   align-items: center;
 `;

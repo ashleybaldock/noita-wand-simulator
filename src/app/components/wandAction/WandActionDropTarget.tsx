@@ -28,14 +28,24 @@ const DropTargetArea = styled.div<{ enabled: boolean; hint?: boolean }>`
 const DropTargetBefore = styled(DropTargetArea)`
   background-color: rgba(255, 255, 0, 0.3);
   top: 0;
-  width: 55%;
-  left: -35%;
+  width: var(--sizes-before-droptarget-width);
+  left: calc(
+    (
+        var(--sizes-spelledit-grid-layout-gap) / 2 +
+          var(--sizes-after-droptarget-width) / 2
+      ) * -1
+  );
 `;
 const DropTargetAfter = styled(DropTargetArea)`
   background-color: rgba(255, 0, 0, 0.3);
   top: 0;
-  width: 55%;
-  right: -30%;
+  width: var(--sizes-after-droptarget-width);
+  right: calc(
+    (
+        var(--sizes-spelledit-grid-layout-gap) / 2 +
+          var(--sizes-after-droptarget-width) / 2
+      ) * -1
+  );
 `;
 
 const InsertMarker = styled.div<{
@@ -46,65 +56,70 @@ const InsertMarker = styled.div<{
   pointer-events: ${({ enabled }) => (enabled ? 'auto' : 'none')};
 
   position: absolute;
-  height: 120%;
-  width: 3px;
-  top: -5px;
+  height: 58px;
+  width: 12px;
+  top: -3px;
   left: -10px;
 
   border: none;
-  padding: 0 5px;
+  padding: 0;
 
-  &::before {
-    position: absolute;
-    content: '';
-    height: 100%;
-    display: block;
-    border-left-color: transparent;
-    border-left-width: 3px;
-    border-left-style: dotted;
+  image-rendering: pixelated;
 
-    ${({ isCursor }) =>
-      isCursor ? 'border-left-color: var(--color-wand-edit-cursor);' : ''}
-    ${({ active }) =>
-      active ? 'border-left-color: var(--color-wand-edit-cursor-active);' : ''}
+  background-image: url('/data/inventory/cursor-top.png'),
+    url('/data/inventory/cursor-mid.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: top center, center center;
+
+  filter: hue-rotate(190deg) opacity(0.1);
+
+  ${({ active }) =>
+    active
+      ? `
+      top: -4px;
+      cursor: drop;
+      filter: hue-rotate(240deg) opacity(1);
+  `
+      : ''}
   }
 
   &:hover {
+    top: -4px;
     cursor: text;
-  }
-  &:hover::before {
-    border-left-color: red;
+    filter: hue-rotate(190deg) opacity(1);
   }
 `;
 
 const InsertBeforeMarker = styled(InsertMarker)`
   z-index: var(--zindex-insert-before);
-
-  &:hover::before {
-    border-left-color: red;
-  }
+  background-color: rgba(255, 0, 0, 0.1);
 `;
 
 const InsertAfterMarker = styled(InsertMarker)`
   z-index: var(--zindex-insert-after);
-  left: unset;
-  right: -7.5px;
 
-  &:hover::before {
-    border-left-color: blue;
-  }
+  image-rendering: pixelated;
 `;
 
-const Cursor = styled.div<{ visible: boolean }>`
-  ${({ visible }) => (visible ? 'opacity: 1;' : 'opacity: 0;')}
+const Cursor = styled.div<{ position: WandEditCursorPosition }>`
+  ${({ position }) =>
+    position === 'before' || position === 'after'
+      ? 'opacity: 1;'
+      : 'opacity: 0;'}
 
   z-index: var(--zindex-cursor-current);
 
   position: absolute;
-  height: 112%;
-  width: 20%;
-  top: -6%;
-  left: -16.4%;
+  height: 58px;
+  width: 12px;
+  top: -4px;
+  ${({ position }) =>
+    position === 'before'
+      ? 'left: -10px;'
+      : position === 'after'
+      ? 'right: -10px;'
+      : 'display: none;'}
 
   image-rendering: pixelated;
   pointer-events: none;
@@ -117,15 +132,22 @@ const Cursor = styled.div<{ visible: boolean }>`
 `;
 
 type WandEditCursorPosition = 'none' | 'before' | 'after';
+type WandEditSelection = 'none' | 'start' | 'thru' | 'end' | 'single';
 
 type Props = {
   wandIndex: number;
   cursor?: WandEditCursorPosition;
+  selection?: WandEditSelection;
   onDragChange: (isDrag: boolean) => void;
 };
 
 export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
-  const { onDragChange, wandIndex, cursor = 'none' } = props;
+  const {
+    onDragChange,
+    wandIndex,
+    cursor = 'none',
+    selection = 'none',
+  } = props;
   const dispatch = useAppDispatch();
   const { config } = useAppSelector(selectConfig);
 
@@ -253,7 +275,7 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
         isCursor={cursor === 'after'}
         onClick={() => dispatch(moveCursor({ to: wandIndex + 1 }))}
       />
-      <Cursor visible={cursor === 'before'} />
+      <Cursor position={cursor} />
     </DropTargetMain>
   );
 }

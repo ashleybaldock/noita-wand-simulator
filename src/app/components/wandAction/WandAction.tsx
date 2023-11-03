@@ -48,12 +48,17 @@ export const WandAction = styled(_WandAction)`
   transition-duration: 150ms;
   transition-property: var(--transition-props);
   transition-timing-function: var(--transition-out, ease-out);
+  cursor: grab;
 
   &:hover {
     transform: scale(109%);
 
     transition-timing-function: var(--transition-out, ease-out);
     transition-property: var(--transition-props);
-    cursor: move;
+  }
+
+  &:active {
+    cursor: grabbing;
+    border: 1px solid red;
   }
 `;

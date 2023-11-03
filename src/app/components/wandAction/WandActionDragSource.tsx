@@ -14,8 +14,8 @@ const StyledDiv = styled.div<{
 
   ${({ isDragging }) =>
     isDragging
-      ? ``
-      : `
+      ? `cursor: grabbing;`
+      : `cursor: grab;
     &&:hover > div > div {
       z-index: 1000;
     }

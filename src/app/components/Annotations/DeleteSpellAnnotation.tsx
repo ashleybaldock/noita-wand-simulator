@@ -11,6 +11,7 @@ const DeleteDiv = styled(BaseAnnotation)`
   font-size: 10px;
   text-align: center;
   font-family: var(--font-family-noita-default);
+  cursor: pointer;
 `;
 
 type Props = {
