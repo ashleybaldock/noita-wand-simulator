@@ -11,7 +11,7 @@ import { DEFAULT_SIZE } from './util';
  *   --size-: override size
  *  --xsize-: size multiplier
  * */
-export const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle<{ keyHints: boolean }>`
   :root {
     --usize-spell: 1px;
     --bsize-spell: ${DEFAULT_SIZE}px;
@@ -21,5 +21,8 @@ export const GlobalStyle = createGlobalStyle`
 
     --sizes-spelledit-spell-total: calc(var(--bsize-spell) + (var(--bsize-spell-border-width) * 2));
     --sizes-spelledit-grid-layout-gap: 8;
+
+    ${({ keyHints }) =>
+      keyHints ? '--display-keyhints: none;' : '--display-keyhints: block;'}
   }
 `;

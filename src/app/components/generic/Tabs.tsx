@@ -93,6 +93,7 @@ const TitleDiv = styled.div<{
 `;
 
 const TabKeyHint = styled.div`
+  display: var(--display-keyhints);
   z-index: var(--zindex-keyhint);
   position: absolute;
   top: -2px;

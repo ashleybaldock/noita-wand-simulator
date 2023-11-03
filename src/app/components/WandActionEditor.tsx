@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components/macro';
-import { Spell } from '../calc/spell';
-import { getSpellById } from '../calc/spells';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { useAppDispatch } from '../redux/hooks';
 import {
   useSpells,
@@ -11,6 +10,8 @@ import {
   removeSpellAfterCursor,
   removeSpellBeforeCursor,
 } from '../redux/wandSlice';
+import { Spell } from '../calc/spell';
+import { getSpellById } from '../calc/spells';
 import { isKnownSpell } from '../types';
 import {
   DeckIndexAnnotation,
@@ -22,7 +23,6 @@ import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
 import { WandAction } from './wandAction/WandAction';
 import { WandActionDragSource } from './wandAction/WandActionDragSource';
 import { WandActionBorder } from './wandAction/WandActionBorder';
-import { useHotkeys } from 'react-hotkeys-hook';
 
 const StyledList = styled.ul`
   --grid-layout-gap: 8;

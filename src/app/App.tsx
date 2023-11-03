@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { WandSimulator } from './components/WandSimulator';
@@ -9,11 +10,14 @@ import { GlobalStyle } from './RootCSSVars';
 
 export function App() {
   const { isRelease, branch, hash } = useReleaseInfo();
+  const [showKeyHints, setShowKeyHints] = useState(false);
+
+  useHotkeys('h', () => setShowKeyHints((showing) => !showing));
 
   return (
     <Provider store={store}>
       <KeyStateContextProvider debug={true}>
-        <GlobalStyle />
+        <GlobalStyle keyHints={showKeyHints} />
         {!isRelease && (
           <Helmet>
             <link rel="icon" href="/favicon-dev.ico" />
