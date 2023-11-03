@@ -13,6 +13,7 @@ import {
   RedoButton,
   ConfigButton,
 } from './buttons';
+import { ExportWikiButton } from './Export/ExportWikiButton';
 
 const MainDiv = styled.div`
   display: flex;
@@ -42,19 +43,26 @@ const ContentDiv = styled.div`
 const CopySpells = styled.div`
   position: absolute;
   right: 0;
-  bottom: 0;
+  bottom: -0.4em;
   display: flex;
   flex-direction: row;
   justify-content: end;
   align-items: end;
   font-family: var(--font-family-noita-default);
   z-index: var(--zindex-copy-png);
+
+  @media screen and (max-width: 900px) {
+    bottom: -0.8em;
+  }
 `;
 
 const WandActionEditorWrapper = styled.div`
   position: relative;
   height: auto;
   flex: 1 1 auto;
+  @media screen and (max-width: 900px) {
+    margin: 0.8em 0 0.4em 0;
+  }
 `;
 
 const EditButtons = styled.div`
@@ -122,6 +130,7 @@ export function WandBuilder() {
                   fileName={'spells'}
                   enabled={true}
                 />
+                <ExportWikiButton />
               </CopySpells>
             </WandActionEditorWrapper>
           </ContentDiv>

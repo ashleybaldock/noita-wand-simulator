@@ -142,6 +142,11 @@ export const toFrames = (durationInSeconds: number, fps: number = 60) =>
 export const toSeconds = (durationInFrames: number, fps: number = 60) =>
   round(durationInFrames / fps, 2);
 
+export const copyToClipboard = async (text: string) =>
+  'clipboard' in navigator
+    ? await navigator.clipboard.writeText(text)
+    : document.execCommand('copy', true, text);
+
 export function forceDisableCanvasSmoothing() {
   // https://stackoverflow.com/a/22018649
   // save old getContext

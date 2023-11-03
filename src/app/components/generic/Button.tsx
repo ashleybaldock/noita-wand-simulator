@@ -27,6 +27,7 @@ const borderForShape = new Map<ButtonShape, string>([
 const StyledButton = styled.button<{
   imgUrl: string;
   imgDataUrl: string;
+  imgAfter: boolean;
   minimal: boolean;
   shape: ButtonShape;
 }>`
@@ -38,52 +39,76 @@ const StyledButton = styled.button<{
   font-variant: small-caps;
   cursor: pointer;
 
+  --background-size: 1.4em;
+  --pad-img-side: 2.2em;
+  --pad-other-side: 0.6em;
+
   margin: 0;
-  padding: 0.2em 0.6em 0em 2.2em;
+  padding-top: 0.2em;
+  padding-bottom: 0;
+  ${({ imgAfter }) =>
+    imgAfter
+      ? `padding-right: var(--pad-img-side);
+         padding-left: var(--pad-other-side);
+         background-position: 90% 50%;`
+      : `padding-right: var(--pad-other-side);
+         padding-left: var(--pad-img-side);
+         background-position: 10% 50%;`}
+
   ${({ shape }) => borderForShape.get(shape)};
 
   ${({ imgUrl }) =>
     imgUrl.length > 0 ? `background-image: url('/${imgUrl}')` : ''};
   ${({ imgDataUrl }) =>
     imgDataUrl.length > 0 ? `background-image: url("${imgDataUrl}")` : ''};
-  padding-left: 2.2em;
-  background-position: 0.4em 50%;
   background-origin: padding-box;
-  background-size: 1.4em;
+  background-size: var(--background-size);
   background-repeat: no-repeat;
   image-rendering: pixelated;
 
-  ${({ minimal }) =>
-    minimal
-      ? `
-    margin: 0;
-    cursor: pointer;
-    background-size: 1.64em;
-    background-position: 0.36em 50%;
-    padding: 0.6em 0.4em 0.3em 2.3em;
-    font-size: 0.6em;
-    line-height: 1.1em;
-    `
-      : ``};
-
   & {
     transition: var(--transition-hover-out);
-    transition-property: border-color, color;
+    transition-property: border-color, color, opacity;
   }
 
   &:hover {
     color: var(--color-button-hover);
     border-color: var(--color-button-border-hover);
     transition: var(--transition-hover-in);
-    transition-property: border-color, color;
+    transition-property: border-color, color, opacity;
   }
 
   &:active {
     color: var(--color-button-active);
     border-color: var(--color-button-border-active);
     transition: var(--transition-activate);
-    transition-property: border-color, color;
+    transition-property: border-color, color, opacity;
   }
+
+  ${({ minimal }) =>
+    minimal
+      ? `
+    --background-size: 20%;
+    --pad-img-side: calc(var(--background-size) + 0.4em);
+    --pad-other-side: 0.6em;
+
+    margin: 0;
+    cursor: pointer;
+    padding-top: 0.4em;
+    padding-bottom: 0.3em;
+    font-size: 0.6em;
+    line-height: 1.1em;
+    border-radius: 0.2em;
+    background-size: auto calc(var(--background-size) * 3.2);
+    color: var(--color-emphasis);
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+      color: var(--color-emphasis);
+    }
+    `
+      : ``};
 `;
 
 type Props = {
@@ -92,6 +117,7 @@ type Props = {
   onMouseOut?: () => void;
   imgUrl?: string;
   imgDataUrl?: string;
+  imgAfter?: boolean;
   minimal?: boolean;
   shape?: ButtonShape;
   bgScale?: 1;
@@ -106,6 +132,7 @@ export const Button = ({
 
   imgUrl = '',
   imgDataUrl = '',
+  imgAfter = false,
   minimal = false,
   shape = 'pill',
   bgScale = 1,
@@ -117,6 +144,7 @@ export const Button = ({
       shape={shape}
       imgUrl={imgUrl}
       imgDataUrl={imgDataUrl}
+      imgAfter={imgAfter}
       onClick={onClick}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
