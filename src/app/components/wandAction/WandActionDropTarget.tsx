@@ -80,11 +80,11 @@ const Cursor = styled.div<{ visible: boolean }>`
   width: 20%;
   top: -6%;
   background-image: url('/data/inventory/cursor.png');
-  background-image: url('/data/inventory/cursor-bottom.png'),
-    url('/data/inventory/cursor-top.png'), url('/data/inventory/cursor-mid.png');
+  background-image: url('/data/inventory/cursor-top.png'),
+    url('/data/inventory/cursor-mid.png');
   background-repeat: no-repeat;
   background-size: 100%;
-  background-position: bottom center, top center, center center;
+  background-position: top center, center center;
   image-rendering: pixelated;
   z-index: 1;
   pointer-events: none;

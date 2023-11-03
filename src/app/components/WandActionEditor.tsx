@@ -8,6 +8,8 @@ import {
   setSpellAtIndex,
   useCursor,
   moveCursor,
+  removeSpellAfterCursor,
+  removeSpellBeforeCursor,
 } from '../redux/wandSlice';
 import { isKnownSpell } from '../types';
 import {
@@ -127,8 +129,44 @@ export function WandActionEditor() {
   const spellIds = useSpells();
   const { position: cursorPosition } = useCursor();
 
-  useHotkeys('w', (_, kEv) => {
+  useHotkeys('w', () => {
     dispatch(moveCursor({ moveBy: -10 }));
+  });
+  useHotkeys('a', () => {
+    dispatch(moveCursor({ moveBy: -1 }));
+  });
+  useHotkeys('s', () => {
+    dispatch(moveCursor({ moveBy: 10 }));
+  });
+  useHotkeys('d', () => {
+    dispatch(moveCursor({ moveBy: 1 }));
+  });
+  useHotkeys('Backspace', () => {
+    dispatch(removeSpellBeforeCursor({ shift: 'left' }));
+    dispatch(moveCursor({ moveBy: -1 }));
+  });
+  useHotkeys('ctrl+Backspace', () => {
+    dispatch(removeSpellBeforeCursor({ shift: 'right' }));
+  });
+
+  useHotkeys('shift+w', () => {
+    dispatch(moveCursor({ moveBy: -10 }));
+  });
+  useHotkeys('shift+a', () => {
+    dispatch(moveCursor({ moveBy: -1 }));
+  });
+  useHotkeys('shift+s', () => {
+    dispatch(moveCursor({ moveBy: 10 }));
+  });
+  useHotkeys('shift+d', () => {
+    dispatch(moveCursor({ moveBy: 1 }));
+  });
+  useHotkeys('shift+Backspace', () => {
+    dispatch(removeSpellAfterCursor({ shift: 'left' }));
+  });
+  useHotkeys('ctrl+shift+Backspace', () => {
+    dispatch(removeSpellAfterCursor({ shift: 'right' }));
+    dispatch(moveCursor({ moveBy: 1 }));
   });
 
   const spellActions = spellIds.map((spellId) =>

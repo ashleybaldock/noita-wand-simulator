@@ -24,18 +24,35 @@ export const KeyStateContextProvider = ({
   const [keyState, setKeyState] = useState(defaultKeyState);
 
   useEffect(() => {
+    const blurListener = (evt: FocusEvent) => {
+      console.log(evt);
+      setKeyState((keyState) => ({
+        ...keyState,
+        shift: false,
+        ctrl: false,
+        alt: false,
+        meta: false,
+      }));
+    };
+
+    window.addEventListener('blur', blurListener);
+
+    return () => document.removeEventListener('blur', blurListener);
+  }, []);
+
+  useEffect(() => {
     const keydownListener = (evt: KeyboardEvent) => {
       console.log(evt);
-      if (evt.key === 'Shift') {
+      if (evt.key === 'Shift' || evt.shiftKey) {
         setKeyState((keyState) => ({ ...keyState, shift: true }));
       }
-      if (evt.key === 'Control') {
+      if (evt.key === 'Control' || evt.ctrlKey) {
         setKeyState((keyState) => ({ ...keyState, ctrl: true }));
       }
-      if (evt.key === 'Alt') {
+      if (evt.key === 'Alt' || evt.altKey) {
         setKeyState((keyState) => ({ ...keyState, alt: true }));
       }
-      if (evt.key === 'Meta') {
+      if (evt.key === 'Meta' || evt.metaKey) {
         setKeyState((keyState) => ({ ...keyState, meta: true }));
       }
     };
@@ -47,6 +64,13 @@ export const KeyStateContextProvider = ({
   useEffect(() => {
     const keyupEventListener = (evt: KeyboardEvent) => {
       console.log(evt);
+      setKeyState((keyState) => ({
+        ...keyState,
+        shift: evt.shiftKey,
+        ctrl: evt.ctrlKey,
+        alt: evt.altKey,
+        meta: evt.metaKey,
+      }));
       if (evt.key === 'Shift') {
         setKeyState((keyState) => ({ ...keyState, shift: false }));
       }

@@ -63,6 +63,8 @@ export const v2WandStateMapping: v2WandStateRecord = {
 export const v2SpellsMapping = 's' as const;
 export const v2AlwaysMapping = 'w' as const;
 
+export type ShiftDirection = 'left' | 'right' | 'none';
+
 export type Cursor = {
   position: number;
 };

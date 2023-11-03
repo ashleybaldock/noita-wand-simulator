@@ -1,7 +1,14 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
-import { Cursor, SpellEditMode, SpellId, Wand, WandState } from '../types';
+import {
+  Cursor,
+  SpellEditMode,
+  SpellId,
+  Wand,
+  WandState,
+  ShiftDirection,
+} from '../types';
 import { defaultWand } from './Wand/presets';
 import { useSliceWrapper } from './useSlice';
 import { generateWandStateFromSearch } from './Wand/fromSearch';
@@ -47,7 +54,7 @@ export const wandSlice = createSlice({
   name: 'wand',
   initialState,
   reducers: {
-    resetWand: (state) => {
+    resetWand: () => {
       return initialState;
     },
     setWand: (
@@ -120,6 +127,35 @@ export const wandSlice = createSlice({
         },
         type: '',
       }),
+    removeSpellBeforeCursor: (
+      state,
+      {
+        payload: { shift = 'left' },
+      }: PayloadAction<{ shift?: ShiftDirection }>,
+    ): void =>
+      wandSlice.caseReducers.clearSpellAtIndex(state, {
+        payload: {
+          index:
+            state.cursor.position > 0
+              ? state.cursor.position - 1
+              : state.wand.deck_capacity,
+          shift,
+        },
+        type: '',
+      }),
+    removeSpellAfterCursor: (
+      state,
+      {
+        payload: { shift = 'left' },
+      }: PayloadAction<{ shift?: ShiftDirection }>,
+    ): void =>
+      wandSlice.caseReducers.clearSpellAtIndex(state, {
+        payload: {
+          index: state.cursor.position,
+          shift,
+        },
+        type: '',
+      }),
     setSpellAtIndex: (
       state,
       {
@@ -141,14 +177,44 @@ export const wandSlice = createSlice({
     },
     clearSpellAtIndex: (
       state,
-      { payload: { index } }: PayloadAction<{ index: number }>,
+      {
+        payload: { index, shift = 'none' },
+      }: PayloadAction<{ index: number; shift: ShiftDirection }>,
     ): void => {
-      state.spellIds[index] = null;
+      if (shift === 'none') {
+        state.spellIds[index] = null;
+      }
+      if (shift === 'left') {
+        state.spellIds = fixedLengthCopy(
+          [
+            ...state.spellIds.slice(0, index),
+            ...state.spellIds.slice(index + 1),
+          ],
+          state.wand.deck_capacity,
+        );
+      }
+      if (shift === 'right') {
+        state.spellIds = fixedLengthCopy(
+          [
+            null,
+            ...state.spellIds.slice(0, index),
+            ...state.spellIds.slice(index + 1),
+          ],
+          state.wand.deck_capacity,
+        );
+      }
     },
     moveCursor: (
       state,
-      { payload: { moveBy: number } }: PayloadAction<{ moveBy: number }>,
-    ): void => {},
+      { payload: { moveBy } }: PayloadAction<{ moveBy: number }>,
+    ): void => {
+      const currentCursorPosition = state.cursor.position;
+      const proposedCursorPosition = currentCursorPosition + moveBy;
+      const wrappedCursorPosition =
+        (proposedCursorPosition + state.wand.deck_capacity) %
+        state.wand.deck_capacity;
+      state.cursor.position = wrappedCursorPosition;
+    },
     moveSpell: (
       state,
       {
@@ -216,8 +282,10 @@ export const {
   setSpellAtIndex,
   insertSpellBefore,
   insertSpellBeforeCursor,
+  removeSpellBeforeCursor,
   insertSpellAfter,
   insertSpellAfterCursor,
+  removeSpellAfterCursor,
   moveSpell,
   moveCursor,
 } = wandSlice.actions;
