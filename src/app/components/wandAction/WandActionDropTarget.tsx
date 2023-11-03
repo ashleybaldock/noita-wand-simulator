@@ -8,6 +8,7 @@ import {
   insertSpellAfter,
   moveSpell,
   setSpellAtIndex,
+  moveCursor,
 } from '../../redux/wandSlice';
 import { selectConfig } from '../../redux/configSlice';
 
@@ -37,65 +38,82 @@ const DropTargetAfter = styled(DropTargetArea)`
   right: -30%;
 `;
 
-const InsertMarker = styled.div<{ isCursor: boolean; active: boolean }>`
+const InsertMarker = styled.div<{
+  enabled: boolean;
+  isCursor: boolean;
+  active: boolean;
+}>`
+  pointer-events: ${({ enabled }) => (enabled ? 'auto' : 'none')};
+
   position: absolute;
   height: 120%;
-  width: 1px;
+  width: 3px;
   top: -5px;
+  left: -10px;
 
-  border-left-color: transparent;
-  ${({ isCursor }) =>
-    isCursor ? 'border-left-color: var(--color-wand-edit-cursor);' : ''}
-  ${({ active }) =>
-    active ? 'border-left-color: var(--color-wand-edit-cursor-active);' : ''}
-  border-left-width: 3px;
-  border-left-style: dotted;
-  z-index: 1;
-  pointer-events: none;
+  border: none;
+  padding: 0 5px;
+
+  &::before {
+    position: absolute;
+    content: '';
+    height: 100%;
+    display: block;
+    border-left-color: transparent;
+    border-left-width: 3px;
+    border-left-style: dotted;
+
+    ${({ isCursor }) =>
+      isCursor ? 'border-left-color: var(--color-wand-edit-cursor);' : ''}
+    ${({ active }) =>
+      active ? 'border-left-color: var(--color-wand-edit-cursor-active);' : ''}
+  }
+
+  &:hover {
+    cursor: text;
+  }
+  &:hover::before {
+    border-left-color: red;
+  }
+`;
+
+const InsertBeforeMarker = styled(InsertMarker)`
+  z-index: var(--zindex-insert-before);
+
+  &:hover::before {
+    border-left-color: red;
+  }
+`;
+
+const InsertAfterMarker = styled(InsertMarker)`
+  z-index: var(--zindex-insert-after);
+  left: unset;
+  right: -7.5px;
+
+  &:hover::before {
+    border-left-color: blue;
+  }
 `;
 
 const Cursor = styled.div<{ visible: boolean }>`
   ${({ visible }) => (visible ? 'opacity: 1;' : 'opacity: 0;')}
 
-  position: absolute;
-  height: 118%;
-  width: 50%;
-  top: -9%;
-  left: -16.4%;
-
-  background-image: url('/data/inventory/cursor.png');
-  background-image: url('/data/inventory/cursor-mid.png'),
-    url('/data/inventory/cursor-top.png'),
-    url('/data/inventory/cursor-bottom.png');
-  background-repeat: no-repeat;
-  background-size: 56%;
-  background-position: center, top center, bottom center;
-
-  image-rendering: pixelated;
-  z-index: 1;
-  pointer-events: none;
+  z-index: var(--zindex-cursor-current);
 
   position: absolute;
   height: 112%;
   width: 20%;
   top: -6%;
-  background-image: url('/data/inventory/cursor.png');
+  left: -16.4%;
+
+  image-rendering: pixelated;
+  pointer-events: none;
+
   background-image: url('/data/inventory/cursor-top.png'),
     url('/data/inventory/cursor-mid.png');
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: top center, center center;
-  image-rendering: pixelated;
-  z-index: 1;
-  pointer-events: none;
-`;
-
-const InsertBeforeMarker = styled(InsertMarker)`
-  left: -5px;
-`;
-
-const InsertAfterMarker = styled(InsertMarker)`
-  right: -4px;
 `;
 
 type WandEditCursorPosition = 'none' | 'before' | 'after';
@@ -162,7 +180,7 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
     [dispatch, wandIndex],
   );
 
-  const [{ isOver, isDragging }, drop] = useDrop(
+  const [{ isOver, isDraggingAction }, drop] = useDrop(
     () => ({
       accept: 'action',
       drop: (item: WandActionDragItem, monitor) => {
@@ -173,11 +191,12 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
       canDrop: (item: WandActionDragItem) => item.sourceWandIndex !== wandIndex,
       collect: (monitor) => ({
         isOver: monitor.isOver({ shallow: true }) && monitor.canDrop(),
-        isDragging: monitor.getItemType() === 'action',
+        isDraggingAction: monitor.getItemType() === 'action',
       }),
     }),
     [handleDrop],
   );
+
   const [{ isOver: isOverBefore }, dropBefore] = useDrop(
     () => ({
       accept: 'action',
@@ -189,6 +208,7 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
     }),
     [handleDropBefore],
   );
+
   const [{ isOver: isOverAfter }, dropAfter] = useDrop(
     () => ({
       accept: 'action',
@@ -213,19 +233,26 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
       {props.children}
       <DropTargetBefore
         ref={dropBefore}
-        enabled={isDragging}
+        enabled={isDraggingAction}
         hint={config.debug?.dragHint}
       />
       <InsertBeforeMarker
         active={isOverBefore}
+        enabled={!isDraggingAction}
         isCursor={cursor === 'before'}
+        onClick={() => dispatch(moveCursor({ to: wandIndex }))}
       />
       <DropTargetAfter
         ref={dropAfter}
-        enabled={isDragging}
+        enabled={isDraggingAction}
         hint={config.debug?.dragHint}
       />
-      <InsertAfterMarker active={isOverAfter} isCursor={cursor === 'after'} />
+      <InsertAfterMarker
+        active={isOverAfter}
+        enabled={!isDraggingAction}
+        isCursor={cursor === 'after'}
+        onClick={() => dispatch(moveCursor({ to: wandIndex + 1 }))}
+      />
       <Cursor visible={cursor === 'before'} />
     </DropTargetMain>
   );

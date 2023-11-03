@@ -12,7 +12,7 @@ import {
 import { defaultWand } from './Wand/presets';
 import { useSliceWrapper } from './useSlice';
 import { generateWandStateFromSearch } from './Wand/fromSearch';
-import { MAX_ALWAYS } from '../util';
+import { isNotNullOrUndefined, MAX_ALWAYS } from '../util';
 import { generateWikiWandV2 } from './Wand/toWiki';
 
 export function fixedLengthCopy<T>(
@@ -47,6 +47,8 @@ const initialState: WandState = {
   messages: messages || [],
   cursor: {
     position: 0,
+    selectFrom: null,
+    selectTo: null,
   },
 } as const;
 
@@ -204,16 +206,35 @@ export const wandSlice = createSlice({
         );
       }
     },
+    moveSelection: (
+      state,
+      { payload: { by, to } }: PayloadAction<{ by?: number; to?: number }>,
+    ): void => {},
+    /*
+     * moveCursor()
+     * to: specific index; by: relative to current position
+     * If both specified, performs 'to', then 'by'
+     */
     moveCursor: (
       state,
-      { payload: { moveBy } }: PayloadAction<{ moveBy: number }>,
+      {
+        payload: { by, to, select = false },
+      }: PayloadAction<{ by?: number; to?: number; select?: boolean }>,
     ): void => {
-      const currentCursorPosition = state.cursor.position;
-      const proposedCursorPosition = currentCursorPosition + moveBy;
-      const wrappedCursorPosition =
-        (proposedCursorPosition + state.wand.deck_capacity) %
-        state.wand.deck_capacity;
-      state.cursor.position = wrappedCursorPosition;
+      if (isNotNullOrUndefined(to)) {
+        state.cursor.position = Math.min(
+          Math.max(0, to),
+          state.wand.deck_capacity,
+        );
+      }
+      if (isNotNullOrUndefined(by)) {
+        const currentCursorPosition = state.cursor.position;
+        const proposedCursorPosition = currentCursorPosition + by;
+        const wrappedCursorPosition =
+          (proposedCursorPosition + state.wand.deck_capacity) %
+          state.wand.deck_capacity;
+        state.cursor.position = wrappedCursorPosition;
+      }
     },
     moveSpell: (
       state,
@@ -286,6 +307,7 @@ export const {
   insertSpellAfter,
   insertSpellAfterCursor,
   removeSpellAfterCursor,
+  moveSelection,
   moveSpell,
   moveCursor,
 } = wandSlice.actions;

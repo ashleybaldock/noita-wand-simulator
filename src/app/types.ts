@@ -67,6 +67,8 @@ export type ShiftDirection = 'left' | 'right' | 'none';
 
 export type Cursor = {
   position: number;
+  selectFrom: number | null;
+  selectTo: number | null;
 };
 
 export type WandState = {

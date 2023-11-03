@@ -9,6 +9,7 @@ import {
   moveCursor,
   removeSpellAfterCursor,
   removeSpellBeforeCursor,
+  moveSelection,
 } from '../redux/wandSlice';
 import { Spell } from '../calc/spell';
 import { getSpellById } from '../calc/spells';
@@ -129,45 +130,68 @@ export function WandActionEditor() {
   const spellIds = useSpells();
   const { position: cursorPosition } = useCursor();
 
+  /* Move cursor */
+  /* isSelecting && end selection
+   *   visual change from in-progress selection, to active selection */
   useHotkeys('w', () => {
-    dispatch(moveCursor({ moveBy: -10 }));
+    dispatch(moveCursor({ by: -10 }));
   });
   useHotkeys('a', () => {
-    dispatch(moveCursor({ moveBy: -1 }));
+    dispatch(moveCursor({ by: -1 }));
   });
   useHotkeys('s', () => {
-    dispatch(moveCursor({ moveBy: 10 }));
+    dispatch(moveCursor({ by: 10 }));
   });
   useHotkeys('d', () => {
-    dispatch(moveCursor({ moveBy: 1 }));
+    dispatch(moveCursor({ by: 1 }));
   });
+
+  /* Delete spells */
+  /* isSelecting ? delete selected, clear selection : delete single
+   *   visual change from in-progress/active selection to none */
   useHotkeys('Backspace', () => {
     dispatch(removeSpellBeforeCursor({ shift: 'left' }));
-    dispatch(moveCursor({ moveBy: -1 }));
+    dispatch(moveCursor({ by: -1 }));
   });
   useHotkeys('ctrl+Backspace', () => {
     dispatch(removeSpellBeforeCursor({ shift: 'right' }));
-  });
-
-  useHotkeys('shift+w', () => {
-    dispatch(moveCursor({ moveBy: -10 }));
-  });
-  useHotkeys('shift+a', () => {
-    dispatch(moveCursor({ moveBy: -1 }));
-  });
-  useHotkeys('shift+s', () => {
-    dispatch(moveCursor({ moveBy: 10 }));
-  });
-  useHotkeys('shift+d', () => {
-    dispatch(moveCursor({ moveBy: 1 }));
   });
   useHotkeys('shift+Backspace', () => {
     dispatch(removeSpellAfterCursor({ shift: 'left' }));
   });
   useHotkeys('ctrl+shift+Backspace', () => {
     dispatch(removeSpellAfterCursor({ shift: 'right' }));
-    dispatch(moveCursor({ moveBy: 1 }));
+    dispatch(moveCursor({ by: 1 }));
   });
+
+  /* Modify selection */
+  /* isSelecting ? extend : clear previous, begin new
+   *   visual change to indicate change of active selection */
+  useHotkeys('shift+w', () => {
+    dispatch(moveCursor({ by: -10, select: true }));
+  });
+  useHotkeys('shift+a', () => {
+    dispatch(moveCursor({ by: -1, select: true }));
+  });
+  useHotkeys('shift+s', () => {
+    dispatch(moveCursor({ by: 10, select: true }));
+  });
+  useHotkeys('shift+d', () => {
+    dispatch(moveCursor({ by: 1, select: true }));
+  });
+
+  /* Move selection */
+  /* isSelecting ? end selection,shift selection : new single selection,shift
+   *   visual change to indicate selection commmited, and shift of spells */
+  useHotkeys('ctrl+shift+a', () => {
+    dispatch(moveSelection({ by: -1 }));
+  });
+  useHotkeys('ctrl+shift+d', () => {
+    dispatch(moveSelection({ by: 1 }));
+  });
+
+  /* Cut selection to new wand/storage */
+  /* Copy selection & paste duplicate */
 
   const spellActions = spellIds.map((spellId) =>
     isKnownSpell(spellId) ? getSpellById(spellId) : undefined,
