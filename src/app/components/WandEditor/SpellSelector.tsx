@@ -1,24 +1,26 @@
 import styled from 'styled-components/macro';
-import { Spell } from '../calc/spell';
-import { spells } from '../calc/spells';
+import { useMemo } from 'react';
+import { groupBy, objectEntries } from '../../util/util';
+import { Spell } from '../../calc/spell';
+import { spells } from '../../calc/spells';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { ConfigState, selectConfig } from '../../redux/configSlice';
+import {
+  insertSpellAfterCursor,
+  insertSpellBeforeCursor,
+} from '../../redux/wandSlice';
 import {
   getBackgroundUrlForSpellType,
   spellTypeGroupInfoMap,
   spellTypeGroupsOrdered,
   spellTypeInfoMap,
-} from '../calc/spellTypes';
-import { WandActionDragSource } from './wandAction/WandActionDragSource';
-import { useMemo } from 'react';
-import { WandAction } from './wandAction/WandAction';
-import { WandActionBorder } from './wandAction/WandActionBorder';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { ConfigState, selectConfig } from '../redux/configSlice';
+} from '../../calc/spellTypes';
+import { Tabs } from '../generic';
 import {
-  insertSpellAfterCursor,
-  insertSpellBeforeCursor,
-} from '../redux/wandSlice';
-import { groupBy, objectEntries } from '../util/util';
-import { Tabs } from './generic';
+  WandAction,
+  WandActionBorder,
+  WandActionDragSource,
+} from '../WandAction';
 
 const MainDiv = styled.div`
   --bsize-spell: 40px;
@@ -92,13 +94,11 @@ const isBetaEnabled = (
   return !spell.beta || configBetaEnabled;
 };
 
-type WandActionSelectProps = {
-  spell: Spell;
-};
-
 const WandActionSelect = ({
   spell: { id, type, sprite },
-}: WandActionSelectProps) => {
+}: {
+  spell: Spell;
+}) => {
   const dispatch = useAppDispatch();
 
   const dragSourceOnClick = (clickEvent: React.MouseEvent<HTMLDivElement>) => {

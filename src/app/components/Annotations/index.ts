@@ -1,5 +1,6 @@
 export * from './ActionProxyAnnotation';
 export * from './ActionSourceAnnotation';
+export * from './ChargesRemainingAnnotation';
 export * from './DeckIndexAnnotation';
 export * from './DeleteSpellAnnotation';
 export * from './DontDrawAnnotation';

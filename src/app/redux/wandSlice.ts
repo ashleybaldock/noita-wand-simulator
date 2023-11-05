@@ -47,8 +47,8 @@ const initialState: WandState = {
   messages: messages || [],
   cursor: {
     position: 0,
-    selectFrom: null,
-    selectTo: null,
+    selectFrom: 0,
+    selectTo: 6,
   },
 } as const;
 

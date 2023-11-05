@@ -3,8 +3,8 @@ import styled from 'styled-components/macro';
 import { WandActionEditor } from './WandActionEditor';
 import { WandStatsEditor } from './WandStatsEditor';
 import { WandBorder } from './WandBorder';
-import { SaveImageButton } from './generic';
-import { SectionHeader } from './SectionHeader';
+import { SaveImageButton } from '../generic';
+import { SectionHeader } from '../SectionHeader';
 import {
   ExportButton,
   LoadButton,
@@ -12,8 +12,8 @@ import {
   UndoButton,
   RedoButton,
   ConfigButton,
-} from './buttons';
-import { ExportWikiButton } from './Export/ExportWikiButton';
+} from '../buttons';
+import { ExportWikiButton } from '../Export/ExportWikiButton';
 
 const MainDiv = styled.div`
   display: flex;

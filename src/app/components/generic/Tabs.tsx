@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import styled from 'styled-components/macro';
 import { SpellType } from '../../calc/spellTypes';
-import { WandAction } from '../wandAction/WandAction';
+import { WandAction } from '../WandAction';
 
 const MainDiv = styled.div`
   font-size: 14px;

@@ -7,14 +7,9 @@ const StyledSpan = styled.span`
   padding: 2px;
 `;
 
-type Props = {
+export const IterationLimitWarning = ({
+  hitIterationLimit,
+}: {
   hitIterationLimit: boolean;
-};
-
-export function IterationLimitWarning(props: Props) {
-  if (!props.hitIterationLimit) {
-    return null;
-  }
-
-  return <StyledSpan>Iteration limit reached</StyledSpan>;
-}
+}) =>
+  hitIterationLimit ? <StyledSpan>Iteration limit reached</StyledSpan> : null;

@@ -1,7 +1,7 @@
 import styled from 'styled-components/macro';
 import { Spell } from '../../../calc/spell';
 import { DEFAULT_SIZE } from '../../../util';
-import { ActionTreeShotResultNodeDiv } from '../../shotResult/ActionTreeShotResult';
+import { ActionTreeShotResultNodeDiv } from '../ActionTree';
 
 const LineDiv = styled.div<{
   size: number;
@@ -83,19 +83,18 @@ const ArrowHeadDiv = styled.div<{
   image-rendering: pixelated;
 `;
 
-type Props = {
+export const NextActionArrow = ({
+  size = DEFAULT_SIZE,
+  swept = false,
+}: {
   size?: number;
   proxy?: Spell;
   swept?: boolean;
-};
-
-export function NextActionArrow(props: Props) {
-  const { size = DEFAULT_SIZE, swept = false } = props;
-
+}) => {
   return (
     <>
       <LineDiv size={size} swept={swept} />
       <ArrowHeadDiv size={size} />
     </>
   );
-}
+};

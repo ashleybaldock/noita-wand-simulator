@@ -61,7 +61,8 @@
   --zindex-cursor-select-to: 68;
   --zindex-cursor-current: 70;
 
-  --zindex-deckidx-note: 80;
+  --zindex-note-deckidx: 80;
+  --zindex-note-charges: 81;
 
   --zindex-tabs-hover: 90;
   --zindex-tabs-selected: 100;

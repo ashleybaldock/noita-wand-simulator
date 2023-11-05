@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro';
-import { WandActionGroup } from '../wandAction/WandActionGroup';
-import { GroupedWandShot } from '../../calc/eval/types';
+import { WandActionGroup } from '../WandActionGroup';
+import { GroupedWandShot } from '../../../calc/eval/types';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -10,16 +10,11 @@ const StyledDiv = styled.div`
   margin: 1px;
 `;
 
-type Props = {
-  shot: GroupedWandShot;
-};
-
 // list of all actions played, and sub-ShotResults for triggers
-export function ActionCalledShotResult(props: Props) {
-  const s = props.shot;
+export const ActionCalledShotResult = ({ shot }: { shot: GroupedWandShot }) => {
   return (
     <StyledDiv>
-      {s.calledActions.map((actionCall, index) => {
+      {shot.calledActions.map((actionCall, index) => {
         return (
           <div key={index}>
             <WandActionGroup group={actionCall} />
@@ -28,4 +23,4 @@ export function ActionCalledShotResult(props: Props) {
       })}
     </StyledDiv>
   );
-}
+};

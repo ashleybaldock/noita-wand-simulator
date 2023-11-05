@@ -4,9 +4,9 @@ import { useConfig } from '../../redux';
 const IndexDiv = styled.div`
   pointer-events: none;
   position: absolute;
-  bottom: -4px;
-  right: -4px;
-  z-index: var(--zindex-deckidx-note);
+  bottom: -2px;
+  right: 2px;
+  z-index: var(--zindex-note-deckidx);
   color: rgb(255, 255, 255);
   font-size: 14px;
   font-family: var(--font-family-noita-default);
@@ -21,12 +21,11 @@ const IndexDiv = styled.div`
     var(--shadow-bg) -1px -1px 1px;
 `;
 
-type Props = {
+export const DeckIndexAnnotation = ({
+  deckIndex,
+}: {
   deckIndex?: number | string;
-};
-
-export function DeckIndexAnnotation(props: Props) {
-  const { deckIndex } = props;
+}) => {
   const { config } = useConfig();
 
   if (deckIndex === undefined || !config.showDeckIndexes) {
@@ -38,4 +37,4 @@ export function DeckIndexAnnotation(props: Props) {
   } else {
     return <IndexDiv>{deckIndex}</IndexDiv>;
   }
-}
+};

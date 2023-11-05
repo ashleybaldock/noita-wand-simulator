@@ -104,10 +104,14 @@ const KeyStateDebug = styled.div`
   padding: 3px;
 `;
 const KeyStateKey = styled.span<{ pressed: boolean }>`
-  margin: 2px;
+  margin: 0 1px 0 0;
   padding: 2px;
   border-width: 2px;
   border-style: solid;
+  font-variant: small-caps;
+  line-height: 1em;
+  border-radius: 2px;
+  font-size: 10px;
   border-color: ${({ pressed }) => (pressed ? 'var(--color-base)' : '#555555')};
   color: ${({ pressed }) => (pressed ? 'var(--color-base)' : '#555555')};
 `;

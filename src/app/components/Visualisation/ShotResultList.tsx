@@ -1,20 +1,20 @@
-import { isValidActionId, isGreekActionId } from '../../calc/actionId';
-import { useAppSelector } from '../../redux/hooks';
-import { ProjectileTreeShotResult } from './ProjectileTreeShotResult';
-import styled from 'styled-components/macro';
-import { ActionCalledShotResult } from './ActionCalledShotResult';
 import React, { useMemo, useRef } from 'react';
-import { SectionHeader } from '../SectionHeader';
+import styled from 'styled-components/macro';
+import { isNotNullOrUndefined } from '../../util';
 import { clickWand } from '../../calc/eval/clickWand';
-import { selectConfig } from '../../redux/configSlice';
-import { ActionTreeShotResult } from './ActionTreeShotResult';
 import { condenseActionsAndProjectiles } from '../../calc/grouping/condense';
-import { ShotMetadata } from './ShotMetadata';
+import { isValidActionId, isGreekActionId } from '../../calc/actionId';
+import { getSpellById } from '../../calc/spells';
+import { useWandState } from '../../redux';
+import { selectConfig } from '../../redux/configSlice';
+import { useAppSelector } from '../../redux/hooks';
 import { SaveImageButton, ScrollWrapper } from '../generic';
 import { IterationLimitWarning } from './IterationLimitWarning';
-import { useWandSlice } from '../../redux';
-import { isNotNullOrUndefined } from '../../util';
-import { getSpellById } from '../../calc/spells';
+import { ProjectileTreeShotResult } from './ProjectileTree';
+import { ActionCalledShotResult } from './ActionSequence';
+import { ActionTreeShotResult } from './ActionTree';
+import { SectionHeader } from '../SectionHeader';
+import { ShotMetadata } from './ShotMetadata';
 
 const ParentDiv = styled.div``;
 
@@ -26,18 +26,8 @@ const SectionDiv = styled.div`
   width: fit-content;
 `;
 
-type Props = {
-  pauseCalculations: boolean;
-  condenseShots: boolean;
-  unlimitedSpells: boolean;
-  infiniteSpells: boolean;
-  showDivides: boolean;
-  showGreekSpells: boolean;
-  showDirectActionCalls: boolean;
-};
-
 // list of several ShotResults, generally from clicking/holding until reload, but also for one click
-export function ShotResultList({
+export const ShotResultList = ({
   pauseCalculations,
   condenseShots,
   unlimitedSpells,
@@ -45,9 +35,16 @@ export function ShotResultList({
   showDivides,
   showGreekSpells,
   showDirectActionCalls,
-}: Props) {
-  const { wand: wandSlice } = useWandSlice();
-  const { spellIds, wand } = wandSlice.present;
+}: {
+  pauseCalculations: boolean;
+  condenseShots: boolean;
+  unlimitedSpells: boolean;
+  infiniteSpells: boolean;
+  showDivides: boolean;
+  showGreekSpells: boolean;
+  showDirectActionCalls: boolean;
+}) => {
+  const { wand, spellIds } = useWandState();
 
   const { config } = useAppSelector(selectConfig);
 
@@ -195,4 +192,4 @@ export function ShotResultList({
       )}
     </ParentDiv>
   );
-}
+};

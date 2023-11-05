@@ -1,5 +1,4 @@
 import styled from 'styled-components/macro';
-import { ActionCall } from '../../calc/eval/types';
 import { Spell } from '../../calc/spell';
 import { useConfig } from '../../redux';
 

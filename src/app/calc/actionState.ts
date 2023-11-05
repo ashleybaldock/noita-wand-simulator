@@ -42,6 +42,7 @@ export type GunActionState = {
   damage_slice_add: number;
   damage_healing_add: number;
   damage_curse_add: number;
+  damage_holy_add: number;
   damage_drill_add: number;
   damage_critical_chance: number;
   damage_critical_multiplier: number;
@@ -115,6 +116,7 @@ export const defaultGunActionState: GunActionState = {
   damage_slice_add: 0.0,
   damage_healing_add: 0.0,
   damage_curse_add: 0.0,
+  damage_holy_add: 0.0,
   damage_drill_add: 0.0,
   damage_critical_chance: 0,
   damage_critical_multiplier: 0.0,

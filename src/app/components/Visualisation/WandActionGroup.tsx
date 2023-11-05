@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro';
-import { WandAction } from './WandAction';
-import { NextActionArrow } from '../shotResult/TreeArrows';
+import { WandAction, WandActionBorder } from '../WandAction';
+import { NextActionArrow } from '../Visualisation/Arrows';
 import { DEFAULT_SIZE } from '../../util/constants';
 import {
   GroupedObject,
@@ -17,7 +17,6 @@ import {
   FriendlyFireAnnotation,
   RecursionAnnotation,
 } from '../Annotations/';
-import { WandActionBorder } from './WandActionBorder';
 import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 
 const MainDiv = styled.div.attrs({

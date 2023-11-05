@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import styled from 'styled-components/macro';
-import { WandBuilder } from './WandBuilder';
-import { ShotResultList } from './shotResult/ShotResultList';
+import { SpellSelector, WandBuilder } from './WandEditor';
+import { ShotResultList } from './Visualisation';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { selectConfig } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
 import { SectionHeader } from './SectionHeader';
-import { SpellSelector } from './SpellSelector';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { forceDisableCanvasSmoothing } from '../util/util';

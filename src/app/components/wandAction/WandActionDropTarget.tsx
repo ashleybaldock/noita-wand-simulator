@@ -12,97 +12,140 @@ import {
 } from '../../redux/wandSlice';
 import { selectConfig } from '../../redux/configSlice';
 
-const DropTargetMain = styled.div`
+const DropTargetMain = styled.div<{
+  selection: WandSelection;
+}>`
+  --selection-bdcolor: #00dbff;
+  --selection-bgcolor: #0000ff78;
+  --selection-bdradius: 3px;
+  --selection-bdwidth: 1px;
+  --selection-bdstyle: dashed;
+
   position: relative;
   height: 100%;
+  padding: 2px 4px 2px 4px;
+
+  border-style: hidden;
+  border-width: var(--selection-bdwidth);
+  border-color: var(--selection-bdcolor);
+
+  ${({ selection }) =>
+    selection !== 'none'
+      ? `
+  padding: 2px 4px 2px 4px;
+  background-color: var(--selection-bgcolor);
+  border-top-style: var(--selection-bdstyle);
+  border-bottom-style: var(--selection-bdstyle);
+    `
+      : ''}
+  ${({ selection }) =>
+    selection === 'start'
+      ? `
+  padding: 2px 4px 2px 4px;
+  border-left-style: var(--selection-bdstyle);
+  border-left-style: hidden;
+  border-radius: var(--selection-bdradius) 0 0 var(--selection-bdradius);
+    `
+      : ''}
+  ${({ selection }) =>
+    selection === 'end'
+      ? `
+  padding: 2px 4px 2px 4px;
+  border-right-style: var(--selection-bdstyle);
+  border-right-style: hidden;
+  border-radius: 0 var(--selection-bdradius) var(--selection-bdradius) 0;
+    `
+      : ''}
+  ${({ selection }) =>
+    selection === 'single'
+      ? `
+  padding: 2px 4px 2px 4px;
+  border-left-style: var(--selection-bdstyle);
+  border-left-style: hidden;
+  border-right-style: var(--selection-bdstyle);
+  border-right-style: hidden;
+  border-radius: var(--selection-bdradius);
+    `
+      : ''}
 `;
-const DropTargetArea = styled.div<{ enabled: boolean; hint?: boolean }>`
-  pointer-events: ${({ enabled }) => (enabled ? 'auto' : 'none')};
-  opacity: ${({ hint, enabled }) => (hint ? (enabled ? '0.8' : '0.5') : '0')};
+
+const DropTarget = styled.div<{
+  enabled: boolean;
+  hint?: boolean;
+  isDraggingAction: boolean;
+  isDraggingOver: boolean;
+  isDraggingSelect: boolean;
+  selection: WandSelection;
+  onClick: React.MouseEventHandler<HTMLElement>;
+}>`
+  pointer-events: ${({ isDraggingOver }) => (isDraggingOver ? 'auto' : 'none')};
 
   background-color: transparent;
   position: absolute;
   height: 100%;
   box-sizing: border-box;
-`;
-const DropTargetBefore = styled(DropTargetArea)`
-  background-color: rgba(255, 255, 0, 0.3);
-  top: 0;
-  width: var(--sizes-before-droptarget-width);
-  left: calc(
-    (
-        var(--sizes-spelledit-grid-layout-gap) / 2 +
-          var(--sizes-after-droptarget-width) / 2
-      ) * -1
-  );
-`;
-const DropTargetAfter = styled(DropTargetArea)`
-  background-color: rgba(255, 0, 0, 0.3);
-  top: 0;
-  width: var(--sizes-after-droptarget-width);
-  right: calc(
-    (
-        var(--sizes-spelledit-grid-layout-gap) / 2 +
-          var(--sizes-after-droptarget-width) / 2
-      ) * -1
-  );
-`;
 
-const InsertMarker = styled.div<{
-  enabled: boolean;
-  isCursor: boolean;
-  active: boolean;
-}>`
-  pointer-events: ${({ enabled }) => (enabled ? 'auto' : 'none')};
+  &::after {
+    pointer-events: ${({ isDraggingAction }) =>
+      isDraggingAction ? 'none' : 'auto'};
+    opacity: 1;
 
-  position: absolute;
-  height: 58px;
-  width: 12px;
-  top: -3px;
-  left: -10px;
+    content: '';
+    display: block;
+    position: absolute;
+    height: 58px;
+    --width: 12px;
+    width: var(--width);
+    top: -2px;
+    left: calc(50% - var(--width) / 2);
 
-  border: none;
-  padding: 0;
+    border: none;
+    padding: 0;
 
-  image-rendering: pixelated;
+    image-rendering: pixelated;
+    filter: opacity(0.1);
 
-  background-image: url('/data/inventory/cursor-top.png'),
-    url('/data/inventory/cursor-mid.png');
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-position: top center, center center;
+    background-image: url('/data/inventory/cursor-top.png'),
+      url('/data/inventory/cursor-mid.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: top center, center center;
 
-  filter: hue-rotate(190deg) opacity(0.1);
-
-  ${({ active }) =>
-    active
-      ? `
-      top: -4px;
-      cursor: drop;
-      filter: hue-rotate(240deg) opacity(1);
-  `
-      : ''}
+    ${({ isDraggingOver }) =>
+      isDraggingOver
+        ? `
+        cursor: drop;
+        filter: hue-rotate(240deg) opacity(1);
+    `
+        : ''}
   }
-
-  &:hover {
-    top: -4px;
+  &:hover::after {
     cursor: text;
     filter: hue-rotate(190deg) opacity(1);
   }
 `;
+const DropTargetBefore = styled(DropTarget)`
+  background-color: rgba(255, 255, 0, 0);
+  top: 0;
+  width: var(--sizes-before-droptarget-width);
+  left: -15px;
 
-const InsertBeforeMarker = styled(InsertMarker)`
-  z-index: var(--zindex-insert-before);
-  background-color: rgba(255, 0, 0, 0.1);
+  &::after {
+    z-index: var(--zindex-insert-before);
+  }
+`;
+const DropTargetAfter = styled(DropTarget)`
+  background-color: rgba(255, 0, 0, 0);
+  top: 0;
+  width: var(--sizes-after-droptarget-width);
+  right: -15px;
+
+  &::after {
+    z-index: var(--zindex-insert-after);
+  }
 `;
 
-const InsertAfterMarker = styled(InsertMarker)`
-  z-index: var(--zindex-insert-after);
-
-  image-rendering: pixelated;
-`;
-
-const Cursor = styled.div<{ position: WandEditCursorPosition }>`
+const Cursor = styled.div<{ position: CursorPosition }>`
   ${({ position }) =>
     position === 'before' || position === 'after'
       ? 'opacity: 1;'
@@ -113,12 +156,12 @@ const Cursor = styled.div<{ position: WandEditCursorPosition }>`
   position: absolute;
   height: 58px;
   width: 12px;
-  top: -4px;
+  top: -2px;
   ${({ position }) =>
     position === 'before'
-      ? 'left: -10px;'
+      ? 'left: -6px;'
       : position === 'after'
-      ? 'right: -10px;'
+      ? 'right: -6px;'
       : 'display: none;'}
 
   image-rendering: pixelated;
@@ -131,23 +174,21 @@ const Cursor = styled.div<{ position: WandEditCursorPosition }>`
   background-position: top center, center center;
 `;
 
-type WandEditCursorPosition = 'none' | 'before' | 'after';
-type WandEditSelection = 'none' | 'start' | 'thru' | 'end' | 'single';
+export type CursorPosition = 'none' | 'before' | 'after';
+export type WandSelection = 'none' | 'start' | 'thru' | 'end' | 'single';
 
-type Props = {
+export const WandActionDropTarget = ({
+  onDragChange,
+  wandIndex,
+  cursor = 'none',
+  selection = 'none',
+  children,
+}: React.PropsWithChildren<{
   wandIndex: number;
-  cursor?: WandEditCursorPosition;
-  selection?: WandEditSelection;
+  cursor?: CursorPosition;
+  selection?: WandSelection;
   onDragChange: (isDrag: boolean) => void;
-};
-
-export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
-  const {
-    onDragChange,
-    wandIndex,
-    cursor = 'none',
-    selection = 'none',
-  } = props;
+}>) => {
   const dispatch = useAppDispatch();
   const { config } = useAppSelector(selectConfig);
 
@@ -202,7 +243,7 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
     [dispatch, wandIndex],
   );
 
-  const [{ isOver, isDraggingAction }, drop] = useDrop(
+  const [{ isOver, isDraggingAction, isDraggingSelect }, drop] = useDrop(
     () => ({
       accept: 'action',
       drop: (item: WandActionDragItem, monitor) => {
@@ -214,6 +255,7 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
       collect: (monitor) => ({
         isOver: monitor.isOver({ shallow: true }) && monitor.canDrop(),
         isDraggingAction: monitor.getItemType() === 'action',
+        isDraggingSelect: monitor.getItemType() === 'select',
       }),
     }),
     [handleDrop],
@@ -251,31 +293,29 @@ export function WandActionDropTarget(props: React.PropsWithChildren<Props>) {
   useEffect(() => onDragChange(isOver), [isOver, onDragChange]);
 
   return (
-    <DropTargetMain ref={drop}>
-      {props.children}
+    <DropTargetMain ref={drop} selection={selection}>
+      {children}
       <DropTargetBefore
         ref={dropBefore}
-        enabled={isDraggingAction}
         hint={config.debug?.dragHint}
-      />
-      <InsertBeforeMarker
-        active={isOverBefore}
-        enabled={!isDraggingAction}
-        isCursor={cursor === 'before'}
         onClick={() => dispatch(moveCursor({ to: wandIndex }))}
+        isDraggingAction={isDraggingAction}
+        isDraggingSelect={isDraggingSelect}
+        isDraggingOver={isOverBefore}
+        enabled={isDraggingAction}
+        selection={selection}
       />
       <DropTargetAfter
         ref={dropAfter}
-        enabled={isDraggingAction}
         hint={config.debug?.dragHint}
-      />
-      <InsertAfterMarker
-        active={isOverAfter}
-        enabled={!isDraggingAction}
-        isCursor={cursor === 'after'}
         onClick={() => dispatch(moveCursor({ to: wandIndex + 1 }))}
+        isDraggingAction={isDraggingAction}
+        isDraggingOver={isOverAfter}
+        isDraggingSelect={isDraggingSelect}
+        enabled={isDraggingAction}
+        selection={selection}
       />
       <Cursor position={cursor} />
     </DropTargetMain>
   );
-}
+};

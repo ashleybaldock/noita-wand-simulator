@@ -1,10 +1,10 @@
-import { useAppDispatch } from '../redux/hooks';
-import { useWand, setWand } from '../redux/wandSlice';
-import { Wand } from '../types';
+import { useAppDispatch } from '../../redux/hooks';
+import { useWand, setWand } from '../../redux/wandSlice';
+import { Wand } from '../../types';
 import styled from 'styled-components/macro';
-import { AppDispatch } from '../redux/store';
-import { EditableInteger } from './generic';
-import { round, toFrames, toSeconds, TypedProperties } from '../util/util';
+import { AppDispatch } from '../../redux/store';
+import { EditableInteger } from '../generic';
+import { round, toFrames, toSeconds, TypedProperties } from '../../util/util';
 
 const CheckboxField = styled.input`
   margin: 1px;

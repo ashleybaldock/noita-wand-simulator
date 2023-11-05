@@ -1,9 +1,9 @@
 import styled from 'styled-components/macro';
 import { ProjectileCastState } from './ProjectileCastState';
-import { WandActionGroup } from '../wandAction/WandActionGroup';
-import { GroupedWandShot } from '../../calc/eval/types';
-import { ShotMetadata } from './ShotMetadata';
-import { isRawObject } from '../../calc/grouping/combineGroups';
+import { WandActionGroup } from '../WandActionGroup';
+import { GroupedWandShot } from '../../../calc/eval/types';
+import { ShotMetadata } from '../ShotMetadata';
+import { isRawObject } from '../../../calc/grouping/combineGroups';
 
 const StyledShotDiv = styled.div`
   display: flex;
@@ -14,24 +14,20 @@ const StyledShotDiv = styled.div`
   margin: 1px;
 `;
 
-type StyledProjectileDivProps = {
+const StyledProjectileDiv = styled.div<{
   indent: boolean;
-};
-
-const StyledProjectileDiv = styled.div<StyledProjectileDivProps>`
+}>`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-top: ${(props) => (props.indent ? 24 : 0)}px;
+  margin-top: ${({ indent }) => (indent ? 24 : 0)}px;
 `;
 
-type StyledCastStateDivProps = {
+const StyledMetadataDiv = styled.div<{
   indent: boolean;
-};
-
-const StyledMetadataDiv = styled.div<StyledCastStateDivProps>`
-  margin-top: ${(props) => (props.indent ? 24 : 0)}px;
+}>`
+  margin-top: ${({ indent }) => (indent ? 24 : 0)}px;
 `;
 
 const TriggerDiv = styled.div`
@@ -43,20 +39,19 @@ const TriggerDiv = styled.div`
   margin-bottom: 10px;
 `;
 
-type Props = {
+// list of all actions played, and sub-ShotResults for triggers
+export function ProjectileTreeShotResult({
+  shot,
+  indent,
+}: {
   shot: GroupedWandShot;
   indent: boolean;
-};
-
-// list of all actions played, and sub-ShotResults for triggers
-export function ProjectileTreeShotResult(props: Props) {
-  const { shot } = props;
-
+}) {
   return (
     <StyledShotDiv>
       <div>
-        <StyledMetadataDiv indent={props.indent}>
-          {!props.indent && (
+        <StyledMetadataDiv indent={indent}>
+          {!indent && (
             <ShotMetadata
               manaDrain={shot.manaDrain}
               castDelay={shot.castState?.fire_rate_wait}
@@ -75,7 +70,7 @@ export function ProjectileTreeShotResult(props: Props) {
           );
         }
         return (
-          <StyledProjectileDiv key={index} indent={props.indent}>
+          <StyledProjectileDiv key={index} indent={indent}>
             <WandActionGroup group={p} />
             {triggerComponent}
           </StyledProjectileDiv>

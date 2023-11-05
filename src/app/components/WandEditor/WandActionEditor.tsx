@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components/macro';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { useAppDispatch } from '../redux/hooks';
+import { useAppDispatch } from '../../redux/hooks';
 import {
   useSpells,
   setSpellAtIndex,
@@ -10,28 +10,31 @@ import {
   removeSpellAfterCursor,
   removeSpellBeforeCursor,
   moveSelection,
-} from '../redux/wandSlice';
-import { Spell } from '../calc/spell';
-import { getSpellById } from '../calc/spells';
-import { isKnownSpell } from '../types';
+} from '../../redux/wandSlice';
+import { Spell } from '../../calc/spell';
+import { getSpellById } from '../../calc/spells';
+import { isKnownSpell } from '../../types';
 import {
+  ChargesRemainingAnnotation,
   DeckIndexAnnotation,
   DeleteSpellAnnotation,
   FriendlyFireAnnotation,
   NoManaAnnotation,
-} from './Annotations/';
-import { WandActionDropTarget } from './wandAction/WandActionDropTarget';
-import { WandAction } from './wandAction/WandAction';
-import { WandActionDragSource } from './wandAction/WandActionDragSource';
-import { WandActionBorder } from './wandAction/WandActionBorder';
+} from '../Annotations/';
+import {
+  WandAction,
+  WandActionBorder,
+  WandActionDropTarget,
+  WandSelection,
+  WandActionDragSource,
+} from '../WandAction';
 
 const StyledList = styled.ul`
-  --grid-layout-gap: var(--sizes-spelledit-grid-layout-gap, 8px);
-  --grid-max-column-count: 8;
-  --grid-item-width: var(--sizes-spelledit-spell-total, 54px);
+  --grid-layout-gap: 0px;
+  --grid-max-column-count: 9;
+  --grid-item-width: 62px;
 
   margin: 0;
-  padding: 0;
   padding: 0 16px;
   background-color: var(--color-wand-editor-bg);
 
@@ -46,26 +49,31 @@ const StyledList = styled.ul`
     auto-fill,
     minmax(var(--grid-item-width), var(--grid-item-width))
   );
-  grid-gap: var(--grid-layout-gap);
+  grid-gap: 4px 0;
   justify-content: center;
   align-items: center;
 `;
 
 const StyledListItem = styled.li`
-  display: block;
+  display: flex;
   flex: 0 1 auto;
   list-style-type: none;
+  padding: 0 var(--grid-layout-gap);
 `;
 
-type Props = {
+function ActionComponent({
+  spellAction,
+  wandIndex,
+  deckIndex,
+  cursorIndex,
+  selection,
+}: {
   spellAction?: Spell;
   wandIndex: number;
   cursorIndex: number;
   deckIndex?: number;
-};
-
-function ActionComponent(props: Props) {
-  const { spellAction, wandIndex, deckIndex, cursorIndex } = props;
+  selection?: WandSelection;
+}) {
   const dispatch = useAppDispatch();
   const [mouseOver, setMouseOver] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -86,6 +94,7 @@ function ActionComponent(props: Props) {
       wandIndex={wandIndex}
       onDragChange={(dragOver: boolean) => setDragOver(dragOver)}
       cursor={cursor}
+      selection={selection}
     >
       <WandActionBorder
         highlight={dragOver}
@@ -109,6 +118,10 @@ function ActionComponent(props: Props) {
               />
             </WandActionDragSource>
             <DeckIndexAnnotation deckIndex={deckIndex} />
+            <ChargesRemainingAnnotation
+              charges={spellAction.uses_remaining}
+              nounlimited={spellAction.never_unlimited}
+            />
             <NoManaAnnotation />
             <FriendlyFireAnnotation />
           </>
@@ -122,7 +135,7 @@ export function WandActionEditor() {
   const dispatch = useAppDispatch();
 
   const spellIds = useSpells();
-  const { position: cursorPosition } = useCursor();
+  const { position: cursorPosition, selectFrom, selectTo } = useCursor();
 
   /* Move cursor */
   /* isSelecting && end selection
@@ -143,17 +156,17 @@ export function WandActionEditor() {
   /* Delete spells */
   /* isSelecting ? delete selected, clear selection : delete single
    *   visual change from in-progress/active selection to none */
-  useHotkeys('Backspace', () => {
+  useHotkeys('Backspace, r', () => {
     dispatch(removeSpellBeforeCursor({ shift: 'left' }));
     dispatch(moveCursor({ by: -1 }));
   });
-  useHotkeys('ctrl+Backspace', () => {
+  useHotkeys('ctrl+Backspace, ctrl+r', () => {
     dispatch(removeSpellBeforeCursor({ shift: 'right' }));
   });
-  useHotkeys('shift+Backspace', () => {
+  useHotkeys('shift+Backspace, shift+r', () => {
     dispatch(removeSpellAfterCursor({ shift: 'left' }));
   });
-  useHotkeys('ctrl+shift+Backspace', () => {
+  useHotkeys('ctrl+shift+Backspace, ctrl+shift+r', () => {
     dispatch(removeSpellAfterCursor({ shift: 'right' }));
     dispatch(moveCursor({ by: 1 }));
   });
@@ -185,12 +198,35 @@ export function WandActionEditor() {
   });
 
   /* Cut selection to new wand/storage */
-  /* Copy selection & paste duplicate */
+  /* Duplicate selection */
 
   const spellActions = spellIds.map((spellId) =>
     isKnownSpell(spellId) ? getSpellById(spellId) : undefined,
   );
   let deckIndex = 0;
+
+  const getSelection = (
+    idx: number,
+    from: number | null,
+    to: number | null,
+  ): WandSelection => {
+    if (from === null || to === null) {
+      return 'none';
+    }
+    if (from === to && from === idx) {
+      return 'single';
+    }
+    if ((idx >= from && idx <= to) || (idx >= to && idx <= from)) {
+      if (idx === from) {
+        return 'start';
+      }
+      if (idx === to) {
+        return 'end';
+      }
+      return 'thru';
+    }
+    return 'none';
+  };
 
   return (
     <StyledList>
@@ -201,6 +237,7 @@ export function WandActionEditor() {
             wandIndex={wandIndex}
             deckIndex={spellAction !== undefined ? deckIndex++ : undefined}
             cursorIndex={cursorPosition}
+            selection={getSelection(wandIndex, selectFrom, selectTo)}
           />
         </StyledListItem>
       ))}

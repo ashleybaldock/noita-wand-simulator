@@ -1,6 +1,10 @@
 import styled from 'styled-components/macro';
-import { WandActionGroup } from '../wandAction/WandActionGroup';
-import { ActionCall, GroupedWandShot, TreeNode } from '../../calc/eval/types';
+import { WandActionGroup } from '../WandActionGroup';
+import {
+  ActionCall,
+  GroupedWandShot,
+  TreeNode,
+} from '../../../calc/eval/types';
 
 export const ActionTreeShotResultMainDiv = styled.div`
   display: flex;
@@ -27,12 +31,7 @@ const ChildrenDiv = styled.div`
   border-bottom: 0;
 `;
 
-type ActionTreeComponentProps = {
-  node: TreeNode<ActionCall>;
-};
-
-function ActionTreeComponent(props: ActionTreeComponentProps) {
-  const { node } = props;
+const ActionTreeComponent = ({ node }: { node: TreeNode<ActionCall> }) => {
   const childCount = node.children.length;
   const hasChildren = childCount > 0;
 
@@ -48,19 +47,14 @@ function ActionTreeComponent(props: ActionTreeComponentProps) {
       )}
     </ActionTreeShotResultNodeDiv>
   );
-}
-
-type Props = {
-  shot: GroupedWandShot;
 };
 
-export function ActionTreeShotResult(props: Props) {
-  const s = props.shot;
+export const ActionTreeShotResult = ({ shot }: { shot: GroupedWandShot }) => {
   return (
     <ActionTreeShotResultMainDiv>
-      {s.actionTree.map((n, index) => (
+      {shot.actionTree.map((n, index) => (
         <ActionTreeComponent node={n} key={index} />
       ))}
     </ActionTreeShotResultMainDiv>
   );
-}
+};
