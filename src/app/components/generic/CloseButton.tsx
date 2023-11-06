@@ -11,10 +11,6 @@ const StyledButton = styled.button`
   }
 `;
 
-type Props = {
-  onClick: () => void;
-};
-
-export function CloseButton(props: Props) {
-  return <StyledButton onClick={props.onClick}>X</StyledButton>;
-}
+export const CloseButton = ({ onClick }: { onClick: () => void }) => (
+  <StyledButton onClick={onClick}>X</StyledButton>
+);
