@@ -27,7 +27,7 @@ import {
   WandActionDropTarget,
   WandSelection,
   WandActionDragSource,
-} from '../WandAction';
+} from '../Spells/WandAction';
 
 const StyledList = styled.ul`
   --grid-layout-gap: 0px;

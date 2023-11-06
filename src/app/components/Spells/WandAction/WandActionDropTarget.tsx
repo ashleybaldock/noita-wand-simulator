@@ -1,7 +1,7 @@
 import { useDrop } from 'react-dnd';
 import { useCallback, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { WandActionDragItem } from '../../types';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { WandActionDragItem } from '../../../types';
 import styled from 'styled-components/macro';
 import {
   insertSpellBefore,
@@ -9,8 +9,8 @@ import {
   moveSpell,
   setSpellAtIndex,
   moveCursor,
-} from '../../redux/wandSlice';
-import { selectConfig } from '../../redux/configSlice';
+} from '../../../redux/wandSlice';
+import { selectConfig } from '../../../redux/configSlice';
 
 const DropTargetMain = styled.div<{
   selection: WandSelection;

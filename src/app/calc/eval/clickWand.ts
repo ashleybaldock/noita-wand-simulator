@@ -108,6 +108,7 @@ export function clickWand(
   const unsub = subscribe((eventType, ...args) => {
     switch (eventType) {
       case 'BeginProjectile':
+        // TODO remove this
         const validSourceActionCalls = calledActions.filter((a) => {
           return [
             'projectile',

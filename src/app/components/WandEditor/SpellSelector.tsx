@@ -20,7 +20,7 @@ import {
   WandAction,
   WandActionBorder,
   WandActionDragSource,
-} from '../WandAction';
+} from '../Spells/WandAction';
 
 const MainDiv = styled.div`
   --bsize-spell: 40px;

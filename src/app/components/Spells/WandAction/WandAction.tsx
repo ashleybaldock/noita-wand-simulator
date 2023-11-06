@@ -1,5 +1,8 @@
 import styled from 'styled-components/macro';
-import { SpellType, getBackgroundUrlForSpellType } from '../../calc/spellTypes';
+import {
+  SpellType,
+  getBackgroundUrlForSpellType,
+} from '../../../calc/spellTypes';
 
 type Props = {
   onDeleteSpell?: () => void;

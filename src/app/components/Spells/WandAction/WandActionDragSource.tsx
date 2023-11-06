@@ -1,7 +1,7 @@
 import { useDrag } from 'react-dnd';
 
 import styled from 'styled-components/macro';
-import { ActionId } from '../../calc/actionId';
+import { ActionId } from '../../../calc/actionId';
 
 const StyledDiv = styled.div<{
   isDragging: boolean;
