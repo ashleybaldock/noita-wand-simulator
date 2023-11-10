@@ -132,12 +132,12 @@ export function ActionUsed(item_id: any) {
   }
 }
 
-export function LogAction(s: string) {
-  const result = onEvent('LogAction', s);
-  if (result !== undefined) {
-    return result;
-  }
-}
+// export function LogAction(s: string) {
+//   const result = onEvent('LogAction', s);
+//   if (result !== undefined) {
+//     return result;
+//   }
+// }
 
 export function StartReload(reload_time: number) {
   const result = onEvent('StartReload', reload_time);

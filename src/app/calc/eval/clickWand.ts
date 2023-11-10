@@ -15,19 +15,24 @@ import {
 import { isValidEntityPath, entityToActions } from '../entityLookup';
 import { isIterativeActionId } from '../actionId';
 import { ActionCall, Requirements, TreeNode, WandShot } from './types';
+import { defaultGunActionState } from '../actionState';
+
+export type StopCondition = 'reload' | 'refresh' | 'iterLimit';
 
 export function clickWand(
   wand: Gun,
   spells: Spell[],
   mana: number,
   castDelay: number,
-  fireUntilReload: boolean,
-  endOnRefresh: boolean,
+  fireUntil: StopCondition,
   requirements?: Requirements,
 ): [WandShot[], number | undefined, boolean] {
   if (spells.filter((s) => s != null).length === 0) {
     return [[], undefined, false];
   }
+
+  const fireUntilReload = fireUntil === 'reload';
+  const endOnRefresh = fireUntil === 'refresh';
 
   let iterations = 0;
   const iterationLimit = 10;
@@ -53,6 +58,7 @@ export function clickWand(
       projectiles: [],
       calledActions: [],
       actionTree: [],
+      castState: { ...defaultGunActionState },
     };
     calledActions = [];
     currentShotStack = [];
@@ -168,6 +174,7 @@ export function clickWand(
           projectiles: [],
           calledActions: [],
           actionTree: [],
+          castState: undefined,
         };
         parentShot.projectiles[parentShot.projectiles.length - 1].trigger =
           currentShot;
@@ -213,7 +220,8 @@ export function clickWand(
         break;
       }
       case 'OnActionFinished': {
-        // const [source, spell, c, recursion, iteration, returnValue] = args;
+        const [source, spell, c, recursion, iteration, returnValue] = args;
+        currentShot.castState = Object.assign({}, c);
         currentNode = currentNode?.parent;
         break;
       }
@@ -228,7 +236,7 @@ export function clickWand(
   resetState();
 
   _set_gun(wand);
-  _clear_deck(false);
+  _clear_deck(/*false*/);
 
   spells.forEach((spell, index) => {
     if (!spell) {

@@ -81,8 +81,7 @@ export const ShotResultList = ({
         spellActionsWithUses,
         wand.mana_max,
         wand.cast_delay,
-        true,
-        config.endSimulationOnRefresh,
+        config.endSimulationOnRefresh ? 'refresh' : 'reload',
         config.requirements,
       ),
     [

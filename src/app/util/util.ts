@@ -130,17 +130,12 @@ export type TypedProperties<T, U> = Pick<
   }[keyof T]
 >;
 
-export const numSign = (v: any, round?: number) => {
-  if (round !== undefined) {
-    v = Math.round(Number(v) * Math.pow(10, round)) / Math.pow(10, round);
-  }
-  return (v < 0 ? '' : '+') + v;
-};
+export const formatYesNo = (v: boolean) => (v ? 'Yes' : 'No');
 
-export const round = (v: number, position: number) =>
-  Math.round(Number(v) * Math.pow(10, position)) / Math.pow(10, position);
+export const round = (n: number, to: number) =>
+  Math.round(n * Math.pow(10, to)) / Math.pow(10, to);
 
-export const sign = (v: number) => (v < 0 ? '' : '+') + v;
+export const sign = (n: number) => (n < 0 ? '' : '+') + n;
 
 export const toFrames = (durationInSeconds: number, fps: number = 60) =>
   round(durationInSeconds * fps, 2);

@@ -22,7 +22,7 @@ import {
   BeginTriggerTimer,
   EndProjectile,
   EndTrigger,
-  LogAction,
+  /* LogAction,*/
   OnActionCalled,
   OnActionFinished,
   OnActionPlayed,
@@ -133,7 +133,7 @@ let state_cards_drawn = 0;
 
 let playing_permanent_card = false;
 
-let use_game_log = false;
+// let use_game_log = false;
 
 // initialize global/constant gun state
 export let gun = ConfigGun_Init();
@@ -495,13 +495,13 @@ function move_hand_to_discarded() {
       action.is_identified = true;
     }
 
-    if (use_game_log) {
-      if (action.is_identified) {
-        LogAction(action.name);
-      } else {
-        LogAction('?');
-      }
-    }
+    // if (use_game_log) {
+    //   if (action.is_identified) {
+    //     LogAction(action.name);
+    //   } else {
+    //     LogAction('?');
+    //   }
+    // }
 
     if (action.uses_remaining !== 0 || action.custom_uses_logic) {
       if (action.permanently_attached == null) {
@@ -603,7 +603,7 @@ export function _set_gun(g: Gun) {
 }
 
 // this can be used to build a new deck
-export function _clear_deck(use_game_log_: boolean) {
+export function _clear_deck(/*use_game_log_: boolean*/) {
   hand = [];
   discarded = [];
   deck = [];
@@ -611,7 +611,7 @@ export function _clear_deck(use_game_log_: boolean) {
   current_reload_time = 0;
   reloading = false;
 
-  use_game_log = use_game_log_;
+  // use_game_log = use_game_log_;
 }
 
 // this can be used to build a new deck

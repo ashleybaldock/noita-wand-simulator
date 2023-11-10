@@ -3,7 +3,7 @@ import {
   defaultGunActionState,
   GunActionState,
 } from '../../../calc/actionState';
-import { numSign, round } from '../../../util/util';
+import { formatYesNo, round, sign } from '../../../util/util';
 
 const StyledList = styled.div`
   display: flex;
@@ -12,7 +12,8 @@ const StyledList = styled.div`
   align-items: flex-start;
   font-family: monospace;
   color: #fff;
-  font-weight: bold;
+  font-weight: unset;
+  font-size: 0.8em;
   min-width: 230px;
   border: 1px solid black;
   padding: 1px;
@@ -66,28 +67,28 @@ const fields: FieldDescription[] = [
   // {field: 'action_never_unlimited', displayName: 'action_never_unlimited', render: (_, v) => `${v}`},
   {
     field: 'state_shuffled',
-    displayName: 'state_shuffled',
-    render: (_, v) => `${v}`,
+    displayName: 'Deck Shuffled',
+    render: (_, v) => `${formatYesNo(Boolean(v))}`,
   },
   {
     field: 'state_cards_drawn',
-    displayName: 'state_cards_drawn',
-    render: (_, v) => `${v}`,
+    displayName: 'Cards Drawn',
+    render: (_, v) => `${formatYesNo(Boolean(v))}`,
   },
   {
     field: 'state_discarded_action',
-    displayName: 'state_discarded_action',
-    render: (_, v) => `${v}`,
+    displayName: 'Discarded',
+    render: (_, v) => `${formatYesNo(Boolean(v))}`,
   },
   {
     field: 'state_destroyed_action',
-    displayName: 'state_destroyed_action',
-    render: (_, v) => `${v}`,
+    displayName: 'Destroyed',
+    render: (_, v) => `${formatYesNo(Boolean(v))}`,
   },
   {
     field: 'fire_rate_wait',
     displayName: 'Cast Delay',
-    render: (_, v) => `${numSign(Number(v) / 60, 2)}s`,
+    render: (_, v) => `${sign(round(Number(v) / 60, 2))}s`,
   },
   {
     field: 'speed_multiplier',
@@ -103,12 +104,12 @@ const fields: FieldDescription[] = [
   {
     field: 'explosion_radius',
     displayName: 'Explosion Radius',
-    render: (_, v) => `${numSign(Number(v))}`,
+    render: (_, v) => `${sign(Number(v))}`,
   },
   {
     field: 'spread_degrees',
     displayName: 'Spread',
-    render: (_, v) => `${numSign(Number(v), 1)} deg`,
+    render: (_, v) => `${sign(round(Number(v), 1))} deg`,
   },
   {
     field: 'pattern_degrees',
@@ -125,57 +126,57 @@ const fields: FieldDescription[] = [
   {
     field: 'damage_projectile_add',
     displayName: 'Projectile Damage',
-    render: (_, v) => `${numSign(Number(v) * 25, 0)}`,
+    render: (_, v) => `${sign(round(Number(v) * 25, 0))}`,
   },
   {
     field: 'damage_electricity_add',
     displayName: 'Electricity Damage',
-    render: (_, v) => `${numSign(Number(v) * 25, 0)}`,
+    render: (_, v) => `${sign(round(Number(v) * 25, 0))}`,
   },
   {
     field: 'damage_fire_add',
     displayName: 'Fire Damage',
-    render: (_, v) => `${numSign(Number(v) * 25, 0)}`,
+    render: (_, v) => `${sign(round(Number(v) * 25, 0))}`,
   },
   {
     field: 'damage_explosion_add',
     displayName: 'Explosion Damage',
-    render: (_, v) => `${numSign(Number(v) * 25, 0)}`,
+    render: (_, v) => `${sign(round(Number(v) * 25, 0))}`,
   },
   {
     field: 'damage_ice_add',
     displayName: 'Ice Damage',
-    render: (_, v) => `${numSign(Number(v) * 25, 0)}`,
+    render: (_, v) => `${sign(round(Number(v) * 25, 0))}`,
   },
   {
     field: 'damage_slice_add',
     displayName: 'Slice Damage',
-    render: (_, v) => `${numSign(Number(v) * 25, 0)}`,
+    render: (_, v) => `${sign(round(Number(v) * 25, 0))}`,
   },
   {
     field: 'damage_healing_add',
     displayName: 'Healing Damage',
-    render: (_, v) => `${numSign(Number(v) * 25, 0)}`,
+    render: (_, v) => `${sign(round(Number(v) * 25, 0))}`,
   },
   {
     field: 'damage_curse_add',
     displayName: 'Curse Damage',
-    render: (_, v) => `${numSign(Number(v) * 25, 0)}`,
+    render: (_, v) => `${sign(round(Number(v) * 25, 0))}`,
   },
   {
     field: 'damage_holy_add',
     displayName: 'Holy Damage',
-    render: (_, v) => `${numSign(Number(v) * 25, 0)}`,
+    render: (_, v) => `${sign(round(Number(v) * 25, 0))}`,
   },
   {
     field: 'damage_drill_add',
     displayName: 'Drill Damage',
-    render: (_, v) => `${numSign(Number(v) * 25, 0)}`,
+    render: (_, v) => `${sign(round(Number(v) * 25, 0))}`,
   },
   {
     field: 'damage_critical_chance',
     displayName: 'Critical Chance',
-    render: (_, v) => `${numSign(Number(v))}%`,
+    render: (_, v) => `${sign(Number(v))}%`,
   },
   {
     field: 'damage_critical_multiplier',
@@ -195,7 +196,7 @@ const fields: FieldDescription[] = [
   {
     field: 'reload_time',
     displayName: 'Recharge Delay',
-    render: (_, v) => `${numSign(Number(v) / 60, 2)}s`,
+    render: (_, v) => `${sign(round(Number(v) / 60, 2))}s`,
   },
   {
     field: 'lightning_count',
@@ -233,7 +234,7 @@ const fields: FieldDescription[] = [
   {
     field: 'lifetime_add',
     displayName: 'Lifetime Modifier',
-    render: (_, v) => `${numSign(Number(v))}`,
+    render: (_, v) => `${sign(Number(v))}`,
   },
   { field: 'sprite', displayName: 'sprite', render: (_, v) => `${v}` },
   // {field: 'extra_entities', displayName: 'extra_entities', render: (_, v) => `${v}`},
