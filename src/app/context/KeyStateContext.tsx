@@ -24,8 +24,8 @@ export const KeyStateContextProvider = ({
   const [keyState, setKeyState] = useState(defaultKeyState);
 
   useEffect(() => {
-    const blurListener = (evt: FocusEvent) => {
-      console.log(evt);
+    const blurListener = (/*evt: FocusEvent*/) => {
+      // console.log(evt);
       setKeyState((keyState) => ({
         ...keyState,
         shift: false,
@@ -42,7 +42,7 @@ export const KeyStateContextProvider = ({
 
   useEffect(() => {
     const keydownListener = (evt: KeyboardEvent) => {
-      console.log(evt);
+      // console.log(evt);
       if (evt.key === 'Shift' || evt.shiftKey) {
         setKeyState((keyState) => ({ ...keyState, shift: true }));
       }
@@ -63,7 +63,7 @@ export const KeyStateContextProvider = ({
 
   useEffect(() => {
     const keyupEventListener = (evt: KeyboardEvent) => {
-      console.log(evt);
+      // console.log(evt);
       setKeyState((keyState) => ({
         ...keyState,
         shift: evt.shiftKey,
@@ -98,10 +98,11 @@ export const KeyStateContextProvider = ({
 };
 
 const KeyStateDebug = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
   padding: 3px;
+  z-index: var(--zindex-ceiling);
 `;
 const KeyStateKey = styled.span<{ pressed: boolean }>`
   margin: 0 1px 0 0;
@@ -112,8 +113,8 @@ const KeyStateKey = styled.span<{ pressed: boolean }>`
   line-height: 1em;
   border-radius: 2px;
   font-size: 10px;
-  border-color: ${({ pressed }) => (pressed ? 'var(--color-base)' : '#555555')};
-  color: ${({ pressed }) => (pressed ? 'var(--color-base)' : '#555555')};
+  border-color: ${({ pressed }) => (pressed ? 'var(--color-base)' : '#333333')};
+  color: ${({ pressed }) => (pressed ? 'var(--color-base)' : '#333333')};
 `;
 
 export const DebugKeyState = () => {

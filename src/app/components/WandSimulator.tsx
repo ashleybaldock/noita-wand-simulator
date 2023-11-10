@@ -3,14 +3,16 @@ import styled from 'styled-components/macro';
 import { SpellSelector, WandBuilder } from './WandEditor';
 import { ShotResultList } from './Visualisation';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { selectConfig } from '../redux/configSlice';
+import { selectConfig, updateConfig } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
+import { DebugHints } from './Debug';
 import { SectionHeader } from './SectionHeader';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
 import { ReleaseInfo } from './ReleaseInfo';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 const Column = styled.div`
   display: flex;
@@ -35,34 +37,44 @@ const SpellHotbar = styled.div`
 
 export function WandSimulator() {
   const { config } = useAppSelector(selectConfig);
-  useAppDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     forceDisableCanvasSmoothing();
   }, []);
 
+  useHotkeys('=', () => {
+    dispatch(
+      updateConfig({
+        debug: { ...config.debug, dragHint: !config.debug.dragHint },
+      }),
+    );
+  });
+
   return (
-    <Column>
-      <MainHeader></MainHeader>
+    <DebugHints>
       <Column>
-        <DndProvider backend={HTML5Backend}>
-          <WandBuilder />
-          <SpellShortcuts>
-            <SpellHotbar></SpellHotbar>
-          </SpellShortcuts>
-          <SpellSelector />
-        </DndProvider>
+        <MainHeader></MainHeader>
+        <Column>
+          <DndProvider backend={HTML5Backend}>
+            <WandBuilder />
+            <SpellShortcuts>
+              <SpellHotbar></SpellHotbar>
+            </SpellShortcuts>
+            <SpellSelector />
+          </DndProvider>
+        </Column>
+        <Column>
+          <CastConfigEditor />
+        </Column>
+        <Column>
+          <SectionHeader
+            title={`Simulation${config.pauseCalculations ? ' (Paused)' : ''}`}
+          />
+          {!config.pauseCalculations && <ShotResultList {...config} />}
+        </Column>
+        <ReleaseInfo />
       </Column>
-      <Column>
-        <CastConfigEditor />
-      </Column>
-      <Column>
-        <SectionHeader
-          title={`Simulation${config.pauseCalculations ? ' (Paused)' : ''}`}
-        />
-        {!config.pauseCalculations && <ShotResultList {...config} />}
-      </Column>
-      <ReleaseInfo />
-    </Column>
+    </DebugHints>
   );
 }

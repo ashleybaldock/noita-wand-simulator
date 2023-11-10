@@ -10,6 +10,9 @@ import {
   removeSpellAfterCursor,
   removeSpellBeforeCursor,
   moveSelection,
+  setSelection,
+  deleteSelection,
+  clearSelection,
 } from '../../redux/wandSlice';
 import { Spell } from '../../calc/spell';
 import { getSpellById } from '../../calc/spells';
@@ -23,13 +26,84 @@ import {
 } from '../Annotations/';
 import {
   WandAction,
-  WandActionBorder,
-  WandActionDropTarget,
-  WandSelection,
+  WandActionDropTargets,
   WandActionDragSource,
+  WandSelection,
 } from '../Spells/WandAction';
+import { useDragLayer } from 'react-dnd';
 
-const StyledList = styled.ul`
+function ActionComponent({
+  spellAction,
+  wandIndex,
+  deckIndex,
+  cursorIndex,
+  selection,
+}: {
+  spellAction?: Spell;
+  wandIndex: number;
+  cursorIndex: number;
+  deckIndex?: number;
+  selection?: WandSelection;
+}) {
+  const dispatch = useAppDispatch();
+
+  const { isDragging, isDraggingAction, isDraggingSelect } = useDragLayer(
+    (monitor) => ({
+      isDragging: monitor.isDragging(),
+      isDraggingAction: monitor.getItemType() === 'action',
+      isDraggingSelect: monitor.getItemType() === 'select',
+    }),
+  );
+  const handleDeleteSpell = (wandIndex: number) => {
+    dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
+  };
+
+  const cursor =
+    cursorIndex === wandIndex
+      ? 'before'
+      : cursorIndex === wandIndex + 1
+      ? 'after'
+      : 'none';
+
+  return (
+    <WandActionDropTargets
+      wandIndex={wandIndex}
+      cursor={cursor}
+      selection={selection}
+    >
+      {spellAction && (
+        <>
+          <WandActionDragSource
+            actionId={spellAction.id}
+            sourceWandIndex={wandIndex}
+          >
+            <WandAction
+              spellType={spellAction.type}
+              spellSprite={spellAction.sprite}
+              onDeleteSpell={() => handleDeleteSpell(wandIndex)}
+            />
+          </WandActionDragSource>
+          <ChargesRemainingAnnotation
+            charges={spellAction.uses_remaining}
+            nounlimited={spellAction.never_unlimited}
+          />
+          <DeckIndexAnnotation deckIndex={deckIndex} />
+          {!isDraggingAction && (
+            <>
+              <DeleteSpellAnnotation
+                deleteSpell={() => handleDeleteSpell(wandIndex)}
+              />
+              <NoManaAnnotation />
+              <FriendlyFireAnnotation />
+            </>
+          )}
+        </>
+      )}
+    </WandActionDropTargets>
+  );
+}
+
+const SpellSlots = styled.ul`
   --grid-layout-gap: 0px;
   --grid-max-column-count: 9;
   --grid-item-width: 62px;
@@ -49,105 +123,37 @@ const StyledList = styled.ul`
     auto-fill,
     minmax(var(--grid-item-width), var(--grid-item-width))
   );
-  grid-gap: 4px 0;
+  grid-gap: 2px 0;
   justify-content: center;
   align-items: center;
 `;
 
-const StyledListItem = styled.li`
+const SpellSlot = styled.li`
   display: flex;
   flex: 0 1 auto;
   list-style-type: none;
   padding: 0 var(--grid-layout-gap);
 `;
-
-function ActionComponent({
-  spellAction,
-  wandIndex,
-  deckIndex,
-  cursorIndex,
-  selection,
-}: {
-  spellAction?: Spell;
-  wandIndex: number;
-  cursorIndex: number;
-  deckIndex?: number;
-  selection?: WandSelection;
-}) {
-  const dispatch = useAppDispatch();
-  const [mouseOver, setMouseOver] = useState(false);
-  const [dragOver, setDragOver] = useState(false);
-
-  const handleDeleteSpell = (wandIndex: number) => {
-    dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
-  };
-
-  const cursor =
-    cursorIndex === wandIndex
-      ? 'before'
-      : cursorIndex === wandIndex + 1
-      ? 'after'
-      : 'none';
-
-  return (
-    <WandActionDropTarget
-      wandIndex={wandIndex}
-      onDragChange={(dragOver: boolean) => setDragOver(dragOver)}
-      cursor={cursor}
-      selection={selection}
-    >
-      <WandActionBorder
-        highlight={dragOver}
-        onMouseEnter={() => setMouseOver(true)}
-        onMouseLeave={() => setMouseOver(false)}
-      >
-        {spellAction && (
-          <>
-            <WandActionDragSource
-              actionId={spellAction.id}
-              sourceWandIndex={wandIndex}
-            >
-              <WandAction
-                spellType={spellAction.type}
-                spellSprite={spellAction.sprite}
-                onDeleteSpell={() => handleDeleteSpell(wandIndex)}
-              />
-              <DeleteSpellAnnotation
-                visible={mouseOver}
-                deleteSpell={() => handleDeleteSpell(wandIndex)}
-              />
-            </WandActionDragSource>
-            <DeckIndexAnnotation deckIndex={deckIndex} />
-            <ChargesRemainingAnnotation
-              charges={spellAction.uses_remaining}
-              nounlimited={spellAction.never_unlimited}
-            />
-            <NoManaAnnotation />
-            <FriendlyFireAnnotation />
-          </>
-        )}
-      </WandActionBorder>
-    </WandActionDropTarget>
-  );
-}
-
 export function WandActionEditor() {
   const dispatch = useAppDispatch();
 
   const spellIds = useSpells();
   const { position: cursorPosition, selectFrom, selectTo } = useCursor();
+  const isSelecting = selectFrom !== null;
+
+  const currentRowLength = () => 10; // TODO calc from current layout
 
   /* Move cursor */
   /* isSelecting && end selection
    *   visual change from in-progress selection, to active selection */
   useHotkeys('w', () => {
-    dispatch(moveCursor({ by: -10 }));
+    dispatch(moveCursor({ by: -1 * currentRowLength() }));
   });
   useHotkeys('a', () => {
     dispatch(moveCursor({ by: -1 }));
   });
   useHotkeys('s', () => {
-    dispatch(moveCursor({ by: 10 }));
+    dispatch(moveCursor({ by: currentRowLength() }));
   });
   useHotkeys('d', () => {
     dispatch(moveCursor({ by: 1 }));
@@ -157,34 +163,57 @@ export function WandActionEditor() {
   /* isSelecting ? delete selected, clear selection : delete single
    *   visual change from in-progress/active selection to none */
   useHotkeys('Backspace, r', () => {
-    dispatch(removeSpellBeforeCursor({ shift: 'left' }));
-    dispatch(moveCursor({ by: -1 }));
+    if (isSelecting) {
+      dispatch(deleteSelection({ shift: 'left' }));
+      dispatch(clearSelection());
+    } else {
+      dispatch(removeSpellBeforeCursor({ shift: 'left' }));
+      dispatch(moveCursor({ by: -1 }));
+    }
   });
   useHotkeys('ctrl+Backspace, ctrl+r', () => {
-    dispatch(removeSpellBeforeCursor({ shift: 'right' }));
+    if (isSelecting) {
+      dispatch(deleteSelection({ shift: 'right' }));
+      dispatch(clearSelection());
+    } else {
+      dispatch(removeSpellBeforeCursor({ shift: 'right' }));
+    }
   });
   useHotkeys('shift+Backspace, shift+r', () => {
-    dispatch(removeSpellAfterCursor({ shift: 'left' }));
+    if (isSelecting) {
+      dispatch(deleteSelection({}));
+      dispatch(clearSelection());
+    } else {
+      dispatch(removeSpellAfterCursor({ shift: 'left' }));
+    }
   });
   useHotkeys('ctrl+shift+Backspace, ctrl+shift+r', () => {
-    dispatch(removeSpellAfterCursor({ shift: 'right' }));
-    dispatch(moveCursor({ by: 1 }));
+    if (isSelecting) {
+      dispatch(deleteSelection({}));
+      dispatch(clearSelection());
+    } else {
+      dispatch(removeSpellAfterCursor({ shift: 'right' }));
+      dispatch(moveCursor({ by: 1 }));
+    }
   });
 
   /* Modify selection */
   /* isSelecting ? extend : clear previous, begin new
    *   visual change to indicate change of active selection */
   useHotkeys('shift+w', () => {
-    dispatch(moveCursor({ by: -10, select: true }));
+    dispatch(moveCursor({ by: -1 * currentRowLength(), select: 'left' }));
   });
   useHotkeys('shift+a', () => {
-    dispatch(moveCursor({ by: -1, select: true }));
+    dispatch(moveCursor({ by: -1, select: 'left' }));
   });
   useHotkeys('shift+s', () => {
-    dispatch(moveCursor({ by: 10, select: true }));
+    dispatch(moveCursor({ by: currentRowLength(), select: 'right' }));
   });
   useHotkeys('shift+d', () => {
-    dispatch(moveCursor({ by: 1, select: true }));
+    dispatch(moveCursor({ by: 1, select: 'right' }));
+  });
+  useHotkeys('c', () => {
+    dispatch(clearSelection());
   });
 
   /* Move selection */
@@ -197,8 +226,11 @@ export function WandActionEditor() {
     dispatch(moveSelection({ by: 1 }));
   });
 
+  /* Add spaces to front/end w/ + button or drag */
+  /* Selection needs control nodes to grab for drag and drop */
   /* Cut selection to new wand/storage */
   /* Duplicate selection */
+  /* Select spells in current cast state */
 
   const spellActions = spellIds.map((spellId) =>
     isKnownSpell(spellId) ? getSpellById(spellId) : undefined,
@@ -229,9 +261,9 @@ export function WandActionEditor() {
   };
 
   return (
-    <StyledList>
+    <SpellSlots>
       {spellActions.map((spellAction, wandIndex) => (
-        <StyledListItem key={wandIndex}>
+        <SpellSlot key={wandIndex}>
           <ActionComponent
             spellAction={spellAction}
             wandIndex={wandIndex}
@@ -239,8 +271,8 @@ export function WandActionEditor() {
             cursorIndex={cursorPosition}
             selection={getSelection(wandIndex, selectFrom, selectTo)}
           />
-        </StyledListItem>
+        </SpellSlot>
       ))}
-    </StyledList>
+    </SpellSlots>
   );
 }

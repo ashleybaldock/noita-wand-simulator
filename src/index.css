@@ -63,6 +63,7 @@
 
   --zindex-note-deckidx: 80;
   --zindex-note-charges: 81;
+  --zindex-note-delete: 82;
 
   --zindex-tabs-hover: 90;
   --zindex-tabs-selected: 100;
@@ -77,6 +78,8 @@
   --zindex-devinfo: 999;
 
   --zindex-modal-window: 1000;
+
+  --zindex-ceiling: 10000;
 
   --anim-basic-in: 20ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   --transition-hover-in: 80ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;

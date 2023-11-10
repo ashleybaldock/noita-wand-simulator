@@ -1,9 +1,20 @@
 import { Preset, PresetGroup } from '../types';
 
+export const noop = () => {};
+
+export const isNotNull = <T>(x: T | null): x is T => x !== null;
+
+export const isNotNullOrUndefined = <T>(x: T | null | undefined): x is T =>
+  x !== null && x !== undefined;
+
 export const isString = (x: unknown): x is string => typeof '' === typeof x;
 export const isNumber = (x: unknown): x is number => typeof 42 === typeof x;
 export const isBoolean = (x: unknown): x is boolean =>
   typeof false === typeof x;
+
+export const assertNever = (_: never): never => {
+  throw new Error('This should never happen.');
+};
 
 export const parseBooleanFromString = (
   str: string,
@@ -48,11 +59,6 @@ export function isSinglePreset(p: Preset | PresetGroup): p is Preset {
 export function isPresetGroup(p: Preset | PresetGroup): p is PresetGroup {
   return p.hasOwnProperty('presets');
 }
-
-export const isNotNull = <T>(x: T | null): x is T => x !== null;
-
-export const isNotNullOrUndefined = <T>(x: T | null | undefined): x is T =>
-  x !== null && x !== undefined;
 
 export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
   Object.keys(obj) as (keyof T)[];

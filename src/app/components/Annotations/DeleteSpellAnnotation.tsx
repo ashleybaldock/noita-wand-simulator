@@ -1,6 +1,8 @@
 import styled from 'styled-components/macro';
 import { useDrag } from 'react-dnd';
+import { WandActionBorder } from '../Spells/WandAction';
 import { BaseAnnotation } from './BaseAnnotation';
+import { noop } from '../../util';
 
 const DeleteDiv = styled(BaseAnnotation)`
   --transition-in: var(--transition-hover-in);
@@ -11,9 +13,11 @@ const DeleteDiv = styled(BaseAnnotation)`
   right: 4px;
   left: unset;
   color: black;
+
+  border-radius: 5px;
   border: 1px solid #cb3c3c;
-  border-radius: 2px;
   background-color: black;
+
   font-size: 10px;
   text-align: center;
   font-family: var(--font-family-noita-default);
@@ -21,38 +25,44 @@ const DeleteDiv = styled(BaseAnnotation)`
 
   image-rendering: pixelated;
 
+  z-index: var(--zindex-note-delete);
   padding: 2px;
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   background-image: url('/data/warnings/neutralized.png');
   background-repeat: no-repeat;
-  background-size: 12px 12px;
+  background-size: 11px 11px;
+  background-size: 13px 13px;
   background-position: center center;
+
+  transform: scale(100%);
+  transition: var(--transition-in);
+  transition-property: var(--transition-props);
+
+  display: none;
+  ${WandActionBorder}:hover && {
+    display: block;
+  }
 
   &:hover {
     transform: scale(109%);
 
-    transition-timing-function: var(--transition-out, ease-out);
+    transition: var(--transition-out);
     transition-property: var(--transition-props);
   }
 `;
 
-type Props = {
-  visible: boolean;
+export const DeleteSpellAnnotation = ({
+  deleteSpell = noop,
+}: {
   deleteSpell?: () => void;
-};
-
-export function DeleteSpellAnnotation(props: Props) {
-  const { visible, deleteSpell } = props;
+}) => {
   const [{ isDragging }] = useDrag(() => ({
     type: 'action',
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   }));
-  if (isDragging || !visible || !deleteSpell) {
-    return null;
-  }
 
   return <DeleteDiv onClick={deleteSpell}></DeleteDiv>;
-}
+};

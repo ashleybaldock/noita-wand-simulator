@@ -4,17 +4,17 @@ import {
   getBackgroundUrlForSpellType,
 } from '../../../calc/spellTypes';
 
-type Props = {
+const _WandAction = ({
+  spellType,
+  spellSprite,
+  className,
+}: {
   onDeleteSpell?: () => void;
   className?: string;
   spellType?: SpellType;
   spellSprite?: string;
   keyHint?: string;
-};
-
-function _WandAction({ spellType, spellSprite, className }: Props) {
-  // const [mouseOver, setMouseOver] = useState(false);
-
+}) => {
   return (
     <div
       className={className}
@@ -23,11 +23,9 @@ function _WandAction({ spellType, spellSprite, className }: Props) {
           spellType,
         )}`,
       }}
-      // onMouseEnter={() => setMouseOver(true)}
-      // onMouseLeave={() => setMouseOver(false)}
     />
   );
-}
+};
 
 export const WandAction = styled(_WandAction)`
   --transition-in: var(--transition-hover-in);
@@ -62,6 +60,5 @@ export const WandAction = styled(_WandAction)`
 
   &:active {
     cursor: grabbing;
-    border: 1px solid red;
   }
 `;

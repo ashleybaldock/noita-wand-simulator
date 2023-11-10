@@ -63,7 +63,9 @@ export const v2WandStateMapping: v2WandStateRecord = {
 export const v2SpellsMapping = 's' as const;
 export const v2AlwaysMapping = 'w' as const;
 
-export type ShiftDirection = 'left' | 'right' | 'none';
+export type SpellShiftDirection = 'left' | 'right' | 'none';
+export type SpellEditMode = 'overwrite' | 'swap' | 'before' | 'after';
+export type SelectionIndex = 'cursor' | number;
 
 export type Cursor = {
   position: number;
@@ -92,9 +94,19 @@ export type PresetGroup = {
   presets: (Preset | PresetGroup)[];
 };
 
-export type WandActionDragItem = {
+export interface DragItemSelect {
+  disc: 'select';
+  dragStartIndex: number;
+}
+export const isDragItemSelect = (x: DragItem): x is DragItemSelect =>
+  x.disc === 'select';
+
+export interface DragItemSpell {
+  disc: 'spell';
   actionId: ActionId;
   sourceWandIndex?: number;
-};
+}
+export const isDragItemSpell = (x: DragItem): x is DragItemSpell =>
+  x.disc === 'spell';
 
-export type SpellEditMode = 'overwrite' | 'swap' | 'before' | 'after';
+export type DragItem = DragItemSpell | DragItemSelect;

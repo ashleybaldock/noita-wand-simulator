@@ -1,4 +1,5 @@
 import styled from 'styled-components/macro';
+import { noop } from '../../util';
 
 const ButtonShapes = [
   'rectangle',
@@ -122,8 +123,6 @@ type Props = {
   shape?: ButtonShape;
   bgScale?: 1;
 };
-
-const noop = () => {};
 
 export const Button = ({
   onClick = noop,
