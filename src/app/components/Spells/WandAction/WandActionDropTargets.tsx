@@ -1,33 +1,30 @@
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrop } from 'react-dnd';
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { DragItemSelect, DragItemSpell } from '../../../types';
+import { CursorPosition, DragItemSpell, WandSelection } from '../../../types';
 import {
   insertSpellBefore,
   insertSpellAfter,
   moveSpell,
   setSpellAtIndex,
   moveCursor,
-  setSelection,
 } from '../../../redux/wandSlice';
 import { selectConfig } from '../../../redux/configSlice';
 import { WandActionBorder } from './WandActionBorder';
-import { Cursor, CursorPosition } from './Cursor';
 import {
   DropTargetMain,
   DragDropTargetAfter,
   DragDropTargetBefore,
-  WandSelection,
 } from './SpellDropTargets';
+import { WandEditCursor } from './Cursor';
 
 export const WandActionDropTargets = ({
   wandIndex,
-  cursor = 'none',
   selection = 'none',
   children,
 }: React.PropsWithChildren<{
   wandIndex: number;
-  cursor?: CursorPosition;
+  cursorIndex?: CursorPosition;
   selection?: WandSelection;
 }>) => {
   const dispatch = useAppDispatch();
@@ -92,8 +89,9 @@ export const WandActionDropTargets = ({
     useDrop(
       () => ({
         accept: 'spell',
-        drop: (item: DragItemSpell, monitor) =>
-          !monitor.didDrop() && handleDropMain(item),
+        drop: (item: DragItemSpell, monitor) => {
+          !monitor.didDrop() && handleDropMain(item);
+        },
         canDrop: (item: DragItemSpell) => item.sourceWandIndex !== wandIndex,
         collect: (monitor) => ({
           isOverMain: monitor.isOver({ shallow: true }) && monitor.canDrop(),
@@ -107,8 +105,9 @@ export const WandActionDropTargets = ({
   const [{ isOverBefore }, dropRefBefore] = useDrop(
     () => ({
       accept: 'spell',
-      drop: (item: DragItemSpell, monitor) =>
-        !monitor.didDrop() && handleDropBefore(item),
+      drop: (item: DragItemSpell, monitor) => {
+        !monitor.didDrop() && handleDropBefore(item);
+      },
       canDrop: (item: DragItemSpell) =>
         item.sourceWandIndex !== wandIndex &&
         item.sourceWandIndex !== wandIndex + 1,
@@ -122,9 +121,9 @@ export const WandActionDropTargets = ({
   const [{ isOverAfter }, dropRefAfter] = useDrop(
     () => ({
       accept: 'spell',
-      drop: (item: DragItemSpell, monitor) =>
-        !monitor.didDrop() && handleDropAfter(item),
-
+      drop: (item: DragItemSpell, monitor) => {
+        !monitor.didDrop() && handleDropAfter(item);
+      },
       canDrop: (item: DragItemSpell) =>
         item.sourceWandIndex !== wandIndex &&
         item.sourceWandIndex !== wandIndex + 1,
@@ -134,31 +133,6 @@ export const WandActionDropTargets = ({
     }),
     [handleDropAfter],
   );
-
-  const [{ isOverCursor }, dropRefCursor] = useDrop(
-    () => ({
-      accept: 'select',
-      hover: (item: DragItemSelect, monitor) =>
-        !monitor.didDrop() &&
-        monitor.canDrop() &&
-        dispatch(setSelection({ from: item.dragStartIndex, to: wandIndex })),
-      drop: (item: DragItemSelect, monitor) =>
-        !monitor.didDrop() &&
-        dispatch(setSelection({ from: item.dragStartIndex, to: wandIndex })),
-      canDrop: (item: DragItemSelect) => item.dragStartIndex !== wandIndex,
-      collect: (monitor) => ({
-        isOverCursor: monitor.isOver({ shallow: true }) && monitor.canDrop(),
-      }),
-    }),
-    [handleDropAfter],
-  );
-  const [, dragRefCursor] = useDrag(
-    (): { type: string; item: DragItemSelect } => ({
-      type: 'select',
-      item: { disc: 'select', dragStartIndex: wandIndex },
-    }),
-  );
-
   return (
     <DropTargetMain ref={dropRefMain} selection={selection}>
       <WandActionBorder highlight={isOverMain}>{children}</WandActionBorder>
@@ -184,12 +158,15 @@ export const WandActionDropTargets = ({
         enabled={isDraggingAction}
         selection={selection}
       />
-      <Cursor
-        ref={(ref) => dropRefCursor(dragRefCursor(ref))}
-        isDraggingAction={isDraggingAction}
-        isDraggingSelect={isDraggingSelect}
-        isDraggingSelectOver={isDraggingSelect && isOverCursor}
-        position={cursor}
+      <WandEditCursor
+        wandIndex={wandIndex}
+        isDropTarget={isDraggingSelect}
+        isDragSource={!isDraggingSelect && !isDraggingAction}
+      />
+      <WandEditCursor
+        wandIndex={wandIndex}
+        isDropTarget={isDraggingSelect}
+        isDragSource={!isDraggingSelect && !isDraggingAction}
       />
     </DropTargetMain>
   );

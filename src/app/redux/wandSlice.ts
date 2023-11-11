@@ -9,12 +9,14 @@ import {
   SpellEditMode,
   SpellShiftDirection,
   SelectionIndex,
+  WandSelection,
 } from '../types';
 import { defaultWand } from './Wand/presets';
 import { useSliceWrapper } from './useSlice';
 import { generateWandStateFromSearch } from './Wand/fromSearch';
 import { isNotNullOrUndefined, isNumber, isString, MAX_ALWAYS } from '../util';
 import { generateWikiWandV2 } from './Wand/toWiki';
+import { getSelectionForId } from './Wand/toSelection';
 
 export function fixedLengthCopy<T>(
   arr: readonly T[],
@@ -46,10 +48,10 @@ const initialState: WandState = {
   ),
   alwaysIds: fixedLengthCopy(alwaysIds, MAX_ALWAYS),
   messages: messages || [],
-  cursor: {
-    position: 0,
-    selectFrom: 0,
-    selectTo: 6,
+  editor: {
+    cursorIndex: 0,
+    selectFrom: null,
+    selectTo: null,
   },
 } as const;
 
@@ -112,11 +114,11 @@ export const wandSlice = createSlice({
       wandSlice.caseReducers.insertSpellBefore(state, {
         payload: {
           spell,
-          index: state.cursor.position,
+          index: state.editor.cursorIndex,
         },
         type: '',
       });
-      state.cursor.position += 1;
+      state.editor.cursorIndex += 1;
     },
     /* Cursor appears to stay in same place, spells shift to the right */
     insertSpellAfterCursor: (
@@ -126,7 +128,7 @@ export const wandSlice = createSlice({
       wandSlice.caseReducers.insertSpellBefore(state, {
         payload: {
           spell,
-          index: state.cursor.position,
+          index: state.editor.cursorIndex,
         },
         type: '',
       }),
@@ -139,8 +141,8 @@ export const wandSlice = createSlice({
       wandSlice.caseReducers.deleteSpellAtIndex(state, {
         payload: {
           index:
-            state.cursor.position > 0
-              ? state.cursor.position - 1
+            state.editor.cursorIndex > 0
+              ? state.editor.cursorIndex - 1
               : state.wand.deck_capacity,
           shift,
         },
@@ -154,7 +156,7 @@ export const wandSlice = createSlice({
     ): void =>
       wandSlice.caseReducers.deleteSpellAtIndex(state, {
         payload: {
-          index: state.cursor.position,
+          index: state.editor.cursorIndex,
           shift,
         },
         type: '',
@@ -208,8 +210,8 @@ export const wandSlice = createSlice({
       }
     },
     clearSelection: (state): void => {
-      state.cursor.selectFrom = null;
-      state.cursor.selectTo = null;
+      state.editor.selectFrom = null;
+      state.editor.selectTo = null;
     },
     deleteSelection: (
       state,
@@ -217,8 +219,8 @@ export const wandSlice = createSlice({
         payload: { shift = 'none' },
       }: PayloadAction<{ shift?: SpellShiftDirection }>,
     ): void => {
-      state.cursor.selectFrom = null;
-      state.cursor.selectTo = null;
+      state.editor.selectFrom = null;
+      state.editor.selectTo = null;
     },
     setSelection: (
       state,
@@ -228,18 +230,18 @@ export const wandSlice = createSlice({
     ): void => {
       if (isNotNullOrUndefined(from)) {
         if (isString(from) && from === 'cursor') {
-          state.cursor.selectFrom = state.cursor.position;
+          state.editor.selectFrom = state.editor.cursorIndex;
         }
         if (isNumber(from)) {
-          state.cursor.selectFrom = from;
+          state.editor.selectFrom = from;
         }
       }
       if (isNotNullOrUndefined(to)) {
         if (isString(to) && to === 'cursor') {
-          state.cursor.selectTo = state.cursor.position - 1;
+          state.editor.selectTo = state.editor.cursorIndex - 1;
         }
         if (isNumber(to)) {
-          state.cursor.selectTo = to;
+          state.editor.selectTo = to;
         }
       }
     },
@@ -249,7 +251,7 @@ export const wandSlice = createSlice({
     ): void => {},
     /*
      * moveCursor()
-     * to: specific index; by: relative to current position
+     * to: specific index; by: relative to current cursorIndex
      * If both specified, performs 'to', then 'by'
      */
     moveCursor: (
@@ -262,13 +264,13 @@ export const wandSlice = createSlice({
         select?: SpellShiftDirection;
       }>,
     ): void => {
-      const oldCursor = state.cursor.position;
-      let newCursor = state.cursor.position;
+      const oldCursor = state.editor.cursorIndex;
+      let newCursor = state.editor.cursorIndex;
       if (isNotNullOrUndefined(to)) {
         newCursor = Math.min(Math.max(0, to), state.wand.deck_capacity + 1);
       }
       if (isNotNullOrUndefined(by)) {
-        const currentCursorPosition = state.cursor.position;
+        const currentCursorPosition = state.editor.cursorIndex;
         const proposedCursorPosition = currentCursorPosition + by;
         const wrappedCursorPosition =
           (proposedCursorPosition + state.wand.deck_capacity + 1) %
@@ -277,10 +279,10 @@ export const wandSlice = createSlice({
       }
 
       if (select === 'none') {
-        state.cursor.position = newCursor;
+        state.editor.cursorIndex = newCursor;
       } else {
-        const prevFrom = state.cursor.selectFrom;
-        const prevTo = state.cursor.selectTo;
+        const prevFrom = state.editor.selectFrom;
+        const prevTo = state.editor.selectTo;
 
         /* Adjust an existing selection */
         if (isNotNullOrUndefined(prevFrom) && isNotNullOrUndefined(prevTo)) {
@@ -288,59 +290,59 @@ export const wandSlice = createSlice({
           /* shrink selection to new start point, cursor moves with selection */
           if (newCursor === oldCursor && oldCursor === prevFrom) {
             console.log('a', newCursor, oldCursor);
-            state.cursor.selectFrom = newCursor;
-            state.cursor.position = newCursor;
+            state.editor.selectFrom = newCursor;
+            state.editor.cursorIndex = newCursor;
           }
           /* extend selection to new start point, cursor stays still */
           if (newCursor < oldCursor && oldCursor < prevFrom) {
-            state.cursor.selectFrom = oldCursor;
-            state.cursor.position = oldCursor;
+            state.editor.selectFrom = oldCursor;
+            state.editor.cursorIndex = oldCursor;
           }
           /* extend selection to new start point, cursor moves with selection */
           if (newCursor < oldCursor && oldCursor === prevFrom) {
-            state.cursor.selectFrom = newCursor;
-            state.cursor.position = newCursor;
+            state.editor.selectFrom = newCursor;
+            state.editor.cursorIndex = newCursor;
           }
           /* shrink selection to new start/end point, cursor stays still */
           if (newCursor > prevFrom && newCursor < prevTo) {
             if (select === 'right') {
-              state.cursor.position = oldCursor;
-              state.cursor.selectFrom = oldCursor;
+              state.editor.cursorIndex = oldCursor;
+              state.editor.selectFrom = oldCursor;
             }
             if (select === 'left') {
-              state.cursor.position = oldCursor;
-              state.cursor.selectTo = oldCursor - 1;
+              state.editor.cursorIndex = oldCursor;
+              state.editor.selectTo = oldCursor - 1;
             }
           }
           /* shrink selection to new end point, cursor moves with selection */
           if (newCursor === oldCursor && oldCursor === prevTo) {
-            state.cursor.selectTo = newCursor - 1;
-            state.cursor.position = newCursor;
+            state.editor.selectTo = newCursor - 1;
+            state.editor.cursorIndex = newCursor;
           }
           /* extend selection to new end point, cursor stays still */
           if (newCursor > prevTo && oldCursor - 1 > prevTo) {
-            state.cursor.selectTo = oldCursor - 1;
-            state.cursor.position = oldCursor;
+            state.editor.selectTo = oldCursor - 1;
+            state.editor.cursorIndex = oldCursor;
           }
           /* extend selection to new end point, cursor moves with selection */
           if (newCursor > prevTo && oldCursor - 1 === prevTo) {
-            state.cursor.selectTo = newCursor - 1;
-            state.cursor.position = newCursor;
+            state.editor.selectTo = newCursor - 1;
+            state.editor.cursorIndex = newCursor;
           }
         } else if (isNotNullOrUndefined(prevFrom)) {
           if (newCursor < prevFrom) {
-            state.cursor.position = newCursor;
-            state.cursor.selectFrom = newCursor;
-            state.cursor.selectTo = prevFrom;
+            state.editor.cursorIndex = newCursor;
+            state.editor.selectFrom = newCursor;
+            state.editor.selectTo = prevFrom;
           }
           if (newCursor === prevFrom) {
-            state.cursor.position = newCursor;
-            state.cursor.selectTo = newCursor;
+            state.editor.cursorIndex = newCursor;
+            state.editor.selectTo = newCursor;
           }
           if (newCursor > prevFrom) {
-            state.cursor.position = newCursor;
-            state.cursor.selectFrom = prevFrom;
-            state.cursor.selectTo = newCursor;
+            state.editor.cursorIndex = newCursor;
+            state.editor.selectFrom = prevFrom;
+            state.editor.selectTo = newCursor;
           }
         }
       }
@@ -431,7 +433,33 @@ const selectSpells = (state: RootState): SpellId[] =>
   state.wand.present.spellIds;
 const selectMessages = (state: RootState): string[] =>
   state.wand.present.messages;
-const selectCursor = (state: RootState): Cursor => state.wand.present.cursor;
+const selectCursor = createSelector(
+  selectWandState,
+  ({ spellIds, editor: { cursorIndex } }: WandState): Cursor[] =>
+    spellIds.map((_, wandIndex) => ({
+      position:
+        cursorIndex === wandIndex
+          ? 'before'
+          : cursorIndex === wandIndex + 1
+          ? 'after'
+          : 'none',
+      style: 'insert',
+    })),
+);
+const selectSelection = createSelector(
+  selectWandState,
+  ({
+    spellIds,
+    editor: { selectFrom, selectTo },
+  }: WandState): WandSelection[] =>
+    spellIds.map((_, wandIndex) =>
+      getSelectionForId(wandIndex, selectFrom, selectTo),
+    ),
+);
+const selectSelecting = createSelector(
+  selectWandState,
+  ({ editor: { selectFrom } }: WandState): boolean => selectFrom !== null,
+);
 const selectWikiExport = createSelector(selectWandState, generateWikiWandV2);
 
 export const wandReducer = wandSlice.reducer;
@@ -441,8 +469,15 @@ export const useWandState = () => useSelector(selectWandState);
 export const useWikiExport = () => useSelector(selectWikiExport);
 
 export const useWand = () => useSelector(selectWand);
+
 export const useSpells = () => useSelector(selectSpells);
+
 export const useMessages = () => useSelector(selectMessages);
+
 export const useCursor = () => useSelector(selectCursor);
+
+export const useSelection = () => useSelector(selectSelection);
+
+export const useSelecting = () => useSelector(selectSelecting);
 
 export const useWandSlice = () => useSliceWrapper(wandSlice, 'wand');

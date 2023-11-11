@@ -1,22 +1,20 @@
-import { useState } from 'react';
 import styled from 'styled-components/macro';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useAppDispatch } from '../../redux/hooks';
 import {
   useSpells,
   setSpellAtIndex,
-  useCursor,
   moveCursor,
   removeSpellAfterCursor,
   removeSpellBeforeCursor,
   moveSelection,
-  setSelection,
   deleteSelection,
   clearSelection,
+  useSelecting,
 } from '../../redux/wandSlice';
 import { Spell } from '../../calc/spell';
 import { getSpellById } from '../../calc/spells';
-import { isKnownSpell } from '../../types';
+import { isKnownSpell, WandSelection } from '../../types';
 import {
   ChargesRemainingAnnotation,
   DeckIndexAnnotation,
@@ -28,7 +26,6 @@ import {
   WandAction,
   WandActionDropTargets,
   WandActionDragSource,
-  WandSelection,
 } from '../Spells/WandAction';
 import { useDragLayer } from 'react-dnd';
 
@@ -36,12 +33,10 @@ function ActionComponent({
   spellAction,
   wandIndex,
   deckIndex,
-  cursorIndex,
   selection,
 }: {
   spellAction?: Spell;
   wandIndex: number;
-  cursorIndex: number;
   deckIndex?: number;
   selection?: WandSelection;
 }) {
@@ -58,19 +53,8 @@ function ActionComponent({
     dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
   };
 
-  const cursor =
-    cursorIndex === wandIndex
-      ? 'before'
-      : cursorIndex === wandIndex + 1
-      ? 'after'
-      : 'none';
-
   return (
-    <WandActionDropTargets
-      wandIndex={wandIndex}
-      cursor={cursor}
-      selection={selection}
-    >
+    <WandActionDropTargets wandIndex={wandIndex} selection={selection}>
       {spellAction && (
         <>
           <WandActionDragSource
@@ -138,8 +122,7 @@ export function WandActionEditor() {
   const dispatch = useAppDispatch();
 
   const spellIds = useSpells();
-  const { position: cursorPosition, selectFrom, selectTo } = useCursor();
-  const isSelecting = selectFrom !== null;
+  const isSelecting = useSelecting();
 
   const currentRowLength = () => 10; // TODO calc from current layout
 
@@ -237,29 +220,6 @@ export function WandActionEditor() {
   );
   let deckIndex = 0;
 
-  const getSelection = (
-    idx: number,
-    from: number | null,
-    to: number | null,
-  ): WandSelection => {
-    if (from === null || to === null) {
-      return 'none';
-    }
-    if (from === to && from === idx) {
-      return 'single';
-    }
-    if ((idx >= from && idx <= to) || (idx >= to && idx <= from)) {
-      if (idx === from) {
-        return 'start';
-      }
-      if (idx === to) {
-        return 'end';
-      }
-      return 'thru';
-    }
-    return 'none';
-  };
-
   return (
     <SpellSlots>
       {spellActions.map((spellAction, wandIndex) => (
@@ -268,8 +228,6 @@ export function WandActionEditor() {
             spellAction={spellAction}
             wandIndex={wandIndex}
             deckIndex={spellAction !== undefined ? deckIndex++ : undefined}
-            cursorIndex={cursorPosition}
-            selection={getSelection(wandIndex, selectFrom, selectTo)}
           />
         </SpellSlot>
       ))}

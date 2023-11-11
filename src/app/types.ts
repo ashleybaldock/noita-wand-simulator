@@ -67,10 +67,19 @@ export type SpellShiftDirection = 'left' | 'right' | 'none';
 export type SpellEditMode = 'overwrite' | 'swap' | 'before' | 'after';
 export type SelectionIndex = 'cursor' | number;
 
-export type Cursor = {
-  position: number;
+export type WandEditorState = {
+  cursorIndex: number;
   selectFrom: number | null;
   selectTo: number | null;
+};
+
+export type WandSelection = 'none' | 'start' | 'thru' | 'end' | 'single';
+
+export type CursorPosition = 'none' | 'before' | 'after';
+export type CursorStyle = 'none' | 'insert';
+export type Cursor = {
+  position: CursorPosition;
+  style: CursorStyle;
 };
 
 export type WandState = {
@@ -78,7 +87,7 @@ export type WandState = {
   spellIds: SpellId[];
   alwaysIds: SpellId[];
   messages: string[];
-  cursor: Cursor;
+  editor: WandEditorState;
   fromQuery?: WandQueryVersion;
 };
 

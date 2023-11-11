@@ -1,7 +1,6 @@
 import styled from 'styled-components/macro';
 import { WithDebugHints } from '../../Debug';
-
-export type WandSelection = 'none' | 'start' | 'thru' | 'end' | 'single';
+import { WandSelection } from '../../../types';
 
 export const DropTargetMain = styled.div<{
   selection: WandSelection;
