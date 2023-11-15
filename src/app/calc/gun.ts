@@ -6,6 +6,7 @@ import {
   GunActionState,
   ConfigGunActionInfo_Copy,
   ConfigGunActionInfo_Init,
+  ConfigGunActionInfo_Create,
 } from './actionState';
 import { ActionSource } from './actionSources';
 import {
@@ -26,6 +27,7 @@ import {
   OnActionCalled,
   OnActionFinished,
   OnActionPlayed,
+  OnDraw,
   OnNotEnoughManaForAction,
   SetProjectileConfigs,
   StartReload,
@@ -225,10 +227,13 @@ function clone_action(source: Readonly<Spell>, target: Spell) {
 // various utilities
 
 function create_shot(num_of_cards_to_draw: number): Shot {
-  const shot: any = {};
-  shot.state = {};
+  const shot: Shot = {
+    num_of_cards_to_draw,
+    state: ConfigGunActionInfo_Create(),
+  };
+  // shot.state = {};
   reset_modifiers(shot.state);
-  shot.num_of_cards_to_draw = num_of_cards_to_draw;
+  // shot.num_of_cards_to_draw = num_of_cards_to_draw;
   return shot;
 }
 
@@ -322,6 +327,7 @@ export function draw_action(instant_reload_if_empty: boolean) {
   let action = null;
 
   state_cards_drawn = state_cards_drawn + 1;
+  OnDraw(state_cards_drawn);
 
   // if (reflecting) {
   //   return;

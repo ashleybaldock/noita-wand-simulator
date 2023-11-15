@@ -184,6 +184,13 @@ export function clickWand(
         break;
       case 'EndProjectile':
         break;
+      case 'OnDraw':
+        const [totalDrawn] = args;
+        if (currentShot.castState) {
+          currentShot.castState.state_cards_drawn =
+            (totalDrawn ?? currentShot.castState?.state_cards_drawn ?? 0) + 1;
+        }
+        break;
       case 'RegisterGunAction':
         currentShot.castState = Object.assign({}, args[0]);
         break;

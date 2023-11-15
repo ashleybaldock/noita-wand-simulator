@@ -1,4 +1,5 @@
 import { Preset, PresetGroup } from '../types';
+import { FPS } from './constants';
 
 export const noop = () => {};
 
@@ -123,6 +124,19 @@ export const trimArray = <T>(arr: T[], predicate: (o: T) => boolean): T[] => {
   return result;
 };
 
+/*
+ * Counts duplicate entries
+ * Returns [[key, count], ...[keyN, countN]]
+ */
+export const tally = <T>(arr: T[]): [T, number][] => [
+  ...arr
+    .reduce(
+      (map, cur) => map.set(cur, (map.get(cur) ?? 0) + 1),
+      new Map<T, number>(),
+    )
+    .entries(),
+];
+
 export type TypedProperties<T, U> = Pick<
   T,
   {
@@ -137,11 +151,22 @@ export const round = (n: number, to: number) =>
 
 export const sign = (n: number) => (n < 0 ? '' : '+') + n;
 
-export const toFrames = (durationInSeconds: number, fps: number = 60) =>
+export const signZero = (n: number) => (n === 0 ? '--' : sign(n));
+
+export const toFrames = (durationInSeconds: number, fps: number = FPS) =>
   round(durationInSeconds * fps, 2);
 
-export const toSeconds = (durationInFrames: number, fps: number = 60) =>
+export const toSeconds = (durationInFrames: number, fps: number = FPS) =>
   round(durationInFrames / fps, 2);
+
+export const radiusThresholdBonus = (radius: number) => {
+  if (isNaN(radius)) return 'n/a';
+  if (radius < 32) return signZero(0);
+  if (radius < 64) return signZero(325);
+  if (radius < 128) return signZero(375);
+  if (radius < 211) return signZero(500);
+  return `${signZero(600)}|${signZero(500)}`;
+};
 
 export const copyToClipboard = async (text: string) =>
   'clipboard' in navigator

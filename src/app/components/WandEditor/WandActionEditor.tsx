@@ -1,4 +1,5 @@
 import styled from 'styled-components/macro';
+import { useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useAppDispatch } from '../../redux/hooks';
 import {
@@ -28,6 +29,7 @@ import {
   WandActionDragSource,
 } from '../Spells/WandAction';
 import { useDragLayer } from 'react-dnd';
+import { getComputedColumns, useVisibleGridCols } from './hooks';
 
 function ActionComponent({
   spellAction,
@@ -118,13 +120,14 @@ const SpellSlot = styled.li`
   list-style-type: none;
   padding: 0 var(--grid-layout-gap);
 `;
-export function WandActionEditor() {
+export const WandActionEditor = () => {
   const dispatch = useAppDispatch();
 
   const spellIds = useSpells();
   const isSelecting = useSelecting();
-
-  const currentRowLength = () => 10; // TODO calc from current layout
+  const gridRef = useRef(null);
+  const currentRowLength = () => getComputedColumns(gridRef);
+  // const currentRowLength = () => 10; // TODO calc from current layout
 
   /* Move cursor */
   /* isSelecting && end selection
@@ -221,7 +224,7 @@ export function WandActionEditor() {
   let deckIndex = 0;
 
   return (
-    <SpellSlots>
+    <SpellSlots ref={gridRef}>
       {spellActions.map((spellAction, wandIndex) => (
         <SpellSlot key={wandIndex}>
           <ActionComponent
@@ -233,4 +236,4 @@ export function WandActionEditor() {
       ))}
     </SpellSlots>
   );
-}
+};

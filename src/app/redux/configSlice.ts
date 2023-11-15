@@ -27,6 +27,7 @@ export interface ConfigState {
     showSpellsInCategories: boolean;
     endSimulationOnRefresh: boolean;
     showBeta: boolean;
+    castShowChanged: boolean;
     unlocks: {
       [key: string]: boolean;
     };
@@ -71,6 +72,7 @@ export const initialState: ConfigState = {
     showSpellsInCategories: true,
     endSimulationOnRefresh: true,
     showBeta: true,
+    castShowChanged: true,
     unlocks: {
       card_unlocked_black_hole: false,
       card_unlocked_everything: false,

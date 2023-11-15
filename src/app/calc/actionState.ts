@@ -1,3 +1,4 @@
+import { isNotNullOrUndefined } from '../util';
 import { RegisterGunAction } from './eval/wandObserver';
 import { SpellType } from './spellTypes';
 
@@ -21,8 +22,6 @@ export type GunActionState = {
   action_never_unlimited?: boolean;
   state_shuffled: boolean;
   state_cards_drawn: number;
-  state_discarded_action: boolean;
-  state_destroyed_action: boolean;
   fire_rate_wait: number;
   speed_multiplier: number;
   child_speed_multiplier: number;
@@ -95,8 +94,6 @@ export const defaultGunActionState: GunActionState = {
   action_never_unlimited: false,
   state_shuffled: false,
   state_cards_drawn: 0,
-  state_discarded_action: false,
-  state_destroyed_action: false,
   fire_rate_wait: 0,
   speed_multiplier: 1.0,
   child_speed_multiplier: 1.0,
@@ -149,13 +146,20 @@ export function ConfigGunActionInfo_PassToGame(value: GunActionState) {
   RegisterGunAction(value);
 }
 
-export function ConfigGunActionInfo_Init<T extends GunActionState>(source: T) {
-  return ConfigGunActionInfo_Copy(source, defaultGunActionState);
+export function ConfigGunActionInfo_Create() {
+  return { ...defaultGunActionState };
 }
 
-export function ConfigGunActionInfo_Copy<T extends GunActionState>(
-  source: T,
-  dest: T,
+export function ConfigGunActionInfo_Init(source: Readonly<GunActionState>) {
+  const fromSource = isNotNullOrUndefined(source)
+    ? source
+    : defaultGunActionState;
+  return ConfigGunActionInfo_Copy(fromSource, { ...defaultGunActionState });
+}
+
+export function ConfigGunActionInfo_Copy(
+  source: Readonly<GunActionState>,
+  dest: GunActionState,
 ): void {
   // dest.action_id = source.action_id;
   dest.action_name = source.action_name;
@@ -177,8 +181,6 @@ export function ConfigGunActionInfo_Copy<T extends GunActionState>(
   dest.action_never_unlimited = source.action_never_unlimited;
   dest.state_shuffled = source.state_shuffled;
   dest.state_cards_drawn = source.state_cards_drawn;
-  dest.state_discarded_action = source.state_discarded_action;
-  dest.state_destroyed_action = source.state_destroyed_action;
   dest.fire_rate_wait = source.fire_rate_wait;
   dest.speed_multiplier = source.speed_multiplier;
   dest.child_speed_multiplier = source.child_speed_multiplier;
@@ -198,6 +200,7 @@ export function ConfigGunActionInfo_Copy<T extends GunActionState>(
   dest.damage_slice_add = source.damage_slice_add;
   dest.damage_healing_add = source.damage_healing_add;
   dest.damage_curse_add = source.damage_curse_add;
+  dest.damage_holy_add = source.damage_holy_add;
   dest.damage_drill_add = source.damage_drill_add;
   dest.damage_critical_chance = source.damage_critical_chance;
   dest.damage_critical_multiplier = source.damage_critical_multiplier;

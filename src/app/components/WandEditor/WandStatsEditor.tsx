@@ -160,7 +160,7 @@ const StyledListItem = styled.div<{
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;
-  background-image: url(/${({ imgUrl }) => imgUrl});
+  background-image: url('/${({ imgUrl }) => imgUrl}');
   background-position: 0.6em 50%;
   background-size: 1em;
   background-repeat: no-repeat;

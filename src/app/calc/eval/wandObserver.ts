@@ -58,12 +58,12 @@ export function RegisterGunShotEffects(recoil_knockback: any) {
   }
 }
 
-export function Reflection_RegisterProjectile(entity_filename: string) {
-  const result = onEvent('Reflection_RegisterProjectile', entity_filename);
-  if (result !== undefined) {
-    return result;
-  }
-}
+// export function Reflection_RegisterProjectile(entity_filename: string) {
+//   const result = onEvent('Reflection_RegisterProjectile', entity_filename);
+//   if (result !== undefined) {
+//     return result;
+//   }
+// }
 
 export function BeginProjectile(entity_filename: string) {
   const result = onEvent('BeginProjectile', entity_filename);
@@ -305,7 +305,7 @@ export function EntityGetInRadiusWithTag(
   return {};
 }
 
-// globals
+/* At time of writing, this is only used by Requirement: Every Other */
 let globals: { [key: string]: string } = {};
 
 export function GlobalsGetValue(key: string, defaultValue: string): any {
@@ -316,6 +316,7 @@ export function GlobalsGetValue(key: string, defaultValue: string): any {
   return globals.hasOwnProperty(key) ? globals[key] : defaultValue;
 }
 
+/* At time of writing, this is only used by Requirement: Every Other */
 export function GlobalsSetValue(key: string, value: string) {
   const result = onEvent('GlobalsSetValue', key, value);
   if (result !== undefined) {
@@ -333,6 +334,13 @@ export function OnActionPlayed(action_id: any) {
 }
 
 // custom
+
+export const OnDraw = (state_cards_drawn: number) => {
+  const result = onEvent('OnDraw', state_cards_drawn);
+  if (result !== undefined) {
+    return result;
+  }
+};
 
 export function OnActionCalled(
   source: string,

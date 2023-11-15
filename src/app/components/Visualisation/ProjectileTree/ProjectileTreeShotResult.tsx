@@ -40,13 +40,13 @@ const TriggerDiv = styled.div`
 `;
 
 // list of all actions played, and sub-ShotResults for triggers
-export function ProjectileTreeShotResult({
+export const ProjectileTreeShotResult = ({
   shot,
   indent,
 }: {
   shot: GroupedWandShot;
   indent: boolean;
-}) {
+}) => {
   return (
     <StyledShotDiv>
       <div>
@@ -60,22 +60,26 @@ export function ProjectileTreeShotResult({
           <ProjectileCastState castState={shot.castState} />
         </StyledMetadataDiv>
       </div>
-      {shot.projectiles.map((p, index) => {
+      {shot.projectiles.map((projectile, index) => {
         let triggerComponent;
-        if (isRawObject(p)) {
-          triggerComponent = p.trigger && p.trigger.projectiles.length > 0 && (
-            <TriggerDiv>
-              <ProjectileTreeShotResult shot={p.trigger} indent={true} />
-            </TriggerDiv>
-          );
+        if (isRawObject(projectile)) {
+          triggerComponent = projectile.trigger &&
+            projectile.trigger.projectiles.length > 0 && (
+              <TriggerDiv>
+                <ProjectileTreeShotResult
+                  shot={projectile.trigger}
+                  indent={true}
+                />
+              </TriggerDiv>
+            );
         }
         return (
           <StyledProjectileDiv key={index} indent={indent}>
-            <WandActionGroup group={p} />
+            <WandActionGroup group={projectile} />
             {triggerComponent}
           </StyledProjectileDiv>
         );
       })}
     </StyledShotDiv>
   );
-}
+};

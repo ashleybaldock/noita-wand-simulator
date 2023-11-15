@@ -50,8 +50,8 @@ const initialState: WandState = {
   messages: messages || [],
   editor: {
     cursorIndex: 0,
-    selectFrom: null,
-    selectTo: null,
+    selectFrom: 4,
+    selectTo: 9,
   },
 } as const;
 
