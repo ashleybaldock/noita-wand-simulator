@@ -145,6 +145,18 @@ const configOptions = [
     (c) => c.showBeta,
     (c, v) => (c.showBeta = v),
   ),
+  makeConfigField(
+    'Hide Unaltered in Cast State',
+    ConfigType.Boolean,
+    (c) => c.castShowChanged,
+    (c, v) => (c.castShowChanged = v),
+  ),
+  makeConfigField(
+    'Show Durations in Frames',
+    ConfigType.Boolean,
+    (c) => c.showDurationsInFrames,
+    (c, v) => (c.showDurationsInFrames = v),
+  ),
   makeConfigFieldGroup('Unlocks', [
     makeConfigField(
       'Enable All',

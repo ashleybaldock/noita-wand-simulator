@@ -24,9 +24,9 @@ type Props = {
 
 export function ActionProxyAnnotation(props: Props) {
   const { proxy } = props;
-  const { config } = useConfig();
+  const { showProxies } = useConfig();
 
-  if (proxy === undefined || !config.showProxies) {
+  if (proxy === undefined || !showProxies) {
     return null;
   }
 

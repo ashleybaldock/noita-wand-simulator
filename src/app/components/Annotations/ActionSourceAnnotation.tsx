@@ -33,9 +33,9 @@ type Props = {
 
 export function ActionSourceAnnotation(props: Props) {
   const { source } = props;
-  const { config } = useConfig();
+  const { showSources } = useConfig();
 
-  if (source === undefined || !config.showSources) {
+  if (source === undefined || !showSources) {
     return null;
   }
 

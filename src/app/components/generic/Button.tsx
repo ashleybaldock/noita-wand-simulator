@@ -24,7 +24,16 @@ const borderForShape = new Map<ButtonShape, string>([
   ['petal1', 'border-radius: 1.6em 0em 0em 10em / 14em 0em 0em 41em;'],
   ['petal2', 'border-radius: 3.2em 20em 3.2em 12em / 12em 12em 12em 12em;'],
 ]);
+/*
+ *
 
+--pad-other-side: 2.7em;
+padding-left: 0.6em;
+background-position: 100% 50%;
+--background-size: 0.46em;
+--pad-img-side: calc(var(--background-size) + 1.9em);
+
+ */
 const StyledButton = styled.button<{
   imgUrl: string;
   imgDataUrl: string;
@@ -89,14 +98,14 @@ const StyledButton = styled.button<{
   ${({ minimal }) =>
     minimal
       ? `
-    --background-size: 20%;
-    --pad-img-side: calc(var(--background-size) + 0.4em);
-    --pad-other-side: 0.6em;
+    --background-size: 0.42em;
+    --pad-img-side: calc(var(--background-size) + 1.9em);
+    --pad-other-side: 1em;
 
     margin: 0;
     cursor: pointer;
-    padding-top: 0.4em;
-    padding-bottom: 0.3em;
+    padding-top: 0.5em;
+    padding-bottom: 0.4em;
     font-size: 0.6em;
     line-height: 1.1em;
     border-radius: 0.2em;

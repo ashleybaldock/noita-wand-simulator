@@ -10,7 +10,7 @@
   font-display: swap;
 }
 
-/* see also GlobalStyle.tsx */
+/* see also app/RootCSSVars.tsx */
 :root {
   --input-border: 2px solid #555555;
   --input-border-radius: 0 2px 0 2px;
@@ -38,6 +38,8 @@
   --color-button-border: #333333;
   --color-button-border-hover: #aaaaaa;
   --color-button-background: #000000;
+
+  --color-value-ignored: #5b5b66;
 
   --color-note-recursion: #000000;
   --color-note-recursion-bg: #33bbbb;

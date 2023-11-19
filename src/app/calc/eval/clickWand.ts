@@ -17,7 +17,20 @@ import { isIterativeActionId } from '../actionId';
 import { ActionCall, Requirements, TreeNode, WandShot } from './types';
 import { defaultGunActionState } from '../actionState';
 
-export type StopCondition = 'reload' | 'refresh' | 'iterLimit';
+export type StopCondition = 'oneshot' | 'reload' | 'refresh' | 'iterLimit';
+
+export type StopReason =
+  | StopCondition
+  | 'noSpells'
+  | 'timeout'
+  | 'exception'
+  | 'unknown';
+
+export type ClickWandResult = {
+  shots: WandShot[];
+  recharge: number | undefined;
+  endReason: StopReason;
+};
 
 export function clickWand(
   wand: Gun,
@@ -26,13 +39,10 @@ export function clickWand(
   castDelay: number,
   fireUntil: StopCondition,
   requirements?: Requirements,
-): [WandShot[], number | undefined, boolean] {
+): ClickWandResult {
   if (spells.filter((s) => s != null).length === 0) {
-    return [[], undefined, false];
+    return { shots: [], recharge: undefined, endReason: 'noSpells' };
   }
-
-  const fireUntilReload = fireUntil === 'reload';
-  const endOnRefresh = fireUntil === 'refresh';
 
   let iterations = 0;
   const iterationLimit = 10;
@@ -51,66 +61,6 @@ export function clickWand(
   let reloadTime: number | undefined;
 
   let if_half_state = requirements?.half ? 1 : 0;
-
-  const resetState = () => {
-    currentShot = {
-      _typeName: 'WandShot',
-      projectiles: [],
-      calledActions: [],
-      actionTree: [],
-      castState: { ...defaultGunActionState },
-    };
-    calledActions = [];
-    currentShotStack = [];
-    rootNodes = [];
-    currentNode = undefined;
-  };
-
-  let removeOverrides = [];
-  if (requirements) {
-    removeOverrides.push(
-      override('EntityGetInRadiusWithTag', (args) => {
-        if (args[3] === 'homing_target') {
-          return requirements.enemies ? new Array(15) : [];
-        } else if (args[3] === 'projectile') {
-          return requirements.projectiles ? new Array(20) : [];
-        }
-      }),
-    );
-    removeOverrides.push(
-      override('EntityGetFirstComponent', (args) => {
-        if (args[1] === 'DamageModelComponent') {
-          return 'IF_HP'; // just has to be non-null
-        }
-      }),
-    );
-    removeOverrides.push(
-      override('ComponentGetValue2', (args) => {
-        if (args[0] === 'IF_HP') {
-          if (args[1] === 'hp') {
-            return requirements.hp ? 25000 / 25 : 100000 / 25;
-          } else if (args[1] === 'max_hp') {
-            return 100000 / 25;
-          }
-        }
-      }),
-    );
-    removeOverrides.push(
-      override('GlobalsGetValue', (args) => {
-        if (args[0] === 'GUN_ACTION_IF_HALF_STATUS') {
-          return `${if_half_state}`;
-        }
-      }),
-    );
-    removeOverrides.push(
-      override('GlobalsSetValue', (args) => {
-        if (args[0] === 'GUN_ACTION_IF_HALF_STATUS') {
-          if_half_state = Number.parseInt(args[1]);
-        }
-      }),
-    );
-  }
-
   const unsub = subscribe((eventType, ...args) => {
     switch (eventType) {
       case 'BeginProjectile':
@@ -240,42 +190,116 @@ export function clickWand(
     }
   });
 
-  resetState();
+  const resetState = () => {
+    currentShot = {
+      _typeName: 'WandShot',
+      projectiles: [],
+      calledActions: [],
+      actionTree: [],
+      castState: { ...defaultGunActionState },
+    };
+    calledActions = [];
+    currentShotStack = [];
+    rootNodes = [];
+    currentNode = undefined;
+  };
 
-  _set_gun(wand);
-  _clear_deck(/*false*/);
-
-  spells.forEach((spell, index) => {
-    if (!spell) {
-      return;
-    }
-    _add_card_to_deck(spell.id, index, spell.uses_remaining, true);
-  });
-
-  while (!reloaded && iterations < iterationLimit) {
-    state_from_game.fire_rate_wait = castDelay;
-    _start_shot(mana);
-    _draw_actions_for_shot(true);
-    iterations++;
-    currentShot!.calledActions = calledActions!;
-    currentShot!.actionTree = rootNodes;
-    currentShot!.manaDrain = mana - gunMana;
-    wandShots.push(currentShot!);
-    mana = gunMana;
-
-    if (
-      !fireUntilReload ||
-      calledActions!.length === 0 ||
-      (endOnRefresh && calledActions!.some((a) => a.spell.id === 'RESET'))
-    ) {
-      break;
-    }
-
-    resetState();
+  let removeOverrides = [];
+  if (requirements) {
+    removeOverrides.push(
+      override('EntityGetInRadiusWithTag', (args) => {
+        if (args[3] === 'homing_target') {
+          return requirements.enemies ? new Array(15) : [];
+        } else if (args[3] === 'projectile') {
+          return requirements.projectiles ? new Array(20) : [];
+        }
+      }),
+    );
+    removeOverrides.push(
+      override('EntityGetFirstComponent', (args) => {
+        if (args[1] === 'DamageModelComponent') {
+          return 'IF_HP'; // just has to be non-null
+        }
+      }),
+    );
+    removeOverrides.push(
+      override('ComponentGetValue2', (args) => {
+        if (args[0] === 'IF_HP') {
+          if (args[1] === 'hp') {
+            return requirements.hp ? 25000 / 25 : 100000 / 25;
+          } else if (args[1] === 'max_hp') {
+            return 100000 / 25;
+          }
+        }
+      }),
+    );
+    removeOverrides.push(
+      override('GlobalsGetValue', (args) => {
+        if (args[0] === 'GUN_ACTION_IF_HALF_STATUS') {
+          return `${if_half_state}`;
+        }
+      }),
+    );
+    removeOverrides.push(
+      override('GlobalsSetValue', (args) => {
+        if (args[0] === 'GUN_ACTION_IF_HALF_STATUS') {
+          if_half_state = Number.parseInt(args[1]);
+        }
+      }),
+    );
   }
 
+  const endReason = ((): StopReason => {
+    try {
+      resetState();
+
+      _set_gun(wand);
+      _clear_deck(/*false*/);
+
+      spells.forEach((spell, index) => {
+        if (!spell) {
+          return;
+        }
+        _add_card_to_deck(spell.id, index, spell.uses_remaining, true);
+      });
+
+      while (!reloaded && iterations < iterationLimit) {
+        state_from_game.fire_rate_wait = castDelay;
+        _start_shot(mana);
+        _draw_actions_for_shot(true);
+        iterations++;
+        currentShot!.calledActions = calledActions!;
+        currentShot!.actionTree = rootNodes;
+        currentShot!.manaDrain = mana - gunMana;
+        wandShots.push(currentShot!);
+        mana = gunMana;
+
+        if (fireUntil === 'oneshot') {
+          return 'oneshot';
+        }
+        if (
+          fireUntil === 'refresh' &&
+          (calledActions!.length === 0 ||
+            calledActions!.reduce(
+              (found, a) => (a.spell.id === 'RESET' ? found + 1 : found),
+              0,
+            ))
+        ) {
+          return 'refresh';
+        }
+        if (fireUntil === 'iterLimit' && iterations === iterationLimit) {
+          return 'iterLimit';
+        }
+      }
+    } catch (err) {
+      return 'exception';
+    }
+    return 'reload';
+  })();
+
+  resetState();
   unsub();
   removeOverrides.forEach((cb) => cb());
 
-  return [wandShots, reloadTime, iterations === iterationLimit];
+  return { shots: wandShots, recharge: reloadTime, endReason };
 }

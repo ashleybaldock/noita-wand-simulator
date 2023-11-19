@@ -1,0 +1,28 @@
+export const perks = [
+  'always_cast',
+  'bleed_slime',
+  'bounce',
+  'cordyceps',
+  'critical_hit',
+  'duplicate',
+  'duplicate_projectile',
+  'extra_knockback',
+  'fast_projectiles',
+  'food_clock',
+  'glass_cannon',
+  'hungry_ghost',
+  'low_hp_damage_boost',
+  'low_recoil',
+  'lower_spread',
+  'orbit',
+  'projectile_eater_sector',
+  'projectile_homing',
+  'projectile_homing_shooter',
+  'projectile_repulsion',
+  'projectile_repulsion_sector',
+  'projectile_slow_field',
+  'risky_critical',
+  'unlimited_spells',
+] as const;
+
+export type Perk = typeof perks[number];

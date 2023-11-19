@@ -17,6 +17,7 @@ import {
 } from '../../calc/spellTypes';
 import { Tabs } from '../generic';
 import {
+  DraggableWandAction,
   WandAction,
   WandActionBorder,
   WandActionDragSource,
@@ -68,7 +69,7 @@ const SpellSelectorWandActionDragSource = styled(WandActionDragSource)`
   padding: 0.04em 0 0 0.04em;
 `;
 
-const SpellSelectorWandAction = styled(WandAction)`
+const SpellSelectorWandAction = styled(DraggableWandAction)`
   --transition-props: opacity, transform;
 
   opacity: 0.84;

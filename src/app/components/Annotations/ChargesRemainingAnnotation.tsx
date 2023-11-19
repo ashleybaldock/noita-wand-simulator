@@ -38,9 +38,7 @@ export const ChargesRemainingAnnotation = ({
   charges: number | undefined;
   nounlimited: boolean | undefined;
 }) => {
-  const {
-    config: { infiniteSpells },
-  } = useConfig();
+  const { infiniteSpells } = useConfig();
 
   return charges === undefined && !nounlimited ? null : infiniteSpells ? (
     <Infinite />

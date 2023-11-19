@@ -3,7 +3,11 @@ import {
   defaultGunActionState,
   GunActionState,
 } from '../../../calc/actionState';
-import { TrailMaterial } from '../../../calc/materials';
+import {
+  getNameForTrailMaterial,
+  isTrailMaterial,
+  TrailMaterial,
+} from '../../../calc/materials';
 import {
   formatYesNo,
   isString,
@@ -14,8 +18,7 @@ import {
   tally,
   toSeconds,
 } from '../../../util/util';
-import { useAppSelector } from '../../../redux/hooks';
-import { selectConfig } from '../../../redux/configSlice';
+import { Config, useConfig } from '../../../redux/configSlice';
 import { getBackgroundUrlForDamageType } from '../../../calc/damage';
 
 const Section = styled.div`
@@ -61,31 +64,56 @@ const StyledValue = styled.span`
   flex: 0 0 auto;
 `;
 
+const Warning = styled.span`
+  color: var(--color-value-warning);
+  border: 3px dashed red;
+  background-color: red;
+  &::before {
+    content: '';
+  }
+`;
+
+const Unchanged = styled.span`
+  color: var(--color-value-ignored);
+  &::before {
+    content: '--';
+  }
+`;
+
 const ListTitle = styled.div<{ icon?: string }>`
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;
-
-  padding: 0.4em 1em 0 1em;
-  background-position: 0 50%;
-  background-size: 1.4em;
-  ${({ icon }) =>
-    icon ? `background-image: url(${icon});` : 'background-image: none;'};
+  font-size: 0.7em;
+  font-variant: small-caps;
+  padding: 0.3em 1.8em 0.1em 0.4em;
+  background-position: 0.24em 50%;
+  border-left: 0.6em solid white;
+  border-bottom: 1px solid white;
+  align-self: stretch;
+  margin-bottom: 0.1em;
+  background-position: 0.24em 50%;
+  background-size: 1.2em;
+  ${({ icon }) => (icon ? `${icon};` : 'none;')};
   background-repeat: no-repeat;
   image-rendering: pixelated;
 `;
 
-const MaterialTrail = styled.span<{
-  type: TrailMaterial | string;
-}>`
+type MaterialTrailProps = {
+  material: TrailMaterial;
+};
+const MaterialTrail = styled.span.attrs(({ material }: MaterialTrailProps) => ({
+  name: getNameForTrailMaterial(material),
+}))<MaterialTrailProps>`
   display: block;
   &::after {
-    content: '${({ type }) => type}:';
+    content: '${({ material }) => material}:';
     content: '';
     padding: 0.4em 1em 0 1em;
     background-position: 50% 50%;
     background-size: 1.4em;
-    background-image: url('/data/trail/trail_${({ type }) => type}.png');
+    background-image: url('/data/trail/trail_${({ material }) =>
+      material}.png');
     background-repeat: no-repeat;
     image-rendering: pixelated;
   }
@@ -113,16 +141,19 @@ const FilePath = styled.span<{
   }
 `;
 
-type ValueOf<T> = T[keyof T];
+type ExtendedActionState = GunActionState & {
+  manaDrain?: number;
+};
 
 type FieldDescription = {
   icon?: string;
   field: keyof GunActionState;
+  ignoredInTrigger?: boolean;
   key?: string;
   displayName: string;
   render: (
-    actionState: GunActionState,
-    value: ValueOf<GunActionState>,
+    actionState: ExtendedActionState,
+    config: Config,
   ) => JSX.Element | string;
 };
 
@@ -132,104 +163,111 @@ type FieldSection = {
   fields: FieldDescription[];
 };
 
+/* signZero(round(Number(v), 1), <Unchanged />), */
 const fieldSections: FieldSection[] = [
   {
-    title: 'Timing',
+    title: 'Cast State',
     fields: [
       {
-        field: 'fire_rate_wait',
-        displayName: 'Cast Delay',
-        render: (_, v) => {
+        icon: `background-image: url('/data/wand/icon_mana_drain.png');`,
+        field: 'action_mana_drain',
+        displayName: 'Mana Drain',
+        render: ({ manaDrain: v }) =>
+          `${round(Math.max(0, Number(v)), 0)} ${
+            Number(v) < 0 ? `  (${sign(Number(v))})` : ``
+          }`,
+      },
+      {
+        icon: `background-image: url('/data/wand/icon_reload_time-s.png');`,
+        field: 'reload_time',
+        displayName: 'Recharge Time',
+        render: ({ reload_time: v }, { showDurationsInFrames }) => {
           const n = Number(v);
-          const s = toSeconds(n);
-          return `${Math.max(0, s)} s${n < 0 ? `  (${sign(s)} s)` : ``}`;
+          if (showDurationsInFrames) {
+            return `${round(Math.max(0, n), 0)} fr${
+              n < 0 ? `  (${sign(n)} fr)` : ``
+            }`;
+          } else {
+            const s = toSeconds(n);
+            return `${round(Math.max(0, s), 2)} s${
+              n < 0 ? `  (${sign(s)} s)` : ``
+            }`;
+          }
         },
       },
       {
-        field: 'reload_time',
-        displayName: 'Recharge Delay',
-        render: (_, v) => `${sign(round(Number(v) / 60, 2))}s`,
+        icon: `background-image: url('/data/wand/icon_fire_rate_wait.png');`,
+        field: 'fire_rate_wait',
+        ignoredInTrigger: true,
+        displayName: 'Cast Delay',
+        render: ({ fire_rate_wait: v }, { showDurationsInFrames }) => {
+          const n = Number(v);
+          if (showDurationsInFrames) {
+            return `${round(Math.max(0, n), 0)} fr${
+              n < 0 ? `  (${sign(n)} fr)` : ``
+            }`;
+          } else {
+            const s = toSeconds(n);
+            return `${round(Math.max(0, s), 2)} s${
+              n < 0 ? `  (${sign(s)} s)` : ``
+            }`;
+          }
+        },
       },
       {
         field: 'lifetime_add',
         displayName: 'Lifetime',
-        render: (_, v) => `${signZero(Number(v))}`,
+        render: ({ lifetime_add: v }, { showDurationsInFrames }) => {
+          const n = Number(v);
+          if (showDurationsInFrames) {
+            return `${round(Math.max(0, n), 0)} fr${
+              n < 0 ? `  (${sign(n)} fr)` : ``
+            }`;
+          } else {
+            const s = toSeconds(n);
+            return `${round(Math.max(0, s), 2)} s${
+              n < 0 ? `  (${sign(s)} s)` : ``
+            }`;
+          }
+        },
       },
     ],
   },
 
   {
-    title: 'Misc.',
+    title: 'Motion',
     fields: [
       {
-        field: 'bounces',
-        displayName: 'Bounces',
-        render: (_, v) => `${signZero(Number(v))}`,
-      },
-      {
-        field: 'gravity',
-        displayName: 'Gravity',
-        render: (_, v) => `${signZero(Number(v))}`,
-      },
-      {
-        field: 'friendly_fire',
-        displayName: 'Friendly Fire',
-        render: (_, v) => `${formatYesNo(Boolean(v))}`,
-      },
-    ],
-  },
-
-  {
-    title: 'Formation & Spread',
-    fields: [
-      {
+        icon: `background-image: url('/data/wand/icon_spread_degrees.png');`,
         field: 'spread_degrees',
         displayName: 'Spread',
-        render: (_, v) => `${sign(round(Number(v), 1))} DEG`,
+        render: ({ spread_degrees: v }) =>
+          signZero(round(Number(v), 1), <Unchanged />),
       },
       {
+        icon: `background-image: url('/data/icons/t_shape.png');`,
         field: 'pattern_degrees',
         displayName: 'Pattern Angle',
-        render: (_, v) => `±${round(Number(v), 0)} DEG`,
+        render: ({ pattern_degrees: v }) =>
+          signZero(round(Number(v), 1), <Unchanged />),
       },
-    ],
-  },
-
-  {
-    title: 'Speed',
-    fields: [
       {
+        icon: `background-image: url('/data/wand/icon_bounces.png');`,
+        field: 'bounces',
+        displayName: 'Bounces',
+        render: ({ bounces: v }) => signZero(Number(v), <Unchanged />),
+      },
+      // {
+      //   field: 'gravity',
+      //   displayName: 'Gravity',
+      //   render: ({ gravity: v }) => `${signZero(Number(v))}`,
+      // },
+      {
+        icon: `background-image: url('/data/wand/icon_speed_multiplier.png');`,
         field: 'speed_multiplier',
-        displayName: 'Multiplier',
-        render: (_, v) => (Number(v) !== 1 ? `× ${v}` : `--`),
-      },
-      {
-        field: 'child_speed_multiplier',
-        displayName: 'Child Mult.',
-        render: (_, v) => (Number(v) !== 1 ? `× ${v}` : `--`),
-      },
-    ],
-  },
-
-  {
-    title: 'Recoil',
-    fields: [
-      { field: 'recoil', displayName: 'Recoil', render: (_, v) => `${v}` },
-      {
-        field: 'knockback_force',
-        displayName: 'Knockback',
-        render: (_, v) => `${v}`,
-      },
-      {
-        field: 'screenshake',
-        displayName: 'Screen Shake',
-        render: (_, v) => `${v}`,
-      },
-      // {field: 'sound_loop_tag', displayName: 'Sound Loop Tag', render: (_, v) => `${v}`},
-      {
-        field: 'dampening',
-        displayName: 'Dampening',
-        render: (_, v) => `${v}`,
+        displayName: 'Speed',
+        render: ({ speed_multiplier: v }) =>
+          Number(v) !== 1 ? `× ${v}` : <Unchanged />,
       },
     ],
   },
@@ -238,14 +276,15 @@ const fieldSections: FieldSection[] = [
     title: 'Crit',
     fields: [
       {
+        icon: `background-image: url('/data/wand/icon_damage_critical_chance.png');`,
         field: 'damage_critical_chance',
         displayName: 'Chance',
-        render: (_, v) => `${sign(Number(v))}%`,
+        render: ({ damage_critical_chance: v }) => `${sign(Number(v))}%`,
       },
       {
         field: 'damage_critical_multiplier',
         displayName: 'Multiplier',
-        render: (_, v) => `${v}`,
+        render: ({ damage_critical_multiplier: v }) => `${v}`,
       },
     ],
   },
@@ -253,151 +292,175 @@ const fieldSections: FieldSection[] = [
     title: 'Damage',
     fields: [
       {
+        icon: `background-image: url('/data/warnings/icon_danger.png');`,
+        field: 'friendly_fire',
+        displayName: 'Friendly Fire',
+        render: ({ friendly_fire: v }) =>
+          formatYesNo(Boolean(v), { ifTrue: <Warning>{'Yes'}</Warning> }),
+      },
+      {
         icon: `background-image: url('/data/ui_gfx/gun_actions/zero_damage.png');`,
         field: 'damage_null_all',
         displayName: 'All Null',
-        render: (_, v) => `${formatYesNo(Boolean(v))}`,
+        render: ({ damage_null_all: v }) => formatYesNo(Boolean(v)),
       },
 
       {
         icon: getBackgroundUrlForDamageType('melee'),
         field: 'damage_melee_add',
         displayName: 'Melee',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
+        render: ({ damage_melee_add: v }) =>
+          signZero(round(Number(v) * 25, 1), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('projectile'),
         field: 'damage_projectile_add',
         displayName: 'Projectile',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
+        render: ({ damage_projectile_add: v }) =>
+          signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('electricity'),
         field: 'damage_electricity_add',
         displayName: 'Electric',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
+        render: ({ damage_electricity_add: v }) =>
+          signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('fire'),
         field: 'damage_fire_add',
         displayName: 'Fire',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
+        render: ({ damage_fire_add: v }) =>
+          signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('ice'),
         field: 'damage_ice_add',
         displayName: 'Ice',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
+        render: ({ damage_ice_add: v }) =>
+          signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('slice'),
         field: 'damage_slice_add',
         displayName: 'Slice',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
+        render: ({ damage_slice_add: v }) =>
+          signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('heal'),
         field: 'damage_healing_add',
         displayName: 'Healing',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
+        render: ({ damage_healing_add: v }) =>
+          signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('curse'),
         field: 'damage_curse_add',
         displayName: 'Curse',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
+        render: ({ damage_curse_add: v }) =>
+          signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('holy'),
         field: 'damage_holy_add',
         displayName: 'Holy',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
+        render: ({ damage_holy_add: v }) =>
+          signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('drill'),
         field: 'damage_drill_add',
         displayName: 'Drill',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
+        render: ({ damage_drill_add: v }) =>
+          signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('explosion'),
         field: 'damage_explosion_add',
         displayName: 'Explosion',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
-      },
-    ],
-  },
-  {
-    title: 'Explosion',
-    fields: [
-      {
-        field: 'damage_explosion',
-        displayName: 'Damage',
-        render: (_, v) => `${signZero(round(Number(v) * 25, 0))}`,
+        render: ({ damage_explosion_add: v }) =>
+          signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
-        icon: 'data/wand/icon_explosion_radius.png',
+        icon: `background-image: url('/data/wand/icon_explosion_radius.png');`,
         field: 'explosion_radius',
-        displayName: 'Radius',
-        render: (_, v) => `${signZero(Number(v))}`,
+        displayName: 'Expl. Radius',
+        render: ({ explosion_radius: v }) =>
+          signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         key: 'explosion_radius_threshold',
         field: 'explosion_radius',
-        displayName: 'Threshold Min.',
-        render: (_, v) => `${radiusThresholdBonus(Number(v))}`,
+        displayName: 'Expl. Threshold',
+        render: ({ explosion_radius: v }) =>
+          radiusThresholdBonus(Number(v), <Unchanged />),
       },
     ],
   },
-
   {
-    title: 'Terrain',
+    title: 'Impact',
     fields: [
       {
-        field: 'explosion_damage_to_materials',
-        displayName: 'Expl. Damage Materials',
-        render: (_, v) => `${v}`,
+        icon: `background-image: url('/data/wand/icon_recoil.png');`,
+        field: 'recoil',
+        displayName: 'Recoil',
+        render: ({ recoil: v }) => {
+          const n = Number(v);
+          return `${Math.max(0, n)} ${n < 0 ? `  (${sign(n)})` : ``}`;
+        },
       },
+      {
+        icon: `background-image: url('/data/wand/icon_knockback.png');`,
+        field: 'knockback_force',
+        displayName: 'Knockback',
+        render: ({ knockback_force: v }) => `${v}`,
+      },
+      {
+        field: 'screenshake',
+        displayName: 'Screen Shake',
+        render: ({ screenshake: v }) => `${v}`,
+      },
+      // {field: 'sound_loop_tag', displayName: 'Sound Loop Tag', render: ({: v}) => `${v}`},
       {
         field: 'physics_impulse_coeff',
         displayName: 'Physics Impulse Coeff.',
-        render: (_, v) => `${v}`,
+        render: ({ physics_impulse_coeff: v }) => `${v}`,
       },
       {
         field: 'lightning_count',
         displayName: 'Lightning Count',
-        render: (_, v) => `${v}`,
+        render: ({ lightning_count: v }) => `${v}`,
       },
     ],
   },
 
   {
-    title: 'Materials',
+    title: 'Material',
     fields: [
-      { field: 'material', displayName: 'Material', render: (_, v) => `${v}` },
-      {
-        field: 'material_amount',
-        displayName: 'Material Amount',
-        render: (_, v) => `${v}`,
-      },
-    ],
-  },
-
-  {
-    title: 'Trails',
-    fields: [
+      // {
+      //   field: 'material',
+      //   displayName: 'Material',
+      //   render: ({ material: v }) => `${v}`,
+      // },
+      // {
+      //   field: 'material_amount',
+      //   displayName: 'Material Amount',
+      //   render: ({ material_amount: v }) => `${v}`,
+      // },
       {
         field: 'trail_material',
         displayName: 'Trails:',
-        render: (_, v) =>
+        render: ({ trail_material: v }) =>
           isString(v) ? (
             <>
               {tally(v.split(',').filter((v) => v.length > 0)).map(
-                ([name, count]) => (
-                  <MaterialTrail type={name} key={name}>
-                    × {count}
-                  </MaterialTrail>
-                ),
+                ([name, count]) =>
+                  isTrailMaterial(name) ? (
+                    <MaterialTrail material={name} key={name}>
+                      × {count}
+                    </MaterialTrail>
+                  ) : null,
               )}
             </>
           ) : (
@@ -406,8 +469,8 @@ const fieldSections: FieldSection[] = [
       },
       {
         field: 'trail_material_amount',
-        displayName: 'Trail Amount',
-        render: (_, v) => `${v}`,
+        displayName: 'Trail Volume',
+        render: ({ trail_material_amount: v }) => `${v}`,
       },
     ],
   },
@@ -415,43 +478,43 @@ const fieldSections: FieldSection[] = [
   // {
   //   title: 'GFX',
   //   fields: [
-  //     { field: 'light', displayName: 'Light', render: (_, v) => `${v}` },
-  //     { field: 'sprite', displayName: 'Sprite', render: (_, v) => `${v}` },
+  //     { field: 'light', displayName: 'Light', render: ({: v}) => `${v}` },
+  //     { field: 'sprite', displayName: 'Sprite', render: ({: v}) => `${v}` },
   //     {
   //       field: 'blood_count_multiplier',
   //       displayName: 'Blood Count Multiplier',
-  //       render: (_, v) => `${v}`,
+  //       render: ({: v}) => `${v}`,
   //     },
   //     {
   //       field: 'gore_particles',
   //       displayName: 'Gore Particles',
-  //       render: (_, v) => `${v}`,
+  //       render: ({: v}) => `${v}`,
   //     },
   //     {
   //       field: 'ragdoll_fx',
   //       displayName: 'Ragdoll FX',
-  //       render: (_, v) => `${v}`,
+  //       render: ({: v}) => `${v}`,
   //     },
   //   ],
   // },
 
-  {
+  /*{
     title: 'Files',
     fields: [
       // {
       //   field: 'action_sprite_filename',
       //   displayName: 'Sprite file',
-      //   render: (_, v) => `${v}`,
+      //   render: ({: v}) => `${v}`,
       // },
       // {
       //   field: 'action_unidentified_sprite_filename',
       //   displayName: 'Sprite file (No ID)',
-      //   render: (_, v) => `${v}`,
+      //   render: ({: v}) => `${v}`,
       // },
       {
         field: 'custom_xml_file',
         displayName: 'Custom XML Files',
-        render: (_, v) =>
+render: ({: v}) =>
           isString(v) ? (
             <>
               {tally(v.split(',').filter((v) => v.length > 0)).map(
@@ -469,12 +532,12 @@ const fieldSections: FieldSection[] = [
       // {
       // field: 'projectile_file',
       // displayName: 'Projectile File',
-      // render: (_, v) => `${v}`,
+      // render: ({: v}) => `${v}`,
       // },
       {
         field: 'extra_entities',
         displayName: 'Extra Entities',
-        render: (_, v) =>
+render: ({: v}) =>
           isString(v) ? (
             <>
               {tally(v.split(',').filter((v) => v.length > 0)).map(
@@ -492,7 +555,7 @@ const fieldSections: FieldSection[] = [
       {
         field: 'game_effect_entities',
         displayName: 'Game Effect Entities',
-        render: (_, v) =>
+render: ({: v}) =>
           isString(v) ? (
             <>
               {tally(v.split(',').filter((v) => v.length > 0)).map(
@@ -508,93 +571,72 @@ const fieldSections: FieldSection[] = [
           ),
       },
     ],
-  },
-
-  // {
-  //   title: 'State Flags',
-  //   fields: [
-  //     {
-  //       field: 'state_shuffled',
-  //       displayName: 'Deck Shuffled',
-  //       render: (_, v) => `${formatYesNo(Boolean(v))}`,
-  //     },
-  //     {
-  //       field: 'state_cards_drawn',
-  //       displayName: 'Cards Drawn',
-  //       render: (_, v) => `${Number(v)}`,
-  //     },
-  //   ],
-  // },
+    },*/
 
   /*{
     title: 'Action Info',
     fields: [
-      // {field: 'action_id', displayName: 'ID', render: (_, v) => `${v}`},
+// {field: 'action_id', displayName: 'ID', render: ({: v}) => `${v}`},
       {
         field: 'action_name',
         displayName: 'Name',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
       {
         field: 'action_description',
         displayName: 'Desc.',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
       {
         field: 'action_type',
         displayName: 'Type',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
 
       {
         field: 'action_draw_many_count',
         displayName: 'Draw',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
       {
         field: 'action_never_unlimited',
         displayName: 'Never Unlimited',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
       {
         field: 'action_max_uses',
         displayName: 'Max. Charges',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
       {
         field: 'action_mana_drain',
         displayName: 'Mana',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
       {
         field: 'action_spawn_level',
         displayName: 'Spawn Level',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
       {
         field: 'action_spawn_probability',
         displayName: 'Spawn Probability',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
       {
         field: 'action_spawn_requires_flag',
         displayName: 'Spawn Requires Flag',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
       {
         field: 'action_spawn_manual_unlock',
         displayName: 'Spawn Manual Unlock',
-        render: (_, v) => `${v}`,
-      },
-      {
-        field: 'action_is_dangerous_blast',
-        displayName: 'Dangerous Blast',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
       {
         field: 'action_ai_never_uses',
         displayName: 'AI Never Uses',
-        render: (_, v) => `${v}`,
+render: ({: v}) => `${v}`,
       },
     ],
   },*/
@@ -604,41 +646,110 @@ const fieldSections: FieldSection[] = [
 
 export const ProjectileCastState = ({
   castState,
+  manaDrain,
+  rechargeTime,
+  trigger = false,
 }: {
   castState?: GunActionState;
+  manaDrain?: number;
+  rechargeTime?: number;
+  trigger?: boolean;
 }) => {
-  const {
-    config: { castShowChanged },
-  } = useAppSelector(selectConfig);
+  const config = useConfig();
+  const { castShowChanged } = config;
 
   if (!castState) {
     return null;
   }
+
+  const extendedCastState = { ...castState, manaDrain };
+
   return (
     <>
-      {fieldSections.map(({ title, fields, sectionIcon }) => (
-        <Section>
-          <ListTitle icon={sectionIcon}>{title}</ListTitle>
-          <StyledList>
-            {fields.map(({ field, displayName, render, key, icon }) => {
-              if (
-                castShowChanged &&
-                castState[field] === defaultGunActionState[field]
-              ) {
-                return null;
-              }
-              return (
-                <StyledListItem key={key ?? field} icon={icon ?? ''}>
-                  <StyledName>{displayName}</StyledName>
-                  <StyledValue>
-                    {render(castState, castState[field])}
-                  </StyledValue>
-                </StyledListItem>
-              );
-            })}
-          </StyledList>
-        </Section>
-      ))}
+      {fieldSections.map(({ title, fields, sectionIcon }) => {
+        return (
+          <Section key={title}>
+            <ListTitle icon={sectionIcon}>{title}</ListTitle>
+            <StyledList>
+              {fields.map(
+                ({
+                  field,
+                  displayName,
+                  render,
+                  key,
+                  icon,
+                  ignoredInTrigger = false,
+                }) => {
+                  if (
+                    castShowChanged &&
+                    castState[field] === defaultGunActionState[field]
+                  ) {
+                    return null;
+                  }
+                  return (
+                    <StyledListItem key={key ?? field} icon={icon ?? ''}>
+                      <StyledName>{displayName}</StyledName>
+                      <StyledValue>
+                        {!trigger || !ignoredInTrigger
+                          ? render(extendedCastState, config)
+                          : 'ignored'}
+                      </StyledValue>
+                    </StyledListItem>
+                  );
+                },
+              )}
+            </StyledList>
+          </Section>
+        );
+      })}
     </>
   );
 };
+
+/* Unused/obsolete */
+/* This is never set by any spell and defaults to zero
+   * {
+        field: 'explosion_damage_to_materials',
+        displayName: 'Damages Materials',
+        render: ({ explosion_damage_to_materials: v }) => `${v}`,
+        },
+
+      {
+        field: 'damage_explosion',
+        displayName: 'Damage',
+        render: ({ damage_explosion: v }) =>
+          `${signZero(round(Number(v) * 25, 0))}`,
+      },
+      {
+        field: 'dampening',
+        displayName: 'Dampening',
+        render: ({ dampening: v }) => `${v}`,
+      },
+      {
+        icon: `background-image: url('/data/wand/icon_speed_multiplier.png');`,
+        field: 'child_speed_multiplier',
+        displayName: 'Child Mult.',
+        render: ({ child_speed_multiplier: v }) =>
+          Number(v) !== 1 ? `× ${v}` : `--`,
+      },
+      {
+        field: 'action_is_dangerous_blast',
+        displayName: 'Dangerous Blast',
+render: ({: v}) => `${v}`,
+      },
+   */
+// {
+//   title: 'State Flags',
+//   fields: [
+//     {
+//       field: 'state_shuffled',
+//       displayName: 'Deck Shuffled',
+//       render: ({: v}) => `${formatYesNo(Boolean(v))}`,
+//     },
+//     {
+//       field: 'state_cards_drawn',
+//       displayName: 'Cards Drawn',
+//       render: ({: v}) => `${Number(v)}`,
+//     },
+//   ],
+// },

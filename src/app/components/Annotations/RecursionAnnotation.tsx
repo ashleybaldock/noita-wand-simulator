@@ -49,9 +49,9 @@ type Props = {
 
 export function RecursionAnnotation(props: Props) {
   const { spell, recursion, iteration } = props;
-  const { config } = useConfig();
+  const { showRecursion: configShowRecursion } = useConfig();
 
-  if (!config.showRecursion) {
+  if (!configShowRecursion) {
     return null;
   }
 

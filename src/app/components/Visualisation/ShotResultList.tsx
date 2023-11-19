@@ -9,14 +9,15 @@ import { useWandState } from '../../redux';
 import { selectConfig } from '../../redux/configSlice';
 import { useAppSelector } from '../../redux/hooks';
 import { SaveImageButton, ScrollWrapper } from '../generic';
-import { IterationLimitWarning } from './IterationLimitWarning';
-import { ProjectileTreeShotResult } from './ProjectileTree';
 import { ActionCalledShotResult } from './ActionSequence';
 import { ActionTreeShotResult } from './ActionTree';
 import { SectionHeader } from '../SectionHeader';
-import { ShotMetadata } from './ShotMetadata';
+import { ProjectileTree } from './ProjectileTree';
 
-const ParentDiv = styled.div``;
+const ParentDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const SectionDiv = styled.div`
   display: flex;
@@ -48,7 +49,6 @@ export const ShotResultList = ({
 
   const { config } = useAppSelector(selectConfig);
 
-  const projectilesRef = useRef<HTMLDivElement>();
   const actionsCalledRef = useRef<HTMLDivElement>();
   const actionCallTreeRef = useRef<HTMLDivElement>();
 
@@ -74,7 +74,11 @@ export const ShotResultList = ({
     });
   }, [infiniteSpells, unlimitedSpells, spells]);
 
-  let [shots, reloadTime, hitIterationLimit] = useMemo(
+  let {
+    shots,
+    recharge: totalRechargeTime,
+    endReason,
+  } = useMemo(
     () =>
       clickWand(
         wand,
@@ -139,23 +143,11 @@ export const ShotResultList = ({
 
   return (
     <ParentDiv>
-      <SectionHeader title={'Simulation: Projectiles'} />
-      <ScrollWrapper>
-        <SectionDiv ref={projectilesRef as any} className={'saveImageRoot'}>
-          <SaveImageButton
-            targetRef={projectilesRef}
-            fileName={'projectiles'}
-            enabled={groupedShots.length > 0}
-          />
-          <IterationLimitWarning hitIterationLimit={hitIterationLimit} />
-          {groupedShots.length > 0 && (
-            <ShotMetadata rechargeDelay={reloadTime} />
-          )}
-          {groupedShots.map((shot, index) => (
-            <ProjectileTreeShotResult shot={shot} key={index} indent={false} />
-          ))}
-        </SectionDiv>
-      </ScrollWrapper>
+      <ProjectileTree
+        endReason={endReason}
+        shots={groupedShots}
+        totalRechargeTime={totalRechargeTime}
+      ></ProjectileTree>
       <SectionHeader title={'Simulation: Action Call Sequence'} />
       <ScrollWrapper>
         <SectionDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>

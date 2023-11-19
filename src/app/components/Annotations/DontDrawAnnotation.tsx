@@ -23,9 +23,9 @@ type Props = {
 
 export function DontDrawAnnotation(props: Props) {
   const { dont_draw_actions = false } = props;
-  const { config } = useConfig();
+  const { showDontDraw } = useConfig();
 
-  if (!dont_draw_actions || !config.showDontDraw) {
+  if (!dont_draw_actions || !showDontDraw) {
     return null;
   }
 

@@ -26,9 +26,9 @@ export const DeckIndexAnnotation = ({
 }: {
   deckIndex?: number | string;
 }) => {
-  const { config } = useConfig();
+  const { showDeckIndexes } = useConfig();
 
-  if (deckIndex === undefined || !config.showDeckIndexes) {
+  if (deckIndex === undefined || !showDeckIndexes) {
     return null;
   }
 

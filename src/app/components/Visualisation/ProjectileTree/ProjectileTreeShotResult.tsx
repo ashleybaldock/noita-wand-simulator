@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro';
 import { ProjectileCastState } from './ProjectileCastState';
-import { WandActionGroup } from '../WandActionGroup';
+import { ProjectileActionGroup } from './ProjectileActionGroup';
 import { GroupedWandShot } from '../../../calc/eval/types';
 import { ShotMetadata } from '../ShotMetadata';
 import { isRawObject } from '../../../calc/grouping/combineGroups';
@@ -12,6 +12,7 @@ const StyledShotDiv = styled.div`
   align-items: flex-start;
   overflow-x: hidden;
   margin: 1px;
+  border: 1px solid red;
 `;
 
 const StyledProjectileDiv = styled.div<{
@@ -22,6 +23,7 @@ const StyledProjectileDiv = styled.div<{
   justify-content: flex-start;
   align-items: flex-start;
   margin-top: ${({ indent }) => (indent ? 24 : 0)}px;
+  border: 1px solid orange;
 `;
 
 const StyledMetadataDiv = styled.div<{
@@ -39,27 +41,29 @@ const TriggerDiv = styled.div`
   margin-bottom: 10px;
 `;
 
-// list of all actions played, and sub-ShotResults for triggers
+const ShotIndex = styled.div``;
+
 export const ProjectileTreeShotResult = ({
   shot,
   indent,
+  nestingLevel = indent ? 1 : 0,
+  index,
 }: {
   shot: GroupedWandShot;
   indent: boolean;
+  nestingLevel?: number;
+  index: number;
 }) => {
   return (
     <StyledShotDiv>
-      <div>
-        <StyledMetadataDiv indent={indent}>
-          {!indent && (
-            <ShotMetadata
-              manaDrain={shot.manaDrain}
-              castDelay={shot.castState?.fire_rate_wait}
-            />
-          )}
-          <ProjectileCastState castState={shot.castState} />
-        </StyledMetadataDiv>
-      </div>
+      <ShotIndex>{nestingLevel === 0 ? `Shot #${index}` : `Trigger`}</ShotIndex>
+      <StyledMetadataDiv indent={indent}>
+        <ProjectileCastState
+          castState={shot.castState}
+          manaDrain={shot.manaDrain}
+          trigger={nestingLevel !== 0}
+        />
+      </StyledMetadataDiv>
       {shot.projectiles.map((projectile, index) => {
         let triggerComponent;
         if (isRawObject(projectile)) {
@@ -68,6 +72,7 @@ export const ProjectileTreeShotResult = ({
               <TriggerDiv>
                 <ProjectileTreeShotResult
                   shot={projectile.trigger}
+                  index={index}
                   indent={true}
                 />
               </TriggerDiv>
@@ -75,7 +80,7 @@ export const ProjectileTreeShotResult = ({
         }
         return (
           <StyledProjectileDiv key={index} indent={indent}>
-            <WandActionGroup group={projectile} />
+            <ProjectileActionGroup group={projectile} />
             {triggerComponent}
           </StyledProjectileDiv>
         );

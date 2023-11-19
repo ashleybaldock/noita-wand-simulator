@@ -1,7 +1,8 @@
 import styled from 'styled-components/macro';
+import { StopReason } from '../../calc/eval/clickWand';
 import { round } from '../../util/util';
 
-const StyledList = styled.div`
+const List = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -17,63 +18,58 @@ const StyledList = styled.div`
   font-family: var(--font-family-noita-default);
 `;
 
-const StyledListItem = styled.div`
+const ListItem = styled.div`
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;
 `;
 
-const StyledName = styled.span`
+const Name = styled.span`
   text-align: left;
   flex: 0 0 150px;
 `;
 
-const StyledValue = styled.span`
-  text-align: left;
+const Value = styled.span`
+  text-align: endReasoo lnd eft;
   flex: 0 0 auto;
 `;
 
-type Fields = {
+export const ShotMetadata = ({
+  manaDrain,
+  castDelay,
+  rechargeDelay,
+  endReason = 'unknown',
+}: {
   manaDrain?: number;
   castDelay?: number;
   rechargeDelay?: number;
-};
-
-function field<K extends keyof Fields = keyof Fields>(
-  name: K,
-  displayName: string,
-  render: (v: string | number) => React.ReactElement,
-) {
-  return { name, displayName, render };
-}
-
-const fieldRenderers = [
-  field('manaDrain', 'Σ Mana Drain', (v) => <span>{round(Number(v), 0)}</span>),
-  field('castDelay', 'Σ Cast Delay', (v) => (
-    <span>{round(Math.max(0, Number(v) / 60), 2)}s</span>
-  )),
-  field('rechargeDelay', 'Σ Recharge Delay', (v) => (
-    <span>{round(Math.max(0, Number(v) / 60), 2)}s</span>
-  )),
-];
-
-type Props = Fields & {};
-
-export function ShotMetadata(props: Props) {
+  endReason?: StopReason;
+}) => {
   return (
-    <StyledList>
-      {fieldRenderers.map(({ name, displayName, render }) => {
-        const value = props[name];
-        if (value == null) {
-          return null;
-        }
-        return (
-          <StyledListItem key={name}>
-            <StyledName>{displayName}</StyledName>
-            <StyledValue>{render(value)}</StyledValue>
-          </StyledListItem>
-        );
-      })}
-    </StyledList>
+    <List>
+      {(endReason ?? false) && endReason !== 'unknown' && (
+        <ListItem>
+          <Name>{`End: ${endReason}`}</Name>
+        </ListItem>
+      )}
+      {(manaDrain ?? false) && (
+        <ListItem>
+          <Name>{'Σ Mana Drain'}</Name>
+          <Value>{round(Number(manaDrain), 0)}</Value>
+        </ListItem>
+      )}
+      {(castDelay ?? false) && (
+        <ListItem>
+          <Name>{'Σ Cast Delay'}</Name>
+          <Value> {round(Math.max(0, Number(castDelay) / 60), 2)}s</Value>
+        </ListItem>
+      )}
+      {(rechargeDelay ?? false) && (
+        <ListItem>
+          <Name>{'Σ Recharge Delay'}</Name>
+          <Value>{round(Math.max(0, Number(rechargeDelay) / 60), 2)}s</Value>
+        </ListItem>
+      )}
+    </List>
   );
-}
+};

@@ -5,6 +5,7 @@ import styled from 'styled-components/macro';
 import { AppDispatch } from '../../redux/store';
 import { EditableInteger } from '../generic';
 import { round, toFrames, toSeconds, TypedProperties } from '../../util/util';
+import { Config, useConfig } from '../../redux';
 
 const CheckboxField = styled.input`
   margin: 1px;
@@ -49,7 +50,7 @@ const fields = [
   {
     name: 'Shuffle',
     imgUrl: 'data/wand/icon_gun_shuffle.png',
-    render: (wand: Wand, dispatch: AppDispatch) => (
+    render: (wand: Wand, dispatch: AppDispatch, config: Config) => (
       <CheckboxField
         type="checkbox"
         checked={wand.shuffle_deck_when_empty}
@@ -189,13 +190,14 @@ const StyledValue = styled.span`
 export function WandStatsEditor() {
   const wand = useWand();
   const dispatch = useAppDispatch();
+  const config = useConfig();
 
   return (
     <StyledList>
       {fields.map(({ name, imgUrl, render }, index) => (
         <StyledListItem key={index} imgUrl={imgUrl}>
           <StyledName>{name}</StyledName>
-          <StyledValue>{render(wand, dispatch)}</StyledValue>
+          <StyledValue>{render(wand, dispatch, config)}</StyledValue>
         </StyledListItem>
       ))}
     </StyledList>

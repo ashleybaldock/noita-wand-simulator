@@ -3,49 +3,52 @@ import { useAppSelector } from './hooks';
 import { RootState } from './store';
 import { loadState } from '../localStorage';
 
+export interface Config {
+  debug: {
+    dragHint: boolean;
+  };
+  condenseShots: boolean;
+  unlimitedSpells: boolean;
+  infiniteSpells: boolean;
+  infiniteMoney: boolean;
+  infiniteHp: boolean;
+  showDivides: boolean;
+  showGreekSpells: boolean;
+  showDirectActionCalls: boolean;
+  showDeckIndexes: boolean;
+  showRecursion: boolean;
+  showProxies: boolean;
+  showSources: boolean;
+  showDontDraw: boolean;
+  swapOnMove: boolean;
+  showActionTree: boolean;
+  showSpellsInCategories: boolean;
+  endSimulationOnRefresh: boolean;
+  showBeta: boolean;
+  castShowChanged: boolean;
+  showDurationsInFrames: boolean;
+  unlocks: {
+    [key: string]: boolean;
+  };
+  var_money: number;
+  var_hp: number;
+  var_hp_max: number;
+  requirements: {
+    enemies: boolean;
+    projectiles: boolean;
+    hp: boolean;
+    half: boolean;
+  };
+  random: {
+    worldSeed: number;
+    frameNumber: number;
+  };
+  pauseCalculations: boolean;
+}
+
 // Define a type for the slice state
 export interface ConfigState {
-  config: {
-    debug: {
-      dragHint: boolean;
-    };
-    condenseShots: boolean;
-    unlimitedSpells: boolean;
-    infiniteSpells: boolean;
-    infiniteMoney: boolean;
-    infiniteHp: boolean;
-    showDivides: boolean;
-    showGreekSpells: boolean;
-    showDirectActionCalls: boolean;
-    showDeckIndexes: boolean;
-    showRecursion: boolean;
-    showProxies: boolean;
-    showSources: boolean;
-    showDontDraw: boolean;
-    swapOnMove: boolean;
-    showActionTree: boolean;
-    showSpellsInCategories: boolean;
-    endSimulationOnRefresh: boolean;
-    showBeta: boolean;
-    castShowChanged: boolean;
-    unlocks: {
-      [key: string]: boolean;
-    };
-    var_money: number;
-    var_hp: number;
-    var_hp_max: number;
-    requirements: {
-      enemies: boolean;
-      projectiles: boolean;
-      hp: boolean;
-      half: boolean;
-    };
-    random: {
-      worldSeed: number;
-      frameNumber: number;
-    };
-    pauseCalculations: boolean;
-  };
+  config: Config;
 }
 
 // Define the initial state using that type
@@ -73,6 +76,7 @@ export const initialState: ConfigState = {
     endSimulationOnRefresh: true,
     showBeta: true,
     castShowChanged: true,
+    showDurationsInFrames: false,
     unlocks: {
       card_unlocked_black_hole: false,
       card_unlocked_everything: false,
@@ -143,7 +147,7 @@ export const { updateConfig } = configSlice.actions;
 export const selectConfig = (state: RootState): ConfigState => state.config;
 
 export function useConfig() {
-  return useAppSelector(selectConfig);
+  return useAppSelector(selectConfig).config;
 }
 
 export const configReducer = configSlice.reducer;

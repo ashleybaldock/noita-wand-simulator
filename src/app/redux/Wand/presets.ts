@@ -5,9 +5,9 @@ const defaultPreset: Readonly<Preset> = {
   wand: {
     actions_per_round: 1,
     deck_capacity: 26,
-    reload_time: 0.33,
+    reload_time: 20,
     shuffle_deck_when_empty: false,
-    cast_delay: 0.17,
+    cast_delay: 10,
     mana_charge_speed: 1400,
     mana_max: 5000,
     spread: 0,

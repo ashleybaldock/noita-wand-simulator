@@ -1,1 +1,1 @@
-export * from './ProjectileTreeShotResult';
+export * from './ProjectileTree';

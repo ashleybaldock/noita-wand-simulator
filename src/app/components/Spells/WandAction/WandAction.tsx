@@ -28,11 +28,7 @@ const _WandAction = ({
 };
 
 export const WandAction = styled(_WandAction)`
-  --transition-in: var(--transition-hover-in);
-  --transition-out: var(--transition-hover-out);
-  --transition-props: transform;
-
-  --size-spell: var(--bsize-spell, 1em);
+  --size-spell: var(--bsize-spell, 48px);
 
   position: relative;
   min-width: var(--size-spell);
@@ -44,8 +40,14 @@ export const WandAction = styled(_WandAction)`
   font-weight: bold;
   user-select: none;
   image-rendering: pixelated;
-  transform-origin: center;
+`;
 
+export const DraggableWandAction = styled(WandAction)`
+  --transition-in: var(--transition-hover-in);
+  --transition-out: var(--transition-hover-out);
+  --transition-props: transform;
+
+  transform-origin: center;
   transition-duration: 150ms;
   transition-property: var(--transition-props);
   transition-timing-function: var(--transition-out, ease-out);

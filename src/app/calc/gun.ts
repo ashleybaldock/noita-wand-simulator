@@ -690,8 +690,7 @@ function _play_permanent_card(action_id: ActionId) {
 //   apply(hand);
 // }
 
-// eslint-disable-next-line
-function _add_extra_modifier_to_shot(name: ExtraModifier) {
+export function _add_extra_modifier_to_shot(name: ExtraModifier) {
   if (!extraModifiers[name]) {
     console.log(
       "_add_extra_modifier_to_shot() - function '" +

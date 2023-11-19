@@ -17,25 +17,25 @@ export type Spell = {
   max_uses?: number;
   uses_remaining?: number;
   never_unlimited?: boolean;
-  // Info
-  beta?: boolean;
-  spawn_requires_flag?: string;
-  spawn_manual_unlock?: boolean;
-  spawn_level?: string;
-  spawn_probability?: string;
-  sound_loop_tag?: string;
-  price: number;
-  ai_never_uses?: boolean;
-  is_dangerous_blast?: boolean;
-  sprite_unidentified?: string;
   // deck properties
   recursive?: boolean;
   iterative?: boolean;
   deck_index?: number;
-  custom_uses_logic?: never;
-  is_identified?: boolean;
+  permanently_attached?: boolean /* Always Cast */;
+  // Info
+  beta?: boolean;
+  spawn_requires_flag?: string;
+  spawn_level?: string;
+  spawn_probability?: string;
+  price: number;
+  ai_never_uses?: boolean;
+  /* unused? */ spawn_manual_unlock?: boolean;
+  /* unused? */ is_dangerous_blast?: boolean;
+  /* unused? */ sprite_unidentified?: string;
+  /* unused */ custom_uses_logic?: never;
+  /* unused */ is_identified?: boolean;
+  sound_loop_tag?: string;
   inventoryitem_id?: number;
-  permanently_attached?: boolean;
 };
 
 export const validActionCallSources = [

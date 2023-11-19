@@ -58,7 +58,6 @@ const StickyTitleHeader = styled.h2`
   border-right-width: 0.6em;
   border-top-color: black;
   border-top-width: 0em;
-  bottom: -1em;
 `;
 
 type SectionHeaderProps = {

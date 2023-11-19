@@ -24,7 +24,7 @@ import {
   NoManaAnnotation,
 } from '../Annotations/';
 import {
-  WandAction,
+  DraggableWandAction,
   WandActionDropTargets,
   WandActionDragSource,
 } from '../Spells/WandAction';
@@ -63,7 +63,7 @@ function ActionComponent({
             actionId={spellAction.id}
             sourceWandIndex={wandIndex}
           >
-            <WandAction
+            <DraggableWandAction
               spellType={spellAction.type}
               spellSprite={spellAction.sprite}
               onDeleteSpell={() => handleDeleteSpell(wandIndex)}

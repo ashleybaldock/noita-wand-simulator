@@ -144,14 +144,21 @@ export type TypedProperties<T, U> = Pick<
   }[keyof T]
 >;
 
-export const formatYesNo = (v: boolean) => (v ? 'Yes' : 'No');
+export const formatYesNo = (
+  v: boolean,
+  {
+    ifTrue = 'Yes',
+    ifFalse = 'No',
+  }: { ifTrue?: JSX.Element | string; ifFalse?: JSX.Element | string } = {},
+) => (v ? ifTrue : ifFalse);
 
 export const round = (n: number, to: number) =>
   Math.round(n * Math.pow(10, to)) / Math.pow(10, to);
 
 export const sign = (n: number) => (n < 0 ? '' : '+') + n;
 
-export const signZero = (n: number) => (n === 0 ? '--' : sign(n));
+export const signZero = <T>(n: number, ifZero: T | string = '--') =>
+  n === 0 ? ifZero : sign(n);
 
 export const toFrames = (durationInSeconds: number, fps: number = FPS) =>
   round(durationInSeconds * fps, 2);
@@ -159,9 +166,12 @@ export const toFrames = (durationInSeconds: number, fps: number = FPS) =>
 export const toSeconds = (durationInFrames: number, fps: number = FPS) =>
   round(durationInFrames / fps, 2);
 
-export const radiusThresholdBonus = (radius: number) => {
+export const radiusThresholdBonus = (
+  radius: number,
+  ifZero: JSX.Element | string = '--',
+): JSX.Element | string => {
   if (isNaN(radius)) return 'n/a';
-  if (radius < 32) return signZero(0);
+  if (radius < 32) return signZero(0, ifZero);
   if (radius < 64) return signZero(325);
   if (radius < 128) return signZero(375);
   if (radius < 211) return signZero(500);
