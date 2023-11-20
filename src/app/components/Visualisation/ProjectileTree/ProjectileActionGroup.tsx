@@ -20,11 +20,13 @@ import { ActionCall, GroupedProjectile } from '../../../calc/eval/types';
 
 const MainDiv = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  width: min-content;
   align-items: stretch;
   font-family: monospace;
   font-weight: bold;
   font-size: 12px;
+  grid-row: heading;
 `;
 
 const GroupDiv = styled.div`
@@ -84,34 +86,38 @@ export const ProjectileActionGroup = ({
   if (isRawObject(simplified)) {
     if (simplified._typeName === 'ActionCall') {
       return (
-        <WandActionGroupWandActionBorder>
-          <NextActionArrow />
-          <WandAction
-            spellType={simplified.spell.type}
-            spellSprite={simplified.spell.sprite}
-          />
-          <RecursionAnnotation {...simplified} />
-          <ActionSourceAnnotation {...simplified} />
-          <DontDrawAnnotation
-            {...simplified}
-            dont_draw_actions={simplified.dont_draw_actions}
-          />
-          <DeckIndexAnnotation deckIndex={simplified.deckIndex} />
-          <FriendlyFireAnnotation />
-        </WandActionGroupWandActionBorder>
+        <MainDiv>
+          <WandActionGroupWandActionBorder>
+            <NextActionArrow />
+            <WandAction
+              spellType={simplified.spell.type}
+              spellSprite={simplified.spell.sprite}
+            />
+            <RecursionAnnotation {...simplified} />
+            <ActionSourceAnnotation {...simplified} />
+            <DontDrawAnnotation
+              {...simplified}
+              dont_draw_actions={simplified.dont_draw_actions}
+            />
+            <DeckIndexAnnotation deckIndex={simplified.deckIndex} />
+            <FriendlyFireAnnotation />
+          </WandActionGroupWandActionBorder>
+        </MainDiv>
       );
     } else {
       return (
-        <WandActionGroupWandActionBorder>
-          <WandAction
-            spellType={simplified.spell?.type ?? 'projectile'}
-            spellSprite={simplified.spell?.sprite}
-          />
+        <MainDiv>
+          <WandActionGroupWandActionBorder>
+            <WandAction
+              spellType={simplified.spell?.type ?? 'projectile'}
+              spellSprite={simplified.spell?.sprite}
+            />
 
-          <ActionProxyAnnotation proxy={simplified.proxy} />
-          <DeckIndexAnnotation deckIndex={simplified.deckIndex} />
-          <FriendlyFireAnnotation />
-        </WandActionGroupWandActionBorder>
+            <ActionProxyAnnotation proxy={simplified.proxy} />
+            <DeckIndexAnnotation deckIndex={simplified.deckIndex} />
+            <FriendlyFireAnnotation />
+          </WandActionGroupWandActionBorder>
+        </MainDiv>
       );
     }
   } else if (isArrayObject(simplified)) {

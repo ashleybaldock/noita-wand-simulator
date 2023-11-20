@@ -166,7 +166,7 @@ type FieldSection = {
 /* signZero(round(Number(v), 1), <Unchanged />), */
 const fieldSections: FieldSection[] = [
   {
-    title: 'Cast State',
+    title: 'Timing',
     fields: [
       {
         icon: `background-image: url('/data/wand/icon_mana_drain.png');`,
@@ -668,7 +668,7 @@ export const ProjectileCastState = ({
     <>
       {fieldSections.map(({ title, fields, sectionIcon }) => {
         return (
-          <Section key={title}>
+          <>
             <ListTitle icon={sectionIcon}>{title}</ListTitle>
             <StyledList>
               {fields.map(
@@ -699,7 +699,7 @@ export const ProjectileCastState = ({
                 },
               )}
             </StyledList>
-          </Section>
+          </>
         );
       })}
     </>
