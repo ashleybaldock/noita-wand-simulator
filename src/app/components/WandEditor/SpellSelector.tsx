@@ -118,7 +118,11 @@ const WandActionSelect = ({
         key={id}
         onClick={dragSourceOnClick}
       >
-        <SpellSelectorWandAction spellType={type} spellSprite={sprite} />
+        <SpellSelectorWandAction
+          spellId={id}
+          spellType={type}
+          spellSprite={sprite}
+        />
       </SpellSelectorWandActionDragSource>
     </SpellSelectorWandActionBorder>
   );

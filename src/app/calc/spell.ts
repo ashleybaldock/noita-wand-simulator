@@ -1,6 +1,7 @@
 import { ActionId } from './actionId';
 import { Action } from './action';
 import { SpellType } from './spellTypes';
+import { UnlockCondition } from './unlocks';
 
 export type Spell = {
   id: ActionId;
@@ -24,7 +25,7 @@ export type Spell = {
   permanently_attached?: boolean /* Always Cast */;
   // Info
   beta?: boolean;
-  spawn_requires_flag?: string;
+  spawn_requires_flag?: UnlockCondition;
   spawn_level?: string;
   spawn_probability?: string;
   price: number;

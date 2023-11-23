@@ -1,6 +1,5 @@
 import styled from 'styled-components/macro';
 import { WandAction, WandActionBorder } from '../../Spells/WandAction';
-import { NextActionArrow } from '../../Visualisation/Arrows';
 import {
   GroupedObject,
   isArrayObject,
@@ -17,30 +16,50 @@ import {
   RecursionAnnotation,
 } from '../../Annotations/';
 import { ActionCall, GroupedProjectile } from '../../../calc/eval/types';
+import { SIGN_MULTIPLY } from '../../../util';
 
-const MainDiv = styled.div`
+const ArrayGroupDiv = styled.div`
   display: flex;
   flex-direction: row;
+  align-self: end;
+`;
+const MultiGroupDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-self: end;
+`;
+
+const MainDiv = styled.div<{ nestingLevel: number }>`
+  position: relative;
+  display: flex;
+  flex-direction: column;
   width: min-content;
-  align-items: stretch;
+  align-items: center;
   font-family: monospace;
   font-weight: bold;
   font-size: 12px;
   grid-row: heading;
+  margin: 0;
+  align-items: end;
+  align-self: start;
+  text-align: center;
+  border: 1px dashed blue;
+  ${MultiGroupDiv} && {
+    border-top: 1px dashed orange;
+    border-right: 1px dashed orange;
+  }
+  ${ArrayGroupDiv} && {
+    border-bottom: 1px dashed red;
+    border-left: 1px dashed red;
+  }
+  padding-top: calc(
+    var(--sizes-nesting-offset) * ${({ nestingLevel }) => nestingLevel}
+  );
 `;
-
-const GroupDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const CountParentDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
 const CountDiv = styled.div`
   --size-spell: var(--bsize-spell, 48px);
+  position: absolute;
+  top: -2px;
   display: flex;
   flex: 1 1 auto;
   justify-content: center;
@@ -51,44 +70,49 @@ const CountDiv = styled.div`
   font-weight: bold;
   font-size: 12px;
   border: 1px solid #aaa;
+  border-radius: 8px;
   line-height: calc(var(--size-spell) / 3);
   font-family: var(--font-family-noita-default);
+  white-space: nowrap;
+  font-weight: normal;
+  border: 1px solid #656565;
+  border-radius: 5px;
+  padding: 0 2px;
+  line-height: 1.5em;
+  &::after {
+    content: '${SIGN_MULTIPLY}';
+    padding: 0 0.1em;
+  }
 `;
 
-const SpacerDiv = styled.div`
-  --size-spell: var(--bsize-spell, 48px);
-  display: flex;
-  flex: 1 1 auto;
-  min-width: 5px;
-  max-width: calc(var(--size-spell) / 4);
-  height: calc(var(--size-spell) / 4);
-`;
 /*
   background-image: url(/data/inventory/action_tree_box.png);
  */
 const WandActionGroupWandActionBorder = styled(WandActionBorder)`
+  position: relative;
+  top: 6px;
   padding: 3px;
   border: 3px dotted #656565;
   border-radius: 12px;
   background-image: none;
   background-color: rgba(108, 76, 34, 0.1);
-  margin: 4px 0 4px 0;
-  position: relative;
+  margin: 0;
 `;
 
 export const ProjectileActionGroup = ({
   group,
+  nestingLevel,
 }: {
   group: GroupedObject<ActionCall | GroupedProjectile>;
+  nestingLevel: number;
 }) => {
   const simplified = simplifyMultipleObject(group);
 
   if (isRawObject(simplified)) {
     if (simplified._typeName === 'ActionCall') {
       return (
-        <MainDiv>
+        <MainDiv nestingLevel={nestingLevel}>
           <WandActionGroupWandActionBorder>
-            <NextActionArrow />
             <WandAction
               spellType={simplified.spell.type}
               spellSprite={simplified.spell.sprite}
@@ -106,7 +130,7 @@ export const ProjectileActionGroup = ({
       );
     } else {
       return (
-        <MainDiv>
+        <MainDiv nestingLevel={nestingLevel}>
           <WandActionGroupWandActionBorder>
             <WandAction
               spellType={simplified.spell?.type ?? 'projectile'}
@@ -122,23 +146,26 @@ export const ProjectileActionGroup = ({
     }
   } else if (isArrayObject(simplified)) {
     return (
-      <GroupDiv>
+      <ArrayGroupDiv>
         {simplified.map((g, i) => (
-          <ProjectileActionGroup group={g} key={i} />
+          <ProjectileActionGroup
+            nestingLevel={nestingLevel + 1}
+            group={g}
+            key={i}
+          />
         ))}
-      </GroupDiv>
+      </ArrayGroupDiv>
     );
   } else if (isMultipleObject(simplified)) {
     return (
-      <MainDiv>
-        <GroupDiv>
-          <ProjectileActionGroup group={simplified.first} />
-        </GroupDiv>
-        <CountParentDiv>
-          <SpacerDiv />
-          <CountDiv>x {simplified.count}</CountDiv>
-          <SpacerDiv />
-        </CountParentDiv>
+      <MainDiv nestingLevel={nestingLevel}>
+        <MultiGroupDiv>
+          <ProjectileActionGroup
+            nestingLevel={nestingLevel + 1}
+            group={simplified.first}
+          />
+        </MultiGroupDiv>
+        <CountDiv>{simplified.count}</CountDiv>
       </MainDiv>
     );
   } else {

@@ -75,6 +75,14 @@ config = {
       'before': spellsBefore,
       'after': 'export const spells = actions;',
     },
+    'unlocks':
+    {
+      'src': 'data/scripts/gun/gun_actions.lua',
+      'dst': 'src/app/calc/__generated__/main/unlocks.ts',
+      'before': unlocksBefore,
+      'after': 'export const unlocks = actions;',
+
+      }
   },
   'beta': {
       'actionIds':
@@ -90,6 +98,14 @@ config = {
       'after': 'export const spells = actions;',
     },
   },
+    'unlocks':
+    {
+      'src': 'data/scripts/gun/gun_actions.lua',
+      'dst': 'src/app/calc/__generated__/main/unlocks.ts',
+      'before': unlocksBefore,
+      'after': 'export const unlocks = actions;',
+
+      }
 }
 
 
@@ -231,15 +247,27 @@ patterns = [
 ]
 
 
+def processUnlocks(src, dst, before = '', after = ''):
+  with open(src) as inFile:
+    content = inFile.read()
+
+  action_id_pattern = r'\t+{\s*spawn_requires_flag\s*=\s*\"(\w+)\"'
+  action_ids = list(dict.fromkeys(re.findall(action_id_pattern, content, re.dotall)))
+  joined = ",\n".join(f'"{i}"' for i in action_ids)
+  content = f'export const unlocks = [\n{joined}\n] as const;\n\nexport type unlock = typeof unlock[number];\n\n'
+
+
+  with open(dst, 'w') as outFile:
+    outFile.write(before + content + after)
 
 def processActionIds(src, dst, before = '', after = ''):
   with open(src) as inFile:
     content = inFile.read()
 
   action_id_pattern = r'\t+{\s*id\s*=\s*\"(\w+)\"'
-  action_ids = list(dict.fromkeys(re.findall(action_id_pattern, content, re.DOTALL)))
+  action_ids = list(dict.fromkeys(re.findall(action_id_pattern, content, re.dotall)))
   joined = ",\n".join(f'"{i}"' for i in action_ids)
-  content = f'export const actionIds = [\n{joined}\n] as const;\n\nexport type ActionId = typeof actionIds[number];\n\n'
+  content = f'export const actionids = [\n{joined}\n] as const;\n\nexport type actionid = typeof actionids[number];\n\n'
 
   with open(dst, 'w') as outFile:
     outFile.write(before + content + after)
@@ -279,6 +307,7 @@ os.makedirs(os.path.dirname('src/app/calc/__generated__/beta/'), exist_ok=True)
 
 process = {
   'actionIds': processActionIds,
+  'unlocks': processUnlocks,
   'spells': processSpells,
 }
 

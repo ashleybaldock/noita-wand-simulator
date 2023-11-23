@@ -1,4 +1,5 @@
 import styled from 'styled-components/macro';
+import { ActionId } from '../../../calc/actionId';
 import {
   SpellType,
   getBackgroundUrlForSpellType,
@@ -7,23 +8,30 @@ import {
 const _WandAction = ({
   spellType,
   spellSprite,
+  spellId,
   className,
 }: {
   onDeleteSpell?: () => void;
   className?: string;
+  spellId?: ActionId;
   spellType?: SpellType;
   spellSprite?: string;
   keyHint?: string;
 }) => {
   return (
-    <div
-      className={className}
-      style={{
-        backgroundImage: `url('/${spellSprite}'), ${getBackgroundUrlForSpellType(
-          spellType,
-        )}`,
-      }}
-    />
+    <a
+      data-tooltip-id={'tooltip-spellinfo'}
+      data-tooltip-content={`${spellId}`}
+    >
+      <div
+        className={className}
+        style={{
+          backgroundImage: `url('/${spellSprite}'), ${getBackgroundUrlForSpellType(
+            spellType,
+          )}`,
+        }}
+      />
+    </a>
   );
 };
 

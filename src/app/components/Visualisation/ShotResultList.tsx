@@ -12,7 +12,7 @@ import { SaveImageButton, ScrollWrapper } from '../generic';
 import { ActionCalledShotResult } from './ActionSequence';
 import { ActionTreeShotResult } from './ActionTree';
 import { SectionHeader } from '../SectionHeader';
-import { ProjectileTree } from './ProjectileTree';
+import { CastStateTable } from './ProjectileTree';
 
 const ParentDiv = styled.div`
   display: flex;
@@ -143,11 +143,11 @@ export const ShotResultList = ({
 
   return (
     <ParentDiv>
-      <ProjectileTree
+      <CastStateTable
         endReason={endReason}
         shots={groupedShots}
         totalRechargeTime={totalRechargeTime}
-      ></ProjectileTree>
+      ></CastStateTable>
       <SectionHeader title={'Simulation: Action Call Sequence'} />
       <ScrollWrapper>
         <SectionDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>

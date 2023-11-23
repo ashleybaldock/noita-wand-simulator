@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import { DEFAULT_SIZE } from './util';
+import { DEFAULT_SIZE, NESTING_OFFSET } from './util';
 
 /* see also index.css
  * --[flags][category]-[area]-[css-property]
@@ -24,6 +24,8 @@ export const GlobalStyle = createGlobalStyle<{ keyHints: boolean }>`
 
     --sizes-before-droptarget-width: 30px;
     --sizes-after-droptarget-width: 30px;
+
+    --sizes-nesting-offset: ${NESTING_OFFSET}px;
 
     ${({ keyHints }) =>
       keyHints ? '--display-keyhints: none;' : '--display-keyhints: block;'}

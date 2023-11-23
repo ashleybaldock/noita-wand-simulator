@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import styled from 'styled-components/macro';
+import { Tooltip } from 'react-tooltip';
 import { SpellSelector, WandBuilder } from './WandEditor';
 import { ShotResultList } from './Visualisation';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -13,6 +14,7 @@ import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
 import { ReleaseInfo } from './ReleaseInfo';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { SpellInfoTooltip } from './Tooltips';
 
 const Column = styled.div`
   display: flex;
@@ -73,6 +75,7 @@ export function WandSimulator() {
           />
           {!config.pauseCalculations && <ShotResultList {...config} />}
         </Column>
+        <SpellInfoTooltip />
         <ReleaseInfo />
       </Column>
     </DebugHints>

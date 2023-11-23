@@ -64,6 +64,7 @@ function ActionComponent({
             sourceWandIndex={wandIndex}
           >
             <DraggableWandAction
+              spellId={spellAction.id}
               spellType={spellAction.type}
               spellSprite={spellAction.sprite}
               onDeleteSpell={() => handleDeleteSpell(wandIndex)}

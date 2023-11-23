@@ -1,6 +1,5 @@
 import styled from 'styled-components/macro';
 import { ActionSource } from '../../calc/actionSources';
-import { ActionCall } from '../../calc/eval/types';
 import { useConfig } from '../../redux';
 import { BaseAnnotation } from './BaseAnnotation';
 
@@ -13,8 +12,10 @@ const SourceDiv = styled(BaseAnnotation)<{
   transform: translateY(-50%);
   right: unset;
   border: 1px solid #999;
-  color: ${({ colors }) => colors[0]};
-  background-color: ${({ colors }) => colors[1]};
+  ${({ colors: [fgcolor, bgcolor] }) => `
+    color: ${fgcolor};
+    background-color: ${bgcolor};
+  `}
   font-size: 12px;
   text-align: center;
   font-family: var(--font-family-noita-default);
@@ -27,12 +28,11 @@ const sourceDisplayMap: Record<ActionSource, [string, [string, string]]> = {
   multiple: ['*', ['#ddd', '#747']],
 };
 
-type Props = {
+export const ActionSourceAnnotation = ({
+  source,
+}: {
   source?: ActionSource;
-} & Partial<ActionCall>;
-
-export function ActionSourceAnnotation(props: Props) {
-  const { source } = props;
+}) => {
   const { showSources } = useConfig();
 
   if (source === undefined || !showSources) {
@@ -44,4 +44,4 @@ export function ActionSourceAnnotation(props: Props) {
       {sourceDisplayMap[source][0]}
     </SourceDiv>
   );
-}
+};

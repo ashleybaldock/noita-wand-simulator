@@ -3,19 +3,23 @@ import { Spell } from '../../../calc/spell';
 import { DEFAULT_SIZE } from '../../../util';
 import { ActionTreeShotResultNodeDiv } from '../ActionTree';
 
+type ArrowPath = 'down-right' | 'down' | '↳';
+
 const LineDiv = styled.div<{
   size: number;
   swept: boolean;
 }>`
   position: absolute;
+
   font-size: 12px;
   line-height: 14px;
   text-align: center;
-  font-family: var(--font-family-noita-default);
   color: var(--color-arrow-action-text);
+
   border: 3px hidden var(--color-arrow-action);
   border-bottom-style: solid;
   border-left-style: solid;
+
   ${({ swept }) =>
     swept
       ? `

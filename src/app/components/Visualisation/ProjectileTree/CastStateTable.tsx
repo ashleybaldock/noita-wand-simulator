@@ -7,7 +7,7 @@ import { SaveImageButton, ScrollWrapper } from '../../generic';
 import { SectionHeader } from '../../SectionHeader';
 import { IterationLimitWarning } from '../IterationLimitWarning';
 import { ShotMetadata } from '../ShotMetadata';
-import { ProjectileTreeShotResult } from './ProjectileTreeShotResult';
+import { CastStateShotRow } from './CastStateShotRow';
 
 const SectionDiv = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ const SectionDiv = styled.div`
   width: fit-content;
 `;
 
-export const ProjectileTree = ({
+export const CastStateTable = ({
   endReason,
   shots,
   totalRechargeTime,
@@ -29,7 +29,7 @@ export const ProjectileTree = ({
   const projectilesRef = useRef<HTMLDivElement>();
   return (
     <>
-      <SectionHeader title={'Simulation: Projectiles'} />
+      <SectionHeader title={'Simulation: Cast States'} />
       <SectionButtonBar>
         <ConfigButton />
       </SectionButtonBar>
@@ -52,12 +52,7 @@ export const ProjectileTree = ({
             />
           )}
           {shots.map((shot, index) => (
-            <ProjectileTreeShotResult
-              shot={shot}
-              index={index + 1}
-              key={index}
-              indent={false}
-            />
+            <CastStateShotRow shot={shot} shotIndex={index + 1} key={index} />
           ))}
         </SectionDiv>
       </ScrollWrapper>
