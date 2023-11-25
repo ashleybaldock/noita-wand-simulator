@@ -32,6 +32,7 @@ import {
   SetProjectileConfigs,
   StartReload,
   Random,
+  OnMoveDiscardedToDeck,
 } from './eval/wandObserver';
 
 // constants
@@ -461,6 +462,7 @@ export function add_projectile_trigger_death(
 }
 
 export function move_discarded_to_deck() {
+  OnMoveDiscardedToDeck(discarded);
   discarded.forEach((action) => {
     deck.push(action);
   });

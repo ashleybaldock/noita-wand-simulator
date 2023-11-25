@@ -81,8 +81,7 @@ config = {
       'dst': 'src/app/calc/__generated__/main/unlocks.ts',
       'before': unlocksBefore,
       'after': 'export const unlocks = actions;',
-
-      }
+    }
   },
   'beta': {
       'actionIds':
@@ -98,14 +97,13 @@ config = {
       'after': 'export const spells = actions;',
     },
   },
-    'unlocks':
+  'unlocks':
     {
       'src': 'data/scripts/gun/gun_actions.lua',
       'dst': 'src/app/calc/__generated__/main/unlocks.ts',
       'before': unlocksBefore,
       'after': 'export const unlocks = actions;',
-
-      }
+    }
 }
 
 

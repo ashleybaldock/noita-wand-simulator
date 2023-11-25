@@ -4,12 +4,14 @@ import {
   SpellType,
   getBackgroundUrlForSpellType,
 } from '../../../calc/spellTypes';
+import { TooltipId } from '../../Tooltips';
 
 const _WandAction = ({
   spellType,
   spellSprite,
   spellId,
   className,
+  tooltipId,
 }: {
   onDeleteSpell?: () => void;
   className?: string;
@@ -17,21 +19,23 @@ const _WandAction = ({
   spellType?: SpellType;
   spellSprite?: string;
   keyHint?: string;
+  tooltipId?: TooltipId;
 }) => {
   return (
-    <a
-      data-tooltip-id={'tooltip-spellinfo'}
-      data-tooltip-content={`${spellId}`}
-    >
-      <div
-        className={className}
-        style={{
-          backgroundImage: `url('/${spellSprite}'), ${getBackgroundUrlForSpellType(
-            spellType,
-          )}`,
-        }}
-      />
-    </a>
+    <div
+      {...(tooltipId ?? false
+        ? {
+            'data-tooltip-id': tooltipId,
+            'data-tooltip-content': `${spellId}`,
+          }
+        : {})}
+      className={className}
+      style={{
+        backgroundImage: `url('/${spellSprite}'), ${getBackgroundUrlForSpellType(
+          spellType,
+        )}`,
+      }}
+    />
   );
 };
 
@@ -50,7 +54,9 @@ export const WandAction = styled(_WandAction)`
   image-rendering: pixelated;
 `;
 
-export const DraggableWandAction = styled(WandAction)`
+export const DraggableWandAction = styled(WandAction).attrs({
+  tooltipId: 'tooltip-spellinfo',
+})`
   --transition-in: var(--transition-hover-in);
   --transition-out: var(--transition-hover-out);
   --transition-props: transform;

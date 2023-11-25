@@ -35,7 +35,6 @@ const MainDiv = styled.div<{ nestingLevel: number }>`
   flex-direction: column;
   width: min-content;
   align-items: center;
-  font-family: monospace;
   font-weight: bold;
   font-size: 12px;
   grid-row: heading;
@@ -58,27 +57,25 @@ const MainDiv = styled.div<{ nestingLevel: number }>`
 `;
 const CountDiv = styled.div`
   --size-spell: var(--bsize-spell, 48px);
+
   position: absolute;
   top: -2px;
+  height: calc(var(--size-spell) / 3);
   display: flex;
   flex: 1 1 auto;
   justify-content: center;
-  color: white;
-  background-color: black;
-  height: calc(var(--size-spell) / 3);
-  font-family: monospace;
+
   font-weight: bold;
   font-size: 12px;
-  border: 1px solid #aaa;
-  border-radius: 8px;
-  line-height: calc(var(--size-spell) / 3);
-  font-family: var(--font-family-noita-default);
+  line-height: 1.5em;
   white-space: nowrap;
   font-weight: normal;
+
+  color: white;
+  background-color: black;
   border: 1px solid #656565;
   border-radius: 5px;
   padding: 0 2px;
-  line-height: 1.5em;
   &::after {
     content: '${SIGN_MULTIPLY}';
     padding: 0 0.1em;
@@ -90,7 +87,6 @@ const CountDiv = styled.div`
  */
 const WandActionGroupWandActionBorder = styled(WandActionBorder)`
   position: relative;
-  top: 6px;
   padding: 3px;
   border: 3px dotted #656565;
   border-radius: 12px;
@@ -149,7 +145,7 @@ export const ProjectileActionGroup = ({
       <ArrayGroupDiv>
         {simplified.map((g, i) => (
           <ProjectileActionGroup
-            nestingLevel={nestingLevel + 1}
+            nestingLevel={nestingLevel}
             group={g}
             key={i}
           />
@@ -161,7 +157,7 @@ export const ProjectileActionGroup = ({
       <MainDiv nestingLevel={nestingLevel}>
         <MultiGroupDiv>
           <ProjectileActionGroup
-            nestingLevel={nestingLevel + 1}
+            nestingLevel={nestingLevel}
             group={simplified.first}
           />
         </MultiGroupDiv>

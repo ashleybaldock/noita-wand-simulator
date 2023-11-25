@@ -162,13 +162,11 @@ export type Tab = {
   content: React.ReactElement;
 };
 
-type Props = {
+export function Tabs({
+  tabs,
+}: React.PropsWithChildren<{
   tabs: Tab[];
-};
-
-export function Tabs(props: React.PropsWithChildren<Props>) {
-  const { tabs } = props;
-
+}>) {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const displayIndex = Math.min(tabs.length - 1, selectedTabIndex);

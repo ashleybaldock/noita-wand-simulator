@@ -1,4 +1,5 @@
 import { Spell } from '../spell';
+import { TriggerCondition } from '../trigger';
 import { GroupedObject } from '../grouping/combineGroups';
 import { GunActionState } from '../actionState';
 import { ActionSource } from '../actionSources';
@@ -30,6 +31,7 @@ export type WandShot = {
   actionTree: TreeNode<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;
+  triggeredBy?: TriggerCondition;
 };
 
 export type GroupedWandShot = {
@@ -39,6 +41,7 @@ export type GroupedWandShot = {
   actionTree: TreeNode<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;
+  triggeredBy?: TriggerCondition;
 };
 
 export type Projectile = {

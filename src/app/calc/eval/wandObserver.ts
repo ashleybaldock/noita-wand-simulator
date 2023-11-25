@@ -342,6 +342,11 @@ export const OnDraw = (state_cards_drawn: number) => {
   }
 };
 
+/* Each time the wand 'wraps' naturally */
+export const OnMoveDiscardedToDeck = (discarded: readonly Spell[]): void => {
+  onEvent('OnMoveDiscardedToDeck', discarded);
+};
+
 export function OnActionCalled(
   source: string,
   spell: Readonly<Spell>,

@@ -1,8 +1,5 @@
 import styled from 'styled-components/macro';
-import {
-  defaultGunActionState,
-  GunActionState,
-} from '../../../calc/actionState';
+import { GunActionState } from '../../../calc/actionState';
 import {
   getNameForTrailMaterial,
   isTrailMaterial,
@@ -21,31 +18,34 @@ import {
 import { Config, useConfig } from '../../../redux/configSlice';
 import { getBackgroundUrlForDamageType } from '../../../calc/damage';
 import { SIGN_MULTIPLY } from '../../../util';
+import { TriggerCondition } from '../../../calc/trigger';
 
-const PropertyIcon = styled.div<{ icon?: string }>`
+const PropertyBase = styled.div`
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;
 
   height: 1em;
-  padding: 0.2em 1em 0.2em 1.8em;
-
-  background-position: 0em 0em;
+  line-height: 1.2em;
+  background-position: 0em center;
   background-size: 1.1em;
+  white-space: nowrap;
+`;
+
+const PropertyIcon = styled(PropertyBase)<{ icon?: string }>`
   ${({ icon }) => (icon ? `${icon}` : 'background-image: none;')};
   background-repeat: no-repeat;
   image-rendering: pixelated;
 `;
 
-const PropertyName = styled.div`
-  text-align: right;
-  line-height: 1.2em;
+const PropertyName = styled(PropertyBase)`
+  justify-content: end;
   padding-right: 0.3em;
   flex: 0 0 150px;
   white-space: nowrap;
 `;
 
-const PropertyValue = styled.div`
+const PropertyValue = styled(PropertyBase)`
   text-align: center;
   flex: 0 0 auto;
 `;
@@ -108,13 +108,13 @@ const FilePath = styled.span<{
   }
 `;
 
-const formatDuration = (v: number, asSeconds: boolean) => {
+const formatDuration = (v: number, showAsFrames: boolean) => {
   const n = Number(v);
-  if (asSeconds) {
+  if (showAsFrames) {
+    return `${round(Math.max(0, n), 0)} fr${n < 0 ? `  (${sign(n)} fr)` : ``}`;
+  } else {
     const s = toSeconds(n);
     return `${round(Math.max(0, s), 2)} s${n < 0 ? `  (${sign(s)} s)` : ``}`;
-  } else {
-    return `${round(Math.max(0, n), 0)} fr${n < 0 ? `  (${sign(n)} fr)` : ``}`;
   }
 };
 
@@ -200,8 +200,8 @@ const fieldSections: FieldSection[] = [
       {
         icon: `background-image: url('/data/icons/t_shape.png');`,
         field: 'pattern_degrees',
-        displayName: 'Pattern Angle',
-        render: ({ pattern_degrees: v }) => `${round(Number(v), 1)}⊾°`,
+        displayName: 'Pattern Angle', // ⊾
+        render: ({ pattern_degrees: v }) => `${round(Number(v), 1)}°`,
       },
       {
         icon: `background-image: url('/data/wand/icon_bounces.png');`,
@@ -373,16 +373,16 @@ const fieldSections: FieldSection[] = [
         displayName: 'Screen Shake',
         render: ({ screenshake: v }) => `${v}`,
       },
-      {
-        field: 'physics_impulse_coeff',
-        displayName: 'Phys. Imp. Coeff.',
-        render: ({ physics_impulse_coeff: v }) => `${v}`,
-      },
-      {
-        field: 'lightning_count',
-        displayName: 'Lightning Count',
-        render: ({ lightning_count: v }) => `${v}`,
-      },
+      // {
+      //   field: 'physics_impulse_coeff',
+      //   displayName: 'Phys. Imp. Coeff.',
+      //   render: ({ physics_impulse_coeff: v }) => `${v}`,
+      // },
+      // {
+      //   field: 'lightning_count',
+      //   displayName: 'Lightning Count',
+      //   render: ({ lightning_count: v }) => `${v}`,
+      // },
     ],
   },
 
@@ -471,10 +471,12 @@ export const CastStateTotalsColumn = ({
   castState,
   manaDrain,
   insideTrigger = false,
+  triggerType,
 }: {
   castState?: GunActionState;
   manaDrain?: number;
   insideTrigger?: boolean;
+  triggerType?: TriggerCondition;
   showValues?: boolean;
 }) => {
   const config = useConfig();
@@ -485,17 +487,13 @@ export const CastStateTotalsColumn = ({
       {castState &&
         fieldSections.map(({ fields }) => (
           <>
-            {fields.map(({ render, ignoredInTrigger = false }) => {
-              return (
-                <>
-                  <PropertyValue>
-                    {!insideTrigger || !ignoredInTrigger
-                      ? render({ ...castState, manaDrain }, config)
-                      : 'ignored'}
-                  </PropertyValue>
-                </>
-              );
-            })}
+            {fields.map(({ render, ignoredInTrigger = false }) => (
+              <PropertyValue>
+                {!insideTrigger || !ignoredInTrigger
+                  ? render({ ...castState, manaDrain }, config)
+                  : 'ignored'}
+              </PropertyValue>
+            ))}
           </>
         ))}
     </>
@@ -506,10 +504,12 @@ export const CastStateProjectileColumn = ({
   castState,
   manaDrain,
   insideTrigger = false,
+  triggerType,
 }: {
   castState?: GunActionState;
   manaDrain?: number;
   insideTrigger?: boolean;
+  triggerType?: TriggerCondition;
 }) => {
   const config = useConfig();
   const { castShowChanged } = config;
@@ -519,17 +519,16 @@ export const CastStateProjectileColumn = ({
       {castState &&
         fieldSections.map(({ fields }) => (
           <>
-            {fields.map(({ render, ignoredInTrigger = false }) => {
-              return (
-                <>
-                  <PropertyValue>
-                    {!insideTrigger || !ignoredInTrigger
-                      ? render({ ...castState, manaDrain }, config)
-                      : 'ignored'}
-                  </PropertyValue>
-                </>
-              );
-            })}
+            {fields.map(({ render, ignoredInTrigger = false }) => (
+              <PropertyValue>
+                {!insideTrigger || !ignoredInTrigger ? (
+                  // ? render({ ...castState, manaDrain }, config)
+                  <Unchanged />
+                ) : (
+                  ''
+                )}
+              </PropertyValue>
+            ))}
           </>
         ))}
     </>

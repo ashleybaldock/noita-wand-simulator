@@ -18,7 +18,6 @@ import {
 import { Tabs } from '../generic';
 import {
   DraggableWandAction,
-  WandAction,
   WandActionBorder,
   WandActionDragSource,
 } from '../Spells/WandAction';

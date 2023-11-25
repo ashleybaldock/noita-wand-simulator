@@ -16,6 +16,7 @@ import { isValidEntityPath, entityToActions } from '../entityLookup';
 import { isIterativeActionId } from '../actionId';
 import { ActionCall, Requirements, TreeNode, WandShot } from './types';
 import { defaultGunActionState } from '../actionState';
+import { TriggerCondition } from '../trigger';
 
 export type StopCondition = 'oneshot' | 'reload' | 'refresh' | 'iterLimit';
 
@@ -31,6 +32,12 @@ export type ClickWandResult = {
   recharge: number | undefined;
   endReason: StopReason;
 };
+
+const triggerEventToConditionMap = new Map<string, TriggerCondition>([
+  ['BeginTriggerHitWorld', 'hit'],
+  ['BeginTriggerTimer', 'timer'],
+  ['BeginTriggerDeath', 'expire'],
+]);
 
 export function clickWand(
   wand: Gun,
@@ -125,6 +132,7 @@ export function clickWand(
           calledActions: [],
           actionTree: [],
           castState: undefined,
+          triggeredBy: triggerEventToConditionMap.get(eventType),
         };
         parentShot.projectiles[parentShot.projectiles.length - 1].trigger =
           currentShot;
@@ -177,7 +185,11 @@ export function clickWand(
         break;
       }
       case 'OnActionFinished': {
-        const [source, spell, c, recursion, iteration, returnValue] = args;
+        const [
+          ,
+          ,
+          /*source*/ /*spell*/ c /*recursion, iteration, returnValue*/,
+        ] = args;
         currentShot.castState = Object.assign({}, c);
         currentNode = currentNode?.parent;
         break;

@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// import { createRoot } from 'react-dom/client';
 import './index.css';
 import './fonts/NoitaPixel.ttf';
 import './fonts/NoitaGlyphScaled.ttf';
 import { App } from './app/App';
 import reportWebVitals from './reportWebVitals';
 
+// const root = createRoot(document.getElementById('root'));
 ReactDOM.render(
   <React.StrictMode>
     <App />

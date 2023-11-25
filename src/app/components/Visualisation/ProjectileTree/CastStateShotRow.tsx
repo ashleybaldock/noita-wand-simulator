@@ -9,6 +9,7 @@ import {
 import { ProjectileActionGroup } from './ProjectileActionGroup';
 import { GroupedWandShot } from '../../../calc/eval/types';
 import { isRawObject } from '../../../calc/grouping/combineGroups';
+import { TriggerCondition } from '../../../calc/trigger';
 
 const ProjectileShotTable = styled.div`
   display: flex;
@@ -33,46 +34,37 @@ const ProjectileShotTable = styled.div`
   grid-row: heading;
 `;
 
-const ShotSubTotal = styled.div<{ nestingLevel: number }>`
+const BaseColumnHeading = styled.div<{ nestingLevel: number }>`
+  grid-row: heading;
   position: relative;
   display: flex;
   flex-direction: row;
-  font-size: 1em;
-  grid-row: heading;
-  padding: 0 4px;
-  align-self: start;
-  justify-content: center;
+
+  height: 60px;
+  padding: 0 0.3em;
   padding-top: calc(
     var(--sizes-nesting-offset) * ${({ nestingLevel }) => nestingLevel}
   );
+`;
+const ShotSubTotal = styled(BaseColumnHeading)`
+  font-size: 1em;
+  align-self: start;
+  justify-content: center;
   border: 1px dashed purple;
 
-  width: 52px;
-  height: 60px;
+  width: 3em;
   align-items: end;
   text-align: center;
 `;
-const ShotTotal = styled.div<{ nestingLevel: number }>`
-  display: flex;
-  flex-direction: row;
-  font-size: 2em;
-  grid-row: heading;
-  padding: 0 4px;
-  width: 52px;
-  height: 60px;
-  align-items: start;
-  align-self: start;
-  text-align: center;
-  padding-top: calc(
-    var(--sizes-nesting-offset) * ${({ nestingLevel }) => nestingLevel}
-  );
+const ShotIconsColumnHeading = styled(BaseColumnHeading)`
+  width: 1em;
 `;
-const ShotIndex = styled.div<{ index: number; nestingLevel: number }>`
-  display: flex;
-  flex-direction: row;
+const ShotIndexColumnHeading = styled(BaseColumnHeading)<{
+  index: number;
+}>`
   font-size: 2em;
-  grid-row: heading;
-  padding: 8px;
+  padding: 18px;
+
   &::after {
     content: '${({ index }) =>
       index === 1
@@ -93,22 +85,24 @@ export const CastStateColumns = ({
   shotIndex,
   shot,
   nestingLevel = 0,
-  triggerType = 'none',
+  triggerType,
 }: {
   shotIndex: number;
   shot: GroupedWandShot;
   nestingLevel?: number;
-  triggerType?: 'trigger' | 'timer' | 'expiration' | 'none';
+  triggerType?: TriggerCondition;
 }) => {
   return (
     <>
       {nestingLevel === 0 ? (
         <>
-          <ShotIndex index={shotIndex} nestingLevel={nestingLevel}>
+          <ShotIndexColumnHeading index={shotIndex} nestingLevel={nestingLevel}>
             {shotIndex}
-          </ShotIndex>
+          </ShotIndexColumnHeading>
           <CastStateNamesColumn castState={shot.castState} />
-          <ShotTotal nestingLevel={nestingLevel}>{''}</ShotTotal>
+          <ShotIconsColumnHeading nestingLevel={nestingLevel}>
+            {''}
+          </ShotIconsColumnHeading>
           <CastStateIconsColumn castState={shot.castState} />
           <ShotSubTotal nestingLevel={nestingLevel}>{'Total'}</ShotSubTotal>
           <CastStateTotalsColumn
@@ -120,6 +114,7 @@ export const CastStateColumns = ({
         <>
           <ShotSubTotal nestingLevel={nestingLevel}>{'Total'}</ShotSubTotal>
           <CastStateSubTotalsColumn
+            triggerType={triggerType}
             castState={shot.castState}
             manaDrain={shot.manaDrain}
           />
