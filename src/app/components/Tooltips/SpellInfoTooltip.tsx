@@ -4,12 +4,14 @@ import { TooltipId } from './tooltipId';
 import { getSpellById } from '../../calc/spells';
 import { isValidActionId } from '../../calc/actionId';
 import { formatYesNo, isNotNullOrUndefined } from '../../util';
+import { translate } from '../../util/i18n';
 
 const SpellTip = styled.div`
   display: grid;
   grid-template-areas:
     'sname  sname  sname'
     'sdesc  sdesc  sdesc'
+    'sid    sid    simage  '
     'label  value  simage'
     'label  value  simage'
     'label  value  simage'
@@ -36,7 +38,6 @@ const SpellTip = styled.div`
 `;
 const Name = styled.div`
   grid-area: sname;
-  text-transform: uppercase;
   margin-bottom: 0.6em;
 `;
 const Description = styled.div`
@@ -56,9 +57,13 @@ const Value = styled.div`
   grid-column: value;
   margin-left: 0.6em;
 `;
+const SpellId = styled.div`
+  grid-area: sid;
+  margin-top: 4px;
+`;
 const Image = styled.img`
   grid-column: simage;
-  grid-row: 1 / -1;
+  grid-row: simage / -1;
   display: flex;
   flex-direction: column;
   place-self: center center;
@@ -120,11 +125,10 @@ export const SpellInfoTooltip = () => {
         } = getSpellById(actionId);
         return (
           <SpellTip>
-            <Name>{name}</Name>
-            <Description>{description}</Description>
+            <Name>{translate(name)}</Name>
+            <Description>{translate(description)}</Description>
+            <SpellId>{actionId}</SpellId>
             <Image src={`/${sprite}`}></Image>
-            <Label>ID</Label>
-            <Value>{actionId}</Value>
             <Label>Type</Label>
             <Value>{type}</Value>
             <Label>Mana Drain</Label>
