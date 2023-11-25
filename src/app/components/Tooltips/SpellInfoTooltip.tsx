@@ -3,45 +3,49 @@ import { Tooltip } from 'react-tooltip';
 import { TooltipId } from './tooltipId';
 import { getSpellById } from '../../calc/spells';
 import { isValidActionId } from '../../calc/actionId';
-import { isNotNullOrUndefined } from '../../util';
+import { formatYesNo, isNotNullOrUndefined } from '../../util';
 
 const SpellTip = styled.div`
-	display: grid
-	grid-template-areas:
-		'sname  sname  simage'
-		'sdesc  sdesc  simage'
-		'label  value  simage'
-		'label  value  simage'
-		'label  value  simage'
-		'label  value  simage'
-		'label  value  simage'
-		'label  value  simage'
-		'label  value  simage'
-		'label  value  simage'
-		'label  value  simage';
+  display: grid;
+  grid-template-areas:
+    'sname  sname  sname'
+    'sdesc  sdesc  sdesc'
+    'label  value  simage'
+    'label  value  simage'
+    'label  value  simage'
+    'label  value  simage'
+    'label  value  simage'
+    'label  value  simage'
+    'label  value  simage'
+    'label  value  simage'
+    'label  value  simage';
 
-	border: 3px solid #928167;
-	border-radius: 0px 7.5px 0px 7.5px;
-	background-color: rgba(5,5,5,0.9);
+  border: 3px solid #928167;
+  border-radius: 0px 7.5px 0px 7.5px;
+  background-color: rgba(5, 5, 5, 0.9);
 
-	max-width: 300px;
-	min-width: 200px;
-	height: min-content;
-	width: max-content;
-	padding: 1em;
+  max-width: 300px;
+  min-width: 200px;
+  height: min-content;
+  width: max-content;
+  padding: 1em;
 
-	font-family: 'noita', sans-serif;
-	font-size: 0.8em;
-	pointer-events: none;
+  font-family: 'noita', sans-serif;
+  font-size: 0.8em;
+  pointer-events: none;
 `;
 const Name = styled.div`
   grid-area: sname;
   text-transform: uppercase;
+  margin-bottom: 0.6em;
 `;
 const Description = styled.div`
   grid-area: sdesc;
-  margin-top: 0.6em;
+  margin-bottom: 0.6em;
 `;
+// const WikiLink = styled.a`
+//   https: ; //noita.wiki.gg/wiki/${actionId}
+// `;
 const Sub = styled.div`
   margin-top: 0.4em;
 `;
@@ -50,13 +54,19 @@ const Label = styled.div`
 `;
 const Value = styled.div`
   grid-column: value;
+  margin-left: 0.6em;
 `;
-const Image = styled.div`
-  grid-row-start: simage-start;
-  grid-row-end: simage-end;
+const Image = styled.img`
+  grid-column: simage;
+  grid-row: 1 / -1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  place-self: center center;
+  margin-left: 0.6em;
+
+  image-rendering: pixelated;
+  width: 64px;
+  height: 64px;
 `;
 const OUT = styled.div`
   target > && {
@@ -83,12 +93,16 @@ const IN = styled.div`
   }
 `;
 
+const StyledTooltip = styled(Tooltip)`
+  z-index: var(--zindex-tooltips);
+`;
+
 export const SpellInfoTooltip = () => {
   return (
-    <Tooltip
+    <StyledTooltip
       id={'tooltip-spellinfo'}
-      border="1px solid red"
-      closeEvents={{ mouseleave: true, blur: true, click: true }}
+      disableStyleInjection={true}
+      closeEvents={{ mouseleave: false, blur: false, click: true }}
       render={({ content: actionId, activeAnchor }) => {
         if (!isNotNullOrUndefined(actionId) || !isValidActionId(actionId)) {
           return null;
@@ -108,8 +122,35 @@ export const SpellInfoTooltip = () => {
           <SpellTip>
             <Name>{name}</Name>
             <Description>{description}</Description>
+            <Image src={`/${sprite}`}></Image>
             <Label>ID</Label>
             <Value>{actionId}</Value>
+            <Label>Type</Label>
+            <Value>{type}</Value>
+            <Label>Mana Drain</Label>
+            <Value>{mana}</Value>
+            <Label>Uses</Label>
+            <Value>
+              {max_uses === undefined
+                ? `Unlimited`
+                : `${max_uses} (${formatYesNo(Boolean(never_unlimited))})`}
+            </Value>
+            <Label>Beta</Label>
+            <Value>{formatYesNo(Boolean(beta))}</Value>
+            {spawn_requires_flag !== undefined && (
+              <>
+                <Label>Unlock</Label>
+                <Value>{spawn_requires_flag}</Value>
+              </>
+            )}
+            <Label></Label>
+            <Value></Value>
+            <Label></Label>
+            <Value></Value>
+            <Label></Label>
+            <Value></Value>
+            <Label></Label>
+            <Value></Value>
           </SpellTip>
         );
       }}
