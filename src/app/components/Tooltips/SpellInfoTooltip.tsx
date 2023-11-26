@@ -5,6 +5,7 @@ import { getSpellById } from '../../calc/spells';
 import { isValidActionId } from '../../calc/actionId';
 import { formatYesNo, isNotNullOrUndefined } from '../../util';
 import { translate } from '../../util/i18n';
+import { spellTypeInfoMap } from '../../calc/spellTypes';
 
 const SpellTip = styled.div`
   display: grid;
@@ -24,19 +25,21 @@ const SpellTip = styled.div`
 
   border: 3px solid #928167;
   border-radius: 0px 7.5px 0px 7.5px;
-  background-color: rgba(5, 5, 5, 0.9);
+  background-color: rgba(5, 5, 5, 0.96);
+  color: rgb(250, 250, 250);
 
   max-width: 300px;
-  min-width: 200px;
+  min-width: 240px;
   height: min-content;
-  width: max-content;
+  width: auto;
   padding: 1em;
 
   font-family: 'noita', sans-serif;
-  font-size: 0.8em;
+  font-size: 0.9em;
   pointer-events: none;
 `;
 const Name = styled.div`
+  font-size: 1.3em;
   grid-area: sname;
   margin-bottom: 0.6em;
 `;
@@ -44,22 +47,42 @@ const Description = styled.div`
   grid-area: sdesc;
   margin-bottom: 0.6em;
 `;
+const SpellId = styled.div`
+  grid-area: sid;
+  margin-bottom: 0.6em;
+  margin-top: -0.3em;
+  font-size: 0.6em;
+`;
 // const WikiLink = styled.a`
 //   https: ; //noita.wiki.gg/wiki/${actionId}
 // `;
 const Sub = styled.div`
   margin-top: 0.4em;
 `;
-const Label = styled.div`
+
+type LabelProps = { iconSrc?: string };
+const Label = styled.div.attrs(({ iconSrc }: LabelProps) => ({
+  style:
+    iconSrc !== undefined
+      ? {
+          backgroundImage: `url('/${iconSrc}')`,
+        }
+      : {},
+}))<LabelProps>`
   grid-column: label;
+  margin-bottom: 0.2em;
+  white-space: nowrap;
+
+  background-size: 1.2em;
+  background-position: start center;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  padding: 0.1em 0.6em 0.1em 2.2em;
 `;
 const Value = styled.div`
   grid-column: value;
-  margin-left: 0.6em;
-`;
-const SpellId = styled.div`
-  grid-area: sid;
-  margin-top: 4px;
+
+  padding: 0.1em 0em 0.1em 0.6em;
 `;
 const Image = styled.img`
   grid-column: simage;
@@ -73,33 +96,37 @@ const Image = styled.img`
   width: 64px;
   height: 64px;
 `;
-const OUT = styled.div`
-  target > && {
-    transition: transform 200ms, visibility 100ms, opacity 100ms;
-    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-    transform: scale(0.6);
-    opacity: 0;
-    visibility: hidden;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-`;
-const IN = styled.div`
-  target:hover > && {
-    transition: transform 200ms, visibility 300ms, opacity 300ms;
-    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-    transform: scale(1);
-    opacity: 1;
-    visibility: visible;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-`;
 
 const StyledTooltip = styled(Tooltip)`
   z-index: var(--zindex-tooltips);
+
+  min-width: 240;
+
+  &.show {
+    opacity: var(--rt-opacity);
+    transition: opacity var(--rt-transition-show-delay) ease-out;
+
+    transition: transform 200ms, visibility 300ms, opacity 300ms;
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: scale(1);
+    visibility: visible;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  &.closing {
+    transition: opacity var(--rt-transition-closing-delay) ease-in;
+    transition: transform 200ms, visibility 100ms, opacity 100ms;
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: scale(0.6);
+    visibility: hidden;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
 `;
 
 export const SpellInfoTooltip = () => {
@@ -107,7 +134,12 @@ export const SpellInfoTooltip = () => {
     <StyledTooltip
       id={'tooltip-spellinfo'}
       disableStyleInjection={true}
-      closeEvents={{ mouseleave: false, blur: false, click: true }}
+      offset={10}
+      closeEvents={{
+        mouseleave: true,
+        blur: true,
+        click: true,
+      }}
       render={({ content: actionId, activeAnchor }) => {
         if (!isNotNullOrUndefined(actionId) || !isValidActionId(actionId)) {
           return null;
@@ -130,10 +162,12 @@ export const SpellInfoTooltip = () => {
             <SpellId>{actionId}</SpellId>
             <Image src={`/${sprite}`}></Image>
             <Label>Type</Label>
-            <Value>{type}</Value>
-            <Label>Mana Drain</Label>
+            <Value>{spellTypeInfoMap[type].name}</Value>
+            <Label iconSrc={'data/wand/icon_mana_drain.png'}>Mana Drain</Label>
             <Value>{mana}</Value>
-            <Label>Uses</Label>
+            <Label iconSrc={'data/wand/icon_action_max_uses.png'}>
+              Max. Uses
+            </Label>
             <Value>
               {max_uses === undefined
                 ? `Unlimited`
@@ -144,7 +178,7 @@ export const SpellInfoTooltip = () => {
             {spawn_requires_flag !== undefined && (
               <>
                 <Label>Unlock</Label>
-                <Value>{spawn_requires_flag}</Value>
+                <Value>{spawn_requires_flag.substring(14)}</Value>
               </>
             )}
             <Label></Label>

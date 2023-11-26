@@ -52,13 +52,18 @@ const PropertyValue = styled(PropertyBase)`
 
 const Warning = styled.span`
   color: var(--color-value-warning);
-  border: 3px dashed red;
   background-color: red;
   &::before {
     content: '';
   }
 `;
 
+const NotApplicable = styled.span`
+  color: var(--color-value-ignored);
+  &::before {
+    content: 'n/a';
+  }
+`;
 const Unchanged = styled.span`
   color: var(--color-value-ignored);
   &::before {
@@ -124,11 +129,12 @@ type ExtendedActionState = GunActionState & {
 
 type FieldDescription = {
   icon?: string;
-  field: keyof GunActionState;
+  field?: keyof GunActionState;
   ignoredInTrigger?: boolean;
   noTotal?: boolean;
   key?: string;
   displayName: string;
+  toolTip?: string;
   render: (
     actionState: ExtendedActionState,
     config: Config,
@@ -148,7 +154,7 @@ const fieldSections: FieldSection[] = [
     fields: [
       {
         icon: `background-image: url('/data/wand/icon_mana_drain.png');`,
-        field: 'action_mana_drain',
+        key: 'action_mana_drain',
         displayName: 'Mana Drain',
         render: ({ manaDrain: v }) =>
           `${round(Math.max(0, Number(v)), 0)} ${
@@ -157,14 +163,14 @@ const fieldSections: FieldSection[] = [
       },
       {
         icon: `background-image: url('/data/wand/icon_reload_time-s.png');`,
-        field: 'reload_time',
+        key: 'reload_time',
         displayName: 'Recharge Time',
         render: ({ reload_time }, { showDurationsInFrames }) =>
           formatDuration(reload_time, showDurationsInFrames),
       },
       {
         icon: `background-image: url('/data/wand/icon_fire_rate_wait.png');`,
-        field: 'fire_rate_wait',
+        key: 'fire_rate_wait',
         ignoredInTrigger: true,
         displayName: 'Cast Delay',
         render: ({ fire_rate_wait }, { showDurationsInFrames }) =>
@@ -172,14 +178,14 @@ const fieldSections: FieldSection[] = [
       },
       {
         icon: `background-image: url('/data/wand/icon_lifetime.png');`,
-        field: 'lifetime_add',
+        key: 'lifetime_add',
         displayName: 'Lifetime',
         render: ({ lifetime_add }, { showDurationsInFrames }) =>
           formatDuration(lifetime_add, showDurationsInFrames),
       },
       {
         icon: `background-image: url('/data/icons/lifetime_infinite.png');`,
-        field: 'lifetime_add',
+        key: 'wisp_chance',
         noTotal: true,
         displayName: 'Wisp Chance',
         render: ({ lifetime_add }, {}) => '6.67%',
@@ -192,34 +198,77 @@ const fieldSections: FieldSection[] = [
     fields: [
       {
         icon: `background-image: url('/data/wand/icon_spread_degrees.png');`,
-        field: 'spread_degrees',
+        key: 'spread_degrees',
         displayName: 'Spread',
         render: ({ spread_degrees: v }) =>
           signZero(round(Number(v), 0), <Unchanged />),
       },
       {
         icon: `background-image: url('/data/icons/t_shape.png');`,
-        field: 'pattern_degrees',
+        key: 'pattern_degrees',
         displayName: 'Pattern Angle', // ⊾
         render: ({ pattern_degrees: v }) => `${round(Number(v), 1)}°`,
       },
       {
         icon: `background-image: url('/data/wand/icon_bounces.png');`,
-        field: 'bounces',
+        key: 'bounces',
         displayName: 'Bounces',
         render: ({ bounces: v }) => signZero(Number(v), <Unchanged />),
       },
       // {
-      //   field: 'gravity',
+      //   key: 'gravity',
       //   displayName: 'Gravity',
       //   render: ({ gravity: v }) => `${signZero(Number(v))}`,
       // },
       {
         icon: `background-image: url('/data/wand/icon_speed_multiplier.png');`,
-        field: 'speed_multiplier',
+        key: 'speed_multiplier1',
         displayName: 'Speed',
-        render: ({ speed_multiplier: v }) =>
-          Number(v) !== 1 ? `${SIGN_MULTIPLY} ${v}` : <Unchanged />,
+        toolTip: 'Initial speed of the projectile.',
+        render: ({ speed_multiplier: v }) => {
+          const n = Number(v);
+          if (n === 1) {
+            return <Unchanged />;
+          }
+          if (n < 1.17549e-38) {
+            return <Warning>{`${SIGN_MULTIPLY}0 (underflow)`}</Warning>;
+          }
+          if (n < 1) {
+            return `${SIGN_MULTIPLY}${n}`;
+          }
+          if (n > 20) {
+            return `${SIGN_MULTIPLY}20 (capped)`;
+          }
+          if (n > 1) {
+          }
+          return `${SIGN_MULTIPLY}${n}`;
+        },
+      },
+      {
+        // TODO - needs extended spell info
+        icon: `background-image: url('/data/wand/icon_speed_multiplier.png');`,
+        key: 'speed_multiplier2',
+        displayName: 'Speed Bonus',
+        toolTip: 'Speed Scaled Damage Multiplier',
+        render: ({ speed_multiplier: v }) => {
+          return <NotApplicable />;
+          // const n = Number(v);
+          // if (n === 1) {
+          //   return <Unchanged />;
+          // }
+          // if (n < 1.17549e-38) {
+          //   return <Warning>{`${SIGN_MULTIPLY}0 (underflow)`}</Warning>;
+          // }
+          // if (n < 1) {
+          //   return `${SIGN_MULTIPLY}${n}`;
+          // }
+          // if (n > 20) {
+          //   return `${SIGN_MULTIPLY}20 (capped)`;
+          // }
+          // if (n > 1) {
+          // }
+          // return `${SIGN_MULTIPLY}${n}`;
+        },
       },
     ],
   },
@@ -229,14 +278,17 @@ const fieldSections: FieldSection[] = [
     fields: [
       {
         icon: `background-image: url('/data/wand/icon_damage_critical_chance.png');`,
-        field: 'damage_critical_chance',
+        key: 'damage_critical_chance',
         displayName: 'Crit Chance',
-        render: ({ damage_critical_chance: v }) => `${sign(Number(v))}%`,
+        render: ({ damage_critical_chance: v }) => `${Number(v)}%`,
       },
       {
-        field: 'damage_critical_multiplier',
-        displayName: 'Crit Multiplier',
-        render: ({ damage_critical_multiplier: v }) => `${v}`,
+        key: 'damage_critical_multiplier',
+        displayName: 'Crit Mult.',
+        toolTip: 'Critical Hit Damage Multiplier',
+        render: ({ damage_critical_multiplier: v }) => {
+          return `${v}`;
+        },
       },
     ],
   },
@@ -245,105 +297,104 @@ const fieldSections: FieldSection[] = [
     fields: [
       {
         icon: `background-image: url('/data/warnings/icon_danger.png');`,
-        field: 'friendly_fire',
+        key: 'friendly_fire',
         displayName: 'Friendly Fire',
         render: ({ friendly_fire: v }) =>
           formatYesNo(Boolean(v), { ifTrue: <Warning>{'Yes'}</Warning> }),
       },
       {
         icon: `background-image: url('/data/ui_gfx/gun_actions/zero_damage.png');`,
-        field: 'damage_null_all',
+        key: 'damage_null_all',
         displayName: 'All Null',
         render: ({ damage_null_all: v }) => formatYesNo(Boolean(v)),
       },
 
       {
         icon: getBackgroundUrlForDamageType('melee'),
-        field: 'damage_melee_add',
+        key: 'damage_melee_add',
         displayName: 'Melee',
         render: ({ damage_melee_add: v }) =>
           signZero(round(Number(v) * 25, 1), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('projectile'),
-        field: 'damage_projectile_add',
+        key: 'damage_projectile_add',
         displayName: 'Projectile',
         render: ({ damage_projectile_add: v }) =>
           signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('electricity'),
-        field: 'damage_electricity_add',
+        key: 'damage_electricity_add',
         displayName: 'Electric',
         render: ({ damage_electricity_add: v }) =>
           signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('fire'),
-        field: 'damage_fire_add',
+        key: 'damage_fire_add',
         displayName: 'Fire',
         render: ({ damage_fire_add: v }) =>
           signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('ice'),
-        field: 'damage_ice_add',
+        key: 'damage_ice_add',
         displayName: 'Ice',
         render: ({ damage_ice_add: v }) =>
           signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('slice'),
-        field: 'damage_slice_add',
+        key: 'damage_slice_add',
         displayName: 'Slice',
         render: ({ damage_slice_add: v }) =>
           signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('heal'),
-        field: 'damage_healing_add',
+        key: 'damage_healing_add',
         displayName: 'Healing',
         render: ({ damage_healing_add: v }) =>
           signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('curse'),
-        field: 'damage_curse_add',
+        key: 'damage_curse_add',
         displayName: 'Curse',
         render: ({ damage_curse_add: v }) =>
           signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('holy'),
-        field: 'damage_holy_add',
+        key: 'damage_holy_add',
         displayName: 'Holy',
         render: ({ damage_holy_add: v }) =>
           signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('drill'),
-        field: 'damage_drill_add',
+        key: 'damage_drill_add',
         displayName: 'Drill',
         render: ({ damage_drill_add: v }) =>
           signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: getBackgroundUrlForDamageType('explosion'),
-        field: 'damage_explosion_add',
+        key: 'damage_explosion_add',
         displayName: 'Explosion',
         render: ({ damage_explosion_add: v }) =>
           signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
         icon: `background-image: url('/data/wand/icon_explosion_radius.png');`,
-        field: 'explosion_radius',
+        key: 'explosion_radius',
         displayName: 'Expl. Radius',
         render: ({ explosion_radius: v }) =>
           signZero(round(Number(v) * 25, 0), <Unchanged />),
       },
       {
-        key: 'explosion_radius_threshold',
-        field: 'explosion_radius',
+        key: 'explosion_radius_bonus',
         displayName: 'Expl. Threshold',
         render: ({ explosion_radius: v }) =>
           radiusThresholdBonus(Number(v), <Unchanged />),
@@ -355,7 +406,7 @@ const fieldSections: FieldSection[] = [
     fields: [
       {
         icon: `background-image: url('/data/wand/icon_recoil.png');`,
-        field: 'recoil',
+        key: 'recoil',
         displayName: 'Recoil',
         render: ({ recoil: v }) => {
           const n = Number(v);
@@ -364,22 +415,22 @@ const fieldSections: FieldSection[] = [
       },
       {
         icon: `background-image: url('/data/wand/icon_knockback.png');`,
-        field: 'knockback_force',
+        key: 'knockback_force',
         displayName: 'Knockback',
         render: ({ knockback_force: v }) => `${v}`,
       },
       {
-        field: 'screenshake',
+        key: 'screenshake',
         displayName: 'Screen Shake',
         render: ({ screenshake: v }) => `${v}`,
       },
       // {
-      //   field: 'physics_impulse_coeff',
+      //   key: 'physics_impulse_coeff',
       //   displayName: 'Phys. Imp. Coeff.',
       //   render: ({ physics_impulse_coeff: v }) => `${v}`,
       // },
       // {
-      //   field: 'lightning_count',
+      //   key: 'lightning_count',
       //   displayName: 'Lightning Count',
       //   render: ({ lightning_count: v }) => `${v}`,
       // },
@@ -390,17 +441,17 @@ const fieldSections: FieldSection[] = [
     title: 'Material',
     fields: [
       // {
-      //   field: 'material',
+      //   key: 'material',
       //   displayName: 'Material',
       //   render: ({ material: v }) => `${v}`,
       // },
       // {
-      //   field: 'material_amount',
+      //   key: 'material_amount',
       //   displayName: 'Material Amount',
       //   render: ({ material_amount: v }) => `${v}`,
       // },
       {
-        field: 'trail_material',
+        key: 'trail_material',
         displayName: 'Trails:',
         render: ({ trail_material: v }) =>
           isString(v) ? (
@@ -419,7 +470,7 @@ const fieldSections: FieldSection[] = [
           ),
       },
       {
-        field: 'trail_material_amount',
+        key: 'trail_material_amount',
         displayName: 'Trail Volume',
         render: ({ trail_material_amount: v }) => `${v}`,
       },
@@ -437,10 +488,12 @@ export const CastStateNamesColumn = ({
   return (
     <>
       {castState &&
-        fieldSections.map(({ fields }) => (
+        fieldSections.map(({ fields }, i1) => (
           <>
-            {fields.map(({ displayName }) => (
-              <PropertyName>{displayName}</PropertyName>
+            {fields.map(({ key, displayName }, i2) => (
+              <PropertyName key={key ?? `${i1}-${i2}-${key}`}>
+                {displayName}
+              </PropertyName>
             ))}
           </>
         ))}
@@ -456,10 +509,13 @@ export const CastStateIconsColumn = ({
   return (
     <>
       {castState &&
-        fieldSections.map(({ fields }) => (
+        fieldSections.map(({ fields }, i1) => (
           <>
-            {fields.map(({ field, key, icon, displayName }) => (
-              <PropertyIcon key={key ?? field} icon={icon ?? ''} />
+            {fields.map(({ key, icon, displayName }, i2) => (
+              <PropertyIcon
+                key={key ?? `${i1}-${i2}-${key}`}
+                icon={icon ?? ''}
+              />
             ))}
           </>
         ))}
@@ -485,10 +541,10 @@ export const CastStateTotalsColumn = ({
   return (
     <>
       {castState &&
-        fieldSections.map(({ fields }) => (
+        fieldSections.map(({ fields }, i1) => (
           <>
-            {fields.map(({ render, ignoredInTrigger = false }) => (
-              <PropertyValue>
+            {fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
+              <PropertyValue key={key ?? `${i1}-${i2}`}>
                 {!insideTrigger || !ignoredInTrigger
                   ? render({ ...castState, manaDrain }, config)
                   : 'ignored'}
@@ -517,10 +573,10 @@ export const CastStateProjectileColumn = ({
   return (
     <>
       {castState &&
-        fieldSections.map(({ fields }) => (
+        fieldSections.map(({ fields }, i1) => (
           <>
-            {fields.map(({ render, ignoredInTrigger = false }) => (
-              <PropertyValue>
+            {fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
+              <PropertyValue key={key ?? `${i1}-${i2}`}>
                 {!insideTrigger || !ignoredInTrigger ? (
                   // ? render({ ...castState, manaDrain }, config)
                   <Unchanged />
