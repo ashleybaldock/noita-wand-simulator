@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
@@ -16,18 +16,20 @@ export function App() {
 
   return (
     <Provider store={store}>
-      <KeyStateContextProvider debug={true}>
-        <GlobalStyle keyHints={showKeyHints} />
-        {!isRelease && (
-          <Helmet>
-            <link rel="icon" href="/favicon-dev.ico" />
-            <link rel="apple-touch-icon" href="/logo192-dev.png" />
-            <link rel="manifest" href="/manifest-dev.json" />
-            <title>{`Wand Simulator (${branch}:${hash})}`}</title>
-          </Helmet>
-        )}
-        <WandSimulator />
-      </KeyStateContextProvider>
+      <HelmetProvider>
+        <KeyStateContextProvider debug={true}>
+          <GlobalStyle keyHints={showKeyHints} />
+          {!isRelease && (
+            <Helmet>
+              <link rel="icon" href="/favicon-dev.ico" />
+              <link rel="apple-touch-icon" href="/logo192-dev.png" />
+              <link rel="manifest" href="/manifest-dev.json" />
+              <title>{`Wand Simulator (${branch}:${hash})}`}</title>
+            </Helmet>
+          )}
+          <WandSimulator />
+        </KeyStateContextProvider>
+      </HelmetProvider>
     </Provider>
   );
 }

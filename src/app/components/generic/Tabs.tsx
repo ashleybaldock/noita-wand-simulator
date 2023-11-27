@@ -3,6 +3,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import styled from 'styled-components/macro';
 import { SpellType } from '../../calc/spellTypes';
 import { WandAction } from '../Spells/WandAction';
+import { HotkeyHint } from '../Tooltips/HotkeyHint';
 
 const MainDiv = styled.div`
   font-size: 14px;
@@ -90,24 +91,6 @@ const TitleDiv = styled.div<{
       color: var(--color-tab-border-inactive-hover);
     }
   `}
-`;
-
-const TabKeyHint = styled.div`
-  display: var(--display-keyhints);
-  z-index: var(--zindex-keyhint);
-  position: absolute;
-  top: -2px;
-  right: 2px;
-  font-size: 16px;
-  border: 0.12em dotted var(--arrow-action-bdcolor);
-  border-radius: 50%;
-  width: 1.4em;
-  height: 1.4em;
-  text-align: center;
-  line-height: 1.6em;
-  background-color: black;
-  font-weight: 300;
-  color: var(--arrow-action-bdcolor);
 `;
 
 const TabsWandAction = styled(WandAction)`
@@ -206,7 +189,7 @@ export function Tabs({
                 keyHint={`Shortcut: ${index}`}
               />
             ))}
-            <TabKeyHint>{index + 1}</TabKeyHint>
+            <HotkeyHint hotkeys={`${index + 1}`} position={'ne-corner'} />
           </TitleDiv>
         ))}
       </TabTitlesDiv>

@@ -60,7 +60,7 @@ const CopySpells = styled.div`
 const WandActionEditorWrapper = styled.div`
   position: relative;
   height: auto;
-  flex: 1 1 auto;
+  flex: 1 1 min-content;
   @media screen and (max-width: 900px) {
     margin: 0.8em 0 0.4em 0;
   }

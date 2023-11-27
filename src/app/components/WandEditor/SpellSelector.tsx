@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import { groupBy, objectEntries } from '../../util/util';
 import { Spell } from '../../calc/spell';
 import { spells } from '../../calc/spells';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { ConfigState, selectConfig } from '../../redux/configSlice';
+import { useAppDispatch } from '../../redux/hooks';
+import { ConfigState, useConfig } from '../../redux/configSlice';
 import {
   insertSpellAfterCursor,
   insertSpellBeforeCursor,
@@ -128,7 +128,7 @@ const WandActionSelect = ({
 };
 
 export const SpellSelector = () => {
-  const { config } = useAppSelector(selectConfig);
+  const config = useConfig();
 
   const unlockedActions = useMemo(
     () =>

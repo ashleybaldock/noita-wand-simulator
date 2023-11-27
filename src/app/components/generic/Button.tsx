@@ -1,5 +1,7 @@
+import { useHotkeys } from 'react-hotkeys-hook';
 import styled from 'styled-components/macro';
 import { noop } from '../../util';
+import { HotkeyHint } from '../Tooltips';
 
 const ButtonShapes = [
   'rectangle',
@@ -41,6 +43,7 @@ const StyledButton = styled.button<{
   minimal: boolean;
   shape: ButtonShape;
 }>`
+  position: relative;
   color: var(--color-button);
   background-color: var(--color-button-background);
   border: 0.16em solid var(--color-button-border);
@@ -125,6 +128,7 @@ type Props = {
   onClick?: () => void;
   onMouseOver?: () => void;
   onMouseOut?: () => void;
+  hotkeys?: string;
   imgUrl?: string;
   imgDataUrl?: string;
   imgAfter?: boolean;
@@ -137,6 +141,7 @@ export const Button = ({
   onClick = noop,
   onMouseOver = noop,
   onMouseOut = noop,
+  hotkeys = '',
 
   imgUrl = '',
   imgDataUrl = '',
@@ -146,6 +151,7 @@ export const Button = ({
   bgScale = 1,
   children,
 }: React.PropsWithChildren<Props>) => {
+  useHotkeys(hotkeys, onClick, { enabled: hotkeys !== '' });
   return (
     <StyledButton
       minimal={minimal}
@@ -158,6 +164,7 @@ export const Button = ({
       onMouseOut={onMouseOut}
     >
       {children}
+      {minimal ? null : <HotkeyHint hotkeys={hotkeys} position={'below'} />}
     </StyledButton>
   );
 };

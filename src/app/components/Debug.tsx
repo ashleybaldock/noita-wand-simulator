@@ -1,16 +1,13 @@
 import styled from 'styled-components/macro';
-import { useAppSelector } from '../redux/hooks';
-import { selectConfig } from '../redux/configSlice';
+import { useConfig } from '../redux/configSlice';
 
 export const DebugHints = ({
   className,
   children,
 }: React.PropsWithChildren<{ className?: string }>) => {
   const {
-    config: {
-      debug: { dragHint },
-    },
-  } = useAppSelector(selectConfig);
+    debug: { dragHint },
+  } = useConfig();
 
   return dragHint ? (
     <WithDebugHints>{children}</WithDebugHints>

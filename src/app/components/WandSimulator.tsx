@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 import styled from 'styled-components/macro';
-import { Tooltip } from 'react-tooltip';
 import { SpellSelector, WandBuilder } from './WandEditor';
 import { ShotResultList } from './Visualisation';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { selectConfig, updateConfig } from '../redux/configSlice';
+import { useAppDispatch } from '../redux/hooks';
+import { updateConfig, useConfig } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
 import { DebugHints } from './Debug';
 import { SectionHeader } from './SectionHeader';
@@ -38,7 +37,7 @@ const SpellHotbar = styled.div`
 `;
 
 export function WandSimulator() {
-  const { config } = useAppSelector(selectConfig);
+  const config = useConfig();
   const dispatch = useAppDispatch();
 
   useEffect(() => {

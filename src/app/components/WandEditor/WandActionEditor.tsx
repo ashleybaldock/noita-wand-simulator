@@ -29,7 +29,7 @@ import {
   WandActionDragSource,
 } from '../Spells/WandAction';
 import { useDragLayer } from 'react-dnd';
-import { getComputedColumns, useVisibleGridCols } from './hooks';
+import { getComputedColumns } from './hooks';
 
 function ActionComponent({
   spellAction,
@@ -92,7 +92,7 @@ function ActionComponent({
 
 const SpellSlots = styled.ul`
   --grid-layout-gap: 0px;
-  --grid-max-column-count: 9;
+  --grid-max-column-count: 7;
   --grid-item-width: 62px;
 
   margin: 0;
@@ -111,6 +111,9 @@ const SpellSlots = styled.ul`
     minmax(var(--grid-item-width), var(--grid-item-width))
   );
   grid-gap: 2px 0;
+  padding-left: 0;
+  padding: 0 4px;
+
   justify-content: center;
   align-items: center;
 `;

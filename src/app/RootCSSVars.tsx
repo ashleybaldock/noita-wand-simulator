@@ -28,6 +28,6 @@ export const GlobalStyle = createGlobalStyle<{ keyHints: boolean }>`
     --sizes-nesting-offset: ${NESTING_OFFSET}px;
 
     ${({ keyHints }) =>
-      keyHints ? '--display-keyhints: none;' : '--display-keyhints: block;'}
+      keyHints ? '--display-keyhints: none;' : '--display-keyhints: flex;'}
   }
 `;

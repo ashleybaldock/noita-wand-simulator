@@ -18,6 +18,7 @@ export const StyledCursor = styled.div<{
   height: 58px;
   width: 12px;
   top: -2px;
+  left: -6px;
   ${({ cursorIndex }) =>
     cursorIndex === 'before'
       ? `
@@ -28,6 +29,7 @@ export const StyledCursor = styled.div<{
       : cursorIndex === 'after'
       ? `
       right: -6px;
+      left: unset;
   background-image: url('/data/inventory/cursor-top.png'),
     url('/data/inventory/cursor-mid.png');
     `

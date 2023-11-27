@@ -6,6 +6,7 @@ import { isValidActionId } from '../../calc/actionId';
 import { formatYesNo, isNotNullOrUndefined } from '../../util';
 import { translate } from '../../util/i18n';
 import { spellTypeInfoMap } from '../../calc/spellTypes';
+import { WithDebugHints } from '../Debug';
 
 const SpellTip = styled.div`
   display: grid;
@@ -48,6 +49,10 @@ const Description = styled.div`
   margin-bottom: 0.6em;
 `;
 const SpellId = styled.div`
+  display: none;
+  ${WithDebugHints} & {
+    display: flex;
+  }
   grid-area: sid;
   margin-bottom: 0.6em;
   margin-top: -0.3em;

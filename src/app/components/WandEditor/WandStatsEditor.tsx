@@ -134,18 +134,16 @@ const StyledList = styled.div`
   height: min-content;
 
   @media screen and (max-width: 900px) {
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-columns: repeat(3, 1fr);
-    min-width: 30vw;
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 800px) {
     display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(5, 1fr);
     min-width: 40vw;
+    width: fit-content;
+    grid-template-columns: repeat(2, 1fr);
+    align-self: center;
   }
 
   @media screen and (max-width: 500px) {
@@ -153,6 +151,8 @@ const StyledList = styled.div`
     grid-auto-flow: column;
     grid-template-rows: repeat(9, 1fr);
     min-width: 60vw;
+    width: 100%;
+    align-self: center;
   }
 `;
 const StyledListItem = styled.div<{
