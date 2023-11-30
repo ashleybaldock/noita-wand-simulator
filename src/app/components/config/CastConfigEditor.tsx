@@ -390,6 +390,14 @@ export function CastConfigEditor(props: Props) {
             </CheckboxInputWrapper>
           </SubSectionContent>
         </SubSectionDiv>
+        <SubSectionDiv>
+          <SubSectionTitle>
+            <span>Run Until</span>
+          </SubSectionTitle>
+          <SubSectionContent>
+            Single Shot, Until Reload, Until Refresh, For N Shots
+          </SubSectionContent>
+        </SubSectionDiv>
         {/* <SubSectionDiv> */}
         {/*   <SubSectionTitle>Simulation: {config.pauseCalculations ? <SimPaused>Paused</SimPaused> : <SimRunning>Running</SimRunning>}</SubSectionTitle> */}
         {/*   <SubSectionContent> */}

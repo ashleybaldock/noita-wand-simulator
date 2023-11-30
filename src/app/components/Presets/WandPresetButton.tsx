@@ -6,9 +6,7 @@ import React, { useCallback, useState } from 'react';
 import { WandPresetMenu } from './WandPresetMenu';
 import { Button, Modal } from '../generic';
 
-type Props = {};
-
-export function WandPresetButton(props: Props) {
+export const WandPresetButton = () => {
   const { presets } = useAppSelector(selectPresets);
   const dispatch = useAppDispatch();
 
@@ -29,6 +27,7 @@ export function WandPresetButton(props: Props) {
   return (
     <>
       <Button
+        hotkeys={'o'}
         imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
         onClick={() => setMenuVisible(!menuVisible)}
       >
@@ -39,4 +38,4 @@ export function WandPresetButton(props: Props) {
       </Modal>
     </>
   );
-}
+};

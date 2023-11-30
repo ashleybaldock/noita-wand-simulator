@@ -79,8 +79,18 @@ export function EndProjectile() {
   }
 }
 
-export function BeginTriggerTimer(delay_frames: number) {
-  const result = onEvent('BeginTriggerTimer', delay_frames);
+export function BeginTriggerTimer(
+  delay_frames: number,
+  entity_filename: string,
+  action_draw_count: number,
+) {
+  const result = onEvent(
+    'BeginTrigger',
+    'timer',
+    delay_frames,
+    entity_filename,
+    action_draw_count,
+  );
   if (result !== undefined) {
     return result;
   }

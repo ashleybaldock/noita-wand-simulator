@@ -47,41 +47,39 @@ const lookup = new Map<string, Key>([
 export type HintPosition = 'above' | 'below' | 'ne-corner';
 
 const HotkeyHintBase = styled.div<{ position: HintPosition }>`
-  display: var(--display-keyhints);
-  z-index: var(--zindex-keyhint);
-  position: absolute;
-  font-size: 1em;
-  border: 0.12em dotted var(--arrow-action-bdcolor);
-  border-radius: 0.5em;
-  min-width: 1.2em;
-  min-height: 1.4em;
-  text-align: center;
-  line-height: 1.3em;
-  background-color: black;
-  font-weight: 300;
+  --shadow-offx: 0;
+  --shadow-offy: 0;
+  --shadow-blur: 0.2em;
+  --shadow-spread: 0.1em;
+  --shadow-color: var(--color-keyhint-shadow, rgba(0, 0, 0, 0.66));
+  --border-color: var(--color-keyhint-border, #ffbf00);
 
-  color: var(--arrow-action-bdcolor);
-  display: var(--display-keyhints);
-  z-index: var(--zindex-keyhint);
   position: absolute;
-  font-size: 1em;
-  border: 0.3em double var(--arrow-action-bdcolor);
-  border-radius: 0.44em /1.2em;
+  top: unset;
+  left: unset;
+  right: unset;
+  bottom: unset;
   min-width: 0;
   min-height: 0;
-  text-align: center;
-  line-height: 1.3em;
-  background-color: black;
-  font-weight: 300;
-  color: var(--arrow-action-bdcolor);
-  top: -1px;
-  left: unset;
-  right: 3px;
-  bottom: unset;
-  padding: 0.2em 0.2em 0.16em 0.2em;
+
+  display: var(--display-keyhints);
   flex-direction: column;
   place-content: center;
 
+  color: var(--arrow-action-bdcolor);
+  font-size: 0.9em;
+  font-weight: 300;
+  text-align: center;
+  line-height: 1.3em;
+
+  background-color: black;
+  padding: 0.2em 0.2em 0.16em 0.2em;
+  border: 0.3em double var(--color-keyhint-border);
+  border-radius: 0.44em / 1.2em;
+  box-shadow: var(--shadow-offx) var(--shadow-offy) var(--shadow-blur)
+    var(--shadow-spread) var(--shadow-color);
+
+  z-index: var(--zindex-keyhint);
   &:hover {
     z-index: var(--zindex-keyhint-hover);
   }
@@ -90,17 +88,17 @@ const HotkeyHintBase = styled.div<{ position: HintPosition }>`
     if (position === 'above') {
       return `
   top: -1.3em;
-  left: 0em;
-  right: unset;
+  left: unset;
+  right: 6%;
   bottom: unset;
       `;
     }
     if (position === 'below') {
       return `
-  top: 100%;
+  top: 74%;
   bottom: unset;
-  left: 10%;
-  right: unset;
+  left: unset;
+  right: 6%;
       `;
     }
     if (position === 'ne-corner') {
@@ -121,7 +119,7 @@ export const HotkeyHint = ({
   hotkeys?: string;
   position: HintPosition;
 }) => {
-  return (
+  return hotkeys === '' ? null : (
     <HotkeyHintBase position={position}>
       <HotKeyCombos hotkeys={hotkeys}></HotKeyCombos>
     </HotkeyHintBase>

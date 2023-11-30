@@ -17,6 +17,7 @@ import {
 } from '../../Annotations/';
 import { ActionCall, GroupedProjectile } from '../../../calc/eval/types';
 import { SIGN_MULTIPLY } from '../../../util';
+import { WithDebugHints } from '../../Debug';
 
 const ArrayGroupDiv = styled.div`
   display: flex;
@@ -34,22 +35,26 @@ const MainDiv = styled.div<{ nestingLevel: number }>`
   display: flex;
   flex-direction: column;
   width: min-content;
+  width: auto;
   align-items: center;
   font-weight: bold;
   font-size: 12px;
   grid-row: heading;
   margin: 0;
-  align-items: end;
+  align-items: center;
   align-self: start;
   text-align: center;
-  border: 1px dashed blue;
-  ${MultiGroupDiv} && {
-    border-top: 1px dashed orange;
-    border-right: 1px dashed orange;
-  }
-  ${ArrayGroupDiv} && {
-    border-bottom: 1px dashed red;
-    border-left: 1px dashed red;
+
+  ${WithDebugHints} && {
+    border: 1px dashed blue;
+    ${MultiGroupDiv} && {
+      border-top: 1px dashed orange;
+      border-right: 1px dashed orange;
+    }
+    ${ArrayGroupDiv} && {
+      border-bottom: 1px dashed red;
+      border-left: 1px dashed red;
+    }
   }
   padding-top: calc(
     var(--sizes-nesting-offset) * ${({ nestingLevel }) => nestingLevel}

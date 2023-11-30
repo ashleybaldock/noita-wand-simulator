@@ -1,9 +1,8 @@
-import { useHotkeys } from 'react-hotkeys-hook';
 import { Button, Modal } from '../generic';
 import { ExportAs } from '../Export';
 import { useState } from 'react';
 
-export function ExportButton() {
+export const ExportButton = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleClose = () => {
@@ -14,8 +13,6 @@ export function ExportButton() {
     console.log('todo:exportAction');
     setModalVisible(!modalVisible);
   };
-
-  useHotkeys('e', openExportDialog);
 
   return (
     <>
@@ -30,4 +27,4 @@ export function ExportButton() {
       </Modal>
     </>
   );
-}
+};

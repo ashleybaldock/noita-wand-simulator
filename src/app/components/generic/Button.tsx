@@ -164,7 +164,7 @@ export const Button = ({
       onMouseOut={onMouseOut}
     >
       {children}
-      {minimal ? null : <HotkeyHint hotkeys={hotkeys} position={'below'} />}
+      {<HotkeyHint hotkeys={hotkeys} position={minimal ? 'above' : 'below'} />}
     </StyledButton>
   );
 };

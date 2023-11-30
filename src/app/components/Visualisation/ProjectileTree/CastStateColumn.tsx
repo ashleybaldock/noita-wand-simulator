@@ -7,6 +7,7 @@ import {
 } from '../../../calc/materials';
 import {
   formatYesNo,
+  isNotNullOrUndefined,
   isString,
   radiusThresholdBonus,
   round,
@@ -20,34 +21,58 @@ import { getBackgroundUrlForDamageType } from '../../../calc/damage';
 import { SIGN_MULTIPLY } from '../../../util';
 import { TriggerCondition } from '../../../calc/trigger';
 
-const PropertyBase = styled.div`
+const GridRowItem = styled.div<{
+  firstValue?: boolean;
+  firstInGroup?: boolean;
+  isTotal?: boolean;
+}>`
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;
 
   height: 1em;
   line-height: 1.2em;
-  background-position: 0em center;
-  background-size: 1.1em;
-  white-space: nowrap;
-`;
-
-const PropertyIcon = styled(PropertyBase)<{ icon?: string }>`
-  ${({ icon }) => (icon ? `${icon}` : 'background-image: none;')};
   background-repeat: no-repeat;
   image-rendering: pixelated;
+  white-space: nowrap;
+  padding: 0.4em;
+
+  ${({ firstInGroup, firstValue }) =>
+    firstInGroup
+      ? firstValue
+        ? `
+  border-top: 1px dotted var(--color-vis-cs-inborder);
+    `
+        : `
+  border-top: 1px dotted var(--color-vis-cs-inborder-dark);
+    `
+      : ``}
+  ${({ isTotal }) =>
+    isTotal
+      ? `
+  border-left: 1px dotted var(--color-vis-cs-inborder);
+  `
+      : `
+  border-left: 1px dotted var(--color-vis-cs-inborder-dark);
+  `}
 `;
 
-const PropertyName = styled(PropertyBase)`
+const PropertyIcon = styled(GridRowItem)<{ icon?: string }>`
+  background-position: center center;
+  background-size: 1.1em;
+  ${({ icon }) => (icon ? `${icon}` : 'background-image: none;')};
+`;
+
+const PropertyName = styled(GridRowItem)`
   justify-content: end;
   padding-right: 0.3em;
   flex: 0 0 150px;
-  white-space: nowrap;
 `;
 
-const PropertyValue = styled(PropertyBase)`
-  text-align: center;
-  flex: 0 0 auto;
+const PropertyValue = styled(GridRowItem)`
+  justify-content: center;
+  padding-right: 0.4em;
+  padding-left: 0.4em;
 `;
 
 const Warning = styled.span`
@@ -58,16 +83,81 @@ const Warning = styled.span`
   }
 `;
 
-const NotApplicable = styled.span`
-  color: var(--color-value-ignored);
-  &::before {
-    content: 'n/a';
+const LowerLimit = styled.span`
+  &::after {
+    content: '(Min)';
+    line-height: 1;
+    font-size: 0.83em;
+    padding-left: 0.3em;
   }
 `;
-const Unchanged = styled.span`
+
+const UpperLimit = styled.span`
+  &::after {
+    content: '(Max)';
+    line-height: 1;
+    font-size: 0.83em;
+    padding-left: 0.3em;
+  }
+`;
+
+const Ignored = styled.span`
   color: var(--color-value-ignored);
   &::before {
-    content: '--';
+    content: 'ignored';
+  }
+`;
+
+const Numerator = styled.span`
+  line-height: 0.7;
+  font-size: 0.83em;
+  vertical-align: top;
+`;
+const Denominator = styled.span`
+  line-height: 1;
+  font-size: 0.83em;
+  vertical-align: bottom;
+`;
+const UnstyledFraction = ({
+  a,
+  b,
+  className = '',
+}: {
+  a: string;
+  b: string;
+  className?: string;
+}) => {
+  return (
+    <span className={className}>
+      <Numerator>{a}</Numerator>
+      {'/'}
+      <Denominator>{b}</Denominator>
+    </span>
+  );
+};
+const Fraction = styled(UnstyledFraction)`
+  letter-spacing: -0.14em;
+`;
+
+const NotApplicable = styled(Fraction).attrs(() => ({ a: 'n', b: 'a' }))`
+  color: var(--color-value-ignored);
+  font-variant: small-caps;
+`;
+const Missing = styled.span`
+  color: var(--color-value-ignored);
+  &::before {
+    content: '?';
+  }
+`;
+type UnchangedProps = {
+  content?: string;
+};
+const Unchanged = styled.span.attrs(({ content = '--' }: UnchangedProps) => ({
+  content,
+}))<UnchangedProps>`
+  color: var(--color-value-ignored);
+  &::before {
+    content: '${({ content }) => content}';
   }
 `;
 
@@ -116,20 +206,21 @@ const FilePath = styled.span<{
 const formatDuration = (v: number, showAsFrames: boolean) => {
   const n = Number(v);
   if (showAsFrames) {
-    return `${round(Math.max(0, n), 0)} fr${n < 0 ? `  (${sign(n)} fr)` : ``}`;
+    return `${round(Math.max(0, n), 0)}f ${n < 0 ? ` (${sign(n)})` : ``}`;
   } else {
     const s = toSeconds(n);
-    return `${round(Math.max(0, s), 2)} s${n < 0 ? `  (${sign(s)} s)` : ``}`;
+    return `${round(Math.max(0, s), 2)}s ${n < 0 ? ` (${sign(s)})` : ``}`;
   }
 };
 
 type ExtendedActionState = GunActionState & {
+  insideTrigger: boolean;
+  isTotal: boolean;
   manaDrain?: number;
 };
 
 type FieldDescription = {
   icon?: string;
-  field?: keyof GunActionState;
   ignoredInTrigger?: boolean;
   noTotal?: boolean;
   key?: string;
@@ -157,9 +248,13 @@ const fieldSections: FieldSection[] = [
         key: 'action_mana_drain',
         displayName: 'Mana Drain',
         render: ({ manaDrain: v }) =>
-          `${round(Math.max(0, Number(v)), 0)} ${
-            Number(v) < 0 ? `  (${sign(Number(v))})` : ``
-          }`,
+          isNotNullOrUndefined(v) ? (
+            `${round(Math.max(0, Number(v)), 0)} ${
+              Number(v) < 0 ? `  (${sign(Number(v))})` : ``
+            }`
+          ) : (
+            <Missing />
+          ),
       },
       {
         icon: `background-image: url('/data/wand/icon_reload_time-s.png');`,
@@ -180,8 +275,17 @@ const fieldSections: FieldSection[] = [
         icon: `background-image: url('/data/wand/icon_lifetime.png');`,
         key: 'lifetime_add',
         displayName: 'Lifetime',
-        render: ({ lifetime_add }, { showDurationsInFrames }) =>
-          formatDuration(lifetime_add, showDurationsInFrames),
+        render: (
+          { lifetime_add, isTotal, insideTrigger },
+          { showDurationsInFrames },
+        ) => {
+          if (isTotal) {
+            return signZero(Number(lifetime_add));
+          }
+          return lifetime_add === -1
+            ? `inf.`
+            : `${lifetime_add}-${lifetime_add}`;
+        },
       },
       {
         icon: `background-image: url('/data/icons/lifetime_infinite.png');`,
@@ -227,21 +331,33 @@ const fieldSections: FieldSection[] = [
         toolTip: 'Initial speed of the projectile.',
         render: ({ speed_multiplier: v }) => {
           const n = Number(v);
+          if (n < 0) {
+            return `<0 ?!`;
+          }
+          if (n === 0) {
+            return `0`;
+          }
           if (n === 1) {
             return <Unchanged />;
           }
           if (n < 1.17549e-38) {
             return <Warning>{`${SIGN_MULTIPLY}0 (underflow)`}</Warning>;
           }
-          if (n < 1) {
-            return `${SIGN_MULTIPLY}${n}`;
+          if (n < 0.0001) {
+            return (
+              <LowerLimit>{`${SIGN_MULTIPLY}${n.toExponential(2)}`}</LowerLimit>
+            );
           }
-          if (n > 20) {
-            return `${SIGN_MULTIPLY}20 (capped)`;
+          if (n < 1) {
+            return `${SIGN_MULTIPLY}${n.toPrecision(2)}`;
+          }
+          if (n === 20) {
+            return <UpperLimit>{`${SIGN_MULTIPLY}20`}</UpperLimit>;
           }
           if (n > 1) {
+            return `${SIGN_MULTIPLY}${n.toFixed(2)}`;
           }
-          return `${SIGN_MULTIPLY}${n}`;
+          return `${SIGN_MULTIPLY}${n.toPrecision(2)}`;
         },
       },
       {
@@ -277,6 +393,46 @@ const fieldSections: FieldSection[] = [
     title: 'Crit',
     fields: [
       {
+        icon: `background-image: url('/data/status/wet.png');`,
+        key: 'crit_on_wet',
+        displayName: 'Crit On: Wet',
+        noTotal: true,
+        render: ({ game_effect_entities: v }) =>
+          formatYesNo(v.includes('effect_apply_wet'), {
+            ifFalse: <Unchanged />,
+          }),
+      },
+      {
+        icon: `background-image: url('/data/status/oiled.png');`,
+        key: 'crit_on_oil',
+        displayName: 'Crit On: Oil',
+        noTotal: true,
+        render: ({ game_effect_entities: v }) =>
+          formatYesNo(v.includes('effect_apply_oiled'), {
+            ifFalse: <Unchanged />,
+          }),
+      },
+      {
+        icon: `background-image: url('/data/status/bloody.png');`,
+        key: 'crit_on_blood',
+        displayName: 'Crit On: Blood',
+        noTotal: true,
+        render: ({ game_effect_entities: v }) =>
+          formatYesNo(v.includes('effect_apply_bloody'), {
+            ifFalse: <Unchanged />,
+          }),
+      },
+      {
+        icon: `background-image: url('/data/status/burning.png');`,
+        key: 'crit_on_fire',
+        displayName: 'Crit On: Fire',
+        noTotal: true,
+        render: ({ game_effect_entities: v }) =>
+          formatYesNo(v.includes('effect_apply_on_fire'), {
+            ifFalse: <Unchanged />,
+          }),
+      },
+      {
         icon: `background-image: url('/data/wand/icon_damage_critical_chance.png');`,
         key: 'damage_critical_chance',
         displayName: 'Crit Chance',
@@ -299,14 +455,20 @@ const fieldSections: FieldSection[] = [
         icon: `background-image: url('/data/warnings/icon_danger.png');`,
         key: 'friendly_fire',
         displayName: 'Friendly Fire',
-        render: ({ friendly_fire: v }) =>
-          formatYesNo(Boolean(v), { ifTrue: <Warning>{'Yes'}</Warning> }),
+        render: ({ friendly_fire: v, isTotal }) =>
+          formatYesNo(Boolean(v), {
+            ifTrue: <Warning>{'Yes'}</Warning>,
+            ifFalse: isTotal ? <Unchanged content={'No'} /> : <Unchanged />,
+          }),
       },
       {
         icon: `background-image: url('/data/ui_gfx/gun_actions/zero_damage.png');`,
         key: 'damage_null_all',
         displayName: 'All Null',
-        render: ({ damage_null_all: v }) => formatYesNo(Boolean(v)),
+        render: ({ damage_null_all: v }) =>
+          formatYesNo(Boolean(v), {
+            ifFalse: <Unchanged />,
+          }),
       },
 
       {
@@ -453,6 +615,7 @@ const fieldSections: FieldSection[] = [
       {
         key: 'trail_material',
         displayName: 'Trails:',
+        /* TODO + memoise */
         render: ({ trail_material: v }) =>
           isString(v) ? (
             <>
@@ -480,7 +643,7 @@ const fieldSections: FieldSection[] = [
 
 // todo: handle extra_entities that affect damage/etc
 
-export const CastStateNamesColumn = ({
+export const FieldNamesColumn = ({
   castState,
 }: {
   castState?: GunActionState;
@@ -491,7 +654,11 @@ export const CastStateNamesColumn = ({
         fieldSections.map(({ fields }, i1) => (
           <>
             {fields.map(({ key, displayName }, i2) => (
-              <PropertyName key={key ?? `${i1}-${i2}-${key}`}>
+              <PropertyName
+                key={key ?? `${i1}-${i2}-${key}`}
+                firstValue={i1 === 0}
+                firstInGroup={i2 === 0}
+              >
                 {displayName}
               </PropertyName>
             ))}
@@ -501,11 +668,7 @@ export const CastStateNamesColumn = ({
   );
 };
 
-export const CastStateIconsColumn = ({
-  castState,
-}: {
-  castState?: GunActionState;
-}) => {
+export const IconsColumn = ({ castState }: { castState?: GunActionState }) => {
   return (
     <>
       {castState &&
@@ -514,6 +677,8 @@ export const CastStateIconsColumn = ({
             {fields.map(({ key, icon, displayName }, i2) => (
               <PropertyIcon
                 key={key ?? `${i1}-${i2}-${key}`}
+                firstValue={i1 === 0}
+                firstInGroup={i2 === 0}
                 icon={icon ?? ''}
               />
             ))}
@@ -523,7 +688,7 @@ export const CastStateIconsColumn = ({
   );
 };
 
-export const CastStateTotalsColumn = ({
+export const TotalsColumn = ({
   castState,
   manaDrain,
   insideTrigger = false,
@@ -543,20 +708,37 @@ export const CastStateTotalsColumn = ({
       {castState &&
         fieldSections.map(({ fields }, i1) => (
           <>
-            {fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
-              <PropertyValue key={key ?? `${i1}-${i2}`}>
-                {!insideTrigger || !ignoredInTrigger
-                  ? render({ ...castState, manaDrain }, config)
-                  : 'ignored'}
-              </PropertyValue>
-            ))}
+            {fields.map(
+              (
+                { key, render, ignoredInTrigger = false, noTotal = false },
+                i2,
+              ) => (
+                <PropertyValue
+                  key={key ?? `${i1}-${i2}`}
+                  firstValue={i1 === 0}
+                  firstInGroup={i2 === 0}
+                  isTotal={true}
+                >
+                  {insideTrigger && ignoredInTrigger ? (
+                    <Ignored />
+                  ) : noTotal ? (
+                    <Unchanged />
+                  ) : (
+                    render(
+                      { ...castState, insideTrigger, isTotal: true, manaDrain },
+                      config,
+                    )
+                  )}
+                </PropertyValue>
+              ),
+            )}
           </>
         ))}
     </>
   );
 };
 
-export const CastStateProjectileColumn = ({
+export const ProjectileColumn = ({
   castState,
   manaDrain,
   insideTrigger = false,
@@ -576,12 +758,19 @@ export const CastStateProjectileColumn = ({
         fieldSections.map(({ fields }, i1) => (
           <>
             {fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
-              <PropertyValue key={key ?? `${i1}-${i2}`}>
+              <PropertyValue
+                key={key ?? `${i1}-${i2}`}
+                firstValue={i1 === 0}
+                firstInGroup={i2 === 0}
+                isTotal={false}
+              >
                 {!insideTrigger || !ignoredInTrigger ? (
-                  // ? render({ ...castState, manaDrain }, config)
-                  <Unchanged />
+                  render(
+                    { ...castState, isTotal: false, insideTrigger, manaDrain },
+                    config,
+                  )
                 ) : (
-                  ''
+                  <Ignored />
                 )}
               </PropertyValue>
             ))}
@@ -591,4 +780,4 @@ export const CastStateProjectileColumn = ({
   );
 };
 
-export const CastStateSubTotalsColumn = CastStateTotalsColumn;
+export const SubTotalsColumn = TotalsColumn;

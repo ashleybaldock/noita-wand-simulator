@@ -26,6 +26,7 @@ const _ExportWikiButton = () => {
 
   return (
     <Button
+      hotkeys={'e'}
       minimal
       onClick={() =>
         copyToClipboard(wikiTemplate).then(onCopySuccess).catch(onCopyFailure)

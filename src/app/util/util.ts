@@ -208,6 +208,21 @@ export function forceDisableCanvasSmoothing() {
   HTMLCanvasElement.prototype.getContext = getSmoothContext as any;
 }
 
+export const toUrl = (path: string) => {
+  if (path.startsWith('data:image')) {
+    return `url("${path}")`;
+  }
+  if (path.startsWith('/')) {
+    return `url('${path}')`;
+  }
+  return `url('/${path}')`;
+};
+
+export const toBackgroundImage = (path?: string) =>
+  isNotNullOrUndefined(path)
+    ? `background-image: ${toUrl(path)};`
+    : 'background-color: red;';
+
 // https://stackoverflow.com/a/7616484
 export function hashString(s: string) {
   let hash = 0;

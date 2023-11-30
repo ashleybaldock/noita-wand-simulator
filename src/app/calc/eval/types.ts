@@ -31,7 +31,7 @@ export type WandShot = {
   actionTree: TreeNode<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;
-  triggeredBy?: TriggerCondition;
+  triggerType?: TriggerCondition;
 };
 
 export type GroupedWandShot = {
@@ -41,7 +41,7 @@ export type GroupedWandShot = {
   actionTree: TreeNode<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;
-  triggeredBy?: TriggerCondition;
+  triggerType?: TriggerCondition;
 };
 
 export type Projectile = {

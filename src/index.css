@@ -39,6 +39,8 @@
   --color-button-border-hover: #aaaaaa;
   --color-button-background: #000000;
 
+  --color-vis-cs-inborder: #3a3a3a;
+  --color-vis-cs-inborder-dark: #222222;
   --color-value-ignored: #5b5b66;
 
   --color-note-recursion: #000000;
@@ -53,6 +55,9 @@
   --color-wand-editor-bg: #000000;
   --color-wand-edit-cursor: #ffff66;
   --color-wand-edit-cursor-active: #ffff66;
+
+  --color-keyhint-shadow: rgba(0, 0, 0, 0.66);
+  --color-keyhint-border: #ffbf00;
 
   --font-family-noita-default: 'noita', sans-serif;
   --font-family-noita-glyphs: 'glyphs', sans-serif;

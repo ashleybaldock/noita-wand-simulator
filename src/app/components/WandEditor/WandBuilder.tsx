@@ -78,7 +78,7 @@ export function WandBuilder() {
         <RedoButton />
         <ResetButton />
         <LoadButton />
-        <ExportButton />
+        {/* <ExportButton /> */}
         <ConfigButton />
       </SectionButtonBar>
       <MainDiv>

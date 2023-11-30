@@ -124,6 +124,7 @@ export function clickWand(
       case 'BeginTriggerHitWorld':
       case 'BeginTriggerTimer':
       case 'BeginTriggerDeath':
+        const [entity_filename, action_draw_count, delay_frames] = args;
         parentShot = currentShot;
         currentShotStack.push(currentShot);
         currentShot = {
@@ -131,8 +132,8 @@ export function clickWand(
           projectiles: [],
           calledActions: [],
           actionTree: [],
-          castState: undefined,
-          triggeredBy: triggerEventToConditionMap.get(eventType),
+          castState: { ...defaultGunActionState },
+          triggerType: triggerEventToConditionMap.get(eventType),
         };
         parentShot.projectiles[parentShot.projectiles.length - 1].trigger =
           currentShot;

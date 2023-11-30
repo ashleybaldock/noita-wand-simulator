@@ -7,7 +7,7 @@ import { SaveImageButton, ScrollWrapper } from '../../generic';
 import { SectionHeader } from '../../SectionHeader';
 import { IterationLimitWarning } from '../IterationLimitWarning';
 import { ShotMetadata } from '../ShotMetadata';
-import { CastStateShotRow } from './CastStateShotRow';
+import { ShotTable } from './ShotTable';
 
 const SectionDiv = styled.div`
   display: flex;
@@ -52,7 +52,7 @@ export const CastStateTable = ({
             />
           )}
           {shots.map((shot, index) => (
-            <CastStateShotRow shot={shot} shotIndex={index + 1} key={index} />
+            <ShotTable shot={shot} shotIndex={index + 1} key={index} />
           ))}
         </SectionDiv>
       </ScrollWrapper>

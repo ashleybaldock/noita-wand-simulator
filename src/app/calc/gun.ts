@@ -433,7 +433,7 @@ export function add_projectile_trigger_timer(
   action_draw_count: number,
 ) {
   BeginProjectile(entity_filename);
-  BeginTriggerTimer(delay_frames);
+  BeginTriggerTimer(delay_frames, entity_filename, action_draw_count);
   draw_shot(create_shot(action_draw_count), true);
   EndTrigger();
   EndProjectile();

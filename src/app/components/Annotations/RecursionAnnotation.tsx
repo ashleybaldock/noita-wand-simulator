@@ -21,12 +21,12 @@ const RecursionDiv = styled.div`
 `;
 
 const IterationDiv = styled.div<{
-  offset: boolean;
+  $offset: boolean;
 }>`
   position: absolute;
   bottom: -7px;
-  left: ${({ offset }) =>
-    offset ? `0` : `calc(var(--bsize-spell) / 4 + 1px)`};
+  left: ${({ $offset }) =>
+    $offset ? `0` : `calc(var(--bsize-spell) / 4 + 1px)`};
 
   width: calc(var(--bsize-spell) / 4);
   height: calc(var(--bsize-spell) / 4);
@@ -66,7 +66,9 @@ export function RecursionAnnotation(props: Props) {
     <>
       {showRecursion && <RecursionDiv>{recursion}</RecursionDiv>}
       {showIteration && (
-        <IterationDiv offset={showRecursion ?? false}>{iteration}</IterationDiv>
+        <IterationDiv $offset={showRecursion ?? false}>
+          {iteration}
+        </IterationDiv>
       )}
     </>
   );

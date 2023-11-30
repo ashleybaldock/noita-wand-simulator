@@ -12,6 +12,7 @@ export function ConfigButton() {
   return (
     <>
       <Button
+        hotkeys={'p'}
         imgUrl={'data/sampo-config.png'}
         onClick={() => setModalVisible(!modalVisible)}
       >
