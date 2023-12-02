@@ -3,7 +3,19 @@ import { Action } from './action';
 import { SpellType } from './spellTypes';
 import { UnlockCondition } from './unlocks';
 
-export type Spell = {
+export type SpellDeckInfo = {
+  id: ActionId;
+  deck_index?: number;
+  /* Always Cast */
+  permanently_attached?: boolean;
+};
+
+export type SpellExtraInfo = {
+  id: ActionId;
+  beta?: boolean;
+};
+
+export type SpellProperties = {
   id: ActionId;
   name: string;
   description: string;
@@ -18,18 +30,18 @@ export type Spell = {
   max_uses?: number;
   uses_remaining?: number;
   never_unlimited?: boolean;
-  // deck properties
   recursive?: boolean;
   iterative?: boolean;
-  deck_index?: number;
-  permanently_attached?: boolean /* Always Cast */;
   // Info
-  beta?: boolean;
   spawn_requires_flag?: UnlockCondition;
   spawn_level?: string;
   spawn_probability?: string;
   price: number;
   ai_never_uses?: boolean;
+};
+
+export type SpellUnusedProperties = {
+  id: ActionId;
   /* unused? */ spawn_manual_unlock?: boolean;
   /* unused? */ is_dangerous_blast?: boolean;
   /* unused? */ sprite_unidentified?: string;
@@ -39,15 +51,7 @@ export type Spell = {
   inventoryitem_id?: number;
 };
 
-export const validActionCallSources = [
-  'projectile',
-  'static',
-  'material',
-  'other',
-  'utility',
-] as const;
-
-export type ValidActionCallSource = Extract<
-  typeof validActionCallSources[number],
-  SpellType
->;
+export type Spell = SpellDeckInfo &
+  SpellExtraInfo &
+  SpellProperties &
+  SpellUnusedProperties;

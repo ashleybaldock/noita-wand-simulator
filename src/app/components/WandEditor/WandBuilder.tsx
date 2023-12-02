@@ -23,6 +23,10 @@ const MainDiv = styled.div`
   background-color: var(--color-base-background);
   margin: 10px 6px;
 
+  @media screen and (max-width: 500px) {
+    margin: 10px 0;
+  }
+
   @media screen and (max-width: 900px) {
     flex-direction: column;
   }

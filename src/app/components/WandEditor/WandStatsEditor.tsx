@@ -150,9 +150,11 @@ const StyledList = styled.div`
     display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(9, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     min-width: 60vw;
     width: 100%;
     align-self: center;
+    justify-items: center;
   }
 `;
 const StyledListItem = styled.div<{

@@ -32,6 +32,9 @@ export type WandShot = {
   castState?: GunActionState;
   manaDrain?: number;
   triggerType?: TriggerCondition;
+  triggerEntity?: string;
+  triggerActionDrawCount?: number;
+  triggerDelayFrames?: number;
 };
 
 export type GroupedWandShot = {

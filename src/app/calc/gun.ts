@@ -433,7 +433,7 @@ export function add_projectile_trigger_timer(
   action_draw_count: number,
 ) {
   BeginProjectile(entity_filename);
-  BeginTriggerTimer(delay_frames, entity_filename, action_draw_count);
+  BeginTriggerTimer(entity_filename, action_draw_count, delay_frames);
   draw_shot(create_shot(action_draw_count), true);
   EndTrigger();
   EndProjectile();
@@ -444,7 +444,7 @@ export function add_projectile_trigger_hit_world(
   action_draw_count: number,
 ) {
   BeginProjectile(entity_filename);
-  BeginTriggerHitWorld();
+  BeginTriggerHitWorld(entity_filename, action_draw_count);
   draw_shot(create_shot(action_draw_count), true);
   EndTrigger();
   EndProjectile();
@@ -455,7 +455,7 @@ export function add_projectile_trigger_death(
   action_draw_count: number,
 ) {
   BeginProjectile(entity_filename);
-  BeginTriggerDeath();
+  BeginTriggerDeath(entity_filename, action_draw_count);
   draw_shot(create_shot(action_draw_count), true);
   EndTrigger();
   EndProjectile();

@@ -17,6 +17,7 @@ import { isIterativeActionId } from '../actionId';
 import { ActionCall, Requirements, TreeNode, WandShot } from './types';
 import { defaultGunActionState } from '../actionState';
 import { TriggerCondition } from '../trigger';
+import { isValidActionCallSource, SpellType } from '../spellTypes';
 
 export type StopCondition = 'oneshot' | 'reload' | 'refresh' | 'iterLimit';
 
@@ -59,6 +60,7 @@ export function clickWand(
   let currentShotStack: WandShot[];
   let lastCalledAction: ActionCall | undefined;
   let calledActions: ActionCall[];
+  let validSourceCalledActions: ActionCall[];
   let parentShot;
 
   // action call tree
@@ -71,21 +73,10 @@ export function clickWand(
   const unsub = subscribe((eventType, ...args) => {
     switch (eventType) {
       case 'BeginProjectile':
-        // TODO remove this
-        const validSourceActionCalls = calledActions.filter((a) => {
-          return [
-            'projectile',
-            'static',
-            'material',
-            'other',
-            'utility',
-          ].includes(a.spell.type);
-        });
-
         const entity: string = args[0];
 
         let sourceAction =
-          validSourceActionCalls[validSourceActionCalls.length - 1]?.spell;
+          validSourceCalledActions[validSourceCalledActions.length - 1]?.spell;
         let proxy: Spell | undefined = undefined;
 
         if (!sourceAction) {
@@ -134,6 +125,9 @@ export function clickWand(
           actionTree: [],
           castState: { ...defaultGunActionState },
           triggerType: triggerEventToConditionMap.get(eventType),
+          triggerEntity: entity_filename,
+          triggerActionDrawCount: action_draw_count,
+          triggerDelayFrames: delay_frames,
         };
         parentShot.projectiles[parentShot.projectiles.length - 1].trigger =
           currentShot;
@@ -183,6 +177,9 @@ export function clickWand(
           currentNode = newNode;
         }
         calledActions.push(lastCalledAction);
+        if (isValidActionCallSource(spell.type)) {
+          validSourceCalledActions.push(lastCalledAction);
+        }
         break;
       }
       case 'OnActionFinished': {

@@ -28,6 +28,10 @@ const HeaderDiv = styled.div<{
   height: 60px;
   image-rendering: pixelated;
   margin: 14px 16px;
+  @media screen and (max-width: 500px) {
+    margin: 6px 6px;
+    background-position: center;
+  }
 `;
 
 const SpacerDiv = styled.div`

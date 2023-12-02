@@ -1,6 +1,6 @@
 import { Random as RandomExt } from '../lua/random';
 import { GunActionState } from '../actionState';
-import { Spell } from '../spell';
+import { Spell, SpellDeckInfo } from '../spell';
 
 export type ComponentID = string;
 export type EntityID = string;
@@ -80,14 +80,27 @@ export function EndProjectile() {
 }
 
 export function BeginTriggerTimer(
+  entity_filename: string,
+  action_draw_count: number,
   delay_frames: number,
+) {
+  const result = onEvent(
+    'BeginTriggerTimer',
+    entity_filename,
+    action_draw_count,
+    delay_frames,
+  );
+  if (result !== undefined) {
+    return result;
+  }
+}
+
+export function BeginTriggerHitWorld(
   entity_filename: string,
   action_draw_count: number,
 ) {
   const result = onEvent(
-    'BeginTrigger',
-    'timer',
-    delay_frames,
+    'BeginTriggerHitWorld',
     entity_filename,
     action_draw_count,
   );
@@ -96,15 +109,15 @@ export function BeginTriggerTimer(
   }
 }
 
-export function BeginTriggerHitWorld() {
-  const result = onEvent('BeginTriggerHitWorld');
-  if (result !== undefined) {
-    return result;
-  }
-}
-
-export function BeginTriggerDeath() {
-  const result = onEvent('BeginTriggerDeath');
+export function BeginTriggerDeath(
+  entity_filename: string,
+  action_draw_count: number,
+) {
+  const result = onEvent(
+    'BeginTriggerDeath',
+    entity_filename,
+    action_draw_count,
+  );
   if (result !== undefined) {
     return result;
   }
@@ -354,7 +367,16 @@ export const OnDraw = (state_cards_drawn: number) => {
 
 /* Each time the wand 'wraps' naturally */
 export const OnMoveDiscardedToDeck = (discarded: readonly Spell[]): void => {
-  onEvent('OnMoveDiscardedToDeck', discarded);
+  onEvent(
+    'OnMoveDiscardedToDeck',
+    discarded.map<SpellDeckInfo>(
+      ({ id, deck_index, permanently_attached }) => ({
+        id,
+        deck_index,
+        permanently_attached,
+      }),
+    ),
+  );
 };
 
 export function OnActionCalled(

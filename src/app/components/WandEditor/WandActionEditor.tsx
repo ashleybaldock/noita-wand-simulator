@@ -100,7 +100,7 @@ const SpellSlots = styled.ul`
   background-color: var(--color-wand-editor-bg);
 
   @media screen and (max-width: 500px) {
-    padding: 12px 4px;
+    padding: 0 0;
   }
 
   --gap-count: calc(var(--grid-max-column-count) - 1);

@@ -17,6 +17,7 @@ const MainDiv = styled.div`
 
 const SubSectionDiv = styled.div<{}>`
   display: flex;
+  flex-direction: column;
   flex: 1 0 48%;
   flex-wrap: wrap;
   justify-content: start;
@@ -37,13 +38,13 @@ const SubSectionTitle = styled.div<{
 }>`
   display: flex;
   align-items: center;
-  background-color: #000;
+  align-self: start;
   color: #eee;
   padding: 2px 6px 2px 4px;
   font-family: 'noita', '04b03', sans-serif;
   font-size: 14px;
   ${({ minWidth }) => `min-width: ${minWidth ?? '6em'};`}
-  justify-content: space-evenly;
+  justify-content: start;
 
   span {
     padding-top: 2px;
@@ -242,7 +243,7 @@ export function CastConfigEditor(props: Props) {
       <MainDiv>
         <SubSectionDiv>
           <SubSectionTitle>
-            <InputImageLabel size={24} imgUrl={'data/config/heart2.png'} />
+            <InputImageLabel size={18} imgUrl={'data/config/heart2.png'} />
             <span>Health</span>
           </SubSectionTitle>
           <SubSectionContent>
@@ -279,7 +280,7 @@ export function CastConfigEditor(props: Props) {
         </SubSectionDiv>
         <SubSectionDiv>
           <SubSectionTitle>
-            <InputImageLabel size={20} imgUrl={'data/config/goldnugget2.png'} />
+            <InputImageLabel size={16} imgUrl={'data/config/goldnugget2.png'} />
             <span>Money</span>
           </SubSectionTitle>
           <SubSectionContent>
@@ -306,11 +307,8 @@ export function CastConfigEditor(props: Props) {
         </SubSectionDiv>
         <SubSectionDiv>
           <SubSectionTitle minWidth={'auto'}>
-            <InputImageLabel
-              leftMargin={'6px'}
-              size={19}
-              imgUrl={'data/config/die2.png'}
-            />
+            <InputImageLabel size={16} imgUrl={'data/config/die2.png'} />
+            <span>Random</span>
           </SubSectionTitle>
           <SubSectionContent wrapq={true} maxWidth={'calc(100% - 2.2em)'}>
             <RandomInputWrapper>
@@ -337,7 +335,8 @@ export function CastConfigEditor(props: Props) {
         </SubSectionDiv>
         <SubSectionDiv>
           <SubSectionTitle>
-            <span>Requirements</span>
+            <InputImageLabel size={18} imgUrl={'data/config/req.png'} />
+            <span>Requirement State</span>
           </SubSectionTitle>
           <SubSectionContent>
             <CheckboxInputWrapper>
@@ -392,7 +391,7 @@ export function CastConfigEditor(props: Props) {
         </SubSectionDiv>
         <SubSectionDiv>
           <SubSectionTitle>
-            <span>Run Until</span>
+            <span>Run Simulation Until</span>
           </SubSectionTitle>
           <SubSectionContent>
             Single Shot, Until Reload, Until Refresh, For N Shots

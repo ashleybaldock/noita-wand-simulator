@@ -7,6 +7,7 @@ import { formatYesNo, isNotNullOrUndefined } from '../../util';
 import { translate } from '../../util/i18n';
 import { spellTypeInfoMap } from '../../calc/spellTypes';
 import { WithDebugHints } from '../Debug';
+import { getSpriteForPerk, Perk } from '../../calc/perks';
 
 const SpellTip = styled.div`
   display: grid;
@@ -134,6 +135,23 @@ const StyledTooltip = styled(Tooltip)`
   }
 `;
 
+type InlineIconProps = {
+  perk?: Perk;
+};
+const InlineIcon = styled.span.attrs(({ perk }: InlineIconProps) => ({
+  style: {
+    backgroundImage: `url('${getSpriteForPerk(perk)}')`,
+  },
+}))<InlineIconProps>`
+  display: inline-block;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 1em;
+  image-rendering: pixelated;
+  width: 1em;
+  height: 1em;
+`;
+
 export const SpellInfoTooltip = () => {
   return (
     <StyledTooltip
@@ -174,9 +192,15 @@ export const SpellInfoTooltip = () => {
               Max. Uses
             </Label>
             <Value>
-              {max_uses === undefined
-                ? `Unlimited`
-                : `${max_uses} (${formatYesNo(Boolean(never_unlimited))})`}
+              {max_uses === undefined ? (
+                `Unlimited`
+              ) : (
+                <>
+                  {`${max_uses}`}
+                  <InlineIcon perk={'unlimited_spells'} />
+                  {`${formatYesNo(Boolean(never_unlimited))})`}
+                </>
+              )}
             </Value>
             <Label>Beta</Label>
             <Value>{formatYesNo(Boolean(beta))}</Value>
