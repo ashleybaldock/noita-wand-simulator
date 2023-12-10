@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useAppSelector } from './hooks';
 import { RootState } from './store';
 import { loadState } from '../localStorage';
+import { UnlockCondition } from '../calc/unlocks';
 
 export interface Config {
   debug: {
@@ -27,9 +28,7 @@ export interface Config {
   showBeta: boolean;
   castShowChanged: boolean;
   showDurationsInFrames: boolean;
-  unlocks: {
-    [key: string]: boolean;
-  };
+  unlocks: Record<UnlockCondition, boolean>;
   var_money: number;
   var_hp: number;
   var_hp_max: number;
@@ -110,6 +109,7 @@ export const initialState: ConfigState = {
       card_unlocked_rainbow_trail: false,
       card_unlocked_homing_wand: false,
       card_unlocked_fish: false,
+      card_unlocked_infinite: false,
     },
     var_money: 10000,
     var_hp: 100,

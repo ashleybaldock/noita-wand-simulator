@@ -33,6 +33,8 @@ import {
   StartReload,
   Random,
   OnMoveDiscardedToDeck,
+  SetRandomSeed,
+  GameGetFrameNum,
 } from './eval/wandObserver';
 
 // constants
@@ -255,7 +257,7 @@ function draw_shot(shot: Shot, instant_reload_if_empty: boolean) {
 
 export function order_deck() {
   if (gun.shuffle_deck_when_empty) {
-    // SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() )
+    SetRandomSeed(GameGetFrameNum(), GameGetFrameNum());
     // shuffle the deck
     // state_shuffled = true;
 

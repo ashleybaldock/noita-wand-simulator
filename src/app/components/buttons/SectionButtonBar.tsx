@@ -30,7 +30,4 @@ export const SectionButtonBar = styled.div`
   & > button:first-child {
     margin-left: 0;
   }
-
-  @media screen and (max-width: 900px) {
-  }
 `;

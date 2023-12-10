@@ -68,7 +68,7 @@ const actions: Spell[] = [
 		mana: 25,
 		max_uses: 3,
 		custom_xml_file: "data/entities/misc/custom_cards/bomb.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/bomb.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 100
 		},
@@ -86,7 +86,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/light_bullet.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			c.screenshake = c.screenshake + 0.5
@@ -107,7 +107,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 10,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			c.screenshake = c.screenshake + 0.5
 			c.damage_critical_chance = c.damage_critical_chance + 5
@@ -126,7 +126,7 @@ const actions: Spell[] = [
 		price: 250,
 		mana: 15,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 4
 			c.screenshake = c.screenshake + 1
 			c.damage_critical_chance = c.damage_critical_chance + 5
@@ -146,7 +146,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 10,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			c.screenshake = c.screenshake + 0.5
 			c.damage_critical_chance = c.damage_critical_chance + 5
@@ -166,7 +166,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 20,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/bullet.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 4
 			c.screenshake = c.screenshake + 2
@@ -188,7 +188,7 @@ const actions: Spell[] = [
 		price: 190,
 		mana: 35,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 4
 			c.screenshake = c.screenshake + 2
 			c.spread_degrees = c.spread_degrees + 2.0
@@ -210,7 +210,7 @@ const actions: Spell[] = [
 		price: 190,
 		mana: 35,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 4
 			c.screenshake = c.screenshake + 2
 			c.spread_degrees = c.spread_degrees + 2.0
@@ -232,7 +232,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 30,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/bullet_heavy.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 7
 			c.screenshake = c.screenshake + 2.5
@@ -255,7 +255,7 @@ const actions: Spell[] = [
 		price: 240,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 7
 			c.screenshake = c.screenshake + 2.5
 			c.spread_degrees = c.spread_degrees + 5.0
@@ -278,7 +278,7 @@ const actions: Spell[] = [
 		price: 240,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 7
 			c.screenshake = c.screenshake + 2.5
 			c.spread_degrees = c.spread_degrees + 5.0
@@ -301,7 +301,7 @@ const actions: Spell[] = [
 		price: 80,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/light_bullet_air.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			
@@ -323,7 +323,7 @@ const actions: Spell[] = [
 		mana: 30,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/bullet_slow.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/bullet_slow.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 6
 			c.screenshake = c.screenshake + 2
@@ -345,7 +345,7 @@ const actions: Spell[] = [
 		mana: 50,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/bullet_slow.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 25
 			c.screenshake = c.screenshake + 2
 			c.spread_degrees = c.spread_degrees + 10
@@ -367,7 +367,7 @@ const actions: Spell[] = [
 		mana: 50,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/bullet_slow.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 6
 			c.screenshake = c.screenshake + 2
 			c.spread_degrees = c.spread_degrees + 3.6
@@ -390,7 +390,7 @@ const actions: Spell[] = [
 		max_uses: 3,
 		never_unlimited: true,
 		custom_xml_file: "data/entities/misc/custom_cards/black_hole.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/black_hole.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 80
 			c.screenshake = c.screenshake + 20
@@ -411,7 +411,7 @@ const actions: Spell[] = [
 		max_uses: 3,
 		never_unlimited: true,
 		custom_xml_file: "data/entities/misc/custom_cards/black_hole.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_death("data/entities/projectiles/deck/black_hole.xml", 1)
 			c.fire_rate_wait = c.fire_rate_wait + 90
 			c.screenshake = c.screenshake + 20
@@ -431,7 +431,7 @@ const actions: Spell[] = [
 		mana: 240,
 		max_uses: 6,
 		custom_xml_file: "data/entities/misc/custom_cards/black_hole_big.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/black_hole_big.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 80
 			c.screenshake = c.screenshake + 10
@@ -453,7 +453,7 @@ const actions: Spell[] = [
 		max_uses: 6,
 		never_unlimited: true,
 		custom_xml_file: "data/entities/misc/custom_cards/black_hole_giga.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			let black_holes = EntityGetWithTag( "black_hole_giga" )
 			
 			if ( black_holes.length < 3 )  {
@@ -477,7 +477,7 @@ const actions: Spell[] = [
 		price: 220,
 		mana: 140,
 		max_uses: 5,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/tentacle_portal.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 		},
@@ -496,7 +496,7 @@ const actions: Spell[] = [
 		price: 110,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/spitter.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait - 1
@@ -518,7 +518,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 10,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			
 			c.fire_rate_wait = c.fire_rate_wait - 1
 			c.screenshake = c.screenshake + 0.1
@@ -540,7 +540,7 @@ const actions: Spell[] = [
 		price: 190,
 		mana: 25,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/spitter_tier_2.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait - 2
@@ -562,7 +562,7 @@ const actions: Spell[] = [
 		price: 220,
 		mana: 30,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_timer("data/entities/projectiles/deck/spitter_tier_2.xml", 40, 1)
 			
 			c.fire_rate_wait = c.fire_rate_wait - 2
@@ -584,7 +584,7 @@ const actions: Spell[] = [
 		price: 240,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/spitter_tier_3.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait - 4
@@ -606,7 +606,7 @@ const actions: Spell[] = [
 		price: 260,
 		mana: 45,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_timer("data/entities/projectiles/deck/spitter_tier_3.xml", 40, 1)
 			
 			c.fire_rate_wait = c.fire_rate_wait - 4
@@ -628,7 +628,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/bubbleshot.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait - 5
@@ -648,7 +648,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 16,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			
 			c.fire_rate_wait = c.fire_rate_wait - 5
 			c.dampening = 0.1
@@ -668,7 +668,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 20,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/disc_bullet.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait + 10
@@ -689,7 +689,7 @@ const actions: Spell[] = [
 		price: 180,
 		mana: 38,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/disc_bullet_big.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait + 20
@@ -711,7 +711,7 @@ const actions: Spell[] = [
 		price: 270,
 		mana: 70,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/disc_bullet_bigger.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait + 40
@@ -733,7 +733,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 20,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/bouncy_orb.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait + 10
@@ -753,7 +753,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 50,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_timer("data/entities/projectiles/deck/bouncy_orb.xml",200,1)
 			
 			c.fire_rate_wait = c.fire_rate_wait + 10
@@ -773,7 +773,7 @@ const actions: Spell[] = [
 		price: 60,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/rubber_ball.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait - 2
@@ -793,7 +793,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 15,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/arrow.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait + 10
@@ -814,7 +814,7 @@ const actions: Spell[] = [
 		price: 110,
 		mana: 10,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/pollen.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait + 2
@@ -835,7 +835,7 @@ const actions: Spell[] = [
 		mana: 30,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/lance.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/lance.xml")
 			
 			c.fire_rate_wait = c.fire_rate_wait + 20
@@ -857,7 +857,7 @@ const actions: Spell[] = [
 		mana: 70,
 		max_uses: 10,
 		custom_xml_file: "data/entities/misc/custom_cards/rocket.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/rocket.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 60
 			
@@ -879,7 +879,7 @@ const actions: Spell[] = [
 		mana: 90,
 		max_uses: 8,
 		custom_xml_file: "data/entities/misc/custom_cards/rocket_tier_2.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/rocket_tier_2.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 90
 			
@@ -901,7 +901,7 @@ const actions: Spell[] = [
 		mana: 120,
 		max_uses: 6,
 		custom_xml_file: "data/entities/misc/custom_cards/rocket_tier_3.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/rocket_tier_3.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 120
 			
@@ -923,7 +923,7 @@ const actions: Spell[] = [
 		mana: 50,
 		max_uses: 25,
 		custom_xml_file: "data/entities/misc/custom_cards/grenade.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/grenade.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 			c.screenshake = c.screenshake + 4.0
@@ -946,7 +946,7 @@ const actions: Spell[] = [
 		max_uses: 25,
 		custom_xml_file: "data/entities/misc/custom_cards/grenade_trigger.xml",
 		mana: 50,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 30
 			c.screenshake = c.screenshake + 4.0
 			
@@ -969,7 +969,7 @@ const actions: Spell[] = [
 		mana: 90,
 		max_uses: 20,
 		custom_xml_file: "data/entities/misc/custom_cards/grenade_tier_2.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/grenade_tier_2.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			c.screenshake = c.screenshake + 8.0
@@ -992,7 +992,7 @@ const actions: Spell[] = [
 		mana: 90,
 		max_uses: 20,
 		custom_xml_file: "data/entities/misc/custom_cards/grenade_tier_3.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/grenade_tier_3.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 80
 			c.screenshake = c.screenshake + 15.0
@@ -1015,7 +1015,7 @@ const actions: Spell[] = [
 		mana: 50,
 		max_uses: 25,
 		custom_xml_file: "data/entities/misc/custom_cards/grenade.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/grenade_anti.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 			c.screenshake = c.screenshake + 4.0
@@ -1038,7 +1038,7 @@ const actions: Spell[] = [
 		mana: 80,
 		max_uses: 35,
 		custom_xml_file: "data/entities/misc/custom_cards/grenade.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/grenade_large.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 40
 			c.screenshake = c.screenshake + 5.0
@@ -1060,7 +1060,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 20,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/mine.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 			c.child_speed_multiplier = c.child_speed_multiplier * 0.75
@@ -1087,7 +1087,7 @@ const actions: Spell[] = [
 		price: 240,
 		mana: 20,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_death("data/entities/projectiles/deck/mine.xml", 1)
 			c.fire_rate_wait = c.fire_rate_wait + 30
 			c.child_speed_multiplier = c.child_speed_multiplier * 0.75
@@ -1114,7 +1114,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 20,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/pipe_bomb.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 			c.child_speed_multiplier = c.child_speed_multiplier * 0.75
@@ -1140,7 +1140,7 @@ const actions: Spell[] = [
 		price: 230,
 		mana: 20,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 30
 			c.child_speed_multiplier = c.child_speed_multiplier * 0.75
 			c.speed_multiplier = c.speed_multiplier * 0.75
@@ -1168,7 +1168,7 @@ const actions: Spell[] = [
 		price: 170,
 		mana: 120,
 		max_uses: 10,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/exploding_deer.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 80
 		},
@@ -1187,7 +1187,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 100,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/duck.xml")
 			add_projectile("data/entities/projectiles/deck/duck.xml")
 			add_projectile("data/entities/projectiles/deck/duck.xml")
@@ -1210,7 +1210,7 @@ const actions: Spell[] = [
 		mana: 150,
 		max_uses: 10,
 		never_unlimited: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/worm_shot.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 80
 			setCurrentReloadTime(current_reload_time + 40)
@@ -1230,7 +1230,7 @@ const actions: Spell[] = [
 		spawn_probability: "1,1,1,1,1",
 		price: 120,
 		mana: 50,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/bomb_detonator.xml")
 		},
 	},
@@ -1248,7 +1248,7 @@ const actions: Spell[] = [
 		mana: 30,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/laser.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/laser.xml")
 			c.fire_rate_wait = c.fire_rate_wait - 22
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_disintegrated.xml,"
@@ -1267,7 +1267,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.6,0.6,0.6,0.6,0.1",
 		price: 300,
 		mana: 110,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			
 			add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
 			add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
@@ -1295,7 +1295,7 @@ const actions: Spell[] = [
 		mana: 70,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/electric_charge.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/lightning.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			shot_effects.recoil_knockback = 180.0
@@ -1314,7 +1314,7 @@ const actions: Spell[] = [
 		price: 250,
 		mana: 70,
 		custom_xml_file: "data/entities/misc/custom_cards/electric_charge.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/ball_lightning.xml")
 			add_projectile("data/entities/projectiles/deck/ball_lightning.xml")
 			add_projectile("data/entities/projectiles/deck/ball_lightning.xml")
@@ -1334,7 +1334,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,1,1,0.5",
 		price: 180,
 		mana: 60,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/orb_laseremitter.xml")
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 20.0
 			c.fire_rate_wait = c.fire_rate_wait + 6
@@ -1353,7 +1353,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,1,0.2,0.5,1",
 		price: 200,
 		mana: 80,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/orb_laseremitter_four.xml")
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 30.0
 			c.fire_rate_wait = c.fire_rate_wait + 15
@@ -1372,7 +1372,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.3,1,0.5,0.1",
 		price: 120,
 		mana: 40,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/orb_laseremitter_cutter.xml")
 			setCurrentReloadTime(current_reload_time + 10)
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_disintegrated.xml,"
@@ -1391,7 +1391,7 @@ const actions: Spell[] = [
 		price: 70,
 		mana: 0,
 		sound_loop_tag: "sound_digger",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/digger.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 1
 			setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
@@ -1410,7 +1410,7 @@ const actions: Spell[] = [
 		price: 110,
 		mana: 0,
 		sound_loop_tag: "sound_digger",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/powerdigger.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 1
 			setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
@@ -1430,7 +1430,7 @@ const actions: Spell[] = [
 		mana: 1,
 		
 		sound_loop_tag: "sound_chainsaw",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/chainsaw.xml")
 			c.fire_rate_wait = 0
 			c.spread_degrees = c.spread_degrees + 6.0
@@ -1451,7 +1451,7 @@ const actions: Spell[] = [
 		mana: 10,
 		
 		sound_loop_tag: "sound_digger",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/luminous_drill.xml")
 			c.fire_rate_wait = c.fire_rate_wait - 35
 			setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
@@ -1471,7 +1471,7 @@ const actions: Spell[] = [
 		mana: 30,
 		
 		sound_loop_tag: "sound_digger",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_timer("data/entities/projectiles/deck/luminous_drill.xml",4,1)
 			c.fire_rate_wait = c.fire_rate_wait - 35
 			setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
@@ -1492,7 +1492,7 @@ const actions: Spell[] = [
 		mana: 20,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/tentacle.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/tentacle.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 40
 		},
@@ -1512,7 +1512,7 @@ const actions: Spell[] = [
 		mana: 20,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/tentacle_timer.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_timer("data/entities/projectiles/deck/tentacle.xml",20,1)
 			c.fire_rate_wait = c.fire_rate_wait + 40
 		},
@@ -1533,7 +1533,7 @@ const actions: Spell[] = [
 		max_uses: 20,
 		never_unlimited: true,
 		custom_xml_file: "data/entities/misc/custom_cards/heal_bullet.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/heal_bullet.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 4
 			c.spread_degrees = c.spread_degrees + 2.0
@@ -1554,7 +1554,7 @@ const actions: Spell[] = [
 		mana: 50,
 		max_uses: 15,
 		custom_xml_file: "data/entities/misc/custom_cards/spiral_shot.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/spiral_shot.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 20
 		},
@@ -1571,7 +1571,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.5,0.5,1,1",
 		price: 100,
 		mana: 40,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/magic_shield_start.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 20
 		},
@@ -1588,7 +1588,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.2,0.5,0.5,0.1",
 		price: 120,
 		mana: 60,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/big_magic_shield_start.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 		},
@@ -1604,7 +1604,7 @@ const actions: Spell[] = [
 		spawn_probability: "1,1,1,1",
 		price: 240,
 		mana: 80,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/chain_bolt.xml")
 			c.spread_degrees = c.spread_degrees + 14.0
 			c.fire_rate_wait = c.fire_rate_wait + 45
@@ -1624,7 +1624,7 @@ const actions: Spell[] = [
 		mana: 70,
 		max_uses: 15,
 		custom_xml_file: "data/entities/misc/custom_cards/fireball.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/fireball.xml")
 			c.spread_degrees = c.spread_degrees + 4.0
 			c.fire_rate_wait = c.fire_rate_wait + 50
@@ -1644,7 +1644,7 @@ const actions: Spell[] = [
 		price: 280,
 		mana: 150,
 		max_uses: 10,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/meteor.xml")
 		},
 	},
@@ -1662,7 +1662,7 @@ const actions: Spell[] = [
 		mana: 20,
 		max_uses: 60,
 		custom_xml_file: "data/entities/misc/custom_cards/flamethrower.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/flamethrower.xml")
 			c.spread_degrees = c.spread_degrees + 4.0
 		},
@@ -1681,7 +1681,7 @@ const actions: Spell[] = [
 		mana: 90,
 		max_uses: 15,
 		custom_xml_file: "data/entities/misc/custom_cards/iceball.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/iceball.xml")
 			c.spread_degrees = c.spread_degrees + 8.0
 			c.fire_rate_wait = c.fire_rate_wait + 80
@@ -1703,7 +1703,7 @@ const actions: Spell[] = [
 		mana: 20,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/slimeball.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/slime.xml")
 			c.spread_degrees = c.spread_degrees + 4.0
 			c.fire_rate_wait = c.fire_rate_wait + 10
@@ -1730,7 +1730,7 @@ const actions: Spell[] = [
 		mana: 90,
 		custom_xml_file: "data/entities/misc/custom_cards/darkflame.xml",
 		max_uses: 60,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/darkflame.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 20
 		},
@@ -1746,7 +1746,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 60,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/rocket_player.xml")
 			setCurrentReloadTime(current_reload_time + 30)
 			c.spread_degrees = c.spread_degrees + 3.0
@@ -1767,7 +1767,7 @@ const actions: Spell[] = [
 		price: 50,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/machinegun_bullet.xml")
 			c.fire_rate_wait = c.fire_rate_wait - 3
 			c.screenshake = c.screenshake + 0.2
@@ -1788,7 +1788,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 120,
 		max_uses: 10,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/pebble_player.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 80
 		},
@@ -1807,7 +1807,7 @@ const actions: Spell[] = [
 		mana: 50,
 		max_uses: 16,
 		custom_xml_file: "data/entities/misc/custom_cards/tnt.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/tnt.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			c.spread_degrees = c.spread_degrees + 6.0
@@ -1827,7 +1827,7 @@ const actions: Spell[] = [
 		mana: 70,
 		max_uses: 16,
 		custom_xml_file: "data/entities/misc/custom_cards/glitter_bomb.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/glitter_bomb.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			c.spread_degrees = c.spread_degrees + 12.0
@@ -1845,7 +1845,7 @@ const actions: Spell[] = [
 		spawn_probability: "1,1,1,1,1",
 		price: 160,
 		mana: 25,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/buckshot_player.xml")
 			add_projectile("data/entities/projectiles/deck/buckshot_player.xml")
 			add_projectile("data/entities/projectiles/deck/buckshot_player.xml")
@@ -1866,7 +1866,7 @@ const actions: Spell[] = [
 		price: 180,
 		mana: 45,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
 			add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
 			add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
@@ -1895,7 +1895,7 @@ const actions: Spell[] = [
 		spawn_probability: "1,1,1,0.1",
 		price: 220,
 		mana: 65,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/glowing_bolt.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 40
 			c.spread_degrees = c.spread_degrees + 6.0
@@ -1914,7 +1914,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8",
 		price: 200,
 		mana: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/spore_pod.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 40
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 30.0
@@ -1932,7 +1932,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.6,0.2,0.2,0.6",
 		price: 140,
 		mana: 25,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/glue_shot.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 			c.spread_degrees = c.spread_degrees + 5.0
@@ -1953,7 +1953,7 @@ const actions: Spell[] = [
 		mana: 300,
 		max_uses: 2,
 		custom_xml_file: "data/entities/misc/custom_cards/bomb_holy.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/bomb_holy.xml")
 			setCurrentReloadTime(current_reload_time + 80)
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 100.0
@@ -1976,7 +1976,7 @@ const actions: Spell[] = [
 		max_uses: 2,
 		never_unlimited: true,
 		custom_xml_file: "data/entities/misc/custom_cards/bomb_holy_giga.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/bomb_holy_giga.xml")
 			setCurrentReloadTime(current_reload_time + 160)
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 100.0
@@ -1997,7 +1997,7 @@ const actions: Spell[] = [
 		mana: 75,
 		max_uses: 10,
 		custom_xml_file: "data/entities/misc/custom_cards/propane_tank.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/propane_tank.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 100
 		},
@@ -2015,7 +2015,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 75,
 		max_uses: 6,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/bomb_cart.xml")
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 200.0
 			c.fire_rate_wait = c.fire_rate_wait + 60
@@ -2033,7 +2033,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.3,0.2,0.1",
 		price: 200,
 		mana: 40,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/orb_cursed.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 20
 			shot_effects.recoil_knockback = 40.0
@@ -2051,7 +2051,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.5,0.5,1.0,1.0,1.0",
 		price: 200,
 		mana: 70,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/orb_expanding.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 			shot_effects.recoil_knockback = 20.0
@@ -2071,7 +2071,7 @@ const actions: Spell[] = [
 		price: 300,
 		mana: 240,
 		max_uses: 3,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/crumbling_earth.xml")
 		},
 	},
@@ -2089,7 +2089,7 @@ const actions: Spell[] = [
 		mana: 100,
 		max_uses: 3,
 		custom_xml_file: "data/entities/misc/custom_cards/summon_rock.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/rock.xml")
 		},
 	},
@@ -2106,7 +2106,7 @@ const actions: Spell[] = [
 		price: 220,
 		mana: 100,
 		max_uses: 2,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() )
 			let types = ["monster","slime","red","fire"]
 			let rnd = Random(1, types.length)
@@ -2126,7 +2126,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 140,
 		mana: 30,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_death("data/entities/items/pickup/egg_hollow.xml", 1)
 			c.fire_rate_wait = c.fire_rate_wait - 12
 		},
@@ -2144,7 +2144,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 40,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/tntbox.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 		},
@@ -2162,7 +2162,7 @@ const actions: Spell[] = [
 		price: 170,
 		mana: 40,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/tntbox_big.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 		},
@@ -2179,7 +2179,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.2,0.5,0.5",
 		price: 90,
 		mana: 70,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/swarm_fly.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_fly.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_fly.xml")
@@ -2202,7 +2202,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.2,0.5,0.5",
 		price: 100,
 		mana: 80,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/swarm_firebug.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_firebug.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_firebug.xml")
@@ -2224,7 +2224,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.2,0.5,0.5",
 		price: 120,
 		mana: 90,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
 			add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
@@ -2248,7 +2248,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.5,0.5",
 		price: 160,
 		mana: 120,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/friend_fly.xml")
 			c.spread_degrees = c.spread_degrees + 24.0
 			c.fire_rate_wait = c.fire_rate_wait + 80
@@ -2270,7 +2270,7 @@ const actions: Spell[] = [
 		mana: 20,
 		max_uses: 20,
 		custom_xml_file: "data/entities/misc/custom_cards/acidshot.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/acidshot.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 10
 		},
@@ -2289,7 +2289,7 @@ const actions: Spell[] = [
 		mana: 120,
 		max_uses: 3,
 		custom_xml_file: "data/entities/misc/custom_cards/thunderball.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/thunderball.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 120
 		},
@@ -2309,7 +2309,7 @@ const actions: Spell[] = [
 		mana: 10,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/firebomb.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/firebomb.xml")
 		},
 	},
@@ -2325,7 +2325,7 @@ const actions: Spell[] = [
 		spawn_probability: "1,1,1,1",
 		price: 10,
 		mana: 5,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/chunk_of_soil.xml")
 		},
 	},
@@ -2343,7 +2343,7 @@ const actions: Spell[] = [
 		price: 210,
 		mana: 80,
 		custom_xml_file: "data/entities/misc/custom_cards/death_cross.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/death_cross.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 40
 		},
@@ -2362,7 +2362,7 @@ const actions: Spell[] = [
 		mana: 150,
 		max_uses: 8,
 		custom_xml_file: "data/entities/misc/custom_cards/death_cross.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/death_cross_big.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 70
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 30.0
@@ -2381,7 +2381,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			for (const i of luaFor(1, 6)) {
 				add_projectile("data/entities/projectiles/deck/infestation.xml")
 			}
@@ -2403,7 +2403,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 70,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/wall_horizontal.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 5
 		},
@@ -2421,7 +2421,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 70,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/wall_vertical.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 5
 		},
@@ -2439,7 +2439,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 70,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/wall_square.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 20
 		},
@@ -2457,7 +2457,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 40,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/temporary_wall.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 40
 		},
@@ -2475,7 +2475,7 @@ const actions: Spell[] = [
 		price: 90,
 		mana: 30,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/temporary_platform.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 40
 		},
@@ -2493,7 +2493,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 90,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/purple_explosion_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 10
 			c.speed_multiplier = c.speed_multiplier - 2
@@ -2517,7 +2517,7 @@ const actions: Spell[] = [
 		spawn_probability: "1,1,1,1,1,1",
 		price: 240,
 		mana: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_death("data/entities/projectiles/deck/delayed_spell.xml", 3)
 			c.fire_rate_wait = c.fire_rate_wait + 10
 		},
@@ -2534,7 +2534,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.6,0.6,0.6,0.6,0.6,0.6",
 		price: 90,
 		mana: 0,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_death("data/entities/projectiles/deck/long_distance_cast.xml", 1)
 			c.fire_rate_wait = c.fire_rate_wait - 5
 		},
@@ -2551,7 +2551,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.6,0.6,0.6,0.6,0.6,0.6",
 		price: 190,
 		mana: 100,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_death("data/entities/projectiles/deck/teleport_cast.xml", 1)
 			c.fire_rate_wait = c.fire_rate_wait + 20
 			c.spread_degrees = c.spread_degrees + 24
@@ -2569,7 +2569,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.2,0.2,0.6,0.6,0.6",
 		price: 160,
 		mana: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile_trigger_death("data/entities/projectiles/deck/super_teleport_cast.xml", 1)
 			c.fire_rate_wait = c.fire_rate_wait + 10
 			c.spread_degrees = c.spread_degrees - 6
@@ -2589,7 +2589,7 @@ const actions: Spell[] = [
 		price: 80,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/mist_radioactive.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 10
 		},
@@ -2607,7 +2607,7 @@ const actions: Spell[] = [
 		price: 80,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/mist_alcohol.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 10
 		},
@@ -2625,7 +2625,7 @@ const actions: Spell[] = [
 		price: 80,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/mist_slime.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 10
 		},
@@ -2643,7 +2643,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 40,
 		max_uses: 10,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/mist_blood.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 10
 		},
@@ -2661,7 +2661,7 @@ const actions: Spell[] = [
 		price: 170,
 		mana: 20,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/circle_fire.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 20
 		},
@@ -2679,7 +2679,7 @@ const actions: Spell[] = [
 		price: 180,
 		mana: 40,
 		max_uses: 4,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/circle_acid.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 20
 		},
@@ -2697,7 +2697,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 20,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/circle_oil.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 20
 		},
@@ -2715,7 +2715,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 20,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/circle_water.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 20
 		},
@@ -2734,7 +2734,7 @@ const actions: Spell[] = [
 		price: 110,
 		mana: 0,
 		sound_loop_tag: "sound_spray",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/material_water.xml")
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_wet.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 15
@@ -2754,7 +2754,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 0,
 		sound_loop_tag: "sound_spray",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/material_oil.xml")
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_oiled.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 15
@@ -2776,7 +2776,7 @@ const actions: Spell[] = [
 		max_uses: 250,
 		mana: 0,
 		sound_loop_tag: "sound_spray",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/material_blood.xml")
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_bloody.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 15
@@ -2798,7 +2798,7 @@ const actions: Spell[] = [
 		
 		mana: 0,
 		sound_loop_tag: "sound_spray",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/material_acid.xml")
 			c.fire_rate_wait = c.fire_rate_wait - 15
 			setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
@@ -2820,7 +2820,7 @@ const actions: Spell[] = [
 		
 		mana: 0,
 		sound_loop_tag: "sound_spray",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/material_cement.xml")
 			c.fire_rate_wait = c.fire_rate_wait - 15
 			setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
@@ -2842,7 +2842,7 @@ const actions: Spell[] = [
 		mana: 40,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/teleport_projectile.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/teleport_projectile.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			c.spread_degrees = c.spread_degrees - 2.0
@@ -2862,7 +2862,7 @@ const actions: Spell[] = [
 		mana: 20,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/teleport_projectile_short.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/teleport_projectile_short.xml")
 			c.spread_degrees = c.spread_degrees - 2.0
 		},
@@ -2881,7 +2881,7 @@ const actions: Spell[] = [
 		mana: 40,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/teleport_projectile_static.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/teleport_projectile_static.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			c.spread_degrees = c.spread_degrees - 2.0
@@ -2900,7 +2900,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/swapper.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			c.screenshake = c.screenshake + 0.5
@@ -2920,7 +2920,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.6,0.6,0.6,0.4,0.4,0.4",
 		price: 130,
 		mana: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/teleport_projectile_closer.xml")
 			c.spread_degrees = c.spread_degrees - 2.0
 		},
@@ -2942,7 +2942,7 @@ const actions: Spell[] = [
 		mana: 200,
 		max_uses: 1,
 		custom_xml_file: "data/entities/misc/custom_cards/nuke.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/nuke.xml")
 			c.fire_rate_wait = 20
 			c.speed_multiplier = c.speed_multiplier * 0.75
@@ -2980,7 +2980,7 @@ const actions: Spell[] = [
 		mana: 500,
 		max_uses: 1,
 		custom_xml_file: "data/entities/misc/custom_cards/nuke_giga.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/nuke_giga.xml")
 			c.fire_rate_wait = 50
 			c.speed_multiplier = c.speed_multiplier * 0.5
@@ -3016,7 +3016,7 @@ const actions: Spell[] = [
 		price: 220,
 		mana: 70,
 		max_uses: 25,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() )
 			let types = ["pink","green","blue","orange"]
 			let rnd = Random(1, types.length)
@@ -3042,7 +3042,7 @@ const actions: Spell[] = [
 		mana: 300,
 		max_uses: 1,
 		never_unlimited: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/wand_ghost_player.xml")
 			add_projectile("data/entities/particles/image_emitters/wand_effect.xml")
 		},
@@ -3061,7 +3061,7 @@ const actions: Spell[] = [
 		mana: 300,
 		max_uses: 1,
 		never_unlimited: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/touch_gold.xml")
 		},
 	},
@@ -3078,7 +3078,7 @@ const actions: Spell[] = [
 		price: 420,
 		mana: 280,
 		max_uses: 5,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/touch_water.xml")
 		},
 	},
@@ -3095,7 +3095,7 @@ const actions: Spell[] = [
 		price: 380,
 		mana: 260,
 		max_uses: 5,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/touch_oil.xml")
 		},
 	},
@@ -3112,7 +3112,7 @@ const actions: Spell[] = [
 		price: 360,
 		mana: 240,
 		max_uses: 5,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/touch_alcohol.xml")
 		},
 	},
@@ -3129,7 +3129,7 @@ const actions: Spell[] = [
 		price: 390,
 		mana: 270,
 		max_uses: 3,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/touch_blood.xml")
 		},
 	},
@@ -3146,7 +3146,7 @@ const actions: Spell[] = [
 		price: 350,
 		mana: 230,
 		max_uses: 5,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/touch_smoke.xml")
 		},
 	},
@@ -3165,7 +3165,7 @@ const actions: Spell[] = [
 		mana: 600,
 		max_uses: 5,
 		ai_never_uses: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/destruction.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 100
 			setCurrentReloadTime(current_reload_time + 300)
@@ -3184,7 +3184,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions( 2, true )
 		},
 	},
@@ -3200,7 +3200,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 2,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions( 3, true )
 		},
 	},
@@ -3216,7 +3216,7 @@ const actions: Spell[] = [
 		price: 180,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions( 4, true )
 		},
 	},
@@ -3233,7 +3233,7 @@ const actions: Spell[] = [
 		price: 300,
 		mana: 30,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions( 8, true )
 		},
 	},
@@ -3250,7 +3250,7 @@ const actions: Spell[] = [
 		price: 500,
 		mana: 50,
 		max_uses: 30,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			if ( deck.length > 0 )  {
 				draw_actions( deck.length, true )
 			}
@@ -3269,7 +3269,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions( 2, true )
 			c.spread_degrees = c.spread_degrees + 10.0
 		},
@@ -3286,7 +3286,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 1,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions( 3, true )
 			c.spread_degrees = c.spread_degrees + 20.0
 		},
@@ -3303,7 +3303,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 2,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions( 4, true )
 			c.spread_degrees = c.spread_degrees + 40.0
 		},
@@ -3320,7 +3320,7 @@ const actions: Spell[] = [
 		price: 80,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions(2, true)
 			c.pattern_degrees = 180
 		},
@@ -3337,7 +3337,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 2,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions(2, true)
 			c.pattern_degrees = 45
 		},
@@ -3354,7 +3354,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 3,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions(3, true)
 			c.pattern_degrees = 90
 		},
@@ -3371,7 +3371,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 3,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions(3, true)
 			c.pattern_degrees = 20
 		},
@@ -3388,7 +3388,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 6,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions(6, true)
 			c.pattern_degrees = 180
 		},
@@ -3405,7 +3405,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions(5, true)
 			c.pattern_degrees = 180
 			
@@ -3424,7 +3424,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 1,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.spread_degrees = c.spread_degrees - 60.0
 			draw_actions( 1, true )
 		},
@@ -3440,7 +3440,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8",
 		price: 100,
 		mana: 2,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait - 7
 			setCurrentReloadTime(current_reload_time - 15)
 			c.spread_degrees = c.spread_degrees + 720
@@ -3459,7 +3459,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 12,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait    = c.fire_rate_wait - 10
 			setCurrentReloadTime(current_reload_time - 20)
 			draw_actions( 1, true )
@@ -3478,7 +3478,7 @@ const actions: Spell[] = [
 		mana: 40,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/lifetime.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.lifetime_add 		= c.lifetime_add + 75
 			c.fire_rate_wait = c.fire_rate_wait + 13
 			draw_actions( 1, true )
@@ -3497,7 +3497,7 @@ const actions: Spell[] = [
 		mana: 10,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/lifetime_down.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.lifetime_add 		= c.lifetime_add - 42
 			c.fire_rate_wait = c.fire_rate_wait - 15
 			draw_actions( 1, true )
@@ -3517,7 +3517,7 @@ const actions: Spell[] = [
 		price: 50,
 		mana: 1,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/nolla.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 15
 			draw_actions( 1, true )
@@ -3535,7 +3535,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.2,0.3,0.4,0.4",
 		price: 50,
 		mana: 0,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			setCurrentReloadTime(90)
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback - 80.0
 			draw_actions( 1, true )
@@ -3554,7 +3554,7 @@ const actions: Spell[] = [
 		price: 50,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/explosion_remove.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 15
 			c.explosion_radius = c.explosion_radius - 30.0
@@ -3575,7 +3575,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/explosion_tiny.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 15
 			c.explosion_radius = c.explosion_radius - 30.0
@@ -3596,7 +3596,7 @@ const actions: Spell[] = [
 		price: 40,
 		mana: 10,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/laser_emitter_wider.xml,"
 			draw_actions( 1, true )
 		},
@@ -3615,7 +3615,7 @@ const actions: Spell[] = [
 		mana: -30,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/mana_reduce.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 10
 			draw_actions( 1, true )
 		},
@@ -3633,19 +3633,19 @@ const actions: Spell[] = [
 		price: 150,
 		mana: -100,
 		custom_xml_file: "data/entities/misc/custom_cards/blood_magic.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/particles/blood_sparks.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 20
 			setCurrentReloadTime(current_reload_time - 20)
 			draw_actions( 1, true )
 			
-			let entity_id = GetUpdatedEntityID()
+			let entity_id = GetUpdatedEntityID(this.id)
 			
 			let dcomps = EntityGetComponent( entity_id, "DamageModelComponent" )
 			
 			if (( dcomps != null ) && ( dcomps.length > 0 ))  {
 				for (const [a, b] of ipairs(dcomps, 'dcomps')) {
-					let hp = ComponentGetValue2( b, "hp" )
+					let hp = ComponentGetValue2(this.id,  b, "hp" )
 					hp = Math.max( hp - 0.16, 0.04 )
 					ComponentSetValue2( b, "hp", hp )
 				}
@@ -3665,14 +3665,14 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 30,
 		custom_xml_file: "data/entities/misc/custom_cards/money_magic.xml",
-		action: (c: GunActionState) => {
-			let entity_id = GetUpdatedEntityID()
+		action: function(c: GunActionState) {
+			let entity_id = GetUpdatedEntityID(this.id)
 			
-			let dcomp = EntityGetFirstComponent( entity_id, "WalletComponent" )
+			let dcomp = EntityGetFirstComponent(this.id,  entity_id, "WalletComponent" )
 			
 			if ( dcomp != null )  {
-				let money = ComponentGetValue2( dcomp, "money" )
-				let moneyspent = ComponentGetValue2( dcomp, "money_spent" )
+				let money = ComponentGetValue2(this.id,  dcomp, "money" )
+				let moneyspent = ComponentGetValue2(this.id,  dcomp, "money_spent" )
 				let damage = Math.min( Math.floor( money * 0.05 ), 24000 )
 				
 				if (( damage > 1 ) && ( money >= 10 ))  {
@@ -3715,13 +3715,13 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 20,
 		custom_xml_file: "data/entities/misc/custom_cards/blood_to_power.xml",
-		action: (c: GunActionState) => {
-			let entity_id = GetUpdatedEntityID()
+		action: function(c: GunActionState) {
+			let entity_id = GetUpdatedEntityID(this.id)
 			
-			let dcomp = EntityGetFirstComponent( entity_id, "DamageModelComponent" )
+			let dcomp = EntityGetFirstComponent(this.id,  entity_id, "DamageModelComponent" )
 			
 			if ( dcomp != null )  {
-				let hp = ComponentGetValue2( dcomp, "hp" )
+				let hp = ComponentGetValue2(this.id,  dcomp, "hp" )
 				let damage = Math.min( hp * 0.44, 960 )
 				let self_damage = hp * 0.2
 				
@@ -3752,7 +3752,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.1,1",
 		price: 250,
 		mana: 250,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			let hand_count = hand.length
 			
 			for (const [i, v] of ipairs(hand, 'hand')) {
@@ -3780,7 +3780,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.5,0.5,0.5,0.5,1",
 		price: 200,
 		mana: 10,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/quantum_split.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 5
 			draw_actions( 1, true )
@@ -3798,7 +3798,7 @@ const actions: Spell[] = [
 		price: 50,
 		mana: 1,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.gravity = c.gravity + 600.0
 			draw_actions( 1, true )
 		},
@@ -3815,7 +3815,7 @@ const actions: Spell[] = [
 		price: 50,
 		mana: 1,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.gravity = c.gravity - 600.0
 			draw_actions( 1, true )
 		},
@@ -3834,7 +3834,7 @@ const actions: Spell[] = [
 		price: 10,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/sinewave.xml,"
 			c.speed_multiplier = c.speed_multiplier * 2
 			
@@ -3860,7 +3860,7 @@ const actions: Spell[] = [
 		price: 10,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/chaotic_arc.xml,"
 			c.speed_multiplier = c.speed_multiplier * 2
 			
@@ -3886,7 +3886,7 @@ const actions: Spell[] = [
 		price: 20,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/pingpong_path.xml,"
 			c.lifetime_add = c.lifetime_add + 25
 			draw_actions( 1, true )
@@ -3905,7 +3905,7 @@ const actions: Spell[] = [
 		price: 30,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/avoiding_arc.xml,"
 			c.fire_rate_wait    = c.fire_rate_wait + 10
 			draw_actions( 1, true )
@@ -3924,7 +3924,7 @@ const actions: Spell[] = [
 		price: 30,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/floating_arc.xml,"
 			c.fire_rate_wait    = c.fire_rate_wait + 10
 			draw_actions( 1, true )
@@ -3943,7 +3943,7 @@ const actions: Spell[] = [
 		price: 30,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/fly_downwards.xml,"
 			draw_actions( 1, true )
 			c.fire_rate_wait    = c.fire_rate_wait - 3
@@ -3962,7 +3962,7 @@ const actions: Spell[] = [
 		price: 20,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/fly_upwards.xml,"
 			draw_actions( 1, true )
 			c.fire_rate_wait    = c.fire_rate_wait - 3
@@ -3981,7 +3981,7 @@ const actions: Spell[] = [
 		price: 20,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/horizontal_arc.xml,"
 			draw_actions( 1, true )
 			c.damage_projectile_add = c.damage_projectile_add + 0.3
@@ -4001,7 +4001,7 @@ const actions: Spell[] = [
 		price: 30,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/line_arc.xml,"
 			draw_actions( 1, true )
 			c.damage_projectile_add = c.damage_projectile_add + 0.2
@@ -4021,7 +4021,7 @@ const actions: Spell[] = [
 		price: 30,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/spiraling_shot.xml,"
 			draw_actions( 1, true )
 			c.damage_projectile_add = c.damage_projectile_add + 0.1
@@ -4042,7 +4042,7 @@ const actions: Spell[] = [
 		price: 30,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/orbit_shot.xml,"
 			draw_actions( 1, true )
 			c.damage_projectile_add = c.damage_projectile_add + 0.1
@@ -4063,7 +4063,7 @@ const actions: Spell[] = [
 		price: 170,
 		mana: 2,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/phasing_arc.xml,"
 			draw_actions( 1, true )
 			c.fire_rate_wait    = c.fire_rate_wait - 12
@@ -4090,7 +4090,7 @@ const actions: Spell[] = [
 		price: 50,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.bounces = c.bounces + 10
 			draw_actions( 1, true )
 		},
@@ -4107,7 +4107,7 @@ const actions: Spell[] = [
 		price: 50,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/remove_bounce.xml,"
 			c.bounces = 0
 			draw_actions( 1, true )
@@ -4126,7 +4126,7 @@ const actions: Spell[] = [
 		price: 220,
 		mana: 70,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/homing.xml,data/entities/particles/tinyspark_white.xml,"
 			draw_actions( 1, true )
 		},
@@ -4144,7 +4144,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/homing_short.xml,data/entities/particles/tinyspark_white_weak.xml,"
 			draw_actions( 1, true )
 		},
@@ -4162,7 +4162,7 @@ const actions: Spell[] = [
 		price: 175,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/homing_rotate.xml,data/entities/particles/tinyspark_white.xml,"
 			draw_actions( 1, true )
 		},
@@ -4180,7 +4180,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 10,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/homing_shooter.xml,data/entities/particles/tinyspark_white.xml,"
 			draw_actions( 1, true )
 		},
@@ -4197,7 +4197,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.4,0.4,0.4,0.4,0.4",
 		price: 150,
 		mana: 25,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/autoaim.xml,"
 			draw_actions( 1, true )
 		},
@@ -4215,7 +4215,7 @@ const actions: Spell[] = [
 		price: 180,
 		mana: 60,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/homing_accelerating.xml,data/entities/particles/tinyspark_white_small.xml,"
 			draw_actions( 1, true )
 		},
@@ -4233,7 +4233,7 @@ const actions: Spell[] = [
 		price: 175,
 		mana: 30,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/homing_cursor.xml,data/entities/particles/tinyspark_white.xml,"
 			draw_actions( 1, true )
 		},
@@ -4251,7 +4251,7 @@ const actions: Spell[] = [
 		price: 175,
 		mana: 60,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/homing_area.xml,data/entities/particles/tinyspark_white.xml,"
 			c.fire_rate_wait    = c.fire_rate_wait + 8
 			c.spread_degrees = c.spread_degrees + 6
@@ -4280,7 +4280,7 @@ const actions: Spell[] = [
 		price: 190,
 		mana: 140,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.damage_projectile_add = c.damage_projectile_add - 0.6
 			c.extra_entities = c.extra_entities + "data/entities/misc/piercing_shot.xml,"
 			c.friendly_fire		= true
@@ -4300,7 +4300,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 160,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/clipping_shot.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			setCurrentReloadTime(current_reload_time + 40)
@@ -4321,7 +4321,7 @@ const actions: Spell[] = [
 		mana: 5,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/damage.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.damage_projectile_add = c.damage_projectile_add + 0.4
 			c.gore_particles    = c.gore_particles + 5
 			c.fire_rate_wait    = c.fire_rate_wait + 5
@@ -4345,7 +4345,7 @@ const actions: Spell[] = [
 		mana: 15,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/damage_random.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() + 253 )
 			let multiplier = 0
 			multiplier = Random( -3, 4 ) * Random( 0, 2 )
@@ -4372,7 +4372,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 2,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.damage_projectile_add = c.damage_projectile_add + 1.3
 			c.gore_particles    = c.gore_particles + 15
 			c.fire_rate_wait    = c.fire_rate_wait + 8
@@ -4398,7 +4398,7 @@ const actions: Spell[] = [
 		max_uses: 20,
 		never_unlimited: true,
 		custom_xml_file: "data/entities/misc/custom_cards/damage_forever.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			if ( mana > 50 )  {
 				let manaforspell = mana - 50
 				c.damage_projectile_add = c.damage_projectile_add + 0.025 * manaforspell
@@ -4426,7 +4426,7 @@ const actions: Spell[] = [
 		mana: 5,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/critical_hit.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.damage_critical_chance = c.damage_critical_chance + 15
 			draw_actions( 1, true )
 		},
@@ -4444,7 +4444,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 30,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/area_damage.xml,"
 			draw_actions( 1, true )
 		},
@@ -4462,7 +4462,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 110,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/spells_to_power.xml,"
 			c.fire_rate_wait    = c.fire_rate_wait + 40
 			draw_actions( 1, true )
@@ -4481,7 +4481,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 110,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/essence_to_power.xml,"
 			c.fire_rate_wait    = c.fire_rate_wait + 20
 			draw_actions( 1, true )
@@ -4502,7 +4502,7 @@ const actions: Spell[] = [
 		mana: 7,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/heavy_shot.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.damage_projectile_add = c.damage_projectile_add + 1.75
 			c.fire_rate_wait    = c.fire_rate_wait + 10
 			c.gore_particles    = c.gore_particles + 10
@@ -4533,7 +4533,7 @@ const actions: Spell[] = [
 		mana: 5,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/light_shot.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.damage_projectile_add = c.damage_projectile_add - 1.0
 			c.explosion_radius = c.explosion_radius - 10.0
 			if (c.explosion_radius < 0)  {
@@ -4567,7 +4567,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.knockback_force = c.knockback_force + 5
 			draw_actions( 1, true )
 		},
@@ -4584,7 +4584,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 200.0
 			draw_actions( 1, true )
 		},
@@ -4601,7 +4601,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 5,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback - 200
 			draw_actions( 1, true )
 		},
@@ -4619,7 +4619,7 @@ const actions: Spell[] = [
 		mana: 3,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/speed.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.speed_multiplier = c.speed_multiplier * 2.5
 			
 			if ( c.speed_multiplier >= 20 )  {
@@ -4645,7 +4645,7 @@ const actions: Spell[] = [
 		mana: 20,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/accelerating_shot.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait    = c.fire_rate_wait + 8
 			c.speed_multiplier = c.speed_multiplier * 0.32
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
@@ -4674,7 +4674,7 @@ const actions: Spell[] = [
 		mana: 10,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/decelerating_shot.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait    = c.fire_rate_wait - 8
 			c.speed_multiplier = c.speed_multiplier * 1.68
 			shot_effects.recoil_knockback = shot_effects.recoil_knockback - 10.0
@@ -4703,7 +4703,7 @@ const actions: Spell[] = [
 		mana: 30,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/explosive_projectile.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.explosion_radius = c.explosion_radius + 15.0
 			c.damage_explosion_add = c.damage_explosion_add + 0.2
 			c.fire_rate_wait   = c.fire_rate_wait + 40
@@ -4732,7 +4732,7 @@ const actions: Spell[] = [
 		price: 80,
 		mana: 30,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/water_to_poison.xml,data/entities/particles/tinyspark_purple.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 10
 			draw_actions( 1, true )
@@ -4751,7 +4751,7 @@ const actions: Spell[] = [
 		price: 80,
 		mana: 30,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/blood_to_acid.xml,data/entities/particles/tinyspark_red.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 10
 			draw_actions( 1, true )
@@ -4770,7 +4770,7 @@ const actions: Spell[] = [
 		price: 80,
 		mana: 30,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/lava_to_blood.xml,data/entities/particles/tinyspark_orange.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 10
 			draw_actions( 1, true )
@@ -4789,7 +4789,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/liquid_to_explosion.xml,data/entities/particles/tinyspark_red.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 20
 			draw_actions( 1, true )
@@ -4808,7 +4808,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 50,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/toxic_to_acid.xml,data/entities/particles/tinyspark_green.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 10
 			draw_actions( 1, true )
@@ -4827,7 +4827,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 70,
 		max_uses: 8,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/static_to_sand.xml,data/entities/particles/tinyspark_yellow.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 60
 			draw_actions( 1, true )
@@ -4846,7 +4846,7 @@ const actions: Spell[] = [
 		price: 180,
 		mana: 80,
 		max_uses: 8,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/transmutation.xml,data/entities/particles/tinyspark_purple_bright.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 20
 			draw_actions( 1, true )
@@ -4865,7 +4865,7 @@ const actions: Spell[] = [
 		price: 240,
 		mana: 120,
 		max_uses: 30,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/random_explosion.xml,data/entities/particles/tinyspark_purple_bright.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 40
 			draw_actions( 1, true )
@@ -4884,7 +4884,7 @@ const actions: Spell[] = [
 		price: 80,
 		mana: 20,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_necromancy.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 10
 			draw_actions( 1, true )
@@ -4901,7 +4901,7 @@ const actions: Spell[] = [
 		spawn_probability: "1,0.8,0.6,0.4,0.2",
 		price: 20,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/light.xml,"
 			draw_actions( 1, true )
 		},
@@ -4921,7 +4921,7 @@ const actions: Spell[] = [
 		
 		custom_xml_file: "data/entities/misc/custom_cards/explosion.xml",
 		is_dangerous_blast: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/explosion.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			c.screenshake = c.screenshake + 2.5
@@ -4942,7 +4942,7 @@ const actions: Spell[] = [
 		
 		custom_xml_file: "data/entities/misc/custom_cards/explosion_light.xml",
 		is_dangerous_blast: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/explosion_light.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			c.screenshake = c.screenshake + 2.5
@@ -4963,7 +4963,7 @@ const actions: Spell[] = [
 		
 		custom_xml_file: "data/entities/misc/custom_cards/fire_blast.xml",
 		is_dangerous_blast: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/fireblast.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			c.screenshake = c.screenshake + 0.5
@@ -4984,7 +4984,7 @@ const actions: Spell[] = [
 		
 		custom_xml_file: "data/entities/misc/custom_cards/poison_blast.xml",
 		is_dangerous_blast: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/poison_blast.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			c.screenshake = c.screenshake + 0.5
@@ -5005,7 +5005,7 @@ const actions: Spell[] = [
 		
 		custom_xml_file: "data/entities/misc/custom_cards/alcohol_blast.xml",
 		is_dangerous_blast: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/alcohol_blast.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 3
 			c.screenshake = c.screenshake + 0.5
@@ -5026,7 +5026,7 @@ const actions: Spell[] = [
 		
 		custom_xml_file: "data/entities/misc/custom_cards/thunder_blast.xml",
 		is_dangerous_blast: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/thunder_blast.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 			c.screenshake = c.screenshake + 3.0
@@ -5047,7 +5047,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 30,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/berserk_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5065,7 +5065,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 50,
 		max_uses: 5,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/polymorph_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5083,7 +5083,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 20,
 		max_uses: 10,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/chaos_polymorph_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5101,7 +5101,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 60,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/electrocution_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5119,7 +5119,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 50,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/freeze_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5138,7 +5138,7 @@ const actions: Spell[] = [
 		mana: 80,
 		max_uses: 2,
 		never_unlimited: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/regeneration_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5156,7 +5156,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 30,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/teleportation_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5174,7 +5174,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 10,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/levitation_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5193,7 +5193,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 20,
 		max_uses: 10,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/shield_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5211,7 +5211,7 @@ const actions: Spell[] = [
 		price: 250,
 		mana: 120,
 		max_uses: 6,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/projectile_transmutation_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5229,7 +5229,7 @@ const actions: Spell[] = [
 		price: 300,
 		mana: 140,
 		max_uses: 6,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/projectile_thunder_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5247,7 +5247,7 @@ const actions: Spell[] = [
 		price: 250,
 		mana: 120,
 		max_uses: 6,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/projectile_gravity_field.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5265,7 +5265,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 40,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/vacuum_powder.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 10
 		},
@@ -5283,7 +5283,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 40,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/vacuum_liquid.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 10
 		},
@@ -5301,7 +5301,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 50,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/vacuum_entities.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 10
 		},
@@ -5320,7 +5320,7 @@ const actions: Spell[] = [
 		price: 350,
 		mana: 140,
 		max_uses: 3,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/sea_lava.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5338,7 +5338,7 @@ const actions: Spell[] = [
 		price: 350,
 		mana: 140,
 		max_uses: 3,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/sea_alcohol.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5356,7 +5356,7 @@ const actions: Spell[] = [
 		price: 350,
 		mana: 140,
 		max_uses: 3,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/sea_oil.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5374,7 +5374,7 @@ const actions: Spell[] = [
 		price: 350,
 		mana: 140,
 		max_uses: 3,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/sea_water.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5392,7 +5392,7 @@ const actions: Spell[] = [
 		price: 350,
 		mana: 140,
 		max_uses: 3,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/sea_acid.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5410,7 +5410,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 140,
 		max_uses: 3,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/sea_acid_gas.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5428,7 +5428,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 30,
 		max_uses: 10,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/cloud_water.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5446,7 +5446,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 20,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/cloud_oil.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5464,7 +5464,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 60,
 		max_uses: 3,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/cloud_blood.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 		},
@@ -5482,7 +5482,7 @@ const actions: Spell[] = [
 		price: 180,
 		mana: 90,
 		max_uses: 8,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/cloud_acid.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -5501,7 +5501,7 @@ const actions: Spell[] = [
 		price: 190,
 		mana: 90,
 		max_uses: 5,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/cloud_thunder.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 30
 		},
@@ -5520,7 +5520,7 @@ const actions: Spell[] = [
 		mana: 8,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/electric_charge.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.lightning_count = c.lightning_count + 1
 			c.damage_electricity_add = c.damage_electricity_add + 0.1
 			c.extra_entities = c.extra_entities + "data/entities/particles/electricity.xml,"
@@ -5541,7 +5541,7 @@ const actions: Spell[] = [
 		mana: 120,
 		max_uses: 10,
 		never_unlimited: true,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/matter_eater.xml,"
 			draw_actions( 1, true )
 		},
@@ -5560,7 +5560,7 @@ const actions: Spell[] = [
 		mana: 10,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/freeze.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.damage_ice_add = c.damage_ice_add + 0.2
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_frozen.xml,"
 			c.extra_entities = c.extra_entities + "data/entities/particles/freeze_charge.xml,"
@@ -5580,7 +5580,7 @@ const actions: Spell[] = [
 		price: 70,
 		mana: 10,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_burning_critical_hit.xml,"
 			draw_actions( 1, true )
 		},
@@ -5598,7 +5598,7 @@ const actions: Spell[] = [
 		price: 70,
 		mana: 10,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_critical_water.xml,"
 			draw_actions( 1, true )
 		},
@@ -5616,7 +5616,7 @@ const actions: Spell[] = [
 		price: 70,
 		mana: 10,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_critical_oil.xml,"
 			draw_actions( 1, true )
 		},
@@ -5634,7 +5634,7 @@ const actions: Spell[] = [
 		price: 70,
 		mana: 10,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_critical_blood.xml,"
 			draw_actions( 1, true )
 		},
@@ -5652,7 +5652,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 70,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_toxic_charm.xml,"
 			draw_actions( 1, true )
 		},
@@ -5670,7 +5670,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 20,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_explode_slime.xml,"
 			draw_actions( 1, true )
 		},
@@ -5688,7 +5688,7 @@ const actions: Spell[] = [
 		price: 300,
 		mana: 200,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_explode_slime_giga.xml,data/entities/particles/tinyspark_purple.xml,"
 			draw_actions( 1, true )
 		},
@@ -5706,7 +5706,7 @@ const actions: Spell[] = [
 		price: 140,
 		mana: 20,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_explode_alcohol.xml,"
 			draw_actions( 1, true )
 		},
@@ -5724,7 +5724,7 @@ const actions: Spell[] = [
 		price: 300,
 		mana: 200,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_explode_alcohol_giga.xml,data/entities/particles/tinyspark_orange.xml,"
 			draw_actions( 1, true )
 		},
@@ -5740,7 +5740,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.2,0.2,0.2",
 		price: 140,
 		mana: 10,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_petrify.xml,"
 			draw_actions( 1, true )
 		},
@@ -5758,7 +5758,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,1,1,1",
 		price: 200,
 		mana: 90,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/rocket_downwards.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 25
 			draw_actions( 1, true )
@@ -5776,7 +5776,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.5,0.5,0.5",
 		price: 200,
 		mana: 100,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/rocket_octagon.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 20
 			draw_actions( 1, true )
@@ -5795,7 +5795,7 @@ const actions: Spell[] = [
 		price: 0,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/fizzle.xml,"
 			c.speed_multiplier = c.speed_multiplier * 1.2
 			c.fire_rate_wait = c.fire_rate_wait - 10
@@ -5822,7 +5822,7 @@ const actions: Spell[] = [
 		price: 180,
 		mana: 20,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/bounce_explosion.xml,"
 			c.bounces = c.bounces + 1
 			c.fire_rate_wait = c.fire_rate_wait + 25
@@ -5843,7 +5843,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 20,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/bounce_spark.xml,"
 			c.bounces = c.bounces + 1
 			c.fire_rate_wait = c.fire_rate_wait + 8
@@ -5864,7 +5864,7 @@ const actions: Spell[] = [
 		price: 180,
 		mana: 30,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/bounce_laser.xml,"
 			c.bounces = c.bounces + 1
 			c.fire_rate_wait = c.fire_rate_wait + 12
@@ -5885,7 +5885,7 @@ const actions: Spell[] = [
 		price: 180,
 		mana: 40,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/bounce_laser_emitter.xml,"
 			c.bounces = c.bounces + 1
 			c.fire_rate_wait = c.fire_rate_wait + 12
@@ -5906,7 +5906,7 @@ const actions: Spell[] = [
 		price: 250,
 		mana: 80,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/bounce_larpa.xml,"
 			c.bounces = c.bounces + 1
 			c.fire_rate_wait = c.fire_rate_wait + 32
@@ -5927,7 +5927,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 110,
 		max_uses: 16,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/fireball_ray.xml,"
 			draw_actions( 1, true )
 		},
@@ -5946,7 +5946,7 @@ const actions: Spell[] = [
 		mana: 110,
 		max_uses: 16,
 		custom_xml_file: "data/entities/misc/custom_cards/electric_charge.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/lightning_ray.xml,"
 			draw_actions( 1, true )
 		},
@@ -5964,7 +5964,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 110,
 		max_uses: 16,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/tentacle_ray.xml,"
 			draw_actions( 1, true )
 		},
@@ -5982,7 +5982,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 110,
 		max_uses: 16,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/laser_emitter_ray.xml,"
 			draw_actions( 1, true )
 		},
@@ -6000,7 +6000,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 130,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/fireball_ray_line.xml,"
 			draw_actions( 1, true )
 		},
@@ -6018,7 +6018,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 90,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_fireball_ray_enemy.xml,"
 			draw_actions( 1, true )
 		},
@@ -6037,7 +6037,7 @@ const actions: Spell[] = [
 		mana: 90,
 		max_uses: 20,
 		custom_xml_file: "data/entities/misc/custom_cards/electric_charge.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_lightning_ray_enemy.xml,"
 			draw_actions( 1, true )
 		},
@@ -6055,7 +6055,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 90,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_tentacle_ray_enemy.xml,"
 			draw_actions( 1, true )
 		},
@@ -6073,7 +6073,7 @@ const actions: Spell[] = [
 		price: 250,
 		mana: 110,
 		max_uses: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_gravity_field_enemy.xml,"
 			draw_actions( 1, true )
 		},
@@ -6090,7 +6090,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.6,0.8,0.4",
 		price: 140,
 		mana: 30,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_curse.xml,"
 			draw_actions( 1, true )
 		},
@@ -6107,7 +6107,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
 		mana: 50,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_curse_wither_projectile.xml,"
 			draw_actions( 1, true )
 		},
@@ -6124,7 +6124,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
 		mana: 50,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_curse_wither_explosion.xml,"
 			draw_actions( 1, true )
 		},
@@ -6141,7 +6141,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
 		mana: 50,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_curse_wither_melee.xml,"
 			draw_actions( 1, true )
 		},
@@ -6158,7 +6158,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.4,0.9,0.9",
 		price: 100,
 		mana: 50,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_curse_wither_electricity.xml,"
 			draw_actions( 1, true )
 		},
@@ -6176,7 +6176,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.8,0.4,0.2",
 		price: 200,
 		mana: 70,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/orbit_discs.xml,"
 			draw_actions( 1, true )
 		},
@@ -6194,7 +6194,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.5,0.2,0.8,0.4,0.2",
 		price: 140,
 		mana: 40,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/orbit_fireballs.xml,"
 			draw_actions( 1, true )
 		},
@@ -6214,7 +6214,7 @@ const actions: Spell[] = [
 		price: 400,
 		mana: 250,
 		max_uses: 3,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/orbit_nukes.xml,"
 			draw_actions( 1, true )
 		},
@@ -6232,7 +6232,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.8,0.4,0.2,0.2",
 		price: 200,
 		mana: 100,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/orbit_lasers.xml,"
 			draw_actions( 1, true )
 		},
@@ -6250,7 +6250,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.2,0.8,0.1",
 		price: 240,
 		mana: 90,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/orbit_larpa.xml,"
 			draw_actions( 1, true )
 		},
@@ -6268,7 +6268,7 @@ const actions: Spell[] = [
 		price: 240,
 		mana: 70,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/chain_shot.xml,"
 			c.lifetime_add = c.lifetime_add - 30
 			c.damage_projectile_add = c.damage_projectile_add - 0.2
@@ -6297,7 +6297,7 @@ const actions: Spell[] = [
 		
 		mana: 15,
 		custom_xml_file: "data/entities/misc/custom_cards/arc_electric.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/arc_electric.xml,"
 			draw_actions( 1, true )
 		},
@@ -6316,7 +6316,7 @@ const actions: Spell[] = [
 		
 		mana: 15,
 		custom_xml_file: "data/entities/misc/custom_cards/arc_fire.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/arc_fire.xml,"
 			draw_actions( 1, true )
 		},
@@ -6335,7 +6335,7 @@ const actions: Spell[] = [
 		
 		mana: 15,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/arc_gunpowder.xml,"
 			draw_actions( 1, true )
 		},
@@ -6354,7 +6354,7 @@ const actions: Spell[] = [
 		
 		mana: 15,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/arc_poison.xml,"
 			draw_actions( 1, true )
 		},
@@ -6373,7 +6373,7 @@ const actions: Spell[] = [
 		max_uses: 15,
 		mana: 45,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/crumbling_earth_projectile.xml,"
 			draw_actions( 1, true )
 		},
@@ -6393,7 +6393,7 @@ const actions: Spell[] = [
 		max_uses: 10,
 		mana: 100,
 		custom_xml_file: "data/entities/misc/custom_cards/xray.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/xray.xml")
 		},
 	},
@@ -6411,7 +6411,7 @@ const actions: Spell[] = [
 		mana: 15,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/unstable_gunpowder.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.material = "gunpowder_unstable"
 			c.material_amount = c.material_amount + 10
 			
@@ -6431,7 +6431,7 @@ const actions: Spell[] = [
 		mana: 15,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/acid_trail.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.trail_material = c.trail_material + "acid,"
 			c.trail_material_amount = c.trail_material_amount + 5
 			draw_actions( 1, true )
@@ -6450,7 +6450,7 @@ const actions: Spell[] = [
 		mana: 10,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/poison_trail.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_poison.xml,"
 			c.trail_material = c.trail_material + "poison,"
 			c.trail_material_amount = c.trail_material_amount + 9
@@ -6470,7 +6470,7 @@ const actions: Spell[] = [
 		mana: 10,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/oil_trail.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_oiled.xml,"
 			c.trail_material = c.trail_material + "oil,"
 			c.trail_material_amount = c.trail_material_amount + 20
@@ -6490,7 +6490,7 @@ const actions: Spell[] = [
 		mana: 10,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/water_trail.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_wet.xml,"
 			c.trail_material = c.trail_material + "water,"
 			c.trail_material_amount = c.trail_material_amount + 20
@@ -6516,7 +6516,7 @@ const actions: Spell[] = [
 		mana: 10,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/gunpowder_trail.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.trail_material = c.trail_material + "gunpowder,"
 			c.trail_material_amount = c.trail_material_amount + 20
 			draw_actions( 1, true )
@@ -6535,7 +6535,7 @@ const actions: Spell[] = [
 		mana: 10,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/fire_trail.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_on_fire.xml,"
 			c.trail_material = c.trail_material + "fire,"
 			c.trail_material_amount = c.trail_material_amount + 10
@@ -6556,7 +6556,7 @@ const actions: Spell[] = [
 		mana: 5,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/burn_trail.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_on_fire.xml,"
 			c.extra_entities = c.extra_entities + "data/entities/misc/burn.xml,"
 			draw_actions( 1, true )
@@ -6575,7 +6575,7 @@ const actions: Spell[] = [
 		mana: 0,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/torch.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions( 1, true )
 		},
 	},
@@ -6592,7 +6592,7 @@ const actions: Spell[] = [
 		mana: 0,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/torch_electric.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions( 1, true )
 		},
 	},
@@ -6607,7 +6607,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.05,0.6,0.6,0.6,0.6,0.6",
 		price: 220,
 		custom_xml_file: "data/entities/misc/custom_cards/energy_shield.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			
 			draw_actions( 1, true )
 		},
@@ -6623,7 +6623,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.05,0.6,0.6,0.6,0.6,0.6",
 		price: 160,
 		custom_xml_file: "data/entities/misc/custom_cards/energy_shield_sector.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			
 			draw_actions( 1, true )
 		},
@@ -6640,7 +6640,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.3,0.3,0.3,0.3,0.3",
 		price: 180,
 		mana: 5,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.speed_multiplier = c.speed_multiplier * 0.4
 			c.extra_entities = c.extra_entities + "data/entities/misc/energy_shield_shot.xml,"
 			
@@ -6665,7 +6665,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 0,
 		custom_xml_file: "data/entities/misc/custom_cards/tiny_ghost.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			draw_actions( 1, true )
 		},
 	},
@@ -6687,7 +6687,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/ocarina/ocarina_a.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6704,7 +6704,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/ocarina/ocarina_b.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6721,7 +6721,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/ocarina/ocarina_c.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6738,7 +6738,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/ocarina/ocarina_d.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6755,7 +6755,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/ocarina/ocarina_e.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6772,7 +6772,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/ocarina/ocarina_f.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6789,7 +6789,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/ocarina/ocarina_gsharp.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6806,7 +6806,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/ocarina/ocarina_a2.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6823,7 +6823,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/kantele/kantele_a.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6840,7 +6840,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/kantele/kantele_d.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6857,7 +6857,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/kantele/kantele_dis.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6874,7 +6874,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/kantele/kantele_e.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6891,7 +6891,7 @@ const actions: Spell[] = [
 		spawn_probability: "0",
 		price: 10,
 		mana: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/kantele/kantele_g.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 15
 		},
@@ -6909,7 +6909,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.3,0.1,0.1,0.5",
 		price: 100,
 		mana: 5,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 263 )
 			let rnd = Random( 1, actions.length )
 			let data = actions[rnd - 1]
@@ -6941,7 +6941,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.4,0.1,0.1,0.5",
 		price: 150,
 		mana: 20,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 203 )
 			let rnd = Random( 1, actions.length )
 			let data = actions[rnd - 1]
@@ -6973,7 +6973,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.3,0.1,0.1,0.5",
 		price: 120,
 		mana: 20,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 133 )
 			let rnd = Random( 1, actions.length )
 			let data = actions[rnd - 1]
@@ -7005,7 +7005,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.1,0.1,0.5",
 		price: 160,
 		mana: 20,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 253 )
 			let rnd = Random( 1, actions.length )
 			let data = actions[rnd - 1]
@@ -7037,7 +7037,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.3,0.2,0.2,0.1,0.1,1",
 		price: 150,
 		mana: 20,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			let rnd = Random( 1, datasize )
@@ -7093,7 +7093,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.3,0.1,0.1,1",
 		price: 250,
 		mana: 50,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			let rnd = Random( 1, datasize )
@@ -7151,7 +7151,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.2,0.1,0.1,1",
 		price: 200,
 		mana: 40,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			
@@ -7212,7 +7212,7 @@ const actions: Spell[] = [
 		mana: 600,
 		ai_never_uses: true,
 		max_uses: 2,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/all_nukes.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 100
 			setCurrentReloadTime(current_reload_time + 100)
@@ -7231,7 +7231,7 @@ const actions: Spell[] = [
 		price: 400,
 		mana: 100,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/all_discs.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			setCurrentReloadTime(current_reload_time + 50)
@@ -7251,7 +7251,7 @@ const actions: Spell[] = [
 		price: 400,
 		mana: 100,
 		max_uses: 10,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/all_rockets.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			setCurrentReloadTime(current_reload_time + 50)
@@ -7271,7 +7271,7 @@ const actions: Spell[] = [
 		price: 350,
 		mana: 80,
 		max_uses: 15,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/all_deathcrosses.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 40
 			setCurrentReloadTime(current_reload_time + 40)
@@ -7291,7 +7291,7 @@ const actions: Spell[] = [
 		price: 500,
 		mana: 200,
 		max_uses: 10,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/all_blackholes.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 100
 			setCurrentReloadTime(current_reload_time + 100)
@@ -7310,7 +7310,7 @@ const actions: Spell[] = [
 		price: 600,
 		mana: 200,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/all_acid.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 100
 			setCurrentReloadTime(current_reload_time + 100)
@@ -7333,10 +7333,10 @@ const actions: Spell[] = [
 		price: 1000,
 		mana: 600,
 		max_uses: 1,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			let players = EntityGetWithTag( "player_unit" )
 			for (const [i, v] of ipairs(players, 'players')) {
-				let [x, y] = EntityGetTransform( v )
+				let [x, y] = EntityGetTransform(this.id,  v )
 				let eid = EntityLoad("data/entities/projectiles/deck/all_spells_loader.xml", x, y)
 			}
 			c.fire_rate_wait = c.fire_rate_wait + 100
@@ -7356,7 +7356,7 @@ const actions: Spell[] = [
 		mana: 50,
 		max_uses: 7,
 		custom_xml_file: "data/entities/misc/custom_cards/summon_portal.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/summon_portal.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 80
 		},
@@ -7374,7 +7374,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 10,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			let data: Spell | null = null
 			
 			let how_many = 1
@@ -7454,7 +7454,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 20,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			let data: Spell | null = null
 			
 			let how_many = 1
@@ -7534,7 +7534,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 20,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			let data: Spell | null = null
 			
 			let how_many = 1
@@ -7614,7 +7614,7 @@ const actions: Spell[] = [
 		price: 260,
 		mana: 100,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 15
 			c.extra_entities = c.extra_entities + "data/entities/misc/larpa_chaos.xml,"
 			draw_actions( 1, true )
@@ -7633,7 +7633,7 @@ const actions: Spell[] = [
 		price: 290,
 		mana: 120,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 15
 			c.extra_entities = c.extra_entities + "data/entities/misc/larpa_downwards.xml,"
 			draw_actions( 1, true )
@@ -7652,7 +7652,7 @@ const actions: Spell[] = [
 		price: 290,
 		mana: 120,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 15
 			c.extra_entities = c.extra_entities + "data/entities/misc/larpa_upwards.xml,"
 			draw_actions( 1, true )
@@ -7672,7 +7672,7 @@ const actions: Spell[] = [
 		price: 300,
 		mana: 150,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 20
 			c.extra_entities = c.extra_entities + "data/entities/misc/larpa_chaos_2.xml,"
 			draw_actions( 1, true )
@@ -7691,7 +7691,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 90,
 		max_uses: 30,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.fire_rate_wait = c.fire_rate_wait + 15
 			c.extra_entities = c.extra_entities + "data/entities/misc/larpa_death.xml,"
 			draw_actions( 1, true )
@@ -7710,7 +7710,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.1,1",
 		price: 200,
 		mana: 30,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			c.fire_rate_wait = c.fire_rate_wait + 15
 			
 			let data: Spell | null = null
@@ -7747,7 +7747,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.1,1",
 		price: 200,
 		mana: 30,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			c.fire_rate_wait = c.fire_rate_wait + 15
 			
 			let data: Spell | null = null
@@ -7782,7 +7782,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.1,1",
 		price: 200,
 		mana: 80,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			c.fire_rate_wait = c.fire_rate_wait + 35
 			
 			let data1: any = []
@@ -7834,7 +7834,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.1,1",
 		price: 600,
 		mana: 300,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			
 			if ( discarded != null )  {
@@ -7884,7 +7884,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.1,1",
 		price: 500,
 		mana: 120,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			
 			let firerate = c.fire_rate_wait
@@ -7944,7 +7944,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.1,1",
 		price: 500,
 		mana: 120,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			
 			let firerate = c.fire_rate_wait
@@ -8002,7 +8002,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.1,1",
 		price: 500,
 		mana: 120,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			c.fire_rate_wait = c.fire_rate_wait + 30
 			
 			let firerate = c.fire_rate_wait
@@ -8063,32 +8063,32 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.8,0.6,0.1",
 		price: 200,
 		mana: 10,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
-			let entity_id = GetUpdatedEntityID()
-			let [x, y] = EntityGetTransform( entity_id )
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
+			let entity_id = GetUpdatedEntityID(this.id)
+			let [x, y] = EntityGetTransform(this.id,  entity_id )
 			let options: any = []
 			
-			let children = EntityGetAllChildren( entity_id )
-			let inventory = EntityGetFirstComponent( entity_id, "Inventory2Component" )
+			let children = EntityGetAllChildren(this.id,  entity_id )
+			let inventory = EntityGetFirstComponent(this.id,  entity_id, "Inventory2Component" )
 			
 			if (( children != null ) && ( inventory != null ))  {
-				let active_wand = ComponentGetValue2( inventory, "mActiveItem" )
+				let active_wand = ComponentGetValue2(this.id,  inventory, "mActiveItem" )
 				
 				for (const [i, child_id] of ipairs(children, 'children')) {
-					if ( EntityGetName( child_id ) === "inventory_quick" )  {
-						let wands = EntityGetAllChildren( child_id )
+					if ( EntityGetName(this.id,  child_id ) === "inventory_quick" )  {
+						let wands = EntityGetAllChildren(this.id,  child_id )
 						
 						if ( wands != null )  {
 							for (const [k, wand_id] of ipairs(wands, 'wands')) {
 								if (( wand_id !== active_wand ) && EntityHasTag( wand_id, "wand" ))  {
-									let spells = EntityGetAllChildren( wand_id )
+									let spells = EntityGetAllChildren(this.id,  wand_id )
 									
 									if ( spells != null )  {
 										for (const [j, spell_id] of ipairs(spells, 'spells')) {
-											let comp = EntityGetFirstComponentIncludingDisabled( spell_id, "ItemActionComponent" )
+											let comp = EntityGetFirstComponentIncludingDisabled(this.id,  spell_id, "ItemActionComponent" )
 											
 											if ( comp != null )  {
-												let action_id = ComponentGetValue2( comp, "action_id" )
+												let action_id = ComponentGetValue2(this.id,  comp, "action_id" )
 												
 												options.push(action_id)
 											}
@@ -8135,7 +8135,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.2,0.3,0.2,1",
 		price: 200,
 		mana: 35,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			c.fire_rate_wait = c.fire_rate_wait + 20
 			
 			let data: Spell | null = null
@@ -8217,7 +8217,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.1,0.2,1",
 		price: 250,
 		mana: 50,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			c.fire_rate_wait = c.fire_rate_wait + 35
 			
 			let data: Spell | null = null
@@ -8299,7 +8299,7 @@ const actions: Spell[] = [
 		spawn_probability: "0.1,0.1,1",
 		price: 300,
 		mana: 70,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			c.fire_rate_wait = c.fire_rate_wait + 50
 			
 			let data: Spell | null = null
@@ -8382,7 +8382,7 @@ const actions: Spell[] = [
 		price: 400,
 		mana: 200,
 		max_uses: 5,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			c.fire_rate_wait = c.fire_rate_wait + 80
 			setCurrentReloadTime(current_reload_time + 20)
 			
@@ -8470,7 +8470,7 @@ const actions: Spell[] = [
 		mana: 225,
 		max_uses: 2,
 		custom_xml_file: "data/entities/misc/custom_cards/meteor_rain.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/meteor_rain.xml")
 			c.extra_entities = c.extra_entities + "data/entities/misc/effect_meteor_rain.xml,"
 			c.fire_rate_wait = c.fire_rate_wait + 100
@@ -8493,7 +8493,7 @@ const actions: Spell[] = [
 		mana: 225,
 		max_uses: 2,
 		custom_xml_file: "data/entities/misc/custom_cards/worm_rain.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			add_projectile("data/entities/projectiles/deck/worm_rain.xml")
 			c.fire_rate_wait = c.fire_rate_wait + 100
 			setCurrentReloadTime(current_reload_time + 60)
@@ -8512,7 +8512,7 @@ const actions: Spell[] = [
 		spawn_probability: "1",
 		price: 120,
 		mana: 20,
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			setCurrentReloadTime(current_reload_time - 25)
 			
 			for (const [i, v] of ipairs(hand, 'hand')) {
@@ -8547,10 +8547,10 @@ const actions: Spell[] = [
 		spawn_probability: "1",
 		price: 100,
 		mana: 0,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			let endpoint = -1
 			let elsepoint = -1
-			let [x, y] = EntityGetTransform( GetUpdatedEntityID() )
+			let [x, y] = EntityGetTransform(this.id,  GetUpdatedEntityID(this.id) )
 			let enemies = EntityGetInRadiusWithTag( x, y, 240, "homing_target" )
 			
 			let doskip = false
@@ -8633,10 +8633,10 @@ const actions: Spell[] = [
 		spawn_probability: "1",
 		price: 100,
 		mana: 0,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			let endpoint = -1
 			let elsepoint = -1
-			let [x, y] = EntityGetTransform( GetUpdatedEntityID() )
+			let [x, y] = EntityGetTransform(this.id,  GetUpdatedEntityID(this.id) )
 			let enemies = EntityGetInRadiusWithTag( x, y, 160, "projectile" )
 			
 			let doskip = false
@@ -8719,16 +8719,16 @@ const actions: Spell[] = [
 		spawn_probability: "1",
 		price: 100,
 		mana: 0,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			let endpoint = -1
 			let elsepoint = -1
-			let entity_id = GetUpdatedEntityID()
-			let comp = EntityGetFirstComponent( entity_id, "DamageModelComponent" )
+			let entity_id = GetUpdatedEntityID(this.id)
+			let comp = EntityGetFirstComponent(this.id,  entity_id, "DamageModelComponent" )
 			let hpdiff = 1.0
 			
 			if ( comp != null )  {
-				let hp = ComponentGetValue2( comp, "hp" )
-				let max_hp = ComponentGetValue2( comp, "max_hp" )
+				let hp = ComponentGetValue2(this.id,  comp, "hp" )
+				let max_hp = ComponentGetValue2(this.id,  comp, "max_hp" )
 				
 				hpdiff = hp / max_hp
 			}
@@ -8813,7 +8813,7 @@ const actions: Spell[] = [
 		spawn_probability: "1",
 		price: 100,
 		mana: 0,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			let endpoint = -1
 			let elsepoint = -1
 			let doskip = false
@@ -8904,7 +8904,7 @@ const actions: Spell[] = [
 		spawn_probability: "1",
 		price: 10,
 		mana: 0,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {			
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {			
 			draw_actions( 1, true )
 		},
 	},
@@ -8920,7 +8920,7 @@ const actions: Spell[] = [
 		spawn_probability: "1",
 		price: 10,
 		mana: 0,
-		action: (c: GunActionState, recursion_level: number = 0, iteration: number = 1) => {			
+		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {			
 			draw_actions( 1, true )
 		},
 	},
@@ -8938,7 +8938,7 @@ const actions: Spell[] = [
 		price: 40,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/particles/tinyspark_red.xml,data/entities/misc/colour_red.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 8
 			c.screenshake = c.screenshake - 2.5
@@ -8962,7 +8962,7 @@ const actions: Spell[] = [
 		price: 40,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/particles/tinyspark_red.xml,data/entities/misc/colour_orange.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 8
 			c.screenshake = c.screenshake - 2.5
@@ -8986,7 +8986,7 @@ const actions: Spell[] = [
 		price: 40,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/particles/tinyspark_red.xml,data/entities/misc/colour_green.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 8
 			c.screenshake = c.screenshake - 2.5
@@ -9010,7 +9010,7 @@ const actions: Spell[] = [
 		price: 40,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/particles/tinyspark_red.xml,data/entities/misc/colour_yellow.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 8
 			c.screenshake = c.screenshake - 2.5
@@ -9034,7 +9034,7 @@ const actions: Spell[] = [
 		price: 40,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/particles/tinyspark_red.xml,data/entities/misc/colour_purple.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 8
 			c.screenshake = c.screenshake - 2.5
@@ -9058,7 +9058,7 @@ const actions: Spell[] = [
 		price: 40,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/particles/tinyspark_red.xml,data/entities/misc/colour_blue.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 8
 			c.screenshake = c.screenshake - 2.5
@@ -9082,7 +9082,7 @@ const actions: Spell[] = [
 		price: 40,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/particles/tinyspark_red.xml,data/entities/misc/colour_rainbow.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 8
 			c.screenshake = c.screenshake - 2.5
@@ -9106,7 +9106,7 @@ const actions: Spell[] = [
 		price: 40,
 		mana: 0,
 		
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.extra_entities = c.extra_entities + "data/entities/misc/colour_invis.xml,"
 			c.fire_rate_wait = c.fire_rate_wait - 8
 			c.screenshake = c.screenshake - 2.5
@@ -9130,7 +9130,7 @@ const actions: Spell[] = [
 		mana: 0,
 		
 		custom_xml_file: "data/entities/misc/custom_cards/rainbow_trail.xml",
-		action: (c: GunActionState) => {
+		action: function(c: GunActionState) {
 			c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_rainbow_farts.xml,"
 			c.trail_material = c.trail_material + "material_rainbow,"
 			c.trail_material_amount = c.trail_material_amount + 20

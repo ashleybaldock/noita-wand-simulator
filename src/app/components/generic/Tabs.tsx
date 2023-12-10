@@ -21,8 +21,6 @@ const TabTitlesDiv = styled.div`
 `;
 
 /* TODO
- * Use spell icons instead of tab text below 720w
- * Switch to two rows for wand spells + wand stats below 900w
  * * Side-by-side for spell selector on wide screen
  */
 const TitleDiv = styled.div<{
@@ -48,11 +46,8 @@ const TitleDiv = styled.div<{
   border-width: 0.16em;
   border-bottom-width: 0;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 800px) {
     height: 3em;
-  }
-
-  @media screen and (max-width: 720px) {
   }
 
   ${({ selected }) =>
@@ -68,7 +63,7 @@ const TitleDiv = styled.div<{
     cursor: default;
     z-index: var(--zindex-tabs-selected);
 
-    flex: 10 1;
+    flex: 1 1;
 
     &:hover {
     }

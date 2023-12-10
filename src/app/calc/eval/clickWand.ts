@@ -1,6 +1,6 @@
-import { Spell } from '../spell';
+import { Spell, SpellDeckInfo } from '../spell';
 import { getSpellById } from '../spells';
-import { override, subscribe } from './wandObserver';
+import { observer, WandEvent } from './wandObserver';
 import {
   Gun,
   _add_card_to_deck,
@@ -14,47 +14,61 @@ import {
 } from '../gun';
 import { isValidEntityPath, entityToActions } from '../entityLookup';
 import { isIterativeActionId } from '../actionId';
-import { ActionCall, Requirements, TreeNode, WandShot } from './types';
+import { ActionCall, TreeNode, WandShot } from './types';
 import { defaultGunActionState } from '../actionState';
-import { TriggerCondition } from '../trigger';
-import { isValidActionCallSource, SpellType } from '../spellTypes';
-
-export type StopCondition = 'oneshot' | 'reload' | 'refresh' | 'iterLimit';
-
-export type StopReason =
-  | StopCondition
-  | 'noSpells'
-  | 'timeout'
-  | 'exception'
-  | 'unknown';
+import { getTriggerConditionForEvent } from '../trigger';
+import { isValidActionCallSource } from '../spellTypes';
+import { StopCondition, StopReason } from '../../types';
 
 export type ClickWandResult = {
   shots: WandShot[];
   recharge: number | undefined;
   endReason: StopReason;
+  elapsedTime: number;
 };
 
-const triggerEventToConditionMap = new Map<string, TriggerCondition>([
-  ['BeginTriggerHitWorld', 'hit'],
-  ['BeginTriggerTimer', 'timer'],
-  ['BeginTriggerDeath', 'expire'],
-]);
+export type ClickWandSetup = {
+  fireUntil: StopCondition;
+  req_enemies: boolean;
+  req_projectiles: boolean;
+  req_hp: boolean;
+  req_half: boolean;
+  rng_frameNumber: number;
+  rng_worldSeed: number;
+  wand_available_mana: number;
+  wand_cast_delay: number;
+};
 
-export function clickWand(
+export const clickWand = (
   wand: Gun,
   spells: Spell[],
-  mana: number,
-  castDelay: number,
-  fireUntil: StopCondition,
-  requirements?: Requirements,
-): ClickWandResult {
+  {
+    fireUntil,
+    req_enemies,
+    req_projectiles,
+    req_hp,
+    req_half,
+    rng_frameNumber,
+    rng_worldSeed,
+    wand_available_mana,
+    wand_cast_delay,
+  }: ClickWandSetup,
+): ClickWandResult => {
+  const start = performance.now();
+
   if (spells.filter((s) => s != null).length === 0) {
-    return { shots: [], recharge: undefined, endReason: 'noSpells' };
+    return {
+      shots: [],
+      recharge: undefined,
+      endReason: 'noSpells',
+      elapsedTime: 0,
+    };
   }
 
   let iterations = 0;
   const iterationLimit = 10;
   let reloaded = false;
+  let mana = wand_available_mana;
   let wandShots: WandShot[] = [];
   let currentShot: WandShot;
   let currentShotStack: WandShot[];
@@ -69,11 +83,12 @@ export function clickWand(
 
   let reloadTime: number | undefined;
 
-  let if_half_state = requirements?.half ? 1 : 0;
-  const unsub = subscribe((eventType, ...args) => {
-    switch (eventType) {
+  let if_half_state = req_half ? 1 : 0;
+
+  const unsub = observer.subscribe(({ name, payload }: WandEvent) => {
+    switch (name) {
       case 'BeginProjectile':
-        const entity: string = args[0];
+        const { entityFilename } = payload;
 
         let sourceAction =
           validSourceCalledActions[validSourceCalledActions.length - 1]?.spell;
@@ -83,39 +98,41 @@ export function clickWand(
           // fallback to most likely entity source if no action
           // if (!entityToActions(entity)) {
           if (
-            !isValidEntityPath(entity) ||
-            entityToActions(entity) === undefined
+            !isValidEntityPath(entityFilename) ||
+            entityToActions(entityFilename) === undefined
           ) {
-            throw Error(`missing entity: ${entity}`);
+            throw Error(`missing entity: ${entityFilename}`);
           }
-          sourceAction = getSpellById(entityToActions(entity)?.[0]);
+          sourceAction = getSpellById(entityToActions(entityFilename)?.[0]);
         }
 
-        if (entity !== sourceAction.related_projectiles?.[0]) {
-          if (!entityToActions(entity)) {
-            throw Error(`missing entity: ${entity}`);
+        if (entityFilename !== sourceAction.related_projectiles?.[0]) {
+          if (!entityToActions(entityFilename)) {
+            throw Error(`missing entity: ${entityFilename}`);
           }
 
           // check for bugged actions (missing the correct related_projectile)
-          if (entityToActions(entity)[0] !== sourceAction.id) {
+          if (entityToActions(entityFilename)[0] !== sourceAction.id) {
             // this probably means another action caused this projectile (like ADD_TRIGGER)
             proxy = sourceAction;
-            sourceAction = getSpellById(entityToActions(entity)?.[0]);
+            sourceAction = getSpellById(entityToActions(entityFilename)?.[0]);
           }
         }
 
         currentShot.projectiles.push({
           _typeName: 'Projectile',
-          entity: args[0],
+          entity: entityFilename,
           spell: sourceAction,
           proxy: proxy,
           deckIndex: proxy?.deck_index || sourceAction?.deck_index,
         });
         break;
-      case 'BeginTriggerHitWorld':
       case 'BeginTriggerTimer':
+      case 'BeginTriggerHitWorld':
       case 'BeginTriggerDeath':
-        const [entity_filename, action_draw_count, delay_frames] = args;
+        const { entity_filename, action_draw_count } = payload;
+        const delay_frames =
+          name === 'BeginTriggerTimer' ? payload.delay_frames : undefined;
         parentShot = currentShot;
         currentShotStack.push(currentShot);
         currentShot = {
@@ -124,7 +141,7 @@ export function clickWand(
           calledActions: [],
           actionTree: [],
           castState: { ...defaultGunActionState },
-          triggerType: triggerEventToConditionMap.get(eventType),
+          triggerType: getTriggerConditionForEvent(name),
           triggerEntity: entity_filename,
           triggerActionDrawCount: action_draw_count,
           triggerDelayFrames: delay_frames,
@@ -138,17 +155,19 @@ export function clickWand(
       case 'EndProjectile':
         break;
       case 'OnDraw':
-        const [totalDrawn] = args;
+        const { state_cards_drawn: totalDrawn } = payload;
         if (currentShot.castState) {
           currentShot.castState.state_cards_drawn =
             (totalDrawn ?? currentShot.castState?.state_cards_drawn ?? 0) + 1;
         }
         break;
       case 'RegisterGunAction':
-        currentShot.castState = Object.assign({}, args[0]);
+        const { s: castState } = payload;
+        currentShot.castState = Object.assign({}, castState);
         break;
       case 'OnActionCalled': {
-        const [source, spell /*, c */, , recursion, iteration] = args;
+        const { source, spell /*, c: castState */, recursion, iteration } =
+          payload;
         const { id, deck_index, recursive } = spell;
         lastCalledAction = {
           _typeName: 'ActionCall',
@@ -183,19 +202,70 @@ export function clickWand(
         break;
       }
       case 'OnActionFinished': {
-        const [
-          ,
-          ,
-          /*source*/ /*spell*/ c /*recursion, iteration, returnValue*/,
-        ] = args;
-        currentShot.castState = Object.assign({}, c);
+        const {
+          /*source*/ /*spell*/ c: castState /*recursion, iteration, returnValue*/,
+        } = payload;
+        currentShot.castState = Object.assign({}, castState);
         currentNode = currentNode?.parent;
         break;
       }
-      case 'StartReload':
+      case 'StartReload': {
         reloaded = true;
-        reloadTime = args[0];
+        reloadTime = payload.reload_time;
         break;
+      }
+      case 'OnMoveDiscardedToDeck': {
+        const { discarded } = payload;
+        break;
+      }
+
+      case 'GameGetFrameNum': {
+        // TODO - this ought to increment/change with each shot cycle
+        return rng_frameNumber;
+      }
+      case 'SetRandomSeed': {
+        return rng_worldSeed;
+      }
+      // These are used currently only by requirements
+      case 'EntityGetInRadiusWithTag': {
+        const { x, y, radius, tag } = payload;
+        if (tag === 'homing_target') {
+          return req_enemies ? new Array(15) : [];
+        } else if (tag === 'projectile') {
+          return req_projectiles ? new Array(20) : [];
+        }
+        break;
+      }
+      case 'EntityGetFirstComponent': {
+        const { entity_id, component } = payload;
+        if (component === 'DamageModelComponent') {
+          return 'IF_HP'; // just has to be non-null
+        }
+        break;
+      }
+      case 'ComponentGetValue2': {
+        const { component_id, key } = payload;
+        if (component_id === 'IF_HP') {
+          if (key === 'hp') {
+            return req_hp ? 25000 / 25 : 100000 / 25;
+          } else if (key === 'max_hp') {
+            return 100000 / 25;
+          }
+        }
+        break;
+      }
+      case 'GlobalsGetValue': {
+        const { key, defaultValue } = payload;
+        if (key === 'GUN_ACTION_IF_HALF_STATUS') {
+          return `${if_half_state}`;
+        }
+        break;
+      }
+      // Used by Zeta
+      case 'EntityGetAllChildren': {
+        const { actionId, entityId } = payload;
+        break;
+      }
       default:
     }
   });
@@ -209,55 +279,11 @@ export function clickWand(
       castState: { ...defaultGunActionState },
     };
     calledActions = [];
+    validSourceCalledActions = [];
     currentShotStack = [];
     rootNodes = [];
     currentNode = undefined;
   };
-
-  let removeOverrides = [];
-  if (requirements) {
-    removeOverrides.push(
-      override('EntityGetInRadiusWithTag', (args) => {
-        if (args[3] === 'homing_target') {
-          return requirements.enemies ? new Array(15) : [];
-        } else if (args[3] === 'projectile') {
-          return requirements.projectiles ? new Array(20) : [];
-        }
-      }),
-    );
-    removeOverrides.push(
-      override('EntityGetFirstComponent', (args) => {
-        if (args[1] === 'DamageModelComponent') {
-          return 'IF_HP'; // just has to be non-null
-        }
-      }),
-    );
-    removeOverrides.push(
-      override('ComponentGetValue2', (args) => {
-        if (args[0] === 'IF_HP') {
-          if (args[1] === 'hp') {
-            return requirements.hp ? 25000 / 25 : 100000 / 25;
-          } else if (args[1] === 'max_hp') {
-            return 100000 / 25;
-          }
-        }
-      }),
-    );
-    removeOverrides.push(
-      override('GlobalsGetValue', (args) => {
-        if (args[0] === 'GUN_ACTION_IF_HALF_STATUS') {
-          return `${if_half_state}`;
-        }
-      }),
-    );
-    removeOverrides.push(
-      override('GlobalsSetValue', (args) => {
-        if (args[0] === 'GUN_ACTION_IF_HALF_STATUS') {
-          if_half_state = Number.parseInt(args[1]);
-        }
-      }),
-    );
-  }
 
   const endReason = ((): StopReason => {
     try {
@@ -274,7 +300,7 @@ export function clickWand(
       });
 
       while (!reloaded && iterations < iterationLimit) {
-        state_from_game.fire_rate_wait = castDelay;
+        state_from_game.fire_rate_wait = wand_cast_delay;
         _start_shot(mana);
         _draw_actions_for_shot(true);
         iterations++;
@@ -302,6 +328,7 @@ export function clickWand(
         }
       }
     } catch (err) {
+      console.error(err);
       return 'exception';
     }
     return 'reload';
@@ -309,7 +336,11 @@ export function clickWand(
 
   resetState();
   unsub();
-  removeOverrides.forEach((cb) => cb());
 
-  return { shots: wandShots, recharge: reloadTime, endReason };
-}
+  return {
+    shots: wandShots,
+    recharge: reloadTime,
+    endReason,
+    elapsedTime: performance.now() - start,
+  };
+};

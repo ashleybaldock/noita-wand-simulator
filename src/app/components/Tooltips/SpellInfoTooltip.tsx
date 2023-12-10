@@ -8,6 +8,7 @@ import { translate } from '../../util/i18n';
 import { spellTypeInfoMap } from '../../calc/spellTypes';
 import { WithDebugHints } from '../Debug';
 import { getSpriteForPerk, Perk } from '../../calc/perks';
+import { getUnlockName } from '../../calc/unlocks';
 
 const SpellTip = styled.div`
   display: grid;
@@ -207,13 +208,15 @@ export const SpellInfoTooltip = () => {
             {spawn_requires_flag !== undefined && (
               <>
                 <Label>Unlock</Label>
-                <Value>{spawn_requires_flag.substring(14)}</Value>
+                <Value>{getUnlockName(spawn_requires_flag)}</Value>
               </>
             )}
-            <Label></Label>
-            <Value></Value>
-            <Label></Label>
-            <Value></Value>
+            <Label>Friendly-Fire</Label>
+            <Value>--</Value>
+            <Label>Piercing</Label>
+            <Value>--</Value>
+            <Label>Penetrating</Label>
+            <Value>--</Value>
             <Label></Label>
             <Value></Value>
             <Label></Label>

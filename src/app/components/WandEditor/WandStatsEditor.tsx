@@ -6,10 +6,8 @@ import { AppDispatch } from '../../redux/store';
 import { EditableInteger } from '../generic';
 import { round, toFrames, toSeconds, TypedProperties } from '../../util/util';
 import { Config, useConfig } from '../../redux';
-
-const CheckboxField = styled.input`
-  margin: 1px;
-`;
+import { YesNoToggle } from '../Input';
+import { FNSP, SUFFIX_DEGREE, SUFFIX_FRAME, SUFFIX_SECOND } from '../../util';
 
 type NumberFieldProps = {
   field: keyof TypedProperties<Wand, number>;
@@ -27,7 +25,7 @@ const renderNumberField =
     convertRawValue,
     convertDisplayValue,
   }: NumberFieldProps) =>
-  (wand: Wand, dispatch: AppDispatch) => {
+  (wand: Wand, dispatch: AppDispatch, config: Config) => {
     return (
       <EditableInteger
         value={wand[field]}
@@ -46,13 +44,42 @@ const renderNumberField =
     );
   };
 
+const EditableInterval = ({
+  field,
+}: {
+  field: 'cast_delay' | 'reload_time';
+}) => {
+  const { showDurationsInFrames: frames } = useConfig();
+  const wand = useWand();
+  const dispatch = useAppDispatch();
+  return (
+    <EditableInteger
+      value={wand[field]}
+      onChange={(value) =>
+        dispatch(
+          setWand({
+            wand: { ...wand, [field]: value },
+          }),
+        )
+      }
+      step={frames ? 1 : 0.01}
+      formatValue={
+        frames
+          ? (v) => `${Math.round(v)}${FNSP}${SUFFIX_FRAME}`
+          : (v) => `${toSeconds(v)}${FNSP}${SUFFIX_SECOND}`
+      }
+      convertRawValue={frames ? (v) => Math.round(v) : toSeconds}
+      convertDisplayValue={frames ? (v) => Math.round(v) : toFrames}
+    />
+  );
+};
+
 const fields = [
   {
     name: 'Shuffle',
     imgUrl: 'data/wand/icon_gun_shuffle.png',
     render: (wand: Wand, dispatch: AppDispatch, config: Config) => (
-      <CheckboxField
-        type="checkbox"
+      <YesNoToggle
         checked={wand.shuffle_deck_when_empty}
         onChange={(e) =>
           dispatch(
@@ -65,6 +92,11 @@ const fields = [
     ),
   },
   {
+    name: 'Capacity',
+    imgUrl: 'data/wand/icon_gun_capacity.png',
+    render: renderNumberField({ field: 'deck_capacity' }),
+  },
+  {
     name: 'Spells/Cast',
     imgUrl: 'data/wand/icon_gun_actions_per_round.png',
     render: renderNumberField({ field: 'actions_per_round' }),
@@ -72,46 +104,33 @@ const fields = [
   {
     name: 'Cast delay',
     imgUrl: 'data/wand/icon_fire_rate_wait.png',
-    render: renderNumberField({
-      field: 'cast_delay',
-      step: 0.01,
-      formatValue: (v) => `${toSeconds(v)} s`,
-      convertRawValue: toSeconds,
-      convertDisplayValue: toFrames,
-    }),
+    render: () => {
+      return <EditableInterval field="cast_delay" />;
+    },
   },
   {
-    name: 'Rechrg. Time',
+    name: 'Recharge',
     imgUrl: 'data/wand/icon_gun_reload_time.png',
-    render: renderNumberField({
-      field: 'reload_time',
-      step: 0.01,
-      formatValue: (v) => `${toSeconds(v)} s`,
-      convertRawValue: toSeconds,
-      convertDisplayValue: toFrames,
-    }),
+    render: () => {
+      return <EditableInterval field="reload_time" />;
+    },
   },
   {
-    name: 'Mana max',
+    name: 'Mana Max',
     imgUrl: 'data/wand/icon_mana_max.png',
     render: renderNumberField({ field: 'mana_max' }),
   },
   {
-    name: 'Mana chg. Spd',
+    name: 'Mana Regen',
     imgUrl: 'data/wand/icon_mana_charge_speed.png',
     render: renderNumberField({ field: 'mana_charge_speed' }),
-  },
-  {
-    name: 'Capacity',
-    imgUrl: 'data/wand/icon_gun_capacity.png',
-    render: renderNumberField({ field: 'deck_capacity' }),
   },
   {
     name: 'Spread',
     imgUrl: 'data/wand/icon_spread_degrees.png',
     render: renderNumberField({
       field: 'spread',
-      formatValue: (v) => `${round(Number(v), 1)} DEG`,
+      formatValue: (v) => `${round(Number(v), 1)}${FNSP}${SUFFIX_DEGREE}`,
     }),
   },
   {
@@ -125,6 +144,7 @@ const fields = [
 ];
 
 const StyledList = styled.div`
+  align-self: center;
   display: grid;
   grid-auto-flow: row;
   grid-auto-rows: 1.3em;
@@ -133,28 +153,20 @@ const StyledList = styled.div`
   max-height: calc(var(--sizes-spelledit-spell-total) * 4);
   height: min-content;
 
-  @media screen and (max-width: 900px) {
-  }
-
   @media screen and (max-width: 800px) {
-    display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     min-width: 40vw;
     width: fit-content;
-    grid-template-columns: repeat(2, 1fr);
-    align-self: center;
   }
 
   @media screen and (max-width: 500px) {
-    display: grid;
-    grid-auto-flow: column;
+    justify-items: center;
     grid-template-rows: repeat(9, 1fr);
     grid-template-columns: repeat(1, 1fr);
     min-width: 60vw;
     width: 100%;
-    align-self: center;
-    justify-items: center;
   }
 `;
 const StyledListItem = styled.div<{
@@ -172,9 +184,6 @@ const StyledListItem = styled.div<{
   font-size: 16px;
   color: var(--color-button);
   padding: 0.1em 0.6em 0em 2.2em;
-
-  @media screen and (max-width: 700px) {
-  }
 `;
 const StyledName = styled.span`
   text-align: left;
@@ -197,7 +206,7 @@ export function WandStatsEditor() {
   return (
     <StyledList>
       {fields.map(({ name, imgUrl, render }, index) => (
-        <StyledListItem key={index} imgUrl={imgUrl}>
+        <StyledListItem key={name} imgUrl={imgUrl}>
           <StyledName>{name}</StyledName>
           <StyledValue>{render(wand, dispatch, config)}</StyledValue>
         </StyledListItem>

@@ -1,4 +1,5 @@
 import styled from 'styled-components/macro';
+import { StopCondition, StopReason } from '../../types';
 
 const ResultError = styled.span`
   font-weight: bold;
@@ -13,42 +14,42 @@ const ResultSuccess = styled.span`
 /*
  * successful:
  * done      - completed one wand shot
- * reset     - stopped after 2nd RESET (wanr refresh)
+ * reset     - stopped after 2nd RESET (wand refresh)
  * looped    - same shot result as previous
  *
  * failure:
  * timeout   - hit total execution time limit
  * exception - details in info
  */
-export type TerminationReason =
-  | 'done'
-  | 'timeout'
-  | 'exception'
-  | 'reset'
-  | 'looped';
 
 type TerminationInfo = {
   success: boolean;
   message: string;
 };
-const reasonMap: Record<TerminationReason, TerminationInfo> = {
-  done: { success: true, message: 'Completed' },
-  reset: { success: true, message: 'Stopped at 2nd Wand Refresh' },
+const reasonMap: Record<StopReason, TerminationInfo> = {
+  // done: { success: true, message: 'Completed' },
+  noSpells: { success: false, message: 'No Spells to process' },
+  unknown: { success: false, message: 'Unknown' },
+  refresh: { success: true, message: 'Stopped at 2nd Wand Refresh' },
   looped: { success: true, message: 'Stopped due to loop' },
   timeout: { success: false, message: 'Terminated due to global timeout' },
   exception: { success: false, message: 'Terminated due to exception' },
+  oneshot: { success: true, message: 'One Shot Completed' },
+  iterLimit: { success: false, message: 'Hit Iteration Limit' },
+  reload: { success: true, message: 'Ended on Wand Reload' },
 } as const;
 
 export const TerminationWarning = ({
   reason,
 }: {
-  reason: TerminationReason;
+  reason: StopReason;
+  condition: StopCondition;
   info?: string;
 }) => {
   const { success, message } = reasonMap[reason];
-  if (success) {
-    return <ResultSuccess>{message}</ResultSuccess>;
-  } else {
-    return <ResultError>{message}</ResultError>;
-  }
+  return success ? (
+    <ResultSuccess>{message}</ResultSuccess>
+  ) : (
+    <ResultError>{message}</ResultError>
+  );
 };

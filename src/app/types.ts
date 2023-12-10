@@ -22,7 +22,7 @@ export type Wand = {
 };
 
 const wandQueryVersions = [1, 2] as const;
-export type WandQueryVersion = typeof wandQueryVersions[number];
+export type WandQueryVersion = (typeof wandQueryVersions)[number];
 
 export type WandParamValue = string | number | boolean;
 export const isWandParamValue = (x: unknown): x is WandParamValue =>
@@ -43,7 +43,7 @@ const v2ParamNames = [
   's',
   'w',
 ] as const;
-export type V2ParamName = typeof v2ParamNames[number];
+export type V2ParamName = (typeof v2ParamNames)[number];
 export type v2WandStateRecord = Record<keyof Wand, V2ParamName>;
 
 // [ v1param, v2param ]
@@ -119,3 +119,17 @@ export const isDragItemSpell = (x: DragItem): x is DragItemSpell =>
   x.disc === 'spell';
 
 export type DragItem = DragItemSpell | DragItemSelect;
+
+export type StopCondition =
+  | 'oneshot'
+  | 'reload'
+  | 'refresh'
+  | 'iterLimit'
+  | 'looped';
+
+export type StopReason =
+  | StopCondition
+  | 'noSpells'
+  | 'timeout'
+  | 'exception'
+  | 'unknown';

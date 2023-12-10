@@ -67,7 +67,7 @@ const HotkeyHintBase = styled.div<{ position: HintPosition }>`
   place-content: center;
 
   color: var(--arrow-action-bdcolor);
-  font-size: 0.9em;
+  font-size: calc(max(12px, 0.9em));
   font-weight: 300;
   text-align: center;
   line-height: 1.3em;

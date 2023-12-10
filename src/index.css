@@ -21,6 +21,7 @@
   --color-base: #eeeeee;
   --color-base-background: #0c0c0c;
 
+  --color-subdued: #aaaaaa;
   --color-emphasis: #ffffff;
 
   --color-tab-active: #eeeeee;
@@ -104,7 +105,7 @@ html {
 }
 
 body {
-  min-width: 320px;
+  min-width: 300px;
   margin: 0;
   font-family: 'noita', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
     'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',

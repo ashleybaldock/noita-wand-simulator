@@ -18,7 +18,12 @@ import {
 } from '../../../util/util';
 import { Config, useConfig } from '../../../redux/configSlice';
 import { getBackgroundUrlForDamageType } from '../../../calc/damage';
-import { SIGN_MULTIPLY } from '../../../util';
+import {
+  SIGN_MULTIPLY,
+  SUFFIX_BILLION,
+  SUFFIX_MILLION,
+  SUFFIX_THOUSAND,
+} from '../../../util';
 import { TriggerCondition } from '../../../calc/trigger';
 
 const GridRowItem = styled.div<{
@@ -35,7 +40,7 @@ const GridRowItem = styled.div<{
   background-repeat: no-repeat;
   image-rendering: pixelated;
   white-space: nowrap;
-  padding: 0.4em;
+  padding: 0.2em;
 
   ${({ firstInGroup, firstValue }) =>
     firstInGroup
@@ -51,6 +56,7 @@ const GridRowItem = styled.div<{
     isTotal
       ? `
   border-left: 1px dotted var(--color-vis-cs-inborder);
+  background-color: black;
   `
       : `
   border-left: 1px dotted var(--color-vis-cs-inborder-dark);
@@ -138,6 +144,67 @@ const UnstyledFraction = ({
 const Fraction = styled(UnstyledFraction)`
   letter-spacing: -0.14em;
 `;
+
+const Adds = styled.span`
+  &::before {
+    content: '+';
+    font-size: 0.9em;
+  }
+`;
+const Exponent = styled.span`
+  vertical-align: super;
+  font-size: smaller;
+  line-height: normal;
+`;
+const Mantissa = styled.span``;
+
+const Scientific = ({
+  number,
+  precision = 2,
+}: {
+  number: number;
+  precision?: number;
+}) => {
+  const [mantissa, exponent] = number.toExponential(2).split('e');
+  return (
+    <span>
+      <Mantissa>{mantissa}</Mantissa>${SIGN_MULTIPLY}10
+      <Exponent>{exponent}</Exponent>
+    </span>
+  );
+};
+
+const ReadableNumber = ({
+  number: n,
+  ifZero = <Unchanged />,
+}: {
+  number: number;
+  ifZero?: JSX.Element;
+}) => {
+  if (n === 0) {
+    return ifZero;
+  }
+  if (n < 0) {
+    return <>{`${n}`}</>;
+  }
+  if (n < 1e3) {
+    return <Adds>{`${n}`}</Adds>;
+  }
+  if (n < 1e6) {
+    return <Adds>{`${Math.round(n / 1e1) / 100}${SUFFIX_THOUSAND}`}</Adds>;
+  }
+  if (n < 1e9) {
+    return <Adds>{`${Math.round(n / 1e4) / 100}${SUFFIX_MILLION}`}</Adds>;
+  }
+  if (n < 1e12) {
+    return <Adds>{`${Math.round(n / 1e7) / 100}${SUFFIX_BILLION}`}</Adds>;
+  }
+  return (
+    <Adds>
+      <Scientific number={n} />
+    </Adds>
+  );
+};
 
 const NotApplicable = styled(Fraction).attrs(() => ({ a: 'n', b: 'a' }))`
   color: var(--color-value-ignored);
@@ -284,7 +351,7 @@ const fieldSections: FieldSection[] = [
           }
           return lifetime_add === -1
             ? `inf.`
-            : `${lifetime_add}-${lifetime_add}`;
+            : `${lifetime_add}˷±~${lifetime_add}`;
         },
       },
       {
@@ -475,15 +542,23 @@ const fieldSections: FieldSection[] = [
         icon: getBackgroundUrlForDamageType('melee'),
         key: 'damage_melee_add',
         displayName: 'Melee',
-        render: ({ damage_melee_add: v }) =>
-          signZero(round(Number(v) * 25, 1), <Unchanged />),
+        render: ({ damage_melee_add: v }) => (
+          <ReadableNumber
+            number={round(Number(v) * 25, 1)}
+            ifZero={<Unchanged />}
+          />
+        ),
       },
       {
         icon: getBackgroundUrlForDamageType('projectile'),
         key: 'damage_projectile_add',
         displayName: 'Projectile',
-        render: ({ damage_projectile_add: v }) =>
-          signZero(round(Number(v) * 25, 0), <Unchanged />),
+        render: ({ damage_projectile_add: v }) => (
+          <ReadableNumber
+            number={round(Number(v) * 25, 1)}
+            ifZero={<Unchanged />}
+          />
+        ),
       },
       {
         icon: getBackgroundUrlForDamageType('electricity'),

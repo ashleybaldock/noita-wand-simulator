@@ -1,235 +1,525 @@
-import { Random as RandomExt } from '../lua/random';
+import {
+  Random as RandomExt,
+  SetRandomSeed as SetRandomSeedExt,
+} from '../lua/random';
 import { GunActionState } from '../actionState';
 import { Spell, SpellDeckInfo } from '../spell';
+import { ActionId } from '../actionId';
+import { ActionSource } from '../actionSources';
+import { noop } from '../../util';
 
 export type ComponentID = string;
-export type EntityID = string;
+export type EntityID = number;
+export type Entity = object;
+export type InventoryItemID = number;
+export type Component = object;
 
-// listener logic
-type Callback = (eventType: string, ...args: any[]) => void;
-
-let listeners: Callback[] = [];
-
-export function subscribe(callback: Callback) {
-  listeners.push(callback);
-  return () => (listeners = listeners.filter((l) => l !== callback));
-}
-
-function onEvent(eventType: string, ...args: any[]): any {
-  listeners.forEach((c) => c(eventType, ...args));
-  if (overrides[eventType]) {
-    // console.log('onEvent.override', eventType, args);
-    return overrides[eventType]?.(args);
-  }
-}
-
-type OverrideCallback = (...args: any[]) => void;
-let overrides: { [eventType: string]: OverrideCallback | undefined } = {};
-
-export function override(eventType: string, callback: OverrideCallback) {
-  overrides[eventType] = callback;
-  return () => {
-    if (overrides[eventType] === callback) {
-      overrides[eventType] = undefined;
-    }
+type WandEventBase = {
+  SetProjectileConfigs: {};
+  OnNotEnoughManaForAction: {};
+  RegisterGunShotEffects: {
+    recoil_knockback: number;
   };
-}
+  BeginProjectile: {
+    entityFilename: string;
+  };
+  EndProjectile: {};
+  BeginTriggerHitWorld: {
+    entity_filename: string;
+    action_draw_count: number;
+  };
+  BeginTriggerTimer: {
+    entity_filename: string;
+    action_draw_count: number;
+    delay_frames: number;
+  };
+  BeginTriggerDeath: {
+    entity_filename: string;
+    action_draw_count: number;
+  };
+  EndTrigger: {};
+  BaabInstruction: {
+    name: string;
+  };
+  ActionUsesRemainingChanged: {
+    item_id: InventoryItemID;
+    uses_remaining: number;
+    _returns: boolean;
+  };
+  ActionUsed: {
+    itemId: InventoryItemID | undefined;
+  };
+  StartReload: {
+    reload_time: number;
+  };
+  RegisterGunAction: {
+    s: GunActionState;
+  };
+  EntityGetWithTag: {
+    tag: string;
+    _returns: EntityID[];
+  };
+  GetUpdatedEntityID: {
+    actionId: ActionId;
+    _returns: EntityID;
+  };
+  EntityGetComponent: {
+    entity_id: EntityID;
+    component: string;
+    _returns: ComponentID[];
+  };
+  EntityGetFirstComponent: {
+    actionId: ActionId;
+    entity_id: EntityID;
+    component: string;
+    _returns: ComponentID;
+  };
+  EntityGetFirstComponentIncludingDisabled: {
+    actionId: ActionId;
+    entity_id: EntityID;
+    component: string;
+    _returns: ComponentID;
+  };
+  ComponentGetValue2: {
+    actionId: ActionId;
+    component_id: string;
+    key: string;
+    _returns: number;
+  };
+  ComponentSetValue2: {
+    component: ComponentID;
+    key: string;
+    value: number;
+  };
+  EntityInflictDamage: {
+    entityId: EntityID;
+    selfDamage: number;
+    damageType: string;
+    actionString: string;
+    arg1: string;
+    arg2: number;
+    arg3: number;
+    entityId2: EntityID;
+  };
+  EntityGetTransform: {
+    actionId: ActionId;
+    entity: EntityID;
+    _returns: [number, number];
+  };
+  EntityLoad: {
+    entityXml: string;
+    x: number;
+    y: number;
+    _returns: EntityID;
+  };
+  EntityGetAllChildren: {
+    actionId: ActionId;
+    entityId: EntityID;
+    _returns: EntityID[];
+  };
+  EntityGetName: {
+    actionId: ActionId;
+    childId: EntityID;
+    _returns: string;
+  };
+  EntityHasTag: {
+    entityId: EntityID;
+    tag: string;
+    _returns: boolean;
+  };
+  EntityGetInRadiusWithTag: {
+    x: number;
+    y: number;
+    radius: number;
+    tag: string;
+    _returns: number[];
+  };
+  GlobalsGetValue: {
+    key: string;
+    defaultValue: string;
+    _returns: string;
+  };
+  GlobalsSetValue: {
+    key: string;
+    value: string;
+  };
+  OnActionPlayed: {
+    actionId: ActionId;
+  };
+  OnDraw: {
+    state_cards_drawn: number;
+  };
+  OnMoveDiscardedToDeck: {
+    discarded: readonly SpellDeckInfo[];
+  };
+  OnActionCalled: {
+    source: ActionSource;
+    spell: Readonly<Spell>;
+    c: GunActionState;
+    recursion?: number;
+    iteration?: number;
+  };
+  OnActionFinished: {
+    source: string;
+    spell: Readonly<Spell>;
+    c: GunActionState;
+    recursion?: number;
+    iteration?: number;
+    returnValue?: number;
+  };
+  Random: {
+    min: number;
+    max: number;
+    _returns: number;
+  };
+  SetRandomSeed: {
+    a: number;
+    b: number;
+    _returns: number;
+  };
+  GameGetFrameNum: {
+    _returns: number;
+  };
+};
 
-// ext functions
+type WandEventPayloadRecord = {
+  [W in keyof WandEventBase]: {
+    [K in keyof WandEventBase[W] as Exclude<
+      K,
+      '_returns'
+    >]: WandEventBase[W][K];
+  };
+};
+type WandEventReturnTypeRecord = {
+  [W in keyof WandEventBase]: WandEventBase[W] extends { _returns: unknown }
+    ? WandEventBase[W]['_returns']
+    : void;
+};
+export type WandEventRecord = {
+  [K in keyof WandEventBase]: {
+    name: K;
+    payload: WandEventPayloadRecord[K];
+    default?: WandEventReturnTypeRecord[K];
+  };
+};
+type OverridableWandEventRecord = {
+  [W in keyof WandEventRecord as WandEventReturnTypeRecord[W] extends void
+    ? never
+    : W]: WandEventRecord[W];
+};
+export type WandEventOverrideCbRecord = {
+  [W in keyof OverridableWandEventRecord]: (
+    payload: WandEventPayloadRecord[W],
+  ) => WandEventReturnTypeRecord[W] | undefined;
+};
 
-export function SetProjectileConfigs() {
-  const result = onEvent('SetProjectileConfigs');
-  if (result !== undefined) {
-    return result;
-  }
-}
+type WandEventPayload = {
+  [K in keyof WandEventPayloadRecord]: WandEventPayloadRecord[K];
+}[keyof WandEventPayloadRecord];
+type WandEventReturnType = {
+  [K in keyof WandEventReturnTypeRecord]: WandEventReturnTypeRecord[K];
+}[keyof WandEventReturnTypeRecord];
+export type OverridableWandEvent = {
+  [K in keyof OverridableWandEventRecord]: OverridableWandEventRecord[K];
+}[keyof OverridableWandEventRecord];
+export type WandEventOverrideCb = {
+  [K in keyof WandEventOverrideCbRecord]: WandEventOverrideCbRecord[K];
+}[keyof WandEventOverrideCbRecord];
+export type WandEvent = {
+  [K in keyof WandEventRecord]: WandEventRecord[K];
+}[keyof WandEventRecord];
 
-export function OnNotEnoughManaForAction() {
-  const result = onEvent('OnNotEnoughManaForAction');
-  if (result !== undefined) {
-    return result;
-  }
-}
+export type WandEventName = keyof WandEventRecord;
+export type OverridableWandEventName = keyof OverridableWandEventRecord;
 
-export function RegisterGunShotEffects(recoil_knockback: any) {
-  const result = onEvent('RegisterGunShotEffects', recoil_knockback);
-  if (result !== undefined) {
-    return result;
-  }
-}
+export type WandEventOverrideRecord = {
+  [W in keyof OverridableWandEventRecord]: {
+    name: W;
+    payload: WandEventPayloadRecord[W];
+    default: WandEventReturnTypeRecord[W];
+    callback: WandEventOverrideCbRecord[W];
+  };
+};
+export type WandEventOverrides = {
+  [K in keyof WandEventOverrideRecord]: WandEventOverrideRecord[K];
+};
+export type WandEventOverrideGen<W extends OverridableWandEventName> =
+  WandEventOverrideRecord[W];
+export type WandEventOverride = {
+  [K in keyof WandEventOverrideRecord]: WandEventOverrideRecord[K];
+}[keyof WandEventOverrideRecord];
+export type OverridableWandEventCallback = {
+  [K in keyof OverridableWandEventRecord]: {
+    name: K;
+    callback: (
+      name: K,
+      payload: WandEventPayloadRecord[K],
+    ) => WandEventReturnTypeRecord[K] | undefined;
+  };
+}[keyof OverridableWandEventRecord];
 
-// export function Reflection_RegisterProjectile(entity_filename: string) {
-//   const result = onEvent('Reflection_RegisterProjectile', entity_filename);
-//   if (result !== undefined) {
-//     return result;
-//   }
+/* Multi-subscriber implementation */
+// type Callback = (payload: WandEvent) => void;
+// const listeners = new Set<Callback>();
+// export function subscribe(callback: Callback) {
+//   listeners.add(callback);
+//   return () => listeners.delete(callback);
 // }
 
-export function BeginProjectile(entity_filename: string) {
-  const result = onEvent('BeginProjectile', entity_filename);
-  if (result !== undefined) {
-    return result;
-  }
+// const overrides = new Map<OverridableWandEventName, WandEventOverride>();
+
+// type Overrides<
+//   O extends { name: K; callback: F },
+//   W extends { [L in K]: O },
+//   K extends keyof W,
+//   F,
+// > = {
+//   clear: () => Overrides<O, W, K, F>;
+//   delete: (key: K) => Overrides<O, W, K, F>;
+//   set: (key: K, val: O) => Overrides<O, W, K, F>;
+//   get: (key: K) => O | undefined;
+//   getCb: (key: K) => F | undefined;
+//   has: (testKey: K) => boolean;
+// };
+
+// const overrides: Overrides<
+//   WandEventOverride,
+//   WandEventOverrideRecord,
+//   OverridableWandEventName,
+//   WandEventOverrideCb
+// > = (() => {
+//   const contents: Partial<Record<OverridableWandEventName, WandEventOverride>> =
+//     {};
+//   return {
+//     clear: function () {
+//       objectKeys(contents).forEach((key) => delete contents[key]);
+//       return this;
+//     },
+//     delete: function (key) {
+//       delete contents[key];
+//       return this;
+//     },
+//     set: function (key, val) {
+//       contents[key] = val;
+//       return this;
+//     },
+//     get: function (key) {
+//       return contents[key] as WandEventOverrideRecord[OverridableWandEventName];
+//     },
+//     getCb: function (key) {
+//       return contents[key]?.callback as WandEventOverrideCb;
+//     },
+//     has: function (testKey) {
+//       return (
+//         contents.hasOwnProperty(testKey) &&
+//         isNotNullOrUndefined(contents[testKey])
+//       );
+//     },
+//   };
+// })();
+
+// export function override(override: WandEventOverride) {
+//   overrides.set(override.name, override);
+//   return () => {
+//     overrides.delete(override.name);
+//   };
+// }
+
+// const isOverridableWandEvent = (
+//   wandEvent: WandEvent,
+// ): wandEvent is OverridableWandEvent => isNotNullOrUndefined(wandEvent.default);
+
+// function onEvent<W extends WandEvent>(wandEvent: W) {
+//   listeners.forEach((c) => c(wandEvent));
+
+//   if (isOverridableWandEvent(wandEvent)) {
+//     const override = overrides.getCb(wandEvent.name);
+//     if (isNotNullOrUndefined(override)) {
+//       return override(wandEvent.payload);
+//     }
+//     return wandEvent.default;
+//   }
+// }
+// function onOverrideableEvent(wandEvent: WandEvent) {
+//   onEvent(wandEvent);
+// const cb = overrides.get(wandEvent.name);
+// if (isNotNullOrUndefined(cb)) {
+// cb.callback(wandEvent['name'], wandEvent);
+// }
+// }
+// ext functions
+
+export type WandObserverCb = <W extends WandEvent>(payload: W) => W['default'];
+export const observer = (() => {
+  let listener: WandObserverCb = noop;
+  const remove = () => (listener = noop);
+  return {
+    subscribe: (callback: WandObserverCb) => {
+      listener = callback;
+      return () => listener === callback && remove();
+    },
+    onEvent: <W extends WandEvent>(wandEvent: W) => listener(wandEvent),
+  };
+})();
+
+export function SetProjectileConfigs(): void {
+  observer.onEvent({ name: 'SetProjectileConfigs', payload: {} });
 }
 
-export function EndProjectile() {
-  const result = onEvent('EndProjectile');
-  if (result !== undefined) {
-    return result;
-  }
+export function OnNotEnoughManaForAction(): void {
+  observer.onEvent({ name: 'OnNotEnoughManaForAction', payload: {} });
+}
+
+export function RegisterGunShotEffects(recoil_knockback: number): void {
+  observer.onEvent({
+    name: 'RegisterGunShotEffects',
+    payload: { recoil_knockback },
+  });
+}
+
+export function BeginProjectile(entity_filename: string): void {
+  observer.onEvent({
+    name: 'BeginProjectile',
+    payload: { entityFilename: entity_filename },
+  });
+}
+
+export function EndProjectile(): void {
+  observer.onEvent({ name: 'EndProjectile', payload: {} });
 }
 
 export function BeginTriggerTimer(
   entity_filename: string,
   action_draw_count: number,
   delay_frames: number,
-) {
-  const result = onEvent(
-    'BeginTriggerTimer',
-    entity_filename,
-    action_draw_count,
-    delay_frames,
-  );
-  if (result !== undefined) {
-    return result;
-  }
+): void {
+  observer.onEvent({
+    name: 'BeginTriggerTimer',
+    payload: {
+      entity_filename,
+      action_draw_count,
+      delay_frames,
+    },
+  });
 }
 
 export function BeginTriggerHitWorld(
   entity_filename: string,
   action_draw_count: number,
 ) {
-  const result = onEvent(
-    'BeginTriggerHitWorld',
-    entity_filename,
-    action_draw_count,
-  );
-  if (result !== undefined) {
-    return result;
-  }
+  observer.onEvent({
+    name: 'BeginTriggerHitWorld',
+    payload: { entity_filename, action_draw_count },
+  });
 }
 
 export function BeginTriggerDeath(
   entity_filename: string,
   action_draw_count: number,
 ) {
-  const result = onEvent(
-    'BeginTriggerDeath',
-    entity_filename,
-    action_draw_count,
-  );
-  if (result !== undefined) {
-    return result;
-  }
+  observer.onEvent({
+    name: 'BeginTriggerDeath',
+    payload: { entity_filename, action_draw_count },
+  });
 }
 
 export function EndTrigger() {
-  const result = onEvent('EndTrigger');
-  if (result !== undefined) {
-    return result;
-  }
+  observer.onEvent({ name: 'EndTrigger', payload: {} });
 }
 
 export function BaabInstruction(name: string) {
-  const result = onEvent('BaabInstruction', name);
-  if (result !== undefined) {
-    return result;
-  }
+  observer.onEvent({ name: 'BaabInstruction', payload: { name } });
 }
 
 export function ActionUsesRemainingChanged(
   item_id: any,
   uses_remaining: number,
-) {
-  const result = onEvent('ActionUsesRemainingChanged', item_id, uses_remaining);
-  if (result !== undefined) {
-    return result;
-  }
-  return false;
+): boolean {
+  return observer.onEvent({
+    name: 'ActionUsesRemainingChanged',
+    default: false,
+    payload: {
+      item_id,
+      uses_remaining,
+    },
+  });
 }
 
-export function ActionUsed(item_id: any) {
-  const result = onEvent('ActionUsed', item_id);
-  if (result !== undefined) {
-    return result;
-  }
+export function ActionUsed(item_id: InventoryItemID | undefined) {
+  observer.onEvent({ name: 'ActionUsed', payload: { itemId: item_id } });
 }
 
-// export function LogAction(s: string) {
-//   const result = onEvent('LogAction', s);
-//   if (result !== undefined) {
-//     return result;
-//   }
-// }
-
-export function StartReload(reload_time: number) {
-  const result = onEvent('StartReload', reload_time);
-  if (result !== undefined) {
-    return result;
-  }
+export function StartReload(reload_time: number): void {
+  observer.onEvent({ name: 'StartReload', payload: { reload_time } });
 }
 
-export function RegisterGunAction(s: GunActionState) {
-  const result = onEvent('RegisterGunAction', s);
-  if (result !== undefined) {
-    return result;
-  }
+export function RegisterGunAction(s: GunActionState): void {
+  observer.onEvent({ name: 'RegisterGunAction', payload: { s } });
 }
 
-export function EntityGetWithTag(tag: string): any {
-  const result = onEvent('EntityGetWithTag', tag);
-  if (result !== undefined) {
-    return result;
-  }
-  return {};
+export function EntityGetWithTag(tag: string): EntityID[] {
+  return observer.onEvent({
+    name: 'EntityGetWithTag',
+    default: [],
+    payload: { tag },
+  });
 }
 
-export function GetUpdatedEntityID(): EntityID {
-  const result = onEvent('GetUpdatedEntityID');
-  if (result !== undefined) {
-    return result;
-  }
-  return 'dummy entity';
+export function GetUpdatedEntityID(actionId: ActionId): EntityID {
+  return observer.onEvent({
+    name: 'GetUpdatedEntityID',
+    default: 0,
+    payload: { actionId },
+  });
 }
 
 export function EntityGetComponent(
-  entity_id: string,
+  entity_id: EntityID,
   component: string,
 ): ComponentID[] {
-  const result = onEvent('EntityGetComponent', entity_id, component);
-  if (result !== undefined) {
-    return result;
-  }
-  return [component];
+  return observer.onEvent({
+    name: 'EntityGetComponent',
+    default: [component],
+    payload: {
+      entity_id,
+      component,
+    },
+  });
 }
 
 export function EntityGetFirstComponent(
-  entity_id: any,
+  actionId: ActionId,
+  entity_id: EntityID,
   component: string,
-): any {
-  const result = onEvent('EntityGetFirstComponent', entity_id, component);
-  if (result !== undefined) {
-    return result;
-  }
-  return {};
+): ComponentID {
+  return observer.onEvent({
+    name: 'EntityGetFirstComponent',
+    default: '',
+    payload: {
+      actionId,
+      entity_id,
+      component,
+    },
+  });
 }
 
 export function EntityGetFirstComponentIncludingDisabled(
-  entity_id: any,
+  actionId: ActionId,
+  entity_id: EntityID,
   component: string,
-): any {
-  const result = onEvent(
-    'EntityGetFirstComponentIncludingDisabled',
-    entity_id,
-    component,
-  );
-  if (result !== undefined) {
-    return result;
-  }
-  return {};
+): ComponentID {
+  return observer.onEvent({
+    name: 'EntityGetFirstComponentIncludingDisabled',
+    default: '',
+    payload: {
+      actionId,
+      entity_id,
+      component,
+    },
+  });
 }
 
-const componentValues: { [component_id: string]: { [key: string]: any } } = {
+const componentValues: { [component_id: string]: { [key: string]: number } } = {
   'dummy entity': {
     money: 1e18,
     hp: 1e18,
@@ -237,82 +527,99 @@ const componentValues: { [component_id: string]: { [key: string]: any } } = {
   },
 };
 
-export function ComponentGetValue2(component_id: string, key: string): any {
-  const result = onEvent('ComponentGetValue2', component_id, key);
-  if (result !== undefined) {
-    return result;
-  }
-  return componentValues['dummy entity'][key];
+export function ComponentGetValue2(
+  actionId: ActionId,
+  component_id: string,
+  key: string,
+): number {
+  return observer.onEvent({
+    name: 'ComponentGetValue2',
+    default: componentValues['dummy entity'][key],
+    payload: { actionId, component_id, key },
+  });
 }
 
-export function ComponentSetValue2(component: any, key: string, value: any) {
-  const result = onEvent('ComponentSetValue2', component, key, value);
-  if (result !== undefined) {
-    return result;
-  }
+export function ComponentSetValue2(
+  component: ComponentID,
+  key: string,
+  value: number,
+): void {
+  observer.onEvent({
+    name: 'ComponentSetValue2',
+    payload: { component, key, value },
+  });
 }
 
 export function EntityInflictDamage(
-  entityId: any,
+  entityId: EntityID,
   selfDamage: number,
   damageType: string,
   actionString: string,
   arg1: string,
   arg2: number,
   arg3: number,
-  entityId2: any,
-) {
-  onEvent(
-    'EntityInflictDamage',
-    entityId,
-    selfDamage,
-    damageType,
-    actionString,
-    arg1,
-    arg2,
-    arg3,
-    entityId2,
-  );
+  entityId2: EntityID,
+): void {
+  observer.onEvent({
+    name: 'EntityInflictDamage',
+    payload: {
+      entityId,
+      selfDamage,
+      damageType,
+      actionString,
+      arg1,
+      arg2,
+      arg3,
+      entityId2,
+    },
+  });
 }
 
-export function EntityGetTransform(entity: any): [number, number] {
-  const result = onEvent('EntityGetTransform', entity);
-  if (result !== undefined) {
-    return result;
-  }
-  return [0, 0];
+export function EntityGetTransform(
+  actionId: ActionId,
+  entity: EntityID,
+): [number, number] {
+  return observer.onEvent({
+    name: 'EntityGetTransform',
+    default: [0, 0],
+    payload: { actionId, entity },
+  });
 }
 
-export function EntityLoad(entityXml: string, x: number, y: number): number {
-  const result = onEvent('EntityLoad', entityXml, x, y);
-  if (result !== undefined) {
-    return result;
-  }
-  return 0; //entity id
+// Currently only used by end of everything
+export function EntityLoad(entityXml: string, x: number, y: number): EntityID {
+  return observer.onEvent({
+    name: 'EntityLoad',
+    default: 0,
+    payload: { entityXml, x, y },
+  });
 }
 
-export function EntityGetAllChildren(entityId: any): any {
-  const result = onEvent('EntityGetAllChildren', entityId);
-  if (result !== undefined) {
-    return result;
-  }
-  return [];
+export function EntityGetAllChildren(
+  actionId: ActionId,
+  entityId: EntityID,
+): EntityID[] {
+  return observer.onEvent({
+    name: 'EntityGetAllChildren',
+    default: [],
+    payload: { actionId, entityId },
+  });
 }
 
-export function EntityGetName(childId: any): any {
-  const result = onEvent('EntityGetName', childId);
-  if (result !== undefined) {
-    return result;
-  }
-  return {};
+export function EntityGetName(actionId: ActionId, childId: EntityID): string {
+  return observer.onEvent({
+    name: 'EntityGetName',
+    default: '',
+    payload: { actionId, childId },
+  });
 }
 
-export function EntityHasTag(entityId: any, tag: string): any {
-  const result = onEvent('EntityHasTag', entityId, tag);
-  if (result !== undefined) {
-    return result;
-  }
-  return false;
+export function EntityHasTag(entityId: EntityID, tag: string): boolean {
+  return observer.onEvent({
+    name: 'EntityHasTag',
+    default: false,
+    payload: { entityId, tag },
+  });
 }
 
 export function EntityGetInRadiusWithTag(
@@ -320,116 +627,119 @@ export function EntityGetInRadiusWithTag(
   y: number,
   radius: number,
   tag: string,
-): any {
-  const result = onEvent('EntityGetInRadiusWithTag', x, y, radius, tag);
-  if (result !== undefined) {
-    return result;
-  }
-  return {};
+): number[] {
+  return observer.onEvent({
+    name: 'EntityGetInRadiusWithTag',
+    default: [0],
+    payload: {
+      x,
+      y,
+      radius,
+      tag,
+    },
+  });
 }
 
 /* At time of writing, this is only used by Requirement: Every Other */
 let globals: { [key: string]: string } = {};
 
-export function GlobalsGetValue(key: string, defaultValue: string): any {
-  const result = onEvent('GlobalsGetValue', key, defaultValue);
-  if (result !== undefined) {
-    return result;
-  }
-  return globals.hasOwnProperty(key) ? globals[key] : defaultValue;
+export function GlobalsGetValue(key: string, defaultValue: string): string {
+  return observer.onEvent({
+    name: 'GlobalsGetValue',
+    default: globals.hasOwnProperty(key) ? globals[key] : defaultValue,
+    payload: { key, defaultValue },
+  });
 }
 
 /* At time of writing, this is only used by Requirement: Every Other */
-export function GlobalsSetValue(key: string, value: string) {
-  const result = onEvent('GlobalsSetValue', key, value);
-  if (result !== undefined) {
-    return result;
-  }
-  globals[key] = value;
+export function GlobalsSetValue(key: string, value: string): void {
+  observer.onEvent({ name: 'GlobalsSetValue', payload: { key, value } });
 }
 
-export function OnActionPlayed(action_id: any) {
-  const result = onEvent('OnActionPlayed', action_id);
-  if (result !== undefined) {
-    return result;
-  }
-  return false;
+export function OnActionPlayed(actionId: ActionId): void {
+  observer.onEvent({ name: 'OnActionPlayed', payload: { actionId } });
 }
 
 // custom
 
-export const OnDraw = (state_cards_drawn: number) => {
-  const result = onEvent('OnDraw', state_cards_drawn);
-  if (result !== undefined) {
-    return result;
-  }
+export const OnDraw = (state_cards_drawn: number): void => {
+  observer.onEvent({ name: 'OnDraw', payload: { state_cards_drawn } });
 };
 
 /* Each time the wand 'wraps' naturally */
 export const OnMoveDiscardedToDeck = (discarded: readonly Spell[]): void => {
-  onEvent(
-    'OnMoveDiscardedToDeck',
-    discarded.map<SpellDeckInfo>(
-      ({ id, deck_index, permanently_attached }) => ({
-        id,
-        deck_index,
-        permanently_attached,
-      }),
-    ),
-  );
+  observer.onEvent({
+    name: 'OnMoveDiscardedToDeck',
+    payload: {
+      discarded: discarded.map<SpellDeckInfo>(
+        ({ id, deck_index, permanently_attached }) => ({
+          id,
+          deck_index,
+          permanently_attached,
+        }),
+      ),
+    },
+  });
 };
 
 export function OnActionCalled(
-  source: string,
+  source: ActionSource,
   spell: Readonly<Spell>,
   c: GunActionState,
   recursion?: number,
   iteration?: number,
-) {
-  const result = onEvent(
-    'OnActionCalled',
-    source,
-    spell,
-    c,
-    recursion,
-    iteration,
-  );
-  if (result !== undefined) {
-    return result;
-  }
+): void {
+  observer.onEvent({
+    name: 'OnActionCalled',
+    payload: { source, spell, c, recursion, iteration },
+  });
 }
 
 export function OnActionFinished(
-  source: string,
+  source: ActionSource,
   spell: Readonly<Spell>,
   c: GunActionState,
   recursion?: number,
   iteration?: number,
   returnValue?: number,
-) {
-  const result = onEvent(
-    'OnActionFinished',
-    source,
-    spell,
-    c,
-    recursion,
-    iteration,
-    returnValue,
+): void {
+  observer.onEvent({
+    name: 'OnActionFinished',
+    payload: {
+      source,
+      spell,
+      c,
+      recursion,
+      iteration,
+      returnValue,
+    },
+  });
+}
+
+export function Random(min: number, max: number): number {
+  return observer.onEvent({
+    name: 'Random',
+    default: RandomExt(min, max),
+    payload: { min, max },
+  });
+}
+
+export function SetRandomSeed(a: number, b: number): void {
+  SetRandomSeedExt(
+    observer.onEvent({
+      name: 'SetRandomSeed',
+      default: 1,
+      payload: { a, b },
+    }),
+    a,
+    b,
   );
-  if (result !== undefined) {
-    return result;
-  }
 }
 
-export function Random(min: number, max: number) {
-  return RandomExt(min, max);
-}
-
-export function SetRandomSeed(a: number, b: number) {
-  // SetRandomSeedExt(store.getState().config.config.random.worldSeed, a, b);
-}
-
-export function GameGetFrameNum() {
-  return 0;
-  // return store.getState().config.config.random.frameNumber;
+export function GameGetFrameNum(): number {
+  return observer.onEvent({
+    name: 'GameGetFrameNum',
+    default: 1,
+    payload: {},
+  });
 }

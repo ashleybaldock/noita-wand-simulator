@@ -79,12 +79,12 @@ config = {
     {
       'src': 'data/scripts/gun/gun_actions.lua',
       'dst': 'src/app/calc/__generated__/main/unlocks.ts',
-      'before': unlocksBefore,
-      'after': 'export const unlocks = actions;',
+      'before': '',
+      'after': '',
     }
   },
   'beta': {
-      'actionIds':
+    'actionIds':
     {
       'src': 'data/scripts/gun/gun_actions.beta.lua',
       'dst': 'src/app/calc/__generated__/beta/actionIds.ts'
@@ -96,16 +96,39 @@ config = {
       'before': spellsBefore,
       'after': 'export const spells = actions;',
     },
-  },
-  'unlocks':
+    'unlocks':
     {
-      'src': 'data/scripts/gun/gun_actions.lua',
-      'dst': 'src/app/calc/__generated__/main/unlocks.ts',
-      'before': unlocksBefore,
-      'after': 'export const unlocks = actions;',
+      'src': 'data/scripts/gun/gun_actions.beta.lua',
+      'dst': 'src/app/calc/__generated__/beta/unlocks.ts',
+      'before': '',
+      'after': '',
     }
+  }
 }
 
+
+observedFunctions = [
+  "EntityGetWithTag",
+  "GetUpdatedEntityID",
+  "EntityGetComponent",
+  "EntityGetFirstComponent",
+  "ComponentGetValue2",
+  "ComponentSetValue2",
+  "EntityInflictDamage",
+  "ActionUsesRemainingChanged",
+  "EntityGetTransform",
+  "EntityLoad",
+  "EntityGetAllChildren",
+  "EntityGetName",
+  "EntityHasTag",
+  "EntityGetFirstComponentIncludingDisabled",
+  "EntityGetInRadiusWithTag",
+  "GlobalsGetValue",
+  "GlobalsSetValue",
+  "Random",
+  "SetRandomSeed",
+  "GameGetFrameNum"
+]
 
 
 # Convert action functions,
@@ -126,7 +149,7 @@ def actionReplaceFn(m: Match):
     a = actionArgTypes[arg]
     argsString += f', {arg}: {a[0]} = {a[1]}'
 
-  return f'action: ({argsString}) => {{{m.group(2)}{m.group(3)}}},{m.group(4)}'
+  return f'action: function({argsString}) {{{m.group(2)}{m.group(3)}}},{m.group(4)}'
 
 @dataclass
 class PatternReplace:
@@ -242,6 +265,14 @@ patterns = [
   PatternReplace(r'ACTION_TYPE_OTHER', r'"other"', flags=re.MULTILINE),
   PatternReplace(r'ACTION_TYPE_UTILITY', r'"utility"', flags=re.MULTILINE),
   PatternReplace(r'ACTION_TYPE_PASSIVE', r'"passive"', flags=re.MULTILINE),
+
+  PatternReplace(r'EntityGetTransform\(', r'EntityGetTransform(this.id, ', flags=re.MULTILINE),
+  PatternReplace(r'EntityGetAllChildren\(', r'EntityGetAllChildren(this.id, ', flags=re.MULTILINE),
+  PatternReplace(r'EntityGetFirstComponent\(', r'EntityGetFirstComponent(this.id, ', flags=re.MULTILINE),
+  PatternReplace(r'EntityGetFirstComponentIncludingDisabled\(', r'EntityGetFirstComponentIncludingDisabled(this.id, ', flags=re.MULTILINE),
+  PatternReplace(r'ComponentGetValue2\(', r'ComponentGetValue2(this.id, ', flags=re.MULTILINE),
+  PatternReplace(r'EntityGetName\(', r'EntityGetName(this.id, ', flags=re.MULTILINE),
+  PatternReplace(r'GetUpdatedEntityID\(', r'GetUpdatedEntityID(this.id', flags=re.MULTILINE),
 ]
 
 
@@ -249,10 +280,10 @@ def processUnlocks(src, dst, before = '', after = ''):
   with open(src) as inFile:
     content = inFile.read()
 
-  action_id_pattern = r'\t+{\s*spawn_requires_flag\s*=\s*\"(\w+)\"'
-  action_ids = list(dict.fromkeys(re.findall(action_id_pattern, content, re.dotall)))
-  joined = ",\n".join(f'"{i}"' for i in action_ids)
-  content = f'export const unlocks = [\n{joined}\n] as const;\n\nexport type unlock = typeof unlock[number];\n\n'
+  pattern = r'\t+\s*spawn_requires_flag\s*=\s*\"(\w+)\"'
+  matches = sorted(list(dict.fromkeys(re.findall(pattern, content, re.DOTALL))))
+  joined = ",\n  ".join(f'\'{m}\'' for m in matches)
+  content = f'/* Auto-generated file */\n\nexport const unlockConditions = [\n  {joined},\n] as const;\n\nexport type UnlockCondition = typeof unlockConditions[number];\n\n'
 
 
   with open(dst, 'w') as outFile:
@@ -262,10 +293,10 @@ def processActionIds(src, dst, before = '', after = ''):
   with open(src) as inFile:
     content = inFile.read()
 
-  action_id_pattern = r'\t+{\s*id\s*=\s*\"(\w+)\"'
-  action_ids = list(dict.fromkeys(re.findall(action_id_pattern, content, re.dotall)))
-  joined = ",\n".join(f'"{i}"' for i in action_ids)
-  content = f'export const actionids = [\n{joined}\n] as const;\n\nexport type actionid = typeof actionids[number];\n\n'
+  pattern = r'\t+{\s*id\s*=\s*\"(\w+)\"'
+  matches = sorted(list(dict.fromkeys(re.findall(pattern, content, re.DOTALL))))
+  joined = ",\n  ".join(f'\'{m}\'' for m in matches)
+  content = f'/* Auto-generated file */\n\nexport const actionIds = [\n  {joined},\n] as const;\n\nexport type ActionId = typeof actionIds[number];\n\n'
 
   with open(dst, 'w') as outFile:
     outFile.write(before + content + after)

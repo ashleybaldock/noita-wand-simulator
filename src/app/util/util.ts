@@ -1,5 +1,6 @@
 import { Preset, PresetGroup } from '../types';
 import { FPS } from './constants';
+import { mapIter } from './iterTools';
 
 export const noop = () => {};
 
@@ -17,12 +18,35 @@ export const assertNever = (_: never): never => {
   throw new Error('This should never happen.');
 };
 
+/**
+ * Rounds a number
+ */
+// type RoundOptions = {
+//   step?: number;
+//   min?: number;
+//   max?: number;
+//   method?: 'ceil' | 'floor' | 'round';
+// };
+// export const roundToStep = (
+//   n: number,
+//   {
+//     step = 1,
+//     min = Number.NEGATIVE_INFINITY,
+//     max = Number.POSITIVE_INFINITY,
+//     method = 'round',
+//   }: RoundOptions,
+// ) => {
+//   return Math.ceil((n - offset) / increment) * increment + offset;
+// };
+
 export const parseBooleanFromString = (
   str: string,
   defaultTo: boolean = false,
   truthy: RegExp = /(?:^1$|^y$|^Y$|^t$|^T$|^true|^yes)/,
   falsey: RegExp = /(?:^0$|^n$|^N$|^f$|^F$|^false|^no)/,
 ) => truthy.test(str) || !falsey.test(str) || defaultTo;
+
+type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
 
 export function union<T, U>(setA: Set<T>, setB: Set<U>) {
   let _union = new Set<T | U>(setA);
@@ -36,9 +60,9 @@ export function range(n: number) {
   return [...Array(n).keys()];
 }
 
-type DiffResult<T extends object> = Partial<
-  { [key in keyof T]: { a: T[key]; b: T[key] } }
->;
+type DiffResult<T extends object> = Partial<{
+  [key in keyof T]: { a: T[key]; b: T[key] };
+}>;
 
 export function diff<T extends object>(a: T, b: T) {
   const result: any = {};
@@ -101,9 +125,7 @@ export const invertRecord = <
  * e.g. Map<K,V> => Map<V,K>
  */
 export const invertMap = <K, V>(obj: Map<K, V>): Map<V, K> =>
-  new Map<V, K>(
-    mapIter(obj.entries(), ([key, value]) => ({ ok: true, val: [value, key] })),
-  );
+  new Map<V, K>(mapIter(obj.entries(), ([key, value]) => [value, key]));
 
 export function constToDisplayString(c: string) {
   return c.replace(/_/g, ' ').replace(/\w\S*/g, function (txt) {
@@ -235,25 +257,4 @@ export function hashString(s: string) {
     hash |= 0; // Convert to 32bit integer
   }
   return hash;
-}
-
-type Maybe<T> =
-  | {
-      ok: true;
-      val: T;
-    }
-  | {
-      ok: false;
-    };
-
-export function* mapIter<TI, TO>(
-  iterable: IterableIterator<TI>,
-  callback: (input: TI) => Maybe<TO>,
-): IterableIterator<TO> {
-  for (let x of iterable) {
-    const result = callback(x);
-    if (result.ok) {
-      yield result.val;
-    }
-  }
 }

@@ -6,7 +6,6 @@ import { WandBorder } from './WandBorder';
 import { SaveImageButton } from '../generic';
 import { SectionHeader } from '../SectionHeader';
 import {
-  ExportButton,
   LoadButton,
   ResetButton,
   UndoButton,
@@ -27,7 +26,7 @@ const MainDiv = styled.div`
     margin: 10px 0;
   }
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 800px) {
     flex-direction: column;
   }
 `;
@@ -39,7 +38,7 @@ const ContentDiv = styled.div`
   background-color: var(--color-button-background);
   padding: 0.8em 0.2em 0.6em 0.2em;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 800px) {
     flex-direction: column;
     align-items: stretch;
   }
@@ -56,7 +55,7 @@ const CopySpells = styled.div`
   font-family: var(--font-family-noita-default);
   z-index: var(--zindex-copy-png);
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 800px) {
     bottom: -0.8em;
   }
 `;
@@ -65,7 +64,7 @@ const WandActionEditorWrapper = styled.div`
   position: relative;
   height: auto;
   flex: 1 1 min-content;
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 800px) {
     margin: 0.8em 0 0.4em 0;
   }
 `;

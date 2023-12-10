@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { SpellSelector, WandBuilder } from './WandEditor';
-import { ShotResultList } from './Visualisation';
+import { VisualisationList } from './Visualisation';
 import { useAppDispatch } from '../redux/hooks';
 import { updateConfig, useConfig } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
 import { DebugHints } from './Debug';
-import { SectionHeader } from './SectionHeader';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { forceDisableCanvasSmoothing } from '../util/util';
@@ -69,10 +68,7 @@ export function WandSimulator() {
           <CastConfigEditor />
         </Column>
         <Column>
-          <SectionHeader
-            title={`Simulation${config.pauseCalculations ? ' (Paused)' : ''}`}
-          />
-          {!config.pauseCalculations && <ShotResultList {...config} />}
+          <VisualisationList {...config} />
         </Column>
         <SpellInfoTooltip />
         <ReleaseInfo />

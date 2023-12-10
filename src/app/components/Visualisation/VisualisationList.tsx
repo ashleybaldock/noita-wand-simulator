@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 import { isNotNullOrUndefined } from '../../util';
 import { clickWand } from '../../calc/eval/clickWand';
@@ -6,17 +6,18 @@ import { condenseActionsAndProjectiles } from '../../calc/grouping/condense';
 import { isValidActionId, isGreekActionId } from '../../calc/actionId';
 import { getSpellById } from '../../calc/spells';
 import { useWandState } from '../../redux';
-import { selectConfig } from '../../redux/configSlice';
-import { useAppSelector } from '../../redux/hooks';
+import { useConfig } from '../../redux/configSlice';
 import { SaveImageButton, ScrollWrapper } from '../generic';
 import { ActionCalledShotResult } from './ActionSequence';
 import { ActionTreeShotResult } from './ActionTree';
 import { SectionHeader } from '../SectionHeader';
 import { CastStateTable } from './ProjectileTree';
+import { SimulationStatus } from '../SimulationStatus';
 
 const ParentDiv = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
 `;
 
 const SectionDiv = styled.div`
@@ -28,8 +29,7 @@ const SectionDiv = styled.div`
 `;
 
 // list of several ShotResults, generally from clicking/holding until reload, but also for one click
-export const ShotResultList = ({
-  pauseCalculations,
+export const VisualisationList = ({
   condenseShots,
   unlimitedSpells,
   infiniteSpells,
@@ -37,7 +37,6 @@ export const ShotResultList = ({
   showGreekSpells,
   showDirectActionCalls,
 }: {
-  pauseCalculations: boolean;
   condenseShots: boolean;
   unlimitedSpells: boolean;
   infiniteSpells: boolean;
@@ -47,7 +46,13 @@ export const ShotResultList = ({
 }) => {
   const { wand, spellIds } = useWandState();
 
-  const { config } = useAppSelector(selectConfig);
+  const config = useConfig();
+  const {
+    random: { worldSeed, frameNumber },
+    endSimulationOnRefresh,
+    showActionTree,
+    requirements: requirementConfig,
+  } = config;
 
   const actionsCalledRef = useRef<HTMLDivElement>();
   const actionCallTreeRef = useRef<HTMLDivElement>();
@@ -74,27 +79,36 @@ export const ShotResultList = ({
     });
   }, [infiniteSpells, unlimitedSpells, spells]);
 
+  const [simulationRunning, setSimulationRunning] = useState(false);
+
   let {
     shots,
     recharge: totalRechargeTime,
     endReason,
-  } = useMemo(
-    () =>
-      clickWand(
-        wand,
-        spellActionsWithUses,
-        wand.mana_max,
-        wand.cast_delay,
-        config.endSimulationOnRefresh ? 'refresh' : 'reload',
-        config.requirements,
-      ),
-    [
-      config.endSimulationOnRefresh,
-      config.requirements,
-      spellActionsWithUses,
-      wand,
-    ],
-  );
+    elapsedTime,
+  } = useMemo(() => {
+    setSimulationRunning(true);
+    const result = clickWand(wand, spellActionsWithUses, {
+      req_enemies: requirementConfig.enemies,
+      req_projectiles: requirementConfig.projectiles,
+      req_hp: requirementConfig.hp,
+      req_half: requirementConfig.half,
+      rng_frameNumber: frameNumber,
+      rng_worldSeed: worldSeed,
+      wand_available_mana: wand.mana_max,
+      wand_cast_delay: wand.cast_delay,
+      fireUntil: endSimulationOnRefresh ? 'refresh' : 'reload',
+    });
+    setSimulationRunning(false);
+    return result;
+  }, [
+    endSimulationOnRefresh,
+    frameNumber,
+    requirementConfig,
+    spellActionsWithUses,
+    wand,
+    worldSeed,
+  ]);
 
   shots = useMemo(() => {
     if (!showDivides) {
@@ -143,25 +157,18 @@ export const ShotResultList = ({
 
   return (
     <ParentDiv>
+      <SimulationStatus
+        simulationRunning={simulationRunning}
+        lastStopReason={endReason}
+        lastEndCondition={'oneshot'}
+        elapsedTime={elapsedTime}
+      />
       <CastStateTable
         endReason={endReason}
         shots={groupedShots}
         totalRechargeTime={totalRechargeTime}
       ></CastStateTable>
-      <SectionHeader title={'Simulation: Action Call Sequence'} />
-      <ScrollWrapper>
-        <SectionDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>
-          <SaveImageButton
-            targetRef={actionsCalledRef}
-            fileName={'actions_called'}
-            enabled={groupedShots.length > 0}
-          />
-          {groupedShots.map((shot, index) => (
-            <ActionCalledShotResult key={index} shot={shot} />
-          ))}
-        </SectionDiv>
-      </ScrollWrapper>
-      {config.showActionTree && (
+      {showActionTree && (
         <>
           <SectionHeader title={'Simulation: Action Call Tree'} />
           <ScrollWrapper>
@@ -181,6 +188,19 @@ export const ShotResultList = ({
           </ScrollWrapper>
         </>
       )}
+      <SectionHeader title={'Simulation: Action Call Sequence'} />
+      <ScrollWrapper>
+        <SectionDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>
+          <SaveImageButton
+            targetRef={actionsCalledRef}
+            fileName={'actions_called'}
+            enabled={groupedShots.length > 0}
+          />
+          {groupedShots.map((shot, index) => (
+            <ActionCalledShotResult key={index} shot={shot} />
+          ))}
+        </SectionDiv>
+      </ScrollWrapper>
     </ParentDiv>
   );
 };

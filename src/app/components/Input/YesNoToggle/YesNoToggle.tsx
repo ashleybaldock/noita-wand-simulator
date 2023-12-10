@@ -1,0 +1,94 @@
+import { noop } from 'lodash';
+import { ChangeEventHandler, MouseEventHandler } from 'react';
+import styled from 'styled-components/macro';
+
+type CheckboxProps = {
+  $hidden?: boolean;
+};
+export const Checkbox = styled.input.attrs({ type: 'checkbox' })<CheckboxProps>`
+  --form-control-color: white;
+
+  appearance: none;
+  background-color: #000;
+  margin: 0;
+
+  ${({ $hidden }) =>
+    $hidden
+      ? `
+  display: grid;
+  `
+      : `
+  display: none;
+  `}
+  place-content: center;
+
+  font: inherit;
+  color: currentColor;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid currentColor;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+
+  &::before {
+    content: '';
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 20ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+  }
+  &&:checked::before {
+    transform: scale(1);
+  }
+`;
+
+const WrapperLabel = styled.label`
+  display: flex;
+  flex-direction: row;
+  user-select: none;
+  cursor: pointer;
+  position: relative;
+`;
+
+const Sizer = styled.div`
+  color: transparent;
+  visibility: hidden;
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+`;
+
+const Combiner = styled.div`
+  position: relative;
+  display: grid;
+  place-items: center center;
+`;
+
+export const YesNoToggle = ({
+  checked,
+  onChange,
+  onClick = noop,
+  children,
+}: React.PropsWithChildren<{
+  checked: boolean;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  onClick?: MouseEventHandler<HTMLInputElement>;
+}>) => {
+  return (
+    <WrapperLabel>
+      {children}
+      <Checkbox
+        hidden={true}
+        checked={checked}
+        onChange={onChange}
+        onClick={onClick}
+      />
+      <Combiner>
+        <Sizer>Yes</Sizer>
+        <Overlay>{checked ? `Yes` : `No`}</Overlay>
+      </Combiner>
+    </WrapperLabel>
+  );
+};

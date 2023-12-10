@@ -1,8 +1,9 @@
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { selectConfig, updateConfig } from '../../redux/configSlice';
+import { useAppDispatch } from '../../redux/hooks';
+import { updateConfig, useConfig } from '../../redux/configSlice';
 import styled from 'styled-components/macro';
 import { ChangeEvent } from 'react';
 import { SectionHeader } from '../SectionHeader';
+import { YesNoToggle } from '../Input';
 
 const MainDiv = styled.div`
   display: flex;
@@ -10,9 +11,6 @@ const MainDiv = styled.div`
   flex-wrap: wrap;
   align-items: stretch;
   padding: 1px;
-
-  @media screen and (max-width: 400px) {
-  }
 `;
 
 const SubSectionDiv = styled.div<{}>`
@@ -41,7 +39,6 @@ const SubSectionTitle = styled.div<{
   align-self: start;
   color: #eee;
   padding: 2px 6px 2px 4px;
-  font-family: 'noita', '04b03', sans-serif;
   font-size: 14px;
   ${({ minWidth }) => `min-width: ${minWidth ?? '6em'};`}
   justify-content: start;
@@ -104,7 +101,6 @@ const InputWrapper = styled.label`
     background-color: #222;
     border: var(--input-border);
     border-radius: var(--input-border-radius);
-    font-family: 'noita', '04b03', sans-serif;
     font-size: 14px;
     color: #fff;
     text-align: center;
@@ -126,7 +122,6 @@ const InputWrapper = styled.label`
     margin: 0 6px 0 5px;
   }
 
-  font-family: 'noita', '04b03', sans-serif;
   font-size: 14px;
 `;
 
@@ -179,10 +174,8 @@ const InputImageLabel = styled.div<{
   margin: 0 4px 0 ${({ leftMargin }) => (leftMargin ? leftMargin : '2px')};
 `;
 
-type Props = {};
-
-export function CastConfigEditor(props: Props) {
-  const { config } = useAppSelector(selectConfig);
+export const CastConfigEditor = () => {
+  const config = useConfig();
   const dispatch = useAppDispatch();
 
   const reqs = config.requirements;
@@ -248,14 +241,12 @@ export function CastConfigEditor(props: Props) {
           </SubSectionTitle>
           <SubSectionContent>
             <CheckboxInputWrapper>
-              <CheckboxWrapper>
-                <input
-                  type="checkbox"
-                  checked={config.infiniteHp}
-                  onChange={handleConfigToggle('infiniteHp')}
-                />
-                <span>∞</span>
-              </CheckboxWrapper>
+              <YesNoToggle
+                checked={config.infiniteHp}
+                onChange={handleConfigToggle('infiniteHp')}
+              >
+                <span>∞: </span>
+              </YesNoToggle>
             </CheckboxInputWrapper>
             <InputWrapper>
               <input
@@ -336,57 +327,49 @@ export function CastConfigEditor(props: Props) {
         <SubSectionDiv>
           <SubSectionTitle>
             <InputImageLabel size={18} imgUrl={'data/config/req.png'} />
-            <span>Requirement State</span>
+            <span>Requirements</span>
           </SubSectionTitle>
           <SubSectionContent>
-            <CheckboxInputWrapper>
+            <YesNoToggle
+              checked={reqs.enemies}
+              onChange={requirementsChangeHandler('enemies')}
+            >
               <InputImageLabel
                 leftMargin={'6px'}
                 size={32}
                 imgUrl={'data/ui_gfx/gun_actions/if_enemy.png'}
               />
-              <input
-                type="checkbox"
-                checked={reqs.enemies}
-                onChange={requirementsChangeHandler('enemies')}
-              />
-            </CheckboxInputWrapper>
-            <CheckboxInputWrapper>
+            </YesNoToggle>
+            <YesNoToggle
+              checked={reqs.projectiles}
+              onChange={requirementsChangeHandler('projectiles')}
+            >
               <InputImageLabel
                 leftMargin={'6px'}
                 size={32}
                 imgUrl={'data/ui_gfx/gun_actions/if_projectile.png'}
               />
-              <input
-                type="checkbox"
-                checked={reqs.projectiles}
-                onChange={requirementsChangeHandler('projectiles')}
-              />
-            </CheckboxInputWrapper>
-            <CheckboxInputWrapper>
+            </YesNoToggle>
+            <YesNoToggle
+              checked={reqs.hp}
+              onChange={requirementsChangeHandler('hp')}
+            >
               <InputImageLabel
                 leftMargin={'6px'}
                 size={32}
                 imgUrl={'data/ui_gfx/gun_actions/if_hp.png'}
               />
-              <input
-                type="checkbox"
-                checked={reqs.hp}
-                onChange={requirementsChangeHandler('hp')}
-              />
-            </CheckboxInputWrapper>
-            <CheckboxInputWrapper>
+            </YesNoToggle>
+            <YesNoToggle
+              checked={reqs.half}
+              onChange={requirementsChangeHandler('half')}
+            >
               <InputImageLabel
                 leftMargin={'6px'}
                 size={32}
                 imgUrl={'data/ui_gfx/gun_actions/if_half.png'}
               />
-              <input
-                type="checkbox"
-                checked={reqs.half}
-                onChange={requirementsChangeHandler('half')}
-              />
-            </CheckboxInputWrapper>
+            </YesNoToggle>
           </SubSectionContent>
         </SubSectionDiv>
         <SubSectionDiv>
@@ -414,4 +397,4 @@ export function CastConfigEditor(props: Props) {
       </MainDiv>
     </>
   );
-}
+};

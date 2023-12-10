@@ -32,37 +32,12 @@ const StyledShotTable = styled.div`
   border: 1px solid rgba(255, 0, 0, 0.3);
 `;
 
-const HeadingOuter = styled.div<{
-  nestingLevel?: number;
-  triggerType?: TriggerCondition;
-}>`
-  grid-row: heading;
-  position: relative;
+const HeadingInner = styled.div`
   display: flex;
   flex-direction: column;
-
-  height: auto;
-  padding-top: calc(
-    var(--sizes-nesting-offset) * ${({ nestingLevel = 0 }) => nestingLevel}
-  );
-
-  &::before {
-    display: none;
-    content: '';
-    height: 2.4em;
-    width: 100%;
-
-    background-position: center 0.2em;
-    background-repeat: no-repeat;
-    background-size: 2em;
-    image-rendering: pixelated;
-    ${({ triggerType }) =>
-      isNotNullOrUndefined(triggerType) &&
-      toBackgroundImage(getIconForTrigger(triggerType))}
-  }
-`;
-const HeadingInner = styled.div`
-  min-height: 60px;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
   box-sizing: border-box;
 
   ${WithDebugHints} && {
@@ -70,8 +45,77 @@ const HeadingInner = styled.div`
   }
 `;
 
+const HeadingOuter = styled.div<{
+  nestingLevel?: number;
+  triggerType?: TriggerCondition;
+  alignTop?: boolean;
+}>`
+  grid-row: heading;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+  align-self: stretch;
+
+  ${({ alignTop = true, nestingLevel = 0 }) =>
+    false &&
+    (alignTop
+      ? `
+  height: auto;
+  border-top: 3px solid var(--color-arrow-action);
+    padding-top: calc(var(--sizes-nesting-offset) * 1);
+
+  justify-content: stretch;
+    `
+      : `
+  border-bottom: 3px solid var(--color-arrow-action);
+    padding-bottom: calc(var(--sizes-nesting-offset) * 1);
+  justify-content: end;
+    `)}
+  & ${HeadingInner}::before {
+    display: none;
+    content: '';
+    height: 2.4em;
+    width: 100%;
+
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    ${({ triggerType }) =>
+      isNotNullOrUndefined(triggerType)
+        ? `
+    background-position: center 0.2em;
+    background-size: 2em;
+        ${toBackgroundImage(getIconForTrigger(triggerType))}
+        `
+        : `
+    background-position: center center;
+    background-size: 3em;
+        background-image: url('/data/items_gfx/wands/wand_0104.png');
+        `}
+  }
+`;
+const LineSpacer = styled.div<{
+  alignTop?: boolean;
+  line?: 'solid' | 'dashed' | 'dotted';
+}>`
+  ${({ alignTop = true, line = 'solid' }) => `
+    ${line === 'dashed' ? `opacity: 0.6;` : `opacity: 1;`}
+    ${
+      alignTop
+        ? `
+  border-top: 3px ${line} var(--color-arrow-action);
+  padding-top: calc(var(--sizes-nesting-offset) * 1);
+  `
+        : `
+  border-bottom: 3px ${line} var(--color-arrow-action);
+  padding-bottom: calc(var(--sizes-nesting-offset) * 1);
+`
+    }`}
+`;
+
 const BaseColumnHeading = ({
-  nestingLevel,
+  nestingLevel = 0,
   triggerType,
   children,
   className,
@@ -86,20 +130,29 @@ const BaseColumnHeading = ({
       triggerType={triggerType}
       nestingLevel={nestingLevel}
     >
+      {nestingLevel > 0 &&
+        [...Array(nestingLevel)].map((_, i) => (
+          <LineSpacer line={'dashed'} key={i} />
+        ))}
+      <LineSpacer key={nestingLevel} />
+
       <HeadingInner>{children}</HeadingInner>
     </HeadingOuter>
   );
 };
+const ProjectileHeading = styled(BaseColumnHeading)`
+  background-color: black;
+`;
+
 const TotalsColumnHeading = styled(BaseColumnHeading)`
   font-size: 1em;
-  align-self: start;
-  justify-content: stretch;
 
   min-width: 4em;
-  align-items: start;
-  text-align: center;
 
-  &::before {
+  border-left: 1px dotted var(--color-vis-cs-inborder);
+  background-color: black;
+
+  & ${HeadingInner}::before {
     display: initial;
   }
 
@@ -114,24 +167,49 @@ const IconsColumnHeading = styled(BaseColumnHeading)`
 const ShotIndexColumnHeading = styled(BaseColumnHeading)<{
   index: number;
 }>`
-  font-size: 2em;
-  padding: 18px;
-  padding-top: 0;
   flex-direction: row;
-  align-self: start;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
 
-  &::after {
-    content: '${({ index }) =>
-      index === 1
-        ? 'st'
-        : index === 2
-        ? 'nd'
-        : index === 3
-        ? 'rd'
-        : 'th'} shot';
+  font-size: 2em;
+  padding: 0 18px;
+
+  & ${HeadingInner} {
+    min-height: unset;
+    transform: translate(0.5em);
+    flex-direction: column-reverse;
+    justify-content: center;
+  }
+
+  & ${HeadingInner}::before {
+    content: 'shot';
+    display: flex;
+    justify-content: center;
+    position: relative;
+    top: -0.3em;
     font-size: 0.4em;
     white-space: nowrap;
-    align-self: start;
+    padding-top: 0.2em;
+  }
+  & ${HeadingInner}::after {
+    display: flex;
+    justify-content: end;
+    position: relative;
+    top: 0.6em;
+    left: 0.8em;
+    content: '${({ index }) =>
+      index > 4 && index < 20
+        ? 'th'
+        : index % 20 === 1
+        ? 'st'
+        : index % 20 === 2
+        ? 'nd'
+        : index % 20 === 3
+        ? 'rd'
+        : 'th'}';
+    font-size: 0.4em;
+    white-space: nowrap;
   }
 }
 `;
@@ -168,7 +246,7 @@ export const ShotTableColumns = ({
             nestingLevel={nestingLevel}
             triggerType={triggerType}
           >
-            {'Payload Total'}
+            {'Total'}
           </TotalsColumnHeading>
           <SubTotalsColumn
             triggerType={triggerType}
@@ -191,10 +269,12 @@ export const ShotTableColumns = ({
         }
         return (
           <>
-            <ProjectileActionGroup
-              nestingLevel={nestingLevel}
-              group={projectile}
-            />
+            <ProjectileHeading nestingLevel={nestingLevel}>
+              <ProjectileActionGroup
+                nestingLevel={nestingLevel}
+                group={projectile}
+              />
+            </ProjectileHeading>
             <ProjectileColumn
               castState={castState}
               manaDrain={manaDrain}

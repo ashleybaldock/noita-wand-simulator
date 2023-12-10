@@ -1,11 +1,10 @@
 import { useRef } from 'react';
 import styled from 'styled-components/macro';
-import { StopReason } from '../../../calc/eval/clickWand';
+import { StopReason } from '../../../types';
 import { GroupedWandShot } from '../../../calc/eval/types';
 import { ConfigButton, SectionButtonBar } from '../../buttons';
 import { SaveImageButton, ScrollWrapper } from '../../generic';
 import { SectionHeader } from '../../SectionHeader';
-import { IterationLimitWarning } from '../IterationLimitWarning';
 import { ShotMetadata } from '../ShotMetadata';
 import { ShotTable } from './ShotTable';
 
@@ -15,6 +14,13 @@ const SectionDiv = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   width: fit-content;
+  padding: 5px;
+`;
+
+const SaveButtons = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 0;
 `;
 
 export const CastStateTable = ({
@@ -33,17 +39,15 @@ export const CastStateTable = ({
       <SectionButtonBar>
         <ConfigButton />
       </SectionButtonBar>
-      <SectionDiv>
-        {' '}
-        <SaveImageButton
-          targetRef={projectilesRef}
-          fileName={'projectiles'}
-          enabled={shots.length > 0}
-        />
-        <IterationLimitWarning hitIterationLimit={endReason === 'iterLimit'} />
-      </SectionDiv>
 
       <ScrollWrapper>
+        <SaveButtons>
+          <SaveImageButton
+            targetRef={projectilesRef}
+            fileName={'projectiles'}
+            enabled={shots.length > 0}
+          />
+        </SaveButtons>
         <SectionDiv ref={projectilesRef as any} className={'saveImageRoot'}>
           {shots.length > 0 && (
             <ShotMetadata

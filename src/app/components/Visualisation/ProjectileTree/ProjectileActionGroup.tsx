@@ -42,7 +42,6 @@ const MainDiv = styled.div<{ nestingLevel: number }>`
   grid-row: heading;
   margin: 0;
   align-items: center;
-  align-self: start;
   text-align: center;
 
   ${WithDebugHints} && {
@@ -56,9 +55,6 @@ const MainDiv = styled.div<{ nestingLevel: number }>`
       border-left: 1px dashed red;
     }
   }
-  padding-top: calc(
-    var(--sizes-nesting-offset) * ${({ nestingLevel }) => nestingLevel}
-  );
 `;
 const CountDiv = styled.div`
   --size-spell: var(--bsize-spell, 48px);

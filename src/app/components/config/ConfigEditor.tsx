@@ -7,7 +7,7 @@ import {
 } from '../../redux/configSlice';
 import styled from 'styled-components/macro';
 import _ from 'lodash';
-import { constToDisplayString } from '../../util/util';
+import { constToDisplayString, objectKeys } from '../../util/util';
 
 enum ConfigType {
   Boolean = 'boolean',
@@ -163,7 +163,7 @@ const configOptions = [
       ConfigType.Button,
       (c) => null,
       (c, v) =>
-        Object.keys(initialConfigState.config.unlocks).forEach(
+        objectKeys(initialConfigState.config.unlocks).forEach(
           (k) => (c.unlocks[k] = true),
         ),
     ),
@@ -172,11 +172,11 @@ const configOptions = [
       ConfigType.Button,
       (c) => null,
       (c, v) =>
-        Object.keys(initialConfigState.config.unlocks).forEach(
+        objectKeys(initialConfigState.config.unlocks).forEach(
           (k) => (c.unlocks[k] = false),
         ),
     ),
-    ...Object.keys(initialConfigState.config.unlocks).map((unlockField) =>
+    ...objectKeys(initialConfigState.config.unlocks).map((unlockField) =>
       makeConfigField(
         constToDisplayString(unlockField.replace(/card_unlocked_(.*)/, '$1')),
         ConfigType.Boolean,

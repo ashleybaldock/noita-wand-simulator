@@ -1,5 +1,5 @@
 import styled from 'styled-components/macro';
-import { StopReason } from '../../calc/eval/clickWand';
+import { StopReason } from '../../types';
 import { round } from '../../util/util';
 
 const List = styled.div`
