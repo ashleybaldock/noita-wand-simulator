@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 export const SectionButtonBar = styled.div`
   display: flex;

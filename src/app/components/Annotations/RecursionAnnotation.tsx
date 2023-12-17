@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { isIterativeActionId } from '../../calc/actionId';
 import { useConfig } from '../../redux';
 import { recursiveActionIds } from '../../calc/spells';

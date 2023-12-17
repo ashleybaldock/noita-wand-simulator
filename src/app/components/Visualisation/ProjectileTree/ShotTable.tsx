@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   FieldNamesColumn,
   IconsColumn,
@@ -7,13 +7,23 @@ import {
   TotalsColumn,
 } from './CastStateColumn';
 import { ProjectileActionGroup } from './ProjectileActionGroup';
-import { GroupedWandShot } from '../../../calc/eval/types';
-import { isRawObject } from '../../../calc/grouping/combineGroups';
-import { TriggerCondition, getIconForTrigger } from '../../../calc/trigger';
-import { isNotNullOrUndefined, toBackgroundImage } from '../../../util';
-import { WithDebugHints } from '../../Debug';
+import { GroupedProjectile, GroupedWandShot } from '../../../calc/eval/types';
+import { isNotNullOrUndefined, NBSP } from '../../../util';
+import {
+  GroupedObject,
+  isRawObject,
+} from '../../../calc/grouping/combineGroups';
+import {
+  IconsColumnHeading,
+  ProjectileHeading,
+  ShotIndexColumnHeading,
+  SubTotalsColumnHeading,
+  TotalsColumnHeading,
+} from './ColumnHeading';
 
 const StyledShotTable = styled.div`
+  --nesting-offset: var(--sizes-nesting-offset, 16px);
+
   display: grid;
   gap: 0;
   grid-auto-flow: column;
@@ -32,188 +42,6 @@ const StyledShotTable = styled.div`
   border: 1px solid rgba(255, 0, 0, 0.3);
 `;
 
-const HeadingInner = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  box-sizing: border-box;
-
-  ${WithDebugHints} && {
-    border: 1px dashed #00009c;
-  }
-`;
-
-const HeadingOuter = styled.div<{
-  nestingLevel?: number;
-  triggerType?: TriggerCondition;
-  alignTop?: boolean;
-}>`
-  grid-row: heading;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  text-align: center;
-  align-self: stretch;
-
-  ${({ alignTop = true, nestingLevel = 0 }) =>
-    false &&
-    (alignTop
-      ? `
-  height: auto;
-  border-top: 3px solid var(--color-arrow-action);
-    padding-top: calc(var(--sizes-nesting-offset) * 1);
-
-  justify-content: stretch;
-    `
-      : `
-  border-bottom: 3px solid var(--color-arrow-action);
-    padding-bottom: calc(var(--sizes-nesting-offset) * 1);
-  justify-content: end;
-    `)}
-  & ${HeadingInner}::before {
-    display: none;
-    content: '';
-    height: 2.4em;
-    width: 100%;
-
-    background-repeat: no-repeat;
-    image-rendering: pixelated;
-    ${({ triggerType }) =>
-      isNotNullOrUndefined(triggerType)
-        ? `
-    background-position: center 0.2em;
-    background-size: 2em;
-        ${toBackgroundImage(getIconForTrigger(triggerType))}
-        `
-        : `
-    background-position: center center;
-    background-size: 3em;
-        background-image: url('/data/items_gfx/wands/wand_0104.png');
-        `}
-  }
-`;
-const LineSpacer = styled.div<{
-  alignTop?: boolean;
-  line?: 'solid' | 'dashed' | 'dotted';
-}>`
-  ${({ alignTop = true, line = 'solid' }) => `
-    ${line === 'dashed' ? `opacity: 0.6;` : `opacity: 1;`}
-    ${
-      alignTop
-        ? `
-  border-top: 3px ${line} var(--color-arrow-action);
-  padding-top: calc(var(--sizes-nesting-offset) * 1);
-  `
-        : `
-  border-bottom: 3px ${line} var(--color-arrow-action);
-  padding-bottom: calc(var(--sizes-nesting-offset) * 1);
-`
-    }`}
-`;
-
-const BaseColumnHeading = ({
-  nestingLevel = 0,
-  triggerType,
-  children,
-  className,
-}: {
-  nestingLevel?: number;
-  triggerType?: TriggerCondition;
-  className?: string;
-} & React.PropsWithChildren) => {
-  return (
-    <HeadingOuter
-      className={className}
-      triggerType={triggerType}
-      nestingLevel={nestingLevel}
-    >
-      {nestingLevel > 0 &&
-        [...Array(nestingLevel)].map((_, i) => (
-          <LineSpacer line={'dashed'} key={i} />
-        ))}
-      <LineSpacer key={nestingLevel} />
-
-      <HeadingInner>{children}</HeadingInner>
-    </HeadingOuter>
-  );
-};
-const ProjectileHeading = styled(BaseColumnHeading)`
-  background-color: black;
-`;
-
-const TotalsColumnHeading = styled(BaseColumnHeading)`
-  font-size: 1em;
-
-  min-width: 4em;
-
-  border-left: 1px dotted var(--color-vis-cs-inborder);
-  background-color: black;
-
-  & ${HeadingInner}::before {
-    display: initial;
-  }
-
-  ${WithDebugHints} && {
-    border-left: 1px solid #580058;
-    border-top: 1px solid #630063;
-  }
-`;
-const IconsColumnHeading = styled(BaseColumnHeading)`
-  width: 1.6em;
-`;
-const ShotIndexColumnHeading = styled(BaseColumnHeading)<{
-  index: number;
-}>`
-  flex-direction: row;
-  align-items: center;
-  align-self: stretch;
-  justify-content: center;
-
-  font-size: 2em;
-  padding: 0 18px;
-
-  & ${HeadingInner} {
-    min-height: unset;
-    transform: translate(0.5em);
-    flex-direction: column-reverse;
-    justify-content: center;
-  }
-
-  & ${HeadingInner}::before {
-    content: 'shot';
-    display: flex;
-    justify-content: center;
-    position: relative;
-    top: -0.3em;
-    font-size: 0.4em;
-    white-space: nowrap;
-    padding-top: 0.2em;
-  }
-  & ${HeadingInner}::after {
-    display: flex;
-    justify-content: end;
-    position: relative;
-    top: 0.6em;
-    left: 0.8em;
-    content: '${({ index }) =>
-      index > 4 && index < 20
-        ? 'th'
-        : index % 20 === 1
-        ? 'st'
-        : index % 20 === 2
-        ? 'nd'
-        : index % 20 === 3
-        ? 'rd'
-        : 'th'}';
-    font-size: 0.4em;
-    white-space: nowrap;
-  }
-}
-`;
-
 export const ShotTableColumns = ({
   shotIndex,
   shot: { castState, manaDrain, triggerType, projectiles },
@@ -227,27 +55,27 @@ export const ShotTableColumns = ({
     <>
       {nestingLevel === 0 ? (
         <>
-          <ShotIndexColumnHeading index={shotIndex} nestingLevel={nestingLevel}>
+          <ShotIndexColumnHeading index={shotIndex} $nestingLevel={nestingLevel}>
             {shotIndex}
           </ShotIndexColumnHeading>
           <FieldNamesColumn castState={castState} />
-          <IconsColumnHeading nestingLevel={nestingLevel}>
+          <IconsColumnHeading $nestingLevel={nestingLevel}>
             {''}
           </IconsColumnHeading>
           <IconsColumn castState={castState} />
-          <TotalsColumnHeading nestingLevel={nestingLevel}>
-            {'Shot Total'}
+          <TotalsColumnHeading $origin={true} $nestingLevel={nestingLevel}>
+            {`Shot${NBSP}Totals`}
           </TotalsColumnHeading>
           <TotalsColumn castState={castState} manaDrain={manaDrain} />
         </>
       ) : (
         <>
-          <TotalsColumnHeading
-            nestingLevel={nestingLevel}
-            triggerType={triggerType}
+          <SubTotalsColumnHeading
+            $nestingLevel={nestingLevel}
+            $triggerType={triggerType}
           >
-            {'Total'}
-          </TotalsColumnHeading>
+            {`Payload${NBSP}Totals`}
+          </SubTotalsColumnHeading>
           <SubTotalsColumn
             triggerType={triggerType}
             castState={castState}
@@ -255,35 +83,43 @@ export const ShotTableColumns = ({
           />
         </>
       )}
-      {projectiles.map((projectile, index) => {
-        let triggerComponent;
-        if (isRawObject(projectile)) {
-          triggerComponent = projectile.trigger &&
-            projectile.trigger.projectiles.length > 0 && (
-              <ShotTableColumns
-                shot={projectile.trigger}
-                shotIndex={index}
-                nestingLevel={nestingLevel + 1}
+      {projectiles.map(
+        (projectile: GroupedObject<GroupedProjectile>, index, arr) => {
+          const last = index === arr.length - 1;
+          const trigger =
+            (isRawObject<GroupedProjectile>(projectile) &&
+              projectile.trigger &&
+              projectile.trigger.projectiles.length > 0 &&
+              projectile.trigger) ||
+            undefined;
+          return (
+            <>
+              <ProjectileHeading
+                $branch={isNotNullOrUndefined(trigger)}
+                $endpoint={last}
+                $nestingLevel={nestingLevel}
+              >
+                <ProjectileActionGroup
+                  nestingLevel={nestingLevel}
+                  group={projectile}
+                />
+              </ProjectileHeading>
+              <ProjectileColumn
+                castState={castState}
+                manaDrain={manaDrain}
+                insideTrigger={true}
               />
-            );
-        }
-        return (
-          <>
-            <ProjectileHeading nestingLevel={nestingLevel}>
-              <ProjectileActionGroup
-                nestingLevel={nestingLevel}
-                group={projectile}
-              />
-            </ProjectileHeading>
-            <ProjectileColumn
-              castState={castState}
-              manaDrain={manaDrain}
-              insideTrigger={true}
-            />
-            {triggerComponent}
-          </>
-        );
-      })}
+              {isNotNullOrUndefined(trigger) && (
+                <ShotTableColumns
+                  shot={trigger}
+                  shotIndex={index}
+                  nestingLevel={nestingLevel + 1}
+                />
+              )}
+            </>
+          );
+        },
+      )}
     </>
   );
 };

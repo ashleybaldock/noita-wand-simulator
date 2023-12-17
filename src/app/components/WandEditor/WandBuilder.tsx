@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { WandActionEditor } from './WandActionEditor';
 import { WandStatsEditor } from './WandStatsEditor';
 import { WandBorder } from './WandBorder';

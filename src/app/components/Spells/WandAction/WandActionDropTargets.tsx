@@ -1,7 +1,6 @@
 import { useDrop } from 'react-dnd';
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { CursorPosition, DragItemSpell, WandSelection } from '../../../types';
 import {
   insertSpellBefore,
   insertSpellAfter,
@@ -17,6 +16,8 @@ import {
   DragDropTargetBefore,
 } from './SpellDropTargets';
 import { WandEditCursor } from './Cursor';
+import { WandSelection } from '../../../redux/Wand/wandSelection';
+import { CursorPosition, DragItemSpell } from './types';
 
 export const WandActionDropTargets = ({
   wandIndex,

@@ -1,5 +1,5 @@
 import { useHotkeys } from 'react-hotkeys-hook';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { noop } from '../../util';
 import { HotkeyHint } from '../Tooltips';
 
@@ -12,7 +12,7 @@ const ButtonShapes = [
   'petal1',
   'petal2',
 ] as const;
-export type ButtonShape = typeof ButtonShapes[number];
+export type ButtonShape = (typeof ButtonShapes)[number];
 
 const borderForShape = new Map<ButtonShape, string>([
   ['rectangle', 'border-radius: 0em / 0em;'],

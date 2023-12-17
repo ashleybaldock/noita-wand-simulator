@@ -1,5 +1,5 @@
-import React, { useMemo, useRef, useState } from 'react';
-import styled from 'styled-components/macro';
+import React, { LegacyRef, useMemo, useRef, useState } from 'react';
+import styled from 'styled-components';
 import { isNotNullOrUndefined } from '../../util';
 import { clickWand } from '../../calc/eval/clickWand';
 import { condenseActionsAndProjectiles } from '../../calc/grouping/condense';
@@ -11,7 +11,7 @@ import { SaveImageButton, ScrollWrapper } from '../generic';
 import { ActionCalledShotResult } from './ActionSequence';
 import { ActionTreeShotResult } from './ActionTree';
 import { SectionHeader } from '../SectionHeader';
-import { CastStateTable } from './ProjectileTree';
+import { ShotList } from './ProjectileTree';
 import { SimulationStatus } from '../SimulationStatus';
 
 const ParentDiv = styled.div`
@@ -163,17 +163,18 @@ export const VisualisationList = ({
         lastEndCondition={'oneshot'}
         elapsedTime={elapsedTime}
       />
-      <CastStateTable
+      <ShotList
+        simulationRunning={simulationRunning}
         endReason={endReason}
         shots={groupedShots}
         totalRechargeTime={totalRechargeTime}
-      ></CastStateTable>
+      />
       {showActionTree && (
         <>
           <SectionHeader title={'Simulation: Action Call Tree'} />
           <ScrollWrapper>
             <SectionDiv
-              ref={actionCallTreeRef as any}
+              ref={actionCallTreeRef as LegacyRef<HTMLDivElement>}
               className={'saveImageRoot'}
             >
               <SaveImageButton
@@ -190,7 +191,10 @@ export const VisualisationList = ({
       )}
       <SectionHeader title={'Simulation: Action Call Sequence'} />
       <ScrollWrapper>
-        <SectionDiv ref={actionsCalledRef as any} className={'saveImageRoot'}>
+        <SectionDiv
+          ref={actionsCalledRef as LegacyRef<HTMLDivElement>}
+          className={'saveImageRoot'}
+        >
           <SaveImageButton
             targetRef={actionsCalledRef}
             fileName={'actions_called'}

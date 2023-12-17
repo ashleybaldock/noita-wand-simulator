@@ -104,7 +104,7 @@ const KeyStateDebug = styled.div`
   padding: 3px;
   z-index: var(--zindex-ceiling);
 `;
-const KeyStateKey = styled.span<{ pressed: boolean }>`
+const KeyStateKey = styled.span<{ $pressed: boolean }>`
   margin: 0 1px 0 0;
   padding: 2px;
   border-width: 2px;
@@ -113,8 +113,8 @@ const KeyStateKey = styled.span<{ pressed: boolean }>`
   line-height: 1em;
   border-radius: 2px;
   font-size: 10px;
-  border-color: ${({ pressed }) => (pressed ? 'var(--color-base)' : '#333333')};
-  color: ${({ pressed }) => (pressed ? 'var(--color-base)' : '#333333')};
+  border-color: ${({ $pressed }) => ($pressed ? 'var(--color-base)' : '#333333')};
+  color: ${({ $pressed }) => ($pressed ? 'var(--color-base)' : '#333333')};
 `;
 
 export const DebugKeyState = () => {
@@ -122,10 +122,10 @@ export const DebugKeyState = () => {
 
   return (
     <KeyStateDebug>
-      <KeyStateKey pressed={shift}>Shift</KeyStateKey>
-      <KeyStateKey pressed={ctrl}>Ctrl</KeyStateKey>
-      <KeyStateKey pressed={alt}>Alt</KeyStateKey>
-      <KeyStateKey pressed={meta}>Meta</KeyStateKey>
+      <KeyStateKey $pressed={shift}>Shift</KeyStateKey>
+      <KeyStateKey $pressed={ctrl}>Ctrl</KeyStateKey>
+      <KeyStateKey $pressed={alt}>Alt</KeyStateKey>
+      <KeyStateKey $pressed={meta}>Meta</KeyStateKey>
     </KeyStateDebug>
   );
 };

@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { StopCondition, StopReason } from '../../types';
 
 const ResultError = styled.span`
@@ -27,7 +27,6 @@ type TerminationInfo = {
   message: string;
 };
 const reasonMap: Record<StopReason, TerminationInfo> = {
-  // done: { success: true, message: 'Completed' },
   noSpells: { success: false, message: 'No Spells to process' },
   unknown: { success: false, message: 'Unknown' },
   refresh: { success: true, message: 'Stopped at 2nd Wand Refresh' },
@@ -39,17 +38,21 @@ const reasonMap: Record<StopReason, TerminationInfo> = {
   reload: { success: true, message: 'Ended on Wand Reload' },
 } as const;
 
-export const TerminationWarning = ({
-  reason,
-}: {
-  reason: StopReason;
-  condition: StopCondition;
-  info?: string;
-}) => {
-  const { success, message } = reasonMap[reason];
-  return success ? (
-    <ResultSuccess>{message}</ResultSuccess>
-  ) : (
-    <ResultError>{message}</ResultError>
-  );
-};
+export const TerminationWarning = styled(
+  ({
+    reason,
+    condition,
+    className,
+  }: {
+    reason: StopReason;
+    condition: StopCondition;
+    className?: string;
+  }) => {
+    const { success, message } = reasonMap[reason];
+    return success ? (
+      <ResultSuccess className={className}>{message}</ResultSuccess>
+    ) : (
+      <ResultError className={className}>{message}</ResultError>
+    );
+  },
+)``;

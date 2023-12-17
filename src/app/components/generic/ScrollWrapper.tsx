@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { PropsWithChildren } from 'react';
 
 /* rotate() makes the scrollbar be at the top */

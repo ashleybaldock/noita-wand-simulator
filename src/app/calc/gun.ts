@@ -1,14 +1,14 @@
 import { ActionId } from './actionId';
+import { ActionSource } from './actionSources';
 import { Spell } from './spell';
 import { getSpellById } from './spells';
+import { GunActionState } from './actionState';
 import {
-  defaultGunActionState,
-  GunActionState,
-  ConfigGunActionInfo_Copy,
-  ConfigGunActionInfo_Init,
   ConfigGunActionInfo_Create,
-} from './actionState';
-import { ActionSource } from './actionSources';
+  ConfigGunActionInfo_Init,
+  ConfigGunActionInfo_Copy,
+  defaultGunActionState,
+} from './defaultActionState';
 import {
   ConfigGunShotEffects_Init,
   ConfigGunShotEffects_PassToGame,
@@ -35,7 +35,7 @@ import {
   OnMoveDiscardedToDeck,
   SetRandomSeed,
   GameGetFrameNum,
-} from './eval/wandObserver';
+} from './eval/dispatch';
 
 // constants
 export const ACTION_DRAW_RELOAD_TIME_INCREASE = 0;

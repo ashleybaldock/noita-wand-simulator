@@ -1,17 +1,13 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { getBackgroundUrlForSpellType, SpellType } from '../../calc/spellTypes';
 
-type SpellTypeBorderProps = {
+export const SpellTypeBorder = styled.div.attrs<{
   spellType?: SpellType;
-};
-
-export const SpellTypeBorder = styled.div.attrs(
-  ({ spellType }: SpellTypeBorderProps) => ({
-    style: {
-      borderImageSource: getBackgroundUrlForSpellType(spellType),
-    },
-  }),
-)<SpellTypeBorderProps>`
+}>(({ spellType }) => ({
+  style: {
+    borderImageSource: getBackgroundUrlForSpellType(spellType),
+  },
+}))`
   display: block;
   padding: 0.2em;
 

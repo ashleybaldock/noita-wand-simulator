@@ -1,7 +1,5 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { useState } from 'react';
-
-type Props = {};
 
 const logoVariants = [
   '/logo/logo-blue.png',
@@ -45,7 +43,7 @@ const ExtraDiv = styled.div`
   margin-right: 15px;
 `;
 
-export function MainHeader({ children }: React.PropsWithChildren<Props>) {
+export function MainHeader({ children }: React.PropsWithChildren) {
   const [logoVariant, setLogoVariant] = useState(
     logoVariants[getRandomInteger(logoVariants.length)],
   );

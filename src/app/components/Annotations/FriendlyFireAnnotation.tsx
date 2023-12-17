@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const SourceDiv = styled.div<{
   colors: [string, string];

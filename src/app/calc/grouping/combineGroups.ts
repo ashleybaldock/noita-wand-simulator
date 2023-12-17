@@ -10,26 +10,26 @@ export function chunk<T>(arr: T[], chunkSize: number) {
   return result;
 }
 
-export type MultipleObject<T extends Object> = {
+export type MultipleObject<T extends object> = {
   first: GroupedObject<T>;
   count: number;
 };
-export type GroupedObject<T extends Object> =
+export type GroupedObject<T extends object> =
   | T
   | MultipleObject<T>
   | GroupedObject<T>[];
 
-export function isRawObject<T extends Object>(
+export function isRawObject<T extends object>(
   grouped: GroupedObject<T>,
 ): grouped is T {
   return (
     !Array.isArray(grouped) &&
-    !grouped.hasOwnProperty('count') &&
-    !grouped.hasOwnProperty('first')
+    !Object.prototype.hasOwnProperty.call(grouped, 'count') &&
+    !Object.prototype.hasOwnProperty.call(grouped, 'first')
   );
 }
 
-export function isMultipleObject<T extends Object>(
+export function isMultipleObject<T extends object>(
   grouped: GroupedObject<T>,
 ): grouped is MultipleObject<T> {
   return (
@@ -39,13 +39,13 @@ export function isMultipleObject<T extends Object>(
   );
 }
 
-export function isArrayObject<T extends Object>(
+export function isArrayObject<T extends object>(
   grouped: GroupedObject<T>,
 ): grouped is GroupedObject<T>[] {
   return Array.isArray(grouped);
 }
 
-export function simplifyMultipleObject<T extends Object>(
+export function simplifyMultipleObject<T extends object>(
   grouped: GroupedObject<T>,
 ): GroupedObject<T> {
   if (isMultipleObject(grouped) && grouped.count === 1) {
@@ -58,7 +58,7 @@ export function simplifyMultipleObject<T extends Object>(
   return grouped;
 }
 
-export function combineGroups<T extends Object>(
+export function combineGroups<T extends object>(
   arr: T[],
   keyFn?: (o: T) => any,
   merge?: (o: GroupedObject<T>[]) => GroupedObject<T>,
@@ -72,7 +72,7 @@ export function combineGroups<T extends Object>(
   return result;
 }
 
-function mergeMatches<T extends Object, U extends GroupedObject<T>[]>(
+function mergeMatches<T extends object, U extends GroupedObject<T>[]>(
   matches: U[],
   merge: (o: GroupedObject<T>[]) => GroupedObject<T>,
 ) {
@@ -88,7 +88,7 @@ function mergeMatches<T extends Object, U extends GroupedObject<T>[]>(
   return result;
 }
 
-export function _combineGroups<T extends Object>(
+export function _combineGroups<T extends object>(
   arr: GroupedObject<T>[],
   keyFn?: (o: T) => any,
   merge?: (o: GroupedObject<T>[]) => GroupedObject<T>,

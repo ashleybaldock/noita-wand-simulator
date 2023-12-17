@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { Spell } from '../../../calc/spell';
 import { DEFAULT_SIZE } from '../../../util';
 import { ActionTreeShotResultNodeDiv } from '../ActionTree';

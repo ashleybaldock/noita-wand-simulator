@@ -3,16 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/is-prop-valid": "^1.2.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.0",
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^29.5.11",
     "@types/lodash": "^4.14.171",
-    "@types/node": "^16.4.2",
-    "@types/react": "^18.2.38",
+    "@types/node": "^20.10.4",
+    "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.17",
-    "@types/styled-components": "^5.1.11",
+    "fuse.js": "^7.0.0",
     "lodash": "^4.17.21",
     "prettier": "^2.3.2",
     "react": "^18.2.0",
@@ -26,8 +27,9 @@
     "react-scripts": "5.0.1",
     "react-tooltip": "^5.23.0",
     "redux-undo": "^1.0.1",
-    "styled-components": "^5.3.0",
-    "typescript": "^4.1.2",
+    "styled-components": "^6.1.1",
+    "stylis": "^4.3.0",
+    "typescript": "^5.3.3",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
@@ -42,15 +44,32 @@
     "generate-entity-map": "python scripts/generate_entity_map.py"
   },
   "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "rules": {
+      "prefer-const": "warn",
+      "no-case-declarations": "warn",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-explicit-any": "warn"
+    },
+    "plugins": [
+      "@typescript-eslint"
+    ],
     "root": true,
     "env": {
       "es6": true,
       "node": true
-    },
-    "extends": [
-      "react-app/jest",
-      "react-app"
-    ]
+    }
   },
   "prettier": {
     "printWidth": 80,
@@ -75,7 +94,13 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/react-helmet": "^6.1.6",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
     "circular-dependency-plugin": "^5.2.2",
+    "eslint": "^8.56.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-react": "^7.33.2",
     "react-git-info": "^2.0.1",
     "serve": "^12.0.0"
   }

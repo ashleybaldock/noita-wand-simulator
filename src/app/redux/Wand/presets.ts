@@ -1,4 +1,4 @@
-import { Preset, PresetGroup } from '../../types';
+import { Preset, PresetGroup } from './preset';
 
 const defaultPreset: Readonly<Preset> = {
   name: '',

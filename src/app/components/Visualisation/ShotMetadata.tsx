@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { StopReason } from '../../types';
 import { round } from '../../util/util';
 

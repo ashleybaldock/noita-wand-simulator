@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { WandAction, WandActionBorder } from '../Spells/WandAction';
 import { NextActionArrow } from '../Visualisation/Arrows';
 import { DEFAULT_SIZE } from '../../util/constants';

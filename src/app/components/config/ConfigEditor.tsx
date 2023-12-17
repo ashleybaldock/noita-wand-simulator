@@ -1,11 +1,11 @@
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useAppDispatch } from '../../redux/hooks';
 import {
   ConfigState,
   initialState as initialConfigState,
-  selectConfig,
   updateConfig,
+  useConfig,
 } from '../../redux/configSlice';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import _ from 'lodash';
 import { constToDisplayString, objectKeys } from '../../util/util';
 
@@ -228,10 +228,8 @@ const ConfigSubtitle = styled.div`
   font-weight: bold;
 `;
 
-type Props = {};
-
-export function ConfigEditor(props: Props) {
-  const { config } = useAppSelector(selectConfig);
+export function ConfigEditor() {
+  const config = useConfig();
   const dispatch = useAppDispatch();
 
   const makeUpdateFunction =

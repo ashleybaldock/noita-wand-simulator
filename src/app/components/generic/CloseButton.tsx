@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const StyledButton = styled.button`
   border: 1px solid #111;

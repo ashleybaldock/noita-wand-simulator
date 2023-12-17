@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { useConfig } from '../redux';
 import { StopCondition, StopReason } from '../types';
 import { TerminationWarning } from './Visualisation/TerminationWarning';
@@ -47,7 +47,9 @@ export const SimulationStatus = styled(
     lastStopReason,
     lastEndCondition,
     elapsedTime = 0,
+    className,
   }: {
+    className?: string;
     simulationRunning: boolean;
     lastStopReason: StopReason;
     lastEndCondition: StopCondition;
@@ -56,7 +58,7 @@ export const SimulationStatus = styled(
     const { pauseCalculations } = useConfig();
 
     return (
-      <StyledStatus>
+      <StyledStatus className={className}>
         <Value>
           <Label>Simulation State</Label>
           {simulationRunning

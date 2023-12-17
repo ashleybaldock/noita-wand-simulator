@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import React from 'react';
 import { useWikiExport } from '../../redux';
 import { Button } from '../generic/Button';

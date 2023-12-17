@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { useMemo } from 'react';
 import { groupBy, objectEntries } from '../../util/util';
 import { Spell } from '../../calc/spell';

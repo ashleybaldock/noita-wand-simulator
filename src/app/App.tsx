@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { StyleSheetManager } from 'styled-components';
+import { shouldForwardProp } from './shouldForwardProp';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Provider } from 'react-redux';
@@ -16,20 +18,22 @@ export function App() {
 
   return (
     <Provider store={store}>
-      <HelmetProvider>
-        <KeyStateContextProvider debug={true}>
-          <GlobalStyle keyHints={showKeyHints} />
-          {!isRelease && (
-            <Helmet>
-              <link rel="icon" href="/favicon-dev.ico" />
-              <link rel="apple-touch-icon" href="/logo192-dev.png" />
-              <link rel="manifest" href="/manifest-dev.json" />
-              <title>{`Wand Simulator (${branch}:${hash})}`}</title>
-            </Helmet>
-          )}
-          <WandSimulator />
-        </KeyStateContextProvider>
-      </HelmetProvider>
+      <StyleSheetManager shouldForwardProp={shouldForwardProp}>
+        <HelmetProvider>
+          <KeyStateContextProvider debug={true}>
+              <GlobalStyle keyHints={showKeyHints} />
+              {!isRelease && (
+                <Helmet>
+                  <link rel="icon" href="/favicon-dev.ico" />
+                  <link rel="apple-touch-icon" href="/logo192-dev.png" />
+                  <link rel="manifest" href="/manifest-dev.json" />
+                  <title>{`Wand Simulator (${branch}:${hash})}`}</title>
+                </Helmet>
+              )}
+              <WandSimulator />
+          </KeyStateContextProvider>
+        </HelmetProvider>
+      </StyleSheetManager>
     </Provider>
   );
 }

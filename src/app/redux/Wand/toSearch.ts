@@ -1,4 +1,5 @@
-import { WandState, WandQueryVersion, v2WandStateMapping } from '../../types';
+import { WandState } from './wandState';
+import { v2WandStateMapping, WandQueryVersion } from './wand';
 import { objectEntries, trimArray } from '../../util';
 
 const encodeQueryParam = (p: string | number | boolean) =>

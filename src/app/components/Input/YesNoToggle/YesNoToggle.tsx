@@ -1,6 +1,7 @@
-import { noop } from 'lodash';
+import { noop } from '../../../util';
 import { ChangeEventHandler, MouseEventHandler } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
+import { YesNo } from '../../Presentation';
 
 type CheckboxProps = {
   $hidden?: boolean;
@@ -51,21 +52,6 @@ const WrapperLabel = styled.label`
   position: relative;
 `;
 
-const Sizer = styled.div`
-  color: transparent;
-  visibility: hidden;
-`;
-
-const Overlay = styled.div`
-  position: absolute;
-`;
-
-const Combiner = styled.div`
-  position: relative;
-  display: grid;
-  place-items: center center;
-`;
-
 export const YesNoToggle = ({
   checked,
   onChange,
@@ -85,10 +71,7 @@ export const YesNoToggle = ({
         onChange={onChange}
         onClick={onClick}
       />
-      <Combiner>
-        <Sizer>Yes</Sizer>
-        <Overlay>{checked ? `Yes` : `No`}</Overlay>
-      </Combiner>
+      <YesNo yes={checked} />
     </WrapperLabel>
   );
 };

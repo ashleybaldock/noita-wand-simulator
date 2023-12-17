@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SpellSelector, WandBuilder } from './WandEditor';
 import { VisualisationList } from './Visualisation';
 import { useAppDispatch } from '../redux/hooks';
@@ -8,7 +8,7 @@ import { MainHeader } from './MainHeader';
 import { DebugHints } from './Debug';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { forceDisableCanvasSmoothing } from '../util/util';
+// import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
 import { ReleaseInfo } from './ReleaseInfo';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -39,9 +39,9 @@ export function WandSimulator() {
   const config = useConfig();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    forceDisableCanvasSmoothing();
-  }, []);
+  // useEffect(() => {
+  //   forceDisableCanvasSmoothing();
+  // }, []);
 
   useHotkeys('=', () => {
     dispatch(

@@ -1,5 +1,6 @@
-import { SpellId, WandState } from '../../types';
 import { toSeconds } from '../../util';
+import { SpellId } from './spellId';
+import { WandState } from './wandState';
 
 export type WikiWandOptions = {
   pretty: boolean;

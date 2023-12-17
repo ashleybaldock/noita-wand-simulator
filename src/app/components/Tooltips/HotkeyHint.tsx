@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const lookup = new Map<string, Key>([
   ['mod', { symbol: '^', text: 'Mod' }],
@@ -66,7 +66,7 @@ const HotkeyHintBase = styled.div<{ position: HintPosition }>`
   flex-direction: column;
   place-content: center;
 
-  color: var(--arrow-action-bdcolor);
+  color: var(--color-arrow-action);
   font-size: calc(max(12px, 0.9em));
   font-weight: 300;
   text-align: center;
@@ -128,7 +128,7 @@ export const HotkeyHint = ({
 
 const KeyCombo = styled.div`
   display: flex;
-  flex-directon: row;
+  flex-direction: row;
   align-items: center;
   width: 100%;
 
@@ -188,7 +188,7 @@ const KeyCap = styled.kbd`
 
   background-color: black;
   border: none;
-  color: var(--arrow-action-bdcolor);
+  color: var(--color-arrow-action);
 `;
 
 const KeyStroke = styled.div`

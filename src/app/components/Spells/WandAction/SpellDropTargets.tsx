@@ -1,6 +1,6 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
+import { WandSelection } from '../../../redux/Wand/wandSelection';
 import { WithDebugHints } from '../../Debug';
-import { WandSelection } from '../../../types';
 
 export const DropTargetMain = styled.div<{
   selection: WandSelection;

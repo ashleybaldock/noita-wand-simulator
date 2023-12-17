@@ -6,7 +6,12 @@ from re import Match
 srcFile = 'data/scripts/gun/gun_actions.lua'
 srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
 
-spellsBefore = """import {
+spellsBefore = """/* Auto-generated file */
+
+import { GunActionState } from '../../actionState';
+import { Spell } from '../../spell';
+import { ipairs, luaFor } from "../../lua/loops";
+import {
   hand,
   deck,
   discarded,
@@ -54,10 +59,7 @@ import {
   Random,
   SetRandomSeed,
   GameGetFrameNum
-} from "../../eval/wandObserver";
-import { Spell } from '../../spell';
-import { GunActionState } from '../../actionState';
-import { ipairs, luaFor } from "../../lua/loops";
+} from "../../eval/dispatch";
 
 """
 

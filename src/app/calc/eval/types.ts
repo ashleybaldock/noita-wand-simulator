@@ -4,6 +4,13 @@ import { GroupedObject } from '../grouping/combineGroups';
 import { GunActionState } from '../actionState';
 import { ActionSource } from '../actionSources';
 
+export type ComponentID = string;
+export type EntityID = number;
+export type Entity = object;
+export type InventoryItemID = number | undefined;
+export type Component = object;
+export type EntityTransform = [x: number, y: number];
+
 /*
  * Evaluation & visualisation
  */

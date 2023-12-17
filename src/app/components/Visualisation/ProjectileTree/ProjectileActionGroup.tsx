@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { WandAction, WandActionBorder } from '../../Spells/WandAction';
 import {
   GroupedObject,
@@ -92,7 +92,7 @@ const WandActionGroupWandActionBorder = styled(WandActionBorder)`
   border: 3px dotted #656565;
   border-radius: 12px;
   background-image: none;
-  background-color: rgba(108, 76, 34, 0.1);
+  background-color: black;
   margin: 0;
 `;
 
@@ -134,7 +134,10 @@ export const ProjectileActionGroup = ({
               spellSprite={simplified.spell?.sprite}
             />
 
-            <ActionProxyAnnotation proxy={simplified.proxy} />
+            <ActionProxyAnnotation
+              spell={simplified.spell}
+              proxy={simplified.proxy}
+            />
             <DeckIndexAnnotation deckIndex={simplified.deckIndex} />
             <FriendlyFireAnnotation />
           </WandActionGroupWandActionBorder>

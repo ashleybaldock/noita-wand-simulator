@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SpellType } from '../../calc/spellTypes';
 import { WandAction } from '../Spells/WandAction';
 import { HotkeyHint } from '../Tooltips/HotkeyHint';

@@ -1,3 +1,8 @@
+/* Auto-generated file */
+
+import { GunActionState } from '../../actionState';
+import { Spell } from '../../spell';
+import { ipairs, luaFor } from "../../lua/loops";
 import {
   hand,
   deck,
@@ -46,10 +51,7 @@ import {
   Random,
   SetRandomSeed,
   GameGetFrameNum
-} from "../../eval/wandObserver";
-import { Spell } from '../../spell';
-import { GunActionState } from '../../actionState';
-import { ipairs, luaFor } from "../../lua/loops";
+} from "../../eval/dispatch";
 
 const actions: Spell[] = [
 	

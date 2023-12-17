@@ -1,9 +1,9 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { useDrag, useDrop } from 'react-dnd';
 import { useAppDispatch } from '../../../redux/hooks';
-import { CursorPosition, CursorStyle, DragItemSelect } from '../../../types';
 import { WithDebugHints } from '../../Debug';
 import { setSelection, useCursor } from '../../../redux';
+import { CursorPosition, CursorStyle, DragItemSelect } from './types';
 
 export const StyledCursor = styled.div<{
   cursorIndex: CursorPosition;

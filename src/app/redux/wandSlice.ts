@@ -1,22 +1,18 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
-import {
-  Cursor,
-  SpellId,
-  Wand,
-  WandState,
-  SpellEditMode,
-  SpellShiftDirection,
-  SelectionIndex,
-  WandSelection,
-} from '../types';
+import { SpellEditMode, SpellShiftDirection, SelectionIndex } from '../types';
 import { defaultWand } from './Wand/presets';
 import { useSliceWrapper } from './useSlice';
 import { generateWandStateFromSearch } from './Wand/fromSearch';
 import { isNotNullOrUndefined, isNumber, isString, MAX_ALWAYS } from '../util';
 import { generateWikiWandV2 } from './Wand/toWiki';
 import { getSelectionForId } from './Wand/toSelection';
+import { WandState } from './Wand/wandState';
+import { Wand } from './Wand/wand';
+import { SpellId } from './Wand/spellId';
+import { WandSelection } from './Wand/wandSelection';
+import { Cursor } from '../components/Spells/WandAction/types';
 
 export function fixedLengthCopy<T>(
   arr: readonly T[],

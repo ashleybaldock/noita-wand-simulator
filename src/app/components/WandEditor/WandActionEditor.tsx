@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useAppDispatch } from '../../redux/hooks';
@@ -15,7 +15,6 @@ import {
 } from '../../redux/wandSlice';
 import { Spell } from '../../calc/spell';
 import { getSpellById } from '../../calc/spells';
-import { isKnownSpell, WandSelection } from '../../types';
 import {
   ChargesRemainingAnnotation,
   DeckIndexAnnotation,
@@ -30,6 +29,8 @@ import {
 } from '../Spells/WandAction';
 import { useDragLayer } from 'react-dnd';
 import { getComputedColumns } from './hooks';
+import { WandSelection } from '../../redux/Wand/wandSelection';
+import { isKnownSpell } from '../../redux/Wand/spellId';
 
 function ActionComponent({
   spellAction,

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { CloseButton } from './CloseButton';
 
 const BackgroundDiv = styled.div`

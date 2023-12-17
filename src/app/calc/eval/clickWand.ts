@@ -1,6 +1,6 @@
-import { Spell, SpellDeckInfo } from '../spell';
+import { Spell } from '../spell';
 import { getSpellById } from '../spells';
-import { observer, WandEvent } from './wandObserver';
+import { observer } from './wandObserver';
 import {
   Gun,
   _add_card_to_deck,
@@ -15,10 +15,11 @@ import {
 import { isValidEntityPath, entityToActions } from '../entityLookup';
 import { isIterativeActionId } from '../actionId';
 import { ActionCall, TreeNode, WandShot } from './types';
-import { defaultGunActionState } from '../actionState';
+import { defaultGunActionState } from '../defaultActionState';
 import { getTriggerConditionForEvent } from '../trigger';
 import { isValidActionCallSource } from '../spellTypes';
 import { StopCondition, StopReason } from '../../types';
+import { WandEvent } from './wandEvent';
 
 export type ClickWandResult = {
   shots: WandShot[];
@@ -69,7 +70,7 @@ export const clickWand = (
   const iterationLimit = 10;
   let reloaded = false;
   let mana = wand_available_mana;
-  let wandShots: WandShot[] = [];
+  const wandShots: WandShot[] = [];
   let currentShot: WandShot;
   let currentShotStack: WandShot[];
   let lastCalledAction: ActionCall | undefined;
@@ -83,7 +84,7 @@ export const clickWand = (
 
   let reloadTime: number | undefined;
 
-  let if_half_state = req_half ? 1 : 0;
+  const if_half_state = req_half ? 1 : 0;
 
   const unsub = observer.subscribe(({ name, payload }: WandEvent) => {
     switch (name) {
@@ -292,12 +293,11 @@ export const clickWand = (
       _set_gun(wand);
       _clear_deck(/*false*/);
 
-      spells.forEach((spell, index) => {
-        if (!spell) {
-          return;
-        }
-        _add_card_to_deck(spell.id, index, spell.uses_remaining, true);
-      });
+      spells.forEach(
+        (spell, index) =>
+          spell &&
+          _add_card_to_deck(spell.id, index, spell.uses_remaining, true),
+      );
 
       while (!reloaded && iterations < iterationLimit) {
         state_from_game.fire_rate_wait = wand_cast_delay;

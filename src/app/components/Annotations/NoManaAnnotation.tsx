@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 export const SourceDiv = styled.div<{
   colors: [string, string];
@@ -22,9 +22,7 @@ export const SourceDiv = styled.div<{
   opacity: 0;
 `;
 
-type Props = {};
-
-export function NoManaAnnotation(props: Props) {
+export function NoManaAnnotation() {
   // const { config } = useConfig();
   //
   return <SourceDiv colors={['#000', '#fff']}></SourceDiv>;

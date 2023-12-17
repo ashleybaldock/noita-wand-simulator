@@ -1,4 +1,4 @@
-import { WandSelection } from '../../types';
+import { WandSelection } from './wandSelection';
 
 export const getSelectionForId = (
   idx: number,

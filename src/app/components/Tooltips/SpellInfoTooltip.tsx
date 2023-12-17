@@ -1,14 +1,15 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { Tooltip } from 'react-tooltip';
 import { TooltipId } from './tooltipId';
 import { getSpellById } from '../../calc/spells';
 import { isValidActionId } from '../../calc/actionId';
-import { formatYesNo, isNotNullOrUndefined } from '../../util';
+import { isNotNullOrUndefined } from '../../util';
 import { translate } from '../../util/i18n';
 import { spellTypeInfoMap } from '../../calc/spellTypes';
 import { WithDebugHints } from '../Debug';
 import { getSpriteForPerk, Perk } from '../../calc/perks';
 import { getUnlockName } from '../../calc/unlocks';
+import { YesNo } from '../Presentation';
 
 const SpellTip = styled.div`
   display: grid;
@@ -67,21 +68,20 @@ const Sub = styled.div`
   margin-top: 0.4em;
 `;
 
-type LabelProps = { iconSrc?: string };
-const Label = styled.div.attrs(({ iconSrc }: LabelProps) => ({
+const Label = styled.div.attrs<{ iconSrc?: string }>(({ iconSrc }) => ({
   style:
     iconSrc !== undefined
       ? {
           backgroundImage: `url('/${iconSrc}')`,
         }
       : {},
-}))<LabelProps>`
+}))`
   grid-column: label;
   margin-bottom: 0.2em;
   white-space: nowrap;
 
   background-size: 1.2em;
-  background-position: start center;
+  background-position: left center;
   background-repeat: no-repeat;
   image-rendering: pixelated;
   padding: 0.1em 0.6em 0.1em 2.2em;
@@ -107,7 +107,7 @@ const Image = styled.img`
 const StyledTooltip = styled(Tooltip)`
   z-index: var(--zindex-tooltips);
 
-  min-width: 240;
+  min-width: 240px;
 
   &.show {
     opacity: var(--rt-opacity);
@@ -136,14 +136,13 @@ const StyledTooltip = styled(Tooltip)`
   }
 `;
 
-type InlineIconProps = {
+const InlineIcon = styled.span.attrs<{
   perk?: Perk;
-};
-const InlineIcon = styled.span.attrs(({ perk }: InlineIconProps) => ({
+}>(({ perk }) => ({
   style: {
     backgroundImage: `url('${getSpriteForPerk(perk)}')`,
   },
-}))<InlineIconProps>`
+}))`
   display: inline-block;
   background-position: center center;
   background-repeat: no-repeat;
@@ -199,12 +198,12 @@ export const SpellInfoTooltip = () => {
                 <>
                   {`${max_uses}`}
                   <InlineIcon perk={'unlimited_spells'} />
-                  {`${formatYesNo(Boolean(never_unlimited))})`}
+                  <YesNo yes={Boolean(never_unlimited)} />
                 </>
               )}
             </Value>
             <Label>Beta</Label>
-            <Value>{formatYesNo(Boolean(beta))}</Value>
+            <YesNo yes={Boolean(beta)} />
             {spawn_requires_flag !== undefined && (
               <>
                 <Label>Unlock</Label>

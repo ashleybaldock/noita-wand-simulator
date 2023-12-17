@@ -1,4 +1,3 @@
-import { Preset, PresetGroup } from '../types';
 import { FPS } from './constants';
 import { mapIter } from './iterTools';
 
@@ -18,27 +17,6 @@ export const assertNever = (_: never): never => {
   throw new Error('This should never happen.');
 };
 
-/**
- * Rounds a number
- */
-// type RoundOptions = {
-//   step?: number;
-//   min?: number;
-//   max?: number;
-//   method?: 'ceil' | 'floor' | 'round';
-// };
-// export const roundToStep = (
-//   n: number,
-//   {
-//     step = 1,
-//     min = Number.NEGATIVE_INFINITY,
-//     max = Number.POSITIVE_INFINITY,
-//     method = 'round',
-//   }: RoundOptions,
-// ) => {
-//   return Math.ceil((n - offset) / increment) * increment + offset;
-// };
-
 export const parseBooleanFromString = (
   str: string,
   defaultTo: boolean = false,
@@ -46,11 +24,9 @@ export const parseBooleanFromString = (
   falsey: RegExp = /(?:^0$|^n$|^N$|^f$|^F$|^false|^no)/,
 ) => truthy.test(str) || !falsey.test(str) || defaultTo;
 
-type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
-
 export function union<T, U>(setA: Set<T>, setB: Set<U>) {
-  let _union = new Set<T | U>(setA);
-  for (let elem of setB) {
+  const _union = new Set<T | U>(setA);
+  for (const elem of setB) {
     _union.add(elem);
   }
   return _union;
@@ -60,30 +36,21 @@ export function range(n: number) {
   return [...Array(n).keys()];
 }
 
-type DiffResult<T extends object> = Partial<{
-  [key in keyof T]: { a: T[key]; b: T[key] };
-}>;
-
-export function diff<T extends object>(a: T, b: T) {
-  const result: any = {};
-  const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
-  keys.forEach((k) => {
-    const aa: any = a;
-    const ba: any = b;
-    if (aa[k] !== ba[k]) {
-      result[k] = { a: aa[k], b: ba[k] };
-    }
-  });
-  return result as DiffResult<T>;
-}
-
-export function isSinglePreset(p: Preset | PresetGroup): p is Preset {
-  return p.hasOwnProperty('spells');
-}
-
-export function isPresetGroup(p: Preset | PresetGroup): p is PresetGroup {
-  return p.hasOwnProperty('presets');
-}
+// type DiffResult<T extends object> = Partial<{
+//   [key in keyof T]: { a: T[key]; b: T[key] };
+// }>;
+// export function diff<T extends object>(a: T, b: T) {
+//   const result: T = {};
+//   const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
+//   keys.forEach((k) => {
+//     const aa: T = a;
+//     const ba: T = b;
+//     if (aa[k] !== ba[k]) {
+//       result[k] = { a: aa[k], b: ba[k] };
+//     }
+//   });
+//   return result as DiffResult<T>;
+// }
 
 export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
   Object.keys(obj) as (keyof T)[];
@@ -166,14 +133,6 @@ export type TypedProperties<T, U> = Pick<
   }[keyof T]
 >;
 
-export const formatYesNo = (
-  v: boolean,
-  {
-    ifTrue = 'Yes',
-    ifFalse = 'No',
-  }: { ifTrue?: JSX.Element | string; ifFalse?: JSX.Element | string } = {},
-) => (v ? ifTrue : ifFalse);
-
 export const round = (n: number, to: number) =>
   Math.round(n * Math.pow(10, to)) / Math.pow(10, to);
 
@@ -205,30 +164,30 @@ export const copyToClipboard = async (text: string) =>
     ? await navigator.clipboard.writeText(text)
     : document.execCommand('copy', true, text);
 
-export function forceDisableCanvasSmoothing() {
-  // https://stackoverflow.com/a/22018649
-  // save old getContext
-  const oldGetContext = HTMLCanvasElement.prototype.getContext;
+// export function forceDisableCanvasSmoothing() {
+//   // https://stackoverflow.com/a/22018649
+//   // save old getContext
+//   const oldGetContext = HTMLCanvasElement.prototype.getContext;
 
-  // get a context, set it to smoothed if it was a 2d context, and return it.
-  function getSmoothContext(this: any, contextType: any) {
-    let resCtx = oldGetContext.apply(this, arguments as any);
-    if (contextType === '2d') {
-      setToFalse(resCtx, 'imageSmoothingEnabled');
-      setToFalse(resCtx, 'mozImageSmoothingEnabled');
-      setToFalse(resCtx, 'oImageSmoothingEnabled');
-      setToFalse(resCtx, 'webkitImageSmoothingEnabled');
-    }
-    return resCtx;
-  }
+//   // get a context, set it to smoothed if it was a 2d context, and return it.
+//   function getSmoothContext(this: any, contextType: any) {
+//     let resCtx = oldGetContext.apply(this, arguments as any);
+//     if (contextType === '2d' && isNotNullOrUndefined(resCtx)) {
+//       setToFalse(resCtx, 'imageSmoothingEnabled');
+//       setToFalse(resCtx, 'mozImageSmoothingEnabled');
+//       setToFalse(resCtx, 'oImageSmoothingEnabled');
+//       setToFalse(resCtx, 'webkitImageSmoothingEnabled');
+//     }
+//     return resCtx;
+//   }
 
-  function setToFalse(obj: any, prop: any) {
-    if (obj[prop] !== undefined) obj[prop] = false;
-  }
+//   function setToFalse(obj: RenderingContext, prop: keyof RenderingContext) {
+//     if (isNotNullOrUndefined(obj[prop]) obj[prop] = false;
+//   }
 
-  // inject new smoothed getContext
-  HTMLCanvasElement.prototype.getContext = getSmoothContext as any;
-}
+//   // inject new smoothed getContext
+//   HTMLCanvasElement.prototype.getContext = getSmoothContext as any;
+// }
 
 export const toUrl = (path: string) => {
   if (path.startsWith('data:image')) {
@@ -258,3 +217,24 @@ export function hashString(s: string) {
   }
   return hash;
 }
+
+/**
+ * Rounds a number
+ */
+// type RoundOptions = {
+//   step?: number;
+//   min?: number;
+//   max?: number;
+//   method?: 'ceil' | 'floor' | 'round';
+// };
+// export const roundToStep = (
+//   n: number,
+//   {
+//     step = 1,
+//     min = Number.NEGATIVE_INFINITY,
+//     max = Number.POSITIVE_INFINITY,
+//     method = 'round',
+//   }: RoundOptions,
+// ) => {
+//   return Math.ceil((n - offset) / increment) * increment + offset;
+// };

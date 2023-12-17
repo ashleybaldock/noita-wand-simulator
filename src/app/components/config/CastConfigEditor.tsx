@@ -1,6 +1,6 @@
 import { useAppDispatch } from '../../redux/hooks';
 import { updateConfig, useConfig } from '../../redux/configSlice';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { ChangeEvent } from 'react';
 import { SectionHeader } from '../SectionHeader';
 import { YesNoToggle } from '../Input';
@@ -13,7 +13,7 @@ const MainDiv = styled.div`
   padding: 1px;
 `;
 
-const SubSectionDiv = styled.div<{}>`
+const SubSectionDiv = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 0 48%;

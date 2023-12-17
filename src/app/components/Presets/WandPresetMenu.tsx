@@ -1,7 +1,6 @@
-import { Preset, PresetGroup } from '../../types';
 import React from 'react';
-import styled from 'styled-components/macro';
-import { isPresetGroup } from '../../util/util';
+import styled from 'styled-components';
+import { isPresetGroup, Preset, PresetGroup } from '../../redux/Wand/preset';
 import { Button } from '../generic';
 
 const PresetGroupNameDiv = styled.div`
@@ -54,14 +53,13 @@ const PresetButtonDiv = styled.li`
   }
 `;
 
-type Props = {
+export function WandPresetMenu({
+  presets,
+  onSelect,
+}: {
   presets: (Preset | PresetGroup)[];
   onSelect: (p: Preset) => void;
-};
-
-export function WandPresetMenu(props: Props) {
-  const { presets, onSelect } = props;
-
+}) {
   const createPresetList = (
     presetGroup: PresetGroup,
     first: boolean = true,

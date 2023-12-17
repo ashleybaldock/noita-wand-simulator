@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { ActionSource } from '../../calc/actionSources';
 import { useConfig } from '../../redux';
 import { BaseAnnotation } from './BaseAnnotation';

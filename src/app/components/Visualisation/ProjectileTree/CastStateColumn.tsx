@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { GunActionState } from '../../../calc/actionState';
 import {
   getNameForTrailMaterial,
@@ -6,7 +6,6 @@ import {
   TrailMaterial,
 } from '../../../calc/materials';
 import {
-  formatYesNo,
   isNotNullOrUndefined,
   isString,
   radiusThresholdBonus,
@@ -25,11 +24,16 @@ import {
   SUFFIX_THOUSAND,
 } from '../../../util';
 import { TriggerCondition } from '../../../calc/trigger';
+import { WithDebugHints } from '../../Debug';
+import { Duration } from './Duration';
+import { Unchanged, YesNo, YesOr } from '../../Presentation';
+
+// TODO: handle extra_entities that affect damage/etc
 
 const GridRowItem = styled.div<{
-  firstValue?: boolean;
-  firstInGroup?: boolean;
-  isTotal?: boolean;
+  $firstValue?: boolean;
+  $firstInGroup?: boolean;
+  $isTotal?: boolean;
 }>`
   display: flex;
   flex: 1 1 auto;
@@ -42,9 +46,9 @@ const GridRowItem = styled.div<{
   white-space: nowrap;
   padding: 0.2em;
 
-  ${({ firstInGroup, firstValue }) =>
-    firstInGroup
-      ? firstValue
+  ${({ $firstInGroup, $firstValue }) =>
+    $firstInGroup
+      ? $firstValue
         ? `
   border-top: 1px dotted var(--color-vis-cs-inborder);
     `
@@ -52,8 +56,8 @@ const GridRowItem = styled.div<{
   border-top: 1px dotted var(--color-vis-cs-inborder-dark);
     `
       : ``}
-  ${({ isTotal }) =>
-    isTotal
+  ${({ $isTotal }) =>
+    $isTotal
       ? `
   border-left: 1px dotted var(--color-vis-cs-inborder);
   background-color: black;
@@ -63,10 +67,10 @@ const GridRowItem = styled.div<{
   `}
 `;
 
-const PropertyIcon = styled(GridRowItem)<{ icon?: string }>`
+const PropertyIcon = styled(GridRowItem)<{ $icon?: string }>`
   background-position: center center;
   background-size: 1.1em;
-  ${({ icon }) => (icon ? `${icon}` : 'background-image: none;')};
+  ${({ $icon }) => ($icon ? `${$icon}` : 'background-image: none;')};
 `;
 
 const PropertyName = styled(GridRowItem)`
@@ -125,19 +129,19 @@ const Denominator = styled.span`
   vertical-align: bottom;
 `;
 const UnstyledFraction = ({
-  a,
-  b,
+  $a,
+  $b,
   className = '',
 }: {
-  a: string;
-  b: string;
+  $a: string;
+  $b: string;
   className?: string;
 }) => {
   return (
     <span className={className}>
-      <Numerator>{a}</Numerator>
+      <Numerator>{$a}</Numerator>
       {'/'}
-      <Denominator>{b}</Denominator>
+      <Denominator>{$b}</Denominator>
     </span>
   );
 };
@@ -206,8 +210,8 @@ const ReadableNumber = ({
   );
 };
 
-const NotApplicable = styled(Fraction).attrs(() => ({ a: 'n', b: 'a' }))`
-  color: var(--color-value-ignored);
+const NotApplicable = styled(() => <Fraction $a={'n'} $b={'a'} />)`
+  color: var(--color-value-ignored;
   font-variant: small-caps;
 `;
 const Missing = styled.span`
@@ -216,33 +220,19 @@ const Missing = styled.span`
     content: '?';
   }
 `;
-type UnchangedProps = {
-  content?: string;
-};
-const Unchanged = styled.span.attrs(({ content = '--' }: UnchangedProps) => ({
-  content,
-}))<UnchangedProps>`
-  color: var(--color-value-ignored);
-  &::before {
-    content: '${({ content }) => content}';
-  }
-`;
 
-type MaterialTrailProps = {
-  material: TrailMaterial;
-};
-const MaterialTrail = styled.span.attrs(({ material }: MaterialTrailProps) => ({
-  name: getNameForTrailMaterial(material),
-}))<MaterialTrailProps>`
+// content: '${({ material }) => getNameForTrailMaterial(material)}:';
+const MaterialTrail = styled.span<{
+  $material: TrailMaterial;
+}>`
   display: block;
   &::after {
-    content: '${({ material }) => material}:';
     content: '';
     padding: 0.4em 1em 0 1em;
     background-position: 50% 50%;
     background-size: 1.4em;
-    background-image: url('/data/trail/trail_${({ material }) =>
-      material}.png');
+    background-image: url('/data/trail/trail_${({ $material }) =>
+      getNameForTrailMaterial($material)}.png');
     background-repeat: no-repeat;
     image-rendering: pixelated;
   }
@@ -269,16 +259,6 @@ const FilePath = styled.span<{
     image-rendering: pixelated;
   }
 `;
-
-const formatDuration = (v: number, showAsFrames: boolean) => {
-  const n = Number(v);
-  if (showAsFrames) {
-    return `${round(Math.max(0, n), 0)}f ${n < 0 ? ` (${sign(n)})` : ``}`;
-  } else {
-    const s = toSeconds(n);
-    return `${round(Math.max(0, s), 2)}s ${n < 0 ? ` (${sign(s)})` : ``}`;
-  }
-};
 
 type ExtendedActionState = GunActionState & {
   insideTrigger: boolean;
@@ -327,16 +307,18 @@ const fieldSections: FieldSection[] = [
         icon: `background-image: url('/data/wand/icon_reload_time-s.png');`,
         key: 'reload_time',
         displayName: 'Recharge Time',
-        render: ({ reload_time }, { showDurationsInFrames }) =>
-          formatDuration(reload_time, showDurationsInFrames),
+        render: ({ reload_time }) => (
+          <Duration durationInFrames={reload_time} />
+        ),
       },
       {
         icon: `background-image: url('/data/wand/icon_fire_rate_wait.png');`,
         key: 'fire_rate_wait',
         ignoredInTrigger: true,
         displayName: 'Cast Delay',
-        render: ({ fire_rate_wait }, { showDurationsInFrames }) =>
-          formatDuration(fire_rate_wait, showDurationsInFrames),
+        render: ({ fire_rate_wait }) => (
+          <Duration durationInFrames={fire_rate_wait} />
+        ),
       },
       {
         icon: `background-image: url('/data/wand/icon_lifetime.png');`,
@@ -349,9 +331,8 @@ const fieldSections: FieldSection[] = [
           if (isTotal) {
             return signZero(Number(lifetime_add));
           }
-          return lifetime_add === -1
-            ? `inf.`
-            : `${lifetime_add}˷±~${lifetime_add}`;
+          return lifetime_add === -1 ? `inf.` : <Unchanged></Unchanged>;
+          // : `${lifetime_add}˷±~${lifetime_add}`;
         },
       },
       {
@@ -359,7 +340,8 @@ const fieldSections: FieldSection[] = [
         key: 'wisp_chance',
         noTotal: true,
         displayName: 'Wisp Chance',
-        render: ({ lifetime_add }, {}) => '6.67%',
+        render: ({ lifetime_add }, _) => <Unchanged />,
+        // render: ({ lifetime_add }, {}) => '6.67%',
       },
     ],
   },
@@ -464,40 +446,44 @@ const fieldSections: FieldSection[] = [
         key: 'crit_on_wet',
         displayName: 'Crit On: Wet',
         noTotal: true,
-        render: ({ game_effect_entities: v }) =>
-          formatYesNo(v.includes('effect_apply_wet'), {
-            ifFalse: <Unchanged />,
-          }),
+        render: ({ game_effect_entities: v }) => (
+          <YesOr yes={v.includes('effect_apply_wet')}>
+            <Unchanged />
+          </YesOr>
+        ),
       },
       {
         icon: `background-image: url('/data/status/oiled.png');`,
         key: 'crit_on_oil',
         displayName: 'Crit On: Oil',
         noTotal: true,
-        render: ({ game_effect_entities: v }) =>
-          formatYesNo(v.includes('effect_apply_oiled'), {
-            ifFalse: <Unchanged />,
-          }),
+        render: ({ game_effect_entities: v }) => (
+          <YesOr yes={v.includes('effect_apply_oiled')}>
+            <Unchanged />
+          </YesOr>
+        ),
       },
       {
         icon: `background-image: url('/data/status/bloody.png');`,
         key: 'crit_on_blood',
         displayName: 'Crit On: Blood',
         noTotal: true,
-        render: ({ game_effect_entities: v }) =>
-          formatYesNo(v.includes('effect_apply_bloody'), {
-            ifFalse: <Unchanged />,
-          }),
+        render: ({ game_effect_entities: v }) => (
+          <YesOr yes={v.includes('effect_apply_bloody')}>
+            <Unchanged />
+          </YesOr>
+        ),
       },
       {
         icon: `background-image: url('/data/status/burning.png');`,
         key: 'crit_on_fire',
         displayName: 'Crit On: Fire',
         noTotal: true,
-        render: ({ game_effect_entities: v }) =>
-          formatYesNo(v.includes('effect_apply_on_fire'), {
-            ifFalse: <Unchanged />,
-          }),
+        render: ({ game_effect_entities: v }) => (
+          <YesOr yes={v.includes('effect_apply_on_fire')}>
+            <Unchanged />
+          </YesOr>
+        ),
       },
       {
         icon: `background-image: url('/data/wand/icon_damage_critical_chance.png');`,
@@ -522,22 +508,22 @@ const fieldSections: FieldSection[] = [
         icon: `background-image: url('/data/warnings/icon_danger.png');`,
         key: 'friendly_fire',
         displayName: 'Friendly Fire',
-        render: ({ friendly_fire: v, isTotal }) =>
-          formatYesNo(Boolean(v), {
-            ifTrue: <Warning>{'Yes'}</Warning>,
-            ifFalse: isTotal ? <Unchanged content={'No'} /> : <Unchanged />,
-          }),
+        render: ({ friendly_fire: v, isTotal }) => (
+          <YesNo
+            yes={Boolean(v)}
+            warnIf={'yes'}
+            customMaybe={<Unchanged content={'No'} />}
+          />
+        ),
       },
       {
         icon: `background-image: url('/data/ui_gfx/gun_actions/zero_damage.png');`,
         key: 'damage_null_all',
         displayName: 'All Null',
-        render: ({ damage_null_all: v }) =>
-          formatYesNo(Boolean(v), {
-            ifFalse: <Unchanged />,
-          }),
+        render: ({ damage_null_all: v }) => (
+          <YesNo yes={Boolean(v)} customNo={<Unchanged />} />
+        ),
       },
-
       {
         icon: getBackgroundUrlForDamageType('melee'),
         key: 'damage_melee_add',
@@ -697,7 +683,7 @@ const fieldSections: FieldSection[] = [
               {tally(v.split(',').filter((v) => v.length > 0)).map(
                 ([name, count]) =>
                   isTrailMaterial(name) ? (
-                    <MaterialTrail material={name} key={name}>
+                    <MaterialTrail $material={name} key={name}>
                       {`${SIGN_MULTIPLY} ${count}`}
                     </MaterialTrail>
                   ) : null,
@@ -716,143 +702,175 @@ const fieldSections: FieldSection[] = [
   },
 ];
 
-// todo: handle extra_entities that affect damage/etc
+export const FieldNamesColumn = styled(
+  ({ castState }: { castState?: GunActionState }) => {
+    return (
+      <>
+        {castState &&
+          fieldSections.map(({ fields }, i1) => (
+            <>
+              {fields.map(({ key, displayName }, i2) => (
+                <PropertyName
+                  key={key ?? `${i1}-${i2}-${key}`}
+                  $firstValue={i1 === 0}
+                  $firstInGroup={i2 === 0}
+                >
+                  {displayName}
+                </PropertyName>
+              ))}
+            </>
+          ))}
+      </>
+    );
+  },
+)`
+  ${WithDebugHints} && {
+    background-color: #a0a;
+  }
+`;
 
-export const FieldNamesColumn = ({
-  castState,
-}: {
-  castState?: GunActionState;
-}) => {
-  return (
-    <>
-      {castState &&
-        fieldSections.map(({ fields }, i1) => (
-          <>
-            {fields.map(({ key, displayName }, i2) => (
-              <PropertyName
-                key={key ?? `${i1}-${i2}-${key}`}
-                firstValue={i1 === 0}
-                firstInGroup={i2 === 0}
-              >
-                {displayName}
-              </PropertyName>
-            ))}
-          </>
-        ))}
-    </>
-  );
-};
+export const IconsColumn = styled(
+  ({ castState }: { castState?: GunActionState }) => {
+    return (
+      <>
+        {castState &&
+          fieldSections.map(({ fields }, i1) => (
+            <>
+              {fields.map(({ key, icon, displayName }, i2) => (
+                <PropertyIcon
+                  key={key ?? `${i1}-${i2}-${key}`}
+                  $firstValue={i1 === 0}
+                  $firstInGroup={i2 === 0}
+                  $icon={icon ?? ''}
+                />
+              ))}
+            </>
+          ))}
+      </>
+    );
+  },
+)`
+  ${WithDebugHints} && {
+    background-color: #0aa;
+  }
+`;
 
-export const IconsColumn = ({ castState }: { castState?: GunActionState }) => {
-  return (
-    <>
-      {castState &&
-        fieldSections.map(({ fields }, i1) => (
-          <>
-            {fields.map(({ key, icon, displayName }, i2) => (
-              <PropertyIcon
-                key={key ?? `${i1}-${i2}-${key}`}
-                firstValue={i1 === 0}
-                firstInGroup={i2 === 0}
-                icon={icon ?? ''}
-              />
-            ))}
-          </>
-        ))}
-    </>
-  );
-};
+export const TotalsColumn = styled(
+  ({
+    castState,
+    manaDrain,
+    insideTrigger = false,
+    triggerType,
+  }: {
+    castState?: GunActionState;
+    manaDrain?: number;
+    insideTrigger?: boolean;
+    triggerType?: TriggerCondition;
+    showValues?: boolean;
+  }) => {
+    const config = useConfig();
+    const { castShowChanged } = config;
 
-export const TotalsColumn = ({
-  castState,
-  manaDrain,
-  insideTrigger = false,
-  triggerType,
-}: {
-  castState?: GunActionState;
-  manaDrain?: number;
-  insideTrigger?: boolean;
-  triggerType?: TriggerCondition;
-  showValues?: boolean;
-}) => {
-  const config = useConfig();
-  const { castShowChanged } = config;
+    return (
+      <>
+        {castState &&
+          fieldSections.map(({ fields }, i1) => (
+            <>
+              {fields.map(
+                (
+                  { key, render, ignoredInTrigger = false, noTotal = false },
+                  i2,
+                ) => (
+                  <PropertyValue
+                    key={key ?? `${i1}-${i2}`}
+                    $firstValue={i1 === 0}
+                    $firstInGroup={i2 === 0}
+                    $isTotal={true}
+                  >
+                    {insideTrigger && ignoredInTrigger ? (
+                      <Ignored />
+                    ) : noTotal ? (
+                      <Unchanged />
+                    ) : (
+                      render(
+                        {
+                          ...castState,
+                          insideTrigger,
+                          isTotal: true,
+                          manaDrain,
+                        },
+                        config,
+                      )
+                    )}
+                  </PropertyValue>
+                ),
+              )}
+            </>
+          ))}
+      </>
+    );
+  },
+)`
+  ${WithDebugHints} && {
+    background-color: #00a;
+  }
+`;
 
-  return (
-    <>
-      {castState &&
-        fieldSections.map(({ fields }, i1) => (
-          <>
-            {fields.map(
-              (
-                { key, render, ignoredInTrigger = false, noTotal = false },
-                i2,
-              ) => (
+export const ProjectileColumn = styled(
+  ({
+    castState,
+    manaDrain,
+    insideTrigger = false,
+    triggerType,
+  }: {
+    castState?: GunActionState;
+    manaDrain?: number;
+    insideTrigger?: boolean;
+    triggerType?: TriggerCondition;
+  }) => {
+    const config = useConfig();
+    const { castShowChanged } = config;
+
+    return (
+      <>
+        {castState &&
+          fieldSections.map(({ fields }, i1) => (
+            <>
+              {fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
                 <PropertyValue
                   key={key ?? `${i1}-${i2}`}
-                  firstValue={i1 === 0}
-                  firstInGroup={i2 === 0}
-                  isTotal={true}
+                  $firstValue={i1 === 0}
+                  $firstInGroup={i2 === 0}
+                  $isTotal={false}
                 >
-                  {insideTrigger && ignoredInTrigger ? (
-                    <Ignored />
-                  ) : noTotal ? (
-                    <Unchanged />
-                  ) : (
+                  {!insideTrigger || !ignoredInTrigger ? (
                     render(
-                      { ...castState, insideTrigger, isTotal: true, manaDrain },
+                      {
+                        ...castState,
+                        isTotal: false,
+                        insideTrigger,
+                        manaDrain,
+                      },
                       config,
                     )
+                  ) : (
+                    <Ignored />
                   )}
                 </PropertyValue>
-              ),
-            )}
-          </>
-        ))}
-    </>
-  );
-};
+              ))}
+            </>
+          ))}
+      </>
+    );
+  },
+)`
+  ${WithDebugHints} && {
+    background-color: #0a0;
+  }
+`;
 
-export const ProjectileColumn = ({
-  castState,
-  manaDrain,
-  insideTrigger = false,
-  triggerType,
-}: {
-  castState?: GunActionState;
-  manaDrain?: number;
-  insideTrigger?: boolean;
-  triggerType?: TriggerCondition;
-}) => {
-  const config = useConfig();
-  const { castShowChanged } = config;
-
-  return (
-    <>
-      {castState &&
-        fieldSections.map(({ fields }, i1) => (
-          <>
-            {fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
-              <PropertyValue
-                key={key ?? `${i1}-${i2}`}
-                firstValue={i1 === 0}
-                firstInGroup={i2 === 0}
-                isTotal={false}
-              >
-                {!insideTrigger || !ignoredInTrigger ? (
-                  render(
-                    { ...castState, isTotal: false, insideTrigger, manaDrain },
-                    config,
-                  )
-                ) : (
-                  <Ignored />
-                )}
-              </PropertyValue>
-            ))}
-          </>
-        ))}
-    </>
-  );
-};
-
-export const SubTotalsColumn = TotalsColumn;
+export const SubTotalsColumn = styled(TotalsColumn)`
+  ${WithDebugHints} && {
+    background-color: #a00;
+  }
+`;

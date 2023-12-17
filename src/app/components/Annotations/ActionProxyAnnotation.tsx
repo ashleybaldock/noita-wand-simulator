@@ -1,6 +1,12 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
+import {
+  isWithExpirationActionId,
+  isWithTimerActionId,
+  isWithTriggerActionId,
+} from '../../calc/actionId';
 import { Spell } from '../../calc/spell';
 import { useConfig } from '../../redux';
+import { isNotNullOrUndefined } from '../../util';
 
 export const ProxyDiv = styled.div<{
   imgUrl: string;
@@ -18,17 +24,40 @@ export const ProxyDiv = styled.div<{
   font-family: var(--font-family-noita-default);
 `;
 
-type Props = {
-  proxy?: Spell;
-};
+const ProxyDivNoBorder = styled.div<{
+  imgUrl: string;
+}>`
+  --size-spell: var(--bsize-spell, 48px);
+  position: relative;
+  min-width: var(--size-spell);
+  width: var(--size-spell);
+  height: var(--size-spell);
+  background-size: cover;
+  font-family: monospace;
+  font-weight: bold;
+  user-select: none;
+  image-rendering: pixelated;
+`;
 
-export function ActionProxyAnnotation(props: Props) {
-  const { proxy } = props;
+export const ActionProxyAnnotation = ({
+  proxy,
+  spell,
+}: {
+  proxy?: Spell;
+  spell?: Spell;
+}) => {
   const { showProxies } = useConfig();
 
-  if (proxy === undefined || !showProxies) {
-    return null;
+  if (showProxies && isNotNullOrUndefined(proxy)) {
+    return <ProxyDiv imgUrl={proxy.sprite} />;
+  } else if (isNotNullOrUndefined(spell?.id)) {
+    if (isWithTriggerActionId(spell?.id)) {
+      return <ProxyDiv imgUrl={'data/icons/trigger-mod.png'} />;
+    } else if (isWithTimerActionId(spell?.id)) {
+      return <ProxyDiv imgUrl={'data/icons/timer-mod.png'} />;
+    } else if (isWithExpirationActionId(spell?.id)) {
+      return <ProxyDiv imgUrl={'data/icons/death-mod.png'} />;
+    }
   }
-
-  return <ProxyDiv imgUrl={proxy.sprite} />;
-}
+  return null;
+};
