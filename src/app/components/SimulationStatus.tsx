@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { useConfig } from '../redux';
 import { StopCondition, StopReason } from '../types';
 import { TerminationWarning } from './Visualisation/TerminationWarning';
+import { FNSP, SUFFIX_MILLISECOND } from '../util';
+import { Duration } from './Visualisation/ProjectileTree/Duration';
 
 const StyledStatus = styled.div`
   margin: 0.4em 0 0.1em 0;
@@ -69,7 +71,10 @@ export const SimulationStatus = styled(
         </Value>
         <Value>
           <Label>Time Elapsed</Label>
-          {`${elapsedTime === 0 ? '<1' : elapsedTime}ms`}
+          <>
+            {elapsedTime < 1 ? `<${FNSP}` : ''}
+            <Duration unit="ms" ms={Math.max(elapsedTime, 1)} />
+          </>
         </Value>
         <Value>
           <Label>Result</Label>

@@ -439,7 +439,7 @@ const selectCursor = createSelector(
           : cursorIndex === wandIndex + 1
           ? 'after'
           : 'none',
-      style: 'insert',
+      style: 'caret',
     })),
 );
 const selectSelection = createSelector(

@@ -7,7 +7,7 @@ import { SaveImageButton, ScrollWrapper } from '../../generic';
 import { SectionHeader } from '../../SectionHeader';
 import { ShotTable } from './ShotTable';
 import { Duration } from './Duration';
-import { isNotNullOrUndefined } from '../../../util';
+import { NBSP, isNotNullOrUndefined } from '../../../util';
 import { useConfig } from '../../../redux';
 
 const SectionDiv = styled.div`
@@ -25,12 +25,19 @@ const SaveButtons = styled.div`
   top: 18px;
 `;
 
+const Emphasis = styled.span`
+  border: 1px dotted yellow;
+  padding: 6px 3px 3px 3px;
+  border-radius: 3px;
+`;
+
 const ShotsSummary = styled(
   ({
     pending,
     shots,
     endReason,
     totalRechargeTime,
+    totalFiringTime,
     totalManaDrain,
     className,
   }: {
@@ -38,6 +45,7 @@ const ShotsSummary = styled(
     endReason: StopReason;
     shots: GroupedWandShot[];
     totalRechargeTime?: number;
+    totalFiringTime?: number;
     totalManaDrain?: number;
     className?: string;
   }) => {
@@ -51,17 +59,36 @@ const ShotsSummary = styled(
     }
     return (
       <div className={className}>
-        <div>{`Fired ${
-          shots?.length ?? '??'
-        } shots, ended due to ${endReason}`}</div>
+        <div>
+          {`Fired${NBSP}`}
+          <Emphasis>{`${shots?.length ?? '??'}${NBSP}shots`}</Emphasis>
+
+          {totalFiringTime ? (
+            <>
+              {`${NBSP}in${NBSP}`}
+              <Emphasis>
+                <Duration unit="f" f={totalFiringTime} />
+              </Emphasis>
+            </>
+          ) : (
+            ''
+          )}
+
+          {`Ended due to ${endReason}`}
+        </div>
         {isNotNullOrUndefined(totalRechargeTime) && (
           <div>
-            {`Total recharge delay:`}
-            <Duration durationInFrames={totalRechargeTime} />
+            {`Total recharge delay:${NBSP}`}
+            <Emphasis>
+              <Duration unit="f" f={totalRechargeTime} />
+            </Emphasis>
           </div>
         )}
         {isNotNullOrUndefined(totalManaDrain) && (
-          <div>{`Total mana drain: ${totalManaDrain}`}</div>
+          <div>
+            {`Total mana drain:${NBSP}`}
+            <Emphasis>{totalManaDrain}</Emphasis>
+          </div>
         )}
       </div>
     );

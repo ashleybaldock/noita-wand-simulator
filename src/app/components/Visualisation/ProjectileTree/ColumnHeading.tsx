@@ -20,9 +20,9 @@ const HeadingInner = styled.div`
 `;
 
 const HeadingOuter = styled.div<{
-  $nestingLevel?: number;
-  $triggerType?: TriggerCondition;
-  $alignTop?: boolean;
+  nestingLevel?: number;
+  triggerType?: TriggerCondition;
+  alignTop?: boolean;
 }>`
   grid-row: heading;
   position: relative;
@@ -54,32 +54,32 @@ const HeadingOuter = styled.div<{
   }
 `;
 const BaseColumnHeading = ({
-  $nestingLevel = 0,
-  $triggerType,
-  $origin = false,
-  $endpoint = false,
-  $branch = false,
+  nestingLevel = 0,
+  triggerType,
+  origin = false,
+  endpoint = false,
+  branch = false,
   children,
   className,
 }: {
-  $nestingLevel?: number;
-  $triggerType?: TriggerCondition;
-  $origin?: boolean;
-  $endpoint?: boolean;
-  $branch?: boolean;
+  nestingLevel?: number;
+  triggerType?: TriggerCondition;
+  origin?: boolean;
+  endpoint?: boolean;
+  branch?: boolean;
   className?: string;
 } & React.PropsWithChildren) => {
   return (
     <HeadingOuter
       className={className}
-      $triggerType={$triggerType}
-      $nestingLevel={$nestingLevel}
+      triggerType={triggerType}
+      nestingLevel={nestingLevel}
     >
       <LineSpacer
-        $nestingLevel={$nestingLevel}
-        $origin={$origin}
-        $endpoint={$endpoint}
-        $branch={$branch}
+        nestingLevel={nestingLevel}
+        origin={origin}
+        endpoint={endpoint}
+        branch={branch}
       />
 
       <HeadingInner>{children}</HeadingInner>
@@ -108,13 +108,13 @@ export const TotalsColumnHeading = styled(BaseColumnHeading)`
     margin-top: 10px;
     display: initial;
 
-    ${({ $triggerType }) =>
-      isNotNullOrUndefined($triggerType)
+    ${({ triggerType }) =>
+      isNotNullOrUndefined(triggerType)
         ? `
     height: 2.4em;
     background-position: center 0.2em;
     background-size: 2em;
-        ${toBackgroundImage(getIconForTrigger($triggerType))}
+        ${toBackgroundImage(getIconForTrigger(triggerType))}
         `
         : `
     height: 2.4em;

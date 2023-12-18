@@ -12,6 +12,8 @@ export const SUFFIX_MILLION = 'm';
 export const SUFFIX_BILLION = 'b';
 
 export const SUFFIX_SECOND = 's';
+export const SUFFIX_MILLISECOND = 'ms';
+export const SUFFIX_MICROSECOND = 'µs';
 export const SUFFIX_FRAME = 'f';
 export const SUFFIX_DEGREE = 'DEG';
 

@@ -7,6 +7,7 @@ import {
   moveSpell,
   setSpellAtIndex,
   moveCursor,
+  useCursor,
 } from '../../../redux/wandSlice';
 import { selectConfig } from '../../../redux/configSlice';
 import { WandActionBorder } from './WandActionBorder';
@@ -25,7 +26,7 @@ export const WandActionDropTargets = ({
   children,
 }: React.PropsWithChildren<{
   wandIndex: number;
-  cursorIndex?: CursorPosition;
+  // cursorIndex?: CursorPosition;
   selection?: WandSelection;
 }>) => {
   const dispatch = useAppDispatch();
@@ -35,6 +36,8 @@ export const WandActionDropTargets = ({
       debug: { dragHint },
     },
   } = useAppSelector(selectConfig);
+  const { position: cursorPosition, style: cursorStyle } =
+    useCursor()[wandIndex];
 
   const handleDropMain = useCallback(
     (item: DragItemSpell) => {
@@ -147,6 +150,7 @@ export const WandActionDropTargets = ({
         isDraggingOver={isOverBefore}
         enabled={isDraggingAction}
         selection={selection}
+        cursor={cursorPosition === 'before' ? cursorStyle : 'none'}
       />
       <DragDropTargetAfter
         ref={dropRefAfter}
@@ -158,17 +162,18 @@ export const WandActionDropTargets = ({
         isDraggingSelect={isDraggingSelect}
         enabled={isDraggingAction}
         selection={selection}
+        cursor={cursorPosition === 'after' ? cursorStyle : 'none'}
       />
-      <WandEditCursor
-        wandIndex={wandIndex}
-        isDropTarget={isDraggingSelect}
-        isDragSource={!isDraggingSelect && !isDraggingAction}
-      />
-      <WandEditCursor
-        wandIndex={wandIndex}
-        isDropTarget={isDraggingSelect}
-        isDragSource={!isDraggingSelect && !isDraggingAction}
-      />
+      {/* <WandEditCursor */}
+      {/*   wandIndex={wandIndex} */}
+      {/*   isDropTarget={isDraggingSelect} */}
+      {/*   isDragSource={!isDraggingSelect && !isDraggingAction} */}
+      {/* /> */}
+      {/* <WandEditCursor */}
+      {/*   wandIndex={wandIndex} */}
+      {/*   isDropTarget={isDraggingSelect} */}
+      {/*   isDragSource={!isDraggingSelect && !isDraggingAction} */}
+      {/* /> */}
     </DropTargetMain>
   );
 };

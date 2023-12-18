@@ -276,14 +276,12 @@ export const CastConfigEditor = () => {
           </SubSectionTitle>
           <SubSectionContent>
             <CheckboxInputWrapper>
-              <CheckboxWrapper>
-                <input
-                  type="checkbox"
-                  checked={config.infiniteMoney}
-                  onChange={handleConfigToggle('infiniteMoney')}
-                />
-                <span>∞</span>
-              </CheckboxWrapper>
+              <YesNoToggle
+                checked={config.infiniteMoney}
+                onChange={handleConfigToggle('infiniteMoney')}
+              >
+                <span>∞:</span>
+              </YesNoToggle>
             </CheckboxInputWrapper>
             <InputWrapper>
               <input
@@ -340,6 +338,23 @@ export const CastConfigEditor = () => {
                 imgUrl={'data/ui_gfx/gun_actions/if_enemy.png'}
               />
             </YesNoToggle>
+            <YesNoToggle
+              checked={!reqs.enemies}
+              onChange={requirementsChangeHandler('enemies')}
+            >
+              <InputImageLabel
+                leftMargin={'0px'}
+                size={32}
+                imgUrl={'data/ui_gfx/gun_actions/if_else.png'}
+              />
+            </YesNoToggle>
+
+            <InputImageLabel
+              leftMargin={'0px'}
+              size={32}
+              imgUrl={'data/ui_gfx/gun_actions/if_end.png'}
+            />
+
             <YesNoToggle
               checked={reqs.projectiles}
               onChange={requirementsChangeHandler('projectiles')}

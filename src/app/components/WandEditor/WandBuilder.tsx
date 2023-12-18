@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { LegacyRef, useRef } from 'react';
 import styled from 'styled-components';
 import { WandActionEditor } from './WandActionEditor';
 import { WandStatsEditor } from './WandStatsEditor';
@@ -86,10 +86,13 @@ export function WandBuilder() {
       </SectionButtonBar>
       <MainDiv>
         <WandBorder>
-          <ContentDiv ref={wandRef as any} className={'saveImageRoot'}>
+          <ContentDiv
+            ref={wandRef as LegacyRef<HTMLDivElement>}
+            className={'saveImageRoot'}
+          >
             <WandStatsEditor />
             <WandActionEditorWrapper
-              ref={spellsRef as any}
+              ref={spellsRef as LegacyRef<HTMLDivElement>}
               className={'saveImageRoot'}
             >
               <WandActionEditor />

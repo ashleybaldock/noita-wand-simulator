@@ -45,13 +45,11 @@ function ActionComponent({
 }) {
   const dispatch = useAppDispatch();
 
-  const { isDragging, isDraggingAction, isDraggingSelect } = useDragLayer(
-    (monitor) => ({
-      isDragging: monitor.isDragging(),
-      isDraggingAction: monitor.getItemType() === 'action',
-      isDraggingSelect: monitor.getItemType() === 'select',
-    }),
-  );
+  const { isDraggingAction } = useDragLayer((monitor) => ({
+    isDragging: monitor.isDragging(),
+    isDraggingAction: monitor.getItemType() === 'action',
+    isDraggingSelect: monitor.getItemType() === 'select',
+  }));
   const handleDeleteSpell = (wandIndex: number) => {
     dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
   };
@@ -125,6 +123,7 @@ const SpellSlot = styled.li`
   list-style-type: none;
   padding: 0 var(--grid-layout-gap);
 `;
+
 export const WandActionEditor = () => {
   const dispatch = useAppDispatch();
 
@@ -132,7 +131,6 @@ export const WandActionEditor = () => {
   const isSelecting = useSelecting();
   const gridRef = useRef(null);
   const currentRowLength = () => getComputedColumns(gridRef);
-  // const currentRowLength = () => 10; // TODO calc from current layout
 
   /* Move cursor */
   /* isSelecting && end selection

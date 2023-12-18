@@ -50,6 +50,7 @@ export const StyledCursor = styled.div<{
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: top center, center center;
+  filter: hue-rotate(90deg);
 
   ${WithDebugHints} && {
     ${({ isOver }) =>
@@ -100,6 +101,7 @@ export const WandEditCursor = ({
 
   return (
     <StyledCursor
+      className={className}
       ref={(ref) => dropRef(dragRef(ref))}
       cursorIndex={position}
       cursorStyle={style}

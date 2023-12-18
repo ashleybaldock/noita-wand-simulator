@@ -1,7 +1,7 @@
 import { ActionId } from '../../../calc/actionId';
 
 export type CursorPosition = 'none' | 'before' | 'after';
-export type CursorStyle = 'none' | 'insert';
+export type CursorStyle = 'none' | 'caret';
 export type Cursor = {
   position: CursorPosition;
   style: CursorStyle;

@@ -20,6 +20,7 @@ import {
   SubTotalsColumnHeading,
   TotalsColumnHeading,
 } from './ColumnHeading';
+import { Fragment } from 'react';
 
 const StyledShotTable = styled.div`
   --nesting-offset: var(--sizes-nesting-offset, 16px);
@@ -55,15 +56,15 @@ export const ShotTableColumns = ({
     <>
       {nestingLevel === 0 ? (
         <>
-          <ShotIndexColumnHeading index={shotIndex} $nestingLevel={nestingLevel}>
+          <ShotIndexColumnHeading index={shotIndex} nestingLevel={nestingLevel}>
             {shotIndex}
           </ShotIndexColumnHeading>
           <FieldNamesColumn castState={castState} />
-          <IconsColumnHeading $nestingLevel={nestingLevel}>
+          <IconsColumnHeading nestingLevel={nestingLevel}>
             {''}
           </IconsColumnHeading>
           <IconsColumn castState={castState} />
-          <TotalsColumnHeading $origin={true} $nestingLevel={nestingLevel}>
+          <TotalsColumnHeading origin={true} nestingLevel={nestingLevel}>
             {`Shot${NBSP}Totals`}
           </TotalsColumnHeading>
           <TotalsColumn castState={castState} manaDrain={manaDrain} />
@@ -71,8 +72,8 @@ export const ShotTableColumns = ({
       ) : (
         <>
           <SubTotalsColumnHeading
-            $nestingLevel={nestingLevel}
-            $triggerType={triggerType}
+            nestingLevel={nestingLevel}
+            triggerType={triggerType}
           >
             {`Payload${NBSP}Totals`}
           </SubTotalsColumnHeading>
@@ -93,11 +94,11 @@ export const ShotTableColumns = ({
               projectile.trigger) ||
             undefined;
           return (
-            <>
+            <Fragment key={index}>
               <ProjectileHeading
-                $branch={isNotNullOrUndefined(trigger)}
-                $endpoint={last}
-                $nestingLevel={nestingLevel}
+                branch={isNotNullOrUndefined(trigger)}
+                endpoint={last}
+                nestingLevel={nestingLevel}
               >
                 <ProjectileActionGroup
                   nestingLevel={nestingLevel}
@@ -116,7 +117,7 @@ export const ShotTableColumns = ({
                   nestingLevel={nestingLevel + 1}
                 />
               )}
-            </>
+            </Fragment>
           );
         },
       )}

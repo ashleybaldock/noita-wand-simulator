@@ -238,8 +238,8 @@ const HotKeyCombos = ({ hotkeys }: { hotkeys: string }) => {
         <KeyCombo key={combo.join('-')}>
           <ListSeperator />
           {combo.map((key: string) => (
-            <KeyStroke>
-              <KeyCap key={`${combo.join('-')}--${key}`}>{`${key}`}</KeyCap>
+            <KeyStroke key={`${combo.join('-')}--${key}`}>
+              <KeyCap>{`${key}`}</KeyCap>
               <KeyCombinator />
             </KeyStroke>
           ))}

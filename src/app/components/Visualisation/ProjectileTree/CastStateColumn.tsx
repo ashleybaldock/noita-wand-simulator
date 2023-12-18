@@ -8,12 +8,9 @@ import {
 import {
   isNotNullOrUndefined,
   isString,
-  radiusThresholdBonus,
   round,
   sign,
-  signZero,
   tally,
-  toSeconds,
 } from '../../../util/util';
 import { Config, useConfig } from '../../../redux/configSlice';
 import { getBackgroundUrlForDamageType } from '../../../calc/damage';
@@ -128,24 +125,17 @@ const Denominator = styled.span`
   font-size: 0.83em;
   vertical-align: bottom;
 `;
-const UnstyledFraction = ({
-  $a,
-  $b,
-  className = '',
-}: {
-  $a: string;
-  $b: string;
-  className?: string;
-}) => {
-  return (
-    <span className={className}>
-      <Numerator>{$a}</Numerator>
-      {'/'}
-      <Denominator>{$b}</Denominator>
-    </span>
-  );
-};
-const Fraction = styled(UnstyledFraction)`
+const Fraction = styled(
+  ({ a, b, className = '' }: { a: string; b: string; className?: string }) => {
+    return (
+      <span className={className}>
+        <Numerator>{a}</Numerator>
+        {'/'}
+        <Denominator>{b}</Denominator>
+      </span>
+    );
+  },
+)`
   letter-spacing: -0.14em;
 `;
 
@@ -210,8 +200,10 @@ const ReadableNumber = ({
   );
 };
 
-const NotApplicable = styled(() => <Fraction $a={'n'} $b={'a'} />)`
-  color: var(--color-value-ignored;
+const NotApplicable = styled(({ className }: { className?: string }) => (
+  <Fraction className={className} a={'n'} b={'a'} />
+))`
+  color: var(--color-value-ignored);
   font-variant: small-caps;
 `;
 const Missing = styled.span`
@@ -221,6 +213,12 @@ const Missing = styled.span`
   }
 `;
 
+const Infinite = styled.span`
+  &::before {
+    content: '∞';
+    font-size: 1.2em;
+  }
+`;
 // content: '${({ material }) => getNameForTrailMaterial(material)}:';
 const MaterialTrail = styled.span<{
   $material: TrailMaterial;
@@ -237,6 +235,43 @@ const MaterialTrail = styled.span<{
     image-rendering: pixelated;
   }
 `;
+
+const Sign = ({ n, children }: React.PropsWithChildren & { n: number }) => (
+  <>
+    {`${n < 0 ? '' : '+'}`}
+    {children ?? n}
+  </>
+);
+
+const SignZero = ({
+  n,
+  ifZero = <Unchanged />,
+}: {
+  n: number;
+  ifZero?: JSX.Element;
+}) => (n === 0 ? ifZero : <Sign n={n} />);
+
+const RadiusThresholdBonus = ({
+  radius,
+  ifZero = <Unchanged />,
+  ifNaN = <NotApplicable />,
+}: {
+  radius: number;
+  ifZero?: JSX.Element;
+  ifNaN?: JSX.Element;
+}): JSX.Element => {
+  if (isNaN(radius)) return ifNaN;
+  if (radius < 32) return <SignZero n={0} ifZero={ifZero} />;
+  if (radius < 64) return <Sign n={325} />;
+  if (radius < 128) return <Sign n={375} />;
+  if (radius < 211) return <Sign n={500} />;
+  return (
+    <>
+      <Sign n={600} />
+      <Sign n={500} />
+    </>
+  );
+};
 
 type FileType = 'xml' | 'png' | 'text';
 const FileTypeIconMap: Record<FileType, string> = {
@@ -267,6 +302,7 @@ type ExtendedActionState = GunActionState & {
 };
 
 type FieldDescription = {
+  hidden?: boolean;
   icon?: string;
   ignoredInTrigger?: boolean;
   noTotal?: boolean;
@@ -285,7 +321,6 @@ type FieldSection = {
   fields: FieldDescription[];
 };
 
-/* signZero(round(Number(v), 1), <Unchanged />), */
 const fieldSections: FieldSection[] = [
   {
     title: 'Timing',
@@ -307,9 +342,7 @@ const fieldSections: FieldSection[] = [
         icon: `background-image: url('/data/wand/icon_reload_time-s.png');`,
         key: 'reload_time',
         displayName: 'Recharge Time',
-        render: ({ reload_time }) => (
-          <Duration durationInFrames={reload_time} />
-        ),
+        render: ({ reload_time }) => <Duration unit={'f'} f={reload_time} />,
       },
       {
         icon: `background-image: url('/data/wand/icon_fire_rate_wait.png');`,
@@ -317,31 +350,38 @@ const fieldSections: FieldSection[] = [
         ignoredInTrigger: true,
         displayName: 'Cast Delay',
         render: ({ fire_rate_wait }) => (
-          <Duration durationInFrames={fire_rate_wait} />
+          <Duration unit="f" f={fire_rate_wait} />
         ),
       },
       {
         icon: `background-image: url('/data/wand/icon_lifetime.png');`,
         key: 'lifetime_add',
         displayName: 'Lifetime',
-        render: (
-          { lifetime_add, isTotal, insideTrigger },
-          { showDurationsInFrames },
-        ) => {
+        render: ({ lifetime_add, isTotal }) => {
           if (isTotal) {
-            return signZero(Number(lifetime_add));
+            return (
+              <Sign n={lifetime_add}>
+                <Duration unit="f" f={lifetime_add} />
+              </Sign>
+            );
           }
-          return lifetime_add === -1 ? `inf.` : <Unchanged></Unchanged>;
-          // : `${lifetime_add}˷±~${lifetime_add}`;
+          return lifetime_add === -1 ? <Infinite /> : <Unchanged></Unchanged>;
+          // : `${lifetime}˷±~${lifetime_randomness}`;
         },
       },
       {
+        hidden: true, // TODO
         icon: `background-image: url('/data/icons/lifetime_infinite.png');`,
         key: 'wisp_chance',
         noTotal: true,
         displayName: 'Wisp Chance',
-        render: ({ lifetime_add }, _) => <Unchanged />,
-        // render: ({ lifetime_add }, {}) => '6.67%',
+        render: ({ isTotal /* lifetime, lifetime_randomness */ }) => {
+          if (isTotal) {
+            return <NotApplicable />;
+          }
+          return <Unchanged />;
+          // return <Percentage>{wispChance(lifetime_randomness, lifetime)}</Percentage>
+        },
       },
     ],
   },
@@ -350,11 +390,13 @@ const fieldSections: FieldSection[] = [
     title: 'Motion',
     fields: [
       {
+        hidden: true, // TODO
         icon: `background-image: url('/data/wand/icon_spread_degrees.png');`,
         key: 'spread_degrees',
         displayName: 'Spread',
-        render: ({ spread_degrees: v }) =>
-          signZero(round(Number(v), 0), <Unchanged />),
+        render: ({ spread_degrees: v }) => (
+          <SignZero n={Number(v)} ifZero={<Unchanged />} />
+        ),
       },
       {
         icon: `background-image: url('/data/icons/t_shape.png');`,
@@ -363,16 +405,20 @@ const fieldSections: FieldSection[] = [
         render: ({ pattern_degrees: v }) => `${round(Number(v), 1)}°`,
       },
       {
+        hidden: true, // TODO
         icon: `background-image: url('/data/wand/icon_bounces.png');`,
         key: 'bounces',
         displayName: 'Bounces',
-        render: ({ bounces: v }) => signZero(Number(v), <Unchanged />),
+        render: ({ bounces: v }) => (
+          <SignZero n={Number(v)} ifZero={<Unchanged />} />
+        ),
       },
-      // {
-      //   key: 'gravity',
-      //   displayName: 'Gravity',
-      //   render: ({ gravity: v }) => `${signZero(Number(v))}`,
-      // },
+      {
+        hidden: true, // TODO
+        key: 'gravity',
+        displayName: 'Gravity',
+        render: ({ gravity: v }) => <SignZero n={Number(v)} />,
+      },
       {
         icon: `background-image: url('/data/wand/icon_speed_multiplier.png');`,
         key: 'speed_multiplier1',
@@ -550,77 +596,88 @@ const fieldSections: FieldSection[] = [
         icon: getBackgroundUrlForDamageType('electricity'),
         key: 'damage_electricity_add',
         displayName: 'Electric',
-        render: ({ damage_electricity_add: v }) =>
-          signZero(round(Number(v) * 25, 0), <Unchanged />),
+        render: ({ damage_electricity_add: v }) => (
+          <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
+        ),
       },
       {
         icon: getBackgroundUrlForDamageType('fire'),
         key: 'damage_fire_add',
         displayName: 'Fire',
-        render: ({ damage_fire_add: v }) =>
-          signZero(round(Number(v) * 25, 0), <Unchanged />),
+        render: ({ damage_fire_add: v }) => (
+          <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
+        ),
       },
       {
         icon: getBackgroundUrlForDamageType('ice'),
         key: 'damage_ice_add',
         displayName: 'Ice',
-        render: ({ damage_ice_add: v }) =>
-          signZero(round(Number(v) * 25, 0), <Unchanged />),
+        render: ({ damage_ice_add: v }) => (
+          <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
+        ),
       },
       {
         icon: getBackgroundUrlForDamageType('slice'),
         key: 'damage_slice_add',
         displayName: 'Slice',
-        render: ({ damage_slice_add: v }) =>
-          signZero(round(Number(v) * 25, 0), <Unchanged />),
+        render: ({ damage_slice_add: v }) => (
+          <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
+        ),
       },
       {
         icon: getBackgroundUrlForDamageType('heal'),
         key: 'damage_healing_add',
         displayName: 'Healing',
-        render: ({ damage_healing_add: v }) =>
-          signZero(round(Number(v) * 25, 0), <Unchanged />),
+        render: ({ damage_healing_add: v }) => (
+          <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
+        ),
       },
       {
         icon: getBackgroundUrlForDamageType('curse'),
         key: 'damage_curse_add',
         displayName: 'Curse',
-        render: ({ damage_curse_add: v }) =>
-          signZero(round(Number(v) * 25, 0), <Unchanged />),
+        render: ({ damage_curse_add: v }) => (
+          <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
+        ),
       },
       {
         icon: getBackgroundUrlForDamageType('holy'),
         key: 'damage_holy_add',
         displayName: 'Holy',
-        render: ({ damage_holy_add: v }) =>
-          signZero(round(Number(v) * 25, 0), <Unchanged />),
+        render: ({ damage_holy_add: v }) => (
+          <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
+        ),
       },
       {
         icon: getBackgroundUrlForDamageType('drill'),
         key: 'damage_drill_add',
         displayName: 'Drill',
-        render: ({ damage_drill_add: v }) =>
-          signZero(round(Number(v) * 25, 0), <Unchanged />),
+        render: ({ damage_drill_add: v }) => (
+          <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
+        ),
       },
       {
         icon: getBackgroundUrlForDamageType('explosion'),
         key: 'damage_explosion_add',
         displayName: 'Explosion',
-        render: ({ damage_explosion_add: v }) =>
-          signZero(round(Number(v) * 25, 0), <Unchanged />),
+        render: ({ damage_explosion_add: v }) => (
+          <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
+        ),
       },
       {
         icon: `background-image: url('/data/wand/icon_explosion_radius.png');`,
         key: 'explosion_radius',
         displayName: 'Expl. Radius',
-        render: ({ explosion_radius: v }) =>
-          signZero(round(Number(v) * 25, 0), <Unchanged />),
+        render: ({ explosion_radius: v }) => (
+          <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
+        ),
       },
       {
         key: 'explosion_radius_bonus',
         displayName: 'Expl. Threshold',
-        render: ({ explosion_radius: v }) =>
-          radiusThresholdBonus(Number(v), <Unchanged />),
+        render: ({ explosion_radius: v }) => (
+          <RadiusThresholdBonus radius={Number(v)} ifZero={<Unchanged />} />
+        ),
       },
     ],
   },
@@ -640,22 +697,22 @@ const fieldSections: FieldSection[] = [
         icon: `background-image: url('/data/wand/icon_knockback.png');`,
         key: 'knockback_force',
         displayName: 'Knockback',
-        render: ({ knockback_force: v }) => `${v}`,
+        render: ({ knockback_force: v }) => <>{`${v}`}</>,
       },
       {
         key: 'screenshake',
         displayName: 'Screen Shake',
-        render: ({ screenshake: v }) => `${v}`,
+        render: ({ screenshake: v }) => <>{`${v}`}</>,
       },
       // {
       //   key: 'physics_impulse_coeff',
       //   displayName: 'Phys. Imp. Coeff.',
-      //   render: ({ physics_impulse_coeff: v }) => `${v}`,
+      //   render: ({ physics_impulse_coeff: v }) => <>{`${v}`}</>,
       // },
       // {
       //   key: 'lightning_count',
       //   displayName: 'Lightning Count',
-      //   render: ({ lightning_count: v }) => `${v}`,
+      //   render: ({ lightning_count: v }) => <>{`${v}`}</>,
       // },
     ],
   },
@@ -666,12 +723,12 @@ const fieldSections: FieldSection[] = [
       // {
       //   key: 'material',
       //   displayName: 'Material',
-      //   render: ({ material: v }) => `${v}`,
+      //   render: ({ material: v }) => <>{`${v}`}</>,
       // },
       // {
       //   key: 'material_amount',
       //   displayName: 'Material Amount',
-      //   render: ({ material_amount: v }) => `${v}`,
+      //   render: ({ material_amount: v }) => <>{`${v}`}</>,
       // },
       {
         key: 'trail_material',
@@ -690,13 +747,13 @@ const fieldSections: FieldSection[] = [
               )}
             </>
           ) : (
-            `${v}`
+            <>{`${v}`}</>
           ),
       },
       {
         key: 'trail_material_amount',
         displayName: 'Trail Volume',
-        render: ({ trail_material_amount: v }) => `${v}`,
+        render: ({ trail_material_amount: v }) => <>{`${v}`}</>,
       },
     ],
   },
@@ -707,19 +764,17 @@ export const FieldNamesColumn = styled(
     return (
       <>
         {castState &&
-          fieldSections.map(({ fields }, i1) => (
-            <>
-              {fields.map(({ key, displayName }, i2) => (
-                <PropertyName
-                  key={key ?? `${i1}-${i2}-${key}`}
-                  $firstValue={i1 === 0}
-                  $firstInGroup={i2 === 0}
-                >
-                  {displayName}
-                </PropertyName>
-              ))}
-            </>
-          ))}
+          fieldSections.map(({ fields }, i1) =>
+            fields.map(({ key, displayName }, i2) => (
+              <PropertyName
+                key={key ?? `${i1}-${i2}-${key}`}
+                $firstValue={i1 === 0}
+                $firstInGroup={i2 === 0}
+              >
+                {displayName}
+              </PropertyName>
+            )),
+          )}
       </>
     );
   },
@@ -734,18 +789,16 @@ export const IconsColumn = styled(
     return (
       <>
         {castState &&
-          fieldSections.map(({ fields }, i1) => (
-            <>
-              {fields.map(({ key, icon, displayName }, i2) => (
-                <PropertyIcon
-                  key={key ?? `${i1}-${i2}-${key}`}
-                  $firstValue={i1 === 0}
-                  $firstInGroup={i2 === 0}
-                  $icon={icon ?? ''}
-                />
-              ))}
-            </>
-          ))}
+          fieldSections.map(({ fields }, i1) =>
+            fields.map(({ key, icon }, i2) => (
+              <PropertyIcon
+                key={key ?? `${i1}-${i2}-${key}`}
+                $firstValue={i1 === 0}
+                $firstInGroup={i2 === 0}
+                $icon={icon ?? ''}
+              />
+            )),
+          )}
       </>
     );
   },
@@ -774,39 +827,37 @@ export const TotalsColumn = styled(
     return (
       <>
         {castState &&
-          fieldSections.map(({ fields }, i1) => (
-            <>
-              {fields.map(
-                (
-                  { key, render, ignoredInTrigger = false, noTotal = false },
-                  i2,
-                ) => (
-                  <PropertyValue
-                    key={key ?? `${i1}-${i2}`}
-                    $firstValue={i1 === 0}
-                    $firstInGroup={i2 === 0}
-                    $isTotal={true}
-                  >
-                    {insideTrigger && ignoredInTrigger ? (
-                      <Ignored />
-                    ) : noTotal ? (
-                      <Unchanged />
-                    ) : (
-                      render(
-                        {
-                          ...castState,
-                          insideTrigger,
-                          isTotal: true,
-                          manaDrain,
-                        },
-                        config,
-                      )
-                    )}
-                  </PropertyValue>
-                ),
-              )}
-            </>
-          ))}
+          fieldSections.map(({ fields }, i1) =>
+            fields.map(
+              (
+                { key, render, ignoredInTrigger = false, noTotal = false },
+                i2,
+              ) => (
+                <PropertyValue
+                  key={key ?? `${i1}-${i2}`}
+                  $firstValue={i1 === 0}
+                  $firstInGroup={i2 === 0}
+                  $isTotal={true}
+                >
+                  {insideTrigger && ignoredInTrigger ? (
+                    <Ignored />
+                  ) : noTotal ? (
+                    <Unchanged />
+                  ) : (
+                    render(
+                      {
+                        ...castState,
+                        insideTrigger,
+                        isTotal: true,
+                        manaDrain,
+                      },
+                      config,
+                    )
+                  )}
+                </PropertyValue>
+              ),
+            ),
+          )}
       </>
     );
   },
@@ -834,32 +885,30 @@ export const ProjectileColumn = styled(
     return (
       <>
         {castState &&
-          fieldSections.map(({ fields }, i1) => (
-            <>
-              {fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
-                <PropertyValue
-                  key={key ?? `${i1}-${i2}`}
-                  $firstValue={i1 === 0}
-                  $firstInGroup={i2 === 0}
-                  $isTotal={false}
-                >
-                  {!insideTrigger || !ignoredInTrigger ? (
-                    render(
-                      {
-                        ...castState,
-                        isTotal: false,
-                        insideTrigger,
-                        manaDrain,
-                      },
-                      config,
-                    )
-                  ) : (
-                    <Ignored />
-                  )}
-                </PropertyValue>
-              ))}
-            </>
-          ))}
+          fieldSections.map(({ fields }, i1) =>
+            fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
+              <PropertyValue
+                key={key ?? `${i1}-${i2}`}
+                $firstValue={i1 === 0}
+                $firstInGroup={i2 === 0}
+                $isTotal={false}
+              >
+                {!insideTrigger || !ignoredInTrigger ? (
+                  render(
+                    {
+                      ...castState,
+                      isTotal: false,
+                      insideTrigger,
+                      manaDrain,
+                    },
+                    config,
+                  )
+                ) : (
+                  <Ignored />
+                )}
+              </PropertyValue>
+            )),
+          )}
       </>
     );
   },

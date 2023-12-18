@@ -168,27 +168,27 @@ const Spacer = styled.div.attrs<{
 
 export const LineSpacer = styled(
   ({
-    $nestingLevel,
-    $origin = false,
-    $endpoint = false,
-    $branch = false,
+    nestingLevel,
+    origin = false,
+    endpoint = false,
+    branch = false,
 
     className,
   }: {
-    $nestingLevel: number;
-    $origin?: boolean;
-    $endpoint?: boolean;
-    $branch?: boolean;
+    nestingLevel: number;
+    origin?: boolean;
+    endpoint?: boolean;
+    branch?: boolean;
     className?: string;
   }) => {
     return (
       <Container className={className}>
-        {[...Array($nestingLevel + 1)].map((_, i) => (
+        {[...Array(nestingLevel + 1)].map((_, i) => (
           <Spacer
-            $origin={$origin}
+            $origin={origin}
             $hide={false}
-            $endpoint={$endpoint}
-            $branch={$branch}
+            $endpoint={endpoint}
+            $branch={branch}
             key={i}
           />
         ))}

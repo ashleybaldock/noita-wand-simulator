@@ -59,6 +59,7 @@ const DragDropTarget = styled.div<{
   isDraggingOver: boolean;
   isDraggingSelect: boolean;
   selection: WandSelection;
+  cursor?: 'none' | 'caret';
   onClick: React.MouseEventHandler<HTMLElement>;
 }>`
   background-color: transparent;
@@ -71,7 +72,41 @@ const DragDropTarget = styled.div<{
   pointer-events: ${({ isDraggingAction, isDraggingSelect }) =>
     isDraggingAction || isDraggingSelect ? 'auto' : 'none'};
 
-  &&::after {
+  &::before {
+    z-index: var(--zindex-cursor-current);
+    --cursor-container-width: 12px;
+    content: '';
+    position: absolute;
+    height: 58px;
+    width: 12px;
+    top: -2px;
+    left: calc(50% - (var(--cursor-container-width) / 2));
+
+    image-rendering: pixelated;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: top center, center center;
+
+    ${({ cursor = 'none' }) => `
+      ${
+        cursor === 'caret'
+          ? `
+    background-image: url('/data/inventory/cursor-top.png'),
+      url('/data/inventory/cursor-mid.png');
+      `
+          : ``
+      }
+        ${
+          cursor === 'none'
+            ? `
+      opacity: 0;
+      `
+            : ``
+        }
+    `}
+  }
+
+  &::after {
     content: '';
     display: block;
     position: absolute;
@@ -144,14 +179,31 @@ export const DragDropTargetAfter = styled(DragDropTarget)`
   z-index: var(--zindex-insert-after);
 
   &&::after {
-    ${({ isDraggingOver }) =>
-      isDraggingOver
-        ? `
-    cursor: w-resize;
-          `
-        : `
+    ${({ isDraggingOver, isDraggingAction, isDraggingSelect }) => `
     cursor: text;
+
+      ${
+        isDraggingOver &&
+        `
+    cursor: w-resize;
+        `
+      }
+
+      ${
+        isDraggingOver &&
+        isDraggingSelect &&
+        `
+        `
+      }
+
+      ${
+        isDraggingOver &&
+        isDraggingAction &&
+        `
+        `
+      }
       `}
+
     ${({ selection }) =>
       selection === 'end' || selection === 'single'
         ? `

@@ -13,7 +13,7 @@ export const isNumber = (x: unknown): x is number => typeof 42 === typeof x;
 export const isBoolean = (x: unknown): x is boolean =>
   typeof false === typeof x;
 
-export const assertNever = (_: never): never => {
+export const assertNever = (_?: never): never => {
   throw new Error('This should never happen.');
 };
 
@@ -106,7 +106,7 @@ export const omit = <T extends object, K extends keyof T>(obj: T, keys: K[]) =>
   ) as Partial<T>;
 
 export const trimArray = <T>(arr: T[], predicate: (o: T) => boolean): T[] => {
-  let result = [...arr];
+  const result = [...arr];
   while (result.length > 0 && predicate(result[result.length - 1])) {
     result.pop();
   }
@@ -138,25 +138,27 @@ export const round = (n: number, to: number) =>
 
 export const sign = (n: number) => (n < 0 ? '' : '+') + n;
 
-export const signZero = <T>(n: number, ifZero: T | string = '--') =>
-  n === 0 ? ifZero : sign(n);
-
 export const toFrames = (durationInSeconds: number, fps: number = FPS) =>
   round(durationInSeconds * fps, 2);
 
 export const toSeconds = (durationInFrames: number, fps: number = FPS) =>
   round(durationInFrames / fps, 2);
 
-export const radiusThresholdBonus = (
-  radius: number,
-  ifZero: JSX.Element | string = '--',
-): JSX.Element | string => {
-  if (isNaN(radius)) return 'n/a';
-  if (radius < 32) return signZero(0, ifZero);
-  if (radius < 64) return signZero(325);
-  if (radius < 128) return signZero(375);
-  if (radius < 211) return signZero(500);
-  return `${signZero(600)}|${signZero(500)}`;
+/**
+ * min: lifetime - variation, max: lifetime + variation
+ * range: abs(max - min) + 1
+ * range: variation * 2 + 1
+ * chance = 1/range
+ *
+ * 60-7= 53, 60+7 = 67, 67-53+1= 15, 1/15 =  0.0667
+ * 50-10= 40, 50+10= 60, 60-40+1= 21, 1/21= 0.0476
+ * 10-40= -30, 10+40= 50, 50--30+1= 81, 1/81= 0.0012
+ */
+export const wispChance = (variation: number, lifetime: number = -1) => {
+  if (lifetime - variation > -1 || lifetime + variation < -1) {
+    return 0;
+  }
+  return 1 / (variation * 2 + 1);
 };
 
 export const copyToClipboard = async (text: string) =>
