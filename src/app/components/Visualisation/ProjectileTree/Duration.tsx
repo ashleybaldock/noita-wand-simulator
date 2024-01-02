@@ -33,17 +33,19 @@ export const Duration = styled(
     const { showDurationsInFrames } = useConfig();
 
     if (props.unit === 'ms') {
-      return <>{`${props.ms}${FNSP}${SUFFIX_MILLISECOND}`}</>;
+      return <>{`≈${FNSP}${props.ms}${FNSP}${SUFFIX_MILLISECOND}`}</>;
     }
     if (props.unit === 'f') {
       if (showDurationsInFrames) {
         return <>{`${props.f}${FNSP}${SUFFIX_FRAME}`}</>;
       }
-      return <>{`~${round(toSeconds(props.f), 2)}${FNSP}${SUFFIX_SECOND}`}</>;
+      return (
+        <>{`≈${FNSP}${round(toSeconds(props.f), 2)}${FNSP}${SUFFIX_SECOND}`}</>
+      );
     }
     if (props.unit === 's') {
       if (showDurationsInFrames) {
-        return <>{`~${toFrames(props.s)}${FNSP}${SUFFIX_FRAME}`}</>;
+        return <>{`≈${FNSP}${toFrames(props.s)}${FNSP}${SUFFIX_FRAME}`}</>;
       }
       return <>{`${round(props.s, 2)}${FNSP}${SUFFIX_SECOND}`}</>;
     }

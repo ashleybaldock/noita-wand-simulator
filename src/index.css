@@ -78,6 +78,8 @@
   --zindex-tabs-selected: 100;
   --zindex-copy-png: 140;
 
+  --zindex-stickyheader-shotgrid: 200;
+
   --zindex-keyhint: 300;
   --zindex-keyhint-hover: 310;
 

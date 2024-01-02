@@ -36,3 +36,40 @@ export const NBSP = ' ';
  * Narrow No-Break Space; Unicode U+202F
  */
 export const MBSP = ' ';
+/**
+ * Soft Hyphen; Unicode U+00AD
+ */
+export const SHYP = '­';
+export const SHYPe = '&shy;';
+/**
+ * Hyphen; Unicode U+2010
+ */
+export const HYPH = '‐';
+export const HYPHe = '&hyphen;';
+/**
+ * No-Break Hyphen; Unicode U+2011
+ */
+export const NBHY = '‑';
+
+/**
+ * Figure Dash; Unicode U+2012
+ */
+export const FDSH = '‒';
+
+/**
+ * En Dash; Unicode U+2013
+ */
+export const NDSH = '–';
+export const NDSHe = '&ndash;';
+
+/**
+ * Em Dash; Unicode U+2014
+ */
+export const MDSH = '—';
+export const MDSHe = '&mdash;';
+
+/**
+ * Horizontal Bar; Unicode U+2015
+ */
+export const HBAR = '―';
+export const HBARe = '&horbar;';

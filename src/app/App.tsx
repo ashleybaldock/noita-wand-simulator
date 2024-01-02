@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StyleSheetManager } from 'styled-components';
 import { shouldForwardProp } from './shouldForwardProp';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
@@ -21,16 +21,16 @@ export function App() {
       <StyleSheetManager shouldForwardProp={shouldForwardProp}>
         <HelmetProvider>
           <KeyStateContextProvider debug={true}>
-              <GlobalStyle keyHints={showKeyHints} />
-              {!isRelease && (
-                <Helmet>
-                  <link rel="icon" href="/favicon-dev.ico" />
-                  <link rel="apple-touch-icon" href="/logo192-dev.png" />
-                  <link rel="manifest" href="/manifest-dev.json" />
-                  <title>{`Wand Simulator (${branch}:${hash})}`}</title>
-                </Helmet>
-              )}
-              <WandSimulator />
+            <GlobalStyle keyHints={showKeyHints} />
+            {!isRelease && (
+              <Helmet>
+                <link rel="icon" href="/favicon-dev.ico" />
+                <link rel="apple-touch-icon" href="/logo192-dev.png" />
+                <link rel="manifest" href="/manifest-dev.json" />
+                <title>{`Wand Simulator (${branch}:${hash})}`}</title>
+              </Helmet>
+            )}
+            <WandSimulator />
           </KeyStateContextProvider>
         </HelmetProvider>
       </StyleSheetManager>

@@ -15,6 +15,7 @@ import {
 import { Config, useConfig } from '../../../redux/configSlice';
 import { getBackgroundUrlForDamageType } from '../../../calc/damage';
 import {
+  FNSP,
   SIGN_MULTIPLY,
   SUFFIX_BILLION,
   SUFFIX_MILLION,
@@ -65,15 +66,20 @@ const GridRowItem = styled.div<{
 `;
 
 const PropertyIcon = styled(GridRowItem)<{ $icon?: string }>`
+  position: sticky;
+  left: -10px;
+  z-index: var(--zindex-stickyheader-shotgrid);
   background-position: center center;
   background-size: 1.1em;
   ${({ $icon }) => ($icon ? `${$icon}` : 'background-image: none;')};
+  background-color: black;
 `;
 
 const PropertyName = styled(GridRowItem)`
   justify-content: end;
   padding-right: 0.3em;
   flex: 0 0 150px;
+  background-color: black;
 `;
 
 const PropertyValue = styled(GridRowItem)`
@@ -219,12 +225,13 @@ const Infinite = styled.span`
     font-size: 1.2em;
   }
 `;
+
 // content: '${({ material }) => getNameForTrailMaterial(material)}:';
 const MaterialTrail = styled.span<{
   $material: TrailMaterial;
 }>`
   display: block;
-  &::after {
+  &::before {
     content: '';
     padding: 0.4em 1em 0 1em;
     background-position: 50% 50%;
@@ -524,12 +531,15 @@ const fieldSections: FieldSection[] = [
         icon: `background-image: url('/data/status/burning.png');`,
         key: 'crit_on_fire',
         displayName: 'Crit On: Fire',
-        noTotal: true,
-        render: ({ game_effect_entities: v }) => (
-          <YesOr yes={v.includes('effect_apply_on_fire')}>
-            <Unchanged />
-          </YesOr>
-        ),
+        render: ({ game_effect_entities: v, isTotal }) =>
+          isTotal ? (
+            <YesNo
+              yes={v.includes('effect_apply_on_fire')}
+              customNo={<Unchanged content={'No'} />}
+            />
+          ) : (
+            <YesNo yes={false} customNo={<Unchanged />} />
+          ),
       },
       {
         icon: `background-image: url('/data/wand/icon_damage_critical_chance.png');`,
@@ -730,18 +740,100 @@ const fieldSections: FieldSection[] = [
       //   displayName: 'Material Amount',
       //   render: ({ material_amount: v }) => <>{`${v}`}</>,
       // },
+
+      /* TODO + memoise */
       {
-        key: 'trail_material',
-        displayName: 'Trails:',
-        /* TODO + memoise */
-        render: ({ trail_material: v }) =>
+        icon: `background-image: url('/data/trail/trail_oil.png');`,
+        key: 'trail_material_oil',
+        displayName: 'Oil Trail',
+        render: ({ trail_material: v, isTotal }) =>
           isString(v) ? (
             <>
               {tally(v.split(',').filter((v) => v.length > 0)).map(
                 ([name, count]) =>
-                  isTrailMaterial(name) ? (
+                  isTrailMaterial(name) && name === 'oil' ? (
                     <MaterialTrail $material={name} key={name}>
-                      {`${SIGN_MULTIPLY} ${count}`}
+                      {isTotal && `${SIGN_MULTIPLY}${FNSP}${count}`}
+                    </MaterialTrail>
+                  ) : null,
+              )}
+            </>
+          ) : (
+            <>{`${v}`}</>
+          ),
+      },
+      {
+        icon: `background-image: url('/data/trail/trail_water.png');`,
+        key: 'trail_material_water',
+        displayName: 'Water Trail',
+        render: ({ trail_material: v, isTotal }) =>
+          isString(v) ? (
+            <>
+              {tally(v.split(',').filter((v) => v.length > 0)).map(
+                ([name, count]) =>
+                  isTrailMaterial(name) && name === 'water' ? (
+                    <MaterialTrail $material={name} key={name}>
+                      {isTotal && `${SIGN_MULTIPLY}${FNSP}${count}`}
+                    </MaterialTrail>
+                  ) : null,
+              )}
+            </>
+          ) : (
+            <>{`${v}`}</>
+          ),
+      },
+      {
+        icon: `background-image: url('/data/trail/trail_acid.png');`,
+        key: 'trail_material_acid',
+        displayName: 'Acid Trail',
+        render: ({ trail_material: v, isTotal }) =>
+          isString(v) ? (
+            <>
+              {tally(v.split(',').filter((v) => v.length > 0)).map(
+                ([name, count]) =>
+                  isTrailMaterial(name) && name === 'acid' ? (
+                    <MaterialTrail $material={name} key={name}>
+                      {isTotal && `${SIGN_MULTIPLY}${FNSP}${count}`}
+                    </MaterialTrail>
+                  ) : null,
+              )}
+            </>
+          ) : (
+            <>{`${v}`}</>
+          ),
+      },
+      {
+        icon: `background-image: url('/data/trail/trail_posion.png');`,
+        key: 'trail_material_poison',
+        displayName: 'Poison Trail',
+        render: ({ trail_material: v, isTotal }) =>
+          isString(v) ? (
+            <>
+              {tally(v.split(',').filter((v) => v.length > 0)).map(
+                ([name, count]) =>
+                  isTrailMaterial(name) && name === 'poison' ? (
+                    <MaterialTrail $material={name} key={name}>
+                      {isTotal && `${SIGN_MULTIPLY}${FNSP}${count}`}
+                    </MaterialTrail>
+                  ) : null,
+              )}
+            </>
+          ) : (
+            <>{`${v}`}</>
+          ),
+      },
+      {
+        icon: `background-image: url('/data/trail/trail_Fire.png');`,
+        key: 'trail_material_fire',
+        displayName: 'Fire Trail',
+        render: ({ trail_material: v, isTotal }) =>
+          isString(v) ? (
+            <>
+              {tally(v.split(',').filter((v) => v.length > 0)).map(
+                ([name, count]) =>
+                  isTrailMaterial(name) && name === 'fire' ? (
+                    <MaterialTrail $material={name} key={name}>
+                      {isTotal && `${SIGN_MULTIPLY}${FNSP}${count}`}
                     </MaterialTrail>
                   ) : null,
               )}

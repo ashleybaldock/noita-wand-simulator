@@ -6,9 +6,7 @@ import { ConfigButton, SectionButtonBar } from '../../buttons';
 import { SaveImageButton, ScrollWrapper } from '../../generic';
 import { SectionHeader } from '../../SectionHeader';
 import { ShotTable } from './ShotTable';
-import { Duration } from './Duration';
-import { NBSP, isNotNullOrUndefined } from '../../../util';
-import { useConfig } from '../../../redux';
+import { ShotSummary } from './ShotSummary';
 
 const SectionDiv = styled.div`
   display: flex;
@@ -21,95 +19,8 @@ const SectionDiv = styled.div`
 
 const SaveButtons = styled.div`
   position: absolute;
-  left: 8px;
-  top: 18px;
-`;
-
-const Emphasis = styled.span`
-  border: 1px dotted yellow;
-  padding: 6px 3px 3px 3px;
-  border-radius: 3px;
-`;
-
-const ShotsSummary = styled(
-  ({
-    pending,
-    shots,
-    endReason,
-    totalRechargeTime,
-    totalFiringTime,
-    totalManaDrain,
-    className,
-  }: {
-    pending: boolean;
-    endReason: StopReason;
-    shots: GroupedWandShot[];
-    totalRechargeTime?: number;
-    totalFiringTime?: number;
-    totalManaDrain?: number;
-    className?: string;
-  }) => {
-    const { pauseCalculations } = useConfig();
-    if (pauseCalculations) {
-      return (
-        <>{`-- Simulation Paused ${
-          pending && `(Pending changes - unpause to update)`
-        }--`}</>
-      );
-    }
-    return (
-      <div className={className}>
-        <div>
-          {`Fired${NBSP}`}
-          <Emphasis>{`${shots?.length ?? '??'}${NBSP}shots`}</Emphasis>
-
-          {totalFiringTime ? (
-            <>
-              {`${NBSP}in${NBSP}`}
-              <Emphasis>
-                <Duration unit="f" f={totalFiringTime} />
-              </Emphasis>
-            </>
-          ) : (
-            ''
-          )}
-
-          {`Ended due to ${endReason}`}
-        </div>
-        {isNotNullOrUndefined(totalRechargeTime) && (
-          <div>
-            {`Total recharge delay:${NBSP}`}
-            <Emphasis>
-              <Duration unit="f" f={totalRechargeTime} />
-            </Emphasis>
-          </div>
-        )}
-        {isNotNullOrUndefined(totalManaDrain) && (
-          <div>
-            {`Total mana drain:${NBSP}`}
-            <Emphasis>{totalManaDrain}</Emphasis>
-          </div>
-        )}
-      </div>
-    );
-  },
-)`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  width: fit-content;
-  padding: 0px 20px 0px 10px;
-  align-self: stretch;
-  margin: 0.5em 0;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 0.2em 1.2em;
-  max-width: 90vw;
-
-  & > div {
-    text-align: center;
-  }
+  left: 200px;
+  top: 37px;
 `;
 
 export const ShotList = ({
@@ -132,23 +43,23 @@ export const ShotList = ({
   return (
     <>
       <SectionHeader title={'Simulation: Shot List'} />
+      <SaveButtons>
+        <SaveImageButton
+          targetRef={shotListRef}
+          fileName={'projectiles'}
+          enabled={shots.length > 0}
+        />
+      </SaveButtons>
       <SectionButtonBar>
         <ConfigButton />
       </SectionButtonBar>
 
       <ScrollWrapper>
-        <SaveButtons>
-          <SaveImageButton
-            targetRef={shotListRef}
-            fileName={'projectiles'}
-            enabled={shots.length > 0}
-          />
-        </SaveButtons>
         <SectionDiv
           ref={shotListRef as LegacyRef<HTMLDivElement>}
           className={'saveImageRoot'}
         >
-          <ShotsSummary
+          <ShotSummary
             pending={simulationRunning}
             shots={shots}
             endReason={endReason}

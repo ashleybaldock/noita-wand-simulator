@@ -32,6 +32,15 @@ const HeaderDiv = styled.div<{
   }
 `;
 
+const HeaderLink = styled.a`
+  text-decoration: none;
+  width: max(30vw, 300px);
+  height: 60px;
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
+`;
+
 const SpacerDiv = styled.div`
   display: flex;
   align-self: center;
@@ -50,6 +59,7 @@ export function MainHeader({ children }: React.PropsWithChildren) {
 
   return (
     <HeaderDiv imgUrl={logoVariant}>
+      <HeaderLink href="/"></HeaderLink>
       <SpacerDiv />
       <ExtraDiv>{children}</ExtraDiv>
     </HeaderDiv>

@@ -26,7 +26,6 @@ export const GlobalStyle = createGlobalStyle<{ keyHints: boolean }>`
     --sizes-after-droptarget-width: 30px;
 
     --sizes-nesting-offset: ${NESTING_OFFSET}px;
-    --sizes-nesting-offset: ${NESTING_OFFSET}px;
 
     ${({ keyHints }) =>
       keyHints ? '--display-keyhints: none;' : '--display-keyhints: flex;'}

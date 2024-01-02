@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   --line-width-x: 3px;
-  --line-width-y: 6px;
+  --line-width-y: 3px;
   --offset-x: 0px;
   --offset-y: 0px;
 
@@ -17,10 +17,10 @@ const Container = styled.div`
   flex-direction: column;
   display: flex;
   box-sizing: border-box;
+  top: 10px;
 `;
 
 const Spacer = styled.div.attrs<{
-  $nestingLevel?: number;
   $alignTop?: boolean;
   $hide?: boolean;
   $origin?: boolean;
@@ -38,15 +38,63 @@ const Spacer = styled.div.attrs<{
   --line-color: var(--color-arrow-action);
   --opacity: 1;
 
+  margin-top: calc(-1 * var(--line-width-x));
+  position: relative;
+
   &::before {
     content: '';
     position: absolute;
     width: calc(50%);
-    height: 1em;
+    height: 0.4em;
     top: calc(var(--line-width-x) * -1);
     left: 0;
     border-left: var(--line-width-x) hidden var(--line-color);
   }
+  &:first-of-type {
+  }
+  &:last-of-type {
+    --opacity: 1;
+    --line-style: solid;
+
+    top: 0;
+  }
+
+  &:last-of-type::before {
+    content: '';
+    box-sizing: border-box;
+    border-top: var(--line-width-x) var(--line-style) var(--line-color);
+    border-right: var(--line-width-x) var(--line-style) var(--line-color);
+    margin-top: 0;
+  }
+
+  &:first-of-type:last-of-type {
+    top: 0;
+  }
+
+  ${({ $endpoint }) =>
+    $endpoint
+      ? `
+  &:last-of-type {
+    border-top-color: transparent;
+  }
+  &::before {
+    display: none;
+  }
+  &:last-of-type::after {
+    content: '';
+    position: absolute;
+    height: 0.5em;
+    left: 0px;
+    border-top: var(--line-width-x) solid var(--line-color);
+    top: calc(var(--line-width-x) * -1);
+    border-right: var(--line-width-x) solid var(--line-color);
+    width: calc(50% - (var(--line-width-x) / 2));
+    border-bottom: 1px hidden transparent;
+    border-radius: 2px;
+  }
+      `
+      : `
+      `}
 
   ${({ $branch }) =>
     $branch
@@ -57,6 +105,7 @@ const Spacer = styled.div.attrs<{
     content: '';
     position: absolute;
     top: unset;
+    left: unset;
     bottom: 0;
     right: 0;
     width: calc(50% - var(--offset-x,0px ) + calc(var(--line-width-y) / 2));
@@ -69,19 +118,30 @@ const Spacer = styled.div.attrs<{
     border-right: 0 hidden transparent;
     border-bottom: var(--line-width-x) var(--line-style) var(--color-arrow-action);
     border-left: var(--line-width-y) var(--line-style) var(--color-arrow-action);
-      border-radius: 0 0 0 30px / 0 0 0 10px;
+      border-radius: 2px;
       border-bottom: var(--line-width-x) var(--line-style) var(--color-arrow-action);
   }
       `
       : `
       `}
+
   ${({ $origin }) =>
     $origin
       ? `
+  border-top-color: transparent;
+  &:last-of-type {
+    border-top-color: transparent;
+  }
+  &::before {
+    display: none;
+  }
   &:last-of-type::after {
     content: '';
     position: absolute;
     height: 0.5em;
+    left: unset;
+    top: unset;
+    bottom: unset;
     right: 0px;
     border-top: var(--line-width-x) solid var(--line-color);
     top: calc(var(--line-width-x) * -1);
@@ -95,87 +155,27 @@ const Spacer = styled.div.attrs<{
       : `
       `}
 
-  margin-top: calc(-1 * var(--line-width-x));
-  position: relative;
+  border-top: var(--line-width-x) var(--line-style) var(--line-color);
+  padding-top: calc(var(--nesting-offset) + var(--line-width-x));
 
   ${({ $hide }) =>
     $hide
       ? `
-  opacity: 0;
-    `
-      : `
-  opacity: var(--opacity);
-    `}
-
-  ${({ $alignTop = true }) => `
-    ${
-      $alignTop
-        ? `
-  border-top: var(--line-width-x) var(--line-style) var(--line-color);
-  padding-top: calc(var(--nesting-offset) + var(--line-width-x));
-  `
-        : `
-  border-bottom: var(--line-width-x) var(--line-style) var(--line-color);
-  padding-bottom: calc(var(--nesting-offset) + var(--line-width-x));
+  border-top-color: transparent;
 `
-    }`}
-
-  &:first-of-type {
-  }
-  &:last-of-type {
-    --opacity: 1;
-    --line-style: solid;
-
-    top: 0;
-
-    ::before {
-      content: '';
-      position: absolute;
-      top: calc(var(--line-width-x) * -1);
-      left: 0;
-      width: calc(50% + (var(--line-width-x) + var(--offset-x, 0px)));
-      height: 60%;
-
-      box-sizing: border-box;
-      border-top: var(--line-width-x) var(--line-style) var(--line-color);
-      border-right: var(--line-width-y) var(--line-style) var(--line-color);
-      border-radius: 0 11px 0 0 / 0 10px 0 0;
-      margin-top: 0;
-    }
-  }
-
-  &:first-of-type:last-of-type {
-    top: 0;
-  }
-
-  ${({ $origin, $endpoint }) => `
-    ${
-      ($origin || $endpoint) &&
-      `
-      border-top-color: transparent;
-    `
-    }
-    ${
-      $origin &&
-      `
-      &::before {
-        display: none;
-      }
-    `
-    }
-  `}
+      : `
+`}
 `;
 
 export const LineSpacer = styled(
   ({
-    nestingLevel,
+    nestingPrefix = [],
     origin = false,
     endpoint = false,
     branch = false,
-
     className,
   }: {
-    nestingLevel: number;
+    nestingPrefix: Array<number>;
     origin?: boolean;
     endpoint?: boolean;
     branch?: boolean;
@@ -183,10 +183,10 @@ export const LineSpacer = styled(
   }) => {
     return (
       <Container className={className}>
-        {[...Array(nestingLevel + 1)].map((_, i) => (
+        {nestingPrefix.map((showLine, i) => (
           <Spacer
+            $hide={!showLine}
             $origin={origin}
-            $hide={false}
             $endpoint={endpoint}
             $branch={branch}
             key={i}

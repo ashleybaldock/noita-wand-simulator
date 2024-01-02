@@ -30,7 +30,7 @@ const MultiGroupDiv = styled.div`
   align-self: end;
 `;
 
-const MainDiv = styled.div<{ nestingLevel: number }>`
+const MainDiv = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -98,17 +98,15 @@ const WandActionGroupWandActionBorder = styled(WandActionBorder)`
 
 export const ProjectileActionGroup = ({
   group,
-  nestingLevel,
 }: {
   group: GroupedObject<ActionCall | GroupedProjectile>;
-  nestingLevel: number;
 }) => {
   const simplified = simplifyMultipleObject(group);
 
   if (isRawObject(simplified)) {
     if (simplified._typeName === 'ActionCall') {
       return (
-        <MainDiv nestingLevel={nestingLevel}>
+        <MainDiv>
           <WandActionGroupWandActionBorder>
             <WandAction
               spellType={simplified.spell.type}
@@ -127,7 +125,7 @@ export const ProjectileActionGroup = ({
       );
     } else {
       return (
-        <MainDiv nestingLevel={nestingLevel}>
+        <MainDiv>
           <WandActionGroupWandActionBorder>
             <WandAction
               spellType={simplified.spell?.type ?? 'projectile'}
@@ -148,22 +146,15 @@ export const ProjectileActionGroup = ({
     return (
       <ArrayGroupDiv>
         {simplified.map((g, i) => (
-          <ProjectileActionGroup
-            nestingLevel={nestingLevel}
-            group={g}
-            key={i}
-          />
+          <ProjectileActionGroup group={g} key={i} />
         ))}
       </ArrayGroupDiv>
     );
   } else if (isMultipleObject(simplified)) {
     return (
-      <MainDiv nestingLevel={nestingLevel}>
+      <MainDiv>
         <MultiGroupDiv>
-          <ProjectileActionGroup
-            nestingLevel={nestingLevel}
-            group={simplified.first}
-          />
+          <ProjectileActionGroup group={simplified.first} />
         </MultiGroupDiv>
         <CountDiv>{simplified.count}</CountDiv>
       </MainDiv>
