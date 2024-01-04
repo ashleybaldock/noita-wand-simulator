@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 const StyledButton = styled.button`
-  border: 1px solid #111;
+  border: 0;
   color: black;
-  background-color: #a33;
+  background-color: transparent;
   cursor: pointer;
 
   &:hover {
@@ -12,5 +12,5 @@ const StyledButton = styled.button`
 `;
 
 export const CloseButton = ({ onClick }: { onClick: () => void }) => (
-  <StyledButton onClick={onClick}>X</StyledButton>
+  <StyledButton onClick={onClick}>❌</StyledButton>
 );

@@ -52,6 +52,10 @@ const WrapperLabel = styled.label`
   position: relative;
 `;
 
+const InteractiveYesNo = styled(YesNo)`
+  text-decoration: underline dotted var(--color-toggle-hover) 1.4px;
+`;
+
 export const YesNoToggle = ({
   checked,
   onChange,
@@ -73,7 +77,7 @@ export const YesNoToggle = ({
         onChange={onChange}
         onClick={onClick}
       />
-      <YesNo yes={checked} />
+      <InteractiveYesNo yes={checked} />
     </WrapperLabel>
   );
 };

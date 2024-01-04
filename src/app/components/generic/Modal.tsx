@@ -9,15 +9,15 @@ const BackgroundDiv = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: var(--color-modal-fullscreen-overlay);
 `;
 
 const MainDiv = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-  background-color: var(--bg-color-tab);
-  color: #eee;
+  background-color: var(--color-modal-bg);
+  color: var(--color-modal-fg);
   max-height: 100%;
   overflow-y: auto;
   box-shadow: -10px 10px 50px #000;
@@ -26,12 +26,14 @@ const MainDiv = styled.div`
 const HeaderDiv = styled.div`
   display: flex;
   flex-direction: row;
-  color: #111;
-  background-color: var(--color-base-background);
-  font-weight: bold;
+  background-color: var(--color-modal-header-bg);
+  color: var(--color-modal-header-fg);
   text-align: center;
   justify-content: space-between;
-  padding-left: 5px;
+  padding-left: 0.5em;
+  justify-content: end;
+  padding: 0.5em;
+  align-items: center;
 `;
 
 const TitleDiv = styled.div``;

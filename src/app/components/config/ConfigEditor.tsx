@@ -26,33 +26,38 @@ const MainDiv = styled.div`
 const ConfigDiv = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 1em;
 `;
 
-const ConfigSubtitle = styled.div`
-  font-weight: bold;
+const ConfigSectionHeading = styled.div`
+  font-weight: normal;
+  text-transform: uppercase;
+  color: var(--color-toggle-label);
 `;
 
 const ToggleWrap = styled.div`
   &::after {
     content: ':';
     padding-right: 1em;
+    margin-right: 0.4em;
   }
 
-  color: var(--color-toggle-label);
+  color: var(--color-toggle-chosen);
+  &:hover {
+    color: var(--color-toggle-hover);
+  }
+  text-decoration: none;
 `;
 
 const StyledYesNoToggle = styled(YesNoToggle)`
   color: var(--color-toggle-chosen);
 
+  margin: 0.5em 0 0.3em 1em;
+
   &:hover {
     color: var(--color-toggle-hover);
   }
-
-  &:hover::after {
-    content: '>';
-  }
 `;
-// const ConfigToggle = ({ configField }: { configField: BooleanConfigField }) => {
 const ConfigToggle = ({
   field,
   children,
@@ -72,49 +77,58 @@ const ConfigToggle = ({
   );
 };
 
-const ConfigToggleGroup = ({
-  title = '',
-  bulkSelectControls = false,
-  section,
-  children,
-}: React.PropsWithChildren<{
-  title?: string;
-  showTitle?: boolean;
-  bulkSelectControls?: boolean;
-  section?: ConfigGroupName;
-  groupName?: string;
-}>) => {
-  return (
-    <div>
-      {title && <ConfigSubtitle>{title}</ConfigSubtitle>}
-      {bulkSelectControls && section && (
-        <>
-          <Button onClick={() => enableConfigGroup(section)}>
-            {'Unlock All'}
-          </Button>
-          <Button onClick={() => disableConfigGroup(section)}>
-            {'Lock All'}
-          </Button>
-        </>
-      )}
-      {children}
-    </div>
-  );
-};
+const ConfigToggleGroup = styled(
+  ({
+    title = '',
+    bulkSelectControls = false,
+    section,
+    children,
+    className,
+  }: React.PropsWithChildren<{
+    title?: string;
+    showTitle?: boolean;
+    bulkSelectControls?: boolean;
+    section?: ConfigGroupName;
+    groupName?: string;
+    className?: string;
+  }>) => {
+    return (
+      <div className={className}>
+        {title && <ConfigSectionHeading>{title}</ConfigSectionHeading>}
+        {bulkSelectControls && section && (
+          <>
+            <Button onClick={() => enableConfigGroup(section)}>
+              {'Unlock All'}
+            </Button>
+            <Button onClick={() => disableConfigGroup(section)}>
+              {'Lock All'}
+            </Button>
+          </>
+        )}
+        {children}
+      </div>
+    );
+  },
+)`
+  margin-bottom: 0.5em;
+`;
 
 export const ConfigEditor = () => {
   return (
     <MainDiv>
       <ConfigDiv>
-        <ConfigToggleGroup>
+        <ConfigToggleGroup title={'Visualisation'}>
+          <ConfigToggle field={'castShowChanged'}>
+            {'Hide Unaltered Cast State values'}
+          </ConfigToggle>
+          <ConfigToggle field={'showDurationsInFrames'}>
+            {'Show Durations in Frames'}
+          </ConfigToggle>
           <ConfigToggle field={'condenseShots'}>
-            {'Combine Similar Actions and Projectiles'}
+            {'Combine Similar Actions & Projectiles'}
           </ConfigToggle>
-          <ConfigToggle field={'unlimitedSpells'}>
-            {'Unlimited Spells'}
-          </ConfigToggle>
-          <ConfigToggle field={'infiniteSpells'}>
-            {'Infinite Spells'}
+          <ConfigToggle field={'showActionTree'}>
+            {'Show Action Tree'}
           </ConfigToggle>
           <ConfigToggle field={'showDirectActionCalls'}>
             {'Show Direct Action Calls'}
@@ -140,25 +154,26 @@ export const ConfigEditor = () => {
           <ConfigToggle field={'showDontDraw'}>
             {'Show Draw Inhibition'}
           </ConfigToggle>
-          <ConfigToggle field={'swapOnMove'}>
-            {'Swap When Moving Actions'}
+        </ConfigToggleGroup>
+        <ConfigToggleGroup title={'Cast Config'}>
+          <ConfigToggle field={'unlimitedSpells'}>
+            {'Unlimited Spells'}
           </ConfigToggle>
-          <ConfigToggle field={'showActionTree'}>
-            {'Show Action Tree'}
-          </ConfigToggle>
-          <ConfigToggle field={'showSpellsInCategories'}>
-            {'Show Spells in Categories'}
+          <ConfigToggle field={'infiniteSpells'}>
+            {'Infinite Spells'}
           </ConfigToggle>
           <ConfigToggle field={'endSimulationOnRefresh'}>
             {'End Simulation on Wand Refresh'}
           </ConfigToggle>
+        </ConfigToggleGroup>
+        <ConfigToggleGroup title={'Wand Editor'}>
+          <ConfigToggle field={'swapOnMove'}>
+            {'Swap Spell Position on move'}
+          </ConfigToggle>
+          <ConfigToggle field={'showSpellsInCategories'}>
+            {'Show Spells in Categories'}
+          </ConfigToggle>
           <ConfigToggle field={'showBeta'}>{'Show Beta Spells'}</ConfigToggle>
-          <ConfigToggle field={'castShowChanged'}>
-            {'Hide Unaltered Cast State values'}
-          </ConfigToggle>
-          <ConfigToggle field={'showDurationsInFrames'}>
-            {'Show Durations in Frames'}
-          </ConfigToggle>
         </ConfigToggleGroup>
         <ConfigToggleGroup
           title={'Unlockable Spells'}
