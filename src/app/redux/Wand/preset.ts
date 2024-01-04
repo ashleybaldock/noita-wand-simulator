@@ -14,9 +14,9 @@ export type PresetGroup = {
 };
 
 export function isSinglePreset(p: Preset | PresetGroup): p is Preset {
-  return p.hasOwnProperty('spells');
+  return Object.prototype.hasOwnProperty.call(p, 'spells');
 }
 
 export function isPresetGroup(p: Preset | PresetGroup): p is PresetGroup {
-  return p.hasOwnProperty('presets');
+  return Object.prototype.hasOwnProperty.call(p, 'presets');
 }

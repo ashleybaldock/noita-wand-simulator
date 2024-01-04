@@ -13,12 +13,10 @@ const ChildDiv = styled.div`
   width: fit-content;
 `;
 
-type Props = {};
-
-export function ScrollWrapper(props: PropsWithChildren<Props>) {
+export const ScrollWrapper = (props: PropsWithChildren) => {
   return (
     <ParentDiv>
       <ChildDiv>{props.children}</ChildDiv>
     </ParentDiv>
   );
-}
+};
