@@ -1,4 +1,4 @@
-import { GunActionState } from './actionState';
+import type { GunActionState } from './actionState';
 
 export const defaultGunActionState: GunActionState = {
   // action_id: '',

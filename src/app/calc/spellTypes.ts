@@ -62,17 +62,19 @@ const SpellTypeInfoMapDefinition = {
 
 export type SpellType = keyof typeof SpellTypeInfoMapDefinition;
 
-export type SpellTypeInfo = typeof SpellTypeInfoMapDefinition[SpellType];
+export type SpellTypeInfo = (typeof SpellTypeInfoMapDefinition)[SpellType];
 
 export type SpellTypeName =
-  typeof SpellTypeInfoMapDefinition[SpellType]['name'];
+  (typeof SpellTypeInfoMapDefinition)[SpellType]['name'];
 
 export type SpellTypeDescription =
-  typeof SpellTypeInfoMapDefinition[SpellType]['description'];
+  (typeof SpellTypeInfoMapDefinition)[SpellType]['description'];
 
-export type SpellTypeUrl = typeof SpellTypeInfoMapDefinition[SpellType]['url'];
+export type SpellTypeUrl =
+  (typeof SpellTypeInfoMapDefinition)[SpellType]['url'];
 
-export type SpellTypeSrc = typeof SpellTypeInfoMapDefinition[SpellType]['src'];
+export type SpellTypeSrc =
+  (typeof SpellTypeInfoMapDefinition)[SpellType]['src'];
 
 export type SpellTypeInfoMap = Record<SpellType, Readonly<SpellTypeInfo>>;
 
@@ -88,7 +90,7 @@ export const getBackgroundUrlForSpellType = (spellType?: SpellType) =>
 
 const groups = ['prj', 'mod', 'umo', 'smp'] as const;
 
-export type SpellTypeGroup = typeof groups[number];
+export type SpellTypeGroup = (typeof groups)[number];
 
 type SpellTypeGroupInfo = {
   contains: readonly SpellType[];
@@ -119,7 +121,6 @@ export const spellTypeGroupInfoMap: Record<SpellTypeGroup, SpellTypeGroupInfo> =
     },
     umo: {
       contains: ['utility', 'multicast', 'other'],
-      // name: 'Utl/Mlt/Oth',
       name: 'Utility/Multicast/Other',
       src: '',
       description: 'Utility, Multicast and Other type spells',
@@ -143,7 +144,7 @@ export const validActionCallSources = [
 ] as const;
 
 export type ValidActionCallSource = Extract<
-  typeof validActionCallSources[number],
+  (typeof validActionCallSources)[number],
   SpellType
 >;
 

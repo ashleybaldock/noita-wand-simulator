@@ -40,6 +40,13 @@
   --color-button-border-hover: #aaaaaa;
   --color-button-background: #000000;
 
+  /* --color-toggle-label: var(--color-subdued); */
+  --color-toggle-label: rgb(110, 110, 110);
+  /* --color-toggle-chosen: var(--color-emphasis); */
+  --color-toggle-chosen: rgb(207, 207, 206);
+  --color-toggle-alternatives: var(--color-base);
+  --color-toggle-hover: rgb(255, 255, 178);
+
   --color-vis-cs-inborder: #3a3a3a;
   --color-vis-cs-inborder-dark: #222222;
   --color-value-ignored: #5b5b66;

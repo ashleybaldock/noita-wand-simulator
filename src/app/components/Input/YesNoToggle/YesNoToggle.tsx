@@ -57,13 +57,15 @@ export const YesNoToggle = ({
   onChange,
   onClick = noop,
   children,
+  className,
 }: React.PropsWithChildren<{
   checked: boolean;
   onChange: ChangeEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
+  className?: string;
 }>) => {
   return (
-    <WrapperLabel>
+    <WrapperLabel className={className}>
       {children}
       <Checkbox
         hidden={true}

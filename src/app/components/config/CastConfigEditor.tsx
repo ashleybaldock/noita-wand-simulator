@@ -1,5 +1,5 @@
-import { useAppDispatch } from '../../redux/hooks';
-import { updateConfig, useConfig } from '../../redux/configSlice';
+import { useAppDispatch, useConfig } from '../../redux/hooks';
+import { updateConfig } from '../../redux/configSlice';
 import styled from 'styled-components';
 import { ChangeEvent } from 'react';
 import { SectionHeader } from '../SectionHeader';
@@ -61,26 +61,6 @@ const SubSectionContent = styled.div<{
   width: 100%;
   ${({ maxWidth }) => (maxWidth ? `max-width: ${maxWidth};` : '')}
   gap: 0.2em;
-`;
-
-const CheckboxWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  align-self: center;
-  flex-wrap: nowrap;
-  flex: 0 1 auto;
-  background-color: #222;
-  border: var(--input-border);
-  border-radius: var(--input-border-radius);
-  margin: 0;
-  padding: 3px 3px 3px 2px;
-  cursor: pointer;
-
-  span {
-    align-self: center;
-    margin: 0 0 0 5px;
-    padding-top: 2px;
-  }
 `;
 
 const InputWrapper = styled.label`
@@ -181,17 +161,16 @@ export const CastConfigEditor = () => {
   const reqs = config.requirements;
   const random = config.random;
 
-  const requirementsChangeHandler =
-    (field: keyof typeof reqs) => (e: ChangeEvent<HTMLInputElement>) => {
-      dispatch(
-        updateConfig({
-          requirements: {
-            ...reqs,
-            [field]: !reqs[field],
-          },
-        }),
-      );
-    };
+  const requirementsChangeHandler = (field: keyof typeof reqs) => () => {
+    dispatch(
+      updateConfig({
+        requirements: {
+          ...reqs,
+          [field]: !reqs[field],
+        },
+      }),
+    );
+  };
   const randomChangeHandler =
     (field: keyof typeof random) => (e: ChangeEvent<HTMLInputElement>) => {
       const newValue = Number.parseInt(e.target.value);

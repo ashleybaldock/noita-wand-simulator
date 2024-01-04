@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import { groupBy, objectEntries } from '../../util/util';
 import { Spell } from '../../calc/spell';
 import { spells } from '../../calc/spells';
-import { useAppDispatch } from '../../redux/hooks';
-import { ConfigState, useConfig } from '../../redux/configSlice';
+import { useAppDispatch, useConfig } from '../../redux/hooks';
+import { ConfigState } from '../../redux/configSlice';
 import {
   insertSpellAfterCursor,
   insertSpellBeforeCursor,

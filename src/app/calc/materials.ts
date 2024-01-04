@@ -1,5 +1,7 @@
 import { isString } from '../util/util';
 
+// TODO generate this from game data
+
 export const trailMaterials = [
   'acid',
   'alcohol',
@@ -12,7 +14,7 @@ export const trailMaterials = [
   'material_rainbow',
 ] as const;
 
-export type TrailMaterial = typeof trailMaterials[number];
+export type TrailMaterial = (typeof trailMaterials)[number];
 const trailMaterialsSet: Set<TrailMaterial> = new Set(trailMaterials);
 export const isTrailMaterial = (x: unknown): x is TrailMaterial =>
   isString(x) && (trailMaterialsSet as Set<string>).has(x);

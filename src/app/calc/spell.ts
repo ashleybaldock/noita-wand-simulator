@@ -1,7 +1,7 @@
-import { ActionId } from './actionId';
-import { Action } from './action';
-import { SpellType } from './spellTypes';
-import { UnlockCondition } from './unlocks';
+import type { ActionId } from './actionId';
+import type { Action } from './action';
+import type { SpellType } from './spellTypes';
+import type { UnlockCondition } from './unlocks';
 
 export type SpellDeckInfo = {
   id: ActionId;

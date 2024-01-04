@@ -1,4 +1,4 @@
-import * as beta from './__generated__/beta/unlocks';
+import type * as beta from './__generated__/beta/unlocks';
 
 export type UnlockCondition = beta.UnlockCondition;
 

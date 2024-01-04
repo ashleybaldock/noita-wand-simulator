@@ -1,8 +1,8 @@
-import { ActionId } from './actionId';
-import { ActionSource } from './actionSources';
-import { Spell } from './spell';
+import type { ActionId } from './actionId';
+import type { ActionSource } from './actionSources';
+import type { Spell } from './spell';
 import { getSpellById } from './spells';
-import { GunActionState } from './actionState';
+import type { GunActionState } from './actionState';
 import {
   ConfigGunActionInfo_Create,
   ConfigGunActionInfo_Init,
@@ -120,11 +120,11 @@ export function setCurrentReloadTime(crt: number) {
   current_reload_time = crt;
 }
 
-export let shot_effects: ShotEffects = {
+export const shot_effects: ShotEffects = {
   recoil_knockback: 0,
 };
 
-let active_extra_modifiers: ExtraModifier[] = [];
+const active_extra_modifiers: ExtraModifier[] = [];
 
 export let mana = 0.0;
 
@@ -160,7 +160,7 @@ export function setForceStopDraws(fsd: boolean) {
 
 // eslint-disable-next-line
 let shot_structure = {};
-let recursion_limit = 2;
+const recursion_limit = 2;
 
 function reset_modifiers(state: GunActionState) {
   ConfigGunActionInfo_Init(state);
@@ -241,7 +241,7 @@ function create_shot(num_of_cards_to_draw: number): Shot {
 }
 
 function draw_shot(shot: Shot, instant_reload_if_empty: boolean) {
-  let c_old = c;
+  const c_old = c;
 
   c = shot.state;
 
@@ -261,14 +261,14 @@ export function order_deck() {
     // shuffle the deck
     // state_shuffled = true;
 
-    let rand = Random;
-    let iterations = deck.length;
-    let new_deck: Spell[] = [];
+    const rand = Random;
+    const iterations = deck.length;
+    const new_deck: Spell[] = [];
 
     for (let i = iterations - 1; i >= 0; i--) {
       // looping from iterations to 1 (inclusive)
-      let index = rand(0, i);
-      let action = deck[index];
+      const index = rand(0, i);
+      const action = deck[index];
       deck.splice(index, 1);
       new_deck.push(action);
     }
@@ -278,14 +278,14 @@ export function order_deck() {
     // sort the deck
     if (!force_stop_draws) {
       deck.sort((a, b) => {
-        let a_index = a.deck_index || 0;
-        let b_index = b.deck_index || 0;
+        const a_index = a.deck_index || 0;
+        const b_index = b.deck_index || 0;
         return a_index - b_index;
       });
     } else {
       deck.sort((a, b) => {
-        let a_ = a.deck_index || 0;
-        let b_ = b.deck_index || 0;
+        const a_ = a.deck_index || 0;
+        const b_ = b.deck_index || 0;
         return a_ - b_;
       });
     }
@@ -383,7 +383,7 @@ export function draw_action(instant_reload_if_empty: boolean) {
 
 function handle_mana_addition(action: Spell) {
   if (action !== null) {
-    let action_mana_required = action.mana || 0;
+    const action_mana_required = action.mana || 0;
 
     if (action_mana_required < 0) {
       mana = mana - action_mana_required;
@@ -407,7 +407,7 @@ export function draw_actions(
     }
 
     for (let i = 0; i < how_many; i++) {
-      let ok = draw_action(instant_reload_if_empty);
+      const ok = draw_action(instant_reload_if_empty);
       if (!ok) {
         // attempt to draw other actions
         while (deck.length > 0) {
@@ -487,7 +487,7 @@ function move_hand_to_discarded() {
         } else if (action.is_identified) {
           // consume consumable actions
           action.uses_remaining = action.uses_remaining - 1;
-          let reduce_uses = ActionUsesRemainingChanged(
+          const reduce_uses = ActionUsesRemainingChanged(
             action.inventoryitem_id,
             action.uses_remaining,
           );
@@ -523,7 +523,7 @@ function move_hand_to_discarded() {
 }
 
 export function check_recursion(data: Readonly<Spell> | null, rec_: number) {
-  let rec = rec_ || 0;
+  const rec = rec_ || 0;
 
   if (data != null) {
     if (data.recursive !== null && data.recursive) {
@@ -635,7 +635,7 @@ export function _add_card_to_deck(
   // let action = actions[i];
   const spell = getSpellById(action_id);
   // if (action.id === action_id) {
-  let spell_clone = {} as Spell;
+  const spell_clone = {} as Spell;
   clone_action(spell, spell_clone);
   spell_clone.inventoryitem_id = inventoryitem_id;
   spell_clone.uses_remaining =
@@ -654,7 +654,7 @@ function _play_permanent_card(action_id: ActionId) {
   // let action = actions[i];
   const action = getSpellById(action_id);
   // if (action.id === action_id) {
-  let action_clone = {} as Spell;
+  const action_clone = {} as Spell;
   playing_permanent_card = true;
   clone_action(action, action_clone);
   action_clone.permanently_attached = true;

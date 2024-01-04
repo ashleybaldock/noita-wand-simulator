@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useConfig } from '../redux/configSlice';
+import { useConfig } from '../redux';
 
 export const DebugHints = ({
   className,
@@ -10,7 +10,7 @@ export const DebugHints = ({
   } = useConfig();
 
   return dragHint ? (
-    <WithDebugHints>{children}</WithDebugHints>
+    <WithDebugHints className={className}>{children}</WithDebugHints>
   ) : (
     <>{children}</>
   );

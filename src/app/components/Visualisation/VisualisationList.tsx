@@ -1,12 +1,11 @@
-import React, { LegacyRef, useMemo, useRef, useState } from 'react';
+import { LegacyRef, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { isNotNullOrUndefined } from '../../util';
 import { clickWand } from '../../calc/eval/clickWand';
 import { condenseActionsAndProjectiles } from '../../calc/grouping/condense';
 import { isValidActionId, isGreekActionId } from '../../calc/actionId';
 import { getSpellById } from '../../calc/spells';
-import { useWandState } from '../../redux';
-import { useConfig } from '../../redux/configSlice';
+import { useConfig, useWandState } from '../../redux';
 import { SaveImageButton, ScrollWrapper } from '../generic';
 import { ActionCalledShotResult } from './ActionSequence';
 import { ActionTreeShotResult } from './ActionTree';

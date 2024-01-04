@@ -4,7 +4,7 @@ export function chunk<T>(arr: T[], chunkSize: number) {
   if (chunkSize <= 0) {
     throw Error('Invalid chunk size');
   }
-  let result = [];
+  const result = [];
   for (let i = 0; i < arr.length; i += chunkSize)
     result.push(arr.slice(i, i + chunkSize));
   return result;
@@ -34,8 +34,8 @@ export function isMultipleObject<T extends object>(
 ): grouped is MultipleObject<T> {
   return (
     !Array.isArray(grouped) &&
-    grouped.hasOwnProperty('count') &&
-    grouped.hasOwnProperty('first')
+    Object.prototype.hasOwnProperty.call(grouped, 'count') &&
+    Object.prototype.hasOwnProperty.call(grouped, 'first')
   );
 }
 

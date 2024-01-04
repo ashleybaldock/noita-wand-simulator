@@ -1,4 +1,4 @@
-import { ActionId } from './actionId';
+import type { ActionId } from './actionId';
 // import { entityToActionId as entityToActionIdRelease } from './__generated__/entityProjectileMap';
 import { entityToActionIds as entityToActionIdsBeta } from './__generated__/entityProjectileMap.beta';
 

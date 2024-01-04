@@ -3,8 +3,8 @@ import { flatMapIter } from '../../app/util/iterTools';
 // import * as main from './__generated__/main/spells';
 import * as beta from './__generated__/beta/spells';
 
-import { ActionId } from './actionId';
-import { Spell } from './spell';
+import type { ActionId } from './actionId';
+import type { Spell } from './spell';
 import { isNotNullOrUndefined } from '../util';
 
 export const spells = beta.spells as ReadonlyArray<Spell>;

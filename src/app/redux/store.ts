@@ -2,8 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import undoable from 'redux-undo';
 import { wandReducer, selectWandState } from './wandSlice';
 import { presetsReducer } from './presetsSlice';
-import { configReducer, selectConfig } from './configSlice';
-import { saveState } from '../localStorage';
+import { configReducer } from './configSlice';
 import { generateSearchFromWandState } from './Wand/toSearch';
 
 export const store = configureStore({
@@ -12,10 +11,6 @@ export const store = configureStore({
     presets: presetsReducer,
     config: configReducer,
   },
-});
-
-observeStore(selectConfig, (state) => {
-  saveState(state);
 });
 
 export type RootState = ReturnType<typeof store.getState>;

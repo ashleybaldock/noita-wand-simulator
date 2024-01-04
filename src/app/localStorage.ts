@@ -17,6 +17,6 @@ export const saveState = (state: ConfigState) => {
     const serializedState = JSON.stringify(state);
     localStorage.setItem('state', serializedState);
   } catch (err) {
-    // Ignore write errors.
+    console.warn('Write to LocalStorage failed', err);
   }
 };

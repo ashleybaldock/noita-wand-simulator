@@ -1,9 +1,8 @@
-import { useEffect } from 'react';
 import styled from 'styled-components';
 import { SpellSelector, WandBuilder } from './WandEditor';
 import { VisualisationList } from './Visualisation';
-import { useAppDispatch } from '../redux/hooks';
-import { updateConfig, useConfig } from '../redux/configSlice';
+import { useAppDispatch, useConfig } from '../redux/hooks';
+import { updateConfig } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
 import { DebugHints } from './Debug';
 import { DndProvider } from 'react-dnd';

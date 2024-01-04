@@ -1,5 +1,7 @@
 import { isNotNullOrUndefined } from '../util';
 
+// TODO generate this from game data
+
 export const damageTypes = [
   'curse',
   'drill',
@@ -22,7 +24,7 @@ export const damageTypes = [
   'slice',
 ] as const;
 
-export type DamageType = typeof damageTypes[number];
+export type DamageType = (typeof damageTypes)[number];
 
 export type DamageTypeInfo = {
   name: string;

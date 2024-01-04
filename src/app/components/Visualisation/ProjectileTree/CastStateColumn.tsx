@@ -12,7 +12,7 @@ import {
   sign,
   tally,
 } from '../../../util/util';
-import { Config, useConfig } from '../../../redux/configSlice';
+import { Config } from '../../../redux/configSlice';
 import { getBackgroundUrlForDamageType } from '../../../calc/damage';
 import {
   FNSP,
@@ -25,6 +25,7 @@ import { TriggerCondition } from '../../../calc/trigger';
 import { WithDebugHints } from '../../Debug';
 import { Duration } from './Duration';
 import { Unchanged, YesNo, YesOr } from '../../Presentation';
+import { useConfig } from '../../../redux';
 
 // TODO: handle extra_entities that affect damage/etc
 

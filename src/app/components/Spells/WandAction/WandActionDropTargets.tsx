@@ -1,6 +1,6 @@
 import { useDrop } from 'react-dnd';
 import { useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { useAppDispatch, useConfig } from '../../../redux/hooks';
 import {
   insertSpellBefore,
   insertSpellAfter,
@@ -9,7 +9,6 @@ import {
   moveCursor,
   useCursor,
 } from '../../../redux/wandSlice';
-import { selectConfig } from '../../../redux/configSlice';
 import { WandActionBorder } from './WandActionBorder';
 import {
   DropTargetMain,
@@ -18,7 +17,7 @@ import {
 } from './SpellDropTargets';
 import { WandEditCursor } from './Cursor';
 import { WandSelection } from '../../../redux/Wand/wandSelection';
-import { CursorPosition, DragItemSpell } from './types';
+import type { CursorPosition, DragItemSpell } from './types';
 
 export const WandActionDropTargets = ({
   wandIndex,
@@ -31,11 +30,9 @@ export const WandActionDropTargets = ({
 }>) => {
   const dispatch = useAppDispatch();
   const {
-    config: {
-      swapOnMove,
-      debug: { dragHint },
-    },
-  } = useAppSelector(selectConfig);
+    swapOnMove,
+    debug: { dragHint },
+  } = useConfig();
   const { position: cursorPosition, style: cursorStyle } =
     useCursor()[wandIndex];
 

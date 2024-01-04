@@ -1,217 +1,21 @@
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useConfig } from '../../redux/hooks';
 import {
-  ConfigState,
-  initialState as initialConfigState,
+  Config,
   updateConfig,
-  useConfig,
+  enableConfigGroup,
+  disableConfigGroup,
+  ConfigGroupName,
 } from '../../redux/configSlice';
 import styled from 'styled-components';
-import _ from 'lodash';
-import { constToDisplayString, objectKeys } from '../../util/util';
+import { YesNoToggle } from '../Input';
+import { Button } from '../generic';
 
-enum ConfigType {
-  Boolean = 'boolean',
-  Button = 'button',
-}
-
-type ConfigField<T> = {
-  displayName: string;
-  type: ConfigType;
-  get: (config: ConfigState['config']) => T;
-  set: (config: ConfigState['config'], v: T) => void;
-};
-
-type ConfigFieldGroup = {
-  displayName: string;
-  fields: (ConfigField<any> | ConfigFieldGroup)[];
-};
-
-function makeConfigField<T>(
-  displayName: string,
-  type: ConfigType,
-  get: (config: ConfigState['config']) => T,
-  set: (config: ConfigState['config'], value: T) => void,
-): ConfigField<T> {
-  return { displayName, type, get, set };
-}
-
-function makeConfigFieldGroup(
-  displayName: string,
-  fields: (ConfigField<any> | ConfigFieldGroup)[],
-): ConfigFieldGroup {
-  return { displayName, fields };
-}
-
-function isConfigFieldGroup(
-  field: ConfigField<any> | ConfigFieldGroup,
-): field is ConfigFieldGroup {
-  return field.hasOwnProperty('fields');
-}
-
-const configOptions = [
-  makeConfigField(
-    'Combine Similar Actions and Projectiles',
-    ConfigType.Boolean,
-    (c) => c.condenseShots,
-    (c, v) => (c.condenseShots = v),
-  ),
-  makeConfigField(
-    'Unlimited Spells',
-    ConfigType.Boolean,
-    (c) => c.unlimitedSpells,
-    (c, v) => (c.unlimitedSpells = v),
-  ),
-  makeConfigField(
-    'Infinite Spells',
-    ConfigType.Boolean,
-    (c) => c.infiniteSpells,
-    (c, v) => (c.infiniteSpells = v),
-  ),
-  makeConfigField(
-    'Show Direct Action Calls',
-    ConfigType.Boolean,
-    (c) => c.showDirectActionCalls,
-    (c, v) => (c.showDirectActionCalls = v),
-  ),
-  makeConfigField(
-    'Show Divides',
-    ConfigType.Boolean,
-    (c) => c.showDivides,
-    (c, v) => (c.showDivides = v),
-  ),
-  makeConfigField(
-    'Show Greek Spells',
-    ConfigType.Boolean,
-    (c) => c.showGreekSpells,
-    (c, v) => (c.showGreekSpells = v),
-  ),
-  makeConfigField(
-    'Show Deck Indexes',
-    ConfigType.Boolean,
-    (c) => c.showDeckIndexes,
-    (c, v) => (c.showDeckIndexes = v),
-  ),
-  makeConfigField(
-    'Show Recursion and Iteration',
-    ConfigType.Boolean,
-    (c) => c.showRecursion,
-    (c, v) => (c.showRecursion = v),
-  ),
-  makeConfigField(
-    'Show Projectile Proxies',
-    ConfigType.Boolean,
-    (c) => c.showProxies,
-    (c, v) => (c.showProxies = v),
-  ),
-  makeConfigField(
-    'Show Action Sources',
-    ConfigType.Boolean,
-    (c) => c.showSources,
-    (c, v) => (c.showSources = v),
-  ),
-  makeConfigField(
-    "Show Don't Draw",
-    ConfigType.Boolean,
-    (c) => c.showDontDraw,
-    (c, v) => (c.showDontDraw = v),
-  ),
-  makeConfigField(
-    'Swap When Moving Actions',
-    ConfigType.Boolean,
-    (c) => c.swapOnMove,
-    (c, v) => (c.swapOnMove = v),
-  ),
-  makeConfigField(
-    'Show Action Tree',
-    ConfigType.Boolean,
-    (c) => c.showActionTree,
-    (c, v) => (c.showActionTree = v),
-  ),
-  makeConfigField(
-    'Show Spells in Categories',
-    ConfigType.Boolean,
-    (c) => c.showSpellsInCategories,
-    (c, v) => (c.showSpellsInCategories = v),
-  ),
-  makeConfigField(
-    'End Simulation on Wand Refresh',
-    ConfigType.Boolean,
-    (c) => c.endSimulationOnRefresh,
-    (c, v) => (c.endSimulationOnRefresh = v),
-  ),
-  makeConfigField(
-    'Show Beta Spells',
-    ConfigType.Boolean,
-    (c) => c.showBeta,
-    (c, v) => (c.showBeta = v),
-  ),
-  makeConfigField(
-    'Hide Unaltered in Cast State',
-    ConfigType.Boolean,
-    (c) => c.castShowChanged,
-    (c, v) => (c.castShowChanged = v),
-  ),
-  makeConfigField(
-    'Show Durations in Frames',
-    ConfigType.Boolean,
-    (c) => c.showDurationsInFrames,
-    (c, v) => (c.showDurationsInFrames = v),
-  ),
-  makeConfigFieldGroup('Unlocks', [
-    makeConfigField(
-      'Enable All',
-      ConfigType.Button,
-      (c) => null,
-      (c, v) =>
-        objectKeys(initialConfigState.config.unlocks).forEach(
-          (k) => (c.unlocks[k] = true),
-        ),
-    ),
-    makeConfigField(
-      'Disable All',
-      ConfigType.Button,
-      (c) => null,
-      (c, v) =>
-        objectKeys(initialConfigState.config.unlocks).forEach(
-          (k) => (c.unlocks[k] = false),
-        ),
-    ),
-    ...objectKeys(initialConfigState.config.unlocks).map((unlockField) =>
-      makeConfigField(
-        constToDisplayString(unlockField.replace(/card_unlocked_(.*)/, '$1')),
-        ConfigType.Boolean,
-        (c) => c.unlocks[unlockField],
-        (c, v) => (c.unlocks[unlockField] = v),
-      ),
-    ),
-  ]),
-];
-
-type ConfigTypeRenderer<T> = (
-  key: string,
-  value: T,
-  update: (value: T) => void,
-) => JSX.Element;
-
-const booleanRenderer: ConfigTypeRenderer<boolean> = (name, value, update) => (
-  <label>
-    <input
-      type="checkbox"
-      checked={value}
-      onChange={(e) => update(e.target.checked)}
-    />
-    {name}
-  </label>
-);
-
-const buttonRenderer: ConfigTypeRenderer<string> = (name, value, update) => (
-  <button onClick={(e) => update(value)}>{name}</button>
-);
-
-const configRenderers: { [T in ConfigType]: ConfigTypeRenderer<any> } = {
-  boolean: booleanRenderer,
-  button: buttonRenderer,
-};
+// ...objectKeys(initialConfigState.config.unlocks).map((unlockField) =>
+//   makeConfigField(
+//     constToDisplayString(unlockField.replace(/card_unlocked_(.*)/, '$1')),
+//     ConfigType.Boolean,
+//     (c) => c.unlocks[unlockField],
+// (c, v) => (c.unlocks[unlockField] = v),
 
 const MainDiv = styled.div`
   display: flex;
@@ -228,56 +32,140 @@ const ConfigSubtitle = styled.div`
   font-weight: bold;
 `;
 
-export function ConfigEditor() {
+const ToggleWrap = styled.div`
+  &::after {
+    content: ':';
+    padding-right: 1em;
+  }
+
+  color: var(--color-toggle-label);
+`;
+
+const StyledYesNoToggle = styled(YesNoToggle)`
+  color: var(--color-toggle-chosen);
+
+  &:hover {
+    color: var(--color-toggle-hover);
+  }
+
+  &:hover::after {
+    content: '>';
+  }
+`;
+// const ConfigToggle = ({ configField }: { configField: BooleanConfigField }) => {
+const ConfigToggle = ({
+  field,
+  children,
+}: React.PropsWithChildren<{
+  field: keyof Config;
+}>) => {
   const config = useConfig();
   const dispatch = useAppDispatch();
 
-  const makeUpdateFunction =
-    <T extends any>(set: (config: ConfigState['config'], value: T) => void) =>
-    (v: T) => {
-      /****** TODO remove lodash ******/
-      let newConfig = _.cloneDeep(config);
-      set(newConfig, v);
-      dispatch(updateConfig(newConfig));
-    };
+  return (
+    <StyledYesNoToggle
+      checked={!!config[field]}
+      onChange={(e) => dispatch(updateConfig({ [field]: e.target.checked }))}
+    >
+      <ToggleWrap>{children}</ToggleWrap>
+    </StyledYesNoToggle>
+  );
+};
 
-  const renderConfigField = (
-    field: ConfigField<any> | ConfigFieldGroup,
-    showTitle = true,
-  ) => {
-    if (isConfigFieldGroup(field)) {
-      return (
-        <div>
-          {showTitle && <ConfigSubtitle>{field.displayName}</ConfigSubtitle>}
-          <div>
-            {field.fields.map((f, index) => (
-              <div key={index}>{renderConfigField(f)}</div>
-            ))}
-          </div>
-        </div>
-      );
-    } else {
-      const { displayName, type, get, set } = field;
-      const renderer = configRenderers[type](
-        displayName,
-        get(config),
-        makeUpdateFunction(set),
-      );
-      return <div>{renderer}</div>;
-    }
-  };
+const ConfigToggleGroup = ({
+  title = '',
+  bulkSelectControls = false,
+  section,
+  children,
+}: React.PropsWithChildren<{
+  title?: string;
+  showTitle?: boolean;
+  bulkSelectControls?: boolean;
+  section?: ConfigGroupName;
+  groupName?: string;
+}>) => {
+  return (
+    <div>
+      {title && <ConfigSubtitle>{title}</ConfigSubtitle>}
+      {bulkSelectControls && section && (
+        <>
+          <Button onClick={() => enableConfigGroup(section)}>
+            {'Unlock All'}
+          </Button>
+          <Button onClick={() => disableConfigGroup(section)}>
+            {'Lock All'}
+          </Button>
+        </>
+      )}
+      {children}
+    </div>
+  );
+};
 
+export const ConfigEditor = () => {
   return (
     <MainDiv>
       <ConfigDiv>
-        {renderConfigField(
-          {
-            displayName: 'Configuration',
-            fields: configOptions,
-          },
-          false,
-        )}
+        <ConfigToggleGroup>
+          <ConfigToggle field={'condenseShots'}>
+            {'Combine Similar Actions and Projectiles'}
+          </ConfigToggle>
+          <ConfigToggle field={'unlimitedSpells'}>
+            {'Unlimited Spells'}
+          </ConfigToggle>
+          <ConfigToggle field={'infiniteSpells'}>
+            {'Infinite Spells'}
+          </ConfigToggle>
+          <ConfigToggle field={'showDirectActionCalls'}>
+            {'Show Direct Action Calls'}
+          </ConfigToggle>
+          <ConfigToggle field={'showDivides'}>
+            {'Show Divide By Spells'}
+          </ConfigToggle>
+          <ConfigToggle field={'showGreekSpells'}>
+            {'Show Greek Spells'}
+          </ConfigToggle>
+          <ConfigToggle field={'showDeckIndexes'}>
+            {'Show Deck Indexes'}
+          </ConfigToggle>
+          <ConfigToggle field={'showRecursion'}>
+            {'Show Recursion and Iteration'}
+          </ConfigToggle>
+          <ConfigToggle field={'showProxies'}>
+            {'Show Projectile Proxies'}
+          </ConfigToggle>
+          <ConfigToggle field={'showSources'}>
+            {'Show Action Sources'}
+          </ConfigToggle>
+          <ConfigToggle field={'showDontDraw'}>
+            {'Show Draw Inhibition'}
+          </ConfigToggle>
+          <ConfigToggle field={'swapOnMove'}>
+            {'Swap When Moving Actions'}
+          </ConfigToggle>
+          <ConfigToggle field={'showActionTree'}>
+            {'Show Action Tree'}
+          </ConfigToggle>
+          <ConfigToggle field={'showSpellsInCategories'}>
+            {'Show Spells in Categories'}
+          </ConfigToggle>
+          <ConfigToggle field={'endSimulationOnRefresh'}>
+            {'End Simulation on Wand Refresh'}
+          </ConfigToggle>
+          <ConfigToggle field={'showBeta'}>{'Show Beta Spells'}</ConfigToggle>
+          <ConfigToggle field={'castShowChanged'}>
+            {'Hide Unaltered Cast State values'}
+          </ConfigToggle>
+          <ConfigToggle field={'showDurationsInFrames'}>
+            {'Show Durations in Frames'}
+          </ConfigToggle>
+        </ConfigToggleGroup>
+        <ConfigToggleGroup
+          title={'Unlockable Spells'}
+          bulkSelectControls={true}
+          section={'unlocks'}
+        ></ConfigToggleGroup>
       </ConfigDiv>
     </MainDiv>
   );
-}
+};

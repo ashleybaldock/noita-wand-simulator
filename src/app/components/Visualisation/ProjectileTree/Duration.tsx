@@ -3,14 +3,13 @@ import {
   assertNever,
   FNSP,
   round,
-  sign,
   SUFFIX_FRAME,
   SUFFIX_MILLISECOND,
   SUFFIX_SECOND,
   toFrames,
   toSeconds,
 } from '../../../util';
-import { useConfig } from '../../../redux/configSlice';
+import { useConfig } from '../../../redux';
 
 type TimeUnit = 'f' | 's' | 'ms';
 

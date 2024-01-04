@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { useAppSelector } from './hooks';
-import { RootState } from './store';
-import { loadState } from '../localStorage';
-import { UnlockCondition } from '../calc/unlocks';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { UnlockCondition } from '../calc/unlocks';
+import { createSlice } from '@reduxjs/toolkit';
+import { loadState, saveState } from '../localStorage';
+import { startAppListening } from './listenerMiddleware';
 
 export interface Config {
   debug: {
@@ -44,6 +44,14 @@ export interface Config {
   };
   pauseCalculations: boolean;
 }
+
+export type ConfigGroupName = 'unlocks' | 'requirements' | 'debug';
+
+type BooleanKeys<T> = {
+  [k in keyof T]: T[k] extends boolean ? k : never;
+}[keyof T];
+
+export type BooleanConfigField = keyof BooleanKeys<Config>;
 
 // Define a type for the slice state
 export interface ConfigState {
@@ -138,16 +146,34 @@ export const configSlice = createSlice({
     ) => {
       state.config = { ...state.config, ...action.payload };
     },
-    updateKey: (state, action) => {},
+    enableConfigGroup: (state, action: PayloadAction<ConfigGroupName>) => {
+      state.config = {
+        ...state.config,
+        [action.payload]: Object.fromEntries(
+          Object.keys(state.config[action.payload]).map((key) => [key, true]),
+        ),
+      };
+    },
+    disableConfigGroup: (state, action: PayloadAction<ConfigGroupName>) => {
+      state.config = {
+        ...state.config,
+        [action.payload]: Object.fromEntries(
+          Object.keys(state.config[action.payload]).map((key) => [key, false]),
+        ),
+      };
+    },
   },
 });
 
-export const { updateConfig } = configSlice.actions;
-
-export const selectConfig = (state: RootState): ConfigState => state.config;
-
-export function useConfig() {
-  return useAppSelector(selectConfig).config;
-}
+export const { updateConfig, enableConfigGroup, disableConfigGroup } =
+  configSlice.actions;
 
 export const configReducer = configSlice.reducer;
+
+/* Save config to localStorage on change */
+startAppListening({
+  actionCreator: updateConfig,
+  effect: (_action, listenerApi) => {
+    saveState(listenerApi.getState().config);
+  },
+});
