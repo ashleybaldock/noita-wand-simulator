@@ -1,21 +1,18 @@
-import { useAppDispatch, useConfig } from '../../redux/hooks';
-import {
-  Config,
-  updateConfig,
-  enableConfigGroup,
-  disableConfigGroup,
-  ConfigGroupName,
-} from '../../redux/configSlice';
 import styled from 'styled-components';
+import { useAppDispatch, useConfig } from '../../redux/hooks';
+import type {
+  ConfigBooleanField,
+  ConfigSection,
+} from '../../redux/configSlice';
+import {
+  disableAllUnlocks,
+  enableAllUnlocks,
+  toggleConfigSetting,
+} from '../../redux/configSlice';
 import { YesNoToggle } from '../Input';
 import { Button } from '../generic';
-
-// ...objectKeys(initialConfigState.config.unlocks).map((unlockField) =>
-//   makeConfigField(
-//     constToDisplayString(unlockField.replace(/card_unlocked_(.*)/, '$1')),
-//     ConfigType.Boolean,
-//     (c) => c.unlocks[unlockField],
-// (c, v) => (c.unlocks[unlockField] = v),
+import { getUnlockName, unlockConditions } from '../../calc/unlocks';
+import { useMemo } from 'react';
 
 const MainDiv = styled.div`
   display: flex;
@@ -58,19 +55,20 @@ const StyledYesNoToggle = styled(YesNoToggle)`
     color: var(--color-toggle-hover);
   }
 `;
+
 const ConfigToggle = ({
   field,
   children,
 }: React.PropsWithChildren<{
-  field: keyof Config;
+  field: ConfigBooleanField;
 }>) => {
   const config = useConfig();
   const dispatch = useAppDispatch();
 
   return (
     <StyledYesNoToggle
-      checked={!!config[field]}
-      onChange={(e) => dispatch(updateConfig({ [field]: e.target.checked }))}
+      checked={config[field]}
+      onChange={() => dispatch(toggleConfigSetting({ name: field }))}
     >
       <ToggleWrap>{children}</ToggleWrap>
     </StyledYesNoToggle>
@@ -88,19 +86,20 @@ const ConfigToggleGroup = styled(
     title?: string;
     showTitle?: boolean;
     bulkSelectControls?: boolean;
-    section?: ConfigGroupName;
+    section?: ConfigSection;
     groupName?: string;
     className?: string;
   }>) => {
+    const dispatch = useAppDispatch();
     return (
       <div className={className}>
         {title && <ConfigSectionHeading>{title}</ConfigSectionHeading>}
         {bulkSelectControls && section && (
           <>
-            <Button onClick={() => enableConfigGroup(section)}>
+            <Button onClick={() => dispatch(enableAllUnlocks())}>
               {'Unlock All'}
             </Button>
-            <Button onClick={() => disableConfigGroup(section)}>
+            <Button onClick={() => dispatch(disableAllUnlocks())}>
               {'Lock All'}
             </Button>
           </>
@@ -114,6 +113,16 @@ const ConfigToggleGroup = styled(
 `;
 
 export const ConfigEditor = () => {
+  const sortedUnlocks = useMemo(() => {
+    return [...unlockConditions]
+      .map((unlock) => ({
+        key: unlock,
+        field: unlock,
+        name: getUnlockName(unlock),
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [unlockConditions]);
+
   return (
     <MainDiv>
       <ConfigDiv>
@@ -179,7 +188,13 @@ export const ConfigEditor = () => {
           title={'Unlockable Spells'}
           bulkSelectControls={true}
           section={'unlocks'}
-        ></ConfigToggleGroup>
+        >
+          {sortedUnlocks.map(({ key, name, field }) => (
+            <ConfigToggle key={key} field={field}>
+              {name}
+            </ConfigToggle>
+          ))}
+        </ConfigToggleGroup>
       </ConfigDiv>
     </MainDiv>
   );

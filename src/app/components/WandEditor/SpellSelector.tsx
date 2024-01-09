@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { useMemo } from 'react';
 import { groupBy, objectEntries } from '../../util/util';
-import { Spell } from '../../calc/spell';
+import type { Spell } from '../../calc/spell';
 import { spells } from '../../calc/spells';
 import { useAppDispatch, useConfig } from '../../redux/hooks';
-import { ConfigState } from '../../redux/configSlice';
+import type { Config, ConfigState } from '../../redux/configSlice';
 import {
   insertSpellAfterCursor,
   insertSpellBeforeCursor,
@@ -80,11 +80,8 @@ const SpellSelectorWandAction = styled(DraggableWandAction)`
   }
 `;
 
-const isSpellUnlocked = (
-  unlocks: ConfigState['config']['unlocks'],
-  spell: Spell,
-) => {
-  return !spell.spawn_requires_flag || unlocks[spell.spawn_requires_flag];
+const isSpellUnlocked = (config: Config, spell: Spell) => {
+  return !spell.spawn_requires_flag || config[spell.spawn_requires_flag];
 };
 
 const isBetaEnabled = (
@@ -133,11 +130,9 @@ export const SpellSelector = () => {
   const unlockedActions = useMemo(
     () =>
       spells.filter(
-        (a) =>
-          isSpellUnlocked(config.unlocks, a) &&
-          isBetaEnabled(config.showBeta, a),
+        (a) => isSpellUnlocked(config, a) && isBetaEnabled(config.showBeta, a),
       ),
-    [config.unlocks, config.showBeta],
+    [config],
   );
 
   const spellsByType = useMemo(() => {
@@ -222,7 +217,7 @@ export const SpellSelector = () => {
         iconSrc: '',
         content: (
           <>
-            {objectEntries(spellsByType).map(([spellType, spells]) => {
+            {objectEntries(spellsByType).map(([spellType]) => {
               return (
                 <SpellCategorySpellsDiv key={spellType}>
                   {spellsByType[spellType].map((spell) => (

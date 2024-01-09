@@ -195,7 +195,8 @@ const StyledValue = styled.span`
   text-align: left;
   flex: 1 0;
   white-space: nowrap;
-  width: 3.4em;
+  min-width: 3.4em;
+  width: 5em;
 `;
 
 export function WandStatsEditor() {

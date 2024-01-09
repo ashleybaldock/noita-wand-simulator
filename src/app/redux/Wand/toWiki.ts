@@ -1,6 +1,6 @@
 import { toSeconds } from '../../util';
-import { SpellId } from './spellId';
-import { WandState } from './wandState';
+import type { SpellId } from './spellId';
+import type { WandState } from './wandState';
 
 export type WikiWandOptions = {
   pretty: boolean;
@@ -25,8 +25,10 @@ const formatBoolean = (bool: boolean): string => (bool ? 'Yes' : 'No');
 
 const formatSpellsPretty = (spellIds: SpellId[], indent: string = ''): string =>
   spellIds.reduce<string>(
-    (acc, cur) =>
-      cur?.length ?? false ? `${acc},\n${indent}${cur}` : `${acc},`,
+    (acc, cur, idx) =>
+      cur?.length ?? false
+        ? `${acc}${idx === 0 ? '' : `,\n${indent}`}${cur}`
+        : `${acc},`,
     '',
   );
 
@@ -59,7 +61,7 @@ export const generateWikiWandV2 = (
     hideLink,
     tooltips,
   }: WikiWandOptions = defaultOptions,
-): string => `{{Wand
+): string => `{{Wand2
 | vertical     = ${formatBoolean(vertical)}
 | wandCard     = ${formatBoolean(wandCard)}
 | hideLink     = ${formatBoolean(hideLink)}
@@ -68,8 +70,6 @@ export const generateWikiWandV2 = (
 | wandPic      = ${pic}
 | shuffle      = ${formatBoolean(shuffle_deck_when_empty)}
 | spellsCast   = ${actions_per_round}
-| alwaysCasts  = ${formatSpellsPretty(alwaysIds, indent)}
-| spells       = ${formatSpellsPretty(spellIds, indent)}
 | castDelay    = ${toSeconds(cast_delay)}
 | rechargeTime = ${toSeconds(reload_time)}
 | manaMax      = ${mana_max}
@@ -77,4 +77,7 @@ export const generateWikiWandV2 = (
 | capacity     = ${deck_capacity}
 | spread       = ${spread}
 | speed        = ${speed}
+| alwaysCasts  = ${formatSpellsPretty(alwaysIds, indent)}
+| spells =
+${formatSpellsPretty(spellIds, '')}
 }}`;

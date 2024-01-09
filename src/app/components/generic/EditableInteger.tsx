@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { LegacyRef, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { Editable } from '../Presentation/Editable';
 
 const StaticValue = styled.div`
   height: 15px;
@@ -32,6 +33,8 @@ const EditingValue = styled.input`
 // }
 // `;
 
+const Wrapper = styled(Editable)``;
+
 type EditableIntegerProps = {
   value: number;
   step?: number;
@@ -53,7 +56,7 @@ export function EditableInteger(props: EditableIntegerProps) {
     step,
     onChange,
     formatValue,
-    convertRawValue,
+    convertRawValue = (n: number) => n,
     convertDisplayValue,
   } = props;
 
@@ -78,49 +81,40 @@ export function EditableInteger(props: EditableIntegerProps) {
     }
   }, [isEditing]);
 
-  if (isEditing) {
-    let elementValue;
-    if (isInvalidValue) {
-      elementValue = invalidValue;
-    } else {
-      elementValue = currentValue;
-      if (convertRawValue) {
-        elementValue = convertRawValue(currentValue);
-      }
-    }
-    return (
-      <EditingValue
-        ref={inputRef as any}
-        step={step}
-        type="number"
-        value={elementValue}
-        onChange={(e) => {
-          const displayValue = Number.parseFloat(e.target.value);
-          if (!Number.isNaN(displayValue)) {
-            setIsInvalidValue(false);
-            setCurrentValue(
-              convertDisplayValue
-                ? convertDisplayValue(displayValue)
-                : displayValue,
-            );
-          } else {
-            setIsInvalidValue(true);
-            setInvalidValue(e.target.value);
-          }
-        }}
-        onBlur={(e) => handleSaveChange()}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleSaveChange();
-          }
-        }}
-      />
-    );
-  } else {
-    return (
-      <StaticValue onClick={handleStartEditing}>
-        {formatValue ? formatValue(value) : value}
-      </StaticValue>
-    );
-  }
+  return (
+    <Wrapper>
+      {isEditing ? (
+        <EditingValue
+          ref={inputRef as LegacyRef<HTMLInputElement>}
+          step={step}
+          type="number"
+          value={isInvalidValue ? invalidValue : convertRawValue(currentValue)}
+          onChange={(e) => {
+            const displayValue = Number.parseFloat(e.target.value);
+            if (!Number.isNaN(displayValue)) {
+              setIsInvalidValue(false);
+              setCurrentValue(
+                convertDisplayValue
+                  ? convertDisplayValue(displayValue)
+                  : displayValue,
+              );
+            } else {
+              setIsInvalidValue(true);
+              setInvalidValue(e.target.value);
+            }
+          }}
+          onBlur={() => handleSaveChange()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSaveChange();
+            }
+          }}
+        />
+      ) : (
+        <StaticValue onClick={handleStartEditing}>
+          {formatValue ? formatValue(value) : value}
+        </StaticValue>
+      )}
+    </Wrapper>
+  );
 }

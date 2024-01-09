@@ -62,6 +62,7 @@ export function WandPresetMenu({
 }) {
   const createPresetList = (
     presetGroup: PresetGroup,
+    prefix: string = 'presets--',
     first: boolean = true,
   ) => {
     const content = (
@@ -70,11 +71,14 @@ export function WandPresetMenu({
         <PresetGroupListDiv>
           {presetGroup.presets.map((p, index) => {
             if (isPresetGroup(p)) {
-              return createPresetList(p, false);
+              return createPresetList(p, `${prefix}--${p.name}`, false);
             } else {
               return (
                 <PresetButtonDiv>
-                  <Button key={p.name} onClick={() => onSelect(p)}>
+                  <Button
+                    key={`${prefix}--${p.name}`}
+                    onClick={() => onSelect(p)}
+                  >
                     {p.name}
                   </Button>
                 </PresetButtonDiv>

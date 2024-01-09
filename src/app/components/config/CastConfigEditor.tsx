@@ -1,7 +1,17 @@
-import { useAppDispatch, useConfig } from '../../redux/hooks';
-import { updateConfig } from '../../redux/configSlice';
 import styled from 'styled-components';
-import { ChangeEvent } from 'react';
+import { useAppDispatch, useConfig } from '../../redux/hooks';
+import type {
+  ConfigBooleanField,
+  ConfigNumberField,
+  ConfigRandom,
+  ConfigRequirements,
+} from '../../redux/configSlice';
+import {
+  setConfigSetting,
+  toggleConfigSetting,
+  updateConfig,
+} from '../../redux/configSlice';
+import type { ChangeEvent } from 'react';
 import { SectionHeader } from '../SectionHeader';
 import { YesNoToggle } from '../Input';
 
@@ -31,6 +41,11 @@ const SubSectionDiv = styled.div`
   border-right-color: var(--config-bottomright-border);
 `;
 
+const YesNoToggleWithoutArrow = styled(YesNoToggle)`
+  & > :last-child::before {
+    content: '';
+  }
+`;
 const SubSectionTitle = styled.div<{
   minWidth?: string;
 }>`
@@ -158,31 +173,30 @@ export const CastConfigEditor = () => {
   const config = useConfig();
   const dispatch = useAppDispatch();
 
-  const reqs = config.requirements;
-  const random = config.random;
+  const {
+    'requirements.half': half,
+    'requirements.enemies': enemies,
+    'requirements.hp': hp,
+    'requirements.projectiles': projectiles,
+  } = config;
+  const { 'random.worldSeed': worldSeed, 'random.frameNumber': frameNumber } =
+    config;
 
-  const requirementsChangeHandler = (field: keyof typeof reqs) => () => {
-    dispatch(
-      updateConfig({
-        requirements: {
-          ...reqs,
-          [field]: !reqs[field],
-        },
-      }),
-    );
-  };
+  const requirementsChangeHandler =
+    (field: ConfigBooleanField & keyof ConfigRequirements) => () => {
+      dispatch(toggleConfigSetting({ name: field }));
+    };
   const randomChangeHandler =
-    (field: keyof typeof random) => (e: ChangeEvent<HTMLInputElement>) => {
+    (field: ConfigNumberField & keyof ConfigRandom) =>
+    (e: ChangeEvent<HTMLInputElement>) => {
       const newValue = Number.parseInt(e.target.value);
       if (!Number.isInteger(newValue)) {
         return;
       }
       dispatch(
-        updateConfig({
-          random: {
-            ...random,
-            [field]: Number.parseInt(e.target.value),
-          },
+        setConfigSetting({
+          name: field,
+          newValue,
         }),
       );
     };
@@ -285,8 +299,8 @@ export const CastConfigEditor = () => {
                 type="text"
                 inputMode="numeric"
                 pattern="^[1-9][0-9]*$"
-                value={config.random.worldSeed}
-                onChange={randomChangeHandler('worldSeed')}
+                value={worldSeed}
+                onChange={randomChangeHandler('random.worldSeed')}
               />
             </RandomInputWrapper>
             <RandomInputWrapper>
@@ -295,8 +309,8 @@ export const CastConfigEditor = () => {
                 type="text"
                 inputMode="numeric"
                 pattern="^[1-9][0-9]*$"
-                value={config.random.frameNumber}
-                onChange={randomChangeHandler('frameNumber')}
+                value={frameNumber}
+                onChange={randomChangeHandler('random.frameNumber')}
               />
             </RandomInputWrapper>
           </SubSectionContent>
@@ -307,26 +321,40 @@ export const CastConfigEditor = () => {
             <span>Requirements</span>
           </SubSectionTitle>
           <SubSectionContent>
-            <YesNoToggle
-              checked={reqs.enemies}
-              onChange={requirementsChangeHandler('enemies')}
+            {/* <YesNoToggleWithoutArrow */}
+            {/*   checked={half} */}
+            {/*   onChange={requirementsChangeHandler('requirements.half')} */}
+            {/* > */}
+            {/*   <InputImageLabel */}
+            {/*     leftMargin={'6px'} */}
+            {/*     size={32} */}
+            {/*     imgUrl={'data/ui_gfx/gun_actions/if_half.png'} */}
+            {/*   /> */}
+            {/* </YesNoToggleWithoutArrow> */}
+            <YesNoToggleWithoutArrow
+              checked={half}
+              onChange={requirementsChangeHandler('requirements.half')}
+              customYes={<>1st</>}
+              customNo={<>2nd</>}
             >
               <InputImageLabel
                 leftMargin={'6px'}
                 size={32}
-                imgUrl={'data/ui_gfx/gun_actions/if_enemy.png'}
+                imgUrl={'data/ui_gfx/gun_actions/if_half.png'}
               />
-            </YesNoToggle>
-            <YesNoToggle
-              checked={!reqs.enemies}
-              onChange={requirementsChangeHandler('enemies')}
+            </YesNoToggleWithoutArrow>
+            <YesNoToggleWithoutArrow
+              checked={!half}
+              onChange={requirementsChangeHandler('requirements.half')}
+              customYes={<>1st</>}
+              customNo={<>2nd</>}
             >
               <InputImageLabel
                 leftMargin={'0px'}
                 size={32}
                 imgUrl={'data/ui_gfx/gun_actions/if_else.png'}
               />
-            </YesNoToggle>
+            </YesNoToggleWithoutArrow>
 
             <InputImageLabel
               leftMargin={'0px'}
@@ -334,36 +362,42 @@ export const CastConfigEditor = () => {
               imgUrl={'data/ui_gfx/gun_actions/if_end.png'}
             />
 
-            <YesNoToggle
-              checked={reqs.projectiles}
-              onChange={requirementsChangeHandler('projectiles')}
+            <YesNoToggleWithoutArrow
+              checked={enemies}
+              onChange={requirementsChangeHandler('requirements.enemies')}
+              customYes={<>Cast</>}
+              customNo={<>Skip</>}
+            >
+              <InputImageLabel
+                leftMargin={'6px'}
+                size={32}
+                imgUrl={'data/ui_gfx/gun_actions/if_enemy.png'}
+              />
+            </YesNoToggleWithoutArrow>
+            <YesNoToggleWithoutArrow
+              checked={projectiles}
+              onChange={requirementsChangeHandler('requirements.projectiles')}
+              customYes={<>Cast</>}
+              customNo={<>Skip</>}
             >
               <InputImageLabel
                 leftMargin={'6px'}
                 size={32}
                 imgUrl={'data/ui_gfx/gun_actions/if_projectile.png'}
               />
-            </YesNoToggle>
-            <YesNoToggle
-              checked={reqs.hp}
-              onChange={requirementsChangeHandler('hp')}
+            </YesNoToggleWithoutArrow>
+            <YesNoToggleWithoutArrow
+              checked={hp}
+              onChange={requirementsChangeHandler('requirements.hp')}
+              customYes={<>Cast</>}
+              customNo={<>Skip</>}
             >
               <InputImageLabel
                 leftMargin={'6px'}
                 size={32}
                 imgUrl={'data/ui_gfx/gun_actions/if_hp.png'}
               />
-            </YesNoToggle>
-            <YesNoToggle
-              checked={reqs.half}
-              onChange={requirementsChangeHandler('half')}
-            >
-              <InputImageLabel
-                leftMargin={'6px'}
-                size={32}
-                imgUrl={'data/ui_gfx/gun_actions/if_half.png'}
-              />
-            </YesNoToggle>
+            </YesNoToggleWithoutArrow>
           </SubSectionContent>
         </SubSectionDiv>
         <SubSectionDiv>

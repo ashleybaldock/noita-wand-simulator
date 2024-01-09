@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 import { Tooltip } from 'react-tooltip';
-import { TooltipId } from './tooltipId';
+// import { TooltipId } from './tooltipId';
 import { getSpellById } from '../../calc/spells';
 import { isValidActionId } from '../../calc/actionId';
 import { isNotNullOrUndefined } from '../../util';
 import { translate } from '../../util/i18n';
 import { spellTypeInfoMap } from '../../calc/spellTypes';
 import { WithDebugHints } from '../Debug';
-import { getSpriteForPerk, Perk } from '../../calc/perks';
+import type { Perk } from '../../calc/perks';
+import { getSpriteForPerk } from '../../calc/perks';
 import { getUnlockName } from '../../calc/unlocks';
 import { YesNo } from '../Presentation';
 

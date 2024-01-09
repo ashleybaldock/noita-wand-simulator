@@ -1,4 +1,5 @@
-import { LegacyRef, useMemo, useRef, useState } from 'react';
+import type { LegacyRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { isNotNullOrUndefined } from '../../util';
 import { clickWand } from '../../calc/eval/clickWand';
@@ -28,29 +29,25 @@ const SectionDiv = styled.div`
 `;
 
 // list of several ShotResults, generally from clicking/holding until reload, but also for one click
-export const VisualisationList = ({
-  condenseShots,
-  unlimitedSpells,
-  infiniteSpells,
-  showDivides,
-  showGreekSpells,
-  showDirectActionCalls,
-}: {
-  condenseShots: boolean;
-  unlimitedSpells: boolean;
-  infiniteSpells: boolean;
-  showDivides: boolean;
-  showGreekSpells: boolean;
-  showDirectActionCalls: boolean;
-}) => {
+export const VisualisationList = () => {
   const { wand, spellIds } = useWandState();
 
   const config = useConfig();
   const {
-    random: { worldSeed, frameNumber },
+    condenseShots,
+    unlimitedSpells,
+    infiniteSpells,
+    showDivides,
+    showGreekSpells,
+    showDirectActionCalls,
     endSimulationOnRefresh,
     showActionTree,
-    requirements: requirementConfig,
+    'random.worldSeed': worldSeed,
+    'random.frameNumber': frameNumber,
+    'requirements.enemies': req_enemies,
+    'requirements.projectiles': req_projectiles,
+    'requirements.hp': req_hp,
+    'requirements.half': req_half,
   } = config;
 
   const actionsCalledRef = useRef<HTMLDivElement>();
@@ -88,10 +85,10 @@ export const VisualisationList = ({
   } = useMemo(() => {
     setSimulationRunning(true);
     const result = clickWand(wand, spellActionsWithUses, {
-      req_enemies: requirementConfig.enemies,
-      req_projectiles: requirementConfig.projectiles,
-      req_hp: requirementConfig.hp,
-      req_half: requirementConfig.half,
+      req_enemies: req_enemies,
+      req_projectiles: req_projectiles,
+      req_hp: req_hp,
+      req_half: req_half,
       rng_frameNumber: frameNumber,
       rng_worldSeed: worldSeed,
       wand_available_mana: wand.mana_max,
@@ -103,7 +100,10 @@ export const VisualisationList = ({
   }, [
     endSimulationOnRefresh,
     frameNumber,
-    requirementConfig,
+    req_enemies,
+    req_projectiles,
+    req_hp,
+    req_half,
     spellActionsWithUses,
     wand,
     worldSeed,

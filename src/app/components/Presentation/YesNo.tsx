@@ -33,16 +33,6 @@ const Combiner = styled.div`
   position: relative;
   display: grid;
   place-items: center center;
-  &::before {
-    content: '▸';
-    height: 100%;
-    width: 100%;
-    // background-color: red;
-    left: -10px;
-    content: '>';
-    position: absolute;
-    padding-left: 0px;
-  }
 `;
 export const YesNo = styled(({ yes, className, warnIf, customYes = <>
       {'Yes'}

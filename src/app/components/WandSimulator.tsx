@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { SpellSelector, WandBuilder } from './WandEditor';
 import { VisualisationList } from './Visualisation';
-import { useAppDispatch, useConfig } from '../redux/hooks';
-import { updateConfig } from '../redux/configSlice';
+import { useAppDispatch } from '../redux/hooks';
+import { toggleConfigSetting } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
 import { DebugHints } from './Debug';
 import { DndProvider } from 'react-dnd';
@@ -35,7 +35,6 @@ const SpellHotbar = styled.div`
 `;
 
 export function WandSimulator() {
-  const config = useConfig();
   const dispatch = useAppDispatch();
 
   // useEffect(() => {
@@ -43,11 +42,7 @@ export function WandSimulator() {
   // }, []);
 
   useHotkeys('=', () => {
-    dispatch(
-      updateConfig({
-        debug: { ...config.debug, dragHint: !config.debug.dragHint },
-      }),
-    );
+    dispatch(toggleConfigSetting({ name: 'debug.dragHint' }));
   });
 
   return (
@@ -67,7 +62,7 @@ export function WandSimulator() {
           <CastConfigEditor />
         </Column>
         <Column>
-          <VisualisationList {...config} />
+          <VisualisationList />
         </Column>
         <SpellInfoTooltip />
         <ReleaseInfo />

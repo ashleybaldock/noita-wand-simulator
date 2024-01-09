@@ -5,9 +5,7 @@ export const DebugHints = ({
   className,
   children,
 }: React.PropsWithChildren<{ className?: string }>) => {
-  const {
-    debug: { dragHint },
-  } = useConfig();
+  const { 'debug.dragHint': dragHint } = useConfig();
 
   return dragHint ? (
     <WithDebugHints className={className}>{children}</WithDebugHints>

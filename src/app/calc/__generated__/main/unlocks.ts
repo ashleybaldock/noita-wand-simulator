@@ -15,7 +15,6 @@ export const unlockConditions = [
   'card_unlocked_exploding_deer',
   'card_unlocked_firework',
   'card_unlocked_funky',
-  'card_unlocked_infinite',
   'card_unlocked_kantele',
   'card_unlocked_material_cement',
   'card_unlocked_maths',
@@ -34,5 +33,7 @@ export const unlockConditions = [
   'card_unlocked_tentacle',
 ] as const;
 
-export type UnlockCondition = typeof unlockConditions[number];
+export type UnlockConditionTuple = typeof unlockConditions;
+
+export type UnlockCondition = UnlockConditionTuple[number];
 

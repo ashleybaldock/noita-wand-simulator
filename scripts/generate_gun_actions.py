@@ -161,7 +161,15 @@ class PatternReplace:
   repeat: bool = False
   expectedSubCount: int = 0
 
-# These are run in sequence, and the ordering matters as each operates on the output of the last
+preprocessorPatterns = [
+  # remove comments
+  PatternReplace(r'--\[\[.*?]]--', '', flags=re.MULTILINE | re.DOTALL),
+  PatternReplace(r'--.*?$', '', flags=re.MULTILINE),
+]
+
+# These are run in sequence
+# Ordering matters as each operates on the output of the last
+# (Run preprocessorPatterns first)
 patterns = [
   # fix syntax for top level actions array
   PatternReplace(
@@ -169,10 +177,6 @@ patterns = [
     r'const actions: Spell[] = [\1]',
     flags=re.DOTALL,
   ),
-
-  # remove comment
-  PatternReplace(r'--\[\[.*?]]--', '', flags=re.MULTILINE | re.DOTALL),
-  PatternReplace(r'--.*?$', '', flags=re.MULTILINE),
 
   # relatedPattern
   PatternReplace(r'related_(\w+)\s*=\s*{(.*?)},', r'related_\1=[\2],', flags=re.MULTILINE),
@@ -277,15 +281,23 @@ patterns = [
   PatternReplace(r'GetUpdatedEntityID\(', r'GetUpdatedEntityID(this.id', flags=re.MULTILINE),
 ]
 
+# Remove comments etc.
+def preProcess(content):
+  for pattern in preprocessorPatterns:
+    content, subCount = re.subn(pattern.pattern, pattern.replace, content, flags=pattern.flags)
+
+  return content
 
 def processUnlocks(src, dst, before = '', after = ''):
   with open(src) as inFile:
     content = inFile.read()
 
+  content = preProcess(content)
+
   pattern = r'\t+\s*spawn_requires_flag\s*=\s*\"(\w+)\"'
   matches = sorted(list(dict.fromkeys(re.findall(pattern, content, re.DOTALL))))
   joined = ",\n  ".join(f'\'{m}\'' for m in matches)
-  content = f'/* Auto-generated file */\n\nexport const unlockConditions = [\n  {joined},\n] as const;\n\nexport type UnlockCondition = typeof unlockConditions[number];\n\n'
+  content = f'/* Auto-generated file */\n\nexport const unlockConditions = [\n  {joined},\n] as const;\n\nexport type UnlockConditionTuple = typeof unlockConditions;\n\nexport type UnlockCondition = UnlockConditionTuple[number];\n\n'
 
 
   with open(dst, 'w') as outFile:
@@ -295,6 +307,8 @@ def processActionIds(src, dst, before = '', after = ''):
   with open(src) as inFile:
     content = inFile.read()
 
+  content = preProcess(content)
+
   pattern = r'\t+{\s*id\s*=\s*\"(\w+)\"'
   matches = sorted(list(dict.fromkeys(re.findall(pattern, content, re.DOTALL))))
   joined = ",\n  ".join(f'\'{m}\'' for m in matches)
@@ -303,10 +317,11 @@ def processActionIds(src, dst, before = '', after = ''):
   with open(dst, 'w') as outFile:
     outFile.write(before + content + after)
 
-
 def processSpells(src, dst, before = '', after = ''):
   with open(src) as inFile:
     content = inFile.read()
+
+  content = preProcess(content)
 
   variances = []
 

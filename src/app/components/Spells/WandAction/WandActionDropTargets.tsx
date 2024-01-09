@@ -16,7 +16,7 @@ import {
   DragDropTargetBefore,
 } from './SpellDropTargets';
 import { WandEditCursor } from './Cursor';
-import { WandSelection } from '../../../redux/Wand/wandSelection';
+import type { WandSelection } from '../../../redux/Wand/wandSelection';
 import type { CursorPosition, DragItemSpell } from './types';
 
 export const WandActionDropTargets = ({
@@ -29,10 +29,7 @@ export const WandActionDropTargets = ({
   selection?: WandSelection;
 }>) => {
   const dispatch = useAppDispatch();
-  const {
-    swapOnMove,
-    debug: { dragHint },
-  } = useConfig();
+  const { swapOnMove, 'debug.dragHint': dragHint } = useConfig();
   const { position: cursorPosition, style: cursorStyle } =
     useCursor()[wandIndex];
 

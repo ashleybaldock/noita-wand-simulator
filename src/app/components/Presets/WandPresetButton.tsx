@@ -1,5 +1,4 @@
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { selectPresets } from '../../redux/presetsSlice';
+import { useAppDispatch, usePresets } from '../../redux/hooks';
 import { setWand } from '../../redux/wandSlice';
 import { useCallback, useState } from 'react';
 import { WandPresetMenu } from './WandPresetMenu';
@@ -7,7 +6,7 @@ import { Button, Modal } from '../generic';
 import { Preset } from '../../redux/Wand/preset';
 
 export const WandPresetButton = () => {
-  const { presets } = useAppSelector(selectPresets);
+  const presets = usePresets();
   const dispatch = useAppDispatch();
 
   const [menuVisible, setMenuVisible] = useState(false);

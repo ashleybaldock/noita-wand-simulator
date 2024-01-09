@@ -1,4 +1,4 @@
-import { Preset, PresetGroup } from './preset';
+import type { Preset, PresetGroup } from './preset';
 
 const defaultPreset: Readonly<Preset> = {
   name: '',
@@ -19,9 +19,78 @@ const defaultPreset: Readonly<Preset> = {
   always: [],
 };
 
+const Kantele = {
+  actions_per_round: 1,
+  deck_capacity: 20,
+  reload_time: 2,
+  shuffle_deck_when_empty: false,
+  cast_delay: 1,
+  mana_charge_speed: 30,
+  mana_max: 2,
+  spread: 0,
+  name: 'Kantele',
+  pic: '',
+  speed: 1,
+};
+const Swiftness = {
+  actions_per_round: 1,
+  deck_capacity: 19,
+  reload_time: 0,
+  shuffle_deck_when_empty: false,
+  cast_delay: -20,
+  mana_charge_speed: 900,
+  mana_max: 650,
+  spread: 0,
+  name: 'Wand of Swiftness',
+  pic: '',
+  speed: 1.25,
+};
+const Multitudes = {
+  actions_per_round: 26,
+  deck_capacity: 26,
+  reload_time: 24,
+  shuffle_deck_when_empty: false,
+  cast_delay: 5,
+  mana_charge_speed: 500,
+  mana_max: 1500,
+  spread: 3,
+  name: 'Wand of Multitudes',
+  pic: '',
+  speed: 1.5,
+};
+
 export const defaultWand = defaultPreset.wand;
 
 export const defaultPresets: Array<Preset | PresetGroup> = [
+  {
+    name: 'Empty Wands',
+    presets: [
+      {
+        name: 'Multitudes',
+        wand: { ...Multitudes },
+        spells: [],
+        always: [],
+      },
+      {
+        name: 'Swiftness Upgraded (25cap)',
+        wand: { ...Swiftness, deck_capacity: 25 },
+        spells: [],
+        always: [],
+      },
+      {
+        name: 'Swiftness',
+        wand: { ...Swiftness },
+        spells: [],
+        always: [],
+      },
+      {
+        name: 'Kantele',
+        wand: { ...Kantele },
+        spells: [],
+        always: [],
+      },
+    ],
+  },
   {
     name: 'Advanced Guide: Introduction to Greek Letter Spells',
     presets: [

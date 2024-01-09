@@ -1,7 +1,8 @@
 import { noop } from '../../../util';
-import { ChangeEventHandler, MouseEventHandler } from 'react';
+import type { ChangeEventHandler, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import { YesNo } from '../../Presentation';
+import { EditableWithLabel } from '../../Presentation/Editable';
 
 type CheckboxProps = {
   $hidden?: boolean;
@@ -44,32 +45,28 @@ export const Checkbox = styled.input.attrs({ type: 'checkbox' })<CheckboxProps>`
   }
 `;
 
-const WrapperLabel = styled.label`
-  display: flex;
-  flex-direction: row;
-  user-select: none;
-  cursor: pointer;
-  position: relative;
-`;
+const Wrapper = styled(EditableWithLabel)``;
 
-const InteractiveYesNo = styled(YesNo)`
-  text-decoration: underline dotted var(--color-toggle-hover) 1.4px;
-`;
+const InteractiveYesNo = styled(YesNo)``;
 
 export const YesNoToggle = ({
   checked,
   onChange,
   onClick = noop,
+  customYes,
+  customNo,
   children,
   className,
 }: React.PropsWithChildren<{
   checked: boolean;
   onChange: ChangeEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
+  customYes?: JSX.Element;
+  customNo?: JSX.Element;
   className?: string;
 }>) => {
   return (
-    <WrapperLabel className={className}>
+    <Wrapper className={className}>
       {children}
       <Checkbox
         hidden={true}
@@ -77,7 +74,11 @@ export const YesNoToggle = ({
         onChange={onChange}
         onClick={onClick}
       />
-      <InteractiveYesNo yes={checked} />
-    </WrapperLabel>
+      <InteractiveYesNo
+        yes={checked}
+        customYes={customYes}
+        customNo={customNo}
+      />
+    </Wrapper>
   );
 };

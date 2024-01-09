@@ -1,4 +1,4 @@
-import { ConfigState } from './redux/configSlice';
+import type { ConfigState } from './redux/configSlice';
 
 export const loadState = (defaultState: ConfigState): ConfigState => {
   try {

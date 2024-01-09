@@ -10,3 +10,8 @@ export const selectConfig = (state: RootState) => state.config;
 export function useConfig() {
   return useAppSelector(selectConfig).config;
 }
+
+export const selectPresets = (state: RootState) => state.presets;
+export function usePresets() {
+  return useAppSelector(selectPresets).presets;
+}

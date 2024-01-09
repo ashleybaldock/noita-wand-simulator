@@ -60,7 +60,11 @@
       "prefer-const": "warn",
       "no-case-declarations": "warn",
       "@typescript-eslint/no-unused-vars": "warn",
-      "@typescript-eslint/no-explicit-any": "warn"
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/consistent-type-imports": "warn",
+      "@typescript-eslint/consistent-type-assertions": "warn",
+      "@typescript-eslint/no-import-type-side-effects": "warn",
+      "@typescript-eslint/ban-types": "warn"
     },
     "plugins": [
       "@typescript-eslint"

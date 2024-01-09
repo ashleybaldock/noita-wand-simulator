@@ -1,5 +1,5 @@
-import { SpellId } from './spellId';
-import { Wand } from './wand';
+import type { SpellId } from './spellId';
+import type { Wand } from './wand';
 
 export type Preset = {
   name: string;
