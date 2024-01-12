@@ -1,5 +1,5 @@
 import { noop } from '../../util';
-import { WandEvent, WandObserverCb } from './wandEvent';
+import type { WandEvent, WandObserverCb } from './wandEvent';
 
 export const observer = (() => {
   let listener: WandObserverCb = noop;

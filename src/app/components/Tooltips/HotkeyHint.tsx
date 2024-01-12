@@ -44,9 +44,9 @@ const lookup = new Map<string, Key>([
   ['f19', { symbol: 'Fn19', text: 'Fn19' }],
 ]);
 
-export type HintPosition = 'above' | 'below' | 'ne-corner';
+export type HintPosition = 'above' | 'below' | 'ne-corner' | 'left' | 'right';
 
-const HotkeyHintBase = styled.div<{ position: HintPosition }>`
+const HotkeyHintBase = styled.div`
   --shadow-offx: 0;
   --shadow-offy: 0;
   --shadow-blur: 0.2em;
@@ -54,13 +54,9 @@ const HotkeyHintBase = styled.div<{ position: HintPosition }>`
   --shadow-color: var(--color-keyhint-shadow, rgba(0, 0, 0, 0.66));
   --border-color: var(--color-keyhint-border, #ffbf00);
 
-  position: absolute;
-  top: unset;
-  left: unset;
-  right: unset;
-  bottom: unset;
   min-width: 0;
   min-height: 0;
+  margin: 0 0.2em;
 
   display: var(--display-keyhints);
   flex-direction: column;
@@ -83,6 +79,15 @@ const HotkeyHintBase = styled.div<{ position: HintPosition }>`
   &:hover {
     z-index: var(--zindex-keyhint-hover);
   }
+`;
+
+const HotkeyHintPositioned = styled(HotkeyHintBase)<{ position: HintPosition }>`
+  margin: 0 0;
+  position: absolute;
+  top: unset;
+  left: unset;
+  right: unset;
+  bottom: unset;
 
   ${({ position }) => {
     if (position === 'above') {
@@ -109,6 +114,22 @@ const HotkeyHintBase = styled.div<{ position: HintPosition }>`
   bottom: unset;
       `;
     }
+    if (position === 'left') {
+      return `
+  top: unset;
+  left: 2px;
+  right: unset;
+  bottom: unset;
+      `;
+    }
+    if (position === 'right') {
+      return `
+  top: unset;
+  left: unset;
+  right: 2px;
+  bottom: unset;
+      `;
+    }
   }}
 `;
 
@@ -120,9 +141,9 @@ export const HotkeyHint = ({
   position: HintPosition;
 }) => {
   return hotkeys === '' ? null : (
-    <HotkeyHintBase position={position}>
+    <HotkeyHintPositioned position={position}>
       <HotKeyCombos hotkeys={hotkeys}></HotKeyCombos>
-    </HotkeyHintBase>
+    </HotkeyHintPositioned>
   );
 };
 
@@ -246,5 +267,38 @@ const HotKeyCombos = ({ hotkeys }: { hotkeys: string }) => {
         </KeyCombo>
       ))}
     </>
+  );
+};
+
+const KeyHintIndicatorWrapper = styled.div`
+  display: var(--display-keyhints);
+  position: fixed;
+  top: 5px;
+  font-size: 0.7em;
+  margin-left: 50%;
+  font-size: 0.7em;
+  align-items: center;
+  min-width: max-content;
+  transform: translate(-50%);
+  background-color: black;
+  z-index: var(--zindex-tooltips);
+  padding: 0.3em 0.7em;
+  border-radius: 0.5em;
+`;
+
+const InlineHotkeyHint = styled(HotkeyHintBase)`
+  font-size: calc(max(10px, 0.6em));
+  font-weight: 200;
+`;
+
+export const KeyHintIndicator = ({ className }: { className?: string }) => {
+  return (
+    <KeyHintIndicatorWrapper className={className}>
+      Showing Hotkey hints - press
+      <InlineHotkeyHint>
+        <HotKeyCombos hotkeys={'h'}></HotKeyCombos>
+      </InlineHotkeyHint>
+      to hide
+    </KeyHintIndicatorWrapper>
   );
 };

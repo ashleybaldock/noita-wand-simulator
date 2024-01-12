@@ -1,22 +1,7 @@
 import styled from 'styled-components';
-import React from 'react';
 import { useWikiExport } from '../../redux';
 import { Button } from '../generic/Button';
 import { copyToClipboard } from '../../util';
-
-//   const copy = (e) => {
-//     const toCopy = e.target?.querySelector?.('input')?.value;
-//     toCopy !== null && toCopy !== undefined
-//     && copyTextToClipboard(toCopy)
-//       .then(() => {
-//         e.target?.classList?.add('copied');
-//         setTimeout(() => e.target?.classList?.remove('copied'), 2000);
-//       })
-//       .catch((err) => {
-//         e.target?.classList?.add('copyfail');
-//         setTimeout(() => e.target?.classList?.remove('copyfail'), 4000);
-//       });
-//   }
 
 const _ExportWikiButton = () => {
   const wikiTemplate = useWikiExport();
@@ -28,6 +13,8 @@ const _ExportWikiButton = () => {
     <Button
       hotkeys={'e'}
       minimal
+      tooltipId="tooltip-actionhint"
+      tooltipActionHintId="actionhint-copywiki"
       onClick={() =>
         copyToClipboard(wikiTemplate).then(onCopySuccess).catch(onCopyFailure)
       }

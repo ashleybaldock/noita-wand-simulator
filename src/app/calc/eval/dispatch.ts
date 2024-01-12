@@ -1,8 +1,8 @@
-import { GunActionState } from '../actionState';
-import { Spell, SpellDeckInfo } from '../spell';
-import { ActionId } from '../actionId';
-import { ActionSource } from '../actionSources';
-import {
+import type { GunActionState } from '../actionState';
+import type { Spell, SpellDeckInfo } from '../spell';
+import type { ActionId } from '../actionId';
+import type { ActionSource } from '../actionSources';
+import type {
   ComponentID,
   EntityID,
   EntityTransform,

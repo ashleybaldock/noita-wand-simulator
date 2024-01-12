@@ -1,7 +1,9 @@
 import { useHotkeys } from 'react-hotkeys-hook';
 import styled from 'styled-components';
 import { noop } from '../../util';
-import { HotkeyHint } from '../Tooltips';
+import type { TooltipId } from '../Tooltips/tooltipId';
+import type { ActionHintId } from '../Tooltips/actionHintId';
+import { HotkeyHint } from '../Tooltips/HotkeyHint';
 
 const ButtonShapes = [
   'rectangle',
@@ -135,6 +137,8 @@ type Props = {
   minimal?: boolean;
   shape?: ButtonShape;
   bgScale?: 1;
+  tooltipId?: TooltipId;
+  tooltipActionHintId?: ActionHintId;
 };
 
 export const Button = ({
@@ -142,6 +146,9 @@ export const Button = ({
   onMouseOver = noop,
   onMouseOut = noop,
   hotkeys = '',
+
+  tooltipId,
+  tooltipActionHintId,
 
   imgUrl = '',
   imgDataUrl = '',
@@ -162,6 +169,12 @@ export const Button = ({
       onClick={onClick}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
+      {...(tooltipId ?? false
+        ? {
+            'data-tooltip-id': tooltipId,
+            'data-tooltip-content': `${tooltipActionHintId}`,
+          }
+        : {})}
     >
       {children}
       {<HotkeyHint hotkeys={hotkeys} position={minimal ? 'above' : 'below'} />}

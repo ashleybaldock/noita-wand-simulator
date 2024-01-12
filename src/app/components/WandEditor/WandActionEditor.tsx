@@ -13,7 +13,7 @@ import {
   clearSelection,
   useSelecting,
 } from '../../redux/wandSlice';
-import { Spell } from '../../calc/spell';
+import type { Spell } from '../../calc/spell';
 import { getSpellById } from '../../calc/spells';
 import {
   ChargesRemainingAnnotation,
@@ -29,7 +29,7 @@ import {
 } from '../Spells/WandAction';
 import { useDragLayer } from 'react-dnd';
 import { getComputedColumns } from './hooks';
-import { WandSelection } from '../../redux/Wand/wandSelection';
+import type { WandSelection } from '../../redux/Wand/wandSelection';
 import { isKnownSpell } from '../../redux/Wand/spellId';
 
 function ActionComponent({
@@ -135,23 +135,23 @@ export const WandActionEditor = () => {
   /* Move cursor */
   /* isSelecting && end selection
    *   visual change from in-progress selection, to active selection */
-  useHotkeys('w', () => {
+  useHotkeys('w, k', () => {
     dispatch(moveCursor({ by: -1 * currentRowLength() }));
   });
-  useHotkeys('a', () => {
+  useHotkeys('a, h', () => {
     dispatch(moveCursor({ by: -1 }));
   });
-  useHotkeys('s', () => {
+  useHotkeys('s, j', () => {
     dispatch(moveCursor({ by: currentRowLength() }));
   });
-  useHotkeys('d', () => {
+  useHotkeys('d, l', () => {
     dispatch(moveCursor({ by: 1 }));
   });
 
   /* Delete spells */
   /* isSelecting ? delete selected, clear selection : delete single
    *   visual change from in-progress/active selection to none */
-  useHotkeys('Backspace, r', () => {
+  useHotkeys('Backspace, r, shift+x', () => {
     if (isSelecting) {
       dispatch(deleteSelection({ shift: 'left' }));
       dispatch(clearSelection());
@@ -168,7 +168,7 @@ export const WandActionEditor = () => {
       dispatch(removeSpellBeforeCursor({ shift: 'right' }));
     }
   });
-  useHotkeys('shift+Backspace, shift+r', () => {
+  useHotkeys('shift+Backspace, shift+r, x', () => {
     if (isSelecting) {
       dispatch(deleteSelection({}));
       dispatch(clearSelection());

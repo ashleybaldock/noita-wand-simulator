@@ -195,6 +195,11 @@ export const ConfigEditor = () => {
             </ConfigToggle>
           ))}
         </ConfigToggleGroup>
+        <ConfigToggleGroup title={'Accessibility'}>
+          <ConfigToggle field={'hideAccessibilityHints'}>
+            {'Hide hints on input fields'}
+          </ConfigToggle>
+        </ConfigToggleGroup>
       </ConfigDiv>
     </MainDiv>
   );

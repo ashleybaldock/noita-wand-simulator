@@ -1,4 +1,4 @@
-import { SpellType } from './spellTypes';
+import type { SpellType } from './spellTypes';
 
 export type GunActionState = {
   // action_id: ActionId;

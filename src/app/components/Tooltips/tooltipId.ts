@@ -1,3 +1,3 @@
-const tooltipIds = ['tooltip-spellinfo'] as const;
+const tooltipIds = ['tooltip-spellinfo', 'tooltip-actionhint'] as const;
 
-export type TooltipId = typeof tooltipIds[number];
+export type TooltipId = (typeof tooltipIds)[number];

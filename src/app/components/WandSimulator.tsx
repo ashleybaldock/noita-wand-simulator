@@ -11,7 +11,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { CastConfigEditor } from './config/CastConfigEditor';
 import { ReleaseInfo } from './ReleaseInfo';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { SpellInfoTooltip } from './Tooltips';
+import { Tooltips } from './Tooltips';
 
 const Column = styled.div`
   display: flex;
@@ -64,7 +64,7 @@ export function WandSimulator() {
         <Column>
           <VisualisationList />
         </Column>
-        <SpellInfoTooltip />
+        <Tooltips />
         <ReleaseInfo />
       </Column>
     </DebugHints>

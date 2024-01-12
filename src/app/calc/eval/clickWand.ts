@@ -1,8 +1,8 @@
-import { Spell } from '../spell';
+import type { Spell } from '../spell';
 import { getSpellById } from '../spells';
 import { observer } from './wandObserver';
+import type { Gun } from '../gun';
 import {
-  Gun,
   _add_card_to_deck,
   _clear_deck,
   _draw_actions_for_shot,
@@ -14,12 +14,12 @@ import {
 } from '../gun';
 import { isValidEntityPath, entityToActions } from '../entityLookup';
 import { isIterativeActionId } from '../actionId';
-import { ActionCall, TreeNode, WandShot } from './types';
+import type { ActionCall, TreeNode, WandShot } from './types';
 import { defaultGunActionState } from '../defaultActionState';
 import { getTriggerConditionForEvent } from '../trigger';
 import { isValidActionCallSource } from '../spellTypes';
-import { StopCondition, StopReason } from '../../types';
-import { WandEvent } from './wandEvent';
+import type { StopCondition, StopReason } from '../../types';
+import type { WandEvent } from './wandEvent';
 
 export type ClickWandResult = {
   shots: WandShot[];
@@ -68,6 +68,7 @@ export const clickWand = (
 
   let iterations = 0;
   const iterationLimit = 10;
+  let wrap = 0;
   let reloaded = false;
   let mana = wand_available_mana;
   const wandShots: WandShot[] = [];
@@ -217,6 +218,7 @@ export const clickWand = (
       }
       case 'OnMoveDiscardedToDeck': {
         const { discarded } = payload;
+        wrap += 1;
         break;
       }
 

@@ -30,6 +30,8 @@ type ConfigBase = {
   var_hp: number;
   var_hp_max: number;
   pauseCalculations: boolean;
+  showKeyHints: boolean;
+  hideAccessibilityHints: boolean;
 };
 export type ConfigRandom = {
   'random.worldSeed': number;
@@ -115,6 +117,8 @@ export const initialState: ConfigState = {
     'random.worldSeed': 0,
     'random.frameNumber': 0,
     'pauseCalculations': false,
+    'showKeyHints': true,
+    'hideAccessibilityHints': false,
   },
 };
 

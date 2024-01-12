@@ -164,11 +164,12 @@ export const SpellInfoTooltip = () => {
         blur: true,
         click: true,
       }}
-      render={({ content: actionId, activeAnchor }) => {
-        if (!isNotNullOrUndefined(actionId) || !isValidActionId(actionId)) {
+      render={({ content }) => {
+        if (!isNotNullOrUndefined(content) || !isValidActionId(content)) {
           return null;
         }
         const {
+          id: actionId,
           name,
           description,
           sprite,
@@ -178,7 +179,7 @@ export const SpellInfoTooltip = () => {
           never_unlimited,
           beta,
           spawn_requires_flag,
-        } = getSpellById(actionId);
+        } = getSpellById(content);
         return (
           <SpellTip>
             <Name>{translate(name)}</Name>

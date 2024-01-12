@@ -1,10 +1,12 @@
-import { LegacyRef, useRef } from 'react';
+import type { LegacyRef } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { WandActionEditor } from './WandActionEditor';
 import { WandStatsEditor } from './WandStatsEditor';
 import { WandBorder } from './WandBorder';
 import { SaveImageButton } from '../generic';
 import { SectionHeader } from '../SectionHeader';
+import { FindSpell } from './FindSpell';
 import {
   LoadButton,
   ResetButton,
@@ -14,6 +16,7 @@ import {
   SectionButtonBar,
 } from '../buttons';
 import { ExportWikiButton } from '../Export/ExportWikiButton';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 const MainDiv = styled.div`
   display: flex;
@@ -70,8 +73,13 @@ const WandActionEditorWrapper = styled.div`
 `;
 
 export function WandBuilder() {
+  const [showingFindSpell, setShowingFindSpell] = useState(false);
+
   const wandRef = useRef<HTMLDivElement>();
   const spellsRef = useRef<HTMLDivElement>();
+  useHotkeys('i', () => {
+    setShowingFindSpell(true);
+  });
 
   return (
     <>
@@ -108,6 +116,7 @@ export function WandBuilder() {
           </ContentDiv>
         </WandBorder>
       </MainDiv>
+      {showingFindSpell && <FindSpell />}
     </>
   );
 }

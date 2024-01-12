@@ -1,10 +1,8 @@
 import styled from 'styled-components';
-import { ActionId } from '../../../calc/actionId';
-import {
-  SpellType,
-  getBackgroundUrlForSpellType,
-} from '../../../calc/spellTypes';
-import { TooltipId } from '../../Tooltips';
+import type { ActionId } from '../../../calc/actionId';
+import type { SpellType } from '../../../calc/spellTypes';
+import { getBackgroundUrlForSpellType } from '../../../calc/spellTypes';
+import type { TooltipId } from '../../Tooltips/tooltipId';
 
 const SpellTypeBorder = styled.div`
   --size-spell: var(--bsize-spell, 48px);

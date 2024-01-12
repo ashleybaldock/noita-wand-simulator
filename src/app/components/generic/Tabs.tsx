@@ -155,8 +155,8 @@ export function Tabs({
     }
   }, [displayIndex, selectedTabIndex]);
 
-  useHotkeys('1,2,3,4,5,6,7,8', (_, kEv) => {
-    const tabIdx = Number.parseInt(kEv.keys?.join('') ?? '', 10);
+  useHotkeys('2,3,4,5,6,7,8', (_, kEv) => {
+    const tabIdx = Number.parseInt(kEv.keys?.join('') ?? '', 10) - 1;
     if (!Number.isNaN(tabIdx) && tabIdx > 0 && tabIdx <= tabs.length) {
       setSelectedTabIndex(tabIdx - 1);
     }
@@ -184,7 +184,7 @@ export function Tabs({
                 keyHint={`Shortcut: ${index}`}
               />
             ))}
-            <HotkeyHint hotkeys={`${index + 1}`} position={'ne-corner'} />
+            <HotkeyHint hotkeys={`${index + 2}`} position={'ne-corner'} />
           </TitleDiv>
         ))}
       </TabTitlesDiv>

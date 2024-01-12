@@ -28,6 +28,11 @@ export const GlobalStyle = createGlobalStyle<{ keyHints: boolean }>`
     --sizes-nesting-offset: ${NESTING_OFFSET}px;
 
     ${({ keyHints }) =>
-      keyHints ? '--display-keyhints: none;' : '--display-keyhints: flex;'}
+      keyHints ? '--display-keyhints: flex;' : '--display-keyhints: none;'}
+  }
+  @media screen and (max-width: 800px) {
+    :root {
+      --display-keyhints: none;
+    }
   }
 `;
