@@ -1,12 +1,6 @@
 import styled from 'styled-components';
-import {
-  ChangeEventHandler,
-  MouseEventHandler,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import type { ChangeEventHandler, MouseEventHandler } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '../../generic';
 
 const WrapperLabel = styled.label`

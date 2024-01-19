@@ -14,6 +14,21 @@ export type Wand = {
   deck_capacity: number;
 };
 
+const wandKeysAffectingSimulation: Array<keyof Wand> = [
+  'cast_delay',
+  'mana_max',
+  'mana_charge_speed',
+  'spread',
+  'speed',
+  'actions_per_round',
+  'shuffle_deck_when_empty',
+  'reload_time',
+  'deck_capacity',
+] as const;
+
+export const compareWandsForSimulation = (a: Wand, b: Wand): boolean =>
+  wandKeysAffectingSimulation.every((key) => a[key] === b[key]);
+
 const wandQueryVersions = [1, 2] as const;
 export type WandQueryVersion = (typeof wandQueryVersions)[number];
 

@@ -1,5 +1,5 @@
-import { SpellId } from './spellId';
-import { Wand, WandQueryVersion } from './wand';
+import type { SpellId } from './spellId';
+import type { Wand, WandQueryVersion } from './wand';
 
 export type WandEditorState = {
   cursorIndex: number;
@@ -12,6 +12,5 @@ export type WandState = {
   spellIds: SpellId[];
   alwaysIds: SpellId[];
   messages: string[];
-  editor: WandEditorState;
   fromQuery?: WandQueryVersion;
 };

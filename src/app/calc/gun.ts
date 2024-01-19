@@ -13,7 +13,8 @@ import {
   ConfigGunShotEffects_Init,
   ConfigGunShotEffects_PassToGame,
 } from './gunshoteffects_generated';
-import { ExtraModifier, extraModifiers } from './extraModifiers';
+import type { ExtraModifier } from './extraModifiers';
+import { extraModifiers } from './extraModifiers';
 import {
   ActionUsed,
   ActionUsesRemainingChanged,
@@ -293,7 +294,7 @@ export function order_deck() {
 }
 
 function play_action(spell: Readonly<Spell>) {
-  OnActionPlayed(spell.id);
+  OnActionPlayed(spell, c, playing_permanent_card);
 
   hand.push(spell);
 

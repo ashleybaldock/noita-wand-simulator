@@ -1,13 +1,15 @@
-import { useAppDispatch } from '../../redux/hooks';
-import { useWand, setWand } from '../../redux/wandSlice';
+import { useAppDispatch, useWand } from '../../redux/hooks';
+import { setWand } from '../../redux/wandSlice';
 import styled from 'styled-components';
-import { AppDispatch } from '../../redux/store';
+import type { AppDispatch } from '../../redux/store';
 import { EditableInteger } from '../generic';
-import { round, toFrames, toSeconds, TypedProperties } from '../../util/util';
-import { Config, useConfig } from '../../redux';
+import type { TypedProperties } from '../../util/util';
+import { round, toFrames, toSeconds } from '../../util/util';
+import type { Config } from '../../redux';
+import { useConfig } from '../../redux';
 import { YesNoToggle } from '../Input';
 import { FNSP, SUFFIX_DEGREE, SUFFIX_FRAME, SUFFIX_SECOND } from '../../util';
-import { Wand } from '../../redux/Wand/wand';
+import type { Wand } from '../../redux/Wand/wand';
 
 type NumberFieldProps = {
   field: keyof TypedProperties<Wand, number>;

@@ -1,15 +1,8 @@
-import { Spell } from '../spell';
-import { TriggerCondition } from '../trigger';
-import { GroupedObject } from '../grouping/combineGroups';
-import { GunActionState } from '../actionState';
-import { ActionSource } from '../actionSources';
-
-export type ComponentID = string;
-export type EntityID = number;
-export type Entity = object;
-export type InventoryItemID = number | undefined;
-export type Component = object;
-export type EntityTransform = [x: number, y: number];
+import type { Spell } from '../spell';
+import type { TriggerCondition } from '../trigger';
+import type { GroupedObject } from '../grouping/combineGroups';
+import type { GunActionState } from '../actionState';
+import type { ActionSource } from '../actionSources';
 
 /*
  * Evaluation & visualisation
@@ -23,6 +16,8 @@ export type ActionCall = {
   recursion?: number;
   iteration?: number;
   dont_draw_actions?: boolean;
+  lastDrawnBeforeWrap?: number;
+  lastCalledBeforeWrap?: number;
 };
 
 export type TreeNode<T> = {
@@ -42,6 +37,7 @@ export type WandShot = {
   triggerEntity?: string;
   triggerActionDrawCount?: number;
   triggerDelayFrames?: number;
+  wraps: number[];
 };
 
 export type GroupedWandShot = {

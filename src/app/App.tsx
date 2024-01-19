@@ -9,6 +9,7 @@ import { WandSimulator } from './components/WandSimulator';
 import { useReleaseInfo } from './util/useVersion';
 import { KeyStateContextProvider } from './context/KeyStateContext';
 import { GlobalStyle } from './RootCSSVars';
+import { URLSearchUpdater } from './components/URLSearchUpdater';
 
 export function App() {
   const { isRelease, branch, hash } = useReleaseInfo();
@@ -21,6 +22,7 @@ export function App() {
       <StyleSheetManager shouldForwardProp={shouldForwardProp}>
         <HelmetProvider>
           <KeyStateContextProvider debug={true}>
+            <URLSearchUpdater />
             <GlobalStyle keyHints={showKeyHints} />
             {!isRelease && (
               <Helmet>

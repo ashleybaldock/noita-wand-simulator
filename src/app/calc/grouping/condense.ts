@@ -1,5 +1,5 @@
 import { combineGroups, isRawObject, mergeProperties } from './combineGroups';
-import {
+import type {
   ActionCall,
   GroupedWandShot,
   Projectile,

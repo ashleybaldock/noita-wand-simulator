@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { GunActionState } from '../../../calc/actionState';
+import type { GunActionState } from '../../../calc/actionState';
+import type { TrailMaterial } from '../../../calc/materials';
 import {
   getNameForTrailMaterial,
   isTrailMaterial,
-  TrailMaterial,
 } from '../../../calc/materials';
 import {
   isNotNullOrUndefined,
@@ -12,7 +12,7 @@ import {
   sign,
   tally,
 } from '../../../util/util';
-import { Config } from '../../../redux/configSlice';
+import type { Config } from '../../../redux/configSlice';
 import { getBackgroundUrlForDamageType } from '../../../calc/damage';
 import {
   FNSP,
@@ -21,7 +21,7 @@ import {
   SUFFIX_MILLION,
   SUFFIX_THOUSAND,
 } from '../../../util';
-import { TriggerCondition } from '../../../calc/trigger';
+import type { TriggerCondition } from '../../../calc/trigger';
 import { WithDebugHints } from '../../Debug';
 import { Duration } from './Duration';
 import { Unchanged, YesNo, YesOr } from '../../Presentation';
@@ -965,12 +965,10 @@ export const ProjectileColumn = styled(
     castState,
     manaDrain,
     insideTrigger = false,
-    triggerType,
   }: {
     castState?: GunActionState;
     manaDrain?: number;
     insideTrigger?: boolean;
-    triggerType?: TriggerCondition;
   }) => {
     const config = useConfig();
     const { castShowChanged } = config;

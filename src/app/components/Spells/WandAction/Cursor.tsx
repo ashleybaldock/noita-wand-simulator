@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import { useDrag, useDrop } from 'react-dnd';
 import { useAppDispatch } from '../../../redux/hooks';
 import { WithDebugHints } from '../../Debug';
-import { setSelection, useCursor } from '../../../redux';
-import { CursorPosition, CursorStyle, DragItemSelect } from './types';
+import { useCursor } from '../../../redux';
+import type { CursorPosition, CursorStyle, DragItemSelect } from './types';
+import { setSelection } from '../../../redux/editorSlice';
 
 export const StyledCursor = styled.div<{
   cursorIndex: CursorPosition;

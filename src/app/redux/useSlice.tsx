@@ -1,6 +1,6 @@
-import { Slice } from '@reduxjs/toolkit';
+import type { Slice } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from './store';
+import type { RootState } from './store';
 
 type SliceNames = keyof RootState;
 

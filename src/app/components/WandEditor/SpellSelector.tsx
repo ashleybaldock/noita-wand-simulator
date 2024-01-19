@@ -5,10 +5,7 @@ import type { Spell } from '../../calc/spell';
 import { spells } from '../../calc/spells';
 import { useAppDispatch, useConfig } from '../../redux/hooks';
 import type { Config, ConfigState } from '../../redux/configSlice';
-import {
-  insertSpellAfterCursor,
-  insertSpellBeforeCursor,
-} from '../../redux/wandSlice';
+import {} from '../../redux/wandSlice';
 import {
   getBackgroundUrlForSpellType,
   spellTypeGroupInfoMap,
@@ -21,6 +18,10 @@ import {
   WandActionBorder,
   WandActionDragSource,
 } from '../Spells/WandAction';
+import {
+  insertSpellAfterCursor,
+  insertSpellBeforeCursor,
+} from '../../redux/editorThunks';
 
 const MainDiv = styled.div`
   --bsize-spell: 40px;
@@ -102,9 +103,9 @@ const WandActionSelect = ({
     clickEvent.preventDefault();
 
     if (clickEvent.shiftKey) {
-      dispatch(insertSpellAfterCursor({ spell: id }));
+      dispatch(insertSpellAfterCursor({ spellId: id }));
     } else {
-      dispatch(insertSpellBeforeCursor({ spell: id }));
+      dispatch(insertSpellBeforeCursor({ spellId: id }));
     }
   };
   return (

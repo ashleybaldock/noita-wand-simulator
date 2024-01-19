@@ -1,18 +1,22 @@
 import styled from 'styled-components';
 import { useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { useAppDispatch } from '../../redux/hooks';
 import {
-  useSpells,
-  setSpellAtIndex,
+  useAppDispatch,
+  useSelecting,
+  useSpellLayout,
+} from '../../redux/hooks';
+import { setSpellAtIndex } from '../../redux/wandSlice';
+import {
   moveCursor,
   removeSpellAfterCursor,
   removeSpellBeforeCursor,
+} from '../../redux/editorThunks';
+import {
   moveSelection,
   deleteSelection,
   clearSelection,
-  useSelecting,
-} from '../../redux/wandSlice';
+} from '../../redux/editorSlice';
 import type { Spell } from '../../calc/spell';
 import { getSpellById } from '../../calc/spells';
 import {
@@ -127,7 +131,7 @@ const SpellSlot = styled.li`
 export const WandActionEditor = () => {
   const dispatch = useAppDispatch();
 
-  const spellIds = useSpells();
+  const spellIds = useSpellLayout();
   const isSelecting = useSelecting();
   const gridRef = useRef(null);
   const currentRowLength = () => getComputedColumns(gridRef);

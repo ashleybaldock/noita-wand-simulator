@@ -3,7 +3,6 @@ import type React from 'react';
 import { useMemo, useState } from 'react';
 import { ProcessingModal } from './ProcessingModal';
 import { exportComponentAsPNG } from 'react-component-export-image';
-import { useWandState } from '../../redux/wandSlice';
 import { hashString } from '../../util/util';
 import { Button } from './Button';
 
@@ -16,11 +15,11 @@ function _SaveImageButton({
   enabled: boolean;
 }) {
   const [isProcessing, setIsProcessing] = useState(false);
-  const wandState = useWandState();
+  // const wandState = useWandState();
 
-  const stateHash = useMemo(() => {
-    return Math.abs(hashString(JSON.stringify(wandState))).toString(36);
-  }, [wandState]);
+  // const stateHash = useMemo(() => {
+  //   return Math.abs(hashString(JSON.stringify(wandState))).toString(36);
+  // }, [wandState]);
 
   // const saveImageHandler = useMemo(
   //   // https://github.com/niklasvh/html2canvas/issues/1878#issuecomment-739245273

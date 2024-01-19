@@ -6,7 +6,7 @@ import { clickWand } from '../../calc/eval/clickWand';
 import { condenseActionsAndProjectiles } from '../../calc/grouping/condense';
 import { isValidActionId, isGreekActionId } from '../../calc/actionId';
 import { getSpellById } from '../../calc/spells';
-import { useConfig, useWandState } from '../../redux';
+import { useConfig, useSpellSequence, useWand } from '../../redux';
 import { SaveImageButton, ScrollWrapper } from '../generic';
 import { ActionCalledShotResult } from './ActionSequence';
 import { ActionTreeShotResult } from './ActionTree';
@@ -29,10 +29,17 @@ const SectionDiv = styled.div`
 `;
 
 // list of several ShotResults, generally from clicking/holding until reload, but also for one click
-export const VisualisationList = () => {
-  const { wand, spellIds } = useWandState();
 
-  const config = useConfig();
+/**
+ * Sequence of simulated wand shots
+ */
+export const VisualisationList = () => {
+  const wand = useWand();
+  const spellIds = useSpellSequence();
+  const [simulationRunning, setSimulationRunning] = useState(false);
+  const actionsCalledRef = useRef<HTMLDivElement>();
+  const actionCallTreeRef = useRef<HTMLDivElement>();
+
   const {
     condenseShots,
     unlimitedSpells,
@@ -48,10 +55,7 @@ export const VisualisationList = () => {
     'requirements.projectiles': req_projectiles,
     'requirements.hp': req_hp,
     'requirements.half': req_half,
-  } = config;
-
-  const actionsCalledRef = useRef<HTMLDivElement>();
-  const actionCallTreeRef = useRef<HTMLDivElement>();
+  } = useConfig();
 
   // TODO This can be a custom hook
   const spells = useMemo(
@@ -62,7 +66,7 @@ export const VisualisationList = () => {
     [spellIds],
   );
 
-  const spellActionsWithUses = useMemo(() => {
+  const spellsWithUses = useMemo(() => {
     if (infiniteSpells) {
       return spells;
     }
@@ -75,16 +79,14 @@ export const VisualisationList = () => {
     });
   }, [infiniteSpells, unlimitedSpells, spells]);
 
-  const [simulationRunning, setSimulationRunning] = useState(false);
-
-  let {
+  const {
     shots,
     recharge: totalRechargeTime,
     endReason,
     elapsedTime,
   } = useMemo(() => {
     setSimulationRunning(true);
-    const result = clickWand(wand, spellActionsWithUses, {
+    const result = clickWand(wand, spellsWithUses, {
       req_enemies: req_enemies,
       req_projectiles: req_projectiles,
       req_hp: req_hp,
@@ -104,12 +106,12 @@ export const VisualisationList = () => {
     req_projectiles,
     req_hp,
     req_half,
-    spellActionsWithUses,
+    spellsWithUses,
     wand,
     worldSeed,
   ]);
 
-  shots = useMemo(() => {
+  const shotsNoDivides = useMemo(() => {
     if (!showDivides) {
       return shots.map((s) => ({
         ...s,
@@ -122,7 +124,7 @@ export const VisualisationList = () => {
     }
   }, [showDivides, shots]);
 
-  shots = useMemo(() => {
+  const shotsNoGreekSpells = useMemo(() => {
     if (!showGreekSpells) {
       return shots.map((s) => ({
         ...s,
@@ -135,7 +137,7 @@ export const VisualisationList = () => {
     }
   }, [showGreekSpells, shots]);
 
-  shots = useMemo(() => {
+  const shotsNoDirectActionCalls = useMemo(() => {
     if (!showDirectActionCalls) {
       return shots.map((s) => ({
         ...s,

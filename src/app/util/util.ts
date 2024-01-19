@@ -126,6 +126,28 @@ export const tally = <T>(arr: T[]): [T, number][] => [
     .entries(),
 ];
 
+/**
+ * Compare two sequences
+ */
+export const compareSequence = (left: unknown[], right: unknown[]): boolean =>
+  left.join() === right.join();
+
+/**
+ * Compare two sequences, ignoring gaps
+ */
+export const compareSequenceIgnoringGaps = (
+  left: unknown[],
+  right: unknown[],
+): boolean => left.filter((x) => x).join() === right.filter((x) => x).join();
+export const fixedLengthCopy = <T>(
+  arr: readonly T[],
+  size: number = arr.length,
+): T[] => {
+  return size > arr.length
+    ? [...arr, ...Array(size - arr.length).fill(null)]
+    : arr.slice(0, size);
+};
+
 export type TypedProperties<T, U> = Pick<
   T,
   {

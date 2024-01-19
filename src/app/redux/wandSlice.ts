@@ -1,28 +1,24 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { useSelector } from 'react-redux';
-import { RootState } from './store';
-import { SpellEditMode, SpellShiftDirection, SelectionIndex } from '../types';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import type { RootState } from './store';
+import type { SpellEditMode, SpellShiftDirection } from '../types';
 import { defaultWand } from './Wand/presets';
 import { useSliceWrapper } from './useSlice';
 import { generateWandStateFromSearch } from './Wand/fromSearch';
-import { isNotNullOrUndefined, isNumber, isString, MAX_ALWAYS } from '../util';
-import { generateWikiWandV2 } from './Wand/toWiki';
-import { getSelectionForId } from './Wand/toSelection';
-import { WandState } from './Wand/wandState';
-import { Wand } from './Wand/wand';
-import { SpellId } from './Wand/spellId';
-import { WandSelection } from './Wand/wandSelection';
-import { Cursor } from '../components/Spells/WandAction/types';
-
-export function fixedLengthCopy<T>(
-  arr: readonly T[],
-  size: number = arr.length,
-): T[] {
-  return size > arr.length
-    ? [...arr, ...Array(size - arr.length).fill(null)]
-    : arr.slice(0, size);
-}
-
+import {
+  MAX_ALWAYS,
+  fixedLengthCopy,
+  compareSequenceIgnoringGaps,
+  isNotNullOrUndefined,
+} from '../util';
+import type { WandState } from './Wand/wandState';
+import { type Wand, compareWandsForSimulation } from './Wand/wand';
+import type { SpellId } from './Wand/spellId';
+import { startAppListening } from './listenerMiddleware';
+import { useConfig } from './hooks';
+import { clickWand } from '../calc/eval/clickWand';
+import { isValidActionId } from '../calc/actionId';
+import { getSpellById } from '../calc/spells';
 const {
   wand,
   spellIds = [],
@@ -44,11 +40,6 @@ const initialState: WandState = {
   ),
   alwaysIds: fixedLengthCopy(alwaysIds, MAX_ALWAYS),
   messages: messages || [],
-  editor: {
-    cursorIndex: 0,
-    selectFrom: 4,
-    selectTo: 9,
-  },
 } as const;
 
 export const wandSlice = createSlice({
@@ -101,62 +92,6 @@ export const wandSlice = createSlice({
         state.wand.deck_capacity,
       );
     },
-    /* Cursor shifts to the right, along with the rest of the spells on the wand
-     * Permits multiple sequential insertions */
-    insertSpellBeforeCursor: (
-      state,
-      { payload: { spell } }: PayloadAction<{ spell: SpellId }>,
-    ): void => {
-      wandSlice.caseReducers.insertSpellBefore(state, {
-        payload: {
-          spell,
-          index: state.editor.cursorIndex,
-        },
-        type: '',
-      });
-      state.editor.cursorIndex += 1;
-    },
-    /* Cursor appears to stay in same place, spells shift to the right */
-    insertSpellAfterCursor: (
-      state,
-      { payload: { spell } }: PayloadAction<{ spell: SpellId }>,
-    ): void =>
-      wandSlice.caseReducers.insertSpellBefore(state, {
-        payload: {
-          spell,
-          index: state.editor.cursorIndex,
-        },
-        type: '',
-      }),
-    removeSpellBeforeCursor: (
-      state,
-      {
-        payload: { shift = 'left' },
-      }: PayloadAction<{ shift?: SpellShiftDirection }>,
-    ): void =>
-      wandSlice.caseReducers.deleteSpellAtIndex(state, {
-        payload: {
-          index:
-            state.editor.cursorIndex > 0
-              ? state.editor.cursorIndex - 1
-              : state.wand.deck_capacity,
-          shift,
-        },
-        type: '',
-      }),
-    removeSpellAfterCursor: (
-      state,
-      {
-        payload: { shift = 'left' },
-      }: PayloadAction<{ shift?: SpellShiftDirection }>,
-    ): void =>
-      wandSlice.caseReducers.deleteSpellAtIndex(state, {
-        payload: {
-          index: state.editor.cursorIndex,
-          shift,
-        },
-        type: '',
-      }),
     setSpellAtIndex: (
       state,
       {
@@ -203,144 +138,6 @@ export const wandSlice = createSlice({
           ],
           state.wand.deck_capacity,
         );
-      }
-    },
-    clearSelection: (state): void => {
-      state.editor.selectFrom = null;
-      state.editor.selectTo = null;
-    },
-    deleteSelection: (
-      state,
-      {
-        payload: { shift = 'none' },
-      }: PayloadAction<{ shift?: SpellShiftDirection }>,
-    ): void => {
-      state.editor.selectFrom = null;
-      state.editor.selectTo = null;
-    },
-    setSelection: (
-      state,
-      {
-        payload: { from, to },
-      }: PayloadAction<{ from: SelectionIndex; to: SelectionIndex }>,
-    ): void => {
-      if (isNotNullOrUndefined(from)) {
-        if (isString(from) && from === 'cursor') {
-          state.editor.selectFrom = state.editor.cursorIndex;
-        }
-        if (isNumber(from)) {
-          state.editor.selectFrom = from;
-        }
-      }
-      if (isNotNullOrUndefined(to)) {
-        if (isString(to) && to === 'cursor') {
-          state.editor.selectTo = state.editor.cursorIndex - 1;
-        }
-        if (isNumber(to)) {
-          state.editor.selectTo = to;
-        }
-      }
-    },
-    moveSelection: (
-      state,
-      { payload: { by, to } }: PayloadAction<{ by?: number; to?: number }>,
-    ): void => {},
-    /*
-     * moveCursor()
-     * to: specific index; by: relative to current cursorIndex
-     * If both specified, performs 'to', then 'by'
-     */
-    moveCursor: (
-      state,
-      {
-        payload: { by, to, select = 'none' },
-      }: PayloadAction<{
-        by?: number;
-        to?: number;
-        select?: SpellShiftDirection;
-      }>,
-    ): void => {
-      const oldCursor = state.editor.cursorIndex;
-      let newCursor = state.editor.cursorIndex;
-      if (isNotNullOrUndefined(to)) {
-        newCursor = Math.min(Math.max(0, to), state.wand.deck_capacity + 1);
-      }
-      if (isNotNullOrUndefined(by)) {
-        const currentCursorPosition = state.editor.cursorIndex;
-        const proposedCursorPosition = currentCursorPosition + by;
-        const wrappedCursorPosition =
-          (proposedCursorPosition + state.wand.deck_capacity + 1) %
-          (state.wand.deck_capacity + 1);
-        newCursor = wrappedCursorPosition;
-      }
-
-      if (select === 'none') {
-        state.editor.cursorIndex = newCursor;
-      } else {
-        const prevFrom = state.editor.selectFrom;
-        const prevTo = state.editor.selectTo;
-
-        /* Adjust an existing selection */
-        if (isNotNullOrUndefined(prevFrom) && isNotNullOrUndefined(prevTo)) {
-          console.log(prevFrom, prevTo, oldCursor, newCursor);
-          /* shrink selection to new start point, cursor moves with selection */
-          if (newCursor === oldCursor && oldCursor === prevFrom) {
-            console.log('a', newCursor, oldCursor);
-            state.editor.selectFrom = newCursor;
-            state.editor.cursorIndex = newCursor;
-          }
-          /* extend selection to new start point, cursor stays still */
-          if (newCursor < oldCursor && oldCursor < prevFrom) {
-            state.editor.selectFrom = oldCursor;
-            state.editor.cursorIndex = oldCursor;
-          }
-          /* extend selection to new start point, cursor moves with selection */
-          if (newCursor < oldCursor && oldCursor === prevFrom) {
-            state.editor.selectFrom = newCursor;
-            state.editor.cursorIndex = newCursor;
-          }
-          /* shrink selection to new start/end point, cursor stays still */
-          if (newCursor > prevFrom && newCursor < prevTo) {
-            if (select === 'right') {
-              state.editor.cursorIndex = oldCursor;
-              state.editor.selectFrom = oldCursor;
-            }
-            if (select === 'left') {
-              state.editor.cursorIndex = oldCursor;
-              state.editor.selectTo = oldCursor - 1;
-            }
-          }
-          /* shrink selection to new end point, cursor moves with selection */
-          if (newCursor === oldCursor && oldCursor === prevTo) {
-            state.editor.selectTo = newCursor - 1;
-            state.editor.cursorIndex = newCursor;
-          }
-          /* extend selection to new end point, cursor stays still */
-          if (newCursor > prevTo && oldCursor - 1 > prevTo) {
-            state.editor.selectTo = oldCursor - 1;
-            state.editor.cursorIndex = oldCursor;
-          }
-          /* extend selection to new end point, cursor moves with selection */
-          if (newCursor > prevTo && oldCursor - 1 === prevTo) {
-            state.editor.selectTo = newCursor - 1;
-            state.editor.cursorIndex = newCursor;
-          }
-        } else if (isNotNullOrUndefined(prevFrom)) {
-          if (newCursor < prevFrom) {
-            state.editor.cursorIndex = newCursor;
-            state.editor.selectFrom = newCursor;
-            state.editor.selectTo = prevFrom;
-          }
-          if (newCursor === prevFrom) {
-            state.editor.cursorIndex = newCursor;
-            state.editor.selectTo = newCursor;
-          }
-          if (newCursor > prevFrom) {
-            state.editor.cursorIndex = newCursor;
-            state.editor.selectFrom = prevFrom;
-            state.editor.selectTo = newCursor;
-          }
-        }
       }
     },
     moveSpell: (
@@ -409,71 +206,88 @@ export const {
   setSpells,
   setSpellAtIndex,
   insertSpellBefore,
-  insertSpellBeforeCursor,
-  removeSpellBeforeCursor,
   insertSpellAfter,
-  insertSpellAfterCursor,
-  removeSpellAfterCursor,
-  moveSelection,
-  clearSelection,
-  deleteSelection,
-  setSelection,
-  moveCursor,
+  deleteSpellAtIndex,
   moveSpell,
 } = wandSlice.actions;
 
-export const selectWandState = (state: RootState): WandState =>
-  state.wand.present;
-const selectWand = (state: RootState): Wand => state.wand.present.wand;
-const selectSpells = (state: RootState): SpellId[] =>
-  state.wand.present.spellIds;
-const selectMessages = (state: RootState): string[] =>
-  state.wand.present.messages;
-const selectCursor = createSelector(
-  selectWandState,
-  ({ spellIds, editor: { cursorIndex } }: WandState): Cursor[] =>
-    spellIds.map((_, wandIndex) => ({
-      position:
-        cursorIndex === wandIndex
-          ? 'before'
-          : cursorIndex === wandIndex + 1
-          ? 'after'
-          : 'none',
-      style: 'caret',
-    })),
-);
-const selectSelection = createSelector(
-  selectWandState,
-  ({
-    spellIds,
-    editor: { selectFrom, selectTo },
-  }: WandState): WandSelection[] =>
-    spellIds.map((_, wandIndex) =>
-      getSelectionForId(wandIndex, selectFrom, selectTo),
-    ),
-);
-const selectSelecting = createSelector(
-  selectWandState,
-  ({ editor: { selectFrom } }: WandState): boolean => selectFrom !== null,
-);
-const selectWikiExport = createSelector(selectWandState, generateWikiWandV2);
-
 export const wandReducer = wandSlice.reducer;
 
-export const useWandState = () => useSelector(selectWandState);
-
-export const useWikiExport = () => useSelector(selectWikiExport);
-
-export const useWand = () => useSelector(selectWand);
-
-export const useSpells = () => useSelector(selectSpells);
-
-export const useMessages = () => useSelector(selectMessages);
-
-export const useCursor = () => useSelector(selectCursor);
-
-export const useSelection = () => useSelector(selectSelection);
-
-export const useSelecting = () => useSelector(selectSelecting);
-
 export const useWandSlice = () => useSliceWrapper(wandSlice, 'wand');
+
+// TODO also depends on config
+// TODO memoise previous sim results to avoid re-running
+const simulationNeedsUpdatePredicate = (
+  _unused: unknown,
+  currentState: RootState,
+  previousState: RootState,
+): boolean =>
+  compareWandsForSimulation(
+    currentState.wand.present.wand,
+    previousState.wand.present.wand,
+  ) &&
+  compareSequenceIgnoringGaps(
+    currentState.wand.present.spellIds,
+    previousState.wand.present.spellIds,
+  );
+
+/**
+ * Update browser history and URL on change
+ */
+startAppListening({
+  predicate: simulationNeedsUpdatePredicate,
+  effect: async (_action, listenerApi) => {
+    const {
+      condenseShots,
+      unlimitedSpells,
+      infiniteSpells,
+      showDivides,
+      showGreekSpells,
+      showDirectActionCalls,
+      endSimulationOnRefresh,
+      showActionTree,
+      'random.worldSeed': worldSeed,
+      'random.frameNumber': frameNumber,
+      'requirements.enemies': req_enemies,
+      'requirements.projectiles': req_projectiles,
+      'requirements.hp': req_hp,
+      'requirements.half': req_half,
+      // } = listenerApi.getState().config.config;
+    } = useConfig();
+
+    const spellIds = listenerApi.getState().wand.present.spellIds;
+    const spells = spellIds.flatMap((id) =>
+      isNotNullOrUndefined(id) && isValidActionId(id) ? getSpellById(id) : [],
+    );
+    const wand = listenerApi.getState().wand.present.wand;
+
+    const task = listenerApi.fork(async (forkApi) =>
+      clickWand(wand, spells /* TODO spellsWithUses */, {
+        req_enemies: req_enemies,
+        req_projectiles: req_projectiles,
+        req_hp: req_hp,
+        req_half: req_half,
+        rng_frameNumber: frameNumber,
+        rng_worldSeed: worldSeed,
+        wand_available_mana: wand.mana_max,
+        wand_cast_delay: wand.cast_delay,
+        fireUntil: endSimulationOnRefresh ? 'refresh' : 'reload',
+      }),
+    );
+
+    const result = await task.result;
+
+    if (result.status === 'ok') {
+      console.log('Child succeeded: ', result.value);
+
+      const {
+        shots,
+        recharge: totalRechargeTime,
+        endReason,
+        elapsedTime,
+      } = result.value;
+    } else {
+      console.log('Child failed: ', result.status, result.error);
+    }
+  },
+});

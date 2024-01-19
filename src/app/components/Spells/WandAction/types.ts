@@ -1,4 +1,4 @@
-import { ActionId } from '../../../calc/actionId';
+import type { ActionId } from '../../../calc/actionId';
 
 export type CursorPosition = 'none' | 'before' | 'after';
 export type CursorStyle = 'none' | 'caret';

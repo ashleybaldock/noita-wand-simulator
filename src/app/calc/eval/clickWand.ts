@@ -26,6 +26,7 @@ export type ClickWandResult = {
   recharge: number | undefined;
   endReason: StopReason;
   elapsedTime: number;
+  wraps: number;
 };
 
 export type ClickWandSetup = {
@@ -38,6 +39,7 @@ export type ClickWandSetup = {
   rng_worldSeed: number;
   wand_available_mana: number;
   wand_cast_delay: number;
+  shotCountLimit?: number;
 };
 
 export const clickWand = (
@@ -53,6 +55,7 @@ export const clickWand = (
     rng_worldSeed,
     wand_available_mana,
     wand_cast_delay,
+    shotCountLimit = 10,
   }: ClickWandSetup,
 ): ClickWandResult => {
   const start = performance.now();
@@ -63,18 +66,20 @@ export const clickWand = (
       recharge: undefined,
       endReason: 'noSpells',
       elapsedTime: 0,
+      wraps: 0,
     };
   }
 
-  let iterations = 0;
-  const iterationLimit = 10;
-  let wrap = 0;
+  let shotCount = 0;
+  let currentWrapNumber = 0;
   let reloaded = false;
   let mana = wand_available_mana;
   const wandShots: WandShot[] = [];
   let currentShot: WandShot;
   let currentShotStack: WandShot[];
   let lastCalledAction: ActionCall | undefined;
+  let lastDrawnAction: ActionCall | undefined;
+  let lastPlayed: Readonly<Spell> | undefined;
   let calledActions: ActionCall[];
   let validSourceCalledActions: ActionCall[];
   let parentShot;
@@ -147,6 +152,7 @@ export const clickWand = (
           triggerEntity: entity_filename,
           triggerActionDrawCount: action_draw_count,
           triggerDelayFrames: delay_frames,
+          wraps: [],
         };
         parentShot.projectiles[parentShot.projectiles.length - 1].trigger =
           currentShot;
@@ -156,6 +162,10 @@ export const clickWand = (
         break;
       case 'EndProjectile':
         break;
+      case 'RegisterGunAction':
+        const { s: castState } = payload;
+        currentShot.castState = Object.assign({}, castState);
+        break;
       case 'OnDraw':
         const { state_cards_drawn: totalDrawn } = payload;
         if (currentShot.castState) {
@@ -163,10 +173,24 @@ export const clickWand = (
             (totalDrawn ?? currentShot.castState?.state_cards_drawn ?? 0) + 1;
         }
         break;
-      case 'RegisterGunAction':
-        const { s: castState } = payload;
-        currentShot.castState = Object.assign({}, castState);
+      case 'OnActionPlayed': {
+        const { spell, c: castState, playing_permanent_card } = payload;
+        lastPlayed = spell;
         break;
+      }
+      case 'OnMoveDiscardedToDeck': {
+        const { discarded } = payload;
+        currentWrapNumber += 1;
+        currentShot.wraps.push(currentWrapNumber);
+        if (lastDrawnAction) {
+          lastDrawnAction.lastDrawnBeforeWrap = currentWrapNumber;
+        }
+        if (lastCalledAction) {
+          lastCalledAction.lastCalledBeforeWrap = currentWrapNumber;
+        }
+
+        break;
+      }
       case 'OnActionCalled': {
         const { source, spell /*, c: castState */, recursion, iteration } =
           payload;
@@ -181,6 +205,9 @@ export const clickWand = (
           iteration: isIterativeActionId(id) ? iteration ?? 1 : undefined,
           dont_draw_actions: dont_draw_actions,
         };
+        if (source === 'draw') {
+          lastDrawnAction = lastCalledAction;
+        }
 
         if (!currentNode) {
           currentNode = {
@@ -214,11 +241,6 @@ export const clickWand = (
       case 'StartReload': {
         reloaded = true;
         reloadTime = payload.reload_time;
-        break;
-      }
-      case 'OnMoveDiscardedToDeck': {
-        const { discarded } = payload;
-        wrap += 1;
         break;
       }
 
@@ -280,6 +302,7 @@ export const clickWand = (
       calledActions: [],
       actionTree: [],
       castState: { ...defaultGunActionState },
+      wraps: [],
     };
     calledActions = [];
     validSourceCalledActions = [];
@@ -301,11 +324,11 @@ export const clickWand = (
           _add_card_to_deck(spell.id, index, spell.uses_remaining, true),
       );
 
-      while (!reloaded && iterations < iterationLimit) {
+      while (!reloaded && shotCount < shotCountLimit) {
         state_from_game.fire_rate_wait = wand_cast_delay;
         _start_shot(mana);
         _draw_actions_for_shot(true);
-        iterations++;
+        shotCount++;
         currentShot!.calledActions = calledActions!;
         currentShot!.actionTree = rootNodes;
         currentShot!.manaDrain = mana - gunMana;
@@ -325,7 +348,7 @@ export const clickWand = (
         ) {
           return 'refresh';
         }
-        if (fireUntil === 'iterLimit' && iterations === iterationLimit) {
+        if (fireUntil === 'iterLimit' && shotCount >= shotCountLimit) {
           return 'iterLimit';
         }
       }
@@ -341,6 +364,7 @@ export const clickWand = (
 
   return {
     shots: wandShots,
+    wraps: currentWrapNumber,
     recharge: reloadTime,
     endReason,
     elapsedTime: performance.now() - start,

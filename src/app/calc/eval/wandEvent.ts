@@ -1,13 +1,12 @@
-import { ActionId } from '../actionId';
-import { ActionSource } from '../actionSources';
-import { GunActionState } from '../actionState';
-import { Spell, SpellDeckInfo } from '../spell';
-import {
-  ComponentID,
-  EntityID,
-  EntityTransform,
-  InventoryItemID,
-} from './types';
+import type { ActionId } from '../actionId';
+import type { ActionSource } from '../actionSources';
+import type { GunActionState } from '../actionState';
+import type { Spell, SpellDeckInfo } from '../spell';
+
+export type ComponentID = string;
+export type EntityID = number;
+export type InventoryItemID = number | undefined;
+export type EntityTransform = [x: number, y: number];
 
 export type WandEventBase = {
   SetProjectileConfigs: {};
@@ -139,7 +138,9 @@ export type WandEventBase = {
     value: string;
   };
   OnActionPlayed: {
-    actionId: ActionId;
+    spell: Readonly<Spell>;
+    c: GunActionState;
+    playing_permanent_card: boolean;
   };
   OnDraw: {
     state_cards_drawn: number;

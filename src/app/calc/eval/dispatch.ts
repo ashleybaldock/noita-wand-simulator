@@ -7,7 +7,7 @@ import type {
   EntityID,
   EntityTransform,
   InventoryItemID,
-} from './types';
+} from './wandEvent';
 import {
   Random as RandomExt,
   SetRandomSeed as SetRandomSeedExt,
@@ -306,8 +306,15 @@ export function GlobalsSetValue(key: string, value: string): void {
   observer.onEvent({ name: 'GlobalsSetValue', payload: { key, value } });
 }
 
-export function OnActionPlayed(actionId: ActionId): void {
-  observer.onEvent({ name: 'OnActionPlayed', payload: { actionId } });
+export function OnActionPlayed(
+  spell: Readonly<Spell>,
+  c: GunActionState,
+  playing_permanent_card: boolean,
+): void {
+  observer.onEvent({
+    name: 'OnActionPlayed',
+    payload: { spell, c, playing_permanent_card },
+  });
 }
 
 // custom

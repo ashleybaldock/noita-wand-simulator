@@ -1,13 +1,11 @@
 import { useDrop } from 'react-dnd';
 import { useCallback } from 'react';
-import { useAppDispatch, useConfig } from '../../../redux/hooks';
+import { useAppDispatch, useConfig, useCursor } from '../../../redux/hooks';
 import {
   insertSpellBefore,
   insertSpellAfter,
   moveSpell,
   setSpellAtIndex,
-  moveCursor,
-  useCursor,
 } from '../../../redux/wandSlice';
 import { WandActionBorder } from './WandActionBorder';
 import {
@@ -15,9 +13,9 @@ import {
   DragDropTargetAfter,
   DragDropTargetBefore,
 } from './SpellDropTargets';
-import { WandEditCursor } from './Cursor';
 import type { WandSelection } from '../../../redux/Wand/wandSelection';
-import type { CursorPosition, DragItemSpell } from './types';
+import type { DragItemSpell } from './types';
+import { moveCursorTo } from '../../../redux/editorSlice';
 
 export const WandActionDropTargets = ({
   wandIndex,
@@ -137,7 +135,7 @@ export const WandActionDropTargets = ({
       <DragDropTargetBefore
         ref={dropRefBefore}
         hint={dragHint}
-        onClick={() => dispatch(moveCursor({ to: wandIndex }))}
+        onClick={() => dispatch(moveCursorTo({ to: wandIndex }))}
         isBeingDragged={false}
         isDraggingAction={isDraggingAction}
         isDraggingSelect={isDraggingSelect}
@@ -149,7 +147,7 @@ export const WandActionDropTargets = ({
       <DragDropTargetAfter
         ref={dropRefAfter}
         hint={dragHint}
-        onClick={() => dispatch(moveCursor({ to: wandIndex + 1 }))}
+        onClick={() => dispatch(moveCursorTo({ to: wandIndex + 1 }))}
         isBeingDragged={false}
         isDraggingAction={isDraggingAction}
         isDraggingOver={isOverAfter}
