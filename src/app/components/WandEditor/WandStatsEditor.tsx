@@ -5,11 +5,11 @@ import type { AppDispatch } from '../../redux/store';
 import { EditableInteger } from '../generic';
 import type { TypedProperties } from '../../util/util';
 import { round, toFrames, toSeconds } from '../../util/util';
-import type { Config } from '../../redux';
 import { useConfig } from '../../redux';
 import { YesNoToggle } from '../Input';
 import { FNSP, SUFFIX_DEGREE, SUFFIX_FRAME, SUFFIX_SECOND } from '../../util';
 import type { Wand } from '../../redux/Wand/wand';
+import { useId } from 'react';
 
 type NumberFieldProps = {
   field: keyof TypedProperties<Wand, number>;
@@ -27,7 +27,7 @@ const renderNumberField =
     convertRawValue,
     convertDisplayValue,
   }: NumberFieldProps) =>
-  (wand: Wand, dispatch: AppDispatch, config: Config) => {
+  (wand: Wand, dispatch: AppDispatch) => {
     return (
       <EditableInteger
         value={wand[field]}
@@ -76,107 +76,15 @@ const EditableInterval = ({
   );
 };
 
-const fields = [
-  {
-    name: 'Shuffle',
-    imgUrl: 'data/wand/icon_gun_shuffle.png',
-    render: (wand: Wand, dispatch: AppDispatch, config: Config) => (
-      <YesNoToggle
-        checked={wand.shuffle_deck_when_empty}
-        onChange={(e) =>
-          dispatch(
-            setWand({
-              wand: { ...wand, shuffle_deck_when_empty: e.target.checked },
-            }),
-          )
-        }
-      />
-    ),
-  },
-  {
-    name: 'Capacity',
-    imgUrl: 'data/wand/icon_gun_capacity.png',
-    render: renderNumberField({ field: 'deck_capacity' }),
-  },
-  {
-    name: 'Spells/Cast',
-    imgUrl: 'data/wand/icon_gun_actions_per_round.png',
-    render: renderNumberField({ field: 'actions_per_round' }),
-  },
-  {
-    name: 'Cast delay',
-    imgUrl: 'data/wand/icon_fire_rate_wait.png',
-    render: () => {
-      return <EditableInterval field="cast_delay" />;
-    },
-  },
-  {
-    name: 'Recharge',
-    imgUrl: 'data/wand/icon_gun_reload_time.png',
-    render: () => {
-      return <EditableInterval field="reload_time" />;
-    },
-  },
-  {
-    name: 'Mana Max',
-    imgUrl: 'data/wand/icon_mana_max.png',
-    render: renderNumberField({ field: 'mana_max' }),
-  },
-  {
-    name: 'Mana Regen',
-    imgUrl: 'data/wand/icon_mana_charge_speed.png',
-    render: renderNumberField({ field: 'mana_charge_speed' }),
-  },
-  {
-    name: 'Spread',
-    imgUrl: 'data/wand/icon_spread_degrees.png',
-    render: renderNumberField({
-      field: 'spread',
-      formatValue: (v) => `${round(Number(v), 1)}${FNSP}${SUFFIX_DEGREE}`,
-    }),
-  },
-  {
-    name: 'Speed',
-    imgUrl: 'data/wand/icon_speed_multiplier.png',
-    render: renderNumberField({
-      field: 'speed',
-      formatValue: (v) => `${round(Number(v), 1)}`,
-    }),
-  },
-];
-
-const StyledList = styled.div`
-  align-self: center;
-  display: grid;
-  grid-auto-flow: row;
-  grid-auto-rows: 1.3em;
-  grid-template-columns: repeat(1, 1fr);
-  width: min-content;
-  max-height: calc(var(--sizes-spelledit-spell-total) * 4);
-  height: min-content;
-
-  @media screen and (max-width: 800px) {
-    grid-auto-flow: column;
-    grid-template-rows: repeat(5, 1fr);
-    grid-template-columns: repeat(2, 1fr);
-    min-width: 40vw;
-    width: fit-content;
-  }
-
-  @media screen and (max-width: 500px) {
-    justify-items: center;
-    grid-template-rows: repeat(9, 1fr);
-    grid-template-columns: repeat(1, 1fr);
-    min-width: 60vw;
-    width: 100%;
-  }
-`;
 const StyledListItem = styled.div<{
   imgUrl: string;
 }>`
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;
+
+  height: calc(var(--child-unit-height) * 1);
+
   background-image: url('/${({ imgUrl }) => imgUrl}');
   background-position: 0.6em 50%;
   background-size: 1em;
@@ -185,35 +93,144 @@ const StyledListItem = styled.div<{
   font-family: var(--font-family-noita-default);
   font-size: 16px;
   color: var(--color-button);
-  padding: 0.1em 0.6em 0em 2.2em;
+  padding: 0.3em 0.6em 0.2em 2.2em;
 `;
-const StyledName = styled.span`
+const StyledName = styled.label`
   text-align: left;
   flex: 0 1 auto;
   width: 7.4em;
   white-space: nowrap;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  &::after {
+    content: '';
+    border-bottom: 3px dotted #222222;
+    height: 0.7em;
+    display: inline-block;
+    flex: 1 1 auto;
+  }
 `;
 const StyledValue = styled.span`
-  text-align: left;
-  flex: 1 0;
+  text-align: right;
+  flex: 1 1 auto;
   white-space: nowrap;
-  min-width: 3.4em;
-  width: 5em;
+  min-width: 5em;
+  width: 10em;
 `;
 
-export function WandStatsEditor() {
+export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
   const wand = useWand();
   const dispatch = useAppDispatch();
-  const config = useConfig();
+
+  const id = useId();
 
   return (
-    <StyledList>
-      {fields.map(({ name, imgUrl, render }, index) => (
-        <StyledListItem key={name} imgUrl={imgUrl}>
-          <StyledName>{name}</StyledName>
-          <StyledValue>{render(wand, dispatch, config)}</StyledValue>
-        </StyledListItem>
-      ))}
-    </StyledList>
+    <>
+      <StyledListItem
+        imgUrl={'data/wand/icon_gun_shuffle.png'}
+        className={className}
+      >
+        <StyledName htmlFor={`${id}-shuffle_deck_when_empty`}>
+          {'Shuffle'}
+        </StyledName>
+        <StyledValue id={`${id}-shuffle_deck_when_empty`}>
+          <YesNoToggle
+            checked={wand.shuffle_deck_when_empty}
+            onChange={(e) =>
+              dispatch(
+                setWand({
+                  wand: { ...wand, shuffle_deck_when_empty: e.target.checked },
+                }),
+              )
+            }
+          />
+        </StyledValue>
+      </StyledListItem>
+      <StyledListItem
+        className={className}
+        imgUrl={'data/wand/icon_gun_capacity.png'}
+      >
+        <StyledName htmlFor={`${id}-deck_capacity`}>{'Capacity'}</StyledName>
+        <StyledValue id={`${id}-deck_capacity`}>
+          {renderNumberField({ field: 'deck_capacity' })(wand, dispatch)}
+        </StyledValue>
+      </StyledListItem>
+      <StyledListItem
+        className={className}
+        imgUrl={'data/wand/icon_gun_actions_per_round.png'}
+      >
+        <StyledName htmlFor={`${id}-actions_per_round`}>
+          {'Spells/Cast'}
+        </StyledName>
+        <StyledValue id={`${id}-actions_per_round`}>
+          {renderNumberField({ field: 'actions_per_round' })(wand, dispatch)}
+        </StyledValue>
+      </StyledListItem>
+      <StyledListItem
+        className={className}
+        imgUrl={'data/wand/icon_fire_rate_wait.png'}
+      >
+        <StyledName htmlFor={`${id}-cast_delay`}>{'Cast delay'}</StyledName>
+        <StyledValue id={`${id}-cast_delay`}>
+          <EditableInterval field="cast_delay" />
+        </StyledValue>
+      </StyledListItem>
+      <StyledListItem
+        className={className}
+        imgUrl={'data/wand/icon_gun_reload_time.png'}
+      >
+        <StyledName htmlFor={`${id}-reload_time`}>{'Recharge'}</StyledName>
+        <StyledValue id={`${id}-reload_time`}>
+          <EditableInterval field="reload_time" />
+        </StyledValue>
+      </StyledListItem>
+      <StyledListItem
+        className={className}
+        imgUrl={'data/wand/icon_mana_max.png'}
+      >
+        <StyledName htmlFor={`${id}-mana_max`}>{'Mana Max'}</StyledName>
+        <StyledValue id={`${id}-mana_max`}>
+          {renderNumberField({ field: 'mana_max' })(wand, dispatch)}
+        </StyledValue>
+      </StyledListItem>
+      <StyledListItem
+        className={className}
+        imgUrl={'data/wand/icon_mana_charge_speed.png'}
+      >
+        <StyledName htmlFor={`${id}-mana_charge_speed`}>
+          {'Mana Regen'}
+        </StyledName>
+        <StyledValue id={`${id}-mana_charge_speed`}>
+          {renderNumberField({ field: 'mana_charge_speed' })(wand, dispatch)}
+        </StyledValue>
+      </StyledListItem>
+      <StyledListItem
+        className={className}
+        imgUrl={'data/wand/icon_spread_degrees.png'}
+      >
+        <StyledName htmlFor={`${id}-spread`}>{'Spread'}</StyledName>
+        <StyledValue id={`${id}-spread`}>
+          {renderNumberField({
+            field: 'spread',
+            formatValue: (v) => `${round(Number(v), 1)}${FNSP}${SUFFIX_DEGREE}`,
+          })(wand, dispatch)}
+        </StyledValue>
+      </StyledListItem>
+      <StyledListItem
+        className={className}
+        imgUrl={'data/wand/icon_speed_multiplier.png'}
+      >
+        <StyledName htmlFor={`${id}-speed`}>{'Speed'}</StyledName>
+        <StyledValue id={`${id}-speed`}>
+          {renderNumberField({
+            field: 'speed',
+            formatValue: (v) => `${round(Number(v), 1)}`,
+          })(wand, dispatch)}
+        </StyledValue>
+      </StyledListItem>
+    </>
   );
-}
+};

@@ -32,7 +32,7 @@ const Overlay = styled.div<{ $warning?: boolean }>`
 const Combiner = styled.div`
   position: relative;
   display: grid;
-  place-items: center center;
+  place-items: center end;
 `;
 export const YesNo = styled(({ yes, className, warnIf, customYes = <>
       {'Yes'}

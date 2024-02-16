@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { WandSelection } from '../../../redux/Wand/wandSelection';
+import type { WandSelection } from '../../../redux/Wand/wandSelection';
 import { WithDebugHints } from '../../Debug';
 
 export const DropTargetMain = styled.div<{
@@ -13,7 +13,7 @@ export const DropTargetMain = styled.div<{
 
   position: relative;
   height: 100%;
-  padding: 2px 4px 2px 4px;
+  padding: calc(var(--bsize-spell) * 0.04) calc(var(--bsize-spell) * 0.08);
 
   border-style: dashed hidden;
   border-width: var(--selection-bdwidth);
@@ -22,7 +22,6 @@ export const DropTargetMain = styled.div<{
   ${({ selection }) =>
     selection !== 'none'
       ? `
-  padding: 2px 4px 2px 4px;
   background-color: var(--selection-bgcolor);
   border-top-color: var(--selection-bdcolor);
   border-bottom-color: var(--selection-bdcolor);
@@ -31,21 +30,18 @@ export const DropTargetMain = styled.div<{
   ${({ selection }) =>
     selection === 'start'
       ? `
-  padding: 2px 4px 2px 4px;
   border-radius: var(--selection-bdradius) 0 0 var(--selection-bdradius);
     `
       : ''}
   ${({ selection }) =>
     selection === 'end'
       ? `
-  padding: 2px 4px 2px 4px;
   border-radius: 0 var(--selection-bdradius) var(--selection-bdradius) 0;
     `
       : ''}
   ${({ selection }) =>
     selection === 'single'
       ? `
-  padding: 2px 4px 2px 4px;
   border-radius: var(--selection-bdradius);
     `
       : ''}
@@ -59,7 +55,7 @@ const DragDropTarget = styled.div<{
   isDraggingOver: boolean;
   isDraggingSelect: boolean;
   selection: WandSelection;
-  cursor?: 'none' | 'caret';
+  $cursor?: 'none' | 'caret';
   onClick: React.MouseEventHandler<HTMLElement>;
 }>`
   background-color: transparent;
@@ -74,22 +70,22 @@ const DragDropTarget = styled.div<{
 
   &::before {
     z-index: var(--zindex-cursor-current);
-    --cursor-container-width: 12px;
+    --cursor-container-width: calc(var(--bsize-spell) / 4);
     content: '';
     position: absolute;
-    height: 58px;
-    width: 12px;
-    top: -2px;
+    height: calc(var(--bsize-spell) * 1.22);
+    width: var(--cursor-container-width);
+    top: calc(var(--bsize-spell) * -0.03);
     left: calc(50% - (var(--cursor-container-width) / 2));
 
     image-rendering: pixelated;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat, repeat-y;
     background-size: 100%;
     background-position: top center, center center;
 
-    ${({ cursor = 'none' }) => `
+    ${({ $cursor = 'none' }) => `
       ${
-        cursor === 'caret'
+        $cursor === 'caret'
           ? `
     background-image: url('/data/inventory/cursor-top.png'),
       url('/data/inventory/cursor-mid.png');
@@ -97,7 +93,7 @@ const DragDropTarget = styled.div<{
           : ``
       }
         ${
-          cursor === 'none'
+          $cursor === 'none'
             ? `
       opacity: 0;
       `
@@ -107,14 +103,15 @@ const DragDropTarget = styled.div<{
   }
 
   &::after {
+    --cursor-container-width: calc(var(--bsize-spell) / 4);
+
     content: '';
     display: block;
     position: absolute;
-    height: 58px;
-    --width: 12px;
-    width: var(--width);
-    top: 0;
-    left: calc(50% - var(--width) / 2);
+    height: calc(var(--bsize-spell) * 1.22);
+    width: var(--cursor-container-width);
+    top: calc(var(--bsize-spell) * -0.03);
+    left: calc(50% - (var(--cursor-container-width) / 2));
 
     border: none;
     padding: 0;
@@ -146,8 +143,8 @@ const DragDropTarget = styled.div<{
 `;
 export const DragDropTargetBefore = styled(DragDropTarget)`
   top: 0;
-  width: var(--sizes-before-droptarget-width);
-  left: -15px;
+  width: calc(var(--bsize-spell) * 0.625);
+  left: calc(var(--bsize-spell) * -0.3125);
   z-index: var(--zindex-insert-before);
 
   &&::after {
@@ -174,8 +171,8 @@ export const DragDropTargetBefore = styled(DragDropTarget)`
 `;
 export const DragDropTargetAfter = styled(DragDropTarget)`
   top: 0;
-  width: var(--sizes-after-droptarget-width);
-  right: -15px;
+  width: calc(var(--bsize-spell) * 0.625);
+  right: calc(var(--bsize-spell) * -0.3125);
   z-index: var(--zindex-insert-after);
 
   &&::after {

@@ -106,6 +106,13 @@ const SpellSlots = styled.ul`
     padding: 0 0;
   }
 
+  @media screen and (max-width: 800px) {
+    & {
+      margin: 0.8em -0.5em 0.4em -0.5em;
+    }
+  }
+  column-span: all;
+
   --gap-count: calc(var(--grid-max-column-count) - 1);
   --total-gap-width: calc(var(--grid-layout-gap) * var(--gap-count));
   display: grid;

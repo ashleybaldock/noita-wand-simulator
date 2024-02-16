@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import equal from 'fast-deep-equal/es6';
 
 export function chunk<T>(arr: T[], chunkSize: number) {
   if (chunkSize <= 0) {
@@ -137,7 +137,7 @@ export function _combineGroups<T extends object>(
           const cmpB = k(result[i + matchi * seqLen + cmpi]);
 
           /****** TODO remove lodash ******/
-          if (cmpA === null || cmpB === null || !_.isEqual(cmpA, cmpB)) {
+          if (cmpA === null || cmpB === null || !equal(cmpA, cmpB)) {
             match = false;
             break;
           }

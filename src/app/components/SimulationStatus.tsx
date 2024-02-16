@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { useConfig } from '../redux';
-import { StopCondition, StopReason } from '../types';
+import type { StopCondition, StopReason } from '../types';
 import { TerminationWarning } from './Visualisation/TerminationWarning';
-import { FNSP, SUFFIX_MILLISECOND } from '../util';
+import { FNSP } from '../util';
 import { Duration } from './Visualisation/ProjectileTree/Duration';
 
 const StyledStatus = styled.div`

@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import { StyleSheetManager } from 'styled-components';
 import { shouldForwardProp } from './shouldForwardProp';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { useHotkeys } from 'react-hotkeys-hook';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { WandSimulator } from './components/WandSimulator';
@@ -13,9 +11,6 @@ import { URLSearchUpdater } from './components/URLSearchUpdater';
 
 export function App() {
   const { isRelease, branch, hash } = useReleaseInfo();
-  const [showKeyHints, setShowKeyHints] = useState(false);
-
-  useHotkeys('h', () => setShowKeyHints((showing) => !showing));
 
   return (
     <Provider store={store}>
@@ -23,7 +18,7 @@ export function App() {
         <HelmetProvider>
           <KeyStateContextProvider debug={true}>
             <URLSearchUpdater />
-            <GlobalStyle keyHints={showKeyHints} />
+            <GlobalStyle />
             {!isRelease && (
               <Helmet>
                 <link rel="icon" href="/favicon-dev.ico" />

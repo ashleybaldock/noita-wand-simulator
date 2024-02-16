@@ -13,6 +13,7 @@ export const isNumber = (x: unknown): x is number => typeof 42 === typeof x;
 export const isBoolean = (x: unknown): x is boolean =>
   typeof false === typeof x;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const assertNever = (_?: never): never => {
   throw new Error('This should never happen.');
 };
@@ -52,6 +53,12 @@ export function range(n: number) {
 //   return result as DiffResult<T>;
 // }
 
+export type ValueOf<T> = T[keyof T];
+
+export type KeyOfType<Obj extends object, KeyType> = {
+  [k in keyof Obj]: Obj[k] extends KeyType ? k : never;
+}[keyof Obj];
+
 export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
   Object.keys(obj) as (keyof T)[];
 
@@ -69,6 +76,20 @@ export const groupBy = <T, K extends string>(arr: T[], keyFn: (x: T) => K) =>
     acc[k].push(cur);
     return acc;
   }, {} as Record<K, T[]>);
+
+/**
+ * Like Object.fromEntries using only keys
+ * @param keys string[] of key names to add
+ * @param defaultTo default value to set for each property
+ */
+export const objectFromKeys = <const T extends ReadonlyArray<string>, const F>(
+  keys: T,
+  defaultTo: F,
+): { [K in T[number]]: F } => {
+  return Object.fromEntries(keys.map((k) => [k, defaultTo])) as {
+    [K in T[number]]: F;
+  };
+};
 
 /**
  * Typed inverse of a Record
@@ -102,7 +123,7 @@ export function constToDisplayString(c: string) {
 
 export const omit = <T extends object, K extends keyof T>(obj: T, keys: K[]) =>
   Object.fromEntries(
-    Object.entries(obj).filter(([k, v]) => !keys.includes(k as K)),
+    Object.entries(obj).filter(([k]) => !keys.includes(k as K)),
   ) as Partial<T>;
 
 export const trimArray = <T>(arr: T[], predicate: (o: T) => boolean): T[] => {

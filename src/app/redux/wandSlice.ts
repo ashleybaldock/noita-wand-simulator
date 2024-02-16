@@ -252,8 +252,7 @@ startAppListening({
       'requirements.projectiles': req_projectiles,
       'requirements.hp': req_hp,
       'requirements.half': req_half,
-      // } = listenerApi.getState().config.config;
-    } = useConfig();
+    } = listenerApi.getState().config.config;
 
     const spellIds = listenerApi.getState().wand.present.spellIds;
     const spells = spellIds.flatMap((id) =>

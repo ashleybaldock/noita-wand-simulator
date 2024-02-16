@@ -9,7 +9,7 @@ interface IUseSearchProps<T> {
 
 export type FuzzySearchMatch = [from: number, to: number];
 
-export type FuzzySearchResultWrapper<T> = {
+export type FuzzySearchResult<T> = {
   item: T;
   score?: number;
   matches: FuzzySearchMatch[];
@@ -45,7 +45,7 @@ export default function useFuzzySearch<T>({
           (fuseResult?.score ?? SCORE_THRESHOLD + 1) < SCORE_THRESHOLD,
       )
       .map(
-        (fuseResult): FuzzySearchResultWrapper<T> => ({
+        (fuseResult): FuzzySearchResult<T> => ({
           item: fuseResult.item,
           score: fuseResult.score,
           matches: fuseResult.matches?.flatMap(({ indices }) => indices) ?? [],

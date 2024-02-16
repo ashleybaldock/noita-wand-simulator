@@ -73,6 +73,7 @@ const SubSectionContent = styled.div<{
   background-color: #000;
   margin-right: 4px;
   flex: 1 1;
+  flex-wrap: wrap;
   width: 100%;
   ${({ maxWidth }) => (maxWidth ? `max-width: ${maxWidth};` : '')}
   gap: 0.2em;

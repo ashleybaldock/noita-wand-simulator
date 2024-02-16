@@ -11,7 +11,7 @@ import { DEFAULT_SIZE, NESTING_OFFSET } from './util';
  *   --size-: override size
  *  --xsize-: size multiplier
  * */
-export const GlobalStyle = createGlobalStyle<{ keyHints: boolean }>`
+export const GlobalStyle = createGlobalStyle`
   :root {
     --usize-spell: 1px;
     --bsize-spell: ${DEFAULT_SIZE}px;
@@ -26,9 +26,6 @@ export const GlobalStyle = createGlobalStyle<{ keyHints: boolean }>`
     --sizes-after-droptarget-width: 30px;
 
     --sizes-nesting-offset: ${NESTING_OFFSET}px;
-
-    ${({ keyHints }) =>
-      keyHints ? '--display-keyhints: flex;' : '--display-keyhints: none;'}
   }
   @media screen and (max-width: 800px) {
     :root {

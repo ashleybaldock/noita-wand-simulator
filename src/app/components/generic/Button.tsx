@@ -42,6 +42,7 @@ const StyledButton = styled.button<{
   imgUrl: string;
   imgDataUrl: string;
   imgAfter: boolean;
+  imgOnly: 'never' | 'mobile';
   minimal: boolean;
   shape: ButtonShape;
 }>`
@@ -124,6 +125,20 @@ const StyledButton = styled.button<{
     }
     `
       : ``};
+
+  ${({ imgOnly }) =>
+    imgOnly === 'mobile' &&
+    `
+    @media screen and (max-width: 500px) {
+      background-position: center center;
+    }
+  `}
+`;
+
+const MobileHidden = styled.div<React.PropsWithChildren>`
+  @media screen and (max-width: 500px) {
+    display: none;
+  }
 `;
 
 type Props = {
@@ -134,6 +149,7 @@ type Props = {
   imgUrl?: string;
   imgDataUrl?: string;
   imgAfter?: boolean;
+  imgOnly?: 'never' | 'mobile';
   minimal?: boolean;
   shape?: ButtonShape;
   bgScale?: 1;
@@ -153,6 +169,7 @@ export const Button = ({
   imgUrl = '',
   imgDataUrl = '',
   imgAfter = false,
+  imgOnly = 'never',
   minimal = false,
   shape = 'pill',
   bgScale = 1,
@@ -166,6 +183,7 @@ export const Button = ({
       imgUrl={imgUrl}
       imgDataUrl={imgDataUrl}
       imgAfter={imgAfter}
+      imgOnly={imgOnly}
       onClick={onClick}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
@@ -176,7 +194,11 @@ export const Button = ({
           }
         : {})}
     >
-      {children}
+      {imgOnly === 'mobile' ? (
+        <MobileHidden>{children}</MobileHidden>
+      ) : (
+        children
+      )}
       {<HotkeyHint hotkeys={hotkeys} position={minimal ? 'above' : 'below'} />}
     </StyledButton>
   );

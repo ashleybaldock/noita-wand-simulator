@@ -78,7 +78,14 @@ export const removeSpellAfterCursor =
   };
 
 export const moveCursor =
-  ({ by }: { by: number; select?: SpellShiftDirection }): AppThunk =>
+  ({
+    by,
+    always = false,
+  }: {
+    by: number;
+    always?: boolean;
+    select?: SpellShiftDirection;
+  }): AppThunk =>
   (dispatch, getState): void => {
     const state = getState();
     dispatch(

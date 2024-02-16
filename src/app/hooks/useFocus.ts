@@ -2,7 +2,8 @@ import { useRef } from 'react';
 
 export const useFocus = <T extends HTMLElement = HTMLElement>() => {
   const ref = useRef<T>(null);
-  const setFocus = () => ref?.current?.focus?.();
+  const focusElement = () => ref?.current?.focus?.();
+  const blurElement = () => ref?.current?.blur?.();
 
-  return [ref, setFocus] as const;
+  return [ref, focusElement, blurElement] as const;
 };

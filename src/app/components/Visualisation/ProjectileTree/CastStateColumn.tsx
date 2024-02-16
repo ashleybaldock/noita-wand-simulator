@@ -465,7 +465,7 @@ const fieldSections: FieldSection[] = [
       },
       {
         // TODO - needs extended spell info
-        icon: `background-image: url('/data/wand/icon_speed_multiplier.png');`,
+        icon: `background-image: url('/data/wand/icon_speed_bonus.png');`,
         key: 'speed_multiplier2',
         displayName: 'Speed Bonus',
         toolTip: 'Speed Scaled Damage Multiplier',

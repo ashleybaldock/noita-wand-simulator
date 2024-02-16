@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import styled from 'styled-components';
+import { useUIToggle } from '../../redux';
 
 const lookup = new Map<string, Key>([
   ['mod', { symbol: '^', text: 'Mod' }],
@@ -58,7 +60,7 @@ const HotkeyHintBase = styled.div`
   min-height: 0;
   margin: 0 0.2em;
 
-  display: var(--display-keyhints);
+  display: flex;
   flex-direction: column;
   place-content: center;
 
@@ -84,6 +86,7 @@ const HotkeyHintBase = styled.div`
 const HotkeyHintPositioned = styled(HotkeyHintBase)<{ position: HintPosition }>`
   margin: 0 0;
   position: absolute;
+  cursor: help;
   top: unset;
   left: unset;
   right: unset;
@@ -130,7 +133,7 @@ const HotkeyHintPositioned = styled(HotkeyHintBase)<{ position: HintPosition }>`
   bottom: unset;
       `;
     }
-  }}
+  }};
 `;
 
 export const HotkeyHint = ({
@@ -140,7 +143,9 @@ export const HotkeyHint = ({
   hotkeys?: string;
   position: HintPosition;
 }) => {
-  return hotkeys === '' ? null : (
+  const [showKeyHints] = useUIToggle('showKeyHints');
+
+  return !showKeyHints || hotkeys === '' ? null : (
     <HotkeyHintPositioned position={position}>
       <HotKeyCombos hotkeys={hotkeys}></HotKeyCombos>
     </HotkeyHintPositioned>
@@ -270,8 +275,8 @@ const HotKeyCombos = ({ hotkeys }: { hotkeys: string }) => {
   );
 };
 
-const KeyHintIndicatorWrapper = styled.div`
-  display: var(--display-keyhints);
+const KeyHintIndicatorWrapper = styled.div<{ $visible: boolean }>`
+  display: ${({ $visible }) => ($visible ? 'flex' : 'none')};
   position: fixed;
   top: 5px;
   font-size: 0.7em;
@@ -292,11 +297,15 @@ const InlineHotkeyHint = styled(HotkeyHintBase)`
 `;
 
 export const KeyHintIndicator = ({ className }: { className?: string }) => {
+  const [show, , toggleShowKeyHints] = useUIToggle('showKeyHints');
+
+  useHotkeys('i', () => toggleShowKeyHints());
+
   return (
-    <KeyHintIndicatorWrapper className={className}>
+    <KeyHintIndicatorWrapper $visible={show} className={className}>
       Showing Hotkey hints - press
       <InlineHotkeyHint>
-        <HotKeyCombos hotkeys={'h'}></HotKeyCombos>
+        <HotKeyCombos hotkeys={'i'}></HotKeyCombos>
       </InlineHotkeyHint>
       to hide
     </KeyHintIndicatorWrapper>

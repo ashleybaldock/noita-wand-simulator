@@ -1,6 +1,8 @@
 export const DEFAULT_SIZE = 48;
 export const MAX_ALWAYS = 4;
 
+export const MAX_RESULTS_SHOWN = 5;
+
 export const FPS = 60;
 
 export const SIGN_MULTIPLY = '×';

@@ -17,7 +17,7 @@ const SpellTip = styled.div`
   grid-template-areas:
     'sname  sname  sname'
     'sdesc  sdesc  sdesc'
-    'sid    sid    simage  '
+    'sid    sid    simage'
     'label  value  simage'
     'label  value  simage'
     'label  value  simage'
@@ -32,6 +32,7 @@ const SpellTip = styled.div`
   border-radius: 0px 7.5px 0px 7.5px;
   background-color: rgba(5, 5, 5, 0.96);
   color: rgb(250, 250, 250);
+  filter: var(--filter-floating-shadow);
 
   max-width: 300px;
   min-width: 240px;

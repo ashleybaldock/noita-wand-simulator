@@ -22,7 +22,7 @@ export const Checkbox = styled.input.attrs({ type: 'checkbox' })<CheckboxProps>`
       : `
   display: none;
   `}
-  place-content: center;
+  place-items: center center;
 
   font: inherit;
   color: currentColor;

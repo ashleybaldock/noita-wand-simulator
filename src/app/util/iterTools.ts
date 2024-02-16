@@ -14,6 +14,7 @@ export function* iterIter<T>(source: Iterator<T>): IterableIterator<T> {
 
 /**
  * Creates an iterator over the first n values of source
+ * !Note, this is a shallow operation and the underlying iterator is consumed
  */
 export function* takeLazily<T>(
   source: IterableIterator<T>,
@@ -31,7 +32,7 @@ export function* takeLazily<T>(
 /**
  * Like takeLazily, but eager
  *
- * !Beware, this reads all items from source into memory
+ * !Beware, this immediately reads the requested (n) items from the source into memory
  *
  * @returns Array of n items from source
  */
@@ -42,7 +43,7 @@ export function takeArray<T>(source: IterableIterator<T>, n: number): Array<T> {
 /**
  * Like takeLazily, but eager
  *
- * !Beware, this reads all items from source into memory
+ * !Beware, this immediately reads all items from source into memory, not for use with infinite sources
  *
  * @returns Iterable of n items from source
  */
@@ -101,8 +102,8 @@ export function* flatMapIter<T, Tout>(
   source: IterableIterator<T>,
   iterMapperFn: IterMapper<T, Tout>,
 ): IterableIterator<Tout> {
-  for (let s of source) {
-    for (let y of iterMapperFn(s)) {
+  for (const s of source) {
+    for (const y of iterMapperFn(s)) {
       yield y;
     }
   }
@@ -130,7 +131,7 @@ export function* mapIter<T, Tout>(
   source: IterableIterator<T>,
   mapperFn: Mapper<T, Tout>,
 ): IterableIterator<Tout> {
-  for (let s of source) {
+  for (const s of source) {
     yield mapperFn(s);
   }
 }

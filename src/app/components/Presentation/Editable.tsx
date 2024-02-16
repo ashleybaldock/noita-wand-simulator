@@ -22,6 +22,7 @@ export const EditableWithLabel = styled.label`
     text-decoration: underline dotted var(--color-toggle-hover) 1.4px;
     cursor: pointer;
     position: relative;
+    width: 100%;
   }
   &:hover {
     color: var(--color-toggle-hover);

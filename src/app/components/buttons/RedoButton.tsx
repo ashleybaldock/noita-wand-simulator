@@ -2,7 +2,7 @@ import { useAppDispatch } from '../../redux/hooks';
 import { ActionCreators } from 'redux-undo';
 import { Button } from '../generic';
 
-export function RedoButton() {
+export const RedoButton = () => {
   const dispatch = useAppDispatch();
 
   const redo = () => dispatch(ActionCreators.redo());
@@ -11,9 +11,10 @@ export function RedoButton() {
     <Button
       hotkeys={'r, ctrl+r, shift+mod+z'}
       imgUrl={'data/redo.png'}
+      imgOnly={'mobile'}
       onClick={() => redo()}
     >
       Redo
     </Button>
   );
-}
+};

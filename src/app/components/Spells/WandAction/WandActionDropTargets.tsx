@@ -142,7 +142,7 @@ export const WandActionDropTargets = ({
         isDraggingOver={isOverBefore}
         enabled={isDraggingAction}
         selection={selection}
-        cursor={cursorPosition === 'before' ? cursorStyle : 'none'}
+        $cursor={cursorPosition === 'before' ? cursorStyle : 'none'}
       />
       <DragDropTargetAfter
         ref={dropRefAfter}
@@ -154,7 +154,7 @@ export const WandActionDropTargets = ({
         isDraggingSelect={isDraggingSelect}
         enabled={isDraggingAction}
         selection={selection}
-        cursor={cursorPosition === 'after' ? cursorStyle : 'none'}
+        $cursor={cursorPosition === 'after' ? cursorStyle : 'none'}
       />
       {/* <WandEditCursor */}
       {/*   wandIndex={wandIndex} */}

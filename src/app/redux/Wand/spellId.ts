@@ -1,5 +1,6 @@
 import { isNotNullOrUndefined } from '../../util';
-import { ActionId, isValidActionId } from '../../calc/actionId';
+import type { ActionId } from '../../calc/actionId';
+import { isValidActionId } from '../../calc/actionId';
 
 export type SpellId = ActionId | string | null;
 

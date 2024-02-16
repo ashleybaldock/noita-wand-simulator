@@ -1,4 +1,5 @@
-import { LegacyRef, useCallback, useEffect, useRef, useState } from 'react';
+import type { LegacyRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Editable } from '../Presentation/Editable';
 

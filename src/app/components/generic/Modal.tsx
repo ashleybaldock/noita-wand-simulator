@@ -7,20 +7,33 @@ const BackgroundDiv = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background-color: var(--color-modal-fullscreen-overlay);
+  overscroll-behavior: none;
 `;
 
 const MainDiv = styled.div`
+  --margin: 2em;
+  --modal-header-height: 1.5em;
+
   position: absolute;
-  top: 0;
-  right: 0;
+  top: var(--margin);
+  right: var(--margin);
+  bottom: var(--margin);
+  left: var(--margin);
   background-color: var(--color-modal-bg);
   color: var(--color-modal-fg);
   max-height: 100%;
   overflow-y: auto;
   box-shadow: -10px 10px 50px #000;
+
+  @media screen and (max-width: 500px) {
+    --margin: 0;
+    box-shadow: unset;
+    height: 100vh;
+    overflow-y: scroll;
+  }
 `;
 
 const HeaderDiv = styled.div`
@@ -34,9 +47,38 @@ const HeaderDiv = styled.div`
   justify-content: end;
   padding: 0.5em;
   align-items: center;
+  font-size: 1.3em;
+  justify-content: center;
+
+  @media screen and (max-width: 500px) {
+    padding: 0;
+    margin: 0;
+    justify-content: start;
+    font-size: unset;
+  }
 `;
 
-const TitleDiv = styled.div``;
+const TitleDiv = styled.div`
+  @media screen and (max-width: 500px) {
+    position: sticky;
+    top: 0;
+    height: var(--modal-header-height);
+    justify-content: right;
+    line-height: 1;
+    font-size: 1.4em;
+
+    background-color: var(--color-modal-bg);
+    height: var(--modal-header-height);
+    padding-top: 0.4em;
+    padding-left: 0.4em;
+    position: fixed;
+    top: 0;
+    text-align: left;
+    z-index: 50;
+    padding-bottom: 0;
+    width: 100%;
+  }
+`;
 
 const ContentDiv = styled.div`
   padding: 5px;
@@ -48,9 +90,12 @@ type Props = {
   onClose: () => void;
 };
 
-export function Modal(props: React.PropsWithChildren<Props>) {
-  const { title, visible, onClose } = props;
-
+export const Modal = ({
+  title,
+  visible,
+  onClose,
+  children,
+}: React.PropsWithChildren<Props>) => {
   const handleClose = useCallback(
     (e?: React.MouseEvent<HTMLDivElement>) => {
       if (!e || e.target === e.currentTarget) {
@@ -81,8 +126,8 @@ export function Modal(props: React.PropsWithChildren<Props>) {
           <TitleDiv>{title}</TitleDiv>
           <CloseButton onClick={handleClose} />
         </HeaderDiv>
-        <ContentDiv>{props.children}</ContentDiv>
+        <ContentDiv>{children}</ContentDiv>
       </MainDiv>
     </BackgroundDiv>
   );
-}
+};

@@ -3,7 +3,7 @@ import { setWand } from '../../redux/wandSlice';
 import { useCallback, useState } from 'react';
 import { WandPresetMenu } from './WandPresetMenu';
 import { Button, Modal } from '../generic';
-import { Preset } from '../../redux/Wand/preset';
+import type { Preset } from '../../redux/Wand/preset';
 
 export const WandPresetButton = () => {
   const presets = usePresets();
@@ -28,6 +28,7 @@ export const WandPresetButton = () => {
       <Button
         hotkeys={'o'}
         imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
+        imgOnly={'mobile'}
         onClick={() => setMenuVisible(!menuVisible)}
       >
         Load

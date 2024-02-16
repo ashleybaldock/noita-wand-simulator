@@ -4,14 +4,41 @@ import type { AppDispatch, RootState } from './store';
 import { createSelector } from 'reselect';
 import { generateWikiWandV2 } from './Wand/toWiki';
 import { generateSearchFromWandState } from './Wand/toSearch';
+import type { KeyOfType } from '../util';
 import { compareSequence, compareSequenceIgnoringGaps } from '../util';
 import type { Cursor } from '../components/Spells/WandAction/types';
 import type { WandSelection } from './Wand/wandSelection';
 import { getSelectionForId } from './Wand/toSelection';
+import type { Config, ConfigToggleField } from './configSlice';
+import { setConfigSetting, toggleConfigSetting } from './configSlice';
+import type { UIState, UIToggle } from './uiSlice';
+import { flipUiToggle, setUiToggle } from './uiSlice';
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+///****************************************/
+//**              uiSlice               **/
+/****************************************/
+
+const selectUI = (state: RootState) => state.ui;
+export const useUI = () => useAppSelector(selectUI);
+
+export const useUIToggle = <TN extends UIToggle>(
+  name: TN,
+): [
+  value: UIState[TN],
+  set: (newValue: UIState[TN]) => void,
+  flip: () => void,
+] => {
+  const dispatch = useAppDispatch();
+  return [
+    useAppSelector(selectUI)[name],
+    (newValue: UIState[TN]) => dispatch(setUiToggle({ name, newValue })),
+    () => dispatch(flipUiToggle({ name })),
+  ];
+};
 
 ///****************************************/
 //**            configSlice             **/
@@ -19,6 +46,49 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 const selectConfig = (state: RootState) => state.config;
 export const useConfig = () => useAppSelector(selectConfig).config;
+
+export const useConfigToggle = <N extends ConfigToggleField>(
+  fieldName: N,
+): [
+  value: Config[N],
+  set: (newValue: Config[N]) => void,
+  toggle: () => void,
+] => {
+  const dispatch = useAppDispatch();
+  return [
+    useAppSelector(selectConfig).config[fieldName],
+    (newValue: Config[N]) =>
+      dispatch(setConfigSetting({ name: fieldName, newValue })),
+    () => dispatch(toggleConfigSetting({ name: fieldName })),
+  ];
+};
+
+export const useConfigSetting = <
+  T extends Config[N],
+  N extends KeyOfType<Config, T>,
+>(
+  fieldName: N,
+): [value: Config[N], set: (newValue: T) => void] => {
+  const dispatch = useAppDispatch();
+  return [
+    useAppSelector(selectConfig).config[fieldName],
+    (newValue: T) => dispatch(setConfigSetting({ name: fieldName, newValue })),
+  ];
+};
+
+export const useKeyhints = (): [
+  value: boolean,
+  toggle: () => void,
+  set: (newValue: boolean) => void,
+] => {
+  const dispatch = useAppDispatch();
+  return [
+    useAppSelector(selectConfig).config['debug.keyHints'],
+    () => dispatch(toggleConfigSetting({ name: 'debug.keyHints' })),
+    (newValue: boolean) =>
+      dispatch(setConfigSetting({ name: 'debug.keyHints', newValue })),
+  ];
+};
 
 ///****************************************/
 //**           presetsSlice             **/
@@ -48,14 +118,25 @@ const selectURLSearch = createSelector(
 );
 export const useURLSearch = () => useSelector(selectURLSearch);
 
+const selectAlwaysCastSpells = createSelector(
+  selectWandState,
+  (wandState) => wandState.alwaysIds,
+);
+
+/**
+ * Always Cast Spell sequence
+ */
+export const useAlwaysCastLayout = () =>
+  useSelector(selectAlwaysCastSpells, compareSequence);
+
+/**
+ * Full Spell sequence
+ */
 const selectSpells = createSelector(
   selectWandState,
   (wandState) => wandState.spellIds,
 );
 
-/**
- * Full Spell sequence
- */
 export const useSpellLayout = () => useSelector(selectSpells, compareSequence);
 
 /**

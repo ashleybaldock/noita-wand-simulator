@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 const StickyHeaderBackground = styled.div`
   position: sticky;
   top: -0.36em;
-  z-index: var(--zindex-stickyheader-behind, 200);
+  z-index: var(--zindex-stickyheader-overline, 840);
 
   display: flex;
   align-items: center;
@@ -43,6 +43,7 @@ const StickyTitleHeader = styled.h2`
   border-top-style: hidden;
   border-left-style: hidden;
 
+  filter: var(--filter-floating-shadow);
   padding: 0.5em 0.6em 6.8px 0.2em;
 
   font-size: 16px;

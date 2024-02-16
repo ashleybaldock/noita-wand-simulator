@@ -4,6 +4,9 @@ import { unlockConditions } from '../calc/unlocks';
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { loadState, saveState } from '../localStorage';
 import { startAppListening } from './listenerMiddleware';
+import type { WritableDraft } from 'immer/dist/internal';
+import { objectFromKeys } from '../util';
+import type { KeyOfType } from '../util';
 
 type ConfigBase = {
   condenseShots: boolean;
@@ -39,6 +42,7 @@ export type ConfigRandom = {
 };
 export type ConfigDebug = {
   'debug.dragHint': boolean;
+  'debug.keyHints': boolean;
 };
 export type ConfigRequirements = {
   'requirements.enemies': boolean;
@@ -59,21 +63,11 @@ export type Config = ConfigBase &
 
 export type ConfigSection = 'unlocks' | 'requirements' | 'debug' | 'random';
 
-const objectFromKeys = <const T extends ReadonlyArray<string>, const F>(
-  keys: T,
-  defaultTo: F,
-): { [K in T[number]]: F } => {
-  return Object.fromEntries(keys.map((k) => [k, defaultTo])) as {
-    [K in T[number]]: F;
-  };
-};
 const unlocksFalse = objectFromKeys(unlockConditions, false);
 const unlocksTrue = objectFromKeys(unlockConditions, true);
 
-type KeyOfType<Obj extends object, KeyType> = {
-  [k in keyof Obj]: Obj[k] extends KeyType ? k : never;
-}[keyof Obj];
-
+export type ConfigField = keyof Config;
+export type ConfigToggleField = KeyOfType<Config, boolean>;
 export type ConfigBooleanField = KeyOfType<Config, boolean>;
 export type ConfigNumberField = KeyOfType<Config, number>;
 
@@ -87,6 +81,7 @@ export const initialState: ConfigState = {
   config: {
     ...unlocksFalse,
     'debug.dragHint': false,
+    'debug.keyHints': false,
     'condenseShots': true,
     'unlimitedSpells': true,
     'infiniteSpells': true,
@@ -132,17 +127,15 @@ export const configSlice = createSlice({
     ) => {
       state.config = { ...state.config, ...action.payload };
     },
-    setConfigSetting: (
-      state,
-      {
-        payload: { name, newValue },
-      }: PayloadAction<{ name: ConfigNumberField; newValue: number }>,
+    setConfigSetting: <T extends Config[N], N extends KeyOfType<Config, T>>(
+      state: WritableDraft<ConfigState>,
+      { payload: { name, newValue } }: PayloadAction<{ name: N; newValue: T }>,
     ) => {
       state.config[name] = newValue;
     },
     toggleConfigSetting: (
       state,
-      { payload: { name } }: PayloadAction<{ name: ConfigBooleanField }>,
+      { payload: { name } }: PayloadAction<{ name: ConfigToggleField }>,
     ) => {
       state.config[name] = !state.config[name];
     },

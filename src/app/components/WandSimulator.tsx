@@ -12,6 +12,7 @@ import { CastConfigEditor } from './config/CastConfigEditor';
 import { ReleaseInfo } from './ReleaseInfo';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Tooltips } from './Tooltips';
+import { Modals } from './Modals/Modals';
 
 const Column = styled.div`
   display: flex;
@@ -34,7 +35,7 @@ const SpellHotbar = styled.div`
   background-color: black;
 `;
 
-export function WandSimulator() {
+export const WandSimulator = () => {
   const dispatch = useAppDispatch();
 
   // useEffect(() => {
@@ -64,9 +65,10 @@ export function WandSimulator() {
         <Column>
           <VisualisationList />
         </Column>
+        <Modals />
         <Tooltips />
         <ReleaseInfo />
       </Column>
     </DebugHints>
   );
-}
+};
