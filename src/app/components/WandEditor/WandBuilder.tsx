@@ -88,20 +88,44 @@ const StyledAlwaysCastEditor = styled(WandAlwaysCastEditor)`
   }
 `;
 
+const SectionHeaderContainer = styled.div`
+  position: sticky;
+  top: -0.36em;
+  z-index: var(--zindex-stickyheader-controls, 220);
+  display: flex;
+  flex-direction: column;
+`;
+
+const SectionHeaderSplit = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+`;
+
 const SectionButtonBarSearch = styled(SectionButtonBar)`
   margin-right: -10px;
   padding-right: 10px;
+  align-self: start;
 `;
-const SectionButtonBarHorizFlex = styled.div`
-  position: sticky;
-  top: -0.16em;
-  z-index: var(--zindex-stickyheader-controls, 220);
+const SectionButtonBarContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap-reverse;
   justify-content: end;
-  align-content: start;
-  margin-top: -2.56em;
+`;
+
+const StickyHeaderTopBar = styled.div`
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  z-index: var(--zindex-stickyheader-overline, 210);
+
+  background-color: transparent;
+  border-top: 0.16em solid var(--color-base-background);
+  border-bottom: 0.16em solid var(--color-tab-border-inactive);
 `;
 
 export const WandBuilder = () => {
@@ -110,20 +134,25 @@ export const WandBuilder = () => {
 
   return (
     <>
-      <SectionHeader title={'Wand Editor'} />
-      <SectionButtonBarHorizFlex>
-        <SectionButtonBarSearch>
-          <SearchButton />
-        </SectionButtonBarSearch>
-        <SectionButtonBar>
-          <UndoButton />
-          <RedoButton />
-          <ResetButton />
-          <LoadButton />
-          <ConfigButton />
-        </SectionButtonBar>
-        {/* <ExportButton /> */}
-      </SectionButtonBarHorizFlex>
+      <SectionHeaderContainer>
+        <StickyHeaderTopBar />
+        <SectionHeaderSplit>
+          <SectionHeader title={'Wand Editor'} />
+          <SectionButtonBarContainer>
+            <SectionButtonBarSearch>
+              <SearchButton />
+            </SectionButtonBarSearch>
+            <SectionButtonBar>
+              <UndoButton />
+              <RedoButton />
+              <ResetButton />
+              <LoadButton />
+              <ConfigButton />
+            </SectionButtonBar>
+            {/* <ExportButton /> */}
+          </SectionButtonBarContainer>
+        </SectionHeaderSplit>
+      </SectionHeaderContainer>
       <MainDiv>
         <WandBorder>
           <ContentDiv

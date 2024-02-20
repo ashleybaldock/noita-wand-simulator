@@ -59,7 +59,7 @@ export function condenseActionsAndProjectiles(
 ): GroupedWandShot {
   return {
     ...wandShot,
-    calledActions: condenseActions(wandShot.calledActions),
+    actionCallGroups: condenseActions(wandShot.actionCallGroups),
     projectiles: condenseProjectiles(wandShot.projectiles),
   };
 }

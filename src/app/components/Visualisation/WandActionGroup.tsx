@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { WandAction, WandActionBorder } from '../Spells/WandAction';
 import { NextActionArrow } from '../Visualisation/Arrows';
 import { DEFAULT_SIZE } from '../../util/constants';
+import type { GroupedObject } from '../../calc/grouping/combineGroups';
 import {
-  GroupedObject,
   isArrayObject,
   isMultipleObject,
   isRawObject,
@@ -14,10 +14,12 @@ import {
   ActionSourceAnnotation,
   DeckIndexAnnotation,
   DontDrawAnnotation,
+  DrawAnnotation,
   FriendlyFireAnnotation,
   RecursionAnnotation,
 } from '../Annotations/';
-import { ActionCall, GroupedProjectile } from '../../calc/eval/types';
+import type { ActionCall, GroupedProjectile } from '../../calc/eval/types';
+import { WrapAnnotation } from '../Annotations/WrapAnnotation';
 
 const MainDiv = styled.div.attrs({
   className: 'MainDiv',
@@ -105,8 +107,18 @@ export const WandActionGroup = ({
             {...simplified}
             dont_draw_actions={simplified.dont_draw_actions}
           />
+          <DrawAnnotation />
           <DeckIndexAnnotation deckIndex={simplified.deckIndex} />
           <FriendlyFireAnnotation />
+          <WrapAnnotation
+            wrappingInto={simplified.wrappingInto}
+            wasLastToBeDrawnBeforeWrapNr={
+              simplified.wasLastToBeDrawnBeforeWrapNr
+            }
+            wasLastToBeCalledBeforeWrapNr={
+              simplified.wasLastToBeCalledBeforeWrapNr
+            }
+          />
         </WandActionGroupWandActionBorder>
       );
     } else {

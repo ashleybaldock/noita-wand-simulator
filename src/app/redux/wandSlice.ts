@@ -15,7 +15,6 @@ import type { WandState } from './Wand/wandState';
 import { type Wand, compareWandsForSimulation } from './Wand/wand';
 import type { SpellId } from './Wand/spellId';
 import { startAppListening } from './listenerMiddleware';
-import { useConfig } from './hooks';
 import { clickWand } from '../calc/eval/clickWand';
 import { isValidActionId } from '../calc/actionId';
 import { getSpellById } from '../calc/spells';

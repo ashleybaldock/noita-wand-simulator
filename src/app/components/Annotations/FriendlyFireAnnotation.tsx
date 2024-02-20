@@ -31,5 +31,10 @@ export function FriendlyFireAnnotation({
 }) {
   // const { config } = useConfig();
 
-  return <SourceDiv colors={['#000', '#fff']}></SourceDiv>;
+  return (
+    <SourceDiv
+      colors={['#000', '#fff']}
+      data-name="FriendlyFireAnnotation"
+    ></SourceDiv>
+  );
 }

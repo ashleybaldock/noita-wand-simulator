@@ -64,5 +64,10 @@ export const DeleteSpellAnnotation = ({
     }),
   }));
 
-  return <DeleteDiv onClick={deleteSpell}></DeleteDiv>;
+  return (
+    <DeleteDiv
+      onClick={deleteSpell}
+      data-name="DeleteSpellAnnotation"
+    ></DeleteDiv>
+  );
 };

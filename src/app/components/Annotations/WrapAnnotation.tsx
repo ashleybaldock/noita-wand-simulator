@@ -1,17 +1,18 @@
 import styled from 'styled-components';
 import { useConfig } from '../../redux';
+import type { SpellDeckInfo } from '../../calc/spell';
 
-const IndexDiv = styled.div`
+const Wrapped = styled.div`
   pointer-events: none;
   position: absolute;
-  bottom: -2px;
-  right: 2px;
+  bottom: -12px;
+  left: 20px;
   z-index: var(--zindex-note-deckidx);
-  color: rgb(255, 255, 255);
+  color: rgb(0 255 0);
   font-size: 14px;
   font-family: var(--font-family-noita-default);
   font-weight: normal;
-  --shadow-bg: rgb(0, 0, 0);
+  --shadow-bg: rgb(0 0 0);
   --shadow-w: 0px;
   text-shadow: var(--shadow-bg) 1px 1px var(--shadow-w),
     var(--shadow-bg) 1px -1px var(--shadow-w),
@@ -21,20 +22,20 @@ const IndexDiv = styled.div`
     var(--shadow-bg) -1px -1px 1px;
 `;
 
-export const DeckIndexAnnotation = ({
-  deckIndex,
+export const WrapAnnotation = ({
+  wasLastToBeDrawnBeforeWrapNr,
+  wasLastToBeCalledBeforeWrapNr,
+  wrappingInto,
 }: {
-  deckIndex?: number | string;
+  wasLastToBeDrawnBeforeWrapNr?: number;
+  wasLastToBeCalledBeforeWrapNr?: number;
+  wrappingInto?: readonly SpellDeckInfo[];
 }) => {
-  const { showDeckIndexes } = useConfig();
+  const { showWraps } = useConfig();
 
-  if (deckIndex === undefined || !showDeckIndexes) {
+  if (!showWraps) {
     return null;
   }
 
-  if (typeof deckIndex === 'number') {
-    return <IndexDiv data-name="DeckIndexAnnotation">{deckIndex + 1}</IndexDiv>;
-  } else {
-    return <IndexDiv data-name="DeckIndexAnnotation">{deckIndex}</IndexDiv>;
-  }
+  return <Wrapped>{wasLastToBeCalledBeforeWrapNr}</Wrapped>;
 };

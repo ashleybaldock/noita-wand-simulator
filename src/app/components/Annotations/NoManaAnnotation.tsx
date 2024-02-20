@@ -22,8 +22,13 @@ export const SourceDiv = styled.div<{
   opacity: 0;
 `;
 
-export function NoManaAnnotation() {
+export const NoManaAnnotation = () => {
   // const { config } = useConfig();
   //
-  return <SourceDiv colors={['#000', '#fff']}></SourceDiv>;
-}
+  return (
+    <SourceDiv
+      colors={['#000', '#fff']}
+      data-name="NoManaAnnotation"
+    ></SourceDiv>
+  );
+};

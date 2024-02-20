@@ -49,7 +49,7 @@ const NoQuery = styled.div`
   position: absolute;
   top: 2.4em;
   right: 0;
-  justify-content: end;
+  justify-content: start;
   flex: 0 0 auto;
   font-size: 0.8em;
   background-color: #0000004f;
@@ -73,6 +73,7 @@ const Container = styled.div`
   max-width: 28vw;
   width: auto;
   min-width: 1em;
+  margin-left: auto;
 }
 `;
 

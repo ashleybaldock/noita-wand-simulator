@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 import { useRef } from 'react';
-import { useHotkeys } from 'react-hotkeys-hook';
-import { useAlwaysCastLayout, useAppDispatch } from '../../redux/hooks';
-import { moveCursor } from '../../redux/editorThunks';
-import { deleteSelection, clearSelection } from '../../redux/editorSlice';
+import { useAlwaysCastLayout } from '../../redux/hooks';
 import { getSpellById } from '../../calc/spells';
 import { isKnownSpell } from '../../redux/Wand/spellId';
 import { SlottedSpell } from './SlottedSpell';
@@ -45,35 +42,42 @@ const StyledName = styled.div`
   width: fit-content;
   margin-right: 0.6em;
   line-height: 1.3;
+  white-space: nowrap;
 `;
 
 const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+  padding: 0.3em 0.6em 0.2em 2.2em;
+
+  background-image: url('/data/wand/icon_gun_permanent_actions.png');
+  background-position: 0.6em 50%;
+  background-size: 1em;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
 `;
 
 export const WandAlwaysCastEditor = styled(
   ({ className = '' }: { className?: string }) => {
-    const dispatch = useAppDispatch();
+    // const dispatch = useAppDispatch();
 
     const alwaysIds = useAlwaysCastLayout();
     const gridRef = useRef(null);
 
     /* Move cursor */
-    useHotkeys('a, h', () => {
-      /*
-       */
-      dispatch(moveCursor({ by: -1, always: true }));
-    });
-    useHotkeys('d, l', () => {
-      dispatch(moveCursor({ by: 1, always: true }));
-    });
+    // useHotkeys('a, h', () => {
+    //   dispatch(moveCursor({ by: -1, always: true }));
+    // });
+    // useHotkeys('d, l', () => {
+    //   dispatch(moveCursor({ by: 1, always: true }));
+    // });
 
-    useHotkeys('Backspace, r, shift+x', () => {
-      dispatch(deleteSelection({ shift: 'left' }));
-      dispatch(clearSelection());
-    });
+    // useHotkeys('Backspace, r, shift+x', () => {
+    //   dispatch(deleteSelection({ shift: 'left' }));
+    //   dispatch(clearSelection());
+    // });
 
     const alwaysActions = alwaysIds.map((alwaysId) =>
       isKnownSpell(alwaysId) ? getSpellById(alwaysId) : undefined,

@@ -1,8 +1,9 @@
-import type { Spell } from '../spell';
+import type { Spell, SpellDeckInfo } from '../spell';
 import type { TriggerCondition } from '../trigger';
 import type { GroupedObject } from '../grouping/combineGroups';
 import type { GunActionState } from '../actionState';
 import type { ActionSource } from '../actionSources';
+import type { TreeNode } from '../../util';
 
 /*
  * Evaluation & visualisation
@@ -16,21 +17,16 @@ export type ActionCall = {
   recursion?: number;
   iteration?: number;
   dont_draw_actions?: boolean;
-  lastDrawnBeforeWrap?: number;
-  lastCalledBeforeWrap?: number;
-};
-
-export type TreeNode<T> = {
-  value: T;
-  parent?: TreeNode<T>;
-  children: TreeNode<T>[];
+  wasLastToBeDrawnBeforeWrapNr?: number;
+  wasLastToBeCalledBeforeWrapNr?: number;
+  wrappingInto?: readonly SpellDeckInfo[];
 };
 
 export type WandShot = {
   _typeName: 'WandShot';
   projectiles: Projectile[];
-  calledActions: ActionCall[];
-  actionTree: TreeNode<ActionCall>[];
+  actionCallGroups: ActionCall[];
+  actionCallTree: TreeNode<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;
   triggerType?: TriggerCondition;
@@ -43,8 +39,8 @@ export type WandShot = {
 export type GroupedWandShot = {
   _typeName: 'WandShot';
   projectiles: GroupedObject<GroupedProjectile>[];
-  calledActions: GroupedObject<ActionCall>[];
-  actionTree: TreeNode<ActionCall>[];
+  actionCallGroups: GroupedObject<ActionCall>[];
+  actionCallTree: TreeNode<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;
   triggerType?: TriggerCondition;

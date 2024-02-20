@@ -14,12 +14,13 @@ import {
 } from '../gun';
 import { isValidEntityPath, entityToActions } from '../entityLookup';
 import { isIterativeActionId } from '../actionId';
-import type { ActionCall, TreeNode, WandShot } from './types';
+import type { ActionCall, WandShot } from './types';
 import { defaultGunActionState } from '../defaultActionState';
 import { getTriggerConditionForEvent } from '../trigger';
 import { isValidActionCallSource } from '../spellTypes';
 import type { StopCondition, StopReason } from '../../types';
 import type { WandEvent } from './wandEvent';
+import type { TreeNode } from '../../util';
 
 export type ClickWandResult = {
   shots: WandShot[];
@@ -145,8 +146,8 @@ export const clickWand = (
         currentShot = {
           _typeName: 'WandShot',
           projectiles: [],
-          calledActions: [],
-          actionTree: [],
+          actionCallGroups: [],
+          actionCallTree: [],
           castState: { ...defaultGunActionState },
           triggerType: getTriggerConditionForEvent(name),
           triggerEntity: entity_filename,
@@ -183,10 +184,12 @@ export const clickWand = (
         currentWrapNumber += 1;
         currentShot.wraps.push(currentWrapNumber);
         if (lastDrawnAction) {
-          lastDrawnAction.lastDrawnBeforeWrap = currentWrapNumber;
+          lastDrawnAction.wasLastToBeDrawnBeforeWrapNr = currentWrapNumber;
+          lastDrawnAction.wrappingInto = discarded;
         }
         if (lastCalledAction) {
-          lastCalledAction.lastCalledBeforeWrap = currentWrapNumber;
+          lastCalledAction.wasLastToBeCalledBeforeWrapNr = currentWrapNumber;
+          lastCalledAction.wrappingInto = discarded;
         }
 
         break;
@@ -299,8 +302,8 @@ export const clickWand = (
     currentShot = {
       _typeName: 'WandShot',
       projectiles: [],
-      calledActions: [],
-      actionTree: [],
+      actionCallGroups: [],
+      actionCallTree: [],
       castState: { ...defaultGunActionState },
       wraps: [],
     };
@@ -329,8 +332,8 @@ export const clickWand = (
         _start_shot(mana);
         _draw_actions_for_shot(true);
         shotCount++;
-        currentShot!.calledActions = calledActions!;
-        currentShot!.actionTree = rootNodes;
+        currentShot!.actionCallGroups = calledActions!;
+        currentShot!.actionCallTree = rootNodes;
         currentShot!.manaDrain = mana - gunMana;
         wandShots.push(currentShot!);
         mana = gunMana;

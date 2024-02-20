@@ -19,11 +19,12 @@ import { moveCursorTo } from '../../../redux/editorSlice';
 
 export const WandActionDropTargets = ({
   wandIndex,
+  alwaysCast = false,
   selection = 'none',
   children,
 }: React.PropsWithChildren<{
   wandIndex: number;
-  // cursorIndex?: CursorPosition;
+  alwaysCast?: boolean;
   selection?: WandSelection;
 }>) => {
   const dispatch = useAppDispatch();

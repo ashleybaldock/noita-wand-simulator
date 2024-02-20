@@ -37,6 +37,15 @@ export function range(n: number) {
   return [...Array(n).keys()];
 }
 
+/**
+ * Tree data structure
+ */
+export type TreeNode<T> = {
+  value: T;
+  parent?: TreeNode<T>;
+  children: TreeNode<T>[];
+};
+
 // type DiffResult<T extends object> = Partial<{
 //   [key in keyof T]: { a: T[key]; b: T[key] };
 // }>;

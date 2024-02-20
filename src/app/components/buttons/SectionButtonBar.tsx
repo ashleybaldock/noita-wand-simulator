@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const SectionButtonBar = styled.div`
   display: flex;
   flex-direction: row;
-  align-self: end;
+  align-self: start;
   background-color: var(--color-base-background);
   border-radius: 0 0 0 15.1em / 0 0 0 54.4em;
   padding: 0.04em;

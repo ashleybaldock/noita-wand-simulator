@@ -1,10 +1,7 @@
 import styled from 'styled-components';
 import { WandActionGroup } from '../WandActionGroup';
-import {
-  ActionCall,
-  GroupedWandShot,
-  TreeNode,
-} from '../../../calc/eval/types';
+import type { ActionCall, GroupedWandShot } from '../../../calc/eval/types';
+import type { TreeNode } from '../../../util';
 
 export const ActionTreeShotResultMainDiv = styled.div`
   display: flex;
@@ -52,7 +49,7 @@ const ActionTreeComponent = ({ node }: { node: TreeNode<ActionCall> }) => {
 export const ActionTreeShotResult = ({ shot }: { shot: GroupedWandShot }) => {
   return (
     <ActionTreeShotResultMainDiv>
-      {shot.actionTree.map((n, index) => (
+      {shot.actionCallTree.map((n, index) => (
         <ActionTreeComponent node={n} key={index} />
       ))}
     </ActionTreeShotResultMainDiv>

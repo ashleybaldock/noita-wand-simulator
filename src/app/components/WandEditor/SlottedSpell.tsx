@@ -41,7 +41,11 @@ export const SlottedSpell = ({
   };
 
   return (
-    <WandActionDropTargets wandIndex={wandIndex} selection={selection}>
+    <WandActionDropTargets
+      alwaysCast={alwaysCast}
+      wandIndex={wandIndex}
+      selection={selection}
+    >
       {spellAction && (
         <>
           <WandActionDragSource

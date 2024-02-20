@@ -14,7 +14,7 @@ const StyledDiv = styled.div`
 export const ActionCalledShotResult = ({ shot }: { shot: GroupedWandShot }) => {
   return (
     <StyledDiv>
-      {shot.calledActions.map((actionCall, index) => {
+      {shot.actionCallGroups.map((actionCall, index) => {
         return (
           <div key={index}>
             <WandActionGroup group={actionCall} />

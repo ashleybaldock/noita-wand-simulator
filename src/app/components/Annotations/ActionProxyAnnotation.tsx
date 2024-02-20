@@ -4,7 +4,7 @@ import {
   isWithTimerActionId,
   isWithTriggerActionId,
 } from '../../calc/actionId';
-import { Spell } from '../../calc/spell';
+import type { Spell } from '../../calc/spell';
 import { useConfig } from '../../redux';
 import { isNotNullOrUndefined } from '../../util';
 

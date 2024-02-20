@@ -24,6 +24,8 @@ type ConfigBase = {
   showDontDraw: boolean;
   swapOnMove: boolean;
   showActionTree: boolean;
+  showWraps: boolean;
+  showDraw: boolean;
   showSpellsInCategories: boolean;
   endSimulationOnRefresh: boolean;
   showBeta: boolean;
@@ -97,6 +99,8 @@ export const initialState: ConfigState = {
     'showDontDraw': true,
     'swapOnMove': true,
     'showActionTree': true,
+    'showWraps': true,
+    'showDraw': true,
     'showSpellsInCategories': true,
     'endSimulationOnRefresh': true,
     'showBeta': true,

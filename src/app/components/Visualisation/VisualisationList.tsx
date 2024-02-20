@@ -115,7 +115,7 @@ export const VisualisationList = () => {
     if (!showDivides) {
       return shots.map((s) => ({
         ...s,
-        calledActions: s.calledActions.filter(
+        calledActions: s.actionCallGroups.filter(
           (ac) => !ac.spell.id.startsWith('DIVIDE'),
         ),
       }));
@@ -128,7 +128,7 @@ export const VisualisationList = () => {
     if (!showGreekSpells) {
       return shots.map((s) => ({
         ...s,
-        calledActions: s.calledActions.filter(
+        calledActions: s.actionCallGroups.filter(
           ({ spell }) => isValidActionId(spell.id) && isGreekActionId(spell.id),
         ),
       }));
@@ -141,7 +141,9 @@ export const VisualisationList = () => {
     if (!showDirectActionCalls) {
       return shots.map((s) => ({
         ...s,
-        calledActions: s.calledActions.filter((ac) => ac.source !== 'action'),
+        calledActions: s.actionCallGroups.filter(
+          (ac) => ac.source !== 'action',
+        ),
       }));
     } else {
       return shots;

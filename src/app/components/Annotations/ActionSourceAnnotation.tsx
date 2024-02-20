@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ActionSource } from '../../calc/actionSources';
+import type { ActionSource } from '../../calc/actionSources';
 import { useConfig } from '../../redux';
 import { BaseAnnotation } from './BaseAnnotation';
 
@@ -40,7 +40,10 @@ export const ActionSourceAnnotation = ({
   }
 
   return (
-    <SourceDiv colors={sourceDisplayMap[source][1]}>
+    <SourceDiv
+      colors={sourceDisplayMap[source][1]}
+      data-name="ActionSourceAnnotation"
+    >
       {sourceDisplayMap[source][0]}
     </SourceDiv>
   );
