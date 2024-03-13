@@ -7,7 +7,7 @@ const SourceDiv = styled.div<{
   position: absolute;
   top: 10%;
   transform: translateY(-50%);
-  left: calc(-1 * var(--bsize-spell) / 4 + 12px);
+  left: calc(-1 * var(--bsize-spell) / 4 + 32px);
   width: calc(var(--bsize-spell) / 4);
   height: calc(var(--bsize-spell) / 4);
   border: none;

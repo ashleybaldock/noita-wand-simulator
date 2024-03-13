@@ -2,7 +2,7 @@ import { Modal } from '../generic';
 import { ConfigEditor } from '../ConfigEditor';
 import { useUIToggle } from '../../redux';
 
-export function ConfigModal() {
+export const ConfigModal = () => {
   const [modalVisible, setModalVisible] = useUIToggle('showModalConfigEditor');
 
   return (
@@ -14,4 +14,4 @@ export function ConfigModal() {
       <ConfigEditor />
     </Modal>
   );
-}
+};

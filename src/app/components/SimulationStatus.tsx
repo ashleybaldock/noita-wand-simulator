@@ -8,6 +8,9 @@ import { Duration } from './Visualisation/ProjectileTree/Duration';
 const StyledStatus = styled.div`
   margin: 0.4em 0 0.1em 0;
   text-align: center;
+  position: sticky;
+  left: 1em;
+  right: 1em;
 `;
 
 const Label = styled.span`

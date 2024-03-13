@@ -216,11 +216,11 @@ export const ConfigEditor = () => {
             {'Infinite Spells'}
           </ConfigToggle>
         </ConfigToggleGroup>
-        <ConfigToggleGroup title={'End Simulation'}>
-          <ConfigToggle field={'endSimulationOnRefresh'}>
-            {'...on Wand Refresh'}
-          </ConfigToggle>
-        </ConfigToggleGroup>
+        {/* <ConfigToggleGroup title={'End Simulation'}> */}
+        {/*   <ConfigToggle field={'endSimulationOnRefresh'}> */}
+        {/*     {'...on Wand Refresh'} */}
+        {/*   </ConfigToggle> */}
+        {/* </ConfigToggleGroup> */}
         <ConfigToggleGroup title={'Wand Editor'}>
           <ConfigToggle field={'swapOnMove'}>
             {'Swap Spell Position on move'}
@@ -229,6 +229,7 @@ export const ConfigEditor = () => {
             {'Show Spells in Categories'}
           </ConfigToggle>
           <ConfigToggle field={'showBeta'}>{'Show Beta Spells'}</ConfigToggle>
+          <ConfigToggle field={'showExtra'}>{'Show Beta Spells'}</ConfigToggle>
         </ConfigToggleGroup>
         <ConfigToggleGroup
           title={'Unlockable Spells'}

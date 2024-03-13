@@ -1,7 +1,8 @@
 import { useDrag } from 'react-dnd';
 
 import styled from 'styled-components';
-import { ActionId } from '../../../calc/actionId';
+import type { ActionId } from '../../../calc/actionId';
+import type { WandIndex } from '../../../redux/WandIndex';
 
 const ActionDragSource = styled.div<{
   isDragging: boolean;
@@ -35,7 +36,7 @@ export const WandActionDragSource = ({
   sourceWandIndex,
 }: React.PropsWithChildren<{
   actionId: ActionId;
-  sourceWandIndex?: number;
+  sourceWandIndex?: WandIndex;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }>) => {
   const [{ isDragging }, dragRef] = useDrag(() => ({

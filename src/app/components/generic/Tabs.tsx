@@ -114,6 +114,8 @@ const ContentDiv = styled.div`
   padding: 0.26em;
   top: -0.16em;
   position: relative;
+  max-height: 50vh;
+  overflow-y: scroll;
 `;
 
 const HiddenContentDiv = styled.div`

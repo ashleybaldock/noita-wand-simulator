@@ -1,7 +1,8 @@
-import { LegacyRef, useRef } from 'react';
+import type { LegacyRef } from 'react';
+import { useRef } from 'react';
 import styled from 'styled-components';
-import { StopReason } from '../../../types';
-import { GroupedWandShot } from '../../../calc/eval/types';
+import type { StopReason } from '../../../types';
+import type { GroupedWandShot } from '../../../calc/eval/types';
 import { ConfigButton, SectionButtonBar } from '../../buttons';
 import { SaveImageButton, ScrollWrapper } from '../../generic';
 import { SectionHeader } from '../../SectionHeader';

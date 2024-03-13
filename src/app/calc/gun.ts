@@ -36,6 +36,8 @@ import {
   OnMoveDiscardedToDeck,
   SetRandomSeed,
   GameGetFrameNum,
+  OnSetDontDraw,
+  OnUnsetDontDraw,
 } from './eval/dispatch';
 
 // constants
@@ -150,6 +152,7 @@ current_reload_time = gun.reload_time;
 export let dont_draw_actions = false;
 
 export function setDontDrawActions(dda: boolean) {
+  dda ? OnSetDontDraw() : OnUnsetDontDraw();
   dont_draw_actions = dda;
 }
 

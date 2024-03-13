@@ -2,11 +2,16 @@
 
 // import * as main from './__generated__/main/actionIds';
 import { isNotNullOrUndefined } from '../util';
+import type { CustomActionId } from './customActionIds';
+import { customActionIds } from './customActionIds';
 import * as beta from './__generated__/beta/actionIds';
 
-export type ActionId = beta.ActionId;
+export type ActionId = beta.ActionId | CustomActionId;
 
-export const actionIdSet: Set<ActionId> = new Set(beta.actionIds);
+export const actionIdSet: Set<ActionId> = new Set([
+  ...beta.actionIds,
+  ...customActionIds,
+]);
 
 export function isValidActionId(id: string): id is ActionId {
   return (actionIdSet as Set<string>).has(id);

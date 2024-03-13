@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { WandAction, WandActionBorder } from '../../Spells/WandAction';
+import type { GroupedObject } from '../../../calc/grouping/combineGroups';
 import {
-  GroupedObject,
   isArrayObject,
   isMultipleObject,
   isRawObject,
@@ -15,9 +14,10 @@ import {
   FriendlyFireAnnotation,
   RecursionAnnotation,
 } from '../../Annotations/';
-import { ActionCall, GroupedProjectile } from '../../../calc/eval/types';
+import type { ActionCall, GroupedProjectile } from '../../../calc/eval/types';
 import { SIGN_MULTIPLY } from '../../../util';
 import { WithDebugHints } from '../../Debug';
+import { WandAction, WandActionBorder } from '../../Spells/WandAction';
 
 const ArrayGroupDiv = styled.div`
   display: flex;
@@ -126,7 +126,11 @@ export const ProjectileActionGroup = ({
     } else {
       return (
         <MainDiv>
-          <WandActionGroupWandActionBorder>
+          <WandActionGroupWandActionBorder
+            data-grouping="none"
+            data-type=""
+            data-name="ProjActionGroup"
+          >
             <WandAction
               spellType={simplified.spell?.type ?? 'projectile'}
               spellSprite={simplified.spell?.sprite}

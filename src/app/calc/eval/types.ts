@@ -20,6 +20,8 @@ export type ActionCall = {
   wasLastToBeDrawnBeforeWrapNr?: number;
   wasLastToBeCalledBeforeWrapNr?: number;
   wrappingInto?: readonly SpellDeckInfo[];
+  wasLastToBeDrawnBeforeBeginTrigger?: WandShot;
+  wasLastToBeCalledBeforeBeginTrigger?: WandShot;
 };
 
 export type WandShot = {

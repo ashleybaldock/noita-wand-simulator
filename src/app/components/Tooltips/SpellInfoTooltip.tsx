@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Tooltip } from 'react-tooltip';
 // import { TooltipId } from './tooltipId';
+import { TooltipBase } from './TooltipBase';
 import { getSpellById } from '../../calc/spells';
 import { isValidActionId } from '../../calc/actionId';
 import { isNotNullOrUndefined } from '../../util';
@@ -11,6 +11,9 @@ import type { Perk } from '../../calc/perks';
 import { getSpriteForPerk } from '../../calc/perks';
 import { getUnlockName } from '../../calc/unlocks';
 import { YesNo } from '../Presentation';
+import { useHideTooltips } from './useHideTooltips';
+
+const StyledTooltipBase = styled(TooltipBase)``;
 
 const SpellTip = styled.div`
   display: grid;
@@ -40,7 +43,7 @@ const SpellTip = styled.div`
   width: auto;
   padding: 1em;
 
-  font-family: 'noita', sans-serif;
+  font-family: var(--font-family-noita-default);
   font-size: 0.9em;
   pointer-events: none;
 `;
@@ -106,38 +109,6 @@ const Image = styled.img`
   height: 64px;
 `;
 
-const StyledTooltip = styled(Tooltip)`
-  z-index: var(--zindex-tooltips);
-
-  min-width: 240px;
-
-  &.show {
-    opacity: var(--rt-opacity);
-    transition: opacity var(--rt-transition-show-delay) ease-out;
-
-    transition: transform 200ms, visibility 300ms, opacity 300ms;
-    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-    transform: scale(1);
-    visibility: visible;
-
-    @media (prefers-reduced-motion: reduce) {
-      transition: none;
-    }
-  }
-
-  &.closing {
-    transition: opacity var(--rt-transition-closing-delay) ease-in;
-    transition: transform 200ms, visibility 100ms, opacity 100ms;
-    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-    transform: scale(0.6);
-    visibility: hidden;
-
-    @media (prefers-reduced-motion: reduce) {
-      transition: none;
-    }
-  }
-`;
-
 const InlineIcon = styled.span.attrs<{
   perk?: Perk;
 }>(({ perk }) => ({
@@ -155,15 +126,23 @@ const InlineIcon = styled.span.attrs<{
 `;
 
 export const SpellInfoTooltip = () => {
+  const [hidden, tooltipRef] = useHideTooltips();
+
   return (
-    <StyledTooltip
+    <StyledTooltipBase
       id={'tooltip-spellinfo'}
+      hidden={hidden}
+      ref={tooltipRef}
       disableStyleInjection={true}
       offset={10}
       closeEvents={{
         mouseleave: true,
         blur: true,
         click: true,
+      }}
+      globalCloseEvents={{
+        scroll: true,
+        resize: true,
       }}
       render={({ content }) => {
         if (!isNotNullOrUndefined(content) || !isValidActionId(content)) {
@@ -213,22 +192,24 @@ export const SpellInfoTooltip = () => {
                 <Value>{getUnlockName(spawn_requires_flag)}</Value>
               </>
             )}
-            <Label>Friendly-Fire</Label>
-            <Value>--</Value>
-            <Label>Piercing</Label>
-            <Value>--</Value>
-            <Label>Penetrating</Label>
-            <Value>--</Value>
-            <Label></Label>
-            <Value></Value>
-            <Label></Label>
-            <Value></Value>
           </SpellTip>
         );
       }}
     />
   );
 };
+
+//             <Label>Friendly-Fire</Label>
+//             <Value>--</Value>
+//             <Label>Piercing</Label>
+//             <Value>--</Value>
+//             <Label>Penetrating</Label>
+//             <Value>--</Value>
+//             <Label></Label>
+//             <Value></Value>
+//             <Label></Label>
+//             <Value></Value>
+
 /*{
     title: 'Action Info',
     fields: [

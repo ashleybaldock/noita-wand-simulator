@@ -4,6 +4,8 @@ import type { SpellShiftDirection, SelectionIndex } from '../types';
 import { useSliceWrapper } from './useSlice';
 import { isNotNullOrUndefined, isNumber, isString } from '../util';
 import type { WandEditorState } from './editorState';
+import type { WandIndex} from './WandIndex';
+import { isMainWandIndex, type MainWandIndex } from './WandIndex';
 
 const initialState: WandEditorState = {
   cursorIndex: 0,
@@ -73,10 +75,13 @@ export const editorSlice = createSlice({
       {
         payload: { to, select = 'none' },
       }: PayloadAction<{
-        to?: number;
+        to?: WandIndex;
         select?: SpellShiftDirection;
       }>,
     ): void => {
+      if (!isMainWandIndex(to)) {
+        return;
+      }
       const oldCursor = state.cursorIndex;
       const newCursor = to ?? state.cursorIndex;
 

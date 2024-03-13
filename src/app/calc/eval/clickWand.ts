@@ -18,7 +18,7 @@ import type { ActionCall, WandShot } from './types';
 import { defaultGunActionState } from '../defaultActionState';
 import { getTriggerConditionForEvent } from '../trigger';
 import { isValidActionCallSource } from '../spellTypes';
-import type { StopCondition, StopReason } from '../../types';
+import type { StopReason } from '../../types';
 import type { WandEvent } from './wandEvent';
 import type { TreeNode } from '../../util';
 
@@ -28,10 +28,13 @@ export type ClickWandResult = {
   endReason: StopReason;
   elapsedTime: number;
   wraps: number;
+  shotCount: number;
+  reloadCount: number;
+  refreshCount: number;
+  repeatCount: number;
 };
 
 export type ClickWandSetup = {
-  fireUntil: StopCondition;
   req_enemies: boolean;
   req_projectiles: boolean;
   req_hp: boolean;
@@ -40,14 +43,23 @@ export type ClickWandSetup = {
   rng_worldSeed: number;
   wand_available_mana: number;
   wand_cast_delay: number;
-  shotCountLimit?: number;
+  endSimulationOnShotCount: number;
+  endSimulationOnReloadCount: number;
+  endSimulationOnRefreshCount: number;
+  endSimulationOnRepeatCount: number;
+  limitSimulationIterations: number;
+  limitSimulationDuration: number;
 };
+
+const startTimer =
+  (start = performance.now()) =>
+  () =>
+    performance.now() - start;
 
 export const clickWand = (
   wand: Gun,
   spells: Spell[],
   {
-    fireUntil,
     req_enemies,
     req_projectiles,
     req_hp,
@@ -56,10 +68,15 @@ export const clickWand = (
     rng_worldSeed,
     wand_available_mana,
     wand_cast_delay,
-    shotCountLimit = 10,
+    endSimulationOnShotCount = 10,
+    endSimulationOnReloadCount = 2,
+    endSimulationOnRefreshCount = 2,
+    endSimulationOnRepeatCount = 1,
+    limitSimulationIterations = 200,
+    limitSimulationDuration = 5000,
   }: ClickWandSetup,
 ): ClickWandResult => {
-  const start = performance.now();
+  const getElapsedTime = startTimer();
 
   if (spells.filter((s) => s != null).length === 0) {
     return {
@@ -68,12 +85,18 @@ export const clickWand = (
       endReason: 'noSpells',
       elapsedTime: 0,
       wraps: 0,
+      shotCount: 0,
+      reloadCount: 0,
+      refreshCount: 0,
+      repeatCount: 0,
     };
   }
 
-  let shotCount = 0;
+  let shotCount = 0,
+    reloadCount = 0,
+    refreshCount = 0,
+    repeatCount = 0;
   let currentWrapNumber = 0;
-  let reloaded = false;
   let mana = wand_available_mana;
   const wandShots: WandShot[] = [];
   let currentShot: WandShot;
@@ -157,6 +180,12 @@ export const clickWand = (
         };
         parentShot.projectiles[parentShot.projectiles.length - 1].trigger =
           currentShot;
+        if (lastDrawnAction) {
+          lastDrawnAction.wasLastToBeDrawnBeforeBeginTrigger = currentShot;
+        }
+        if (lastCalledAction) {
+          lastCalledAction.wasLastToBeCalledBeforeBeginTrigger = currentShot;
+        }
         break;
       case 'EndTrigger':
         currentShot = currentShotStack.pop()!;
@@ -242,7 +271,7 @@ export const clickWand = (
         break;
       }
       case 'StartReload': {
-        reloaded = true;
+        reloadCount++;
         reloadTime = payload.reload_time;
         break;
       }
@@ -327,33 +356,38 @@ export const clickWand = (
           _add_card_to_deck(spell.id, index, spell.uses_remaining, true),
       );
 
-      while (!reloaded && shotCount < shotCountLimit) {
+      let simIterations = 0;
+      while (
+        shotCount < endSimulationOnShotCount &&
+        reloadCount < endSimulationOnReloadCount &&
+        refreshCount < endSimulationOnRefreshCount &&
+        repeatCount < endSimulationOnRepeatCount &&
+        simIterations++ < limitSimulationIterations &&
+        getElapsedTime() < limitSimulationDuration
+      ) {
+        shotCount++;
         state_from_game.fire_rate_wait = wand_cast_delay;
         _start_shot(mana);
         _draw_actions_for_shot(true);
-        shotCount++;
         currentShot!.actionCallGroups = calledActions!;
         currentShot!.actionCallTree = rootNodes;
         currentShot!.manaDrain = mana - gunMana;
         wandShots.push(currentShot!);
         mana = gunMana;
 
-        if (fireUntil === 'oneshot') {
-          return 'oneshot';
-        }
-        if (
-          fireUntil === 'refresh' &&
-          (calledActions!.length === 0 ||
-            calledActions!.reduce(
-              (found, a) => (a.spell.id === 'RESET' ? found + 1 : found),
-              0,
-            ))
-        ) {
-          return 'refresh';
-        }
-        if (fireUntil === 'iterLimit' && shotCount >= shotCountLimit) {
-          return 'iterLimit';
-        }
+        // if (
+        //   fireUntil === 'refresh' &&
+        //   (calledActions!.length === 0 ||
+        //     calledActions!.reduce(
+        //       (found, a) => (a.spell.id === 'RESET' ? found + 1 : found),
+        //       0,
+        //     ))
+        // ) {
+        //   return 'refresh';
+        // }
+        // if (fireUntil === 'iterLimit' && shotCount >= shotCountLimit) {
+        //   return 'iterLimit';
+        // }
       }
     } catch (err) {
       console.error(err);
@@ -370,6 +404,10 @@ export const clickWand = (
     wraps: currentWrapNumber,
     recharge: reloadTime,
     endReason,
-    elapsedTime: performance.now() - start,
+    elapsedTime: getElapsedTime(),
+    shotCount: 0,
+    reloadCount: 0,
+    refreshCount: 0,
+    repeatCount: 0,
   };
 };

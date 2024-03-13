@@ -40,11 +40,6 @@ const isInKey = (key: string): key is InKey => {
 
 export type FuzzySearchPlacement = 'page-middle' | 'header-right';
 
-const Wrapper = styled.div`
-  display: grid;
-  place-items: end center;
-`;
-
 const NoQuery = styled.div`
   position: absolute;
   top: 2.4em;
@@ -64,16 +59,16 @@ const NoQuery = styled.div`
 const Container = styled.div`
   --bsize-spell: 40px;
 
+  grid-area: search;
+
   display: flex;
   flex-direction: column;
   position: relative;
-
-  padding: 0.08em 0 0.08em 0.08em;
   margin: 0;
-  max-width: 28vw;
-  width: auto;
-  min-width: 1em;
   margin-left: auto;
+  width: auto;
+  min-width: 18em;
+  max-width: 28vw;
 }
 `;
 
@@ -100,10 +95,9 @@ const SearchInput = styled.input.attrs({ type: 'text' })`
   outline: none;
 
   border: 1px solid var(--color-tab-border-active);
-  border-radius: 0em 15em 0em 15.1em/12em 54em 0em 54.4em;
   border-style: inset groove;
-  border: 1px solid var(--color-tab-border-active);
-  border-width: 1px;
+  border-radius: 0 0 0 15.1em/12em 0 0 54.4em;
+  border-right-color: transparent;
 
   &:focus {
     box-shadow: 0px 0 8px 0px #ff710ab8 inset, 0px 0px 10px 3px #680000;
@@ -287,33 +281,34 @@ export const FindSpell = ({
 
   return (
     <>
-      <Wrapper className={className}>
-        <Container onMouseDown={(e) => !hidden && preventLossOfFocus(e)}>
-          <SearchInput
-            ref={mergeRefs(useHotkeysRef, inputFocusRef)}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              selectFirstResult();
-            }}
-            onFocus={() => setHidden(false)}
-            onBlur={() => setHidden(true)}
-            autoComplete="off"
-            autoFocus={true}
-            placeholder="spell name/id"
-          ></SearchInput>
-          {<HotkeyHint hotkeys={hotkeys} position={'below'} />}
-          {hidden ? null : noQuery ? (
-            <NoQuery>Start typing to see suggestions</NoQuery>
-          ) : (
-            <SearchResultList
-              results={filteredResults}
-              highlightIdx={selectedResult}
-              onSelectResult={selectResult}
-            />
-          )}
-        </Container>
-      </Wrapper>
+      <Container
+        className={className}
+        onMouseDown={(e) => !hidden && preventLossOfFocus(e)}
+      >
+        <SearchInput
+          ref={mergeRefs(useHotkeysRef, inputFocusRef)}
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+            selectFirstResult();
+          }}
+          onFocus={() => setHidden(false)}
+          onBlur={() => setHidden(true)}
+          autoComplete="off"
+          autoFocus={true}
+          placeholder="spell name/id"
+        ></SearchInput>
+        {<HotkeyHint hotkeys={hotkeys} position={'below'} />}
+        {hidden ? null : noQuery ? (
+          <NoQuery>Start typing to see suggestions</NoQuery>
+        ) : (
+          <SearchResultList
+            results={filteredResults}
+            highlightIdx={selectedResult}
+            onSelectResult={selectResult}
+          />
+        )}
+      </Container>
     </>
   );
 };

@@ -5,6 +5,7 @@ import type { KeyOfType } from '../util';
 // Define a type for the slice state
 export interface UIState {
   showModalConfigEditor: boolean;
+  showWandPresets: boolean;
   showKeyHints: boolean;
 }
 
@@ -13,6 +14,7 @@ export type UIToggle = KeyOfType<UIState, boolean>;
 // Define the initial state using that type
 export const initialState: UIState = {
   showModalConfigEditor: false,
+  showWandPresets: false,
   showKeyHints: false,
 };
 

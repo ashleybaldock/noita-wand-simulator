@@ -16,6 +16,7 @@ import type { Config } from '../../../redux/configSlice';
 import { getBackgroundUrlForDamageType } from '../../../calc/damage';
 import {
   FNSP,
+  NBSP,
   SIGN_MULTIPLY,
   SUFFIX_BILLION,
   SUFFIX_MILLION,
@@ -95,6 +96,32 @@ const Warning = styled.span`
   &::before {
     content: '';
   }
+`;
+
+const _Underflow = ({ className = '' }: { className?: string }) => {
+  return <Warning className={className}>U</Warning>;
+};
+const Underflow = styled(_Underflow)`
+  display: inline-flex;
+  align-self: end;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.2em;
+  border-radius: 50%;
+  padding: 0.06em;
+  font-size: 0.8em;
+  height: 1.4em;
+  width: 1.4em;
+  --a: -1px;
+  --b: 1px;
+  text-shadow: var(--a) var(--a) 0 black, var(--b) var(--b) 0 black,
+    var(--a) var(--b) 0 black, var(--b) var(--a) 0 black, 0 var(--a) 0 black,
+    0 var(--b) 0 black, var(--a) 0 0 black, var(--b) 0 0 black;
+  filter: drop-shadow(0 0 1px #ff2c2c);
+  border: 0.16em dashed #811e1e;
+  box-sizing: border-box;
+  padding-top: 0.24em;
+  background-color: #cb1414;
 `;
 
 const LowerLimit = styled.span`
@@ -444,7 +471,12 @@ const fieldSections: FieldSection[] = [
             return <Unchanged />;
           }
           if (n < 1.17549e-38) {
-            return <Warning>{`${SIGN_MULTIPLY}0 (underflow)`}</Warning>;
+            return (
+              <>
+                {`${SIGN_MULTIPLY}0`}
+                <Underflow />
+              </>
+            );
           }
           if (n < 0.0001) {
             return (

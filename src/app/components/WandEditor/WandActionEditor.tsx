@@ -36,17 +36,16 @@ import { getComputedColumns } from './hooks';
 import type { WandSelection } from '../../redux/Wand/wandSelection';
 import { isKnownSpell } from '../../redux/Wand/spellId';
 
-function ActionComponent({
+const ActionComponent = ({
   spellAction,
   wandIndex,
   deckIndex,
-  selection,
 }: {
   spellAction?: Spell;
   wandIndex: number;
   deckIndex?: number;
   selection?: WandSelection;
-}) {
+}) => {
   const dispatch = useAppDispatch();
 
   const { isDraggingAction } = useDragLayer((monitor) => ({
@@ -55,11 +54,11 @@ function ActionComponent({
     isDraggingSelect: monitor.getItemType() === 'select',
   }));
   const handleDeleteSpell = (wandIndex: number) => {
-    dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
+    dispatch(setSpellAtIndex({ spellId: null, wandIndex }));
   };
 
   return (
-    <WandActionDropTargets wandIndex={wandIndex} selection={selection}>
+    <WandActionDropTargets wandIndex={wandIndex}>
       {spellAction && (
         <>
           <WandActionDragSource
@@ -91,7 +90,7 @@ function ActionComponent({
       )}
     </WandActionDropTargets>
   );
-}
+};
 
 const SpellSlots = styled.ul`
   --grid-layout-gap: 0px;

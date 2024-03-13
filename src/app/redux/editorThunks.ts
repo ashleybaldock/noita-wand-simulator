@@ -56,7 +56,7 @@ export const removeSpellBeforeCursor =
     const state = getState();
     dispatch(
       deleteSpellAtIndex({
-        index:
+        wandIndex:
           state.editor.cursorIndex > 0
             ? state.editor.cursorIndex - 1
             : state.wand.present.wand.deck_capacity,
@@ -71,21 +71,14 @@ export const removeSpellAfterCursor =
     const state = getState();
     dispatch(
       deleteSpellAtIndex({
-        index: state.editor.cursorIndex,
+        wandIndex: state.editor.cursorIndex,
         shift,
       }),
     );
   };
 
 export const moveCursor =
-  ({
-    by,
-    always = false,
-  }: {
-    by: number;
-    always?: boolean;
-    select?: SpellShiftDirection;
-  }): AppThunk =>
+  ({ by }: { by: number; select?: SpellShiftDirection }): AppThunk =>
   (dispatch, getState): void => {
     const state = getState();
     dispatch(

@@ -54,10 +54,16 @@
   --color-note-recursion: #000000;
   --color-note-recursion-bg: #33bbbb;
 
+  --size-arrow-w: 3px;
+  --radius-arrow: 0 0 0 20px/0 0 0 23px;
   --color-arrow-action: #ffbf00;
   --color-arrow-action-text: #dddddd;
   --color-arrow-action-highlight: #ffe29c;
   --color-arrow-drawn: #ffeeee;
+
+  --color-arrow-copy-nodraw: #ffbf00;
+  --color-arrow-copy: #ffbf00;
+  --color-arrow-draw: #ffeeff;
 
   --arrow-action-bdcolor: #ffbf00;
 

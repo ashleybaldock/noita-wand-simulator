@@ -1,6 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
-import { isPresetGroup, Preset, PresetGroup } from '../../redux/Wand/preset';
+import type { Preset, PresetGroup } from '../../redux/Wand/preset';
+import { isPresetGroup } from '../../redux/Wand/preset';
 import { Button } from '../generic';
 
 const PresetGroupNameDiv = styled.div`
@@ -53,13 +53,13 @@ const PresetButtonDiv = styled.li`
   }
 `;
 
-export function WandPresetMenu({
+export const WandPresetMenu = ({
   presets,
   onSelect,
 }: {
   presets: (Preset | PresetGroup)[];
   onSelect: (p: Preset) => void;
-}) {
+}) => {
   const createPresetList = (
     presetGroup: PresetGroup,
     prefix: string = 'presets--',
@@ -71,12 +71,16 @@ export function WandPresetMenu({
         <PresetGroupListDiv>
           {presetGroup.presets.map((p, index) => {
             if (isPresetGroup(p)) {
-              return createPresetList(p, `${prefix}--${p.name}`, false);
+              return createPresetList(
+                p,
+                `${prefix}--${presetGroup.name}--${p.name}`,
+                false,
+              );
             } else {
               return (
                 <PresetButtonDiv>
                   <Button
-                    key={`${prefix}--${p.name}`}
+                    key={`${prefix}--${presetGroup.name}--${p.name}`}
                     onClick={() => onSelect(p)}
                   >
                     {p.name}
@@ -91,14 +95,18 @@ export function WandPresetMenu({
 
     if (first) {
       return (
-        <FirstPresetGroupDiv key={presetGroup.name}>
+        <FirstPresetGroupDiv key={`${prefix}--${presetGroup.name}`}>
           {content}
         </FirstPresetGroupDiv>
       );
     } else {
-      return <PresetGroupDiv key={presetGroup.name}>{content}</PresetGroupDiv>;
+      return (
+        <PresetGroupDiv key={`${prefix}--${presetGroup.name}`}>
+          {content}
+        </PresetGroupDiv>
+      );
     }
   };
 
   return createPresetList({ name: 'Presets', presets });
-}
+};

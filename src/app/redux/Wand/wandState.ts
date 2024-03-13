@@ -11,6 +11,7 @@ export type WandState = {
   wand: Wand;
   spellIds: SpellId[];
   alwaysIds: SpellId[];
+  zetaId?: SpellId;
   messages: string[];
   fromQuery?: WandQueryVersion;
 };

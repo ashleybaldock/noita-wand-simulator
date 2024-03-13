@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { getBackgroundUrlForSpellType, SpellType } from '../../calc/spellTypes';
+import type { SpellType } from '../../calc/spellTypes';
+import { getBackgroundUrlForSpellType } from '../../calc/spellTypes';
 
 export const SpellTypeBorder = styled.div.attrs<{
   spellType?: SpellType;

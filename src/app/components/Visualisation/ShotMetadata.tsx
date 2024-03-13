@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { StopReason } from '../../types';
+import type { StopReason } from '../../types';
 import { round } from '../../util/util';
 
 const List = styled.div`
@@ -30,7 +30,7 @@ const Name = styled.span`
 `;
 
 const Value = styled.span`
-  text-align: endReasoo lnd eft;
+  text-align: left;
   flex: 0 0 auto;
 `;
 

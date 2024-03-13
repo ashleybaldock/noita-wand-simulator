@@ -49,14 +49,31 @@ export const ActionProxyAnnotation = ({
   const { showProxies } = useConfig();
 
   if (showProxies && isNotNullOrUndefined(proxy)) {
-    return <ProxyDiv imgUrl={proxy.sprite} />;
+    return (
+      <ProxyDiv data-name="ActionProxyAnnotation-Proxy" imgUrl={proxy.sprite} />
+    );
   } else if (isNotNullOrUndefined(spell?.id)) {
     if (isWithTriggerActionId(spell?.id)) {
-      return <ProxyDiv imgUrl={'data/icons/trigger-mod.png'} />;
+      return (
+        <ProxyDiv
+          data-name="ActionProxyAnnotation-Trigger"
+          imgUrl={'data/icons/trigger-mod.png'}
+        />
+      );
     } else if (isWithTimerActionId(spell?.id)) {
-      return <ProxyDiv imgUrl={'data/icons/timer-mod.png'} />;
+      return (
+        <ProxyDiv
+          data-name="ActionProxyAnnotation-Timer"
+          imgUrl={'data/icons/timer-mod.png'}
+        />
+      );
     } else if (isWithExpirationActionId(spell?.id)) {
-      return <ProxyDiv imgUrl={'data/icons/death-mod.png'} />;
+      return (
+        <ProxyDiv
+          data-name="ActionProxyAnnotation-Expiration"
+          imgUrl={'data/icons/death-mod.png'}
+        />
+      );
     }
   }
   return null;

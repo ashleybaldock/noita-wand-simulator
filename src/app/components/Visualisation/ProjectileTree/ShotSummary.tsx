@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { Duration } from './Duration';
 import { NBSP, isNotNullOrUndefined } from '../../../util';
-import { StopReason } from '../../../types';
-import { GroupedWandShot } from '../../../calc/eval/types';
+import type { StopReason } from '../../../types';
+import type { GroupedWandShot } from '../../../calc/eval/types';
 import { useConfig } from '../../../redux';
 
 const SummaryItem = styled.div`

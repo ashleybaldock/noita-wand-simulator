@@ -7,12 +7,13 @@ import {
   TotalsColumn,
 } from './CastStateColumn';
 import { ProjectileActionGroup } from './ProjectileActionGroup';
-import { GroupedProjectile, GroupedWandShot } from '../../../calc/eval/types';
+import type {
+  GroupedProjectile,
+  GroupedWandShot,
+} from '../../../calc/eval/types';
 import { isNotNullOrUndefined, NBSP } from '../../../util';
-import {
-  GroupedObject,
-  isRawObject,
-} from '../../../calc/grouping/combineGroups';
+import type { GroupedObject } from '../../../calc/grouping/combineGroups';
+import { isRawObject } from '../../../calc/grouping/combineGroups';
 import {
   IconsColumnHeading,
   ProjectileHeading,
@@ -20,7 +21,7 @@ import {
   SubTotalsColumnHeading,
   TotalsColumnHeading,
 } from './ColumnHeading';
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
 
 const StyledShotTable = styled.div`
   --nesting-offset: var(--sizes-nesting-offset, 16px);

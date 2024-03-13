@@ -6,13 +6,14 @@ import { generateWikiWandV2 } from './Wand/toWiki';
 import { generateSearchFromWandState } from './Wand/toSearch';
 import type { KeyOfType } from '../util';
 import { compareSequence, compareSequenceIgnoringGaps } from '../util';
-import type { Cursor } from '../components/Spells/WandAction/types';
 import type { WandSelection } from './Wand/wandSelection';
 import { getSelectionForId } from './Wand/toSelection';
 import type { Config, ConfigToggleField } from './configSlice';
 import { setConfigSetting, toggleConfigSetting } from './configSlice';
 import type { UIState, UIToggle } from './uiSlice';
 import { flipUiToggle, setUiToggle } from './uiSlice';
+import type { Cursor } from '../components/Spells/WandAction/Cursor';
+import type { SpellId } from './Wand/spellId';
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -118,14 +119,38 @@ const selectURLSearch = createSelector(
 );
 export const useURLSearch = () => useSelector(selectURLSearch);
 
+/**
+ * Special case for Zeta's slot
+ */
+const selectZeta = createSelector(
+  selectWandState,
+  (wandState) => wandState.zetaId,
+);
+const selectIsZetaOnWand = createSelector(selectWandState, (wandState) =>
+  wandState.spellIds.some((spellId) => spellId === 'ZETA'),
+);
+export const useZeta = (): [
+  zetaOnWand: boolean,
+  zetaSpellId: SpellId | null,
+  // setZetaSpellId: (spellId: SpellId) => void,
+] => {
+  // const dispatch = useAppDispatch();
+  return [
+    useSelector(selectIsZetaOnWand) ?? false,
+    useSelector(selectZeta) ?? null,
+    // (spellId: SpellId) =>
+    //   dispatch(setSpellAtIndex({ wandIndex: ZTA, spellId })),
+  ];
+};
+
+/**
+ * Always Cast Spell sequence
+ */
 const selectAlwaysCastSpells = createSelector(
   selectWandState,
   (wandState) => wandState.alwaysIds,
 );
 
-/**
- * Always Cast Spell sequence
- */
 export const useAlwaysCastLayout = () =>
   useSelector(selectAlwaysCastSpells, compareSequence);
 
@@ -158,22 +183,34 @@ export const useMessages = () => useSelector(selectMessages);
 
 const selectCursorIndex = (state: RootState) => state.editor.cursorIndex;
 
-const selectCursor = createSelector(
+const selectCursors = createSelector(
   selectCursorIndex,
   selectSpells,
   (cursorIndex, spellIds): Cursor[] =>
-    spellIds.map((_, wandIndex) => ({
-      position:
-        cursorIndex === wandIndex
-          ? 'before'
-          : cursorIndex === wandIndex + 1
-          ? 'after'
-          : 'none',
-      style: 'caret',
-    })),
+    spellIds.map(
+      (_, wandIndex): Cursor => ({
+        position:
+          cursorIndex === wandIndex
+            ? 'before'
+            : cursorIndex === wandIndex + 1
+            ? 'after'
+            : 'none',
+        style: 'caret',
+      }),
+    ),
 );
 
-export const useCursor = () => useSelector(selectCursor);
+export const useCursors = () => useSelector(selectCursors);
+
+// const selectCursor = createSelector(
+//   selectCursors,
+
+// export const useCursor = (wandIndex: WandIndex): Cursor => {
+//   if (isMainWandIndex(wandIndex)) {
+//     return cursor[wandIndex];
+//   }
+//   return { position: 'none', style: 'none' };
+// };
 
 const selectSelectionExtents = (state: RootState) => ({
   selectFrom: state.editor.selectFrom,

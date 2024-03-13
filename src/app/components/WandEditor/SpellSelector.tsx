@@ -5,7 +5,6 @@ import type { Spell } from '../../calc/spell';
 import { spells } from '../../calc/spells';
 import { useAppDispatch, useConfig } from '../../redux/hooks';
 import type { Config, ConfigState } from '../../redux/configSlice';
-import {} from '../../redux/wandSlice';
 import {
   getBackgroundUrlForSpellType,
   spellTypeGroupInfoMap,

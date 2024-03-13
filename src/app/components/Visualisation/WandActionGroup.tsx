@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { WandAction, WandActionBorder } from '../Spells/WandAction';
 import { NextActionArrow } from '../Visualisation/Arrows';
 import { DEFAULT_SIZE } from '../../util/constants';
 import type { GroupedObject } from '../../calc/grouping/combineGroups';
@@ -20,6 +19,7 @@ import {
 } from '../Annotations/';
 import type { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 import { WrapAnnotation } from '../Annotations/WrapAnnotation';
+import { WandAction, WandActionBorder } from '../Spells/WandAction';
 
 const MainDiv = styled.div.attrs({
   className: 'MainDiv',
@@ -79,7 +79,7 @@ const WandActionGroupWandActionBorder = styled(WandActionBorder)`
   border-radius: 12px;
   background-image: none;
   background-color: rgba(108, 76, 34, 0.1);
-  margin: 4px 0 4px 48px;
+  margin: 4px 0 4px var(--col-spacing, 48px);
   position: relative;
 `;
 
@@ -123,7 +123,11 @@ export const WandActionGroup = ({
       );
     } else {
       return (
-        <WandActionGroupWandActionBorder>
+        <WandActionGroupWandActionBorder
+          data-grouping="none"
+          data-type=""
+          data-name="WandActionGroup"
+        >
           <NextActionArrow />
           <WandAction
             spellType={simplified.spell?.type ?? 'projectile'}
@@ -138,7 +142,7 @@ export const WandActionGroup = ({
     }
   } else if (isArrayObject(simplified)) {
     return (
-      <GroupDiv>
+      <GroupDiv data-grouping="array">
         {simplified.map((g, i) => (
           <WandActionGroup group={g} key={i} size={size} />
         ))}
@@ -146,7 +150,7 @@ export const WandActionGroup = ({
     );
   } else if (isMultipleObject(simplified)) {
     return (
-      <MainDiv>
+      <MainDiv data-grouping="multiple">
         <GroupDiv>
           <WandActionGroup group={simplified.first} size={size} />
         </GroupDiv>

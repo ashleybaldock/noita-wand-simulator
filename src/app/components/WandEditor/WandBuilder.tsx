@@ -2,25 +2,16 @@ import type { LegacyRef } from 'react';
 import { useRef } from 'react';
 import styled from 'styled-components';
 import { WandActionEditor } from './WandActionEditor';
+import { WandBuilderToolbar } from './WandBuilderToolbar';
 import { WandStatsEditor } from './WandStatsEditor';
 import { WandBorder } from './WandBorder';
 import { SaveImageButton } from '../generic';
-import { SectionHeader } from '../SectionHeader';
-import {
-  LoadButton,
-  ResetButton,
-  UndoButton,
-  RedoButton,
-  ConfigButton,
-  SectionButtonBar,
-} from '../buttons';
 import { ExportWikiButton } from '../Export/ExportWikiButton';
-import { SearchButton } from '../buttons/SearchButton';
 import { WandAlwaysCastEditor } from './WandAlwaysCastEditor';
+import { ZetaEditor } from './ZetaEditor';
 
 const MainDiv = styled.div`
   display: flex;
-  flex-direction: row;
   flex-direction: column;
   background-color: var(--color-base-background);
   margin: 10px 6px;
@@ -87,45 +78,12 @@ const StyledAlwaysCastEditor = styled(WandAlwaysCastEditor)`
     box-sizing: border-box;
   }
 `;
-
-const SectionHeaderContainer = styled.div`
-  position: sticky;
-  top: -0.36em;
-  z-index: var(--zindex-stickyheader-controls, 220);
-  display: flex;
-  flex-direction: column;
-`;
-
-const SectionHeaderSplit = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-`;
-
-const SectionButtonBarSearch = styled(SectionButtonBar)`
-  margin-right: -10px;
-  padding-right: 10px;
-  align-self: start;
-`;
-const SectionButtonBarContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap-reverse;
-  justify-content: end;
-`;
-
-const StickyHeaderTopBar = styled.div`
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-
-  z-index: var(--zindex-stickyheader-overline, 210);
-
-  background-color: transparent;
-  border-top: 0.16em solid var(--color-base-background);
-  border-bottom: 0.16em solid var(--color-tab-border-inactive);
+const StyledZetaEditor = styled(ZetaEditor)`
+  ${ColumnsContainer} > & {
+    height: calc(var(--child-unit-height) * 3);
+    break-inside: avoid;
+    box-sizing: border-box;
+  }
 `;
 
 export const WandBuilder = () => {
@@ -134,25 +92,7 @@ export const WandBuilder = () => {
 
   return (
     <>
-      <SectionHeaderContainer>
-        <StickyHeaderTopBar />
-        <SectionHeaderSplit>
-          <SectionHeader title={'Wand Editor'} />
-          <SectionButtonBarContainer>
-            <SectionButtonBarSearch>
-              <SearchButton />
-            </SectionButtonBarSearch>
-            <SectionButtonBar>
-              <UndoButton />
-              <RedoButton />
-              <ResetButton />
-              <LoadButton />
-              <ConfigButton />
-            </SectionButtonBar>
-            {/* <ExportButton /> */}
-          </SectionButtonBarContainer>
-        </SectionHeaderSplit>
-      </SectionHeaderContainer>
+      <WandBuilderToolbar />
       <MainDiv>
         <WandBorder>
           <ContentDiv
@@ -162,6 +102,7 @@ export const WandBuilder = () => {
             <ColumnsContainer>
               <StyledWandStatsEditor />
               <StyledAlwaysCastEditor />
+              <StyledZetaEditor />
             </ColumnsContainer>
             <WandActionEditorWrapper
               ref={spellsRef as LegacyRef<HTMLDivElement>}

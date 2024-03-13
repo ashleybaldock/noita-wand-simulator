@@ -4,27 +4,27 @@ import type { WandSelection } from '../../redux/Wand/wandSelection';
 import { useAppDispatch } from '../../redux/hooks';
 import { setSpellAtIndex } from '../../redux/wandSlice';
 import {
-  DraggableWandAction,
-  WandActionDragSource,
-  WandActionDropTargets,
-} from '../Spells/WandAction';
-import {
   ChargesRemainingAnnotation,
   DeckIndexAnnotation,
   DeleteSpellAnnotation,
   FriendlyFireAnnotation,
   NoManaAnnotation,
 } from '../Annotations';
+import type { WandIndex } from '../../redux/WandIndex';
+import {
+  DraggableWandAction,
+  WandActionDragSource,
+  WandActionDropTargets,
+} from '../Spells/WandAction';
 
 export const SlottedSpell = ({
   spellAction,
   wandIndex,
   deckIndex,
-  selection,
   alwaysCast = false,
 }: {
   spellAction?: Spell;
-  wandIndex: number;
+  wandIndex: WandIndex;
   deckIndex?: number;
   selection?: WandSelection;
   alwaysCast?: boolean;
@@ -36,16 +36,12 @@ export const SlottedSpell = ({
     isDraggingAction: monitor.getItemType() === 'action',
     isDraggingSelect: monitor.getItemType() === 'select',
   }));
-  const handleDeleteSpell = (wandIndex: number) => {
-    dispatch(setSpellAtIndex({ spell: null, index: wandIndex }));
+  const handleDeleteSpell = (wandIndex: WandIndex) => {
+    dispatch(setSpellAtIndex({ spellId: null, wandIndex }));
   };
 
   return (
-    <WandActionDropTargets
-      alwaysCast={alwaysCast}
-      wandIndex={wandIndex}
-      selection={selection}
-    >
+    <WandActionDropTargets wandIndex={wandIndex}>
       {spellAction && (
         <>
           <WandActionDragSource

@@ -48,27 +48,27 @@ export const WandSimulator = () => {
 
   return (
     <DebugHints>
-      <Column>
-        <MainHeader></MainHeader>
+      <DndProvider backend={HTML5Backend}>
         <Column>
-          <DndProvider backend={HTML5Backend}>
+          <MainHeader></MainHeader>
+          <Column>
             <WandBuilder />
             <SpellShortcuts>
               <SpellHotbar></SpellHotbar>
             </SpellShortcuts>
             <SpellSelector />
-          </DndProvider>
+          </Column>
+          <Column>
+            <CastConfigEditor />
+          </Column>
+          <Column>
+            <VisualisationList />
+          </Column>
+          <Modals />
+          <Tooltips />
+          <ReleaseInfo />
         </Column>
-        <Column>
-          <CastConfigEditor />
-        </Column>
-        <Column>
-          <VisualisationList />
-        </Column>
-        <Modals />
-        <Tooltips />
-        <ReleaseInfo />
-      </Column>
+      </DndProvider>
     </DebugHints>
   );
 };

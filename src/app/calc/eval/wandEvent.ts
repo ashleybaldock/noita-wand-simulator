@@ -31,7 +31,7 @@ export type WandEventBase = {
     entity_filename: string;
     action_draw_count: number;
   };
-  EndTrigger: {};
+  EndTrigger: Record<string, never>;
   BaabInstruction: {
     name: string;
   };
@@ -142,6 +142,8 @@ export type WandEventBase = {
     c: GunActionState;
     playing_permanent_card: boolean;
   };
+  OnSetDontDraw: Record<string, never>;
+  OnUnsetDontDraw: Record<string, never>;
   OnDraw: {
     state_cards_drawn: number;
   };

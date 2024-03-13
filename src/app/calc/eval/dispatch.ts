@@ -125,10 +125,10 @@ export function GetUpdatedEntityID(actionId: ActionId): EntityID {
   });
 }
 
-export function EntityGetComponent(
+export const EntityGetComponent = (
   entity_id: EntityID,
   component: string,
-): ComponentID[] {
+): ComponentID[] => {
   return observer.onEvent({
     name: 'EntityGetComponent',
     default: [component],
@@ -137,7 +137,7 @@ export function EntityGetComponent(
       component,
     },
   });
-}
+};
 
 export function EntityGetFirstComponent(
   actionId: ActionId,
@@ -227,16 +227,16 @@ export function EntityInflictDamage(
   });
 }
 
-export function EntityGetTransform(
+export const EntityGetTransform = (
   actionId: ActionId,
   entity: EntityID,
-): EntityTransform {
+): EntityTransform => {
   return observer.onEvent({
     name: 'EntityGetTransform',
     default: [0, 0],
     payload: { actionId, entity },
   });
-}
+};
 
 // Currently only used by end of everything
 export function EntityLoad(entityXml: string, x: number, y: number): EntityID {
@@ -321,6 +321,13 @@ export function OnActionPlayed(
 
 export const OnDraw = (state_cards_drawn: number): void => {
   observer.onEvent({ name: 'OnDraw', payload: { state_cards_drawn } });
+};
+
+export const OnUnsetDontDraw = (): void => {
+  observer.onEvent({ name: 'OnUnsetDontDraw', payload: {} });
+};
+export const OnSetDontDraw = (): void => {
+  observer.onEvent({ name: 'OnSetDontDraw', payload: {} });
 };
 
 /* Each time the wand 'wraps' naturally */

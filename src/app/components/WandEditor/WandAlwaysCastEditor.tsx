@@ -37,12 +37,22 @@ const SpellSlot = styled.li`
 `;
 
 const StyledName = styled.div`
-  flex: 0 1 auto;
-  text-align: right;
+  flex: 1 1 auto;
+  display: flex;
+  text-align: left;
   width: fit-content;
   margin-right: 0.6em;
   line-height: 1.3;
-  white-space: nowrap;
+  white-space: normal;
+  color: var(--color-button);
+
+  &::after {
+    content: '';
+    border-bottom: 3px dotted #222222;
+    height: 0.7em;
+    display: inline-block;
+    flex: 1 1 auto;
+  }
 `;
 
 const Container = styled.div`
@@ -92,6 +102,7 @@ export const WandAlwaysCastEditor = styled(
             <SpellSlot key={wandIndex}>
               <SlottedSpell
                 spellAction={alwaysAction}
+                alwaysCast={true}
                 wandIndex={wandIndex}
                 deckIndex={alwaysAction !== undefined ? deckIndex++ : undefined}
               />

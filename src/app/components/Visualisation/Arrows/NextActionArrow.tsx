@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Spell } from '../../../calc/spell';
+import type { Spell } from '../../../calc/spell';
 import { DEFAULT_SIZE } from '../../../util';
 import { ActionTreeShotResultNodeDiv } from '../ActionTree';
 
@@ -16,7 +16,7 @@ const LineDiv = styled.div<{
   text-align: center;
   color: var(--color-arrow-action-text);
 
-  border: 3px hidden var(--color-arrow-action);
+  border: var(--arrow-w) hidden var(--color-arrow-action);
   border-bottom-style: solid;
   border-left-style: solid;
 
@@ -30,35 +30,13 @@ const LineDiv = styled.div<{
   border-radius: 12px 0 0 12px;
     `
       : `
-  top: 1.5px;
-  left: -50px;
-  width: 32px;
-  height: 24px;
-  border-radius: 0 0 0 12px;
+      
+  left: calc(var(--arrow-hz) * -1);
+  width: var(--arrow-hz);
+  height: calc(50% - var(--arrow-w) / 2);
+  top: 0;
+  border-radius: var(--radius-arrow);
   `}
-
-  &::before {
-    position: absolute;
-    content: '';
-    top: 0px;
-    border: 3px hidden var(--color-arrow-action-highlight);
-    border-bottom-style: dotted;
-    border-left-style: dotted;
-    ${({ swept }) =>
-      swept
-        ? `
-    left: -1px;
-    width: 27px;
-    height: 23px;
-    border-radius: 15px 0 0 12px;
-      `
-        : `
-    left: -3px;
-    width: 34px;
-    height: 24px;
-    border-radius: 0 0 0 12px;
-    `}
-  }
 
   ${ActionTreeShotResultNodeDiv}:first-of-type > div > & {
     border-left-style: hidden;
@@ -74,9 +52,11 @@ const ArrowHeadDiv = styled.div<{
   size: number;
 }>`
   position: absolute;
-  left: -52px;
-  width: 48px;
-  top: calc(50% - 8px);
+  top: calc(50% - (var(--ahead-h) * 0.5));
+  height: var(--ahead-h);
+  left: calc(var(--arrow-hz, 48px) * -1);
+  width: var(--arrow-hz, 48px);
+  border-radius: var(--radius-arrow);
   height: 16px;
   transform: translate(0px, 0);
   border: none;

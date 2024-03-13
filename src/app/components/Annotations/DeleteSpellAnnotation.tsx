@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useDrag } from 'react-dnd';
-import { WandActionBorder } from '../Spells/WandAction';
+import { StyledWandActionBorder } from '../Spells/WandAction';
 import { BaseAnnotation } from './BaseAnnotation';
 import { noop } from '../../util';
 
@@ -40,7 +40,7 @@ const DeleteDiv = styled(BaseAnnotation)`
   transition-property: var(--transition-props);
 
   display: none;
-  ${WandActionBorder}:hover && {
+  ${StyledWandActionBorder}:hover && {
     display: block;
   }
 

@@ -13,8 +13,6 @@ const StickyTitleHeader = styled.h2`
 
   background-color: var(--color-base-background);
 
-  filter: var(--filter-floating-shadow);
-
   padding: 0.5em 0.6em 6.8px 0.2em;
   margin: 0 auto 0 0;
 

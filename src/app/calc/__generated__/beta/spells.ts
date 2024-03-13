@@ -4,6 +4,28 @@ import { GunActionState } from '../../actionState';
 import { Spell } from '../../spell';
 import { ipairs, luaFor } from "../../lua/loops";
 import {
+  EntityGetWithTag,
+  GetUpdatedEntityID,
+  EntityGetComponent,
+  EntityGetFirstComponent,
+  ComponentGetValue2,
+  ComponentSetValue2,
+  EntityInflictDamage,
+  ActionUsesRemainingChanged,
+  EntityGetTransform,
+  EntityLoad,
+  EntityGetAllChildren,
+  EntityGetName,
+  EntityHasTag,
+  EntityGetFirstComponentIncludingDisabled,
+  EntityGetInRadiusWithTag,
+  GlobalsGetValue,
+  GlobalsSetValue,
+  Random,
+  SetRandomSeed,
+  GameGetFrameNum
+} from "../../eval/dispatch";
+import {
   hand,
   deck,
   discarded,
@@ -30,28 +52,6 @@ import {
   reflecting,
   call_action,
 } from "../../gun";
-import {
-  EntityGetWithTag,
-  GetUpdatedEntityID,
-  EntityGetComponent,
-  EntityGetFirstComponent,
-  ComponentGetValue2,
-  ComponentSetValue2,
-  EntityInflictDamage,
-  ActionUsesRemainingChanged,
-  EntityGetTransform,
-  EntityLoad,
-  EntityGetAllChildren,
-  EntityGetName,
-  EntityHasTag,
-  EntityGetFirstComponentIncludingDisabled,
-  EntityGetInRadiusWithTag,
-  GlobalsGetValue,
-  GlobalsSetValue,
-  Random,
-  SetRandomSeed,
-  GameGetFrameNum
-} from "../../eval/dispatch";
 
 const actions: Spell[] = [
 	
@@ -7942,6 +7942,26 @@ const actions: Spell[] = [
 			draw_actions( 1, true )
 		},
 	},
+	{
+		id: "DRAW_EAT",
+		name: "$DRAW_EAT",
+		description: "$DRAW_EAT",
+		sprite: "data/ui_gfx/gun_actions/draw_eat.png",
+		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
+		type: "other",
+		spawn_level: "",
+		spawn_probability: "",
+		price: 2,
+		mana: 10,
+		action: function(c: GunActionState) {
+      if (hand.length === 0) {
+        return;
+      }
+      if (hand[hand.length - 1]?.id === 'DRAW_EAT') {
+        discarded.push(hand[hand.length - 1]);
+      }
+    }
+  },
 	{
 		id: "ALPHA",
 		name: "$action_alpha",
