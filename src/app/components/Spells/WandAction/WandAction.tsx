@@ -3,6 +3,7 @@ import type { ActionId } from '../../../calc/actionId';
 import type { SpellType } from '../../../calc/spellTypes';
 import { getBackgroundUrlForSpellType } from '../../../calc/spellTypes';
 import type { TooltipId } from '../../Tooltips/tooltipId';
+import type { CSSProperties } from 'react';
 
 const SpellTypeBorder = styled.div`
   --size-spell: var(--bsize-spell, 48px);
@@ -24,10 +25,12 @@ const _WandAction = ({
   spellSprite,
   spellId,
   className,
+  style,
   tooltipId,
 }: {
   onDeleteSpell?: () => void;
   className?: string;
+  style?: CSSProperties;
   spellId?: ActionId;
   spellType?: SpellType;
   spellSprite?: string;
@@ -44,6 +47,7 @@ const _WandAction = ({
         : {})}
       className={className}
       style={{
+        ...style,
         backgroundImage: `url('/${spellSprite}'), ${getBackgroundUrlForSpellType(
           spellType,
         )}`,

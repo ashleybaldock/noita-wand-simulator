@@ -16,6 +16,7 @@ import { ReleaseInfo } from './ReleaseInfo';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Tooltips } from './Tooltips';
 import { Modals } from './Modals/Modals';
+import { SpellDragPreview } from './DragPreview';
 
 const Column = styled.div`
   display: flex;
@@ -71,6 +72,7 @@ export const WandSimulator = () => {
           <Tooltips />
           <ReleaseInfo />
         </Column>
+        <SpellDragPreview />
       </DndProvider>
     </DebugHints>
   );

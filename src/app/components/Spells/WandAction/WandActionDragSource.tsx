@@ -4,6 +4,15 @@ import styled from 'styled-components';
 import type { ActionId } from '../../../calc/actionId';
 import type { WandIndex } from '../../../redux/WandIndex';
 
+export type DraggedAction = {
+  actionId: ActionId;
+  sourceWandIndex?: WandIndex;
+};
+
+type ActionDragSourceMonitor = {
+  isDragging: boolean;
+};
+
 const ActionDragSource = styled.div<{
   isDragging: boolean;
 }>`
@@ -39,7 +48,11 @@ export const WandActionDragSource = ({
   sourceWandIndex?: WandIndex;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }>) => {
-  const [{ isDragging }, dragRef] = useDrag(() => ({
+  const [{ isDragging }, dragRef] = useDrag<
+    DraggedAction,
+    DraggedAction,
+    ActionDragSourceMonitor
+  >(() => ({
     type: 'spell',
     item: { actionId, sourceWandIndex },
     collect: (monitor) => ({
