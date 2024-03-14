@@ -5,8 +5,11 @@ import { useAppDispatch } from '../redux/hooks';
 import { toggleConfigSetting } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
 import { DebugHints } from './Debug';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+// import { DndProvider } from 'react-dnd';
+// import { HTML5Backend } from 'react-dnd-html5-backend';
+// import { TouchBackend } from 'react-dnd-touch-backend';
+import { DndProvider } from 'react-dnd-multi-backend';
+import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 // import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
 import { ReleaseInfo } from './ReleaseInfo';
@@ -48,7 +51,7 @@ export const WandSimulator = () => {
 
   return (
     <DebugHints>
-      <DndProvider backend={HTML5Backend}>
+      <DndProvider options={HTML5toTouch}>
         <Column>
           <MainHeader></MainHeader>
           <Column>
