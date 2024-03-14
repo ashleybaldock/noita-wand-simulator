@@ -14,6 +14,7 @@ import {
 import type { ChangeEvent } from 'react';
 import { SectionHeader } from '../SectionHeader';
 import { YesNoToggle } from '../Input';
+import { SectionToolbar } from '../SectionToolbar';
 
 const MainDiv = styled.div`
   display: flex;
@@ -25,30 +26,24 @@ const MainDiv = styled.div`
 
 const SubSectionDiv = styled.div`
   display: flex;
-  flex-direction: column;
-  flex: 1 0 48%;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex: 1 1 46%;
+  flex-wrap: nowrap;
+  align-self: center;
+  align-content: center;
+  align-items: center;
+  align-self: center;
   justify-content: start;
-  align-items: stretch;
-  margin: 0px;
+
+  padding: 0;
+  margin: 0;
   min-height: 2.3em;
+  background-color: #111;
   border: 2px solid #232323;
-  background-color: #111;
-  background-color: #111;
   border-top-color: var(--config-topleft-border);
   border-left-color: var(--config-topleft-border);
   border-bottom-color: var(--config-bottomright-border);
   border-right-color: var(--config-bottomright-border);
-
-  flex: 1 1 46%;
-  align-self: center;
-  padding: 0;
-  margin: 0;
-  flex-direction: row;
-  align-content: center;
-  align-items: center;
-  align-self: center;
-  flex-wrap: nowrap;
 `;
 
 const YesNoToggleWithoutArrow = styled(YesNoToggle)`
@@ -60,35 +55,24 @@ const SubSectionTitle = styled.div<{
   minWidth?: string;
 }>`
   display: flex;
-  align-items: center;
-  align-self: start;
-  color: #eee;
-  padding: 2px 6px 2px 4px;
-  font-size: 14px;
-  ${({ minWidth }) => `min-width: ${minWidth ?? '6em'};`}
-  justify-content: start;
-
-  span {
-    padding-top: 2px;
-  }
-
-  flex-direction: row;
-  align-content: center;
-  align-items: center;
-  align-self: center;
-  flex-wrap: nowrap;
   flex: 0 1;
-  object-fit: contain;
-  background-size: contain;
-  background-repeat: no-repeat;
-  white-space: nowrap;
+  flex-wrap: nowrap;
   justify-content: unset;
 
   flex-direction: row;
   align-content: center;
   align-items: center;
   align-self: center;
-  flex-wrap: nowrap;
+
+  color: #eee;
+  padding: 2px 6px 2px 4px;
+  font-size: 14px;
+  ${({ minWidth }) => `min-width: ${minWidth ?? '10em'};`}
+
+  object-fit: contain;
+  background-size: contain;
+  background-repeat: no-repeat;
+  white-space: nowrap;
 
   &:nth-child(1) {
     flex: 0 1;
@@ -108,6 +92,12 @@ const SubSectionTitle = styled.div<{
   }
   &:nth-child(2) {
     flex: 1 0;
+  }
+
+  & > span {
+    padding-top: 2px;
+    white-space: nowrap;
+    margin-right: 1.2em;
   }
 `;
 
@@ -131,6 +121,13 @@ const SubSectionContent = styled.div<{
   align-items: center;
   align-self: center;
   flex-wrap: nowrap;
+  justify-content: space-between;
+
+  :is([data-section='ending'], [data-section='limits']) & {
+    flex: 1 1 auto;
+    gap: 1em;
+    margin: 0 3em;
+  }
 `;
 
 const InputWrapper = styled.label`
@@ -142,7 +139,7 @@ const InputWrapper = styled.label`
   flex: 1 1 auto;
 
   &:first-child {
-    flex: 1 1 auto;
+    flex: 1 1 46%;
 
     object-fit: contain;
     background-size: contain;
@@ -181,10 +178,20 @@ const InputWrapper = styled.label`
   }
 
   font-size: 14px;
+
+  span {
+    text-align: right;
+    white-space: nowrap;
+    margin-right: 1em;
+  }
 `;
 
 const CheckboxInputWrapper = styled(InputWrapper)`
-  flex: 0;
+  flex: 0 1;
+
+  &:first-child {
+    flex: 0 1;
+  }
 `;
 
 const RandomInputWrapper = styled(InputWrapper)`
@@ -194,10 +201,6 @@ const RandomInputWrapper = styled(InputWrapper)`
 
   input[type='text'] {
     min-width: 4em;
-  }
-  span {
-    min-width: 3.5em;
-    text-align: right;
   }
 `;
 
@@ -328,7 +331,7 @@ export const CastConfigEditor = () => {
 
   return (
     <>
-      <SectionHeader title={'Cast Config'} />
+      <SectionToolbar title={'Cast Config'} />
       <MainDiv>
         <SubSectionDiv data-section="health">
           <SubSectionTitle>
@@ -341,7 +344,7 @@ export const CastConfigEditor = () => {
                 checked={config.infiniteHp}
                 onChange={handleConfigToggle('infiniteHp')}
               >
-                <span>∞: </span>
+                <span style={{ whiteSpace: 'nowrap' }}>∞: </span>
               </YesNoToggle>
             </CheckboxInputWrapper>
             <InputWrapper>

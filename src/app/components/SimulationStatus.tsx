@@ -3,7 +3,7 @@ import { useConfig } from '../redux';
 import type { StopCondition, StopReason } from '../types';
 import { TerminationWarning } from './Visualisation/TerminationWarning';
 import { FNSP } from '../util';
-import { Duration } from './Visualisation/ProjectileTree/Duration';
+import { Duration } from './Visualisation/Duration';
 
 const StyledStatus = styled.div`
   margin: 0.4em 0 0.1em 0;

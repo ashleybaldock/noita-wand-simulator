@@ -24,7 +24,7 @@ import {
 } from '../../../util';
 import type { TriggerCondition } from '../../../calc/trigger';
 import { WithDebugHints } from '../../Debug';
-import { Duration } from './Duration';
+import { Duration } from '../Duration';
 import { Unchanged, YesNo, YesOr } from '../../Presentation';
 import { useConfig } from '../../../redux';
 

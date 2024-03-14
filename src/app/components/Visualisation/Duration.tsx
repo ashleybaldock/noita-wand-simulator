@@ -8,8 +8,8 @@ import {
   SUFFIX_SECOND,
   toFrames,
   toSeconds,
-} from '../../../util';
-import { useConfig } from '../../../redux';
+} from '../../util';
+import { useConfig } from '../../redux';
 
 type TimeUnit = 'f' | 's' | 'ms';
 

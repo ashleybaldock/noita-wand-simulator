@@ -3,11 +3,11 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 import type { StopReason } from '../../../types';
 import type { GroupedWandShot } from '../../../calc/eval/types';
-import { ConfigButton, SectionButtonBar } from '../../buttons';
+import { ConfigButton } from '../../buttons';
 import { SaveImageButton, ScrollWrapper } from '../../generic';
-import { SectionHeader } from '../../SectionHeader';
 import { ShotTable } from './ShotTable';
 import { ShotSummary } from './ShotSummary';
+import { SectionToolbar } from '../../SectionToolbar';
 
 const SectionDiv = styled.div`
   display: flex;
@@ -43,17 +43,16 @@ export const ShotList = ({
   );
   return (
     <>
-      <SectionHeader title={'Simulation: Shot List'} />
-      <SaveButtons>
-        <SaveImageButton
-          targetRef={shotListRef}
-          fileName={'projectiles'}
-          enabled={shots.length > 0}
-        />
-      </SaveButtons>
-      <SectionButtonBar>
+      <SectionToolbar title={'Simulation: Shot List'}>
+        <SaveButtons>
+          <SaveImageButton
+            targetRef={shotListRef}
+            fileName={'projectiles'}
+            enabled={shots.length > 0}
+          />
+        </SaveButtons>
         <ConfigButton />
-      </SectionButtonBar>
+      </SectionToolbar>
 
       <ScrollWrapper>
         <SectionDiv

@@ -10,9 +10,9 @@ import { useConfig, useSpellSequence, useWand } from '../../redux';
 import { SaveImageButton, ScrollWrapper } from '../generic';
 import { ActionCalledShotResult } from './ActionSequence';
 import { ActionTreeShotResult } from './ActionTree';
-import { SectionHeader } from '../SectionHeader';
-import { ShotList } from './ProjectileTree';
+import { ShotList } from './ShotList';
 import { SimulationStatus } from '../SimulationStatus';
+import { SectionToolbar } from '../SectionToolbar';
 
 const ParentDiv = styled.div`
   display: flex;
@@ -189,7 +189,7 @@ export const VisualisationList = () => {
       />
       {showActionTree && (
         <>
-          <SectionHeader title={'Simulation: Action Call Tree'} />
+          <SectionToolbar title={'Simulation: Action Call Tree'} />
           <ScrollWrapper>
             <SectionDiv
               ref={actionCallTreeRef as LegacyRef<HTMLDivElement>}
@@ -207,7 +207,7 @@ export const VisualisationList = () => {
           </ScrollWrapper>
         </>
       )}
-      <SectionHeader title={'Simulation: Action Call Sequence'} />
+      <SectionToolbar title={'Simulation: Action Call Sequence'} />
       <ScrollWrapper>
         <SectionDiv
           ref={actionsCalledRef as LegacyRef<HTMLDivElement>}

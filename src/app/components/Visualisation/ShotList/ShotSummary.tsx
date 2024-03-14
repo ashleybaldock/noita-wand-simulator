@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Duration } from './Duration';
+import { Duration } from '../Duration';
 import { NBSP, isNotNullOrUndefined } from '../../../util';
 import type { StopReason } from '../../../types';
 import type { GroupedWandShot } from '../../../calc/eval/types';

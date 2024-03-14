@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { TriggerCondition, getIconForTrigger } from '../../../calc/trigger';
+import type { TriggerCondition } from '../../../calc/trigger';
+import { getIconForTrigger } from '../../../calc/trigger';
 import { isNotNullOrUndefined, toBackgroundImage } from '../../../util';
 import { WithDebugHints } from '../../Debug';
 import { LineSpacer } from './LineSpacer';
