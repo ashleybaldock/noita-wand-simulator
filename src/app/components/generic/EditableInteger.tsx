@@ -42,7 +42,6 @@ const Value = styled.input.attrs({
   text-decoration: none;
     `
       : `
-  height: 15px;
   margin: 0;
   padding: 0 2px;
   border: none;
