@@ -11,7 +11,6 @@ export const SpellDragPreview = () => {
   const { itemType, item, style } = preview;
   const { actionId } = item as DraggedAction;
   const spell = isKnownSpell(actionId) ? getSpellById(actionId) : undefined;
-  console.log(itemType, item, style, actionId, spell);
   if (!spell) {
     return null;
   }

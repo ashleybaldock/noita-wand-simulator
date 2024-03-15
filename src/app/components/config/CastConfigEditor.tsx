@@ -12,27 +12,28 @@ import {
   updateConfig,
 } from '../../redux/configSlice';
 import type { ChangeEvent } from 'react';
-import { SectionHeader } from '../SectionHeader';
 import { YesNoToggle } from '../Input';
 import { SectionToolbar } from '../SectionToolbar';
+import { InputImageLabel } from '../Input/ImageLabel/InputImageLabel';
+import { RequirementToggle } from '../Input/RequirementToggle/RequirementToggle';
 
 const MainDiv = styled.div`
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: stretch;
-  padding: 1px;
 `;
 
-const SubSectionDiv = styled.div`
+const SubSectionDiv = styled.div<{
+  'data-section'?: string;
+}>`
   display: flex;
   flex-direction: row;
   flex: 1 1 46%;
   flex-wrap: nowrap;
-  align-self: center;
   align-content: center;
   align-items: center;
   align-self: center;
+  align-self: stretch;
   justify-content: start;
 
   padding: 0;
@@ -46,11 +47,19 @@ const SubSectionDiv = styled.div`
   border-right-color: var(--config-bottomright-border);
 `;
 
-const YesNoToggleWithoutArrow = styled(YesNoToggle)`
-  & > :last-child::before {
-    content: '';
+const RequirementsSubSection = styled(SubSectionDiv).attrs(() => ({
+  'data-section': 'requirements',
+}))`
+  flex-direction: column;
+
+  & > :first-child {
+    align-self: start;
+  }
+  & > :last-child {
+    flex-wrap: wrap;
   }
 `;
+
 const SubSectionTitle = styled.div<{
   minWidth?: string;
 }>`
@@ -204,30 +213,18 @@ const RandomInputWrapper = styled(InputWrapper)`
   }
 `;
 
-const RequiremementEveryOther = ({
-  className = '',
-  children,
-}: React.PropsWithChildren<{ className?: string }>) => {
-  return <>{children}</>;
-};
-const RequiremementIfEnemy = ({
-  className = '',
-  children,
-}: React.PropsWithChildren<{ className?: string }>) => {
-  return <>{children}</>;
-};
-const RequiremementIfProjectiles = ({
-  className = '',
-  children,
-}: React.PropsWithChildren<{ className?: string }>) => {
-  return <>{children}</>;
-};
-const RequiremementIfHp = ({
-  className = '',
-  children,
-}: React.PropsWithChildren<{ className?: string }>) => {
-  return <>{children}</>;
-};
+const RequiremementEveryOther = styled(RequirementToggle).attrs(() => ({
+  sprite: 'data/ui_gfx/gun_actions/if_half.png',
+}))``;
+const RequiremementIfEnemy = styled(RequirementToggle).attrs(() => ({
+  sprite: 'data/ui_gfx/gun_actions/if_enemy.png',
+}))``;
+const RequiremementIfProjectiles = styled(RequirementToggle).attrs(() => ({
+  sprite: 'data/ui_gfx/gun_actions/if_projectile.png',
+}))``;
+const RequiremementIfHp = styled(RequirementToggle).attrs(() => ({
+  sprite: 'data/ui_gfx/gun_actions/if_hp.png',
+}))``;
 
 // const SimPaused = styled.span`
 //   display: inline-block;
@@ -240,31 +237,6 @@ const RequiremementIfHp = ({
 //   width: 4em;
 //   padding-left: 4px;
 // `;
-
-const InputImageLabel = styled.div<{
-  size: number;
-  imgUrl: string;
-  leftMargin?: string;
-}>`
-  position: relative;
-  background-color: #111;
-  min-width: ${({ size }) => size}px;
-  width: ${({ size }) => size}px;
-  height: ${({ size }) => size}px;
-  background-image: url(/${({ imgUrl }) => imgUrl});
-  background-size: cover;
-  font-family: monospace;
-  font-weight: bold;
-  user-select: none;
-  image-rendering: pixelated;
-  margin: 0 4px 0 ${({ leftMargin }) => (leftMargin ? leftMargin : '2px')};
-
-  flex: 1 1;
-  object-fit: contain;
-  background-size: contain;
-  background-repeat: no-repeat;
-  white-space: nowrap;
-`;
 
 export const CastConfigEditor = () => {
   const config = useConfig();
@@ -421,7 +393,7 @@ export const CastConfigEditor = () => {
             </RandomInputWrapper>
           </SubSectionContent>
         </SubSectionDiv>
-        <SubSectionDiv data-section="requirements">
+        <RequirementsSubSection>
           <SubSectionTitle>
             <InputImageLabel size={18} imgUrl={'data/config/req.png'} />
             <span>Requirements</span>
@@ -437,137 +409,32 @@ export const CastConfigEditor = () => {
             {/*     imgUrl={'data/ui_gfx/gun_actions/if_half.png'} */}
             {/*   /> */}
             {/* </YesNoToggleWithoutArrow> */}
-            <RequiremementEveryOther>
-              <YesNoToggleWithoutArrow
-                checked={half}
-                onChange={requirementsChangeHandler('requirements.half')}
-                customYes={<>1st</>}
-                customNo={<>2nd</>}
-              >
-                <InputImageLabel
-                  leftMargin={'6px'}
-                  size={32}
-                  imgUrl={'data/ui_gfx/gun_actions/if_half.png'}
-                />
-              </YesNoToggleWithoutArrow>
-              <YesNoToggleWithoutArrow
-                checked={!half}
-                onChange={requirementsChangeHandler('requirements.half')}
-                customYes={<>1st</>}
-                customNo={<>2nd</>}
-              >
-                <InputImageLabel
-                  leftMargin={'0px'}
-                  size={32}
-                  imgUrl={'data/ui_gfx/gun_actions/if_else.png'}
-                />
-              </YesNoToggleWithoutArrow>
-
-              <InputImageLabel
-                leftMargin={'0px'}
-                size={32}
-                imgUrl={'data/ui_gfx/gun_actions/if_end.png'}
-              />
-            </RequiremementEveryOther>
-
-            <RequiremementIfEnemy>
-              <YesNoToggleWithoutArrow
-                checked={enemies}
-                onChange={requirementsChangeHandler('requirements.enemies')}
-                customYes={<>Cast</>}
-                customNo={<>Skip</>}
-              >
-                <InputImageLabel
-                  leftMargin={'6px'}
-                  size={32}
-                  imgUrl={'data/ui_gfx/gun_actions/if_enemy.png'}
-                />
-              </YesNoToggleWithoutArrow>
-              <YesNoToggleWithoutArrow
-                checked={!enemies}
-                onChange={requirementsChangeHandler('requirements.enemies')}
-                customYes={<>Cast</>}
-                customNo={<>Skip</>}
-              >
-                <InputImageLabel
-                  leftMargin={'0px'}
-                  size={32}
-                  imgUrl={'data/ui_gfx/gun_actions/if_else.png'}
-                />
-              </YesNoToggleWithoutArrow>
-
-              <InputImageLabel
-                leftMargin={'0px'}
-                size={32}
-                imgUrl={'data/ui_gfx/gun_actions/if_end.png'}
-              />
-            </RequiremementIfEnemy>
-            <RequiremementIfProjectiles>
-              <YesNoToggleWithoutArrow
-                checked={projectiles}
-                onChange={requirementsChangeHandler('requirements.projectiles')}
-                customYes={<>Cast</>}
-                customNo={<>Skip</>}
-              >
-                <InputImageLabel
-                  leftMargin={'6px'}
-                  size={32}
-                  imgUrl={'data/ui_gfx/gun_actions/if_projectile.png'}
-                />
-              </YesNoToggleWithoutArrow>
-              <YesNoToggleWithoutArrow
-                checked={!projectiles}
-                onChange={requirementsChangeHandler('requirements.projectiles')}
-                customYes={<>Cast</>}
-                customNo={<>Skip</>}
-              >
-                <InputImageLabel
-                  leftMargin={'0px'}
-                  size={32}
-                  imgUrl={'data/ui_gfx/gun_actions/if_else.png'}
-                />
-              </YesNoToggleWithoutArrow>
-
-              <InputImageLabel
-                leftMargin={'0px'}
-                size={32}
-                imgUrl={'data/ui_gfx/gun_actions/if_end.png'}
-              />
-            </RequiremementIfProjectiles>
-            <RequiremementIfHp>
-              <YesNoToggleWithoutArrow
-                checked={hp}
-                onChange={requirementsChangeHandler('requirements.hp')}
-                customYes={<>Cast</>}
-                customNo={<>Skip</>}
-              >
-                <InputImageLabel
-                  leftMargin={'6px'}
-                  size={32}
-                  imgUrl={'data/ui_gfx/gun_actions/if_hp.png'}
-                />
-              </YesNoToggleWithoutArrow>
-              <YesNoToggleWithoutArrow
-                checked={!hp}
-                onChange={requirementsChangeHandler('requirements.hp')}
-                customYes={<>Cast</>}
-                customNo={<>Skip</>}
-              >
-                <InputImageLabel
-                  leftMargin={'0px'}
-                  size={32}
-                  imgUrl={'data/ui_gfx/gun_actions/if_else.png'}
-                />
-              </YesNoToggleWithoutArrow>
-
-              <InputImageLabel
-                leftMargin={'0px'}
-                size={32}
-                imgUrl={'data/ui_gfx/gun_actions/if_end.png'}
-              />
-            </RequiremementIfHp>
+            <RequiremementEveryOther
+              checked={half}
+              onChange={requirementsChangeHandler('requirements.half')}
+              customYes={<>1st</>}
+              customNo={<>2nd</>}
+            />
+            <RequiremementIfEnemy
+              checked={enemies}
+              onChange={requirementsChangeHandler('requirements.enemies')}
+              customYes={<>Cast</>}
+              customNo={<>Skip</>}
+            />
+            <RequiremementIfProjectiles
+              checked={projectiles}
+              onChange={requirementsChangeHandler('requirements.projectiles')}
+              customYes={<>Cast</>}
+              customNo={<>Skip</>}
+            />
+            <RequiremementIfHp
+              checked={hp}
+              onChange={requirementsChangeHandler('requirements.hp')}
+              customYes={<>Cast</>}
+              customNo={<>Skip</>}
+            />
           </SubSectionContent>
-        </SubSectionDiv>
+        </RequirementsSubSection>
         <SubSectionDiv data-section="limits">
           <SubSectionTitle>
             <span>Limits</span>
