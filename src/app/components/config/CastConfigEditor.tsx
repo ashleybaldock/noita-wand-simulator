@@ -14,8 +14,8 @@ import {
 import type { ChangeEvent } from 'react';
 import { YesNoToggle } from '../Input';
 import { SectionToolbar } from '../SectionToolbar';
-import { InputImageLabel } from '../Input/ImageLabel/InputImageLabel';
 import { RequirementToggle } from '../Input/RequirementToggle/RequirementToggle';
+import { InputImageLabel } from '../Input/ImageLabel/InputImageLabel';
 
 const MainDiv = styled.div`
   display: flex;
