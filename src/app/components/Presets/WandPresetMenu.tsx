@@ -84,11 +84,9 @@ const StyledPresetButton = styled(Button)`
 
 const PresetButton = ({
   preset,
-  key,
   className = '',
 }: {
   preset: Preset;
-  key: string;
   className?: string;
 }) => {
   const dispatch = useAppDispatch();
@@ -105,7 +103,6 @@ const PresetButton = ({
   return (
     <PresetButtonListItem
       data-name="PresetButtonListItem"
-      key={key}
       className={className}
     >
       <StyledPresetButton onClick={() => handleSelect(preset)}>
@@ -162,12 +159,8 @@ export const WandPresetMenu = () => {
   return (
     <PresetGroupList>
       {presets.map((presetGroup, index) => (
-        <PresetListSection>
-          <PresetList
-            presetGroup={presetGroup}
-            prefix={'presets--'}
-            key={index}
-          />
+        <PresetListSection key={index}>
+          <PresetList presetGroup={presetGroup} prefix={'presets--'} />
         </PresetListSection>
       ))}
       <Footer />
