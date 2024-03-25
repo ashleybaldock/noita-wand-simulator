@@ -1,7 +1,7 @@
 import { useUIToggle } from '../../redux';
 import { Button } from '../generic';
 
-export const ConfigButton = () => {
+export const ConfigButton = ({ className = '' }: { className?: string }) => {
   const [, setModalVisible] = useUIToggle('showModalConfigEditor');
   return (
     <Button
@@ -9,6 +9,7 @@ export const ConfigButton = () => {
       imgUrl={'data/sampo-config.png'}
       imgOnly={'mobile'}
       onClick={() => setModalVisible(true)}
+      className={className}
     >
       Config
     </Button>

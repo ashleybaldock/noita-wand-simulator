@@ -5,12 +5,15 @@ const StyledButton = styled.button`
   color: black;
   background-color: transparent;
   cursor: pointer;
+  font-size: 1em;
+  margin-left: 1em;
 
   &:hover {
     background-color: #c55;
   }
   & > span {
     filter: grayscale(1) brightness(2.2);
+    pointer-events: none;
   }
 
   @media screen and (max-width: 500px) {
@@ -23,7 +26,7 @@ const StyledButton = styled.button`
     background-color: black;
     border-radius: 0 0 0 70% / 40%;
     padding: 0.6em 0.6em 0.6em 0.9em;
-    z-index: 10;
+    z-index: var(--zindex-modal-closebutton);
     border-color: var(--color-modal-bg);
     border-style: solid;
     border-width: 0 0 0.4em 0em;

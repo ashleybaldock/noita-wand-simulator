@@ -14,6 +14,7 @@ const ButtonShapes = [
   'petal1',
   'petal2',
 ] as const;
+
 export type ButtonShape = (typeof ButtonShapes)[number];
 
 const borderForShape = new Map<ButtonShape, string>([
@@ -62,6 +63,7 @@ const StyledButton = styled.button<{
   margin: 0;
   padding-top: 0.2em;
   padding-bottom: 0;
+
   ${({ imgAfter }) =>
     imgAfter
       ? `padding-right: var(--pad-img-side);
@@ -141,22 +143,6 @@ const MobileHidden = styled.div<React.PropsWithChildren>`
   }
 `;
 
-type Props = {
-  onClick?: () => void;
-  onMouseOver?: () => void;
-  onMouseOut?: () => void;
-  hotkeys?: string;
-  imgUrl?: string;
-  imgDataUrl?: string;
-  imgAfter?: boolean;
-  imgOnly?: 'never' | 'mobile';
-  minimal?: boolean;
-  shape?: ButtonShape;
-  bgScale?: 1;
-  tooltipId?: TooltipId;
-  tooltipActionHintId?: ActionHintId;
-};
-
 export const Button = ({
   onClick = noop,
   onMouseOver = noop,
@@ -172,12 +158,27 @@ export const Button = ({
   imgOnly = 'never',
   minimal = false,
   shape = 'pill',
-  bgScale = 1,
   children,
-}: React.PropsWithChildren<Props>) => {
+  className = '',
+}: React.PropsWithChildren<{
+  className?: string;
+  onClick?: () => void;
+  onMouseOver?: () => void;
+  onMouseOut?: () => void;
+  hotkeys?: string;
+  imgUrl?: string;
+  imgDataUrl?: string;
+  imgAfter?: boolean;
+  imgOnly?: 'never' | 'mobile';
+  minimal?: boolean;
+  shape?: ButtonShape;
+  tooltipId?: TooltipId;
+  tooltipActionHintId?: ActionHintId;
+}>) => {
   useHotkeys(hotkeys, onClick, { enabled: hotkeys !== '' });
   return (
     <StyledButton
+      className={className}
       minimal={minimal}
       shape={shape}
       imgUrl={imgUrl}

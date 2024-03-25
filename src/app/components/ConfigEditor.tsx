@@ -246,6 +246,9 @@ export const ConfigEditor = () => {
           <ConfigToggle field={'hideAccessibilityHints'}>
             {'Hide hints on input fields'}
           </ConfigToggle>
+          <ConfigToggle field={'mirrorControls'}>
+            {'UI elements swap sides'}
+          </ConfigToggle>
         </ConfigToggleGroup>
       </ConfigDiv>
     </MainDiv>

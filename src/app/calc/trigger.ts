@@ -1,19 +1,41 @@
-export type TriggerCondition = 'hit' | 'timer' | 'expire';
+import { isNotNullOrUndefined } from '../util';
+import type { WandEventName } from './eval/wandEvent';
+import { WandEventBase } from './eval/wandEvent';
 
-const triggerEventToConditionMap = new Map<string, TriggerCondition>([
-  ['BeginTriggerHitWorld', 'hit'],
-  ['BeginTriggerTimer', 'timer'],
-  ['BeginTriggerDeath', 'expire'],
-]);
+export const TriggerConditionDefinition = {
+  hit: { event: 'BeginTriggerHitWorld', sprite: 'data/icons/trigger-mod.png' },
+  timer: { event: 'BeginTriggerTimer', sprite: 'data/icons/timer-mod.png' },
+  expire: { event: 'BeginTriggerDeath', sprite: 'data/icons/death-mod.png' },
+} as const;
 
-export const getTriggerConditionForEvent = (triggerEvent: string) =>
-  triggerEventToConditionMap.get(triggerEvent);
+export type TriggerCondition = keyof typeof TriggerConditionDefinition;
 
-const triggerIconMap = new Map<TriggerCondition, string>([
-  ['hit', 'data/icons/trigger-mod.png'],
-  ['timer', 'data/icons/timer-mod.png'],
-  ['expire', 'data/icons/death-mod.png'],
-]);
+type TriggerConditionInfo = {
+  sprite: (typeof TriggerConditionDefinition)[TriggerCondition]['sprite'];
+  event: WandEventName;
+};
 
-export const getIconForTrigger = (triggerType: TriggerCondition) =>
-  triggerIconMap.get(triggerType);
+export type TriggerConditionInfoRecord = Readonly<
+  Record<TriggerCondition, Readonly<TriggerConditionInfo>>
+>;
+
+export const triggerConditionInfoRecord =
+  TriggerConditionDefinition as TriggerConditionInfoRecord;
+
+export const triggerConditionFor = (
+  wandEvent: WandEventName,
+): TriggerCondition | undefined => {
+  if (wandEvent === 'BeginTriggerHitWorld') {
+    return 'hit';
+  }
+  if (wandEvent === 'BeginTriggerTimer') {
+    return 'timer';
+  }
+  if (wandEvent === 'BeginTriggerDeath') {
+    return 'expire';
+  }
+  return undefined;
+};
+
+export const getSpriteForTrigger = (triggerType: TriggerCondition) =>
+  triggerConditionInfoRecord[triggerType].sprite;

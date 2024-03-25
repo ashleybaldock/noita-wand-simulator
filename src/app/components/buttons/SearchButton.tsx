@@ -6,7 +6,6 @@ import styled from 'styled-components';
 
 export const StyledButton = styled(Button)`
   align-content: start;
-  padding-left: 0.8em;
   border-left-color: #5d5d5d;
 `;
 export const SearchButton = ({ hotkeys = 'f, `, /' }: { hotkeys?: string }) => {

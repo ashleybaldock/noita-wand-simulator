@@ -20,6 +20,28 @@ const Optimal = styled(Emphasis)`
 const CouldImprove = styled(Emphasis)`
   border: 1px dotted #ff0000;
 `;
+const StickyContainer = styled.div`
+  position: sticky;
+  left: 1em;
+  right: 1em;
+
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: baseline;
+  gap: 0.2em 1.2em;
+
+  width: fit-content;
+  max-width: 90vw;
+  padding: 0px 20px 0px 10px;
+  margin: 0.8em 0 1.2em 0;
+
+  & > div {
+    text-align: center;
+  }
+`;
 
 export const ShotSummary = styled(
   ({
@@ -48,7 +70,7 @@ export const ShotSummary = styled(
       );
     }
     return (
-      <div className={className}>
+      <StickyContainer className={className}>
         <SummaryItem>
           {`Fired${NBSP}`}
           <Emphasis>{`${shots?.length ?? '??'}${NBSP}shots`}</Emphasis>
@@ -91,24 +113,7 @@ export const ShotSummary = styled(
             )}
           </SummaryItem>
         )}
-      </div>
+      </StickyContainer>
     );
   },
-)`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: baseline;
-  width: fit-content;
-  padding: 0px 20px 0px 10px;
-  align-self: stretch;
-  margin: 0.8em 0 1.2em 0;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 0.2em 1.2em;
-  max-width: 90vw;
-
-  & > div {
-    text-align: center;
-  }
-`;
+)``;

@@ -16,7 +16,7 @@ import { isValidEntityPath, entityToActions } from '../entityLookup';
 import { isIterativeActionId } from '../actionId';
 import type { ActionCall, WandShot } from './types';
 import { defaultGunActionState } from '../defaultActionState';
-import { getTriggerConditionForEvent } from '../trigger';
+import { triggerConditionFor } from '../trigger';
 import { isValidActionCallSource } from '../spellTypes';
 import type { StopReason } from '../../types';
 import type { WandEvent } from './wandEvent';
@@ -172,7 +172,7 @@ export const clickWand = (
           actionCallGroups: [],
           actionCallTree: [],
           castState: { ...defaultGunActionState },
-          triggerType: getTriggerConditionForEvent(name),
+          triggerType: triggerConditionFor(name),
           triggerEntity: entity_filename,
           triggerActionDrawCount: action_draw_count,
           triggerDelayFrames: delay_frames,

@@ -42,6 +42,7 @@ type ConfigBase = {
   limitSimulationIterations: number;
   limitSimulationDuration: number;
   hideAccessibilityHints: boolean;
+  mirrorControls: boolean;
 };
 export type ConfigRandom = {
   'random.worldSeed': number;
@@ -128,6 +129,7 @@ export const initialState: ConfigState = {
     'random.frameNumber': 0,
     'pauseCalculations': false,
     'hideAccessibilityHints': false,
+    'mirrorControls': false,
   },
 };
 

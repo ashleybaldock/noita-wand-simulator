@@ -15,7 +15,7 @@ import { useHideTooltips } from './useHideTooltips';
 
 const StyledTooltipBase = styled(TooltipBase)``;
 
-const SpellTip = styled.div`
+const SpellTooltipContainer = styled.div`
   display: grid;
   grid-template-areas:
     'sname  sname  sname'
@@ -125,11 +125,16 @@ const InlineIcon = styled.span.attrs<{
   height: 1em;
 `;
 
-export const SpellInfoTooltip = () => {
+export const SpellInfoTooltip = ({
+  className = '',
+}: {
+  className?: string;
+}) => {
   const [hidden, tooltipRef] = useHideTooltips();
 
   return (
     <StyledTooltipBase
+      className={className}
       id={'tooltip-spellinfo'}
       hidden={hidden}
       ref={tooltipRef}
@@ -161,7 +166,7 @@ export const SpellInfoTooltip = () => {
           spawn_requires_flag,
         } = getSpellById(content);
         return (
-          <SpellTip>
+          <SpellTooltipContainer>
             <Name>{translate(name)}</Name>
             <Description>{translate(description)}</Description>
             <SpellId>{actionId}</SpellId>
@@ -192,7 +197,7 @@ export const SpellInfoTooltip = () => {
                 <Value>{getUnlockName(spawn_requires_flag)}</Value>
               </>
             )}
-          </SpellTip>
+          </SpellTooltipContainer>
         );
       }}
     />

@@ -24,6 +24,19 @@ const SaveButtons = styled.div`
   top: 37px;
 `;
 
+const StyledConfigButton = styled(ConfigButton)`
+  grid-row: buttons;
+  grid-column: -2;
+`;
+
+const ShotListToolbar = () => {
+  return (
+    <SectionToolbar title={'Simulation: Shot List'}>
+      <StyledConfigButton />
+    </SectionToolbar>
+  );
+};
+
 export const ShotList = ({
   simulationRunning,
   endReason,
@@ -43,7 +56,8 @@ export const ShotList = ({
   );
   return (
     <>
-      <SectionToolbar title={'Simulation: Shot List'}>
+      <ShotListToolbar />
+      <ScrollWrapper>
         <SaveButtons>
           <SaveImageButton
             targetRef={shotListRef}
@@ -51,10 +65,6 @@ export const ShotList = ({
             enabled={shots.length > 0}
           />
         </SaveButtons>
-        <ConfigButton />
-      </SectionToolbar>
-
-      <ScrollWrapper>
         <SectionDiv
           ref={shotListRef as LegacyRef<HTMLDivElement>}
           className={'saveImageRoot'}

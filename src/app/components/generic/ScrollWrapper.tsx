@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 /* rotate() makes the scrollbar be at the top */
 const ParentDiv = styled.div`
   padding: 12px 8px;
   overflow-x: auto;
   transform: rotateX(180deg);
+  overscroll-behavior-x: none;
 `;
 
 const ChildDiv = styled.div`

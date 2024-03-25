@@ -1,41 +1,22 @@
-import { useAppDispatch, usePresets } from '../../redux/hooks';
-import { setWand } from '../../redux/wandSlice';
-import { useCallback, useState } from 'react';
-import { WandPresetMenu } from './WandPresetMenu';
-import { Button, Modal } from '../generic';
-import type { Preset } from '../../redux/Wand/preset';
+import { useUIToggle } from '../../redux/hooks';
+import { Button } from '../generic';
 
-export const WandPresetButton = () => {
-  const presets = usePresets();
-  const dispatch = useAppDispatch();
-
-  const [menuVisible, setMenuVisible] = useState(false);
-
-  const handleSelect = useCallback(
-    (preset: Preset) => {
-      setMenuVisible(false);
-      dispatch(setWand({ wand: preset.wand, spells: preset.spells }));
-    },
-    [dispatch],
-  );
-
-  const handleClose = () => {
-    setMenuVisible(false);
-  };
+export const WandPresetButton = ({
+  className = '',
+}: {
+  className?: string;
+}) => {
+  const [, setMenuVisible] = useUIToggle('showWandPresets');
 
   return (
-    <>
-      <Button
-        hotkeys={'o'}
-        imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
-        imgOnly={'mobile'}
-        onClick={() => setMenuVisible(!menuVisible)}
-      >
-        Load
-      </Button>
-      <Modal visible={menuVisible} onClose={handleClose} title="Presets">
-        <WandPresetMenu presets={presets} onSelect={handleSelect} />
-      </Modal>
-    </>
+    <Button
+      hotkeys={'o'}
+      imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
+      imgOnly={'mobile'}
+      onClick={() => setMenuVisible(true)}
+      className={className}
+    >
+      Load
+    </Button>
   );
 };

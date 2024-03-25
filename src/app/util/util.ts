@@ -253,11 +253,6 @@ export const toUrl = (path: string) => {
   return `url('/${path}')`;
 };
 
-export const toBackgroundImage = (path?: string) =>
-  isNotNullOrUndefined(path)
-    ? `background-image: ${toUrl(path)};`
-    : 'background-color: red;';
-
 // https://stackoverflow.com/a/7616484
 export function hashString(s: string) {
   let hash = 0;

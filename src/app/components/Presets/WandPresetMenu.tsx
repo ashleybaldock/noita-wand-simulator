@@ -1,112 +1,176 @@
 import styled from 'styled-components';
 import type { Preset, PresetGroup } from '../../redux/Wand/preset';
-import { isPresetGroup } from '../../redux/Wand/preset';
+import { isPresetGroup, isSinglePreset } from '../../redux/Wand/preset';
 import { Button } from '../generic';
+import { setWand, useAppDispatch, usePresets, useUIToggle } from '../../redux';
+import { useCallback } from 'react';
 
 const PresetGroupNameDiv = styled.div`
   font-weight: bold;
+  letter-spacing: 0.01em;
+  position: sticky;
+  padding: 1.3em 0 0.3em 0;
+  letter-spacing: 0.01em;
+  top: -0.4em;
+  background-color: var(--color-modal-bg);
+  z-index: var(--zindex-modal-subtitle);
+
+  @media screen and (max-width: 500px) {
+    top: var(--modal-header-height);
+  }
 `;
 
-const PresetGroupListDiv = styled.ul`
+const PresetGroupList = styled.ul`
   list-style-type: none;
   padding: 0;
   margin: 0;
   position: relative;
-
-  li:last-child {
-    border-left: 2px solid transparent;
-  }
 `;
 
-const FirstPresetGroupDiv = styled.div``;
-
-const PresetGroupDiv = styled.li`
-  border-left: 2px solid var(--color-base);
-  margin-left: 1em;
+const PresetListSection = styled.li`
+  list-style-type: none;
   padding-left: 1em;
   position: relative;
+`;
 
-  &:before {
-    content: '┗';
-    color: var(--color-base);
-    position: absolute;
-    top: 0;
-    left: -9px;
-  }
+const PresetGroupListItem = styled.li`
+  list-style-type: none;
+  margin-left: 1em;
+  padding: 0 1em 0.4em 1em;
+  position: relative;
 
   li {
     margin-left: 0;
   }
 `;
-const PresetButtonDiv = styled.li`
-  border-left: 2px solid var(--color-base);
+const PresetButtonListItem = styled.li`
   margin-left: 1em;
   padding-left: 1em;
   position: relative;
 
-  &:before {
-    content: '┗';
-    color: var(--color-base);
+  &:hover::before {
+  }
+
+  &::before {
+    --thickness: 2px;
+    --color: var(--color-base);
+    --thalf: calc(var(--thickness) / 2);
+    --height: calc(100% - var(--thalf));
+    --width: calc(100% - var(--thalf));
+    --width: 2em;
+
+    content: '';
+    pointer-events: none;
     position: absolute;
-    top: 0;
-    left: -9px;
+    top: calc((var(--height) / -2) - var(--thalf));
+    left: calc(var(--thickness) * -1);
+    border-left: var(--thickness) solid var(--color);
+    border-bottom: var(--thickness) solid var(--color);
+    border-radius: 0 0 0 8px;
+    height: var(--height);
+    width: var(--width);
   }
 `;
 
-export const WandPresetMenu = ({
-  presets,
-  onSelect,
+const StyledPresetButton = styled(Button)`
+  text-align: left;
+  width: 90%;
+  padding-top: 0.4em;
+  padding-bottom: 0.2em;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  border-radius: 2px 8px;
+`;
+
+const PresetButton = ({
+  preset,
+  key,
+  className = '',
 }: {
-  presets: (Preset | PresetGroup)[];
-  onSelect: (p: Preset) => void;
+  preset: Preset;
+  key: string;
+  className?: string;
 }) => {
-  const createPresetList = (
-    presetGroup: PresetGroup,
-    prefix: string = 'presets--',
-    first: boolean = true,
-  ) => {
-    const content = (
-      <>
-        {!first && <PresetGroupNameDiv>{presetGroup.name}</PresetGroupNameDiv>}
-        <PresetGroupListDiv>
-          {presetGroup.presets.map((p, index) => {
-            if (isPresetGroup(p)) {
-              return createPresetList(
-                p,
-                `${prefix}--${presetGroup.name}--${p.name}`,
-                false,
-              );
-            } else {
-              return (
-                <PresetButtonDiv>
-                  <Button
-                    key={`${prefix}--${presetGroup.name}--${p.name}`}
-                    onClick={() => onSelect(p)}
-                  >
-                    {p.name}
-                  </Button>
-                </PresetButtonDiv>
-              );
-            }
-          })}
-        </PresetGroupListDiv>
-      </>
-    );
+  const dispatch = useAppDispatch();
+  const [, setModalVisible] = useUIToggle('showWandPresets');
 
-    if (first) {
-      return (
-        <FirstPresetGroupDiv key={`${prefix}--${presetGroup.name}`}>
-          {content}
-        </FirstPresetGroupDiv>
-      );
-    } else {
-      return (
-        <PresetGroupDiv key={`${prefix}--${presetGroup.name}`}>
-          {content}
-        </PresetGroupDiv>
-      );
-    }
-  };
+  const handleSelect = useCallback(
+    (preset: Preset) => {
+      dispatch(setWand({ wand: preset.wand, spells: preset.spells }));
+      setModalVisible(false);
+    },
+    [dispatch],
+  );
 
-  return createPresetList({ name: 'Presets', presets });
+  return (
+    <PresetButtonListItem
+      data-name="PresetButtonListItem"
+      key={key}
+      className={className}
+    >
+      <StyledPresetButton onClick={() => handleSelect(preset)}>
+        {preset.name}
+      </StyledPresetButton>
+    </PresetButtonListItem>
+  );
+};
+
+const PresetList = ({
+  presetGroup,
+  prefix = '',
+}: {
+  presetGroup: PresetGroup;
+  prefix: string;
+}) => {
+  return (
+    <>
+      <PresetGroupNameDiv>{presetGroup.name}</PresetGroupNameDiv>
+      <PresetGroupList data-name="PresetGroupList">
+        {presetGroup.presets.map((preset) => {
+          if (isPresetGroup(preset)) {
+            return (
+              <PresetGroupListItem
+                key={`${prefix}--${presetGroup.name}--${preset.name}`}
+              >
+                <PresetList
+                  data-name="PresetList"
+                  presetGroup={preset}
+                  prefix={`${prefix}--${presetGroup.name}`}
+                />
+              </PresetGroupListItem>
+            );
+          }
+          if (isSinglePreset(preset)) {
+            return (
+              <PresetButton
+                preset={preset}
+                key={`${prefix}--${presetGroup.name}--${preset.name}`}
+              />
+            );
+          }
+        })}
+      </PresetGroupList>
+    </>
+  );
+};
+const Footer = styled.div`
+  height: 6em;
+`;
+export const WandPresetMenu = () => {
+  const presets = usePresets();
+
+  return (
+    <PresetGroupList>
+      {presets.map((presetGroup, index) => (
+        <PresetListSection>
+          <PresetList
+            presetGroup={presetGroup}
+            prefix={'presets--'}
+            key={index}
+          />
+        </PresetListSection>
+      ))}
+      <Footer />
+    </PresetGroupList>
+  );
 };

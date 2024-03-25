@@ -61,7 +61,7 @@ const Multitudes = {
 
 export const defaultWand = defaultPreset.wand;
 
-export const defaultPresets: Array<Preset | PresetGroup> = [
+export const defaultPresets: Array<PresetGroup> = [
   {
     name: 'Empty Wands',
     presets: [

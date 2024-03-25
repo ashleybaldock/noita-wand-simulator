@@ -27,6 +27,7 @@ const MainDiv = styled.div`
   max-height: 100%;
   overflow-y: auto;
   box-shadow: -10px 10px 50px #000;
+  overscroll-behavior: none;
 
   @media screen and (max-width: 500px) {
     --margin: 0;
@@ -44,11 +45,10 @@ const HeaderDiv = styled.div`
   text-align: center;
   justify-content: space-between;
   padding-left: 0.5em;
-  justify-content: end;
   padding: 0.5em;
-  align-items: center;
+  align-items: baseline;
   font-size: 1.3em;
-  justify-content: center;
+  justify-content: end;
 
   @media screen and (max-width: 500px) {
     padding: 0;
@@ -74,7 +74,7 @@ const TitleDiv = styled.div`
     position: fixed;
     top: 0;
     text-align: left;
-    z-index: 50;
+    z-index: var(--zindex-modal-title);
     padding-bottom: 0;
     width: 100%;
   }
@@ -82,6 +82,7 @@ const TitleDiv = styled.div`
 
 const ContentDiv = styled.div`
   padding: 5px;
+  padding-top: var(--modal-header-height);
 `;
 
 type Props = {

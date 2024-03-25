@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import type { TriggerCondition } from '../../../calc/trigger';
-import { getIconForTrigger } from '../../../calc/trigger';
-import { isNotNullOrUndefined, toBackgroundImage } from '../../../util';
+import { getSpriteForTrigger } from '../../../calc/trigger';
+import { isNotNullOrUndefined, toUrl } from '../../../util';
 import { WithDebugHints } from '../../Debug';
 import { LineSpacer } from './LineSpacer';
 
@@ -22,6 +22,8 @@ const HeadingOuter = styled.div<{
   nestingPrefix: Array<number>;
   nestingLevel?: number;
   triggerType?: TriggerCondition;
+  isStartOfTrigger?: boolean;
+  isEndOfTrigger?: boolean;
   alignTop?: boolean;
 }>`
   grid-row: heading;
@@ -32,13 +34,11 @@ const HeadingOuter = styled.div<{
   text-align: center;
   align-self: stretch;
 
-  &::before {
+  ${WithDebugHints} &::before {
     content: '';
     position: absolute;
     width: 100%;
     height: 100%;
-  }
-  ${WithDebugHints} &::before {
     border-left: 3px solid blue;
   }
 
@@ -52,14 +52,29 @@ const HeadingOuter = styled.div<{
     background-repeat: no-repeat;
     image-rendering: pixelated;
   }
+
+  ${({ isStartOfTrigger }) =>
+    isStartOfTrigger &&
+    `
+  position: sticky;
+  left: 2em;
+  z-index: 200;
+    `}
+  ${({ isEndOfTrigger }) =>
+    isEndOfTrigger &&
+    `
+  position: sticky;
+  left: 2em;
+  z-index: 200;
+    `}
 `;
 const BaseColumnHeading = ({
   nestingPrefix = [],
   nestingLevel = 0,
   triggerType,
   origin = false,
-  endpoint = false,
-  branch = false,
+  isEndOfTrigger = false,
+  isStartOfTrigger = false,
   showLineSpacer = true,
   children,
   className,
@@ -68,8 +83,8 @@ const BaseColumnHeading = ({
   nestingLevel?: number;
   triggerType?: TriggerCondition;
   origin?: boolean;
-  endpoint?: boolean;
-  branch?: boolean;
+  isEndOfTrigger?: boolean;
+  isStartOfTrigger?: boolean;
   showLineSpacer?: boolean;
   className?: string;
 } & React.PropsWithChildren) => {
@@ -79,13 +94,15 @@ const BaseColumnHeading = ({
       triggerType={triggerType}
       nestingLevel={nestingLevel}
       nestingPrefix={nestingPrefix}
+      isStartOfTrigger={isStartOfTrigger}
+      isEndOfTrigger={isEndOfTrigger}
     >
       {showLineSpacer && (
         <LineSpacer
           nestingPrefix={nestingPrefix}
           origin={origin}
-          endpoint={endpoint}
-          branch={branch}
+          endpoint={isEndOfTrigger}
+          branch={isStartOfTrigger}
         />
       )}
 
@@ -123,7 +140,7 @@ export const TotalsColumnHeading = styled(ColumnHeadingWithLineSpacer)`
     height: 2.4em;
     background-position: center 0.2em;
     background-size: 2em;
-        ${toBackgroundImage(getIconForTrigger(triggerType))}
+    background-image: ${toUrl(getSpriteForTrigger(triggerType))}
         `
         : `
     height: 2.4em;

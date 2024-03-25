@@ -16,6 +16,7 @@ import { YesNoToggle } from '../Input';
 import { SectionToolbar } from '../SectionToolbar';
 import { RequirementToggle } from '../Input/RequirementToggle/RequirementToggle';
 import { InputImageLabel } from '../Input/ImageLabel/InputImageLabel';
+import { NumericInput } from '../Input/NumericInput/NumericInput';
 
 const MainDiv = styled.div`
   display: flex;
@@ -320,13 +321,19 @@ export const CastConfigEditor = () => {
               </YesNoToggle>
             </CheckboxInputWrapper>
             <InputWrapper>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="^[1-9][0-9]*$"
+              <NumericInput
+                min={0}
+                max={Number.POSITIVE_INFINITY}
                 value={config.var_hp}
                 onChange={numberChangeHandler('var_hp')}
-              />
+              ></NumericInput>
+              {/* <input */}
+              {/*   type="text" */}
+              {/*   inputMode="numeric" */}
+              {/*   pattern="^[1-9][0-9]*$" */}
+              {/*   value={config.var_hp} */}
+              {/*   onChange={numberChangeHandler('var_hp')} */}
+              {/* /> */}
             </InputWrapper>
             {/* <InputWrapper> */}
             {/*   / */}
