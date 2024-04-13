@@ -1,9 +1,4 @@
-import type { TriggerCondition } from '../trigger';
 // import type { GroupedObject } from '../grouping/combineGroups';
-import type { GunActionState } from '../actionState';
-import type { TreeNode } from '../../util';
-import type { ActionCall } from './ActionCall';
-import type { SpellDeckInfo } from '../spell';
 
 /*
  * Evaluation & visualisation

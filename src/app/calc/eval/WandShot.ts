@@ -1,8 +1,9 @@
-import { sequentialId, type TreeNode } from '../../util';
 import type { ShotProjectile } from './ShotProjectile';
 import type { GunActionState } from '../actionState';
 import type { TriggerCondition } from '../trigger';
 import type { ActionCall } from './ActionCall';
+import type { TreeNode } from '../../util/TreeNode';
+import { sequentialId } from '../../util';
 
 export type WandShotId = number;
 

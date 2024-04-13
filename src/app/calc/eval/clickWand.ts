@@ -21,15 +21,12 @@ import { triggerConditionFor } from '../trigger';
 import { isValidActionCallSource } from '../spellTypes';
 import type { StopReason } from '../../types';
 import type { WandEvent } from './wandEvent';
-import {
-  isNotNullOrUndefined,
-  type ChangeFields,
-  type TreeNode,
-} from '../../util';
+import { isNotNullOrUndefined, type ChangeFields } from '../../util';
 import type { ActionCall } from './ActionCall';
 import { nextWandShotId, type WandShot } from './WandShot';
 import type { MapTree } from '../../util/MapTree';
 import { mapTreeToMapTree } from '../../util/MapTree';
+import type { TreeNode } from '../../util/TreeNode';
 
 export type ClickWandResult = {
   shots: WandShot[];

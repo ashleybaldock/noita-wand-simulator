@@ -109,30 +109,6 @@ config = {
 }
 
 
-observedFunctions = [
-  "EntityGetWithTag",
-  "GetUpdatedEntityID",
-  "EntityGetComponent",
-  "EntityGetFirstComponent",
-  "ComponentGetValue2",
-  "ComponentSetValue2",
-  "EntityInflictDamage",
-  "ActionUsesRemainingChanged",
-  "EntityGetTransform",
-  "EntityLoad",
-  "EntityGetAllChildren",
-  "EntityGetName",
-  "EntityHasTag",
-  "EntityGetFirstComponentIncludingDisabled",
-  "EntityGetInRadiusWithTag",
-  "GlobalsGetValue",
-  "GlobalsSetValue",
-  "Random",
-  "SetRandomSeed",
-  "GameGetFrameNum"
-]
-
-
 # Convert action functions,
 # replacing cast state global with param
 # action\s*=\s*function\((.*?)\)(\s*)(.*?)end,(\s*},)
@@ -272,14 +248,32 @@ patterns = [
   PatternReplace(r'ACTION_TYPE_UTILITY', r'"utility"', flags=re.MULTILINE),
   PatternReplace(r'ACTION_TYPE_PASSIVE', r'"passive"', flags=re.MULTILINE),
 
-  PatternReplace(r'EntityGetTransform\(', r'EntityGetTransform(this.id, ', flags=re.MULTILINE),
-  PatternReplace(r'EntityGetAllChildren\(', r'EntityGetAllChildren(this.id, ', flags=re.MULTILINE),
-  PatternReplace(r'EntityGetFirstComponent\(', r'EntityGetFirstComponent(this.id, ', flags=re.MULTILINE),
-  PatternReplace(r'EntityGetFirstComponentIncludingDisabled\(', r'EntityGetFirstComponentIncludingDisabled(this.id, ', flags=re.MULTILINE),
-  PatternReplace(r'ComponentGetValue2\(', r'ComponentGetValue2(this.id, ', flags=re.MULTILINE),
-  PatternReplace(r'EntityGetName\(', r'EntityGetName(this.id, ', flags=re.MULTILINE),
-  PatternReplace(r'GetUpdatedEntityID\(', r'GetUpdatedEntityID(this.id', flags=re.MULTILINE),
-]
+  PatternReplace(r'(GameGetFrameNum)\(', r'\1(this.id', flags=re.MULTILINE),
+
+  PatternReplace(r'(' + '|'.join([
+      "ActionUsesRemainingChanged",
+      "ComponentGetValue2",
+      "ComponentSetValue2",
+      "EntityGetAllChildren",
+      "EntityGetComponent",
+      "EntityGetFirstComponent",
+      "EntityGetFirstComponentIncludingDisabled",
+      "EntityGetInRadiusWithTag",
+      "EntityGetName",
+      "EntityGetTransform",
+      "EntityGetWithTag",
+      "EntityHasTag",
+      "EntityInflictDamage",
+      "EntityLoad",
+      "GameGetFrameNum",
+      "GetUpdatedEntityID",
+      "GlobalsGetValue",
+      "GlobalsSetValue",
+      "Random",
+      "SetRandomSeed"
+      ]) + r')\(', r'\1(this.id, ', flags=re.MULTILINE),
+  ]
+
 
 # Remove comments etc.
 def preProcess(content):

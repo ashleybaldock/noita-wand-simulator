@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { WandActionGroup } from '../WandActionGroup';
-import { isNotNullOrUndefined, type TreeNode } from '../../../util';
 import type { ActionCall } from '../../../calc/eval/ActionCall';
 import type { WandShotResult } from '../../../calc/eval/clickWand';
+import type { TreeNode } from '../../../util/TreeNode';
+import { isNotNullOrUndefined } from '../../../util';
 
 export const ActionTreeShotResultMainDiv = styled.div`
   --arrow-hz: 40px;
