@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { Duration } from '../Duration';
 import { NBSP, isNotNullOrUndefined } from '../../../util';
 import type { StopReason } from '../../../types';
-import type { GroupedWandShot } from '../../../calc/eval/types';
 import { useConfig } from '../../../redux';
+import type { WandShot } from '../../../calc/eval/WandShot';
 
 const SummaryItem = styled.div`
   line-height: 1.7em;
@@ -55,7 +55,7 @@ export const ShotSummary = styled(
   }: {
     pending: boolean;
     endReason: StopReason;
-    shots: GroupedWandShot[];
+    shots: WandShot[];
     totalRechargeTime?: number;
     totalFiringTime?: number;
     totalManaDrain?: number;

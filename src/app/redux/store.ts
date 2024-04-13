@@ -7,8 +7,10 @@ import { presetsReducer } from './presetsSlice';
 import { configReducer } from './configSlice';
 import { editorReducer } from './editorSlice';
 import { uiReducer } from './uiSlice';
-import { listenerMiddleware } from './listenerMiddleware';
+import { listenerMiddleware, startAppListening } from './listenerMiddleware';
 import type { WandState } from './Wand/wandState';
+import { resultReducer, newResult } from './resultSlice';
+import { startUpdateListener } from './updateResultListener';
 
 export const store = configureStore({
   reducer: {
@@ -17,10 +19,20 @@ export const store = configureStore({
     config: configReducer,
     editor: editorReducer,
     ui: uiReducer,
+    result: resultReducer,
   },
 
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().prepend(listenerMiddleware.middleware),
+  middleware: (getDefaultMiddleware) => {
+    startUpdateListener(startAppListening);
+    return getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [newResult.type],
+      },
+      // immutableCheck: {
+      //   ignoredPaths: ['result.last.shots'],
+      // },
+    }).prepend(listenerMiddleware.middleware);
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

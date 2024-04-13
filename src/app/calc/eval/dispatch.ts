@@ -14,6 +14,8 @@ import {
 } from '../lua/random';
 import { observer } from './wandObserver';
 
+export type WandId = '__WAND__';
+
 export function SetProjectileConfigs(): void {
   observer.onEvent({ name: 'SetProjectileConfigs', payload: {} });
 }
@@ -84,6 +86,7 @@ export function BaabInstruction(name: string) {
 }
 
 export function ActionUsesRemainingChanged(
+  actionId: ActionId | WandId,
   item_id: InventoryItemID,
   uses_remaining: number,
 ): boolean {
@@ -109,7 +112,10 @@ export function RegisterGunAction(s: GunActionState): void {
   observer.onEvent({ name: 'RegisterGunAction', payload: { s } });
 }
 
-export function EntityGetWithTag(tag: string): EntityID[] {
+export function EntityGetWithTag(
+  actionId: ActionId | WandId,
+  tag: string,
+): EntityID[] {
   return observer.onEvent({
     name: 'EntityGetWithTag',
     default: [],
@@ -117,7 +123,7 @@ export function EntityGetWithTag(tag: string): EntityID[] {
   });
 }
 
-export function GetUpdatedEntityID(actionId: ActionId): EntityID {
+export function GetUpdatedEntityID(actionId: ActionId | WandId): EntityID {
   return observer.onEvent({
     name: 'GetUpdatedEntityID',
     default: 0,
@@ -126,6 +132,7 @@ export function GetUpdatedEntityID(actionId: ActionId): EntityID {
 }
 
 export const EntityGetComponent = (
+  actionId: ActionId | WandId,
   entity_id: EntityID,
   component: string,
 ): ComponentID[] => {
@@ -140,7 +147,7 @@ export const EntityGetComponent = (
 };
 
 export function EntityGetFirstComponent(
-  actionId: ActionId,
+  actionId: ActionId | WandId,
   entity_id: EntityID,
   component: string,
 ): ComponentID {
@@ -156,7 +163,7 @@ export function EntityGetFirstComponent(
 }
 
 export function EntityGetFirstComponentIncludingDisabled(
-  actionId: ActionId,
+  actionId: ActionId | WandId,
   entity_id: EntityID,
   component: string,
 ): ComponentID {
@@ -180,7 +187,7 @@ const componentValues: { [component_id: string]: { [key: string]: number } } = {
 };
 
 export function ComponentGetValue2(
-  actionId: ActionId,
+  actionId: ActionId | WandId,
   component_id: string,
   key: string,
 ): number {
@@ -192,6 +199,7 @@ export function ComponentGetValue2(
 }
 
 export function ComponentSetValue2(
+  actionId: ActionId | WandId,
   component: ComponentID,
   key: string,
   value: number,
@@ -203,6 +211,7 @@ export function ComponentSetValue2(
 }
 
 export function EntityInflictDamage(
+  actionId: ActionId | WandId,
   entityId: EntityID,
   selfDamage: number,
   damageType: string,
@@ -228,7 +237,7 @@ export function EntityInflictDamage(
 }
 
 export const EntityGetTransform = (
-  actionId: ActionId,
+  actionId: ActionId | WandId,
   entity: EntityID,
 ): EntityTransform => {
   return observer.onEvent({
@@ -239,7 +248,12 @@ export const EntityGetTransform = (
 };
 
 // Currently only used by end of everything
-export function EntityLoad(entityXml: string, x: number, y: number): EntityID {
+export function EntityLoad(
+  actionId: ActionId | WandId,
+  entityXml: string,
+  x: number,
+  y: number,
+): EntityID {
   return observer.onEvent({
     name: 'EntityLoad',
     default: 0,
@@ -248,7 +262,7 @@ export function EntityLoad(entityXml: string, x: number, y: number): EntityID {
 }
 
 export function EntityGetAllChildren(
-  actionId: ActionId,
+  actionId: ActionId | WandId,
   entityId: EntityID,
 ): EntityID[] {
   return observer.onEvent({
@@ -258,7 +272,10 @@ export function EntityGetAllChildren(
   });
 }
 
-export function EntityGetName(actionId: ActionId, childId: EntityID): string {
+export function EntityGetName(
+  actionId: ActionId | WandId,
+  childId: EntityID,
+): string {
   return observer.onEvent({
     name: 'EntityGetName',
     default: '',
@@ -266,7 +283,11 @@ export function EntityGetName(actionId: ActionId, childId: EntityID): string {
   });
 }
 
-export function EntityHasTag(entityId: EntityID, tag: string): boolean {
+export function EntityHasTag(
+  actionId: ActionId | WandId,
+  entityId: EntityID,
+  tag: string,
+): boolean {
   return observer.onEvent({
     name: 'EntityHasTag',
     default: false,
@@ -275,6 +296,7 @@ export function EntityHasTag(entityId: EntityID, tag: string): boolean {
 }
 
 export function EntityGetInRadiusWithTag(
+  actionId: ActionId | WandId,
   x: number,
   y: number,
   radius: number,
@@ -293,7 +315,11 @@ export function EntityGetInRadiusWithTag(
 }
 
 /* At time of writing, this is only used by Requirement: Every Other */
-export function GlobalsGetValue(key: string, defaultValue: string): string {
+export function GlobalsGetValue(
+  actionId: ActionId | WandId,
+  key: string,
+  defaultValue: string,
+): string {
   return observer.onEvent({
     name: 'GlobalsGetValue',
     default: defaultValue,
@@ -302,7 +328,11 @@ export function GlobalsGetValue(key: string, defaultValue: string): string {
 }
 
 /* At time of writing, this is only used by Requirement: Every Other */
-export function GlobalsSetValue(key: string, value: string): void {
+export function GlobalsSetValue(
+  actionId: ActionId | WandId,
+  key: string,
+  value: string,
+): void {
   observer.onEvent({ name: 'GlobalsSetValue', payload: { key, value } });
 }
 
@@ -314,6 +344,16 @@ export function OnActionPlayed(
   observer.onEvent({
     name: 'OnActionPlayed',
     payload: { spell, c, playing_permanent_card },
+  });
+}
+
+export function OnPlayPermanentCard(
+  actionId: ActionId | WandId,
+  c: GunActionState,
+): void {
+  observer.onEvent({
+    name: 'OnPlayPermanentCard',
+    payload: { actionId, c },
   });
 }
 
@@ -380,7 +420,11 @@ export function OnActionFinished(
   });
 }
 
-export function Random(min: number, max: number): number {
+export function Random(
+  actionId: ActionId | WandId,
+  min: number,
+  max: number,
+): number {
   return observer.onEvent({
     name: 'Random',
     default: RandomExt(min, max),
@@ -388,7 +432,11 @@ export function Random(min: number, max: number): number {
   });
 }
 
-export function SetRandomSeed(a: number, b: number): void {
+export function SetRandomSeed(
+  actionId: ActionId | WandId,
+  a: number,
+  b: number,
+): void {
   SetRandomSeedExt(
     observer.onEvent({
       name: 'SetRandomSeed',

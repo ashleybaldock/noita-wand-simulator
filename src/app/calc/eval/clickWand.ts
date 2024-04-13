@@ -1,4 +1,4 @@
-import type { Spell } from '../spell';
+import type { Spell, SpellDeckInfo } from '../spell';
 import { getSpellById } from '../spells';
 import { observer } from './wandObserver';
 import type { Gun } from '../gun';
@@ -6,6 +6,7 @@ import {
   _add_card_to_deck,
   _clear_deck,
   _draw_actions_for_shot,
+  _play_permanent_card,
   _set_gun,
   _start_shot,
   dont_draw_actions,
@@ -13,19 +14,27 @@ import {
   state_from_game,
 } from '../gun';
 import { isValidEntityPath, entityToActions } from '../entityLookup';
-import { isIterativeActionId } from '../actionId';
-import type { ActionCall, WandShot } from './types';
+import type { ActionId } from '../actionId';
+import { isIterativeActionId, isValidActionId } from '../actionId';
 import { defaultGunActionState } from '../defaultActionState';
 import { triggerConditionFor } from '../trigger';
 import { isValidActionCallSource } from '../spellTypes';
 import type { StopReason } from '../../types';
 import type { WandEvent } from './wandEvent';
-import type { TreeNode } from '../../util';
+import {
+  isNotNullOrUndefined,
+  type ChangeFields,
+  type TreeNode,
+} from '../../util';
+import type { ActionCall } from './ActionCall';
+import { nextWandShotId, type WandShot } from './WandShot';
+import type { MapTree } from '../../util/MapTree';
+import { mapTreeToMapTree } from '../../util/MapTree';
 
 export type ClickWandResult = {
   shots: WandShot[];
-  recharge: number | undefined;
-  endReason: StopReason;
+  reloadTime: number | undefined;
+  endConditions: StopReason[];
   elapsedTime: number;
   wraps: number;
   shotCount: number;
@@ -34,7 +43,57 @@ export type ClickWandResult = {
   repeatCount: number;
 };
 
+export type EvalTree = MapTree<ActionCall>;
+
+export type WandShotResult = ChangeFields<
+  WandShot,
+  {
+    actionCallTrees: EvalTree[];
+  }
+>;
+
+export type SerializedClickWandResult = ChangeFields<
+  ClickWandResult,
+  {
+    shots: WandShotResult[];
+  }
+>;
+
+const serializeSpell = (spell: SpellDeckInfo) => ({
+  id: spell?.id,
+  deck_index: spell?.deck_index,
+  permanently_attached: spell?.permanently_attached,
+});
+const maybeSerializeSpell = (spell?: SpellDeckInfo) =>
+  isNotNullOrUndefined(spell) ? serializeSpell(spell) : undefined;
+
+const serializeClickWandResult = (
+  result: ClickWandResult,
+): SerializedClickWandResult => ({
+  ...result,
+  shots: result.shots.map((shot) => ({
+    ...shot,
+    projectiles: shot.projectiles.map((projectile) => ({
+      ...projectile,
+      spell: maybeSerializeSpell(projectile.spell),
+      proxy: maybeSerializeSpell(projectile.proxy),
+    })),
+    actionCallGroups: shot.actionCallGroups.map((actionCallGroup) => ({
+      ...actionCallGroup,
+      spell: serializeSpell(actionCallGroup.spell),
+      wrappingInto: (actionCallGroup.wrappingInto ?? []).map((wrapInto) =>
+        serializeSpell(wrapInto),
+      ),
+    })),
+    actionCallTrees: shot.actionCallTrees.map(mapTreeToMapTree),
+  })),
+});
+
 export type ClickWandSetup = {
+  wand: Gun;
+  spells: Spell[];
+  alwaysCastSpells: Spell[];
+  zetaSpell?: Spell;
   req_enemies: boolean;
   req_projectiles: boolean;
   req_hp: boolean;
@@ -51,68 +110,94 @@ export type ClickWandSetup = {
   limitSimulationDuration: number;
 };
 
+type ClickWandState = {
+  mana: number;
+  currentShot: WandShot;
+  parentShot: WandShot | undefined;
+  currentShotStack: WandShot[];
+  lastCalledAction: ActionCall | undefined;
+  lastDrawnAction: ActionCall | undefined;
+  lastPlayed: Readonly<Spell> | undefined;
+  alwaysCastsPlayed: ActionId[];
+  calledActions: ActionCall[];
+  validSourceCalledActions: ActionCall[];
+  currentNode: TreeNode<ActionCall> | undefined;
+  rootNodes: TreeNode<ActionCall>[];
+};
+
 const startTimer =
   (start = performance.now()) =>
   () =>
     performance.now() - start;
 
-export const clickWand = (
-  wand: Gun,
-  spells: Spell[],
-  {
-    req_enemies,
-    req_projectiles,
-    req_hp,
-    req_half,
-    rng_frameNumber,
-    rng_worldSeed,
-    wand_available_mana,
-    wand_cast_delay,
-    endSimulationOnShotCount = 10,
-    endSimulationOnReloadCount = 2,
-    endSimulationOnRefreshCount = 2,
-    endSimulationOnRepeatCount = 1,
-    limitSimulationIterations = 200,
-    limitSimulationDuration = 5000,
-  }: ClickWandSetup,
-): ClickWandResult => {
+export const clickWand = ({
+  wand,
+  spells,
+  alwaysCastSpells,
+  zetaSpell,
+  req_enemies,
+  req_projectiles,
+  req_hp,
+  req_half,
+  rng_frameNumber,
+  rng_worldSeed,
+  wand_available_mana,
+  wand_cast_delay,
+  endSimulationOnShotCount = 10,
+  endSimulationOnReloadCount = 2,
+  endSimulationOnRefreshCount = 2,
+  endSimulationOnRepeatCount = 1,
+  limitSimulationIterations = 200,
+  limitSimulationDuration = 5000,
+}: ClickWandSetup): SerializedClickWandResult => {
   const getElapsedTime = startTimer();
 
+  const result: ClickWandResult = {
+    shots: [],
+    reloadTime: undefined,
+    endConditions: [],
+    elapsedTime: 0,
+    wraps: 0,
+    shotCount: 0,
+    reloadCount: 0,
+    refreshCount: 0,
+    repeatCount: 0,
+  };
+
   if (spells.filter((s) => s != null).length === 0) {
-    return {
-      shots: [],
-      recharge: undefined,
-      endReason: 'noSpells',
-      elapsedTime: 0,
-      wraps: 0,
-      shotCount: 0,
-      reloadCount: 0,
-      refreshCount: 0,
-      repeatCount: 0,
-    };
+    result.endConditions.push('noSpells');
+    return result;
   }
 
-  let shotCount = 0,
-    reloadCount = 0,
-    refreshCount = 0,
-    repeatCount = 0;
-  let currentWrapNumber = 0;
-  let mana = wand_available_mana;
-  const wandShots: WandShot[] = [];
-  let currentShot: WandShot;
-  let currentShotStack: WandShot[];
-  let lastCalledAction: ActionCall | undefined;
-  let lastDrawnAction: ActionCall | undefined;
-  let lastPlayed: Readonly<Spell> | undefined;
-  let calledActions: ActionCall[];
-  let validSourceCalledActions: ActionCall[];
-  let parentShot;
+  const getShot = (): WandShot => ({
+    _typeName: 'WandShot',
+    id: nextWandShotId(),
+    projectiles: [],
+    actionCallGroups: [],
+    actionCallTrees: [],
+    castState: { ...defaultGunActionState },
+    wraps: [],
+  });
+
+  const resetState = (): ClickWandState => ({
+    calledActions: [],
+    validSourceCalledActions: [],
+    currentShotStack: [],
+    rootNodes: [],
+    currentNode: undefined,
+
+    mana: wand_available_mana,
+    currentShot: getShot(),
+    lastCalledAction: undefined,
+    lastDrawnAction: undefined,
+    lastPlayed: undefined,
+    alwaysCastsPlayed: [],
+    parentShot: undefined,
+  });
+
+  const state: ClickWandState = resetState();
 
   // action call tree
-  let rootNodes: TreeNode<ActionCall>[] = [];
-  let currentNode: TreeNode<ActionCall> | undefined;
-
-  let reloadTime: number | undefined;
 
   const if_half_state = req_half ? 1 : 0;
 
@@ -122,8 +207,10 @@ export const clickWand = (
         const { entityFilename } = payload;
 
         let sourceAction =
-          validSourceCalledActions[validSourceCalledActions.length - 1]?.spell;
-        let proxy: Spell | undefined = undefined;
+          state.validSourceCalledActions[
+            state.validSourceCalledActions.length - 1
+          ]?.spell;
+        let proxy: SpellDeckInfo | undefined = undefined;
 
         if (!sourceAction) {
           // fallback to most likely entity source if no action
@@ -137,7 +224,10 @@ export const clickWand = (
           sourceAction = getSpellById(entityToActions(entityFilename)?.[0]);
         }
 
-        if (entityFilename !== sourceAction.related_projectiles?.[0]) {
+        if (
+          entityFilename !==
+          getSpellById(sourceAction.id).related_projectiles?.[0]
+        ) {
           if (!entityToActions(entityFilename)) {
             throw Error(`missing entity: ${entityFilename}`);
           }
@@ -150,7 +240,7 @@ export const clickWand = (
           }
         }
 
-        currentShot.projectiles.push({
+        state.currentShot.projectiles.push({
           _typeName: 'Projectile',
           entity: entityFilename,
           spell: sourceAction,
@@ -164,13 +254,14 @@ export const clickWand = (
         const { entity_filename, action_draw_count } = payload;
         const delay_frames =
           name === 'BeginTriggerTimer' ? payload.delay_frames : undefined;
-        parentShot = currentShot;
-        currentShotStack.push(currentShot);
-        currentShot = {
+        state.parentShot = state.currentShot;
+        state.currentShotStack.push(state.currentShot);
+        state.currentShot = {
           _typeName: 'WandShot',
+          id: nextWandShotId(),
           projectiles: [],
           actionCallGroups: [],
-          actionCallTree: [],
+          actionCallTrees: [],
           castState: { ...defaultGunActionState },
           triggerType: triggerConditionFor(name),
           triggerEntity: entity_filename,
@@ -178,47 +269,59 @@ export const clickWand = (
           triggerDelayFrames: delay_frames,
           wraps: [],
         };
-        parentShot.projectiles[parentShot.projectiles.length - 1].trigger =
-          currentShot;
-        if (lastDrawnAction) {
-          lastDrawnAction.wasLastToBeDrawnBeforeBeginTrigger = currentShot;
+        state.parentShot.projectiles[
+          state.parentShot.projectiles.length - 1
+        ].trigger = state.currentShot.id;
+        if (state.lastDrawnAction) {
+          state.lastDrawnAction.wasLastToBeDrawnBeforeBeginTrigger =
+            state.currentShot.id;
         }
-        if (lastCalledAction) {
-          lastCalledAction.wasLastToBeCalledBeforeBeginTrigger = currentShot;
+        if (state.lastCalledAction) {
+          state.lastCalledAction.wasLastToBeCalledBeforeBeginTrigger =
+            state.currentShot.id;
         }
         break;
       case 'EndTrigger':
-        currentShot = currentShotStack.pop()!;
+        state.currentShot = state.currentShotStack.pop()!;
         break;
       case 'EndProjectile':
         break;
       case 'RegisterGunAction':
         const { s: castState } = payload;
-        currentShot.castState = Object.assign({}, castState);
+        state.currentShot.castState = Object.assign({}, castState);
         break;
       case 'OnDraw':
         const { state_cards_drawn: totalDrawn } = payload;
-        if (currentShot.castState) {
-          currentShot.castState.state_cards_drawn =
-            (totalDrawn ?? currentShot.castState?.state_cards_drawn ?? 0) + 1;
+        if (state.currentShot.castState) {
+          state.currentShot.castState.state_cards_drawn =
+            (totalDrawn ??
+              state.currentShot.castState?.state_cards_drawn ??
+              0) + 1;
         }
         break;
       case 'OnActionPlayed': {
         const { spell, c: castState, playing_permanent_card } = payload;
-        lastPlayed = spell;
+        state.lastPlayed = spell;
+        break;
+      }
+      case 'OnPlayPermanentCard': {
+        const { actionId, c: castState } = payload;
+        if (isValidActionId(actionId)) {
+          state.alwaysCastsPlayed.push(actionId);
+        }
         break;
       }
       case 'OnMoveDiscardedToDeck': {
         const { discarded } = payload;
-        currentWrapNumber += 1;
-        currentShot.wraps.push(currentWrapNumber);
-        if (lastDrawnAction) {
-          lastDrawnAction.wasLastToBeDrawnBeforeWrapNr = currentWrapNumber;
-          lastDrawnAction.wrappingInto = discarded;
+        result.wraps += 1;
+        state.currentShot.wraps.push(result.wraps);
+        if (state.lastDrawnAction) {
+          state.lastDrawnAction.wasLastToBeDrawnBeforeWrapNr = result.wraps;
+          state.lastDrawnAction.wrappingInto = [...discarded];
         }
-        if (lastCalledAction) {
-          lastCalledAction.wasLastToBeCalledBeforeWrapNr = currentWrapNumber;
-          lastCalledAction.wrappingInto = discarded;
+        if (state.lastCalledAction) {
+          state.lastCalledAction.wasLastToBeCalledBeforeWrapNr = result.wraps;
+          state.lastCalledAction.wrappingInto = [...discarded];
         }
 
         break;
@@ -227,9 +330,14 @@ export const clickWand = (
         const { source, spell /*, c: castState */, recursion, iteration } =
           payload;
         const { id, deck_index, recursive } = spell;
-        lastCalledAction = {
+        console.log(`OnActionCalled gunMana: ${gunMana}`);
+        state.lastCalledAction = {
           _typeName: 'ActionCall',
-          spell,
+          spell: {
+            id: spell.id,
+            deck_index: spell.deck_index,
+            permanently_attached: spell.permanently_attached,
+          },
           source,
           currentMana: gunMana,
           deckIndex: deck_index,
@@ -238,27 +346,27 @@ export const clickWand = (
           dont_draw_actions: dont_draw_actions,
         };
         if (source === 'draw') {
-          lastDrawnAction = lastCalledAction;
+          state.lastDrawnAction = state.lastCalledAction;
         }
 
-        if (!currentNode) {
-          currentNode = {
-            value: lastCalledAction,
+        if (!state.currentNode) {
+          state.currentNode = {
+            value: state.lastCalledAction,
             children: [],
           };
-          rootNodes.push(currentNode);
+          state.rootNodes.push(state.currentNode);
         } else {
           const newNode = {
-            value: lastCalledAction,
+            value: state.lastCalledAction,
             children: [],
-            parent: currentNode,
+            parent: state.currentNode,
           };
-          currentNode?.children.push(newNode);
-          currentNode = newNode;
+          state.currentNode?.children.push(newNode);
+          state.currentNode = newNode;
         }
-        calledActions.push(lastCalledAction);
+        state.calledActions.push(state.lastCalledAction);
         if (isValidActionCallSource(spell.type)) {
-          validSourceCalledActions.push(lastCalledAction);
+          state.validSourceCalledActions.push(state.lastCalledAction);
         }
         break;
       }
@@ -266,13 +374,13 @@ export const clickWand = (
         const {
           /*source*/ /*spell*/ c: castState /*recursion, iteration, returnValue*/,
         } = payload;
-        currentShot.castState = Object.assign({}, castState);
-        currentNode = currentNode?.parent;
+        state.currentShot.castState = Object.assign({}, castState);
+        state.currentNode = state.currentNode?.parent;
         break;
       }
       case 'StartReload': {
-        reloadCount++;
-        reloadTime = payload.reload_time;
+        result.reloadCount++;
+        result.reloadTime = payload.reload_time;
         break;
       }
 
@@ -327,87 +435,85 @@ export const clickWand = (
     }
   });
 
-  const resetState = () => {
-    currentShot = {
-      _typeName: 'WandShot',
-      projectiles: [],
-      actionCallGroups: [],
-      actionCallTree: [],
-      castState: { ...defaultGunActionState },
-      wraps: [],
-    };
-    calledActions = [];
-    validSourceCalledActions = [];
-    currentShotStack = [];
-    rootNodes = [];
-    currentNode = undefined;
-  };
+  try {
+    resetState();
 
-  const endReason = ((): StopReason => {
-    try {
-      resetState();
+    _set_gun(wand);
+    _clear_deck(/*false*/);
 
-      _set_gun(wand);
-      _clear_deck(/*false*/);
+    spells.forEach(
+      (spell, index) =>
+        spell && _add_card_to_deck(spell.id, index, spell.uses_remaining, true),
+    );
 
-      spells.forEach(
-        (spell, index) =>
-          spell &&
-          _add_card_to_deck(spell.id, index, spell.uses_remaining, true),
+    let simIterations = 0;
+
+    while (result.endConditions.length === 0) {
+      result.shotCount++;
+      state_from_game.fire_rate_wait = wand_cast_delay;
+
+      console.log(
+        `shot#${result.shotCount}(_start_shot) mana: ${state.mana}, cast_delay: ${wand_cast_delay}`,
       );
+      _start_shot(state.mana);
 
-      let simIterations = 0;
-      while (
-        shotCount < endSimulationOnShotCount &&
-        reloadCount < endSimulationOnReloadCount &&
-        refreshCount < endSimulationOnRefreshCount &&
-        repeatCount < endSimulationOnRepeatCount &&
-        simIterations++ < limitSimulationIterations &&
-        getElapsedTime() < limitSimulationDuration
-      ) {
-        shotCount++;
-        state_from_game.fire_rate_wait = wand_cast_delay;
-        _start_shot(mana);
-        _draw_actions_for_shot(true);
-        currentShot!.actionCallGroups = calledActions!;
-        currentShot!.actionCallTree = rootNodes;
-        currentShot!.manaDrain = mana - gunMana;
-        wandShots.push(currentShot!);
-        mana = gunMana;
+      alwaysCastSpells.forEach((spell) => {
+        _play_permanent_card(spell.id);
+      });
 
-        // if (
-        //   fireUntil === 'refresh' &&
-        //   (calledActions!.length === 0 ||
-        //     calledActions!.reduce(
-        //       (found, a) => (a.spell.id === 'RESET' ? found + 1 : found),
-        //       0,
-        //     ))
-        // ) {
-        //   return 'refresh';
-        // }
-        // if (fireUntil === 'iterLimit' && shotCount >= shotCountLimit) {
-        //   return 'iterLimit';
-        // }
+      _draw_actions_for_shot(true);
+      state.currentShot.actionCallGroups = state.calledActions!;
+      state.currentShot.actionCallTrees = state.rootNodes;
+      state.currentShot.manaDrain = state.mana - gunMana;
+      console.log(
+        `shot#${result.shotCount}(currentShot.manaDrain) mana: ${state.mana}, gunMana: ${gunMana}`,
+      );
+      result.shots.push(state.currentShot);
+      state.mana = gunMana;
+
+      result.elapsedTime = getElapsedTime();
+
+      /* Check for end conditions */
+      if (result.shotCount >= endSimulationOnShotCount) {
+        result.endConditions.push('shotCount');
       }
-    } catch (err) {
-      console.error(err);
-      return 'exception';
+      if (result.reloadCount >= endSimulationOnReloadCount) {
+        result.endConditions.push('reloadCount');
+      }
+      if (result.refreshCount >= endSimulationOnRefreshCount) {
+        result.endConditions.push('refreshCount');
+      }
+      if (result.repeatCount >= endSimulationOnRepeatCount) {
+        result.endConditions.push('repeatCount');
+      }
+      if (simIterations++ >= limitSimulationIterations) {
+        result.endConditions.push('iterationCount');
+      }
+      if (result.elapsedTime >= limitSimulationDuration) {
+        result.endConditions.push('timeout');
+      }
+
+      // if (
+      //   fireUntil === 'refresh' &&
+      //   (calledActions!.length === 0 ||
+      //     calledActions!.reduce(
+      //       (found, a) => (a.spell.id === 'RESET' ? found + 1 : found),
+      //       0,
+      //     ))
+      // ) {
+      //   return 'refresh';
+      // }
+      // if (fireUntil === 'iterLimit' && result.shotCount >= shotCountLimit) {
+      //   return 'iterLimit';
+      // }
     }
-    return 'reload';
-  })();
+  } catch (err) {
+    console.error(err);
+    result.endConditions.push('exception');
+  }
 
   resetState();
   unsub();
 
-  return {
-    shots: wandShots,
-    wraps: currentWrapNumber,
-    recharge: reloadTime,
-    endReason,
-    elapsedTime: getElapsedTime(),
-    shotCount: 0,
-    reloadCount: 0,
-    refreshCount: 0,
-    repeatCount: 0,
-  };
+  return serializeClickWandResult(result);
 };

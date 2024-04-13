@@ -4,28 +4,6 @@ import { GunActionState } from '../../actionState';
 import { Spell } from '../../spell';
 import { ipairs, luaFor } from "../../lua/loops";
 import {
-  EntityGetWithTag,
-  GetUpdatedEntityID,
-  EntityGetComponent,
-  EntityGetFirstComponent,
-  ComponentGetValue2,
-  ComponentSetValue2,
-  EntityInflictDamage,
-  ActionUsesRemainingChanged,
-  EntityGetTransform,
-  EntityLoad,
-  EntityGetAllChildren,
-  EntityGetName,
-  EntityHasTag,
-  EntityGetFirstComponentIncludingDisabled,
-  EntityGetInRadiusWithTag,
-  GlobalsGetValue,
-  GlobalsSetValue,
-  Random,
-  SetRandomSeed,
-  GameGetFrameNum
-} from "../../eval/dispatch";
-import {
   hand,
   deck,
   discarded,
@@ -52,6 +30,28 @@ import {
   reflecting,
   call_action,
 } from "../../gun";
+import {
+  ActionUsesRemainingChanged,
+  ComponentGetValue2,
+  ComponentSetValue2,
+  EntityGetAllChildren,
+  EntityGetComponent,
+  EntityGetFirstComponent,
+  EntityGetFirstComponentIncludingDisabled,
+  EntityGetInRadiusWithTag,
+  EntityGetName,
+  EntityGetTransform,
+  EntityGetWithTag,
+  EntityHasTag,
+  EntityInflictDamage,
+  EntityLoad,
+  GameGetFrameNum,
+  GetUpdatedEntityID,
+  GlobalsGetValue,
+  GlobalsSetValue,
+  Random,
+  SetRandomSeed,
+} from "../../eval/dispatch";
 
 const actions: Spell[] = [
 	
@@ -495,7 +495,7 @@ const actions: Spell[] = [
 		never_unlimited: true,
 		custom_xml_file: "data/entities/misc/custom_cards/black_hole_giga.xml",
 		action: function(c: GunActionState) {
-			let black_holes = EntityGetWithTag( "black_hole_giga" )
+			let black_holes = EntityGetWithTag(this.id,  "black_hole_giga" )
 			
 			if ( black_holes.length < 3 )  {
 				add_projectile("data/entities/projectiles/deck/black_hole_giga.xml")
@@ -2167,9 +2167,9 @@ const actions: Spell[] = [
 		mana: 100,
 		max_uses: 2,
 		action: function(c: GunActionState) {
-			SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() )
+			SetRandomSeed(this.id,  GameGetFrameNum(), GameGetFrameNum() )
 			let types = ["monster","slime","red","fire"]
-			let rnd = Random(1, types.length)
+			let rnd = Random(this.id, 1, types.length)
 			let egg_name = "egg_" + String(types[rnd - 1]) + ".xml"
 			add_projectile("data/entities/items/pickup/" + egg_name)
 		},
@@ -3092,9 +3092,9 @@ const actions: Spell[] = [
 		mana: 70,
 		max_uses: 25,
 		action: function(c: GunActionState) {
-			SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() )
+			SetRandomSeed(this.id,  GameGetFrameNum(), GameGetFrameNum() )
 			let types = ["pink","green","blue","orange"]
-			let rnd = Random(1, types.length)
+			let rnd = Random(this.id, 1, types.length)
 			let firework_name = "firework_" + String(types[rnd - 1]) + ".xml"
 			add_projectile("data/entities/projectiles/deck/fireworks/" + firework_name)
 			c.fire_rate_wait = c.fire_rate_wait + 60
@@ -3714,15 +3714,15 @@ const actions: Spell[] = [
 			setCurrentReloadTime(current_reload_time - 20)
 			draw_actions( 1, true )
 			
-			let entity_id = GetUpdatedEntityID(this.id)
+			let entity_id = GetUpdatedEntityID(this.id, )
 			
-			let dcomps = EntityGetComponent( entity_id, "DamageModelComponent" )
+			let dcomps = EntityGetComponent(this.id,  entity_id, "DamageModelComponent" )
 			
 			if (( dcomps != null ) && ( dcomps.length > 0 ))  {
 				for (const [a, b] of ipairs(dcomps, 'dcomps')) {
 					let hp = ComponentGetValue2(this.id,  b, "hp" )
 					hp = Math.max( hp - 0.16, 0.04 )
-					ComponentSetValue2( b, "hp", hp )
+					ComponentSetValue2(this.id,  b, "hp", hp )
 				}
 			}
 		},
@@ -3741,7 +3741,7 @@ const actions: Spell[] = [
 		mana: 30,
 		custom_xml_file: "data/entities/misc/custom_cards/money_magic.xml",
 		action: function(c: GunActionState) {
-			let entity_id = GetUpdatedEntityID(this.id)
+			let entity_id = GetUpdatedEntityID(this.id, )
 			
 			let dcomp = EntityGetFirstComponent(this.id,  entity_id, "WalletComponent" )
 			
@@ -3757,8 +3757,8 @@ const actions: Spell[] = [
 					
 					money = money - damage
 					moneyspent = moneyspent + damage
-					ComponentSetValue2( dcomp, "money", money )
-					ComponentSetValue2( dcomp, "money_spent", moneyspent )
+					ComponentSetValue2(this.id,  dcomp, "money", money )
+					ComponentSetValue2(this.id,  dcomp, "money_spent", moneyspent )
 					
 					
 					
@@ -3791,7 +3791,7 @@ const actions: Spell[] = [
 		mana: 20,
 		custom_xml_file: "data/entities/misc/custom_cards/blood_to_power.xml",
 		action: function(c: GunActionState) {
-			let entity_id = GetUpdatedEntityID(this.id)
+			let entity_id = GetUpdatedEntityID(this.id, )
 			
 			let dcomp = EntityGetFirstComponent(this.id,  entity_id, "DamageModelComponent" )
 			
@@ -3803,7 +3803,7 @@ const actions: Spell[] = [
 				if (( hp >= 0.4 ) && ( self_damage > 0.2 ))  {
 					c.extra_entities = c.extra_entities + "data/entities/particles/blood_sparks.xml,"
 					
-					EntityInflictDamage( entity_id, self_damage, "DAMAGE_CURSE", "$action_blood_to_power", "NONE", 0, 0, entity_id )
+					EntityInflictDamage(this.id,  entity_id, self_damage, "DAMAGE_CURSE", "$action_blood_to_power", "NONE", 0, 0, entity_id )
 					
 					
 					
@@ -4480,9 +4480,9 @@ const actions: Spell[] = [
 		
 		custom_xml_file: "data/entities/misc/custom_cards/damage_random.xml",
 		action: function(c: GunActionState) {
-			SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() + 253 )
+			SetRandomSeed(this.id,  GameGetFrameNum(), GameGetFrameNum() + 253 )
 			let multiplier = 0
-			multiplier = Random( -3, 4 ) * Random( 0, 2 )
+			multiplier = Random(this.id,  -3, 4 ) * Random(this.id,  0, 2 )
 			let result = 0
 			result = c.damage_projectile_add + 0.4 * multiplier
 			c.damage_projectile_add = result
@@ -7155,15 +7155,15 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 5,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 263 )
-			let rnd = Random( 1, actions.length )
+			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() + 263 )
+			let rnd = Random(this.id,  1, actions.length )
 			let data = actions[rnd - 1]
 			
 			let safety = 0
 			let rec = check_recursion( data, recursion_level )
 			
 			while (( safety < 100 ) && ( rec === -1 )) {
-				rnd = Random( 1, actions.length )
+				rnd = Random(this.id,  1, actions.length )
 				data = actions[rnd - 1]
 				rec = check_recursion( data, recursion_level )
 				
@@ -7187,15 +7187,15 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 20,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 203 )
-			let rnd = Random( 1, actions.length )
+			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() + 203 )
+			let rnd = Random(this.id,  1, actions.length )
 			let data = actions[rnd - 1]
 			
 			let safety = 0
 			let rec = check_recursion( data, recursion_level )
 			
 			while (( safety < 100 ) && ( ( data.type !== "projectile" ) || ( rec === -1 ) )) {
-				rnd = Random( 1, actions.length )
+				rnd = Random(this.id,  1, actions.length )
 				data = actions[rnd - 1]
 				rec = check_recursion( data, recursion_level )
 				
@@ -7219,15 +7219,15 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 20,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 133 )
-			let rnd = Random( 1, actions.length )
+			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() + 133 )
+			let rnd = Random(this.id,  1, actions.length )
 			let data = actions[rnd - 1]
 			
 			let safety = 0
 			let rec = check_recursion( data, recursion_level )
 			
 			while (( safety < 100 ) && ( ( data.type !== "modifier" ) || ( rec === -1 ) )) {
-				rnd = Random( 1, actions.length )
+				rnd = Random(this.id,  1, actions.length )
 				data = actions[rnd - 1]
 				rec = check_recursion( data, recursion_level )
 				
@@ -7251,15 +7251,15 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 20,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() + 253 )
-			let rnd = Random( 1, actions.length )
+			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() + 253 )
+			let rnd = Random(this.id,  1, actions.length )
 			let data = actions[rnd - 1]
 			
 			let safety = 0
 			let rec = check_recursion( data, recursion_level )
 			
 			while (( safety < 100 ) && ( ( data.type !== "static" ) || ( rec === -1 ) )) {
-				rnd = Random( 1, actions.length )
+				rnd = Random(this.id,  1, actions.length )
 				data = actions[rnd - 1]
 				rec = check_recursion( data, recursion_level )
 				
@@ -7283,9 +7283,9 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 20,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
+			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
-			let rnd = Random( 1, datasize )
+			let rnd = Random(this.id,  1, datasize )
 			
 			let data: Spell | null = null
 				
@@ -7317,7 +7317,7 @@ const actions: Spell[] = [
 				if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 					data.uses_remaining = data.uses_remaining - 1
 					
-					let reduce_uses = ActionUsesRemainingChanged( data.inventoryitem_id, data.uses_remaining )
+					let reduce_uses = ActionUsesRemainingChanged(this.id,  data.inventoryitem_id, data.uses_remaining )
 					if (!reduce_uses) {
 						data.uses_remaining = data.uses_remaining + 1 
 					}
@@ -7339,9 +7339,9 @@ const actions: Spell[] = [
 		price: 250,
 		mana: 50,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
+			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
-			let rnd = Random( 1, datasize )
+			let rnd = Random(this.id,  1, datasize )
 			
 			let data: Spell | null = null
 				
@@ -7375,7 +7375,7 @@ const actions: Spell[] = [
 				if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 					data.uses_remaining = data.uses_remaining - 1
 					
-					let reduce_uses = ActionUsesRemainingChanged( data.inventoryitem_id, data.uses_remaining )
+					let reduce_uses = ActionUsesRemainingChanged(this.id,  data.inventoryitem_id, data.uses_remaining )
 					if (!reduce_uses) {
 						data.uses_remaining = data.uses_remaining + 1 
 					}
@@ -7397,11 +7397,11 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 40,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed( GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
+			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			
 			for (const i of luaFor(1, 3)) {
-				let rnd = Random( 1, datasize )
+				let rnd = Random(this.id,  1, datasize )
 				
 				let data: Spell | null = null
 				
@@ -7433,7 +7433,7 @@ const actions: Spell[] = [
 					if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 						data.uses_remaining = data.uses_remaining - 1
 						
-						let reduce_uses = ActionUsesRemainingChanged( data.inventoryitem_id, data.uses_remaining )
+						let reduce_uses = ActionUsesRemainingChanged(this.id,  data.inventoryitem_id, data.uses_remaining )
 						if (!reduce_uses) {
 							data.uses_remaining = data.uses_remaining + 1 
 						}
@@ -7579,10 +7579,10 @@ const actions: Spell[] = [
 		mana: 600,
 		max_uses: 1,
 		action: function(c: GunActionState) {
-			let players = EntityGetWithTag( "player_unit" )
+			let players = EntityGetWithTag(this.id,  "player_unit" )
 			for (const [i, v] of ipairs(players, 'players')) {
 				let [x, y] = EntityGetTransform(this.id,  v )
-				let eid = EntityLoad("data/entities/projectiles/deck/all_spells_loader.xml", x, y)
+				let eid = EntityLoad(this.id, "data/entities/projectiles/deck/all_spells_loader.xml", x, y)
 			}
 			c.fire_rate_wait = c.fire_rate_wait + 100
 			setCurrentReloadTime(current_reload_time + 100)
@@ -7667,7 +7667,7 @@ const actions: Spell[] = [
 					if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 						data.uses_remaining = data.uses_remaining - 1
 						
-						let reduce_uses = ActionUsesRemainingChanged( data.inventoryitem_id, data.uses_remaining )
+						let reduce_uses = ActionUsesRemainingChanged(this.id,  data.inventoryitem_id, data.uses_remaining )
 						if (!reduce_uses) {
 							data.uses_remaining = data.uses_remaining + 1 
 						}
@@ -7747,7 +7747,7 @@ const actions: Spell[] = [
 					if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 						data.uses_remaining = data.uses_remaining - 1
 						
-						let reduce_uses = ActionUsesRemainingChanged( data.inventoryitem_id, data.uses_remaining )
+						let reduce_uses = ActionUsesRemainingChanged(this.id,  data.inventoryitem_id, data.uses_remaining )
 						if (!reduce_uses) {
 							data.uses_remaining = data.uses_remaining + 1 
 						}
@@ -7827,7 +7827,7 @@ const actions: Spell[] = [
 					if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 						data.uses_remaining = data.uses_remaining - 1
 						
-						let reduce_uses = ActionUsesRemainingChanged( data.inventoryitem_id, data.uses_remaining )
+						let reduce_uses = ActionUsesRemainingChanged(this.id,  data.inventoryitem_id, data.uses_remaining )
 						if (!reduce_uses) {
 							data.uses_remaining = data.uses_remaining + 1 
 						}
@@ -7942,26 +7942,6 @@ const actions: Spell[] = [
 			draw_actions( 1, true )
 		},
 	},
-	{
-		id: "DRAW_EAT",
-		name: "$DRAW_EAT",
-		description: "$DRAW_EAT",
-		sprite: "data/ui_gfx/gun_actions/draw_eat.png",
-		sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-		type: "other",
-		spawn_level: "",
-		spawn_probability: "",
-		price: 2,
-		mana: 10,
-		action: function(c: GunActionState) {
-      if (hand.length === 0) {
-        return;
-      }
-      if (hand[hand.length - 1]?.id === 'DRAW_EAT') {
-        discarded.push(hand[hand.length - 1]);
-      }
-    }
-  },
 	{
 		id: "ALPHA",
 		name: "$action_alpha",
@@ -8329,7 +8309,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 10,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			let entity_id = GetUpdatedEntityID(this.id)
+			let entity_id = GetUpdatedEntityID(this.id, )
 			let [x, y] = EntityGetTransform(this.id,  entity_id )
 			let options: any = []
 			
@@ -8345,7 +8325,7 @@ const actions: Spell[] = [
 						
 						if ( wands != null )  {
 							for (const [k, wand_id] of ipairs(wands, 'wands')) {
-								if (( wand_id !== active_wand ) && EntityHasTag( wand_id, "wand" ))  {
+								if (( wand_id !== active_wand ) && EntityHasTag(this.id,  wand_id, "wand" ))  {
 									let spells = EntityGetAllChildren(this.id,  wand_id )
 									
 									if ( spells != null )  {
@@ -8367,9 +8347,9 @@ const actions: Spell[] = [
 			}
 			
 			if ( options.length > 0 )  {
-				SetRandomSeed( x + GameGetFrameNum(), y + 251 )
+				SetRandomSeed(this.id,  x + GameGetFrameNum(), y + 251 )
 				
-				let rnd = Random( 1, options.length )
+				let rnd = Random(this.id,  1, options.length )
 				let action_id = options[rnd]
 				
 				for (const [i, data] of ipairs(actions, 'actions')) {
@@ -8439,7 +8419,7 @@ const actions: Spell[] = [
 				if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 					data.uses_remaining = data.uses_remaining - 1
 					
-					let reduce_uses = ActionUsesRemainingChanged( data.inventoryitem_id, data.uses_remaining )
+					let reduce_uses = ActionUsesRemainingChanged(this.id,  data.inventoryitem_id, data.uses_remaining )
 					if (!reduce_uses) {
 						data.uses_remaining = data.uses_remaining + 1 
 					}
@@ -8521,7 +8501,7 @@ const actions: Spell[] = [
 				if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 					data.uses_remaining = data.uses_remaining - 1
 					
-					let reduce_uses = ActionUsesRemainingChanged( data.inventoryitem_id, data.uses_remaining )
+					let reduce_uses = ActionUsesRemainingChanged(this.id,  data.inventoryitem_id, data.uses_remaining )
 					if (!reduce_uses) {
 						data.uses_remaining = data.uses_remaining + 1 
 					}
@@ -8603,7 +8583,7 @@ const actions: Spell[] = [
 				if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 					data.uses_remaining = data.uses_remaining - 1
 					
-					let reduce_uses = ActionUsesRemainingChanged( data.inventoryitem_id, data.uses_remaining )
+					let reduce_uses = ActionUsesRemainingChanged(this.id,  data.inventoryitem_id, data.uses_remaining )
 					if (!reduce_uses) {
 						data.uses_remaining = data.uses_remaining + 1 
 					}
@@ -8687,7 +8667,7 @@ const actions: Spell[] = [
 				if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
 					data.uses_remaining = data.uses_remaining - 1
 					
-					let reduce_uses = ActionUsesRemainingChanged( data.inventoryitem_id, data.uses_remaining )
+					let reduce_uses = ActionUsesRemainingChanged(this.id,  data.inventoryitem_id, data.uses_remaining )
 					if (!reduce_uses) {
 						data.uses_remaining = data.uses_remaining + 1 
 					}
@@ -8815,8 +8795,8 @@ const actions: Spell[] = [
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			let endpoint = -1
 			let elsepoint = -1
-			let [x, y] = EntityGetTransform(this.id,  GetUpdatedEntityID(this.id) )
-			let enemies = EntityGetInRadiusWithTag( x, y, 240, "homing_target" )
+			let [x, y] = EntityGetTransform(this.id,  GetUpdatedEntityID(this.id, ) )
+			let enemies = EntityGetInRadiusWithTag(this.id,  x, y, 240, "homing_target" )
 			
 			let doskip = false
 			if ( enemies.length < 15 )  {
@@ -8901,8 +8881,8 @@ const actions: Spell[] = [
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			let endpoint = -1
 			let elsepoint = -1
-			let [x, y] = EntityGetTransform(this.id,  GetUpdatedEntityID(this.id) )
-			let enemies = EntityGetInRadiusWithTag( x, y, 160, "projectile" )
+			let [x, y] = EntityGetTransform(this.id,  GetUpdatedEntityID(this.id, ) )
+			let enemies = EntityGetInRadiusWithTag(this.id,  x, y, 160, "projectile" )
 			
 			let doskip = false
 			if ( enemies.length < 20 )  {
@@ -8987,7 +8967,7 @@ const actions: Spell[] = [
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
 			let endpoint = -1
 			let elsepoint = -1
-			let entity_id = GetUpdatedEntityID(this.id)
+			let entity_id = GetUpdatedEntityID(this.id, )
 			let comp = EntityGetFirstComponent(this.id,  entity_id, "DamageModelComponent" )
 			let hpdiff = 1.0
 			
@@ -9084,14 +9064,14 @@ const actions: Spell[] = [
 			let doskip = false
 			
 			if ( reflecting === false )  {
-				let status = Number.parseInt( GlobalsGetValue( "GUN_ACTION_IF_HALF_STATUS", "0" ) ) || 0
+				let status = Number.parseInt( GlobalsGetValue(this.id,  "GUN_ACTION_IF_HALF_STATUS", "0" ) ) || 0
 				
 				if ( status === 1 )  {
 					doskip = true
 				}
 				
 				status = 1 - status
-				GlobalsSetValue( "GUN_ACTION_IF_HALF_STATUS", String( status ) )
+				GlobalsSetValue(this.id,  "GUN_ACTION_IF_HALF_STATUS", String( status ) )
 			}
 			
 			if ( deck.length > 0 )  {

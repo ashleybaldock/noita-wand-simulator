@@ -26,7 +26,12 @@ const wandKeysAffectingSimulation: Array<keyof Wand> = [
   'deck_capacity',
 ] as const;
 
-export const compareWandsForSimulation = (a: Wand, b: Wand): boolean =>
+/**
+ * Determines if two wands are identical for the purposes of simulation
+ * @returns true if the wands would produce identical simulation results,
+ *        false otherwise
+ */
+export const wandsMatchForSimulation = (a: Wand, b: Wand): boolean =>
   wandKeysAffectingSimulation.every((key) => a[key] === b[key]);
 
 const wandQueryVersions = [1, 2] as const;

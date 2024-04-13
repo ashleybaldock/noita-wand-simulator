@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import type { ActionCall } from '../../calc/eval/types';
 import { useConfig } from '../../redux';
 import { BaseAnnotation } from './BaseAnnotation';
+import type { ActionCall } from '../../calc/eval/ActionCall';
 
 const DontDrawDiv = styled(BaseAnnotation)`
   left: unset;

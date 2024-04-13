@@ -2,12 +2,12 @@ import type { LegacyRef } from 'react';
 import { useRef } from 'react';
 import styled from 'styled-components';
 import type { StopReason } from '../../../types';
-import type { GroupedWandShot } from '../../../calc/eval/types';
 import { ConfigButton } from '../../buttons';
 import { SaveImageButton, ScrollWrapper } from '../../generic';
 import { ShotTable } from './ShotTable';
 import { ShotSummary } from './ShotSummary';
 import { SectionToolbar } from '../../SectionToolbar';
+import type { WandShot } from '../../../calc/eval/WandShot';
 
 const SectionDiv = styled.div`
   display: flex;
@@ -39,13 +39,13 @@ const ShotListToolbar = () => {
 
 export const ShotList = ({
   simulationRunning,
-  endReason,
+  endReasons,
   shots,
   totalRechargeTime,
 }: {
   simulationRunning: boolean;
-  endReason: StopReason;
-  shots: GroupedWandShot[];
+  endReasons: StopReason[];
+  shots: WandShot[];
   totalRechargeTime: number | undefined;
 }) => {
   const shotListRef = useRef<HTMLDivElement>();
@@ -72,7 +72,7 @@ export const ShotList = ({
           <ShotSummary
             pending={simulationRunning}
             shots={shots}
-            endReason={endReason}
+            endReason={endReasons?.[0] ?? 'unknown'}
             totalRechargeTime={totalRechargeTime}
             totalManaDrain={totalManaDrain}
           />

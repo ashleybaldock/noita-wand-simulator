@@ -12,11 +12,11 @@ export type StopConditions = {
 };
 
 export type StopCondition =
-  | 'oneshot'
-  | 'reload'
-  | 'refresh'
-  | 'iterLimit'
-  | 'looped';
+  | 'shotCount'
+  | 'reloadCount'
+  | 'refreshCount'
+  | 'iterationCount'
+  | 'repeatCount';
 
 export type StopReason =
   | StopCondition

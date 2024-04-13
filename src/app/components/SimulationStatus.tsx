@@ -49,15 +49,15 @@ const Value = styled.span`
 export const SimulationStatus = styled(
   ({
     simulationRunning,
-    lastStopReason,
-    lastEndCondition,
+    lastRunStopReasons,
+    lastRunEndConditions,
     elapsedTime = 0,
     className,
   }: {
     className?: string;
     simulationRunning: boolean;
-    lastStopReason: StopReason;
-    lastEndCondition: StopCondition;
+    lastRunStopReasons: StopReason[];
+    lastRunEndConditions: StopCondition[];
     elapsedTime: number;
   }) => {
     const { pauseCalculations } = useConfig();
@@ -82,8 +82,9 @@ export const SimulationStatus = styled(
         <Value>
           <Label>Result</Label>
           <TerminationWarning
-            reason={lastStopReason}
-            condition={lastEndCondition}
+            // TODO - use all
+            reason={lastRunStopReasons?.[0] ?? 'unknown'}
+            condition={lastRunEndConditions?.[0] ?? 'unknown'}
           />
         </Value>
       </StyledStatus>

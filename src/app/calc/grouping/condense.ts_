@@ -1,10 +1,8 @@
 import { combineGroups, isRawObject, mergeProperties } from './combineGroups';
-import type {
-  ActionCall,
-  GroupedWandShot,
-  Projectile,
-  WandShot,
-} from '../eval/types';
+import type { GroupedWandShot } from '../eval/types';
+import type { ActionCall } from '../eval/ActionCall';
+import type { WandShot } from '../eval/WandShot';
+import type { ShotProjectile } from '../eval/ShotProjectile';
 
 function condenseActions(calledActions: ActionCall[]) {
   return combineGroups(
@@ -26,12 +24,12 @@ function condenseActions(calledActions: ActionCall[]) {
   );
 }
 
-function condenseProjectiles(projectiles: Projectile[]) {
+function condenseProjectiles(projectiles: ShotProjectile[]) {
   const projectilesWithProcessedTriggers = projectiles.map((proj) => {
     if (proj.trigger) {
       return {
         ...proj,
-        trigger: condenseActionsAndProjectiles(proj.trigger as WandShot),
+        // trigger: condenseActionsAndProjectiles(proj.trigger as WandShot),
       };
     } else {
       return proj;
@@ -40,11 +38,12 @@ function condenseProjectiles(projectiles: Projectile[]) {
   return combineGroups(
     projectilesWithProcessedTriggers,
     // NaN always compares false, so projectiles with triggers will never combine
-    (p) => (p.trigger && p.trigger.projectiles.length > 0 ? null : p.entity),
+    // (p) => (p.trigger && p.trigger.projectiles.length > 0 ? null : p.entity),
+    (p) => false,
     (o) => {
       // deck index and source
       if (o.map(isRawObject).every((v) => v)) {
-        return mergeProperties(o as Projectile[], [
+        return mergeProperties(o as ShotProjectile[], [
           { prop: 'deckIndex', conflictValue: '*' },
         ]);
       } else {
@@ -60,6 +59,6 @@ export function condenseActionsAndProjectiles(
   return {
     ...wandShot,
     actionCallGroups: condenseActions(wandShot.actionCallGroups),
-    projectiles: condenseProjectiles(wandShot.projectiles),
+    projectiles: [], //condenseProjectiles(wandShot.projectiles),
   };
 }

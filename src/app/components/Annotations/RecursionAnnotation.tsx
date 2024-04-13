@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { isIterativeActionId } from '../../calc/actionId';
 import { useConfig } from '../../redux';
 import { recursiveActionIds } from '../../calc/spells';
-import type { Spell } from '../../calc/spell';
+import type { SpellDeckInfo } from '../../calc/spell';
 
 const RecursionDiv = styled.div`
   pointer-events: none;
@@ -42,7 +42,7 @@ const IterationDiv = styled.div<{
 
 export const RecursionAnnotation = (props: {
   size?: number;
-  spell: Spell;
+  spell: SpellDeckInfo;
   recursion?: number;
   iteration?: number;
 }) => {

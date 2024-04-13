@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { WandActionGroup } from '../WandActionGroup';
-import type { ActionCall, GroupedWandShot } from '../../../calc/eval/types';
 import { isNotNullOrUndefined, type TreeNode } from '../../../util';
+import type { ActionCall } from '../../../calc/eval/ActionCall';
+import type { WandShotResult } from '../../../calc/eval/clickWand';
 
 export const ActionTreeShotResultMainDiv = styled.div`
   --arrow-hz: 40px;
@@ -101,10 +102,10 @@ const ActionTreeComponent = ({ node }: { node: TreeNode<ActionCall> }) => {
   );
 };
 
-export const ActionTreeShotResult = ({ shot }: { shot: GroupedWandShot }) => {
+export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
   return (
     <ActionTreeShotResultMainDiv data-name="ActionTreeShotResultMainDiv">
-      {shot.actionCallTree.map((n, index) => (
+      {shot.actionCallTrees.map((n, index) => (
         <ActionTreeComponent node={n} key={index} />
       ))}
     </ActionTreeShotResultMainDiv>

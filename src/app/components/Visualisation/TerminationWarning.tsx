@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { StopCondition, StopReason } from '../../types';
+import type { StopCondition, StopReason } from '../../types';
 
 const ResultError = styled.span`
   font-weight: bold;
@@ -29,13 +29,13 @@ type TerminationInfo = {
 const reasonMap: Record<StopReason, TerminationInfo> = {
   noSpells: { success: false, message: 'No Spells to process' },
   unknown: { success: false, message: 'Unknown' },
-  refresh: { success: true, message: 'Stopped at 2nd Wand Refresh' },
-  looped: { success: true, message: 'Stopped due to loop' },
+  refreshCount: { success: true, message: 'Stopped at 2nd Wand Refresh' },
+  repeatCount: { success: true, message: 'Stopped due to loop' },
   timeout: { success: false, message: 'Terminated due to global timeout' },
   exception: { success: false, message: 'Terminated due to exception' },
-  oneshot: { success: true, message: 'One Shot Completed' },
-  iterLimit: { success: false, message: 'Hit Iteration Limit' },
-  reload: { success: true, message: 'Ended on Wand Reload' },
+  shotCount: { success: true, message: 'One Shot Completed' },
+  iterationCount: { success: false, message: 'Hit Iteration Limit' },
+  reloadCount: { success: true, message: 'Ended on Wand Reload' },
 } as const;
 
 export const TerminationWarning = styled(

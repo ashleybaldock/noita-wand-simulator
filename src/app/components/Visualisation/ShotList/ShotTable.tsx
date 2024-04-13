@@ -7,13 +7,7 @@ import {
   TotalsColumn,
 } from './CastStateColumn';
 import { ProjectileActionGroup } from './ProjectileActionGroup';
-import type {
-  GroupedProjectile,
-  GroupedWandShot,
-} from '../../../calc/eval/types';
 import { isNotNullOrUndefined, NBSP } from '../../../util';
-import type { GroupedObject } from '../../../calc/grouping/combineGroups';
-import { isRawObject } from '../../../calc/grouping/combineGroups';
 import {
   IconsColumnHeading,
   ProjectileHeading,
@@ -22,6 +16,9 @@ import {
   TotalsColumnHeading,
 } from './ColumnHeading';
 import { Fragment } from 'react';
+import type { WandShot, WandShotId } from '../../../calc/eval/WandShot';
+import { useResult } from '../../../redux';
+import type { ShotProjectile } from '../../../calc/eval/ShotProjectile';
 
 const StyledShotTable = styled.div`
   --nesting-offset: var(--sizes-nesting-offset, 16px);
@@ -121,13 +118,20 @@ const Headings = styled.div`
 
 export const ShotTableHeadings = ({
   shotIndex,
-  shot: { castState, manaDrain, triggerType, projectiles },
+  shotId,
   nestingPrefix = [],
 }: {
   shotIndex: number;
-  shot: GroupedWandShot;
+  shotId: WandShotId;
   nestingPrefix?: Array<number>;
 }) => {
+  const { shotLookup } = useResult();
+  const shot = shotLookup.get(shotId);
+  if (!shot) {
+    return null;
+  }
+  const { castState, manaDrain, triggerType, projectiles } = shot;
+
   return (
     <Headings>
       {nestingPrefix.length === 0 ? (
@@ -155,50 +159,52 @@ export const ShotTableHeadings = ({
           </SubTotalsColumnHeading>
         </>
       )}
-      {projectiles.map(
-        (projectile: GroupedObject<GroupedProjectile>, index, arr) => {
-          const isEndOfTrigger = index === arr.length - 1;
-          const triggerShot =
-            (isRawObject<GroupedProjectile>(projectile) &&
-              projectile.trigger &&
-              projectile.trigger.projectiles.length > 0 &&
-              projectile.trigger) ||
-            undefined;
-          const isStartOfTrigger = isNotNullOrUndefined(triggerShot);
+      {projectiles.map((projectile: ShotProjectile, index, arr) => {
+        const isEndOfTrigger = index === arr.length - 1;
+        const triggerShot = ((lookupResult) =>
+          ((lookupResult?.projectiles?.length ?? 0) > 0 && lookupResult) ||
+          undefined)(shotLookup.get(projectile?.trigger ?? -1));
+        const isStartOfTrigger = isNotNullOrUndefined(triggerShot);
 
-          return (
-            <Fragment key={index}>
-              <ProjectileHeading
-                isStartOfTrigger={isStartOfTrigger}
-                isEndOfTrigger={isEndOfTrigger}
+        return (
+          <Fragment key={index}>
+            <ProjectileHeading
+              isStartOfTrigger={isStartOfTrigger}
+              isEndOfTrigger={isEndOfTrigger}
+              nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
+            >
+              <ProjectileActionGroup group={projectile} />
+            </ProjectileHeading>
+            {isNotNullOrUndefined(triggerShot) && (
+              <ShotTableHeadings
+                shotId={triggerShot.id}
+                shotIndex={index}
                 nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
-              >
-                <ProjectileActionGroup group={projectile} />
-              </ProjectileHeading>
-              {isNotNullOrUndefined(triggerShot) && (
-                <ShotTableHeadings
-                  shot={triggerShot}
-                  shotIndex={index}
-                  nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
-                />
-              )}
-            </Fragment>
-          );
-        },
-      )}
+              />
+            )}
+          </Fragment>
+        );
+      })}
     </Headings>
   );
 };
 
 export const ShotTableColumns = ({
   shotIndex,
-  shot: { castState, manaDrain, triggerType, projectiles },
+  shotId,
   nestingPrefix = [],
 }: {
   shotIndex: number;
-  shot: GroupedWandShot;
+  shotId: WandShotId;
   nestingPrefix?: Array<number>;
 }) => {
+  const { shotLookup } = useResult();
+  const shot = shotLookup.get(shotId);
+  if (!shot) {
+    return null;
+  }
+  const { castState, manaDrain, triggerType, projectiles } = shot;
+
   return (
     <>
       {nestingPrefix.length === 0 ? (
@@ -216,35 +222,30 @@ export const ShotTableColumns = ({
           />
         </>
       )}
-      {projectiles.map(
-        (projectile: GroupedObject<GroupedProjectile>, index, arr) => {
-          const isEndOfTrigger = index === arr.length - 1;
-          const triggerShot =
-            (isRawObject<GroupedProjectile>(projectile) &&
-              projectile.trigger &&
-              projectile.trigger.projectiles.length > 0 &&
-              projectile.trigger) ||
-            undefined;
-          const isStartOfTrigger = isNotNullOrUndefined(triggerShot);
+      {projectiles.map((projectile, index, arr) => {
+        const isEndOfTrigger = index === arr.length - 1;
+        const triggerShot = ((lookupResult) =>
+          ((lookupResult?.projectiles?.length ?? 0) > 0 && lookupResult) ||
+          undefined)(shotLookup.get(projectile?.trigger ?? -1));
+        // const isStartOfTrigger = isNotNullOrUndefined(triggerShot);
 
-          return (
-            <Fragment key={index}>
-              <ProjectileColumn
-                castState={castState}
-                manaDrain={manaDrain}
-                insideTrigger={true}
+        return (
+          <Fragment key={index}>
+            <ProjectileColumn
+              castState={castState}
+              manaDrain={manaDrain}
+              insideTrigger={true}
+            />
+            {isNotNullOrUndefined(triggerShot) && (
+              <ShotTableColumns
+                shotId={triggerShot.id}
+                shotIndex={index}
+                nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
               />
-              {isNotNullOrUndefined(triggerShot) && (
-                <ShotTableColumns
-                  shot={triggerShot}
-                  shotIndex={index}
-                  nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
-                />
-              )}
-            </Fragment>
-          );
-        },
-      )}
+            )}
+          </Fragment>
+        );
+      })}
     </>
   );
 };
@@ -254,12 +255,18 @@ export const ShotTable = ({
   shot,
 }: {
   shotIndex: number;
-  shot: GroupedWandShot;
+  shot: WandShot;
 }) => {
   return (
     <StyledShotTable>
-      <ShotTableHeadings shotIndex={shotIndex} shot={shot}></ShotTableHeadings>
-      <ShotTableColumns shotIndex={shotIndex} shot={shot}></ShotTableColumns>
+      <ShotTableHeadings
+        shotIndex={shotIndex}
+        shotId={shot.id}
+      ></ShotTableHeadings>
+      <ShotTableColumns
+        shotIndex={shotIndex}
+        shotId={shot.id}
+      ></ShotTableColumns>
     </StyledShotTable>
   );
 };

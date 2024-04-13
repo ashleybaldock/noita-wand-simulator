@@ -38,6 +38,7 @@ import {
   GameGetFrameNum,
   OnSetDontDraw,
   OnUnsetDontDraw,
+  OnPlayPermanentCard,
 } from './eval/dispatch';
 
 // constants
@@ -261,7 +262,7 @@ function draw_shot(shot: Shot, instant_reload_if_empty: boolean) {
 
 export function order_deck() {
   if (gun.shuffle_deck_when_empty) {
-    SetRandomSeed(GameGetFrameNum(), GameGetFrameNum());
+    SetRandomSeed('__WAND__', GameGetFrameNum(), GameGetFrameNum());
     // shuffle the deck
     // state_shuffled = true;
 
@@ -271,7 +272,7 @@ export function order_deck() {
 
     for (let i = iterations - 1; i >= 0; i--) {
       // looping from iterations to 1 (inclusive)
-      const index = rand(0, i);
+      const index = rand('__WAND__', 0, i);
       const action = deck[index];
       deck.splice(index, 1);
       new_deck.push(action);
@@ -492,6 +493,7 @@ function move_hand_to_discarded() {
           // consume consumable actions
           action.uses_remaining = action.uses_remaining - 1;
           const reduce_uses = ActionUsesRemainingChanged(
+            '__WAND__',
             action.inventoryitem_id,
             action.uses_remaining,
           );
@@ -653,7 +655,8 @@ export function _add_card_to_deck(
 }
 
 // eslint-disable-next-line
-function _play_permanent_card(action_id: ActionId) {
+export function _play_permanent_card(action_id: ActionId) {
+  OnPlayPermanentCard(action_id, c);
   // for (let i = 0; i < actions.length; i++) {
   // let action = actions[i];
   const action = getSpellById(action_id);

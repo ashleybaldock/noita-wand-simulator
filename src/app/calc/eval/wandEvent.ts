@@ -2,6 +2,7 @@ import type { ActionId } from '../actionId';
 import type { ActionSource } from '../actionSources';
 import type { GunActionState } from '../actionState';
 import type { Spell, SpellDeckInfo } from '../spell';
+import type { WandId } from './dispatch';
 
 export type ComponentID = string;
 export type EntityID = number;
@@ -54,7 +55,7 @@ export type WandEventBase = {
     _returns: EntityID[];
   };
   GetUpdatedEntityID: {
-    actionId: ActionId;
+    actionId: ActionId | WandId;
     _returns: EntityID;
   };
   EntityGetComponent: {
@@ -63,19 +64,19 @@ export type WandEventBase = {
     _returns: ComponentID[];
   };
   EntityGetFirstComponent: {
-    actionId: ActionId;
+    actionId: ActionId | WandId;
     entity_id: EntityID;
     component: string;
     _returns: ComponentID;
   };
   EntityGetFirstComponentIncludingDisabled: {
-    actionId: ActionId;
+    actionId: ActionId | WandId;
     entity_id: EntityID;
     component: string;
     _returns: ComponentID;
   };
   ComponentGetValue2: {
-    actionId: ActionId;
+    actionId: ActionId | WandId;
     component_id: string;
     key: string;
     _returns: number;
@@ -96,7 +97,7 @@ export type WandEventBase = {
     entityId2: EntityID;
   };
   EntityGetTransform: {
-    actionId: ActionId;
+    actionId: ActionId | WandId;
     entity: EntityID;
     _returns: EntityTransform;
   };
@@ -107,12 +108,12 @@ export type WandEventBase = {
     _returns: EntityID;
   };
   EntityGetAllChildren: {
-    actionId: ActionId;
+    actionId: ActionId | WandId;
     entityId: EntityID;
     _returns: EntityID[];
   };
   EntityGetName: {
-    actionId: ActionId;
+    actionId: ActionId | WandId;
     childId: EntityID;
     _returns: string;
   };
@@ -141,6 +142,10 @@ export type WandEventBase = {
     spell: Readonly<Spell>;
     c: GunActionState;
     playing_permanent_card: boolean;
+  };
+  OnPlayPermanentCard: {
+    actionId: ActionId | WandId;
+    c: GunActionState;
   };
   OnSetDontDraw: Record<string, never>;
   OnUnsetDontDraw: Record<string, never>;

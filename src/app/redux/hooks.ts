@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import { generateWikiWandV2 } from './Wand/toWiki';
 import { generateSearchFromWandState } from './Wand/toSearch';
 import type { KeyOfType } from '../util';
-import { compareSequence, compareSequenceIgnoringGaps } from '../util';
+import { sequencesMatch, sequencesMatchIgnoringHoles } from '../util';
 import type { WandSelection } from './Wand/wandSelection';
 import { getSelectionForId } from './Wand/toSelection';
 import type { Config, ConfigToggleField } from './configSlice';
@@ -14,6 +14,7 @@ import type { UIState, UIToggle } from './uiSlice';
 import { flipUiToggle, setUiToggle } from './uiSlice';
 import type { Cursor } from '../components/Spells/WandAction/Cursor';
 import type { SpellId } from './Wand/spellId';
+import { useMemo } from 'react';
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -40,6 +41,8 @@ export const useUIToggle = <TN extends UIToggle>(
     () => dispatch(flipUiToggle({ name })),
   ];
 };
+
+export const useSimulationStatus = () => useUIToggle('simulationRunning');
 
 ///****************************************/
 //**            configSlice             **/
@@ -152,7 +155,7 @@ const selectAlwaysCastSpells = createSelector(
 );
 
 export const useAlwaysCastLayout = () =>
-  useSelector(selectAlwaysCastSpells, compareSequence);
+  useSelector(selectAlwaysCastSpells, sequencesMatch);
 
 /**
  * Full Spell sequence
@@ -162,14 +165,14 @@ const selectSpells = createSelector(
   (wandState) => wandState.spellIds,
 );
 
-export const useSpellLayout = () => useSelector(selectSpells, compareSequence);
+export const useSpellLayout = () => useSelector(selectSpells, sequencesMatch);
 
 /**
  * Spell sequence
  * - Considered to have changed only if order changes
  */
 export const useSpellSequence = () =>
-  useSelector(selectSpells, compareSequenceIgnoringGaps);
+  useSelector(selectSpells, sequencesMatchIgnoringHoles);
 
 const selectMessages = createSelector(
   selectWandState,
@@ -232,3 +235,26 @@ const selectSelecting = createSelector(
 );
 
 export const useSelecting = () => useSelector(selectSelecting);
+
+///****************************************/
+//**            resultSlice             **/
+/****************************************/
+
+export const selectResultState = (state: RootState) => state.result.last;
+
+const selectResult = createSelector(
+  selectResultState,
+  (resultState) => resultState,
+);
+export const useResult = () => {
+  const result = useAppSelector(selectResult);
+  const { shots } = result;
+  const shotLookupMap = useMemo(
+    () => new Map(shots.map((shot) => [shot.id, shot])),
+    [shots],
+  );
+  return {
+    ...result,
+    shotLookup: shotLookupMap,
+  };
+};

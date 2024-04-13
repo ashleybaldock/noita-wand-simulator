@@ -4,24 +4,31 @@ import {
   isWithTimerActionId,
   isWithTriggerActionId,
 } from '../../calc/actionId';
-import type { Spell } from '../../calc/spell';
+import type { SpellDeckInfo } from '../../calc/spell';
 import { useConfig } from '../../redux';
 import { isNotNullOrUndefined } from '../../util';
+import { getSpellById } from '../../calc/spells';
 
 export const ProxyDiv = styled.div<{
   imgUrl: string;
 }>`
+  --size: 0.58;
+  --bsize: calc(var(--size-spell) * var(--size));
+
   pointer-events: none;
+  font-family: var(--font-family-noita-default);
   position: absolute;
-  top: 0;
-  left: 0;
-  width: calc(var(--size-spell) / 3);
-  height: calc(var(--size-spell) / 3);
-  border: 1px solid #999;
   background-image: url(/${({ imgUrl }) => imgUrl});
   background-size: cover;
-  background-color: #111;
-  font-family: var(--font-family-noita-default);
+
+  top: calc(var(--bsize) * -0.25);
+  left: calc(var(--bsize) * -0.25);
+  width: var(--bsize);
+  height: var(--bsize);
+  border: 1px solid #000;
+  background-color: #11111199;
+  border-radius: 50%;
+  box-sizing: border-box;
 `;
 
 const ProxyDivNoBorder = styled.div<{
@@ -43,14 +50,17 @@ export const ActionProxyAnnotation = ({
   proxy,
   spell,
 }: {
-  proxy?: Spell;
-  spell?: Spell;
+  proxy?: SpellDeckInfo;
+  spell?: SpellDeckInfo;
 }) => {
   const { showProxies } = useConfig();
 
   if (showProxies && isNotNullOrUndefined(proxy)) {
     return (
-      <ProxyDiv data-name="ActionProxyAnnotation-Proxy" imgUrl={proxy.sprite} />
+      <ProxyDiv
+        data-name="ActionProxyAnnotation-Proxy"
+        imgUrl={getSpellById(proxy.id).sprite}
+      />
     );
   } else if (isNotNullOrUndefined(spell?.id)) {
     if (isWithTriggerActionId(spell?.id)) {

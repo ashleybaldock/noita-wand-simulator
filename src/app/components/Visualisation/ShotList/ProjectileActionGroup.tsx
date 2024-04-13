@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import type { GroupedObject } from '../../../calc/grouping/combineGroups';
-import {
-  isArrayObject,
-  isMultipleObject,
-  isRawObject,
-  simplifyMultipleObject,
-} from '../../../calc/grouping/combineGroups';
+// import type { GroupedObject } from '../../../calc/grouping/combineGroups';
+// import {
+//   isArrayObject,
+//   isMultipleObject,
+//   isRawObject,
+//   simplifyMultipleObject,
+// } from '../../../calc/grouping/combineGroups';
 import {
   ActionProxyAnnotation,
   ActionSourceAnnotation,
@@ -14,10 +14,14 @@ import {
   FriendlyFireAnnotation,
   RecursionAnnotation,
 } from '../../Annotations/';
-import type { ActionCall, GroupedProjectile } from '../../../calc/eval/types';
-import { SIGN_MULTIPLY } from '../../../util';
+import { SIGN_MULTIPLY, echo } from '../../../util';
 import { WithDebugHints } from '../../Debug';
 import { WandAction, WandActionBorder } from '../../Spells/WandAction';
+import type { ActionCall } from '../../../calc/eval/ActionCall';
+import type { ShotProjectile } from '../../../calc/eval/ShotProjectile';
+import { getSpellById } from '../../../calc/spells';
+
+const isRawObject = (_: unknown) => true;
 
 const ArrayGroupDiv = styled.div`
   display: flex;
@@ -99,9 +103,9 @@ const WandActionGroupWandActionBorder = styled(WandActionBorder)`
 export const ProjectileActionGroup = ({
   group,
 }: {
-  group: GroupedObject<ActionCall | GroupedProjectile>;
+  group: ActionCall | ShotProjectile;
 }) => {
-  const simplified = simplifyMultipleObject(group);
+  const simplified = group; // = simplifyMultipleObject(group);
 
   if (isRawObject(simplified)) {
     if (simplified._typeName === 'ActionCall') {
@@ -109,8 +113,8 @@ export const ProjectileActionGroup = ({
         <MainDiv>
           <WandActionGroupWandActionBorder>
             <WandAction
-              spellType={simplified.spell.type}
-              spellSprite={simplified.spell.sprite}
+              spellType={getSpellById(simplified.spell.id).type}
+              spellSprite={getSpellById(simplified.spell.id).sprite}
             />
             <RecursionAnnotation {...simplified} />
             <ActionSourceAnnotation {...simplified} />
@@ -132,8 +136,15 @@ export const ProjectileActionGroup = ({
             data-name="ProjActionGroup"
           >
             <WandAction
-              spellType={simplified.spell?.type ?? 'projectile'}
-              spellSprite={simplified.spell?.sprite}
+              spellType={
+                (simplified.spell && getSpellById(simplified.spell.id).type) ??
+                'projectile'
+              }
+              spellSprite={
+                (simplified.spell &&
+                  getSpellById(simplified.spell.id).sprite) ??
+                'missing-sprite'
+              }
             />
 
             <ActionProxyAnnotation
@@ -146,23 +157,23 @@ export const ProjectileActionGroup = ({
         </MainDiv>
       );
     }
-  } else if (isArrayObject(simplified)) {
-    return (
-      <ArrayGroupDiv>
-        {simplified.map((g, i) => (
-          <ProjectileActionGroup group={g} key={i} />
-        ))}
-      </ArrayGroupDiv>
-    );
-  } else if (isMultipleObject(simplified)) {
-    return (
-      <MainDiv>
-        <MultiGroupDiv>
-          <ProjectileActionGroup group={simplified.first} />
-        </MultiGroupDiv>
-        <CountDiv>{simplified.count}</CountDiv>
-      </MainDiv>
-    );
+    // } else if (isArrayObject(simplified)) {
+    //   return (
+    //     <ArrayGroupDiv>
+    //       {simplified.map((g, i) => (
+    //         <ProjectileActionGroup group={g} key={i} />
+    //       ))}
+    //     </ArrayGroupDiv>
+    //   );
+    // } else if (isMultipleObject(simplified)) {
+    //   return (
+    //     <MainDiv>
+    //       <MultiGroupDiv>
+    //         <ProjectileActionGroup group={simplified.first} />
+    //       </MultiGroupDiv>
+    //       <CountDiv>{simplified.count}</CountDiv>
+    //     </MainDiv>
+    //   );
   } else {
     return null;
   }

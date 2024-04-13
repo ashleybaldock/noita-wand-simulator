@@ -1,17 +1,30 @@
 import { FPS } from './constants';
-import { mapIter } from './iterTools';
+import { mapIter, sequentialIter } from './iterTools';
 
 export const noop = () => {};
+
+export const echo = <T>(a: T) => a;
 
 export const isNotNull = <T>(x: T | null): x is T => x !== null;
 
 export const isNotNullOrUndefined = <T>(x: T | null | undefined): x is T =>
   x !== null && x !== undefined;
 
-export const isString = (x: unknown): x is string => typeof '' === typeof x;
-export const isNumber = (x: unknown): x is number => typeof 42 === typeof x;
-export const isBoolean = (x: unknown): x is boolean =>
-  typeof false === typeof x;
+export const isUndefined = (x: unknown): x is undefined => x === undefined;
+
+export const isNull = (x: unknown): x is null => null === x;
+
+export const isSymbol = (x: unknown): x is symbol => 'symbol' === typeof x;
+
+export const isString = (x: unknown): x is string => 'string' === typeof x;
+
+export const isNumber = (x: unknown): x is number => 'number' === typeof x;
+
+export const isBigint = (x: unknown): x is bigint => 'bigint' === typeof x;
+
+export const isBoolean = (x: unknown): x is boolean => 'boolean' === typeof x;
+
+export const isObject = (x: unknown): x is object => 'object' === typeof x;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const assertNever = (_?: never): never => {
@@ -33,18 +46,7 @@ export function union<T, U>(setA: Set<T>, setB: Set<U>) {
   return _union;
 }
 
-export function range(n: number) {
-  return [...Array(n).keys()];
-}
-
-/**
- * Tree data structure
- */
-export type TreeNode<T> = {
-  value: T;
-  parent?: TreeNode<T>;
-  children: TreeNode<T>[];
-};
+export const range = (n: number) => [...Array(n).keys()];
 
 // type DiffResult<T extends object> = Partial<{
 //   [key in keyof T]: { a: T[key]; b: T[key] };
@@ -99,6 +101,8 @@ export const objectFromKeys = <const T extends ReadonlyArray<string>, const F>(
     [K in T[number]]: F;
   };
 };
+
+export type ChangeFields<T, R> = Omit<T, keyof R> & R;
 
 /**
  * Typed inverse of a Record
@@ -156,19 +160,29 @@ export const tally = <T>(arr: T[]): [T, number][] => [
     .entries(),
 ];
 
+const compareIdentity = (a: unknown, b: unknown) => a === b;
 /**
  * Compare two sequences
  */
-export const compareSequence = (left: unknown[], right: unknown[]): boolean =>
-  left.join() === right.join();
+export const sequencesMatch = (
+  a: unknown[],
+  b: unknown[],
+  comparator: (a: unknown, b: unknown) => boolean = compareIdentity,
+): boolean => a.length === b.length && a.every((l, i) => comparator(l, b[i]));
 
 /**
- * Compare two sequences, ignoring gaps
+ * Checks if sequences have the same items in the same order
+ * Ignores empty spaces/length etc.
  */
-export const compareSequenceIgnoringGaps = (
-  left: unknown[],
-  right: unknown[],
-): boolean => left.filter((x) => x).join() === right.filter((x) => x).join();
+export const sequencesMatchIgnoringHoles = (
+  a: unknown[],
+  b: unknown[],
+): boolean =>
+  sequencesMatch(
+    a.filter((x) => isNotNullOrUndefined(x)),
+    b.filter((x) => isNotNullOrUndefined(x)),
+  );
+
 export const fixedLengthCopy = <T>(
   arr: readonly T[],
   size: number = arr.length,
@@ -287,3 +301,19 @@ export function hashString(s: string) {
 // ) => {
 //   return Math.ceil((n - offset) / increment) * increment + offset;
 // };
+
+export const sequentialId = <T extends number>() => {
+  const isValidT = (n: number): n is T => n > 0;
+  const startFrom = 1;
+  if (isValidT(startFrom)) {
+    const idGenerator = sequentialIter<T>(startFrom, isValidT);
+    return () => {
+      const { done, value } = idGenerator.next();
+      if (!done) {
+        return value;
+      }
+      throw new Error('Exhausted ID iterator');
+    };
+  }
+  throw new Error('Failed to init ID iterator');
+};

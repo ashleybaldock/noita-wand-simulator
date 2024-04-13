@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { WandActionGroup } from '../WandActionGroup';
-import { GroupedWandShot } from '../../../calc/eval/types';
+import type { WandShot } from '../../../calc/eval/WandShot';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -11,7 +11,7 @@ const StyledDiv = styled.div`
 `;
 
 // list of all actions played, and sub-ShotResults for triggers
-export const ActionCalledShotResult = ({ shot }: { shot: GroupedWandShot }) => {
+export const ActionCalledShotResult = ({ shot }: { shot: WandShot }) => {
   return (
     <StyledDiv>
       {shot.actionCallGroups.map((actionCall, index) => {

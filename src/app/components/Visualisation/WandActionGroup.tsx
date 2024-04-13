@@ -1,13 +1,6 @@
 import styled from 'styled-components';
 import { NextActionArrow } from '../Visualisation/Arrows';
 import { DEFAULT_SIZE } from '../../util/constants';
-import type { GroupedObject } from '../../calc/grouping/combineGroups';
-import {
-  isArrayObject,
-  isMultipleObject,
-  isRawObject,
-  simplifyMultipleObject,
-} from '../../calc/grouping/combineGroups';
 import {
   ActionProxyAnnotation,
   ActionSourceAnnotation,
@@ -17,9 +10,17 @@ import {
   FriendlyFireAnnotation,
   RecursionAnnotation,
 } from '../Annotations/';
-import type { ActionCall, GroupedProjectile } from '../../calc/eval/types';
 import { WrapAnnotation } from '../Annotations/WrapAnnotation';
 import { WandAction, WandActionBorder } from '../Spells/WandAction';
+import type { ActionCall } from '../../calc/eval/ActionCall';
+import { getSpellById } from '../../calc/spells';
+import { echo } from '../../util';
+import type { ShotProjectile } from '../../calc/eval/ShotProjectile';
+
+const isArrayObject = (_: unknown) => false;
+const isMultipleObject = (_: unknown) => false;
+const isRawObject = (_: unknown) => true;
+const simplifyMultipleObject = echo;
 
 const MainDiv = styled.div.attrs({
   className: 'MainDiv',
@@ -88,7 +89,7 @@ export const WandActionGroup = ({
   group,
 }: {
   size?: number;
-  group: GroupedObject<ActionCall | GroupedProjectile>;
+  group: ActionCall | ShotProjectile;
 }) => {
   const simplified = simplifyMultipleObject(group);
 
@@ -98,8 +99,8 @@ export const WandActionGroup = ({
         <WandActionGroupWandActionBorder>
           <NextActionArrow />
           <WandAction
-            spellType={simplified.spell.type}
-            spellSprite={simplified.spell.sprite}
+            spellType={getSpellById(simplified.spell.id).type}
+            spellSprite={getSpellById(simplified.spell.id).sprite}
           />
           <RecursionAnnotation {...simplified} />
           <ActionSourceAnnotation {...simplified} />
@@ -130,8 +131,14 @@ export const WandActionGroup = ({
         >
           <NextActionArrow />
           <WandAction
-            spellType={simplified.spell?.type ?? 'projectile'}
-            spellSprite={simplified.spell?.sprite}
+            spellType={
+              (simplified.spell && getSpellById(simplified.spell.id).type) ??
+              'projectile'
+            }
+            spellSprite={
+              (simplified.spell && getSpellById(simplified.spell.id).sprite) ??
+              'missing-sprite'
+            }
           />
 
           <ActionProxyAnnotation proxy={simplified.proxy} />
@@ -140,27 +147,27 @@ export const WandActionGroup = ({
         </WandActionGroupWandActionBorder>
       );
     }
-  } else if (isArrayObject(simplified)) {
-    return (
-      <GroupDiv data-grouping="array">
-        {simplified.map((g, i) => (
-          <WandActionGroup group={g} key={i} size={size} />
-        ))}
-      </GroupDiv>
-    );
-  } else if (isMultipleObject(simplified)) {
-    return (
-      <MainDiv data-grouping="multiple">
-        <GroupDiv>
-          <WandActionGroup group={simplified.first} size={size} />
-        </GroupDiv>
-        <CountParentDiv>
-          <SpacerDiv size={size} />
-          <CountDiv size={size}>x {simplified.count}</CountDiv>
-          <SpacerDiv size={size} />
-        </CountParentDiv>
-      </MainDiv>
-    );
+    // } else if (isArrayObject(simplified)) {
+    //   return (
+    //     <GroupDiv data-grouping="array">
+    //       {simplified.map((g, i) => (
+    //         <WandActionGroup group={g} key={i} size={size} />
+    //       ))}
+    //     </GroupDiv>
+    //   );
+    // } else if (isMultipleObject(simplified)) {
+    //   return (
+    //     <MainDiv data-grouping="multiple">
+    //       <GroupDiv>
+    //         <WandActionGroup group={simplified.first} size={size} />
+    //       </GroupDiv>
+    //       <CountParentDiv>
+    //         <SpacerDiv size={size} />
+    //         <CountDiv size={size}>x {simplified.count}</CountDiv>
+    //         <SpacerDiv size={size} />
+    //       </CountParentDiv>
+    //     </MainDiv>
+    //   );
   } else {
     return null;
   }
