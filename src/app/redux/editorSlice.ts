@@ -4,13 +4,13 @@ import type { SpellShiftDirection, SelectionIndex } from '../types';
 import { useSliceWrapper } from './useSlice';
 import { isNotNullOrUndefined, isNumber, isString } from '../util';
 import type { WandEditorState } from './editorState';
-import type { WandIndex} from './WandIndex';
-import { isMainWandIndex, type MainWandIndex } from './WandIndex';
+import type { WandIndex } from './WandIndex';
+import { isMainWandIndex } from './WandIndex';
 
 const initialState: WandEditorState = {
   cursorIndex: 0,
-  selectFrom: 4,
-  selectTo: 9,
+  selectFrom: null,
+  selectTo: null,
 } as const;
 
 export const editorSlice = createSlice({

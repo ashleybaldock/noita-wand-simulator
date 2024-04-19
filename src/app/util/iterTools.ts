@@ -1,47 +1,103 @@
 /**
  * Iterator utility functions
  *
+ *     1. Brief guide to Iterators
+ *
+ * ╼══╾ Protocols ╼═══════════════════════════════════════════════╡1.1╞═╾
+ *
+ * ╴╴╴ Iterable : Iterable<T> ╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶┤1.1.1├╶
+ *
+ *  Defines iteration behavior, e.g what for..of loops over
+ *  - Implements the @@iterator method, via the key [Symbol.iterator]
+ *
+ *   [Symbol.iterator]: () => <Object implementing Iterator protocol>
+ *
+ * ╴╴╴ Iterator : Iterator<T> ╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶┤1.2.1├╶
+ *
+ *  Defines interface to the sequence of values
+ *  - Must have a next() method that returns an IteratorResult:
+ *
+ *   next(x?: IN) => { done: boolean, value: OUT | undefined }
+ *
+ *  - Optionally implements:
+ *
+ *   return(x?: IN)
+ *
+ *   throw(e?: Exception)
+ *
+ * ╼══╾ Objects ╼═════════════════════════════════════════════════╡1.2╞═╾
+ *
+ * ╴╴╴ Generator : IterableIterator<T> ╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶┤1.2.1├╶
+ *
+ *  Implements both Iterable and Iterator protocols
+ *  - created via generator functions:
+ *
+ *   function* HelloGenerator<string> () {
+ *     while (true) {
+ *       yield 'hello';
+ *     }
+ *   }
+ *
+ *
+ *     2. This library
+ *
+ * ╼══╾ Types ╼═══════════════════════════════════════════════════╡2.1╞═╾
+ *
+ * ╴╴╴ Generator : IterableIterator<T> ╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶┤1.2.1├╶
+ *
  * source:    IterableIterator<T>
  * predicate: Predicate<T>
  * callback:  Callback<T>
  * mapper:    Mapper<T, Tout>
  *
- *✅   every( source, predicate: Predicate<T>        ): boolean;
- *✅    some( source, predicate: Predicate<T>        ): boolean;
  *
- *      find( source, predicate: Predicate<T>        ): T;
+ * ╼══╾ Methods ╼═════════════════════════════════════════════════╡2.2╞═╾
  *
- *   forEach( source, callback:  Callback<T>         ): void;
- *✅  filter( source, predicate: Predicate<T>        ): Iterator<T>;
- *✅ flatMap( source, mapper:    Mapper<T, Iterable<Tout>>: Iterator<T>;
- *✅     map( source, mapper:    Mapper<T, Tout> ): Iterator<T>;
- *    reduce( source, reducer:    , initialValue?: T ): Tout;
+ * Subset (S -> Sʹ⊆ S)
+ *  ├╴take(source: IterableIterator<T>, count: number): Iterator<>    ✅
+ *  │  ├╴takeLazily
+ *  │  ├╴takeArray
+ *  │  ├╴takeOne
+ *  │  └╴takeEagerly
+ *  ├╴drop(source: IterableIterator<T>, count: number): Iterator<>     🔶
+ *  │
+ *  └╴filter( source, predicate: Predicate<T>        ): Iterator<T>;   ✅
  *
- *✅ take(source: IterableIterator<T>, count: number): Iterator<>
- *    ├ takeLazily
- *    ├ takeArray
- *    ├ takeOne
- *    └ takeEagerly
- *   drop(source: IterableIterator<T>, count: number): Iterator<>
- */
-/*
+ * Reducing (S -> V)
+ *  ├╴forEach( source, callback:  Callback<T>         ): void;         ✅
+ *  ├╴reduce( source, reducer:    , initialValue?: T ): Tout;          🔶
+ *  ├╴find( source, predicate: Predicate<T>        ): T;               ✅
+ *  │
+ *  ├╴every( source, predicate: Predicate<T>        ): boolean;        ✅
+ *  └╴some( source, predicate: Predicate<T>        ): boolean;         ✅
  *
- * ✅ zip(...iters)
- * interleave(i, j)      i[n] j[n] ▬▶︎ [i[0], j[0], i[1], j[1] ... i[n], j[n]]
+ * Mapping (S[i] -> S[f(i)])
+ *  ├╴map( source, mapper:    Mapper<T, Tout> ): Iterator<T>;          ✅
+ *  ├╴flatMap( source, mapper: Mapper<T, Iterable<Tout>>: Iterator<T>; ✅
+ *  │
+ *  ├╴enumerate(i)       i[n]      ▬▶︎ [[i[0], 0], … [i[n], n]]         🔶
+ *  ├╴intersperse(i, f)  i[n]      ▬▶︎ [i[0], f(i[0]), … i[n], f(i[n])] 🔶
+ *  └╴
  *
- * intertwine
+ * Combining (Sᴺ -> S)
+ *  ├╴interleave(i, j)   i[n] j[n] ▬▶︎ [i[0], j[0], … i[n], j[n]]       🔶
+ *  ├╴zip(...iters)                                                    ✅
+ *  ├╴
+ *  └╴intertwine
+ *
  * entwine
  * weave
  * inject
  *
- * interpolate
- * debounce
- * throttle
+ * Hysteresis (S[x...y] -> Sʹ)
+ * ├╴interpolate
+ * ├╴debounce
+ * ├╴throttle
+ * └╴
  */
 export type Predicate<T> = (t: T, i: number) => boolean;
-export const anythingPredicate: Predicate<unknown> = (t: unknown, i: unknown) =>
-  true;
-export const nothingPredicate: Predicate<unknown> = (...arg) => false;
+export const anythingPredicate: Predicate<unknown> = () => true;
+export const nothingPredicate: Predicate<unknown> = () => false;
 
 export type Mapper<T, O> = (t: T, i: number) => O;
 export type Callback<T> = (t: T, i: number) => void;
@@ -62,6 +118,7 @@ export function* iterIter<T>(source: Iterator<T>): IterableIterator<T> {
 
 /**
  * Creates an iterator over the first n values of source
+ *
  * !Note, this is a shallow operation and the underlying iterator is consumed
  */
 export function* takeLazily<T>(
@@ -279,9 +336,9 @@ export function* uniqueIter<T>(
  * Group sets of values from N inputs
  *  to one output of tuples of length N
  *
- * [A1, A2, ...An]  ⎫     [[A1, B1, …X1],
- * [B1, B2, ...Bn]  ⎬  ▬▶︎   [A2, B2, …X2],
- * [X1, X2, ...Xn]  ⎭        …[An, Bn, …Xn]]
+ * [A1, A2, … An]  ⎫     [[A1, B1, … X1],
+ * [B1, B2, … Bn]  ⎬  ▬▶︎   [A2, B2, … X2],
+ * [X1, X2, … Xn]  ⎭        …[An, Bn, … Xn]]
  */
 export function* zipIter<T extends IterableIterator<unknown>[]>(
   ...iterables: T
@@ -355,6 +412,17 @@ export function every<T>(
   return true;
 }
 
+/**
+ * Compare 2 or more iterators to check they match
+ *
+ * Takes an optional filterPredicate which is applied to each iterator
+ * before they are compared
+ *
+ * Lazy evaluation, stops early if a non-match found
+ *
+ * @returns {true} if all sequences match
+ * @returns {false} if any of them differ
+ */
 export const compareSequencesIter = <T>(
   { filterPredicate = anythingPredicate }: SequenceComparisonOptions<T>,
   ...sequences: [

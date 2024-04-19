@@ -2,7 +2,7 @@ import type { LegacyRef } from 'react';
 import { useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import { isNotNullOrUndefined } from '../../util';
-import { isValidActionId, isGreekActionId } from '../../calc/actionId';
+import { isValidActionId } from '../../calc/actionId';
 import { getSpellById } from '../../calc/spells';
 import {
   useConfig,
@@ -42,15 +42,7 @@ export const VisualisationList = () => {
   const actionsCalledRef = useRef<HTMLDivElement>();
   const actionCallTreeRef = useRef<HTMLDivElement>();
 
-  const {
-    condenseShots,
-    unlimitedSpells,
-    infiniteSpells,
-    showDivides,
-    showGreekSpells,
-    showDirectActionCalls,
-    showActionTree,
-  } = useConfig();
+  const { unlimitedSpells, infiniteSpells, showActionTree } = useConfig();
 
   // TODO This can be a custom hook
   const spells = useMemo(
@@ -81,95 +73,6 @@ export const VisualisationList = () => {
     elapsedTime,
   } = useResult();
 
-  // const {
-  //   shots,
-  //   reloadTime: totalRechargeTime,
-  //   endConditions,
-  //   elapsedTime,
-  // } = useMemo(() => {
-  //   setSimulationRunning(true);
-  //   const result = clickWand(wand, spellsWithUses, {
-  //     req_enemies: req_enemies,
-  //     req_projectiles: req_projectiles,
-  //     req_hp: req_hp,
-  //     req_half: req_half,
-  //     rng_frameNumber: frameNumber,
-  //     rng_worldSeed: worldSeed,
-  //     wand_available_mana: wand.mana_max,
-  //     wand_cast_delay: wand.cast_delay,
-  //     endSimulationOnShotCount,
-  //     endSimulationOnReloadCount,
-  //     endSimulationOnRefreshCount,
-  //     endSimulationOnRepeatCount,
-  //     limitSimulationIterations,
-  //     limitSimulationDuration,
-  //   });
-  //   setSimulationRunning(false);
-  //   return result;
-  // }, [
-  //   endSimulationOnShotCount,
-  //   endSimulationOnReloadCount,
-  //   endSimulationOnRefreshCount,
-  //   endSimulationOnRepeatCount,
-  //   limitSimulationIterations,
-  //   limitSimulationDuration,
-  //   frameNumber,
-  //   req_enemies,
-  //   req_projectiles,
-  //   req_hp,
-  //   req_half,
-  //   spellsWithUses,
-  //   wand,
-  //   worldSeed,
-  // ]);
-
-  // const shotsNoDivides = useMemo(() => {
-  //   if (!showDivides) {
-  //     return shots.map((s) => ({
-  //       ...s,
-  //       calledActions: s.actionCallGroups.filter(
-  //         (ac) => !ac.spell.id.startsWith('DIVIDE'),
-  //       ),
-  //     }));
-  //   } else {
-  //     return shots;
-  //   }
-  // }, [showDivides, shots]);
-
-  // const shotsNoGreekSpells = useMemo(() => {
-  //   if (!showGreekSpells) {
-  //     return shots.map((s) => ({
-  //       ...s,
-  //       calledActions: s.actionCallGroups.filter(
-  //         ({ spell }) => isValidActionId(spell.id) && isGreekActionId(spell.id),
-  //       ),
-  //     }));
-  //   } else {
-  //     return shots;
-  //   }
-  // }, [showGreekSpells, shots]);
-
-  // const shotsNoDirectActionCalls = useMemo(() => {
-  //   if (!showDirectActionCalls) {
-  //     return shots.map((s) => ({
-  //       ...s,
-  //       calledActions: s.actionCallGroups.filter(
-  //         (ac) => ac.source !== 'action',
-  //       ),
-  //     }));
-  //   } else {
-  //     return shots;
-  //   }
-  // }, [showDirectActionCalls, shots]);
-
-  const groupedShots = useMemo(() => {
-    // if (condenseShots) {
-    // return shots.map(condenseActionsAndProjectiles);
-    // } else {
-    return shots;
-    // }
-  }, [/*condenseShots,*/ shots]);
-
   return (
     <ParentDiv>
       <SimulationStatus
@@ -181,7 +84,7 @@ export const VisualisationList = () => {
       <ShotList
         simulationRunning={simulationRunning}
         endReasons={endConditions}
-        shots={groupedShots}
+        shots={shots}
         totalRechargeTime={totalRechargeTime}
       />
       {showActionTree && (
@@ -195,9 +98,9 @@ export const VisualisationList = () => {
               <SaveImageButton
                 targetRef={actionCallTreeRef}
                 fileName={'action_tree'}
-                enabled={groupedShots.length > 0}
+                enabled={shots.length > 0}
               />
-              {groupedShots.map((shot, index) => (
+              {shots.map((shot, index) => (
                 <ActionTreeShotResult key={index} shot={shot} />
               ))}
             </SectionDiv>
@@ -213,9 +116,9 @@ export const VisualisationList = () => {
           <SaveImageButton
             targetRef={actionsCalledRef}
             fileName={'actions_called'}
-            enabled={groupedShots.length > 0}
+            enabled={shots.length > 0}
           />
-          {groupedShots.map((shot, index) => (
+          {shots.map((shot, index) => (
             <ActionCalledShotResult key={index} shot={shot} />
           ))}
         </SectionDiv>
@@ -223,3 +126,85 @@ export const VisualisationList = () => {
     </ParentDiv>
   );
 };
+
+// TODO remove/reimplement if needed
+// const {
+//   shots,
+//   reloadTime: totalRechargeTime,
+//   endConditions,
+//   elapsedTime,
+// } = useMemo(() => {
+//   setSimulationRunning(true);
+//   const result = clickWand(wand, spellsWithUses, {
+//     req_enemies: req_enemies,
+//     req_projectiles: req_projectiles,
+//     req_hp: req_hp,
+//     req_half: req_half,
+//     rng_frameNumber: frameNumber,
+//     rng_worldSeed: worldSeed,
+//     wand_available_mana: wand.mana_max,
+//     wand_cast_delay: wand.cast_delay,
+//     endSimulationOnShotCount,
+//     endSimulationOnReloadCount,
+//     endSimulationOnRefreshCount,
+//     endSimulationOnRepeatCount,
+//     limitSimulationIterations,
+//     limitSimulationDuration,
+//   });
+//   setSimulationRunning(false);
+//   return result;
+// }, [
+//   endSimulationOnShotCount,
+//   endSimulationOnReloadCount,
+//   endSimulationOnRefreshCount,
+//   endSimulationOnRepeatCount,
+//   limitSimulationIterations,
+//   limitSimulationDuration,
+//   frameNumber,
+//   req_enemies,
+//   req_projectiles,
+//   req_hp,
+//   req_half,
+//   spellsWithUses,
+//   wand,
+//   worldSeed,
+// ]);
+
+// const shotsNoDivides = useMemo(() => {
+//   if (!showDivides) {
+//     return shots.map((s) => ({
+//       ...s,
+//       calledActions: s.actionCallGroups.filter(
+//         (ac) => !ac.spell.id.startsWith('DIVIDE'),
+//       ),
+//     }));
+//   } else {
+//     return shots;
+//   }
+// }, [showDivides, shots]);
+
+// const shotsNoGreekSpells = useMemo(() => {
+//   if (!showGreekSpells) {
+//     return shots.map((s) => ({
+//       ...s,
+//       calledActions: s.actionCallGroups.filter(
+//         ({ spell }) => isValidActionId(spell.id) && isGreekActionId(spell.id),
+//       ),
+//     }));
+//   } else {
+//     return shots;
+//   }
+// }, [showGreekSpells, shots]);
+
+// const shotsNoDirectActionCalls = useMemo(() => {
+//   if (!showDirectActionCalls) {
+//     return shots.map((s) => ({
+//       ...s,
+//       calledActions: s.actionCallGroups.filter(
+//         (ac) => ac.source !== 'action',
+//       ),
+//     }));
+//   } else {
+//     return shots;
+//   }
+// }, [showDirectActionCalls, shots]);

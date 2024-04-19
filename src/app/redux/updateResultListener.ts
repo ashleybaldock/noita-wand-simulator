@@ -4,11 +4,7 @@ import type { Action } from '@reduxjs/toolkit';
 import { isValidActionId } from '../calc/actionId';
 import { clickWand } from '../calc/eval/clickWand';
 import { getSpellById } from '../calc/spells';
-import {
-  sequencesMatchIgnoringHoles as sequencesDifferPredicate,
-  isNotNullOrUndefined,
-  compareSequencesIter,
-} from '../util';
+import { isNotNullOrUndefined, compareSequencesIter } from '../util';
 import type { SpellId } from './Wand/spellId';
 import { wandsMatchForSimulation } from './Wand/wand';
 import type { AppStartListening } from './listenerMiddleware';
@@ -27,56 +23,107 @@ import type { RootState } from './store';
 //     .map((sequence) => filterIter(sequence, filterPredicate)
 //     .every((f, _, filteredSequences) => f.length === filteredSequences[0].length);
 
-const spellIdsSequenceChangedPredicate = (
+/**
+ * @returns true if sequences are the same, false if they differ
+ */
+const spellSequencesMatchPredicate = (
   _unused: unknown,
   currentState: RootState,
   previousState: RootState,
-): boolean =>
-  compareSequencesIter<SpellId>(
+): boolean => {
+  const res = compareSequencesIter<SpellId>(
     { filterPredicate: isNotNullOrUndefined },
     currentState.wand.present.spellIds.values(),
     previousState.result.lastSpellIds.values(),
   );
-const alwaysIdsSequenceChangedPredicate = (
+  console.log(
+    'spellIdsSequenceChangedPredicate',
+    currentState.wand.present.spellIds.values(),
+    previousState.result.lastSpellIds.values(),
+    res,
+  );
+  return res;
+};
+/**
+ * @returns true if sequences are the same, false if they differ
+ */
+const alwaysCastSequencesMatchPredicate = (
   _unused: unknown,
   currentState: RootState,
   previousState: RootState,
-): boolean =>
-  compareSequencesIter<SpellId>(
+): boolean => {
+  const res = compareSequencesIter<SpellId>(
     { filterPredicate: isNotNullOrUndefined },
     currentState.wand.present.alwaysIds.values(),
     previousState.result.lastAlwaysIds.values(),
   );
+  console.log(
+    'alwaysIdsSequenceChangedPredicate',
+    currentState.wand.present.alwaysIds.values(),
+    previousState.result.lastAlwaysIds.values(),
+    res,
+  );
+  return res;
+};
 
-const wandStatsChangedPredicate = (
+/**
+ * @returns true if all wand stats that affect simulation results are the same, false if they differ
+ */
+const wandStatsMatchPredicate = (
   _unused: unknown,
   currentState: RootState,
   previousState: RootState,
-): boolean =>
-  wandsMatchForSimulation(
+): boolean => {
+  const res = wandsMatchForSimulation(
     currentState.wand.present.wand,
     previousState.result.lastWand,
   );
+  console.log(
+    'wandStatsChangedPredicate',
+    currentState.wand.present.wand,
+    previousState.result.lastWand,
+    res,
+  );
+  return res;
+};
 
-const zetaIdChangedPredicate = (
+/**
+ * @returns true if zetaId matches, false otherwise
+ */
+const zetaIdsMatchPredicate = (
   _unused: unknown,
   currentState: RootState,
   previousState: RootState,
-): boolean =>
-  currentState.wand.present.zetaId === previousState.result.lastZetaId;
+): boolean => {
+  console.log(
+    'zetaIdChangedPredicate',
+    currentState.wand.present.zetaId,
+    previousState.result.lastZetaId,
+  );
+  return currentState.wand.present.zetaId === previousState.result.lastZetaId;
+};
 
 // TODO memoise previous sim results to avoid re-running
+/**
+ * Checks if simulation needs to be re-run
+ *
+ * Composed of several match predicates, if any of those
+ * returns false the simulation needs to be refreshed
+ *
+ * @returns {true} if changes require a new simulation run
+ * @returns {false} if previous simulation result is still valid
+ */
 const simulationNeedsUpdatePredicate = (
   action: Action,
   currentState: RootState,
   previousState: RootState,
 ): boolean =>
   [
-    spellIdsSequenceChangedPredicate,
-    alwaysIdsSequenceChangedPredicate,
-    wandStatsChangedPredicate,
-    zetaIdChangedPredicate,
-  ].every((predicate) => predicate(action, currentState, previousState));
+    spellSequencesMatchPredicate,
+    alwaysCastSequencesMatchPredicate,
+    wandStatsMatchPredicate,
+    zetaIdsMatchPredicate,
+  ].some((predicate) => !predicate(action, currentState, previousState));
 
 /**
  * Update Simulation result when wand has been changed
@@ -105,6 +152,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
       const zetaId = listenerApi.getState().wand.present.zetaId;
       const wand = listenerApi.getState().wand.present.wand;
 
+      console.log('running new simulation');
       listenerApi.dispatch(
         newSimulation({
           wandState: {
@@ -169,6 +217,3 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
       }
     },
   });
-function zipIter(arg0: any[]) {
-  throw new Error('Function not implemented.');
-}

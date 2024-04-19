@@ -53,6 +53,7 @@ const NumericInputButton = styled(Button)`
   height: 2em;
   font: inherit;
   background-color: black;
+  background-position: center center;
   color: white;
   border-radius: 0;
   display: flex;
@@ -60,8 +61,17 @@ const NumericInputButton = styled(Button)`
   align-items: center;
   justify-content: center;
   padding-top: 0.1em;
+  --padding-sides: 0.6em;
+  padding-left: var(--padding-sides);
+  padding-right: var(--padding-sides);
   margin: 0;
   border: 1px solid #444;
+  aspect-ratio: 1.6;
+  padding-top: 0.5em;
+  --padding-sides: 1em;
+  font-size: 1.1em;
+  line-height: 1.2em;
+  background-size: 36%;
 `;
 const ButtonMin = styled(NumericInputButton)`
   border-radius: var(--bdr) 0 0 var(--bdr);
@@ -147,9 +157,14 @@ export const NumericInput = ({
       {children}
       <ButtonMin minimal={true}>{`${min}`}</ButtonMin>
       {showBigStep && (
-        <ButtonBigStepDown minimal={true}>{`⇊`}</ButtonBigStepDown>
+        <ButtonBigStepDown
+          minimal={true}
+          imgUrl="data/arrows/down-double.png"
+        />
       )}
-      {showStep && <ButtonStepDown minimal={true}>{`↓`}</ButtonStepDown>}
+      {showStep && (
+        <ButtonStepDown minimal={true} imgUrl="data/arrows/down-single.png" />
+      )}
       <NumberInput
         ref={inputRef}
         hidden={true}
@@ -157,8 +172,12 @@ export const NumericInput = ({
         onKeyDown={(e) => e.key === 'Enter' && saveChanges()}
         onChange={(e) => {}}
       />
-      {showStep && <ButtonStepUp minimal={true}>{`↑`}</ButtonStepUp>}
-      {showBigStep && <ButtonBigStepUp minimal={true}>{`⇈`}</ButtonBigStepUp>}
+      {showStep && (
+        <ButtonStepUp minimal={true} imgUrl="data/arrows/up-single.png" />
+      )}
+      {showBigStep && (
+        <ButtonBigStepUp minimal={true} imgUrl="data/arrows/up-double.png" />
+      )}
       <ButtonMax minimal={true}>{`${
         max === Number.POSITIVE_INFINITY ? '∞' : max
       }`}</ButtonMax>
