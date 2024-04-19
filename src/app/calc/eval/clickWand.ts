@@ -141,7 +141,7 @@ export const clickWand = ({
   wand_available_mana,
   wand_cast_delay,
   endSimulationOnShotCount = 10,
-  endSimulationOnReloadCount = 2,
+  endSimulationOnReloadCount = 1,
   endSimulationOnRefreshCount = 2,
   endSimulationOnRepeatCount = 1,
   limitSimulationIterations = 200,
@@ -376,7 +376,8 @@ export const clickWand = ({
         break;
       }
       case 'StartReload': {
-        result.reloadCount++;
+        console.log('increment reload count');
+        result.reloadCount = result.reloadCount + 1;
         result.reloadTime = payload.reload_time;
         break;
       }
@@ -470,6 +471,7 @@ export const clickWand = ({
 
       result.elapsedTime = getElapsedTime();
 
+      console.log(result);
       /* Check for end conditions */
       if (result.shotCount >= endSimulationOnShotCount) {
         result.endConditions.push('shotCount');

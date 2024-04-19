@@ -11,18 +11,6 @@ import type { AppStartListening } from './listenerMiddleware';
 import { newResult, newSimulation } from './resultSlice';
 import type { RootState } from './store';
 
-// export const compareSequences = (
-//   {
-//     filterPredicate = anythingPredicate,
-//   }: SequenceComparisonOptions<unknown>,
-//   sequences: IterableIterator<unknown>[]
-// ) => {
-//   // const filteredA = sequenceA.filter(filterPredicate);
-//   // const filteredB = sequenceB.filter(filterPredicate);
-//   sequences
-//     .map((sequence) => filterIter(sequence, filterPredicate)
-//     .every((f, _, filteredSequences) => f.length === filteredSequences[0].length);
-
 /**
  * @returns true if sequences are the same, false if they differ
  */
@@ -36,14 +24,15 @@ const spellSequencesMatchPredicate = (
     currentState.wand.present.spellIds.values(),
     previousState.result.lastSpellIds.values(),
   );
-  console.log(
-    'spellIdsSequenceChangedPredicate',
-    currentState.wand.present.spellIds.values(),
-    previousState.result.lastSpellIds.values(),
-    res,
-  );
+  // console.log(
+  //   'spellIdsSequenceChangedPredicate',
+  //   currentState.wand.present.spellIds.values(),
+  //   previousState.result.lastSpellIds.values(),
+  //   res,
+  // );
   return res;
 };
+
 /**
  * @returns true if sequences are the same, false if they differ
  */
@@ -57,12 +46,12 @@ const alwaysCastSequencesMatchPredicate = (
     currentState.wand.present.alwaysIds.values(),
     previousState.result.lastAlwaysIds.values(),
   );
-  console.log(
-    'alwaysIdsSequenceChangedPredicate',
-    currentState.wand.present.alwaysIds.values(),
-    previousState.result.lastAlwaysIds.values(),
-    res,
-  );
+  // console.log(
+  //   'alwaysIdsSequenceChangedPredicate',
+  //   currentState.wand.present.alwaysIds.values(),
+  //   previousState.result.lastAlwaysIds.values(),
+  //   res,
+  // );
   return res;
 };
 
@@ -78,12 +67,12 @@ const wandStatsMatchPredicate = (
     currentState.wand.present.wand,
     previousState.result.lastWand,
   );
-  console.log(
-    'wandStatsChangedPredicate',
-    currentState.wand.present.wand,
-    previousState.result.lastWand,
-    res,
-  );
+  // console.log(
+  //   'wandStatsChangedPredicate',
+  //   currentState.wand.present.wand,
+  //   previousState.result.lastWand,
+  //   res,
+  // );
   return res;
 };
 
@@ -95,11 +84,11 @@ const zetaIdsMatchPredicate = (
   currentState: RootState,
   previousState: RootState,
 ): boolean => {
-  console.log(
-    'zetaIdChangedPredicate',
-    currentState.wand.present.zetaId,
-    previousState.result.lastZetaId,
-  );
+  // console.log(
+  //   'zetaIdChangedPredicate',
+  //   currentState.wand.present.zetaId,
+  //   previousState.result.lastZetaId,
+  // );
   return currentState.wand.present.zetaId === previousState.result.lastZetaId;
 };
 
