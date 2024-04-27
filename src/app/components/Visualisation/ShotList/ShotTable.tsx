@@ -6,7 +6,6 @@ import {
   SubTotalsColumn,
   TotalsColumn,
 } from './CastStateColumn';
-import { ProjectileActionGroup } from './ProjectileActionGroup';
 import { isNotNullOrUndefined, NBSP } from '../../../util';
 import {
   IconsColumnHeading,
@@ -19,6 +18,7 @@ import { Fragment } from 'react';
 import type { WandShot, WandShotId } from '../../../calc/eval/WandShot';
 import { useResult } from '../../../redux';
 import type { ShotProjectile } from '../../../calc/eval/ShotProjectile';
+import { ShotTableProjectile } from './ShotTableProjectile';
 
 const StyledShotTable = styled.div`
   --nesting-offset: var(--sizes-nesting-offset, 16px);
@@ -173,7 +173,7 @@ export const ShotTableHeadings = ({
               isEndOfTrigger={isEndOfTrigger}
               nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
             >
-              <ProjectileActionGroup group={projectile} />
+              <ShotTableProjectile projectile={projectile} />
             </ProjectileHeading>
             {isNotNullOrUndefined(triggerShot) && (
               <ShotTableHeadings

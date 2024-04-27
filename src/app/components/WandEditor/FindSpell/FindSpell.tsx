@@ -69,6 +69,12 @@ const Container = styled.div`
   width: auto;
   min-width: 18em;
   max-width: 28vw;
+  
+  @media screen and (max-width: 500px) {
+    min-width: 12em;
+    width: 100%;
+    max-width: 88vw;
+  }
 }
 `;
 

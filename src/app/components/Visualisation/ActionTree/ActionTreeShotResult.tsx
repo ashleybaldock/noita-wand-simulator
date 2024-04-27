@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { WandActionGroup } from '../WandActionGroup';
+import { WandActionCall } from '../WandActionCall';
 import type { ActionCall } from '../../../calc/eval/ActionCall';
 import type { WandShotResult } from '../../../calc/eval/clickWand';
 import type { TreeNode } from '../../../util/TreeNode';
@@ -87,7 +87,7 @@ const ActionTreeComponent = ({ node }: { node: TreeNode<ActionCall> }) => {
       data-trigger={isTriggerParent}
       data-wrap={causedWrap}
     >
-      <WandActionGroup data-name="AcTreeNodeAction" group={node.value} />
+      <WandActionCall data-name="AcTreeNodeAction" actionCall={node.value} />
       {hasChildren && (
         <ChildrenDiv
           data-name="AcTreeChildren"

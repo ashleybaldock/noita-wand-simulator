@@ -1,6 +1,6 @@
 import { useHotkeys } from 'react-hotkeys-hook';
 import styled from 'styled-components';
-import { noop } from '../../util';
+import { isString, noop } from '../../util';
 import type { TooltipId } from '../Tooltips/tooltipId';
 import type { ActionHintId } from '../Tooltips/actionHintId';
 import { HotkeyHint } from '../Tooltips/HotkeyHint';
@@ -39,11 +39,24 @@ background-position: 100% 50%;
 --pad-img-side: calc(var(--background-size) + 1.9em);
 
  */
+
+const breakpoints = ['500px', '600px', '700px'] as const;
+
+export type BreakPoint = (typeof breakpoints)[number];
+
+export const isBreakpoint = (
+  (breakpointSet) =>
+  (x: unknown): x is BreakPoint =>
+    isString(x) && (breakpointSet as Set<string>).has(x)
+)(new Set(breakpoints));
+
+export type ImgOnlyOption = 'never' | 'always' | BreakPoint;
+
 const StyledButton = styled.button<{
   imgUrl: string;
   imgDataUrl: string;
   imgAfter: boolean;
-  imgOnly: 'never' | 'mobile';
+  imgOnly: ImgOnlyOption;
   minimal: boolean;
   shape: ButtonShape;
 }>`
@@ -129,16 +142,21 @@ const StyledButton = styled.button<{
       : ``};
 
   ${({ imgOnly }) =>
-    imgOnly === 'mobile' &&
+    imgOnly === 'always' &&
     `
-    @media screen and (max-width: 500px) {
+      background-position: center center;
+  `}
+  ${({ imgOnly }) =>
+    isBreakpoint(imgOnly) &&
+    `
+    @media screen and (max-width: ${imgOnly}) {
       background-position: center center;
     }
   `}
 `;
 
 const MobileHidden = styled.div<React.PropsWithChildren>`
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 600px) {
     display: none;
   }
 `;
@@ -169,7 +187,7 @@ export const Button = ({
   imgUrl?: string;
   imgDataUrl?: string;
   imgAfter?: boolean;
-  imgOnly?: 'never' | 'mobile';
+  imgOnly?: ImgOnlyOption;
   minimal?: boolean;
   shape?: ButtonShape;
   tooltipId?: TooltipId;
@@ -195,7 +213,7 @@ export const Button = ({
           }
         : {})}
     >
-      {imgOnly === 'mobile' ? (
+      {isBreakpoint(imgOnly) ? (
         <MobileHidden>{children}</MobileHidden>
       ) : (
         children

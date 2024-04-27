@@ -30,6 +30,27 @@ const StickyTitleHeader = styled.h2`
 
   font-size: 16px;
   font-weight: normal;
+
+  @media screen and (max-width: 500px) {
+    height: 100%;
+    bottom: 0;
+    left: 0;
+    grid-row: buttons;
+    grid-column: buttons/span 1;
+    z-index: unset;
+    font-size: 14px;
+    line-height: 1.3;
+    white-space: wrap;
+    border: none;
+    border-radius: 0;
+    border-bottom: 0.16em solid var(--color-button-border);
+    flex: 1 1 min-content;
+    padding: 0;
+    padding-left: 0.3em;
+    padding-right: 0.6em;
+    place-self: center;
+    align-items: center;
+  }
 `;
 
 export const SectionHeader = ({

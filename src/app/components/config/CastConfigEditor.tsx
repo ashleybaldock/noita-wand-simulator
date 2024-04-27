@@ -312,14 +312,14 @@ export const CastConfigEditor = () => {
             <span>Health</span>
           </SubSectionTitle>
           <SubSectionContent>
-            <CheckboxInputWrapper>
-              <YesNoToggle
-                checked={config.infiniteHp}
-                onChange={handleConfigToggle('infiniteHp')}
-              >
-                <span style={{ whiteSpace: 'nowrap' }}>∞: </span>
-              </YesNoToggle>
-            </CheckboxInputWrapper>
+            {/* <CheckboxInputWrapper> */}
+            {/*   <YesNoToggle */}
+            {/*     checked={config.infiniteHp} */}
+            {/*     onChange={handleConfigToggle('infiniteHp')} */}
+            {/*   > */}
+            {/*     <span style={{ whiteSpace: 'nowrap' }}>∞: </span> */}
+            {/*   </YesNoToggle> */}
+            {/* </CheckboxInputWrapper> */}
             <InputWrapper>
               <NumericInput
                 min={0}

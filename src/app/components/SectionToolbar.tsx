@@ -22,13 +22,34 @@ const SectionHeaderContainer = styled.div`
   display: grid;
   grid-template-columns:
     [left title-start] 3fr
-    [title-end search-start buttons-start] repeat(5, 1fr)
+    [title-end search-start buttons-start] repeat(6, 1fr)
     [search-end buttons-end right];
   grid-template-rows:
     [top line-start] auto
     [line-end title-start buttons-start] 1fr
     [buttons-end search-start] 1fr
     [search-end title-end bottom];
+
+  @media screen and (max-width: 500px) {
+    grid-template-columns:
+      [left
+      title-start
+      search-start
+      buttons-start] auto repeat(6, 1fr) [title-end
+      search-end
+      buttons-end
+      right];
+    grid-template-rows:
+      [top
+      line-start] auto [line-end
+      buttons-start] 3em [buttons-end
+      search-start] 2em [search-end
+      bottom];
+    grid-template-columns:
+      [left title-start search-start buttons-start] auto repeat(5, 1fr)
+      [title-end search-end buttons-end right];
+    grid-template-rows: [top line-start] auto [line-end buttons-start] 3em [buttons-end search-start] 2em [search-end bottom];
+  }
 
   filter: var(--filter-floating-shadow);
 
@@ -48,6 +69,9 @@ const GridSectionHeader = styled(SectionHeader)`
   display: flex;
   flex-wrap: nowrap;
   align-items: flex-start;
+
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 export const SectionToolbar = ({

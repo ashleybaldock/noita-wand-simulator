@@ -66,7 +66,6 @@ const NumericInputButton = styled(Button)`
   padding-right: var(--padding-sides);
   margin: 0;
   border: 1px solid #444;
-  aspect-ratio: 1.6;
   padding-top: 0.5em;
   --padding-sides: 1em;
   font-size: 1.1em;

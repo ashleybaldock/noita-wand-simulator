@@ -75,7 +75,7 @@ const serializeClickWandResult = (
       spell: maybeSerializeSpell(projectile.spell),
       proxy: maybeSerializeSpell(projectile.proxy),
     })),
-    actionCallGroups: shot.actionCallGroups.map((actionCallGroup) => ({
+    actionCallGroups: shot.actionCalls.map((actionCallGroup) => ({
       ...actionCallGroup,
       spell: serializeSpell(actionCallGroup.spell),
       wrappingInto: (actionCallGroup.wrappingInto ?? []).map((wrapInto) =>
@@ -167,10 +167,9 @@ export const clickWand = ({
   }
 
   const getShot = (): WandShot => ({
-    _typeName: 'WandShot',
     id: nextWandShotId(),
     projectiles: [],
-    actionCallGroups: [],
+    actionCalls: [],
     actionCallTrees: [],
     castState: { ...defaultGunActionState },
     wraps: [],
@@ -248,16 +247,16 @@ export const clickWand = ({
       case 'BeginTriggerTimer':
       case 'BeginTriggerHitWorld':
       case 'BeginTriggerDeath':
+        // TODO type for entity_filename
         const { entity_filename, action_draw_count } = payload;
         const delay_frames =
           name === 'BeginTriggerTimer' ? payload.delay_frames : undefined;
         state.parentShot = state.currentShot;
         state.currentShotStack.push(state.currentShot);
         state.currentShot = {
-          _typeName: 'WandShot',
           id: nextWandShotId(),
           projectiles: [],
-          actionCallGroups: [],
+          actionCalls: [],
           actionCallTrees: [],
           castState: { ...defaultGunActionState },
           triggerType: triggerConditionFor(name),
@@ -460,7 +459,7 @@ export const clickWand = ({
       });
 
       _draw_actions_for_shot(true);
-      state.currentShot.actionCallGroups = state.calledActions!;
+      state.currentShot.actionCalls = state.calledActions!;
       state.currentShot.actionCallTrees = state.rootNodes;
       state.currentShot.manaDrain = state.mana - gunMana;
       console.log(

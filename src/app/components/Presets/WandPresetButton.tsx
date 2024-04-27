@@ -12,7 +12,7 @@ export const WandPresetButton = ({
     <Button
       hotkeys={'o'}
       imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
-      imgOnly={'mobile'}
+      imgOnly={'600px'}
       onClick={() => setMenuVisible(true)}
       className={className}
     >

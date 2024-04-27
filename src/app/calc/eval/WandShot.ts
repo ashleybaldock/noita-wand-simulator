@@ -8,10 +8,9 @@ import { sequentialId } from '../../util';
 export type WandShotId = number;
 
 export type WandShot = {
-  _typeName: 'WandShot';
   id: WandShotId;
   projectiles: ShotProjectile[];
-  actionCallGroups: ActionCall[];
+  actionCalls: ActionCall[];
   actionCallTrees: TreeNode<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;

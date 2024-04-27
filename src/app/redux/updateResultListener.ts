@@ -1,5 +1,3 @@
-// TODO also depends on config
-
 import type { Action } from '@reduxjs/toolkit';
 import { isValidActionId } from '../calc/actionId';
 import { clickWand } from '../calc/eval/clickWand';
@@ -24,12 +22,6 @@ const spellSequencesMatchPredicate = (
     currentState.wand.present.spellIds.values(),
     previousState.result.lastSpellIds.values(),
   );
-  // console.log(
-  //   'spellIdsSequenceChangedPredicate',
-  //   currentState.wand.present.spellIds.values(),
-  //   previousState.result.lastSpellIds.values(),
-  //   res,
-  // );
   return res;
 };
 
@@ -91,6 +83,8 @@ const zetaIdsMatchPredicate = (
   // );
   return currentState.wand.present.zetaId === previousState.result.lastZetaId;
 };
+
+// TODO also depends on config
 
 // TODO memoise previous sim results to avoid re-running
 /**

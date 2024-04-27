@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { WandActionGroup } from '../WandActionGroup';
+import { WandActionCall } from '../WandActionCall';
 import type { WandShot } from '../../../calc/eval/WandShot';
 
 const StyledDiv = styled.div`
@@ -14,10 +14,10 @@ const StyledDiv = styled.div`
 export const ActionCalledShotResult = ({ shot }: { shot: WandShot }) => {
   return (
     <StyledDiv>
-      {shot.actionCallGroups.map((actionCall, index) => {
+      {shot.actionCalls.map((actionCall, index) => {
         return (
           <div key={index}>
-            <WandActionGroup group={actionCall} />
+            <WandActionCall actionCall={actionCall} />
           </div>
         );
       })}
