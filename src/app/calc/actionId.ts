@@ -1,15 +1,15 @@
 // It would be ideal to be able to switch between the beta and release versions of actions at runtime, but that seems like excessive complexity given the current changes mostly add entirely new spells
 
-// import * as main from './__generated__/main/actionIds';
+import * as main from './__generated__/main/actionIds';
 import { isNotNullOrUndefined } from '../util';
 import type { CustomActionId } from './customActionIds';
 import { customActionIds } from './customActionIds';
-import * as beta from './__generated__/beta/actionIds';
+// import * as beta from './__generated__/beta/actionIds';
 
-export type ActionId = beta.ActionId | CustomActionId;
+export type ActionId = main.ActionId | CustomActionId;
 
 export const actionIdSet: Set<ActionId> = new Set([
-  ...beta.actionIds,
+  ...main.actionIds,
   ...customActionIds,
 ]);
 

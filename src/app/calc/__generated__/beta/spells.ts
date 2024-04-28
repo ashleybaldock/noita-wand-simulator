@@ -31,26 +31,26 @@ import {
   call_action,
 } from "../../gun";
 import {
-  ActionUsesRemainingChanged,
-  ComponentGetValue2,
-  ComponentSetValue2,
-  EntityGetAllChildren,
+  EntityGetWithTag,
+  GetUpdatedEntityID,
   EntityGetComponent,
   EntityGetFirstComponent,
+  ComponentGetValue2,
+  ComponentSetValue2,
+  EntityInflictDamage,
+  ActionUsesRemainingChanged,
+  EntityGetTransform,
+  EntityLoad,
+  EntityGetAllChildren,
+  EntityGetName,
+  EntityHasTag,
   EntityGetFirstComponentIncludingDisabled,
   EntityGetInRadiusWithTag,
-  EntityGetName,
-  EntityGetTransform,
-  EntityGetWithTag,
-  EntityHasTag,
-  EntityInflictDamage,
-  EntityLoad,
-  GameGetFrameNum,
-  GetUpdatedEntityID,
   GlobalsGetValue,
   GlobalsSetValue,
   Random,
   SetRandomSeed,
+  GameGetFrameNum
 } from "../../eval/dispatch";
 
 const actions: Spell[] = [
@@ -2167,7 +2167,7 @@ const actions: Spell[] = [
 		mana: 100,
 		max_uses: 2,
 		action: function(c: GunActionState) {
-			SetRandomSeed(this.id,  GameGetFrameNum(), GameGetFrameNum() )
+			SetRandomSeed(this.id,  GameGetFrameNum(this.id, this.id), GameGetFrameNum(this.id, this.id) )
 			let types = ["monster","slime","red","fire"]
 			let rnd = Random(this.id, 1, types.length)
 			let egg_name = "egg_" + String(types[rnd - 1]) + ".xml"
@@ -3092,7 +3092,7 @@ const actions: Spell[] = [
 		mana: 70,
 		max_uses: 25,
 		action: function(c: GunActionState) {
-			SetRandomSeed(this.id,  GameGetFrameNum(), GameGetFrameNum() )
+			SetRandomSeed(this.id,  GameGetFrameNum(this.id, this.id), GameGetFrameNum(this.id, this.id) )
 			let types = ["pink","green","blue","orange"]
 			let rnd = Random(this.id, 1, types.length)
 			let firework_name = "firework_" + String(types[rnd - 1]) + ".xml"
@@ -4480,7 +4480,7 @@ const actions: Spell[] = [
 		
 		custom_xml_file: "data/entities/misc/custom_cards/damage_random.xml",
 		action: function(c: GunActionState) {
-			SetRandomSeed(this.id,  GameGetFrameNum(), GameGetFrameNum() + 253 )
+			SetRandomSeed(this.id,  GameGetFrameNum(this.id, this.id), GameGetFrameNum(this.id, this.id) + 253 )
 			let multiplier = 0
 			multiplier = Random(this.id,  -3, 4 ) * Random(this.id,  0, 2 )
 			let result = 0
@@ -7155,7 +7155,7 @@ const actions: Spell[] = [
 		price: 100,
 		mana: 5,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() + 263 )
+			SetRandomSeed(this.id,  GameGetFrameNum(this.id, this.id) + deck.length, GameGetFrameNum(this.id, this.id) + 263 )
 			let rnd = Random(this.id,  1, actions.length )
 			let data = actions[rnd - 1]
 			
@@ -7187,7 +7187,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 20,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() + 203 )
+			SetRandomSeed(this.id,  GameGetFrameNum(this.id, this.id) + deck.length, GameGetFrameNum(this.id, this.id) + 203 )
 			let rnd = Random(this.id,  1, actions.length )
 			let data = actions[rnd - 1]
 			
@@ -7219,7 +7219,7 @@ const actions: Spell[] = [
 		price: 120,
 		mana: 20,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() + 133 )
+			SetRandomSeed(this.id,  GameGetFrameNum(this.id, this.id) + deck.length, GameGetFrameNum(this.id, this.id) + 133 )
 			let rnd = Random(this.id,  1, actions.length )
 			let data = actions[rnd - 1]
 			
@@ -7251,7 +7251,7 @@ const actions: Spell[] = [
 		price: 160,
 		mana: 20,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() + 253 )
+			SetRandomSeed(this.id,  GameGetFrameNum(this.id, this.id) + deck.length, GameGetFrameNum(this.id, this.id) + 253 )
 			let rnd = Random(this.id,  1, actions.length )
 			let data = actions[rnd - 1]
 			
@@ -7283,7 +7283,7 @@ const actions: Spell[] = [
 		price: 150,
 		mana: 20,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
+			SetRandomSeed(this.id,  GameGetFrameNum(this.id, this.id) + deck.length, GameGetFrameNum(this.id, this.id) - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			let rnd = Random(this.id,  1, datasize )
 			
@@ -7339,7 +7339,7 @@ const actions: Spell[] = [
 		price: 250,
 		mana: 50,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
+			SetRandomSeed(this.id,  GameGetFrameNum(this.id, this.id) + deck.length, GameGetFrameNum(this.id, this.id) - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			let rnd = Random(this.id,  1, datasize )
 			
@@ -7397,7 +7397,7 @@ const actions: Spell[] = [
 		price: 200,
 		mana: 40,
 		action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
-			SetRandomSeed(this.id,  GameGetFrameNum() + deck.length, GameGetFrameNum() - 325 + discarded.length )
+			SetRandomSeed(this.id,  GameGetFrameNum(this.id, this.id) + deck.length, GameGetFrameNum(this.id, this.id) - 325 + discarded.length )
 			let datasize = deck.length + discarded.length
 			
 			for (const i of luaFor(1, 3)) {
@@ -8347,7 +8347,7 @@ const actions: Spell[] = [
 			}
 			
 			if ( options.length > 0 )  {
-				SetRandomSeed(this.id,  x + GameGetFrameNum(), y + 251 )
+				SetRandomSeed(this.id,  x + GameGetFrameNum(this.id, this.id), y + 251 )
 				
 				let rnd = Random(this.id,  1, options.length )
 				let action_id = options[rnd]

@@ -1,9 +1,9 @@
 import { isNotNullOrUndefined } from '../util';
-import * as beta from './__generated__/beta/unlocks';
+import * as main from './__generated__/main/unlocks';
 
-export type UnlockCondition = (typeof beta.unlockConditions)[number];
+export type UnlockCondition = (typeof main.unlockConditions)[number];
 
-export const unlockConditions = beta.unlockConditions;
+export const unlockConditions = main.unlockConditions;
 
 export const UnlockGroups = [
   'Quests',
@@ -62,7 +62,11 @@ const unlockInfo: Record<UnlockCondition, UnlockInfo> = {
   card_unlocked_sea_lava: { name: 'Orb: Lava', group: 'Orbs' },
   card_unlocked_spiral_shot: { name: 'Orb: Spiral Shot', group: 'Orbs' },
   card_unlocked_tentacle: { name: 'Orb: Tentacle', group: 'Orbs' },
-  // 'card_unlocked_': {name: 'Defeat Tapion vasalli'},
+  card_unlocked_cessation: { name: 'Cessation', group: 'Secrets' },
+  card_unlocked_piss: { name: 'All That Glitters', group: 'Secrets' },
+  card_unlocked_sea_mimic: { name: 'Awaken Potions', group: 'Quests' },
+  card_unlocked_polymorph: { name: 'Defeat Tapion vasalli', group: 'Bosses' },
+  card_unlocked_touch_grass: { name: 'Ominous Reward', group: 'Quests' },
 } as const;
 
 export const getUnlockName = (unlockCondition: UnlockCondition) =>

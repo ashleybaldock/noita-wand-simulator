@@ -85,27 +85,27 @@ config = {
       'after': '',
     }
   },
-  'beta': {
-    'actionIds':
-    {
-      'src': 'data/scripts/gun/gun_actions.beta.lua',
-      'dst': 'src/app/calc/__generated__/beta/actionIds.ts'
-    },
-    'spells':
-    {
-      'src': 'data/scripts/gun/gun_actions.beta.lua',
-      'dst': 'src/app/calc/__generated__/beta/spells.ts',
-      'before': spellsBefore,
-      'after': 'export const spells = actions;',
-    },
-    'unlocks':
-    {
-      'src': 'data/scripts/gun/gun_actions.beta.lua',
-      'dst': 'src/app/calc/__generated__/beta/unlocks.ts',
-      'before': '',
-      'after': '',
-    }
-  }
+  # 'beta': {
+  #   'actionIds':
+  #   {
+  #     'src': 'data/scripts/gun/gun_actions.beta.lua',
+  #     'dst': 'src/app/calc/__generated__/beta/actionIds.ts'
+  #   },
+  #   'spells':
+  #   {
+  #     'src': 'data/scripts/gun/gun_actions.beta.lua',
+  #     'dst': 'src/app/calc/__generated__/beta/spells.ts',
+  #     'before': spellsBefore,
+  #     'after': 'export const spells = actions;',
+  #   },
+  #   'unlocks':
+  #   {
+  #     'src': 'data/scripts/gun/gun_actions.beta.lua',
+  #     'dst': 'src/app/calc/__generated__/beta/unlocks.ts',
+  #     'before': '',
+  #     'after': '',
+  #   }
+  # }
 }
 
 
@@ -141,6 +141,8 @@ preprocessorPatterns = [
   # remove comments
   PatternReplace(r'--\[\[.*?]]--', '', flags=re.MULTILINE | re.DOTALL),
   PatternReplace(r'--.*?$', '', flags=re.MULTILINE),
+  # remove dofile
+  PatternReplace(r'dofile_once(.*?$', '', flags=re.MULTILINE),
 ]
 
 # These are run in sequence
