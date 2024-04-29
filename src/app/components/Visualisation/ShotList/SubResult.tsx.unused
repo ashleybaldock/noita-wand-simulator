@@ -1,0 +1,28 @@
+
+// type SubResult = number[] | SubResult[];
+// const getSubShotSummary = (
+//   projectiles: Array<GroupedObject<GroupedProjectile>>,
+//   prefix: Array<number> = [],
+// ): Array<number> => {
+//   return projectiles.flatMap(
+//     (projectile: GroupedObject<GroupedProjectile>, i, arr) => {
+//       const isFirst = i === 0;
+//       const isLast = i === arr.length - 1;
+//       if (
+//         isRawObject<GroupedProjectile>(projectile) &&
+//         projectile.trigger &&
+//         projectile.trigger.projectiles.length > 0
+//       ) {
+//         return getSubShotSummary(projectile.trigger.projectiles, [
+//           ...prefix,
+//           1,
+//         ]);
+//       } else {
+//         return [...prefix, 1];
+//       }
+//     },
+//   );
+// };
+// }, [projectiles]);
+
+// console.log(shotSubStateSummary);

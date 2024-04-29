@@ -376,6 +376,7 @@ export const clickWand = ({
       }
       case 'StartReload': {
         console.log('increment reload count');
+        // actionId = payload.actionId;
         result.reloadCount = result.reloadCount + 1;
         result.reloadTime = payload.reload_time;
         break;
@@ -421,6 +422,12 @@ export const clickWand = ({
         if (key === 'GUN_ACTION_IF_HALF_STATUS') {
           return `${if_half_state}`;
         }
+        break;
+      }
+      case 'HasFlagPersistent': {
+        const { flag } = payload;
+        // TODO link this to the unlocks config screen
+        return true;
         break;
       }
       // Used by Zeta

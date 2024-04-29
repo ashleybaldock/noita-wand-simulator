@@ -13,6 +13,7 @@ import {
   SetRandomSeed as SetRandomSeedExt,
 } from '../lua/random';
 import { observer } from './wandObserver';
+import type { UnlockCondition } from '../unlocks';
 
 export type WandId = '__WAND__';
 
@@ -104,8 +105,11 @@ export function ActionUsed(item_id: InventoryItemID | undefined) {
   observer.onEvent({ name: 'ActionUsed', payload: { itemId: item_id } });
 }
 
-export function StartReload(reload_time: number): void {
-  observer.onEvent({ name: 'StartReload', payload: { reload_time } });
+export function StartReload(
+  actionId: ActionId | WandId,
+  reload_time: number,
+): void {
+  observer.onEvent({ name: 'StartReload', payload: { actionId, reload_time } });
 }
 
 export function RegisterGunAction(s: GunActionState): void {
@@ -202,7 +206,7 @@ export function ComponentSetValue2(
   actionId: ActionId | WandId,
   component: ComponentID,
   key: string,
-  value: number,
+  value: number | boolean,
 ): void {
   observer.onEvent({
     name: 'ComponentSetValue2',
@@ -334,6 +338,18 @@ export function GlobalsSetValue(
   value: string,
 ): void {
   observer.onEvent({ name: 'GlobalsSetValue', payload: { key, value } });
+}
+
+/* At time of writing, this is only used by Requirement: Every Other */
+export function HasFlagPersistent(
+  actionId: ActionId | WandId,
+  flag: UnlockCondition,
+): boolean {
+  return observer.onEvent({
+    name: 'HasFlagPersistent',
+    default: true,
+    payload: { actionId, flag, defaultValue: true },
+  });
 }
 
 export function OnActionPlayed(

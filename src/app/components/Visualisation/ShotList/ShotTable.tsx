@@ -52,7 +52,6 @@ const Headings = styled.div`
 
 // const shotSubStateSummary = useMemo(() => {
 /*
- * For each shot, get count of (grouped) projectiles inside each projectile's trigger
  * S:[a b:[  3       4          ]
  *         i j:[   ] k:[       ]
  *             [x y]   [p q r s]
@@ -60,18 +59,31 @@ const Headings = styled.div`
  * 1+(10)
  *    1 1(+8)
  *         1 1(+2)   1(+4)
- * And the number of items to display to the right of it
- * And construct a line diagram template:
- *           b--i--j--x--y--k--p--q--r--s
  *
- * ⓧ:   a-b:[1,[1,[0,[0,[0,[0,[0,[0,[0,[0,[0
- *      ⬇︎    1, 1, 1, 1, 0, 1, 0, 0, 0, 0]
- *      ⬇︎    1] 0] 1] 1] 0] 1] 1] 1]
- *      ⬇︎
- * ⓨ    🄒 -----i---j-[1,1]--k:[1,[0,[0,[0,[0,
- *                ⬇︎ ^[1,1][0]⬇︎ ^ 1] 1] 1] 1] 1]       Pass down: prefix, includes
- * ⓩ              🄒 x--y         🄒 p--q--r--s
- *                  ^  ^           ^  ^  ^  ^
+ * For each shot, get:
+ *   * count of (grouped) projectiles inside each projectile's trigger
+ *   * And the number of items to display to the right of it
+ * And construct a line diagram template:
+ *
+ *       a╶╴b╶╴i╶╴j╶╴x╶╴y╶╴k╶╴p╶╴q╶╴r╶╴s╶╴c
+ *
+ *   ⓧ   a╶╴b╶───────────────────────────╴c  ⎕  ⎕  ⎕
+ *   ⓨ   ⎕  └─╴i╶╴j╶──────╴k  ⎕  ⎕  ⎕  ⎕  └─╴l  ⎕  ⎕
+ *   ⓨ   ⎕  ⎕  ⎕  └─╴x╶╴y  └─╴p╶╴q╶╴r╶╴s  ⎕  ┕─╴t╶╴u
+ *
+ *
+ *   ⓧ  ⎣1,⎣1,⎜1 ⎜1  1  1⎟ 1⎤⎡1⎤⎡1⎤⎡1⎤⎡1⎤⎜1⎤
+ *            ⎣1,⎜1  1  1⎟ 1⎟⎜0⎟⎜0⎟⎜0⎟⎜0⎟⎣0⎦⎣0⎦
+ *               ⎣1  1  1⎦ 1⎦⎣1⎦⎣1⎦⎣1⎦⎣1⎦⎣ ⎦⎣
+ *       a╶╴b╶╴i╶╴j╶╴x╶╴y╶╴k╶╴p╶╴q╶╴r╶╴s╶╴c
+ *
+ *   ⓧ   a--b:[1,⎡1⎤⎡0⎤⎡0⎤⎡0⎤⎡0⎤⎡0⎤⎡0⎤⎡0⎤⎡0⎤⎡0⎤
+ *          ⬇︎    ⎜1⎟⎜1⎟⎜1⎟⎜1⎟⎜0⎟⎜1⎟⎜0⎟⎜0⎟⎣0⎦⎣0⎦
+ *          ⬇︎    ⎣1⎦⎣0⎦⎣1⎦⎣1⎦⎣0⎦⎣1⎦⎣1⎦⎣1⎦
+ *   ⓨ      🄒 -i╶╴j[1,1]-╴k:[1,[0,[0,[0,[0,
+ *              ⬇︎ ^[1,1][0]⬇︎ ^ 1] 1] 1] 1] 1]       Pass down: prefix, includes
+ *   ⓩ            🄒 x--y         🄒 p--q--r--s
+ *                  ^  ^           ^  ^  ^  ^         (trturn
  *                 [1,[1,       [ [0,[0,[0,[0,
  *                  1] 1]          1] 1] 1] 1] ]
  * [[1[1[0[0 0 0 0 0 0 0 0],
@@ -86,35 +98,15 @@ const Headings = styled.div`
  *  * depth-first inorder traversal
  *  * upper levels padded with zero
  *  * then that can be overwritten if needed by later levels
- *
+ *      [1]     a
+ *    [1,1]   i b
+ *  [1,1,1] x j
+ *  [1,1,1] y
+ *  [1,1,1] p k
+ *  [1,1,1] q
+ *  [1,1,1] r
+ *  [1,1,1] s
  */
-// type SubResult = number[] | SubResult[];
-// const getSubShotSummary = (
-//   projectiles: Array<GroupedObject<GroupedProjectile>>,
-//   prefix: Array<number> = [],
-// ): Array<number> => {
-//   return projectiles.flatMap(
-//     (projectile: GroupedObject<GroupedProjectile>, i, arr) => {
-//       const isFirst = i === 0;
-//       const isLast = i === arr.length - 1;
-//       if (
-//         isRawObject<GroupedProjectile>(projectile) &&
-//         projectile.trigger &&
-//         projectile.trigger.projectiles.length > 0
-//       ) {
-//         return getSubShotSummary(projectile.trigger.projectiles, [
-//           ...prefix,
-//           1,
-//         ]);
-//       } else {
-//         return [...prefix, 1];
-//       }
-//     },
-//   );
-// };
-// }, [projectiles]);
-
-// console.log(shotSubStateSummary);
 
 export const ShotTableHeadings = ({
   shotIndex,

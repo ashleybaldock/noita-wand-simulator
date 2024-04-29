@@ -1,4 +1,5 @@
-import { translations } from '../calc/__generated__/translations.beta';
+import { languages } from '../calc/__generated__/i18n/';
+import { en as translations } from '../calc/__generated__/i18n/';
 
 const isKnownTranslationKey = (key: string): key is keyof typeof translations =>
   Object.prototype.hasOwnProperty.call(translations, key);

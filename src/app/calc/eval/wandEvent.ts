@@ -2,6 +2,7 @@ import type { ActionId } from '../actionId';
 import type { ActionSource } from '../actionSources';
 import type { GunActionState } from '../actionState';
 import type { Spell, SpellDeckInfo } from '../spell';
+import type { UnlockCondition } from '../unlocks';
 import type { WandId } from './dispatch';
 
 export type ComponentID = string;
@@ -45,6 +46,7 @@ export type WandEventBase = {
     itemId: InventoryItemID | undefined;
   };
   StartReload: {
+    actionId: ActionId | WandId;
     reload_time: number;
   };
   RegisterGunAction: {
@@ -84,7 +86,7 @@ export type WandEventBase = {
   ComponentSetValue2: {
     component: ComponentID;
     key: string;
-    value: number;
+    value: number | boolean;
   };
   EntityInflictDamage: {
     entityId: EntityID;
@@ -137,6 +139,12 @@ export type WandEventBase = {
   GlobalsSetValue: {
     key: string;
     value: string;
+  };
+  HasFlagPersistent: {
+    actionId: ActionId | WandId;
+    flag: UnlockCondition;
+    defaultValue: boolean;
+    _returns: boolean;
   };
   OnActionPlayed: {
     spell: Readonly<Spell>;

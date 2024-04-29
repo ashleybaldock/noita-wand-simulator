@@ -40,6 +40,7 @@ import {
   OnUnsetDontDraw,
   OnPlayPermanentCard,
 } from './eval/dispatch';
+import type { EntityId } from '@reduxjs/toolkit';
 
 // constants
 export const ACTION_DRAW_RELOAD_TIME_INCREASE = 0;
@@ -606,7 +607,7 @@ function _handle_reload() {
     move_discarded_to_deck();
     order_deck();
 
-    StartReload(current_reload_time);
+    StartReload('__WAND__', current_reload_time);
     current_reload_time = gun.reload_time;
     start_reload = false;
   }
@@ -733,4 +734,9 @@ export function call_action(
     returnValue as number | undefined,
   );
   return returnValue;
+}
+
+// custom mock for find_the_wand_held() in gun_action_utils
+export function find_the_wand_held(caster_entity: EntityId) {
+  return 1;
 }
