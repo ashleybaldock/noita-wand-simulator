@@ -2,9 +2,9 @@ import re
 from collections import OrderedDict
 
 srcFile = "data/scripts/gun/gun_actions.lua"
-srcFileBeta = "data/scripts/gun/gun_actions.beta.lua"
+# srcFileBeta = "data/scripts/gun/gun_actions.beta.lua"
 dstFile = "./src/app/calc/__generated__/main/entityMap.ts"
-dstFileBeta = "./src/app/calc/__generated__/beta/entityMap.ts"
+# dstFileBeta = "./src/app/calc/__generated__/beta/entityMap.ts"
 
 multiline_comment_pattern = r'--\[\[.*?]]--'
 singleline_comment_pattern = r'--.*?$'

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from re import Match
 
 srcFile = 'data/scripts/gun/gun_actions.lua'
-srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
+# srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
 
 spellsBefore = """/* Auto-generated file */
 
@@ -37,6 +37,7 @@ import {
   order_deck,
   reflecting,
   call_action,
+  find_the_wand_held,
 } from "../../gun";
 import {
   EntityGetWithTag,
@@ -58,10 +59,19 @@ import {
   GlobalsSetValue,
   Random,
   SetRandomSeed,
-  GameGetFrameNum
+  GameGetFrameNum,
+  StartReload,
+  OnNotEnoughManaForAction,
+  HasFlagPersistent,
+
 } from "../../eval/dispatch";
 
 """
+
+spellsAfter = """
+
+export const spells = actions;"""
+
 
 config = {
   'main': {
@@ -75,7 +85,7 @@ config = {
       'src': 'data/scripts/gun/gun_actions.lua',
       'dst': 'src/app/calc/__generated__/main/spells.ts',
       'before': spellsBefore,
-      'after': 'export const spells = actions;',
+      'after': spellsAfter,
     },
     'unlocks':
     {
@@ -142,7 +152,7 @@ preprocessorPatterns = [
   PatternReplace(r'--\[\[.*?]]--', '', flags=re.MULTILINE | re.DOTALL),
   PatternReplace(r'--.*?$', '', flags=re.MULTILINE),
   # remove dofile
-  PatternReplace(r'dofile_once(.*?$', '', flags=re.MULTILINE),
+  PatternReplace(r'dofile_once.*?$', '', flags=re.MULTILINE),
 ]
 
 # These are run in sequence
@@ -152,7 +162,7 @@ patterns = [
   # fix syntax for top level actions array
   PatternReplace(
     r'actions =\s*{(.*)}',
-    r'const actions: Spell[] = [\1]',
+    r'const actions: Spell[] = [\1];',
     flags=re.DOTALL,
   ),
 
@@ -232,6 +242,9 @@ patterns = [
   PatternReplace(r'(?<!let )((?:end|else)point = i)', r'\1 + 1', flags=re.MULTILINE),
   PatternReplace(r'i <= hand_count', r'i < hand_count', flags=re.MULTILINE),
 
+  # Hack for plicates to avoid data.mana being undefined
+  PatternReplace(r'data\.mana', r'(data.mana ?? 0)', flags=re.MULTILINE),
+
   # ActionType type to avoid crusty enum
   PatternReplace(r'data\.type\s*(!==|===)\s*0', r'data.type \1 ACTION_TYPE_PROJECTILE', flags=re.MULTILINE),
   PatternReplace(r'data\.type\s*(!==|===)\s*1', r'data.type \1 ACTION_TYPE_STATIC_PROJECTILE', flags=re.MULTILINE),
@@ -250,7 +263,8 @@ patterns = [
   PatternReplace(r'ACTION_TYPE_UTILITY', r'"utility"', flags=re.MULTILINE),
   PatternReplace(r'ACTION_TYPE_PASSIVE', r'"passive"', flags=re.MULTILINE),
 
-  PatternReplace(r'(GameGetFrameNum)\(', r'\1(this.id', flags=re.MULTILINE),
+  PatternReplace(r'(GameGetFrameNum)\(', r'\1(', flags=re.MULTILINE),
+  PatternReplace(r'(OnNotEnoughManaForAction)\(', r'\1(', flags=re.MULTILINE),
 
   PatternReplace(r'(' + '|'.join([
       "ActionUsesRemainingChanged",
@@ -267,13 +281,16 @@ patterns = [
       "EntityHasTag",
       "EntityInflictDamage",
       "EntityLoad",
-      "GameGetFrameNum",
       "GetUpdatedEntityID",
       "GlobalsGetValue",
       "GlobalsSetValue",
       "Random",
-      "SetRandomSeed"
+      "SetRandomSeed",
+      "StartReload",
+      "HasFlagPersistent",
       ]) + r')\(', r'\1(this.id, ', flags=re.MULTILINE),
+
+      PatternReplace(r'\t', r'  ', flags=re.MULTILINE),
   ]
 
 
@@ -345,7 +362,7 @@ def processSpells(src, dst, before = '', after = ''):
 
 
 os.makedirs(os.path.dirname('src/app/calc/__generated__/main/'), exist_ok=True)
-os.makedirs(os.path.dirname('src/app/calc/__generated__/beta/'), exist_ok=True)
+# os.makedirs(os.path.dirname('src/app/calc/__generated__/beta/'), exist_ok=True)
 
 process = {
   'actionIds': processActionIds,

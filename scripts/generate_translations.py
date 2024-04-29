@@ -14,6 +14,15 @@ languages = ['en', 'de', 'pt-br', 'es-es', 'fr-fr', 'it', 'pl', 'zh-cn', 'jp', '
 for language in languages:
   translations[language] = {}
 
+escaper = str.maketrans({"-":  r"\-",
+                         "]":  r"\]",
+                         "\\": r"\\",
+                         "^":  r"\^",
+                         "$":  r"\$",
+                         "*":  r"\*",
+                         "\"":  r"\\\"",
+                         ".":  r"\."})
+
 with open(srcFile) as inFile:
   reader = csv.DictReader(inFile)
   for row in reader:
@@ -25,7 +34,7 @@ with open(srcFile) as inFile:
     with open(dstFileBase + language + dstFileTail, 'w') as outFile:
       outFile.write('export const translations = {\n')
       for k, t in translations[language].items():
-        outFile.write('  "' + k + "\": \"" + t + "\",\n")
+        outFile.write('  "' + k.translate(escaper) + "\": \"" + t.translate(escaper) + "\",\n")
 
       outFile.write('};\n')
 
@@ -33,7 +42,7 @@ with open(infoFile, 'w') as outFile:
   outFile.write("""/* Auto-generated file */
 
 export const languages = ['""")
-  outFile.write("','".join(languages))
+  outFile.write("','".join([x[:2] for x in languages]))
   outFile.write(
 """'] as const;
 
@@ -41,8 +50,7 @@ export type Language = typeof languages[number];
 
 """)
   for language in languages:
-    outFile.write(f"
-export {{ translations as {language} }} from './translation-{language}';")
+    outFile.write(f"export {{ translations as {language[:2]} }} from './translation-{language}';\n")
 
 # vim:sw=2:sts=2:ts=2:et:
 
