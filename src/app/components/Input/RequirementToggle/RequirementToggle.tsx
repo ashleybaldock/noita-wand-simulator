@@ -5,9 +5,19 @@ import { InputImageLabel } from '../ImageLabel/InputImageLabel';
 const RequirementToggleWrapper = styled.div``;
 
 const YesNoToggleWithoutArrow = styled(YesNoToggle)`
+  place-items: center;
+
   & > :last-child::before {
     content: '';
   }
+
+  @media screen and (max-width: 600px) {
+    font-size: 0.9em;
+  }
+`;
+
+const RequirementInputImageLabel = styled(InputImageLabel)`
+  margin: 0;
 `;
 export const _RequirementToggle = ({
   className = '',
@@ -34,7 +44,7 @@ export const _RequirementToggle = ({
         customYes={customYes}
         customNo={customNo}
       >
-        <InputImageLabel size={size} imgUrl={sprite} />
+        <RequirementInputImageLabel size={size} imgUrl={sprite} />
       </YesNoToggleWithoutArrow>
       <YesNoToggleWithoutArrow
         checked={!checked}
@@ -42,13 +52,13 @@ export const _RequirementToggle = ({
         customYes={customYes}
         customNo={customNo}
       >
-        <InputImageLabel
+        <RequirementInputImageLabel
           size={size}
           imgUrl={'data/ui_gfx/gun_actions/if_else.png'}
         />
       </YesNoToggleWithoutArrow>
 
-      <InputImageLabel
+      <RequirementInputImageLabel
         size={size}
         imgUrl={'data/ui_gfx/gun_actions/if_end.png'}
       />
@@ -58,9 +68,9 @@ export const _RequirementToggle = ({
 
 export const RequirementToggle = styled(_RequirementToggle)`
   display: flex;
-  flex: 1 1 40%;
+  flex: 1 1 22%;
   justify-content: center;
-  margin: 0.1em 0.4em;
+  margin: 0;
 
   & > :last-child {
     flex: 0 0;

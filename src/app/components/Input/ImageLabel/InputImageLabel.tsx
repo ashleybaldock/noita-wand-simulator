@@ -4,6 +4,7 @@ export const InputImageLabel = styled.div<{
   size: number;
   imgUrl: string;
   leftMargin?: string;
+  className?: string;
 }>`
   position: relative;
   background-color: #111;

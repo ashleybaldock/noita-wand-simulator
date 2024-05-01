@@ -20,22 +20,21 @@ const WrapperLabel = styled.label`
   }
 `;
 
-const NumberInput = styled.input.attrs({ type: 'number' })`
-  margin: 0;
-  padding: 0 2px;
-  border: none;
-
+const NumberInput = styled.input.attrs({
+  type: 'text',
+  inputMode: 'numeric',
+  pattern: '^[1-9][0-9]*$',
+})`
   width: 100%;
   flex: 1 1 100%;
   background-color: #000;
-  text-align: left;
 
-  background-color: black;
   caret-color: white;
   color: var(--chint);
-  font: inherit;
   border: 1px solid #222;
+  font: inherit;
   font-size: 1.2em;
+  text-align: left;
   padding: 0.3em 0 0.1em 0;
   margin: 0;
   display: flex;
@@ -46,6 +45,7 @@ const NumberInput = styled.input.attrs({ type: 'number' })`
     box-shadow: 0 0 2px 1px currentColor inset;
   }
 `;
+
 const NumericInputButton = styled(Button)`
   flex: 1 1;
   aspect-ratio: 1;

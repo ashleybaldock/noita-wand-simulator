@@ -22,6 +22,7 @@ const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  background-color: #000;
 `;
 
 const SubSectionDiv = styled.div<{
@@ -40,24 +41,35 @@ const SubSectionDiv = styled.div<{
   padding: 0;
   margin: 0;
   min-height: 2.3em;
-  background-color: #111;
+  background-color: #000;
   border: 2px solid #232323;
   border-top-color: var(--config-topleft-border);
   border-left-color: var(--config-topleft-border);
   border-bottom-color: var(--config-bottomright-border);
   border-right-color: var(--config-bottomright-border);
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    margin: 0;
+    padding-bottom: 0.4em;
+  }
 `;
 
 const RequirementsSubSection = styled(SubSectionDiv).attrs(() => ({
   'data-section': 'requirements',
 }))`
-  flex-direction: column;
-
   & > :first-child {
     align-self: start;
   }
   & > :last-child {
     flex-wrap: wrap;
+  }
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    row-gap: 0.2em;
+    column-gap: 0;
   }
 `;
 
@@ -83,6 +95,7 @@ const SubSectionTitle = styled.div<{
   background-size: contain;
   background-repeat: no-repeat;
   white-space: nowrap;
+  background-color: #000;
 
   &:nth-child(1) {
     flex: 0 1;
@@ -109,6 +122,17 @@ const SubSectionTitle = styled.div<{
     white-space: nowrap;
     margin-right: 1.2em;
   }
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    gap: 0;
+    padding: 0.4em;
+    margin: 0;
+    align-self: start;
+    align-items: start;
+    border: none;
+    flex-direction: row;
+  }
 `;
 
 const SubSectionContent = styled.div<{
@@ -119,8 +143,9 @@ const SubSectionContent = styled.div<{
   display: flex;
   align-items: center;
   background-color: #000;
+  padding: 0;
   margin-right: 4px;
-  flex: 1 1;
+  flex: 1 1 auto;
   flex-wrap: wrap;
   width: 100%;
   ${({ maxWidth }) => (maxWidth ? `max-width: ${maxWidth};` : '')}
@@ -133,10 +158,24 @@ const SubSectionContent = styled.div<{
   flex-wrap: nowrap;
   justify-content: space-between;
 
-  :is([data-section='ending'], [data-section='limits']) & {
-    flex: 1 1 auto;
-    gap: 1em;
-    margin: 0 3em;
+  @media screen and (min-width: 600px) {
+    :is([data-section='ending'], [data-section='limits']) & {
+      flex-wrap: wrap;
+      flex: 1 1 auto;
+      margin: 0 3em;
+      column-gap: 2em;
+      row-gap: 0;
+      & > label {
+        flex-basis: 40%;
+      }
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    :is([data-section='ending'], [data-section='limits']) & {
+      flex-direction: column;
+      gap: 0;
+    }
   }
 `;
 
@@ -194,13 +233,37 @@ const InputWrapper = styled.label`
     white-space: nowrap;
     margin-right: 1em;
   }
+
+  @media screen and (max-width: 600px) {
+    padding: 0 1.8em;
+    flex: 1 1 100%;
+    align-self: stretch;
+  }
 `;
 
-const CheckboxInputWrapper = styled(InputWrapper)`
+const WrappedYesNoToggle = styled(YesNoToggle)`
   flex: 0 1;
+  padding: 0.6em 0.2em;
+  flex: 1 1 100%;
+  align-self: stretch;
 
-  &:first-child {
-    flex: 0 1;
+  & :first-child {
+    flex: 1 0;
+  }
+  & :last-child {
+    flex: 0 0;
+  }
+  @media screen and (max-width: 600px) {
+    padding: 0.6em 1.8em;
+
+    & :first-child {
+      flex: 1 0;
+    }
+    & :last-child {
+      flex: 0 0;
+    }
+    & :last-child::before {
+    }
   }
 `;
 
@@ -320,21 +383,12 @@ export const CastConfigEditor = () => {
             {/*     <span style={{ whiteSpace: 'nowrap' }}>∞: </span> */}
             {/*   </YesNoToggle> */}
             {/* </CheckboxInputWrapper> */}
-            <InputWrapper>
-              <NumericInput
-                min={0}
-                max={Number.POSITIVE_INFINITY}
-                value={config.var_hp}
-                onChange={numberChangeHandler('var_hp')}
-              ></NumericInput>
-              {/* <input */}
-              {/*   type="text" */}
-              {/*   inputMode="numeric" */}
-              {/*   pattern="^[1-9][0-9]*$" */}
-              {/*   value={config.var_hp} */}
-              {/*   onChange={numberChangeHandler('var_hp')} */}
-              {/* /> */}
-            </InputWrapper>
+            <NumericInput
+              min={0}
+              max={Number.POSITIVE_INFINITY}
+              value={config.var_hp}
+              onChange={numberChangeHandler('var_hp')}
+            ></NumericInput>
             {/* <InputWrapper> */}
             {/*   / */}
             {/*   <input */}
@@ -353,23 +407,23 @@ export const CastConfigEditor = () => {
             <span>Money</span>
           </SubSectionTitle>
           <SubSectionContent>
-            <CheckboxInputWrapper>
-              <YesNoToggle
-                checked={config.infiniteMoney}
-                onChange={handleConfigToggle('infiniteMoney')}
-              >
-                <span>∞:</span>
-              </YesNoToggle>
-            </CheckboxInputWrapper>
-            <InputWrapper>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="^[1-9][0-9]*$"
-                value={config.var_money}
-                onChange={numberChangeHandler('var_money')}
-              />
-            </InputWrapper>
+            <NumericInput
+              min={0}
+              max={Number.POSITIVE_INFINITY}
+              // type="text"
+              // inputMode="numeric"
+              // pattern="^[1-9][0-9]*$"
+              value={config.var_money}
+              onChange={numberChangeHandler('var_money')}
+            ></NumericInput>
+            {/* <CheckboxInputWrapper> */}
+            {/*   <YesNoToggle */}
+            {/*     checked={config.infiniteMoney} */}
+            {/*     onChange={handleConfigToggle('infiniteMoney')} */}
+            {/*   > */}
+            {/*     <span>∞:</span> */}
+            {/*   </YesNoToggle> */}
+            {/* </CheckboxInputWrapper> */}
           </SubSectionContent>
         </SubSectionDiv>
         <SubSectionDiv data-section="random">
@@ -406,16 +460,6 @@ export const CastConfigEditor = () => {
             <span>Requirements</span>
           </SubSectionTitle>
           <SubSectionContent wrapq={true}>
-            {/* <YesNoToggleWithoutArrow */}
-            {/*   checked={half} */}
-            {/*   onChange={requirementsChangeHandler('requirements.half')} */}
-            {/* > */}
-            {/*   <InputImageLabel */}
-            {/*     leftMargin={'6px'} */}
-            {/*     size={32} */}
-            {/*     imgUrl={'data/ui_gfx/gun_actions/if_half.png'} */}
-            {/*   /> */}
-            {/* </YesNoToggleWithoutArrow> */}
             <RequiremementEveryOther
               checked={half}
               onChange={requirementsChangeHandler('requirements.half')}
@@ -447,22 +491,18 @@ export const CastConfigEditor = () => {
             <span>Limits</span>
           </SubSectionTitle>
           <SubSectionContent>
-            <CheckboxInputWrapper>
-              <YesNoToggle
-                checked={config.unlimitedSpells}
-                onChange={handleConfigToggle('unlimitedSpells')}
-              >
-                <span>Unlimited Spells Perk</span>
-              </YesNoToggle>
-            </CheckboxInputWrapper>
-            <CheckboxInputWrapper>
-              <YesNoToggle
-                checked={config.infiniteSpells}
-                onChange={handleConfigToggle('infiniteSpells')}
-              >
-                <span>∞ Spells (Ignore usage limits)</span>
-              </YesNoToggle>
-            </CheckboxInputWrapper>
+            <WrappedYesNoToggle
+              checked={config.unlimitedSpells}
+              onChange={handleConfigToggle('unlimitedSpells')}
+            >
+              <span>Unlimited Spells Perk</span>
+            </WrappedYesNoToggle>
+            <WrappedYesNoToggle
+              checked={config.infiniteSpells}
+              onChange={handleConfigToggle('infiniteSpells')}
+            >
+              <span>∞ Spells (Ignore usage limits)</span>
+            </WrappedYesNoToggle>
           </SubSectionContent>
         </SubSectionDiv>
         <SubSectionDiv data-section="ending">
@@ -470,44 +510,32 @@ export const CastConfigEditor = () => {
             <span>End Simulation after:</span>
           </SubSectionTitle>
           <SubSectionContent>
-            <CheckboxInputWrapper>
-              <YesNoToggle
-                checked={config.endSimulationOnShotCount > 0}
-                onChange={handleConfigNumericToggle('endSimulationOnShotCount')}
-              >
-                <span>A single shot</span>
-              </YesNoToggle>
-            </CheckboxInputWrapper>
-            <CheckboxInputWrapper>
-              <YesNoToggle
-                checked={config.endSimulationOnReloadCount > 0}
-                onChange={handleConfigNumericToggle(
-                  'endSimulationOnReloadCount',
-                )}
-              >
-                <span>Reload</span>
-              </YesNoToggle>
-            </CheckboxInputWrapper>
-            <CheckboxInputWrapper>
-              <YesNoToggle
-                checked={config.endSimulationOnRefreshCount > 0}
-                onChange={handleConfigNumericToggle(
-                  'endSimulationOnRefreshCount',
-                )}
-              >
-                <span>Wand Refresh</span>
-              </YesNoToggle>
-            </CheckboxInputWrapper>
-            <CheckboxInputWrapper>
-              <YesNoToggle
-                checked={config.endSimulationOnRepeatCount > 0}
-                onChange={handleConfigNumericToggle(
-                  'endSimulationOnRepeatCount',
-                )}
-              >
-                <span>Repeat</span>
-              </YesNoToggle>
-            </CheckboxInputWrapper>
+            <WrappedYesNoToggle
+              checked={config.endSimulationOnShotCount > 0}
+              onChange={handleConfigNumericToggle('endSimulationOnShotCount')}
+            >
+              <span>A single shot</span>
+            </WrappedYesNoToggle>
+            <WrappedYesNoToggle
+              checked={config.endSimulationOnReloadCount > 0}
+              onChange={handleConfigNumericToggle('endSimulationOnReloadCount')}
+            >
+              <span>Reload</span>
+            </WrappedYesNoToggle>
+            <WrappedYesNoToggle
+              checked={config.endSimulationOnRefreshCount > 0}
+              onChange={handleConfigNumericToggle(
+                'endSimulationOnRefreshCount',
+              )}
+            >
+              <span>Wand Refresh</span>
+            </WrappedYesNoToggle>
+            <WrappedYesNoToggle
+              checked={config.endSimulationOnRepeatCount > 0}
+              onChange={handleConfigNumericToggle('endSimulationOnRepeatCount')}
+            >
+              <span>Repeat</span>
+            </WrappedYesNoToggle>
           </SubSectionContent>
         </SubSectionDiv>
         {/* <SubSectionDiv> */}
