@@ -18,6 +18,7 @@ const YesNoToggleWithoutArrow = styled(YesNoToggle)`
 
 const RequirementInputImageLabel = styled(InputImageLabel)`
   margin: 0;
+  min-width: 32px;
 `;
 export const _RequirementToggle = ({
   className = '',
@@ -38,25 +39,23 @@ export const _RequirementToggle = ({
 }) => {
   return (
     <RequirementToggleWrapper className={className}>
+      <RequirementInputImageLabel size={size} imgUrl={sprite} />
       <YesNoToggleWithoutArrow
         checked={checked}
         onChange={onChange}
         customYes={customYes}
         customNo={customNo}
-      >
-        <RequirementInputImageLabel size={size} imgUrl={sprite} />
-      </YesNoToggleWithoutArrow>
+      ></YesNoToggleWithoutArrow>
+      <RequirementInputImageLabel
+        size={size}
+        imgUrl={'data/ui_gfx/gun_actions/if_else.png'}
+      />
       <YesNoToggleWithoutArrow
         checked={!checked}
         onChange={onChange}
         customYes={customYes}
         customNo={customNo}
-      >
-        <RequirementInputImageLabel
-          size={size}
-          imgUrl={'data/ui_gfx/gun_actions/if_else.png'}
-        />
-      </YesNoToggleWithoutArrow>
+      ></YesNoToggleWithoutArrow>
 
       <RequirementInputImageLabel
         size={size}
@@ -67,12 +66,13 @@ export const _RequirementToggle = ({
 };
 
 export const RequirementToggle = styled(_RequirementToggle)`
+  flex: 1 0 24%;
   display: flex;
-  flex: 1 1 22%;
+  flex-wrap: nowrap;
   justify-content: center;
+  width: fit-content;
   margin: 0;
 
   & > :last-child {
-    flex: 0 0;
   }
 `;

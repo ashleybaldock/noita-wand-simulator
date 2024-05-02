@@ -60,6 +60,12 @@ const SubSectionDiv = styled.div<{
 const RequirementsSubSection = styled(SubSectionDiv).attrs(() => ({
   'data-section': 'requirements',
 }))`
+  flex-direction: row;
+  align-content: unset;
+  align-items: unset;
+  align-self: unset;
+  justify-content: unset;
+
   & > :first-child {
     align-self: start;
   }
@@ -89,7 +95,8 @@ const SubSectionTitle = styled.div<{
   color: #eee;
   padding: 2px 6px 2px 4px;
   font-size: 14px;
-  ${({ minWidth }) => `min-width: ${minWidth ?? '10em'};`}
+
+  ${({ minWidth }) => `min-width: ${minWidth ?? '8em'};`}
 
   object-fit: contain;
   background-size: contain;
@@ -102,7 +109,6 @@ const SubSectionTitle = styled.div<{
     object-fit: contain;
     background-size: contain;
     background-repeat: no-repeat;
-    white-space: nowrap;
     justify-content: unset;
   }
   &:nth-child(1)::after {
@@ -159,6 +165,8 @@ const SubSectionContent = styled.div<{
   justify-content: space-between;
 
   @media screen and (min-width: 600px) {
+    padding: 0.2em;
+
     :is([data-section='ending'], [data-section='limits']) & {
       flex-wrap: wrap;
       flex: 1 1 auto;
@@ -245,7 +253,6 @@ const WrappedYesNoToggle = styled(YesNoToggle)`
   flex: 0 1;
   padding: 0.6em 0.2em;
   flex: 1 1 100%;
-  align-self: stretch;
 
   & :first-child {
     flex: 1 0;
@@ -254,6 +261,7 @@ const WrappedYesNoToggle = styled(YesNoToggle)`
     flex: 0 0;
   }
   @media screen and (max-width: 600px) {
+    align-self: stretch;
     padding: 0.6em 1.8em;
 
     & :first-child {
@@ -270,7 +278,6 @@ const WrappedYesNoToggle = styled(YesNoToggle)`
 const RandomInputWrapper = styled(InputWrapper)`
   flex: 1 1 46%;
   justify-content: space-evenly;
-  width: 100%;
 
   input[type='text'] {
     min-width: 4em;
@@ -371,7 +378,7 @@ export const CastConfigEditor = () => {
       <MainDiv>
         <SubSectionDiv data-section="health">
           <SubSectionTitle>
-            <InputImageLabel size={18} imgUrl={'data/config/heart2.png'} />
+            <InputImageLabel size={22} imgUrl={'data/config/heart2.png'} />
             <span>Health</span>
           </SubSectionTitle>
           <SubSectionContent>
@@ -403,7 +410,7 @@ export const CastConfigEditor = () => {
         </SubSectionDiv>
         <SubSectionDiv data-section="money">
           <SubSectionTitle>
-            <InputImageLabel size={16} imgUrl={'data/config/goldnugget2.png'} />
+            <InputImageLabel size={20} imgUrl={'data/config/goldnugget2.png'} />
             <span>Money</span>
           </SubSectionTitle>
           <SubSectionContent>
@@ -427,8 +434,8 @@ export const CastConfigEditor = () => {
           </SubSectionContent>
         </SubSectionDiv>
         <SubSectionDiv data-section="random">
-          <SubSectionTitle minWidth={'auto'}>
-            <InputImageLabel size={16} imgUrl={'data/config/die2.png'} />
+          <SubSectionTitle>
+            <InputImageLabel size={22} imgUrl={'data/config/die2.png'} />
             <span>Random</span>
           </SubSectionTitle>
           <SubSectionContent wrapq={true} maxWidth={'calc(100% - 2.2em)'}>
@@ -456,7 +463,7 @@ export const CastConfigEditor = () => {
         </SubSectionDiv>
         <RequirementsSubSection>
           <SubSectionTitle>
-            <InputImageLabel size={18} imgUrl={'data/config/req.png'} />
+            <InputImageLabel size={22} imgUrl={'data/config/req.png'} />
             <span>Requirements</span>
           </SubSectionTitle>
           <SubSectionContent wrapq={true}>
