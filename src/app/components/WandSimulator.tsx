@@ -36,6 +36,24 @@ const SpellHotbar = styled.div`
   background-color: black;
 `;
 
+const Alpha = styled.div`
+  font-size: 1.3em;
+  padding: 1em;
+  line-height: 1.8em;
+  position: sticky;
+  top: 0;
+  border: 3px dashed red;
+  color: red;
+  background-color: black;
+  z-index: 99999999;
+  text-align: center;
+
+  @media screen and (max-width: 600px) {
+    padding: 0.8em;
+    font-size: 0.9em;
+  }
+`;
+
 export const WandSimulator = () => {
   const dispatch = useAppDispatch();
 
@@ -51,6 +69,14 @@ export const WandSimulator = () => {
     <DebugHints>
       <DndProvider options={HTML5toTouch}>
         <Column>
+          <Alpha>
+            This is a pre-release development preview - expect bugs.
+            <br />
+            Release version:{' '}
+            <a href="https://tinker-with-wands-online.vercel.app">
+              tinker-with-wands-online.vercel.app
+            </a>
+          </Alpha>
           <MainHeader></MainHeader>
           <Column>
             <WandBuilder />
