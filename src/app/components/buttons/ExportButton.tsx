@@ -1,32 +1,30 @@
-import { useAppDispatch } from '../../redux/hooks';
-import { useEffect } from 'react';
-import { Button } from '../generic';
+import { Button, Modal } from '../generic';
+import { ExportAs } from '../Export';
+import { useState } from 'react';
 
-type Props = {};
+export const ExportButton = () => {
+  const [modalVisible, setModalVisible] = useState(false);
 
-export function ExportButton(props: Props) {
-  const dispatch = useAppDispatch();
+  const handleClose = () => {
+    setModalVisible(false);
+  };
 
-  useEffect(() => {
-    const listener = (e: KeyboardEvent) => {
-      if (
-        (e.ctrlKey || e.metaKey) &&
-        !e.shiftKey &&
-        e.key.toLowerCase() === 'e'
-      ) {
-        console.log('todo:exportAction');
-      }
-    };
-    window.addEventListener('keydown', listener);
-    return () => window.removeEventListener('keydown', listener);
-  }, [dispatch]);
+  const openExportDialog = () => {
+    console.log('todo:exportAction');
+    setModalVisible(!modalVisible);
+  };
 
   return (
-    <Button
-      imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
-      onClick={() => console.log('todo:exportAction')}
-    >
-      Export
-    </Button>
+    <>
+      <Button
+        imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
+        onClick={() => openExportDialog()}
+      >
+        Export
+      </Button>
+      <Modal visible={modalVisible} onClose={handleClose} title="Export as...">
+        <ExportAs />
+      </Modal>
+    </>
   );
-}
+};

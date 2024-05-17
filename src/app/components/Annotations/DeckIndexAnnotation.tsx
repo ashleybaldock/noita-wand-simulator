@@ -1,11 +1,12 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { useConfig } from '../../redux';
 
 const IndexDiv = styled.div`
   pointer-events: none;
   position: absolute;
-  bottom: -6px;
-  right: -6px;
+  bottom: -2px;
+  right: 2px;
+  z-index: var(--zindex-note-deckidx);
   color: rgb(255, 255, 255);
   font-size: 14px;
   font-family: var(--font-family-noita-default);
@@ -20,21 +21,20 @@ const IndexDiv = styled.div`
     var(--shadow-bg) -1px -1px 1px;
 `;
 
-type Props = {
+export const DeckIndexAnnotation = ({
+  deckIndex,
+}: {
   deckIndex?: number | string;
-};
+}) => {
+  const { showDeckIndexes } = useConfig();
 
-export function DeckIndexAnnotation(props: Props) {
-  const { deckIndex } = props;
-  const { config } = useConfig();
-
-  if (deckIndex === undefined || !config.showDeckIndexes) {
+  if (deckIndex === undefined || !showDeckIndexes) {
     return null;
   }
 
   if (typeof deckIndex === 'number') {
-    return <IndexDiv>{deckIndex + 1}</IndexDiv>;
+    return <IndexDiv data-name="DeckIndexAnnotation">{deckIndex + 1}</IndexDiv>;
   } else {
-    return <IndexDiv>{deckIndex}</IndexDiv>;
+    return <IndexDiv data-name="DeckIndexAnnotation">{deckIndex}</IndexDiv>;
   }
-}
+};

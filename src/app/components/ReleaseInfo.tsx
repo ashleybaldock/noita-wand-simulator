@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { useReleaseInfo } from '../util/useVersion';
 
 const Row = styled.div<{
@@ -16,12 +16,11 @@ const Row = styled.div<{
   padding: 0.2em 0.2em 0.4em 0.4em;
   z-index: var(--zindex-devinfo, 999999);
   background-color: var(--color-base-background);
-  border-radius: 0;
-   start;
+  border-radius: 1em;
   font-size: 10px;
-  bottom: 3px;
-  right: 3px;
-  padding: 0;
+  bottom: 1px;
+  right: 12px;
+  padding: 0.4em 0.7em 0.3em 0.7em;
 
   &:hover {
     opacity: 1;

@@ -1,11 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from './store';
-import { Preset, PresetGroup } from '../types';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import type { Preset, PresetGroup } from './Wand/preset';
 import { defaultPresets } from './Wand/presets';
 
 // Define a type for the slice state
 interface PresetsState {
-  presets: (Preset | PresetGroup)[];
+  presets: PresetGroup[];
 }
 
 // Define the initial state using that type
@@ -17,14 +17,12 @@ export const presetsSlice = createSlice({
   name: 'presets',
   initialState,
   reducers: {
-    setPresets: (state, action: PayloadAction<Preset[]>) => {
+    setPresets: (state, action: PayloadAction<PresetGroup[]>) => {
       state.presets = action.payload;
     },
   },
 });
 
 export const { setPresets } = presetsSlice.actions;
-
-export const selectPresets = (state: RootState): PresetsState => state.presets;
 
 export const presetsReducer = presetsSlice.reducer;

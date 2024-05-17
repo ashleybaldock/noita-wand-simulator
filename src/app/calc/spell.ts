@@ -1,8 +1,21 @@
-import { ActionId } from './actionId';
-import { Action } from './action';
-import { SpellType } from './spellTypes';
+import type { ActionId } from './actionId';
+import type { Action } from './action';
+import type { SpellType } from './spellTypes';
+import type { UnlockCondition } from './unlocks';
 
-export type Spell = {
+export type SpellDeckInfo = {
+  id: ActionId;
+  deck_index?: number;
+  /* Always Cast */
+  permanently_attached?: boolean;
+};
+
+export type SpellExtraInfo = {
+  id: ActionId;
+  beta?: boolean;
+};
+
+export type SpellProperties = {
   id: ActionId;
   name: string;
   description: string;
@@ -17,36 +30,28 @@ export type Spell = {
   max_uses?: number;
   uses_remaining?: number;
   never_unlimited?: boolean;
-  // Info
-  beta?: boolean;
-  spawn_requires_flag?: string;
-  spawn_manual_unlock?: boolean;
-  spawn_level?: string;
-  spawn_probability?: string;
-  sound_loop_tag?: string;
-  price: number;
-  ai_never_uses?: boolean;
-  is_dangerous_blast?: boolean;
-  sprite_unidentified?: string;
-  // deck properties
   recursive?: boolean;
   iterative?: boolean;
-  deck_index?: number;
-  custom_uses_logic?: never;
-  is_identified?: boolean;
-  inventoryitem_id?: number;
-  permanently_attached?: boolean;
+  // Info
+  spawn_requires_flag?: UnlockCondition;
+  spawn_level?: string;
+  spawn_probability?: string;
+  price: number;
+  ai_never_uses?: boolean;
 };
 
-export const validActionCallSources = [
-  'projectile',
-  'static',
-  'material',
-  'other',
-  'utility',
-] as const;
+export type SpellUnusedProperties = {
+  id: ActionId;
+  /* unused? */ spawn_manual_unlock?: boolean;
+  /* unused? */ is_dangerous_blast?: boolean;
+  /* unused? */ sprite_unidentified?: string;
+  /* unused */ custom_uses_logic?: never;
+  /* unused */ is_identified?: boolean;
+  sound_loop_tag?: string;
+  inventoryitem_id?: number;
+};
 
-export type ValidActionCallSource = Extract<
-  typeof validActionCallSources[number],
-  SpellType
->;
+export type Spell = SpellDeckInfo &
+  SpellExtraInfo &
+  SpellProperties &
+  SpellUnusedProperties;

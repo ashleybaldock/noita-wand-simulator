@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
-import { SpellType } from '../../calc/spellTypes';
-import { SpellTypeBorder } from '../Spells/SpellTypeBorder';
-import { WandAction } from '../wandAction/WandAction';
+import { useHotkeys } from 'react-hotkeys-hook';
+import styled from 'styled-components';
+import type { SpellType } from '../../calc/spellTypes';
+import { WandAction } from '../Spells/WandAction';
+import { HotkeyHint } from '../Tooltips/HotkeyHint';
 
 const MainDiv = styled.div`
   font-size: 14px;
@@ -11,7 +12,6 @@ const MainDiv = styled.div`
 
 const TabTitlesDiv = styled.div`
   display: flex;
-  flex-direction: row-reverse;
   flex-wrap: wrap-reverse;
   justify-content: start;
   margin-right: 0.7em;
@@ -21,13 +21,12 @@ const TabTitlesDiv = styled.div`
 `;
 
 /* TODO
- * Use spell icons instead of tab text below 720w
- * Switch to two rows for wand spells + wand stats below 900w
  * * Side-by-side for spell selector on wide screen
  */
 const TitleDiv = styled.div<{
   selected: boolean;
 }>`
+  position: relative;
   font-size: 14px;
 
   display: flex;
@@ -47,11 +46,8 @@ const TitleDiv = styled.div<{
   border-width: 0.16em;
   border-bottom-width: 0;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 800px) {
     height: 3em;
-  }
-
-  @media screen and (max-width: 720px) {
   }
 
   ${({ selected }) =>
@@ -67,7 +63,7 @@ const TitleDiv = styled.div<{
     cursor: default;
     z-index: var(--zindex-tabs-selected);
 
-    flex: 10 1;
+    flex: 1 1;
 
     &:hover {
     }
@@ -118,6 +114,8 @@ const ContentDiv = styled.div`
   padding: 0.26em;
   top: -0.16em;
   position: relative;
+  max-height: 50vh;
+  overflow-y: scroll;
 `;
 
 const HiddenContentDiv = styled.div`
@@ -144,13 +142,11 @@ export type Tab = {
   content: React.ReactElement;
 };
 
-type Props = {
+export function Tabs({
+  tabs,
+}: React.PropsWithChildren<{
   tabs: Tab[];
-};
-
-export function Tabs(props: React.PropsWithChildren<Props>) {
-  const { tabs } = props;
-
+}>) {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const displayIndex = Math.min(tabs.length - 1, selectedTabIndex);
@@ -160,6 +156,13 @@ export function Tabs(props: React.PropsWithChildren<Props>) {
       setSelectedTabIndex(displayIndex);
     }
   }, [displayIndex, selectedTabIndex]);
+
+  useHotkeys('2,3,4,5,6,7,8', (_, kEv) => {
+    const tabIdx = Number.parseInt(kEv.keys?.join('') ?? '', 10) - 1;
+    if (!Number.isNaN(tabIdx) && tabIdx > 0 && tabIdx <= tabs.length) {
+      setSelectedTabIndex(tabIdx - 1);
+    }
+  });
 
   if (tabs.length === 0) {
     return null;
@@ -176,8 +179,14 @@ export function Tabs(props: React.PropsWithChildren<Props>) {
           >
             <HiddenContentDiv>{tabs[index].content}</HiddenContentDiv>
             {titleParts.map(({ text, type, bgSrc, egSrc }) => (
-              <TabsWandAction spellType={type} spellSprite={egSrc} />
+              <TabsWandAction
+                key={type}
+                spellType={type}
+                spellSprite={egSrc}
+                keyHint={`Shortcut: ${index}`}
+              />
             ))}
+            <HotkeyHint hotkeys={`${index + 2}`} position={'ne-corner'} />
           </TitleDiv>
         ))}
       </TabTitlesDiv>

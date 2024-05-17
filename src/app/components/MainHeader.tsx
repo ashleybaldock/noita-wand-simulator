@@ -1,7 +1,5 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { useState } from 'react';
-
-type Props = {};
 
 const logoVariants = [
   '/logo/logo-blue.png',
@@ -28,6 +26,19 @@ const HeaderDiv = styled.div<{
   height: 60px;
   image-rendering: pixelated;
   margin: 14px 16px;
+  @media screen and (max-width: 500px) {
+    margin: 6px 6px;
+    background-position: center;
+  }
+`;
+
+const HeaderLink = styled.a`
+  text-decoration: none;
+  width: max(30vw, 300px);
+  height: 60px;
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const SpacerDiv = styled.div`
@@ -41,13 +52,14 @@ const ExtraDiv = styled.div`
   margin-right: 15px;
 `;
 
-export function MainHeader({ children }: React.PropsWithChildren<Props>) {
+export function MainHeader({ children }: React.PropsWithChildren) {
   const [logoVariant, setLogoVariant] = useState(
     logoVariants[getRandomInteger(logoVariants.length)],
   );
 
   return (
     <HeaderDiv imgUrl={logoVariant}>
+      <HeaderLink href="/"></HeaderLink>
       <SpacerDiv />
       <ExtraDiv>{children}</ExtraDiv>
     </HeaderDiv>

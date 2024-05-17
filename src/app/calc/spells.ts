@@ -1,12 +1,13 @@
-import { mapIter } from '../../app/util';
+import { flatMapIter } from '../../app/util/iterTools';
 // It would be ideal to be able to switch between the beta and release versions of actions at runtime, but that seems like excessive complexity given the current changes mostly add entirely new spells
-// import * as main from './__generated__/main/spells';
-import * as beta from './__generated__/beta/spells';
+import * as main from './__generated__/main/spells';
+// import * as beta from './__generated__/beta/spells';
 
-import { ActionId } from './actionId';
-import { Spell } from './spell';
+import type { ActionId } from './actionId';
+import type { Spell } from './spell';
+import { isNotNullOrUndefined } from '../util';
 
-export const spells = beta.spells as ReadonlyArray<Spell>;
+export const spells = main.spells as ReadonlyArray<Spell>;
 
 export type ActionIdToSpellMap = Record<ActionId, Readonly<Spell>>;
 export const spellByIdMap = Object.fromEntries(
@@ -22,28 +23,16 @@ export function getSpellById(id: Readonly<ActionId>) {
 
 export const unlockFlags = [
   ...new Set<string>(
-    mapIter<Spell, string>(spells.values(), ({ spawn_requires_flag }) =>
-      spawn_requires_flag !== undefined
-        ? {
-            val: spawn_requires_flag ?? '',
-            ok: true,
-          }
-        : { ok: false },
+    flatMapIter<Spell, string>(spells.values(), ({ spawn_requires_flag }) =>
+      isNotNullOrUndefined(spawn_requires_flag) ? [spawn_requires_flag] : [],
     ),
   ),
 ] as const;
 
 export const recursiveActionIds = [
   ...new Set<string>(
-    mapIter<Spell, string>(spells.values(), ({ recursive, id }) =>
-      recursive === true
-        ? {
-            val: id,
-            ok: true,
-          }
-        : {
-            ok: false,
-          },
+    flatMapIter<Spell, string>(spells.values(), ({ recursive, id }) =>
+      recursive === true ? [id] : [],
     ),
   ),
 ] as const;

@@ -1,29 +1,20 @@
 import { useAppDispatch } from '../../redux/hooks';
-import { useEffect } from 'react';
 import { ActionCreators } from 'redux-undo';
 import { Button } from '../generic';
 
-type Props = {};
-
-export function RedoButton(props: Props) {
+export const RedoButton = () => {
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const listener = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'z') {
-        dispatch(ActionCreators.redo());
-      }
-    };
-    window.addEventListener('keydown', listener);
-    return () => window.removeEventListener('keydown', listener);
-  }, [dispatch]);
+  const redo = () => dispatch(ActionCreators.redo());
 
   return (
     <Button
-      imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
-      onClick={() => dispatch(ActionCreators.redo())}
+      hotkeys={'r, ctrl+r, shift+mod+z'}
+      imgUrl={'data/redo.png'}
+      imgOnly={'600px'}
+      onClick={() => redo()}
     >
       Redo
     </Button>
   );
-}
+};

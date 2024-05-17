@@ -1,38 +1,41 @@
 ## Branches
 
-- `master` is deployed to https://noita-wand-simulator.salinecitrine.com/
-- `develop` is deployed to https://beta.noita-wand-simulator.salinecitrine.com/
+- `master` is deployed to: https://tinker-with-wands-online.vercel.app/
+- `develop` is deployed to: (tbd - for now, master is develop in this fork)
+
+## Tech
+
+Uses: pnpm (formerly yarn), rollup (formerly CRA/webpack), vite (formerly CRA), React, redux
+Host: Vercel
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `yarn start`
+### `pnpm start`
 
-Runs the app in the development mode.\
+Runs the app in development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `yarn test`
+### `pnpm test`
 
+Note: Test suite is currently not up to date.
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+### `pnpm build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ## Automatic code generation
 
-These scripts convert the files the game uses into forms easily consumed by TypeScript. Uses the following files:
+These scripts convert the Lua files the game uses (for spells, and wand mechanics) into TypeScript. You need to supply the following from an installed copy of the game:
 
 From the main game files:
 
@@ -40,7 +43,7 @@ From the main game files:
 data_base/translations/common.csv
 ```
 
-From the modding data export:
+From the modding data export (see [these instructions](https://noita.wiki.gg/wiki/Modding#Extracting_data_files)):
 
 ```
 data/scripts/gun/gun_actions.lua
@@ -60,31 +63,34 @@ diff --suppress-common-lines -trb gun_actions.ts gun_actions.beta.ts
 diff --suppress-common-lines -trb -I 'spawn_' gun_actions.ts gun_actions.beta.ts
 ```
 
-With those files in place, you can run this command to generate the necessary files:
+With those files in place, you can run this command to generate the Typescript files:
 
 ```
-yarn generate
+pnpm generate
 ```
 
-Or, individually:
+That runs the following commands, which can also be run individually:
 
 ```
-yarn generate-actions
+pnpm generate-actions
 ```
 
-Generate Typescript spell functions from the source Lua code. This requires that you have 'data/scripts/gun/gun_actions.lua' present.
-Runs `scripts/generate_gun_actions.py`.
+(Spell definitions) - uses: 'data/scripts/gun/gun_actions.lua'; runs: `scripts/generate_gun_actions.py`
 
 ```
-yarn generate-entity-map
+pnpm generate-entity-map
 ```
 
-Generate a Typescript map from projectile definitions to spells that use them, based on the source Lua code. This requires that you have 'data/scripts/gun/gun_actions.lua' present.
-Runs `scripts/generate_entity_map.py`.
+(Spell definitions) - uses: 'data/scripts/gun/gun_actions.lua'; runs: `scripts/generate_entity_map.py`
 
 ```
-yarn generate-translations
+pnpm generate-translations
 ```
 
-Generate display strings from IDs based on the game's translation file. This requires that you have './data_base/translations/common.csv' present.
-Runs `scripts/generate_translations.py`.
+(JSON translation for in-game strings) - uses: 'data_base/translations/common.csv'; runs: `scripts/generate_translations.py`
+
+```
+pnpm fetch-wiki
+```
+
+(JSON file containing exported data from the Noita wiki - used for spell tooltips etc.)

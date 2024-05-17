@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const BackgroundDiv = styled.div`
   z-index: var(--zindex-modal-window);

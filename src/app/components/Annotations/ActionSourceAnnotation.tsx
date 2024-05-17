@@ -1,6 +1,5 @@
-import styled from 'styled-components/macro';
-import { ActionSource } from '../../calc/actionSources';
-import { ActionCall } from '../../calc/eval/types';
+import styled from 'styled-components';
+import type { ActionSource } from '../../calc/actionSources';
 import { useConfig } from '../../redux';
 import { BaseAnnotation } from './BaseAnnotation';
 
@@ -13,8 +12,10 @@ const SourceDiv = styled(BaseAnnotation)<{
   transform: translateY(-50%);
   right: unset;
   border: 1px solid #999;
-  color: ${({ colors }) => colors[0]};
-  background-color: ${({ colors }) => colors[1]};
+  ${({ colors: [fgcolor, bgcolor] }) => `
+    color: ${fgcolor};
+    background-color: ${bgcolor};
+  `}
   font-size: 12px;
   text-align: center;
   font-family: var(--font-family-noita-default);
@@ -27,21 +28,23 @@ const sourceDisplayMap: Record<ActionSource, [string, [string, string]]> = {
   multiple: ['*', ['#ddd', '#747']],
 };
 
-type Props = {
+export const ActionSourceAnnotation = ({
+  source,
+}: {
   source?: ActionSource;
-} & Partial<ActionCall>;
+}) => {
+  const { showSources } = useConfig();
 
-export function ActionSourceAnnotation(props: Props) {
-  const { source } = props;
-  const { config } = useConfig();
-
-  if (source === undefined || !config.showSources) {
+  if (source === undefined || !showSources) {
     return null;
   }
 
   return (
-    <SourceDiv colors={sourceDisplayMap[source][1]}>
+    <SourceDiv
+      colors={sourceDisplayMap[source][1]}
+      data-name="ActionSourceAnnotation"
+    >
       {sourceDisplayMap[source][0]}
     </SourceDiv>
   );
-}
+};

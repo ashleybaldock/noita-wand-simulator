@@ -1,52 +1,46 @@
+import type { ThunkAction } from '@reduxjs/toolkit';
+import type { AnyAction } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import undoable from 'redux-undo';
-import { wandReducer, selectWandState } from './wandSlice';
+import { wandReducer } from './wandSlice';
 import { presetsReducer } from './presetsSlice';
-import { configReducer, selectConfig } from './configSlice';
-import { saveState } from '../localStorage';
-import { generateSearchFromWandState } from './Wand/toSearch';
+import { configReducer } from './configSlice';
+import { editorReducer } from './editorSlice';
+import { uiReducer } from './uiSlice';
+import { listenerMiddleware, startAppListening } from './listenerMiddleware';
+import type { WandState } from './Wand/wandState';
+import { resultReducer, newResult } from './resultSlice';
+import { startUpdateListener } from './updateResultListener';
 
 export const store = configureStore({
   reducer: {
-    wand: undoable(wandReducer),
+    wand: undoable<WandState, AnyAction>(wandReducer, { limit: 200 }),
     presets: presetsReducer,
     config: configReducer,
+    editor: editorReducer,
+    ui: uiReducer,
+    result: resultReducer,
   },
-});
 
-observeStore(selectConfig, (state) => {
-  saveState(state);
+  middleware: (getDefaultMiddleware) => {
+    startUpdateListener(startAppListening);
+    return getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [newResult.type],
+      },
+      // immutableCheck: {
+      //   ignoredPaths: ['result.last.shots'],
+      // },
+    }).prepend(listenerMiddleware.middleware);
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export function observeStore<T>(
-  select: (rootState: RootState) => T,
-  onChange: (newState: T) => void,
-) {
-  let currentState: T;
-
-  function handleChange() {
-    const nextState = select(store.getState());
-    if (nextState !== currentState) {
-      currentState = nextState;
-      onChange(currentState);
-    }
-  }
-
-  const unsubscribe = store.subscribe(handleChange);
-  handleChange();
-  return unsubscribe;
-}
-
-observeStore(selectWandState, (state) => {
-  const newSearch = generateSearchFromWandState(state);
-  const currentSearch = window.location.search;
-
-  if (currentSearch !== newSearch) {
-    const url = new URL(window.location.href);
-    url.search = newSearch;
-    window.history.pushState({}, '', url.toString());
-  }
-});
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  AnyAction
+>;

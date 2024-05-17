@@ -1,4 +1,6 @@
-import { WandState, isKnownSpell, v2WandStateMapping } from '../../types';
+import { WandState } from './wandState';
+import { isKnownSpell } from './spellId';
+import { v2WandStateMapping } from './wand';
 import {
   trimArray,
   objectEntries,
@@ -21,8 +23,7 @@ export function generateWandStateFromSearch(search: string): WandState {
   const wand = { ...defaultWand };
 
   objectEntries(wand).forEach(([v1param, defaultValue]) => {
-    const raw =
-      params.get(v2WandStateMapping[v1param].name) ?? params.get(v1param);
+    const raw = params.get(v2WandStateMapping[v1param]) ?? params.get(v1param);
     if (isNotNullOrUndefined(raw)) {
       if (isString(defaultValue)) {
         Object.assign(wand, {
@@ -45,17 +46,29 @@ export function generateWandStateFromSearch(search: string): WandState {
   return {
     messages: log,
     wand,
-    spellIds: trimArray(
-      (params.get('s') ?? params.get('spells') ?? '')
-        .split(',')
-        .map((s) => (isKnownSpell(s) ? s : null)),
-      (s) => !s,
-    ),
-    alwaysIds: trimArray(
-      (params.get('w') ?? '')
-        .split(',')
-        .map((s) => (isKnownSpell(s) ? s : null)),
-      (s) => !s,
-    ),
+    spellIds: (() => {
+      const raw = params.get('s') ?? params.get('spells');
+      if (isNotNullOrUndefined(raw)) {
+        return trimArray(
+          decodeParamAsString(raw, '', log.push)
+            .split(',')
+            .map((s) => (isKnownSpell(s) ? s : null)),
+          (s) => !s,
+        );
+      }
+      return [];
+    })(),
+    alwaysIds: (() => {
+      const raw = params.get('w') ?? params.get('always');
+      if (isNotNullOrUndefined(raw)) {
+        return trimArray(
+          decodeParamAsString(raw, '', log.push)
+            .split(',')
+            .map((s) => (isKnownSpell(s) ? s : null)),
+          (s) => !s,
+        );
+      }
+      return [];
+    })(),
   } as WandState;
 }

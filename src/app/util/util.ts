@@ -1,9 +1,35 @@
-import { Preset, PresetGroup } from '../types';
+import { FPS } from './constants';
+import { mapIter, sequentialIter } from './iterTools';
 
-export const isString = (x: unknown): x is string => typeof '' === typeof x;
-export const isNumber = (x: unknown): x is number => typeof 42 === typeof x;
-export const isBoolean = (x: unknown): x is boolean =>
-  typeof false === typeof x;
+export const noop = () => {};
+
+export const echo = <T>(a: T) => a;
+
+export const isNotNull = <T>(x: T | null): x is T => x !== null;
+
+export const isNotNullOrUndefined = <T>(x: T | null | undefined): x is T =>
+  x !== null && x !== undefined;
+
+export const isUndefined = (x: unknown): x is undefined => x === undefined;
+
+export const isNull = (x: unknown): x is null => null === x;
+
+export const isSymbol = (x: unknown): x is symbol => 'symbol' === typeof x;
+
+export const isString = (x: unknown): x is string => 'string' === typeof x;
+
+export const isNumber = (x: unknown): x is number => 'number' === typeof x;
+
+export const isBigint = (x: unknown): x is bigint => 'bigint' === typeof x;
+
+export const isBoolean = (x: unknown): x is boolean => 'boolean' === typeof x;
+
+export const isObject = (x: unknown): x is object => 'object' === typeof x;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const assertNever = (_?: never): never => {
+  throw new Error('This should never happen.');
+};
 
 export const parseBooleanFromString = (
   str: string,
@@ -13,46 +39,36 @@ export const parseBooleanFromString = (
 ) => truthy.test(str) || !falsey.test(str) || defaultTo;
 
 export function union<T, U>(setA: Set<T>, setB: Set<U>) {
-  let _union = new Set<T | U>(setA);
-  for (let elem of setB) {
+  const _union = new Set<T | U>(setA);
+  for (const elem of setB) {
     _union.add(elem);
   }
   return _union;
 }
 
-export function range(n: number) {
-  return [...Array(n).keys()];
-}
+export const range = (n: number) => [...Array(n).keys()];
 
-type DiffResult<T extends object> = Partial<
-  { [key in keyof T]: { a: T[key]; b: T[key] } }
->;
+// type DiffResult<T extends object> = Partial<{
+//   [key in keyof T]: { a: T[key]; b: T[key] };
+// }>;
+// export function diff<T extends object>(a: T, b: T) {
+//   const result: T = {};
+//   const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
+//   keys.forEach((k) => {
+//     const aa: T = a;
+//     const ba: T = b;
+//     if (aa[k] !== ba[k]) {
+//       result[k] = { a: aa[k], b: ba[k] };
+//     }
+//   });
+//   return result as DiffResult<T>;
+// }
 
-export function diff<T extends object>(a: T, b: T) {
-  const result: any = {};
-  const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
-  keys.forEach((k) => {
-    const aa: any = a;
-    const ba: any = b;
-    if (aa[k] !== ba[k]) {
-      result[k] = { a: aa[k], b: ba[k] };
-    }
-  });
-  return result as DiffResult<T>;
-}
+export type ValueOf<T> = T[keyof T];
 
-export function isSinglePreset(p: Preset | PresetGroup): p is Preset {
-  return p.hasOwnProperty('spells');
-}
-
-export function isPresetGroup(p: Preset | PresetGroup): p is PresetGroup {
-  return p.hasOwnProperty('presets');
-}
-
-export const isNotNull = <T>(x: T | null): x is T => x !== null;
-
-export const isNotNullOrUndefined = <T>(x: T | null | undefined): x is T =>
-  x !== null && x !== undefined;
+export type KeyOfType<Obj extends object, KeyType> = {
+  [k in keyof Obj]: Obj[k] extends KeyType ? k : never;
+}[keyof Obj];
 
 export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
   Object.keys(obj) as (keyof T)[];
@@ -71,6 +87,22 @@ export const groupBy = <T, K extends string>(arr: T[], keyFn: (x: T) => K) =>
     acc[k].push(cur);
     return acc;
   }, {} as Record<K, T[]>);
+
+/**
+ * Like Object.fromEntries using only keys
+ * @param keys string[] of key names to add
+ * @param defaultTo default value to set for each property
+ */
+export const objectFromKeys = <const T extends ReadonlyArray<string>, const F>(
+  keys: T,
+  defaultTo: F,
+): { [K in T[number]]: F } => {
+  return Object.fromEntries(keys.map((k) => [k, defaultTo])) as {
+    [K in T[number]]: F;
+  };
+};
+
+export type ChangeFields<T, R> = Omit<T, keyof R> & R;
 
 /**
  * Typed inverse of a Record
@@ -94,9 +126,7 @@ export const invertRecord = <
  * e.g. Map<K,V> => Map<V,K>
  */
 export const invertMap = <K, V>(obj: Map<K, V>): Map<V, K> =>
-  new Map<V, K>(
-    mapIter(obj.entries(), ([key, value]) => ({ ok: true, val: [value, key] })),
-  );
+  new Map<V, K>(mapIter(obj.entries(), ([key, value]) => [value, key]));
 
 export function constToDisplayString(c: string) {
   return c.replace(/_/g, ' ').replace(/\w\S*/g, function (txt) {
@@ -106,15 +136,60 @@ export function constToDisplayString(c: string) {
 
 export const omit = <T extends object, K extends keyof T>(obj: T, keys: K[]) =>
   Object.fromEntries(
-    Object.entries(obj).filter(([k, v]) => !keys.includes(k as K)),
+    Object.entries(obj).filter(([k]) => !keys.includes(k as K)),
   ) as Partial<T>;
 
 export const trimArray = <T>(arr: T[], predicate: (o: T) => boolean): T[] => {
-  let result = [...arr];
+  const result = [...arr];
   while (result.length > 0 && predicate(result[result.length - 1])) {
     result.pop();
   }
   return result;
+};
+
+/*
+ * Counts duplicate entries
+ * Returns [[key, count], ...[keyN, countN]]
+ */
+export const tally = <T>(arr: T[]): [T, number][] => [
+  ...arr
+    .reduce(
+      (map, cur) => map.set(cur, (map.get(cur) ?? 0) + 1),
+      new Map<T, number>(),
+    )
+    .entries(),
+];
+
+const compareIdentity = (a: unknown, b: unknown) => a === b;
+/**
+ * Compare two sequences
+ */
+export const sequencesMatch = (
+  a: unknown[],
+  b: unknown[],
+  comparator: (a: unknown, b: unknown) => boolean = compareIdentity,
+): boolean => a.length === b.length && a.every((l, i) => comparator(l, b[i]));
+
+/**
+ * Checks if sequences have the same items in the same order
+ * Ignores empty spaces/length etc.
+ */
+export const sequencesMatchIgnoringHoles = (
+  a: unknown[],
+  b: unknown[],
+): boolean =>
+  sequencesMatch(
+    a.filter((x) => isNotNullOrUndefined(x)),
+    b.filter((x) => isNotNullOrUndefined(x)),
+  );
+
+export const fixedLengthCopy = <T>(
+  arr: readonly T[],
+  size: number = arr.length,
+): T[] => {
+  return size > arr.length
+    ? [...arr, ...Array(size - arr.length).fill(null)]
+    : arr.slice(0, size);
 };
 
 export type TypedProperties<T, U> = Pick<
@@ -124,42 +199,73 @@ export type TypedProperties<T, U> = Pick<
   }[keyof T]
 >;
 
-export const numSign = (v: any, round?: number) => {
-  if (round !== undefined) {
-    v = Math.round(Number(v) * Math.pow(10, round)) / Math.pow(10, round);
+export const round = (n: number, to: number) =>
+  Math.round(n * Math.pow(10, to)) / Math.pow(10, to);
+
+export const sign = (n: number) => (n < 0 ? '' : '+') + n;
+
+export const toFrames = (durationInSeconds: number, fps: number = FPS) =>
+  round(durationInSeconds * fps, 2);
+
+export const toSeconds = (durationInFrames: number, fps: number = FPS) =>
+  round(durationInFrames / fps, 2);
+
+/**
+ * min: lifetime - variation, max: lifetime + variation
+ * range: abs(max - min) + 1
+ * range: variation * 2 + 1
+ * chance = 1/range
+ *
+ * 60-7= 53, 60+7 = 67, 67-53+1= 15, 1/15 =  0.0667
+ * 50-10= 40, 50+10= 60, 60-40+1= 21, 1/21= 0.0476
+ * 10-40= -30, 10+40= 50, 50--30+1= 81, 1/81= 0.0012
+ */
+export const wispChance = (variation: number, lifetime: number = -1) => {
+  if (lifetime - variation > -1 || lifetime + variation < -1) {
+    return 0;
   }
-  return (v < 0 ? '' : '+') + v;
+  return 1 / (variation * 2 + 1);
 };
 
-export const round = (v: any, position: number) =>
-  Math.round(Number(v) * Math.pow(10, position)) / Math.pow(10, position);
+export const copyToClipboard = async (text: string) =>
+  'clipboard' in navigator
+    ? await navigator.clipboard.writeText(text)
+    : document.execCommand('copy', true, text);
 
-export const sign = (v: number) => (v < 0 ? '' : '+') + v;
+// export function forceDisableCanvasSmoothing() {
+//   // https://stackoverflow.com/a/22018649
+//   // save old getContext
+//   const oldGetContext = HTMLCanvasElement.prototype.getContext;
 
-export function forceDisableCanvasSmoothing() {
-  // https://stackoverflow.com/a/22018649
-  // save old getContext
-  const oldGetContext = HTMLCanvasElement.prototype.getContext;
+//   // get a context, set it to smoothed if it was a 2d context, and return it.
+//   function getSmoothContext(this: any, contextType: any) {
+//     let resCtx = oldGetContext.apply(this, arguments as any);
+//     if (contextType === '2d' && isNotNullOrUndefined(resCtx)) {
+//       setToFalse(resCtx, 'imageSmoothingEnabled');
+//       setToFalse(resCtx, 'mozImageSmoothingEnabled');
+//       setToFalse(resCtx, 'oImageSmoothingEnabled');
+//       setToFalse(resCtx, 'webkitImageSmoothingEnabled');
+//     }
+//     return resCtx;
+//   }
 
-  // get a context, set it to smoothed if it was a 2d context, and return it.
-  function getSmoothContext(this: any, contextType: any) {
-    let resCtx = oldGetContext.apply(this, arguments as any);
-    if (contextType === '2d') {
-      setToFalse(resCtx, 'imageSmoothingEnabled');
-      setToFalse(resCtx, 'mozImageSmoothingEnabled');
-      setToFalse(resCtx, 'oImageSmoothingEnabled');
-      setToFalse(resCtx, 'webkitImageSmoothingEnabled');
-    }
-    return resCtx;
+//   function setToFalse(obj: RenderingContext, prop: keyof RenderingContext) {
+//     if (isNotNullOrUndefined(obj[prop]) obj[prop] = false;
+//   }
+
+//   // inject new smoothed getContext
+//   HTMLCanvasElement.prototype.getContext = getSmoothContext as any;
+// }
+
+export const toUrl = (path: string) => {
+  if (path.startsWith('data:image')) {
+    return `url("${path}")`;
   }
-
-  function setToFalse(obj: any, prop: any) {
-    if (obj[prop] !== undefined) obj[prop] = false;
+  if (path.startsWith('/')) {
+    return `url('${path}')`;
   }
-
-  // inject new smoothed getContext
-  HTMLCanvasElement.prototype.getContext = getSmoothContext as any;
-}
+  return `url('/${path}')`;
+};
 
 // https://stackoverflow.com/a/7616484
 export function hashString(s: string) {
@@ -175,23 +281,39 @@ export function hashString(s: string) {
   return hash;
 }
 
-type Maybe<T> =
-  | {
-      ok: true;
-      val: T;
-    }
-  | {
-      ok: false;
-    };
+/**
+ * Rounds a number
+ */
+// type RoundOptions = {
+//   step?: number;
+//   min?: number;
+//   max?: number;
+//   method?: 'ceil' | 'floor' | 'round';
+// };
+// export const roundToStep = (
+//   n: number,
+//   {
+//     step = 1,
+//     min = Number.NEGATIVE_INFINITY,
+//     max = Number.POSITIVE_INFINITY,
+//     method = 'round',
+//   }: RoundOptions,
+// ) => {
+//   return Math.ceil((n - offset) / increment) * increment + offset;
+// };
 
-export function* mapIter<TI, TO>(
-  iterable: IterableIterator<TI>,
-  callback: (input: TI) => Maybe<TO>,
-): IterableIterator<TO> {
-  for (let x of iterable) {
-    const result = callback(x);
-    if (result.ok) {
-      yield result.val;
-    }
+export const sequentialId = <T extends number>() => {
+  const isValidT = (n: number): n is T => n > 0;
+  const startFrom = 1;
+  if (isValidT(startFrom)) {
+    const idGenerator = sequentialIter<T>(startFrom, isValidT);
+    return () => {
+      const { done, value } = idGenerator.next();
+      if (!done) {
+        return value;
+      }
+      throw new Error('Exhausted ID iterator');
+    };
   }
-}
+  throw new Error('Failed to init ID iterator');
+};

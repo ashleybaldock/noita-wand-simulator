@@ -1,0 +1,150 @@
+
+  /*{
+     title: 'GFX',
+     fields: [
+       { field: 'light', displayName: 'Light', render: ({: v}) => `${v}` },
+       { field: 'sprite', displayName: 'Sprite', render: ({: v}) => `${v}` },
+       {
+         field: 'blood_count_multiplier',
+         displayName: 'Blood Count Multiplier',
+         render: ({: v}) => `${v}`,
+       },
+       {
+         field: 'gore_particles',
+         displayName: 'Gore Particles',
+         render: ({: v}) => `${v}`,
+       },
+       {
+         field: 'ragdoll_fx',
+         displayName: 'Ragdoll FX',
+         render: ({: v}) => `${v}`,
+       },
+   {field: 'sound_loop_tag', displayName: 'Sound Loop Tag', render: ({: v}) => `${v}`},
+     ],
+  */ },
+
+
+
+
+
+  /*{
+    title: 'Files',
+    fields: [
+       {
+         field: 'action_sprite_filename',
+         displayName: 'Sprite file',
+         render: ({: v}) => `${v}`,
+       },
+       {
+         field: 'action_unidentified_sprite_filename',
+         displayName: 'Sprite file (No ID)',
+         render: ({: v}) => `${v}`,
+       },
+      {
+        field: 'custom_xml_file',
+        displayName: 'Custom XML Files',
+render: ({: v}) =>
+          isString(v) ? (
+            <>
+              {tally(v.split(',').filter((v) => v.length > 0)).map(
+                ([name, count]) => (
+                  <FilePath type={'xml'} key={name}>
+                    {count}
+                  </FilePath>
+                ),
+              )}
+            </>
+          ) : (
+            `${v}`
+          ),
+      },
+       {
+       field: 'projectile_file',
+       displayName: 'Projectile File',
+       render: ({: v}) => `${v}`,
+       },
+      {
+        field: 'extra_entities',
+        displayName: 'Extra Entities',
+render: ({: v}) =>
+          isString(v) ? (
+            <>
+              {tally(v.split(',').filter((v) => v.length > 0)).map(
+                ([name, count]) => (
+                  <FilePath type={'xml'} key={name}>
+                    {name}
+                  </FilePath>
+                ),
+              )}
+            </>
+          ) : (
+            `${v}`
+          ),
+      },
+      {
+        field: 'game_effect_entities',
+        displayName: 'Game Effect Entities',
+render: ({: v}) =>
+          isString(v) ? (
+            <>
+              {tally(v.split(',').filter((v) => v.length > 0)).map(
+                ([name, count]) => (
+                  <FilePath type={'xml'} key={name}>
+                    {name.split('/')}
+                  </FilePath>
+                ),
+              )}
+            </>
+          ) : (
+            `${v}`
+          ),
+      },
+    ],
+    },*/
+/* Unused/obsolete */
+/* This is never set by any spell and defaults to zero
+   * {
+        field: 'explosion_damage_to_materials',
+        displayName: 'Damages Materials',
+        render: ({ explosion_damage_to_materials: v }) => `${v}`,
+        },
+
+      {
+        field: 'damage_explosion',
+        displayName: 'Damage',
+        render: ({ damage_explosion: v }) =>
+          `${signZero(round(Number(v) * 25, 0))}`,
+      },
+      {
+        field: 'dampening',
+        displayName: 'Dampening',
+        render: ({ dampening: v }) => `${v}`,
+      },
+      {
+        icon: `background-image: url('/data/wand/icon_speed_multiplier.png');`,
+        field: 'child_speed_multiplier',
+        displayName: 'Child Mult.',
+        render: ({ child_speed_multiplier: v }) =>
+          Number(v) !== 1 ? `${SIGN_MULTIPLY} ${v}` : `--`,
+      },
+      {
+        field: 'action_is_dangerous_blast',
+        displayName: 'Dangerous Blast',
+render: ({: v}) => `${v}`,
+      },
+   */
+// {
+//   title: 'State Flags',
+//   fields: [
+//     {
+//       field: 'state_shuffled',
+//       displayName: 'Deck Shuffled',
+//       render: ({: v}) => `${formatYesNo(Boolean(v))}`,
+//     },
+//     {
+//       field: 'state_cards_drawn',
+//       displayName: 'Cards Drawn',
+//       render: ({: v}) => `${Number(v)}`,
+//     },
+//   ],
+// },

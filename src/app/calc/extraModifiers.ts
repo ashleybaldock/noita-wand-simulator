@@ -6,7 +6,7 @@ import {
   setCurrentReloadTime,
   shot_effects,
 } from './gun';
-import { GunActionState } from './actionState';
+import type { GunActionState } from './actionState';
 
 export const extraModifiers = {
   critical_hit_boost: (c: GunActionState) => {
@@ -119,7 +119,7 @@ export const extraModifiers = {
     c.gravity = c.gravity - 600.0;
   },
   duplicate_projectile: (c: GunActionState) => {
-    let data = hand[hand.length - 1];
+    const data = hand[hand.length - 1];
 
     // SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() - 523 )
 

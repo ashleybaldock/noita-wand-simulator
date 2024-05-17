@@ -1,16 +1,19 @@
-import { useEffect } from 'react';
-import styled from 'styled-components/macro';
-import { WandBuilder } from './WandBuilder';
-import { ShotResultList } from './shotResult/ShotResultList';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { selectConfig } from '../redux/configSlice';
+import styled from 'styled-components';
+import { SpellSelector, WandBuilder } from './WandEditor';
+import { VisualisationList } from './Visualisation';
+import { useAppDispatch } from '../redux/hooks';
+import { toggleConfigSetting } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
-import { SectionHeader } from './SectionHeader';
-import { SpellSelector } from './SpellSelector';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { forceDisableCanvasSmoothing } from '../util/util';
+import { DebugHints } from './Debug';
+import { DndProvider } from 'react-dnd-multi-backend';
+import { HTML5toTouch } from 'rdndmb-html5-to-touch';
+// import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
+import { ReleaseInfo } from './ReleaseInfo';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { Tooltips } from './Tooltips';
+import { Modals } from './Modals/Modals';
+import { SpellDragPreview } from './DragPreview';
 
 const Column = styled.div`
   display: flex;
@@ -33,36 +36,41 @@ const SpellHotbar = styled.div`
   background-color: black;
 `;
 
-export function WandSimulator() {
-  const { config } = useAppSelector(selectConfig);
-  useAppDispatch();
+export const WandSimulator = () => {
+  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    forceDisableCanvasSmoothing();
-  }, []);
+  // useEffect(() => {
+  //   forceDisableCanvasSmoothing();
+  // }, []);
+
+  useHotkeys('=', () => {
+    dispatch(toggleConfigSetting({ name: 'debug.dragHint' }));
+  });
 
   return (
-    <Column>
-      <MainHeader></MainHeader>
-      <Column>
-        <DndProvider backend={HTML5Backend}>
-          <WandBuilder />
-          <SpellShortcuts>
-            <SpellHotbar></SpellHotbar>
-          </SpellShortcuts>
-          <SpellSelector />
-        </DndProvider>
-      </Column>
-      <Column>
-        <CastConfigEditor />
-      </Column>
-      <Column>
-        <SectionHeader
-          title={`Simulation${config.pauseCalculations ? ' (Paused)' : ''}`}
-        />
-        {!config.pauseCalculations && <ShotResultList {...config} />}
-        <div>Status: Running</div>
-      </Column>
-    </Column>
+    <DebugHints>
+      <DndProvider options={HTML5toTouch}>
+        <Column>
+          <MainHeader></MainHeader>
+          <Column>
+            <WandBuilder />
+            <SpellShortcuts>
+              <SpellHotbar></SpellHotbar>
+            </SpellShortcuts>
+            <SpellSelector />
+          </Column>
+          <Column>
+            <CastConfigEditor />
+          </Column>
+          <Column>
+            <VisualisationList />
+          </Column>
+          <Modals />
+          <Tooltips />
+          <ReleaseInfo />
+        </Column>
+        <SpellDragPreview />
+      </DndProvider>
+    </DebugHints>
   );
-}
+};

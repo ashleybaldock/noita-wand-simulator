@@ -4,9 +4,14 @@ from dataclasses import dataclass
 from re import Match
 
 srcFile = 'data/scripts/gun/gun_actions.lua'
-srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
+# srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
 
-spellsBefore = """import {
+spellsBefore = """/* Auto-generated file */
+
+import { GunActionState } from '../../actionState';
+import { Spell } from '../../spell';
+import { ipairs, luaFor } from "../../lua/loops";
+import {
   hand,
   deck,
   discarded,
@@ -32,6 +37,7 @@ spellsBefore = """import {
   order_deck,
   reflecting,
   call_action,
+  find_the_wand_held,
 } from "../../gun";
 import {
   EntityGetWithTag,
@@ -53,13 +59,19 @@ import {
   GlobalsSetValue,
   Random,
   SetRandomSeed,
-  GameGetFrameNum
-} from "../../eval/wandObserver";
-import { Spell } from '../../spell';
-import { GunActionState } from '../../actionState';
-import { ipairs, luaFor } from "../../lua/loops";
+  GameGetFrameNum,
+  StartReload,
+  OnNotEnoughManaForAction,
+  HasFlagPersistent,
+
+} from "../../eval/dispatch";
 
 """
+
+spellsAfter = """
+
+export const spells = actions;"""
+
 
 config = {
   'main': {
@@ -73,25 +85,38 @@ config = {
       'src': 'data/scripts/gun/gun_actions.lua',
       'dst': 'src/app/calc/__generated__/main/spells.ts',
       'before': spellsBefore,
-      'after': 'export const spells = actions;',
+      'after': spellsAfter,
     },
-  },
-  'beta': {
-      'actionIds':
+    'unlocks':
     {
-      'src': 'data/scripts/gun/gun_actions.beta.lua',
-      'dst': 'src/app/calc/__generated__/beta/actionIds.ts'
-    },
-    'spells':
-    {
-      'src': 'data/scripts/gun/gun_actions.beta.lua',
-      'dst': 'src/app/calc/__generated__/beta/spells.ts',
-      'before': spellsBefore,
-      'after': 'export const spells = actions;',
-    },
+      'src': 'data/scripts/gun/gun_actions.lua',
+      'dst': 'src/app/calc/__generated__/main/unlocks.ts',
+      'before': '',
+      'after': '',
+    }
   },
+  # 'beta': {
+  #   'actionIds':
+  #   {
+  #     'src': 'data/scripts/gun/gun_actions.beta.lua',
+  #     'dst': 'src/app/calc/__generated__/beta/actionIds.ts'
+  #   },
+  #   'spells':
+  #   {
+  #     'src': 'data/scripts/gun/gun_actions.beta.lua',
+  #     'dst': 'src/app/calc/__generated__/beta/spells.ts',
+  #     'before': spellsBefore,
+  #     'after': 'export const spells = actions;',
+  #   },
+  #   'unlocks':
+  #   {
+  #     'src': 'data/scripts/gun/gun_actions.beta.lua',
+  #     'dst': 'src/app/calc/__generated__/beta/unlocks.ts',
+  #     'before': '',
+  #     'after': '',
+  #   }
+  # }
 }
-
 
 
 # Convert action functions,
@@ -112,7 +137,7 @@ def actionReplaceFn(m: Match):
     a = actionArgTypes[arg]
     argsString += f', {arg}: {a[0]} = {a[1]}'
 
-  return f'action: ({argsString}) => {{{m.group(2)}{m.group(3)}}},{m.group(4)}'
+  return f'action: function({argsString}) {{{m.group(2)}{m.group(3)}}},{m.group(4)}'
 
 @dataclass
 class PatternReplace:
@@ -122,18 +147,24 @@ class PatternReplace:
   repeat: bool = False
   expectedSubCount: int = 0
 
-# These are run in sequence, and the ordering matters as each operates on the output of the last
+preprocessorPatterns = [
+  # remove comments
+  PatternReplace(r'--\[\[.*?]]--', '', flags=re.MULTILINE | re.DOTALL),
+  PatternReplace(r'--.*?$', '', flags=re.MULTILINE),
+  # remove dofile
+  PatternReplace(r'dofile_once.*?$', '', flags=re.MULTILINE),
+]
+
+# These are run in sequence
+# Ordering matters as each operates on the output of the last
+# (Run preprocessorPatterns first)
 patterns = [
   # fix syntax for top level actions array
   PatternReplace(
     r'actions =\s*{(.*)}',
-    r'const actions: Spell[] = [\1]',
+    r'const actions: Spell[] = [\1];',
     flags=re.DOTALL,
   ),
-
-  # remove comment
-  PatternReplace(r'--\[\[.*?]]--', '', flags=re.MULTILINE | re.DOTALL),
-  PatternReplace(r'--.*?$', '', flags=re.MULTILINE),
 
   # relatedPattern
   PatternReplace(r'related_(\w+)\s*=\s*{(.*?)},', r'related_\1=[\2],', flags=re.MULTILINE),
@@ -211,6 +242,9 @@ patterns = [
   PatternReplace(r'(?<!let )((?:end|else)point = i)', r'\1 + 1', flags=re.MULTILINE),
   PatternReplace(r'i <= hand_count', r'i < hand_count', flags=re.MULTILINE),
 
+  # Hack for plicates to avoid data.mana being undefined
+  PatternReplace(r'data\.mana', r'(data.mana ?? 0)', flags=re.MULTILINE),
+
   # ActionType type to avoid crusty enum
   PatternReplace(r'data\.type\s*(!==|===)\s*0', r'data.type \1 ACTION_TYPE_PROJECTILE', flags=re.MULTILINE),
   PatternReplace(r'data\.type\s*(!==|===)\s*1', r'data.type \1 ACTION_TYPE_STATIC_PROJECTILE', flags=re.MULTILINE),
@@ -228,26 +262,79 @@ patterns = [
   PatternReplace(r'ACTION_TYPE_OTHER', r'"other"', flags=re.MULTILINE),
   PatternReplace(r'ACTION_TYPE_UTILITY', r'"utility"', flags=re.MULTILINE),
   PatternReplace(r'ACTION_TYPE_PASSIVE', r'"passive"', flags=re.MULTILINE),
-]
+
+  PatternReplace(r'(GameGetFrameNum)\(', r'\1(', flags=re.MULTILINE),
+  PatternReplace(r'(OnNotEnoughManaForAction)\(', r'\1(', flags=re.MULTILINE),
+
+  PatternReplace(r'(' + '|'.join([
+      "ActionUsesRemainingChanged",
+      "ComponentGetValue2",
+      "ComponentSetValue2",
+      "EntityGetAllChildren",
+      "EntityGetComponent",
+      "EntityGetFirstComponent",
+      "EntityGetFirstComponentIncludingDisabled",
+      "EntityGetInRadiusWithTag",
+      "EntityGetName",
+      "EntityGetTransform",
+      "EntityGetWithTag",
+      "EntityHasTag",
+      "EntityInflictDamage",
+      "EntityLoad",
+      "GetUpdatedEntityID",
+      "GlobalsGetValue",
+      "GlobalsSetValue",
+      "Random",
+      "SetRandomSeed",
+      "StartReload",
+      "HasFlagPersistent",
+      ]) + r')\(', r'\1(this.id, ', flags=re.MULTILINE),
+
+      PatternReplace(r'\t', r'  ', flags=re.MULTILINE),
+  ]
 
 
+# Remove comments etc.
+def preProcess(content):
+  for pattern in preprocessorPatterns:
+    content, subCount = re.subn(pattern.pattern, pattern.replace, content, flags=pattern.flags)
+
+  return content
+
+def processUnlocks(src, dst, before = '', after = ''):
+  with open(src) as inFile:
+    content = inFile.read()
+
+  content = preProcess(content)
+
+  pattern = r'\t+\s*spawn_requires_flag\s*=\s*\"(\w+)\"'
+  matches = sorted(list(dict.fromkeys(re.findall(pattern, content, re.DOTALL))))
+  joined = ",\n  ".join(f'\'{m}\'' for m in matches)
+  content = f'/* Auto-generated file */\n\nexport const unlockConditions = [\n  {joined},\n] as const;\n\nexport type UnlockConditionTuple = typeof unlockConditions;\n\nexport type UnlockCondition = UnlockConditionTuple[number];\n\n'
+
+
+  with open(dst, 'w') as outFile:
+    outFile.write(before + content + after)
 
 def processActionIds(src, dst, before = '', after = ''):
   with open(src) as inFile:
     content = inFile.read()
 
-  action_id_pattern = r'\t+{\s*id\s*=\s*\"(\w+)\"'
-  action_ids = list(dict.fromkeys(re.findall(action_id_pattern, content, re.DOTALL)))
-  joined = ",\n".join(f'"{i}"' for i in action_ids)
-  content = f'export const actionIds = [\n{joined}\n] as const;\n\nexport type ActionId = typeof actionIds[number];\n\n'
+  content = preProcess(content)
+
+  pattern = r'\t+{\s*id\s*=\s*\"(\w+)\"'
+  matches = sorted(list(dict.fromkeys(re.findall(pattern, content, re.DOTALL))))
+  joined = ",\n  ".join(f'\'{m}\'' for m in matches)
+  content = f'/* Auto-generated file */\n\nexport const actionIds = [\n  {joined},\n] as const;\n\nexport type ActionId = typeof actionIds[number];\n\n'
 
   with open(dst, 'w') as outFile:
     outFile.write(before + content + after)
 
-
 def processSpells(src, dst, before = '', after = ''):
   with open(src) as inFile:
     content = inFile.read()
+
+  content = preProcess(content)
 
   variances = []
 
@@ -275,10 +362,11 @@ def processSpells(src, dst, before = '', after = ''):
 
 
 os.makedirs(os.path.dirname('src/app/calc/__generated__/main/'), exist_ok=True)
-os.makedirs(os.path.dirname('src/app/calc/__generated__/beta/'), exist_ok=True)
+# os.makedirs(os.path.dirname('src/app/calc/__generated__/beta/'), exist_ok=True)
 
 process = {
   'actionIds': processActionIds,
+  'unlocks': processUnlocks,
   'spells': processSpells,
 }
 

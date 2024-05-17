@@ -1,0 +1,308 @@
+
+// const wandEvents = {
+//   SetProjectileConfigs: {},
+//   OnNotEnoughManaForAction: {},
+//   RegisterGunShotEffects: {
+//     recoil_knockback: number,
+//   },
+//   BeginProjectile: {
+//     entityFilename: string,
+//   },
+//   EndProjectile: {},
+//   BeginTriggerHitWorld: {
+//     entity_filename: string,
+//     action_draw_count: number,
+//   },
+//   BeginTriggerTimer: {
+//     entity_filename: string,
+//     action_draw_count: number,
+//     delay_frames: number,
+//   },
+//   BeginTriggerDeath: {
+//     entity_filename: string,
+//     action_draw_count: number,
+//   },
+//   EndTrigger: {},
+//   BaabInstruction: {
+//     name: string,
+//   },
+//   ActionUsesRemainingChanged: {
+//     item_id: unknown,
+//     uses_remaining: number,
+//     _returns: boolean,
+//   },
+//   ActionUsed: {
+//     itemId: InventoryItemID,
+//   },
+//   StartReload: {
+//     reload_time: number,
+//   },
+//   RegisterGunAction: {
+//     s: GunActionState,
+//   },
+//   EntityGetWithTag: {
+//     tag: string,
+//     _returns: Entity[],
+//   },
+//   GetUpdatedEntityID: {
+//     _returns: string,
+//   },
+//   EntityGetComponent: {
+//     entity_id: EntityID,
+//     component: string,
+//     _returns: ComponentID[],
+//   },
+//   EntityGetFirstComponent: {
+//     entity_id: EntityID,
+//     component: string,
+//     _returns: ComponentID,
+//   },
+//   EntityGetFirstComponentIncludingDisabled: {
+//     entity_id: EntityID,
+//     component: string,
+//     _returns: ComponentID,
+//   },
+//   ComponentGetValue2: {
+//     component_id: string,
+//     key: string,
+//     _returns: number,
+//   },
+//   ComponentSetValue2: {
+//     component: unknown,
+//     key: string,
+//     value: unknown,
+//   },
+//   EntityInflictDamage: {
+//     entityId: EntityID,
+//     selfDamage: number,
+//     damageType: string,
+//     actionString: string,
+//     arg1: string,
+//     arg2: number,
+//     arg3: number,
+//     entityId2: unknown,
+//   },
+//   EntityGetTransform: {
+//     entity: unknown,
+//     _returns: [number, number],
+//   },
+//   EntityLoad: {
+//     entityXml: string,
+//     x: number,
+//     y: number,
+//     _returns: EntityID,
+//   },
+//   EntityGetAllChildren: {
+//     entityId: EntityID,
+//     _returns: Entity[],
+//   },
+//   EntityGetName: {
+//     childId: unknown,
+//     _returns: string,
+//   },
+//   EntityHasTag: {
+//     entityId: unknown,
+//     tag: string,
+//     _returns: boolean,
+//   },
+//   EntityGetInRadiusWithTag: {
+//     x: number,
+//     y: number,
+//     radius: number,
+//     tag: string,
+//     _returns: number,
+//   },
+//   GlobalsGetValue: {
+//     key: string,
+//     defaultValue: string,
+//     _returns: string,
+//   },
+//   GlobalsSetValue: {
+//     key: string,
+//     value: string,
+//   },
+//   OnActionPlayed: {
+//     action_id: ActionId,
+//   },
+//   OnDraw: {
+//     state_cards_drawn: number,
+//   },
+//   OnMoveDiscardedToDeck: {
+//     discarded: readonly SpellDeckInfo[],
+//   },
+//   OnActionCalled: {
+//     source: string,
+//     spell: Readonly<Spell>,
+//     c: GunActionState,
+//     recursion?: number,
+//     iteration?: number;
+//   },
+//   OnActionFinished: {
+//     source: string,
+//     spell: Readonly<Spell>,
+//     c: GunActionState,
+//     recursion?: number,
+//     iteration?: number,
+//     returnValue?: number,
+//   },
+//   Random: {
+//     min: number,
+//     max: number,
+//     _returns: number,
+//   },
+//   SetRandomSeed: {
+//     a: number,
+//     b: number,
+//     _returns: number,
+//   },
+//   GameGetFrameNum: {
+//     _returns: number,
+//   },
+// } as const;
+
+// type WandEventTuples = {
+//   BeginProjectile: ['entityFilename', string];
+//   EndProjectile: never;
+//   BeginTriggerHitWorld:
+//     | ['entity_filename', string]
+//     | ['action_draw_count', number];
+//   BeginTriggerTimer:
+//     | ['entity_filename', string]
+//     | ['action_draw_count', number]
+//     | ['delay_frames', number];
+//   BeginTriggerDeath:
+//     | ['entity_filename', string]
+//     | ['action_draw_count', number];
+//   EndTrigger: never;
+//   BaabInstruction: ['name', string];
+//   ActionUsesRemainingChanged: ['item_id', unknown] | ['uses_remaining', number];
+//   ActionUsed: ['itemId', string];
+//   StartReload: ['reload_time', number];
+//   RegisterGunAction: ['s', GunActionState];
+//   EntityGetWithTag: ['tag', string];
+//   GetUpdatedEntityID: ['TODO', boolean];
+//   EntityGetComponent: ['entity_id', EntityID] | ['component', string];
+//   EntityGetFirstComponent: ['entity_id', EntityID] | ['component', string];
+//   EntityGetFirstComponentIncludingDisabled:
+//     | ['entity_id', EntityID]
+//     | ['component', string];
+//   ComponentGetValue2: ['component_id', string] | ['key', string];
+//   ComponentSetValue2: ['component', unknown] | ['key', string] | ['value', unknown];
+//   EntityInflictDamage:
+//     | ['entityId', EntityID]
+//     | ['selfDamage', number]
+//     | ['damageType', string]
+//     | ['actionString', string]
+//     | ['arg1', string]
+//     | ['arg2', number]
+//     | ['arg3', number]
+//     | ['entityId2', unknown];
+//   EntityGetTransform: ['entity', unknown];
+//   EntityLoad: ['entityXml', string] | ['x', number] | ['y', number];
+//   EntityGetAllChildren: ['entityId', EntityID];
+//   EntityGetName: ['childId', unknown];
+//   EntityHasTag: ['entityId', unknown] | ['tag', string];
+//   EntityGetInRadiusWithTag:
+//     | ['x', number]
+//     | ['y', number]
+//     | ['radius', number]
+//     | ['tag', string];
+//   GlobalsGetValue: ['key', string] | ['defaultValue', string];
+//   GlobalsSetValue: ['key', string] | ['value', string];
+//   OnActionPlayed: ['action_id', unknown];
+//   OnDraw: ['state_cards_drawn', number];
+//   OnMoveDiscardedToDeck: ['discarded', readonly Spell[]];
+//   OnActionCalled:
+//     | ['source', string]
+//     | ['spell', Readonly<Spell>]
+//     | ['c', GunActionState]
+//     | ['recursion?', number]
+//     | ['iteration?', number];
+//   OnActionFinished:
+//     | ['source', string]
+//     | ['spell', Readonly<Spell>]
+//     | ['c', GunActionState]
+//     | ['recursion?', number]
+//     | ['iteration?', number]
+//     | ['returnValue?', number];
+//   Random: ['min', number] | ['max', number];
+//   SetRandomSeed: ['a', number] | ['b', number];
+//   GameGetFrameNum: never;
+// };
+// type READY = {
+//   A: boolean;
+// };
+
+// type CONNECTING = {
+//   B: boolean;
+// };
+
+// type DispatcherPayloads = {
+//   READY: READY;
+//   CONNECTING: CONNECTING;
+// };
+
+/*
+/*
+type EmitterEventsListeners = {
+  dispatch: <DispatcherEvent extends DispatcherEvents>(
+    event: DispatcherEvent,
+    payload: DispatcherPayloads[DispatcherEvent]
+  ) => void;
+};
+ */
+// type TestArgs = Parameters<typeof TestF>;
+// type TestRet = ReturnType<typeof TestF2>;
+
+// type Tuples = ['foo', string, 'bar', boolean, 'baz', null];
+// type TupleToObject<T extends [string, unknown] | never> = T extends never
+//   ? never
+//   : {
+//       [key in T[0]]: Extract<T, [key, unknown]>[1];
+//     };
+
+// type W4 = TupleToObject<WandEventTuples['OnActionFinished']>;
+// type W5 = TupleToObject<Tuples>;
+// type WandEventObjects = {
+//   [W in keyof WandEventTuples]: TupleToObject<WandEventTuples[W]>;
+// };
+
+// type WWW = WandEventObjects['OnActionFinished'];
+
+// type ValueArr<T, KeysTuple extends readonly (keyof T)[]> = { [Index in keyof KeysTuple]: T[KeysTuple[Index]] }
+
+// const valuesOk: ValueArr<WandEvents['Random'], WandEvents['Random']> = [1, 'foo']; // No type errors
+
+// type WR = {
+//   [K in keyof WandEvents]: [[V in keyof WandEvents[K]]: boolean]
+// }
+
+// type Tuples2 = ['foo', string, 'bar', boolean, 'baz', null];
+// type EV<W extends WandEventName> = {
+//   [K in keyof WandEvents[W]]: () => WandEvents[W][K];
+// }
+
+// export const Events: = {};
+
+// type WW<W extends WandEventName> = {
+//   [K in keyof WandEvents[W]]: WandEvents[W][K];
+// };
+
+// listener logic
+
+// type WandEventPayload1<W extends WandEventName> = {
+//   [K in keyof WandEvent[W] as Exclude<K, '_returns'>]: WandEvent[W][K];
+// };
+
+// function onEvent<W extends WandEvent & OverridableWandEvent>(
+//   eventName: W,
+// ): WandEventReturnType<W>;
+// function onEvent<W extends WandEventWithPayload & OverridableWandEvent>(
+//   eventName: W,
+//   payload: WandEventPayload[W],
+// ): WandEventReturnType<W>;
+// function onEvent<W extends WandEvent>(eventName: W): void;
+// function onEvent<W extends WandEventWithPayload>(
+//   eventName: W,
+//   payload: WandEventPayload[W],
+// ): void;

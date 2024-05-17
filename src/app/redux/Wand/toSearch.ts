@@ -1,4 +1,6 @@
-import { WandState, WandQueryVersion, v2WandStateMapping } from '../../types';
+import type { WandState } from './wandState';
+import type { WandQueryVersion } from './wand';
+import { v2WandStateMapping } from './wand';
 import { objectEntries, trimArray } from '../../util';
 
 const encodeQueryParam = (p: string | number | boolean) =>
@@ -21,14 +23,16 @@ function generateSearchFromWandStateV2({
   alwaysIds,
 }: Readonly<WandState>) {
   const params = new URLSearchParams(
-    objectEntries(v2WandStateMapping).map(([v1param, { name: v2param }]) => [
+    objectEntries(v2WandStateMapping).map(([v1param, v2param]) => [
       v2param,
       encodeQueryParam(wand[v1param]),
     ]),
   );
-  params.append('s', spellIds.join(','));
-  params.append('w', alwaysIds.join(','));
-  return '?' + params.toString();
+  // params.append('s', spellIds.join(','));
+  // params.append('w', alwaysIds.join(','));
+  return `?${params.toString()}&w=${alwaysIds.join(',')}&s=${spellIds.join(
+    ',',
+  )}`;
 }
 
 function generateSearchFromWandStateV1(state: WandState) {

@@ -1,18 +1,20 @@
-import { ActionId } from './actionId';
-import { Spell } from './spell';
+import type { ActionId } from './actionId';
+import type { ActionSource } from './actionSources';
+import type { Spell } from './spell';
 import { getSpellById } from './spells';
+import type { GunActionState } from './actionState';
 import {
-  defaultGunActionState,
-  GunActionState,
-  ConfigGunActionInfo_Copy,
+  ConfigGunActionInfo_Create,
   ConfigGunActionInfo_Init,
-} from './actionState';
-import { ActionSource } from './actionSources';
+  ConfigGunActionInfo_Copy,
+  defaultGunActionState,
+} from './defaultActionState';
 import {
   ConfigGunShotEffects_Init,
   ConfigGunShotEffects_PassToGame,
 } from './gunshoteffects_generated';
-import { ExtraModifier, extraModifiers } from './extraModifiers';
+import type { ExtraModifier } from './extraModifiers';
+import { extraModifiers } from './extraModifiers';
 import {
   ActionUsed,
   ActionUsesRemainingChanged,
@@ -22,15 +24,23 @@ import {
   BeginTriggerTimer,
   EndProjectile,
   EndTrigger,
-  LogAction,
+  /* LogAction,*/
   OnActionCalled,
   OnActionFinished,
   OnActionPlayed,
+  OnDraw,
   OnNotEnoughManaForAction,
   SetProjectileConfigs,
   StartReload,
   Random,
-} from './eval/wandObserver';
+  OnMoveDiscardedToDeck,
+  SetRandomSeed,
+  GameGetFrameNum,
+  OnSetDontDraw,
+  OnUnsetDontDraw,
+  OnPlayPermanentCard,
+} from './eval/dispatch';
+import type { EntityId } from '@reduxjs/toolkit';
 
 // constants
 export const ACTION_DRAW_RELOAD_TIME_INCREASE = 0;
@@ -115,11 +125,11 @@ export function setCurrentReloadTime(crt: number) {
   current_reload_time = crt;
 }
 
-export let shot_effects: ShotEffects = {
+export const shot_effects: ShotEffects = {
   recoil_knockback: 0,
 };
 
-let active_extra_modifiers: ExtraModifier[] = [];
+const active_extra_modifiers: ExtraModifier[] = [];
 
 export let mana = 0.0;
 
@@ -133,7 +143,7 @@ let state_cards_drawn = 0;
 
 let playing_permanent_card = false;
 
-let use_game_log = false;
+// let use_game_log = false;
 
 // initialize global/constant gun state
 export let gun = ConfigGun_Init();
@@ -144,6 +154,7 @@ current_reload_time = gun.reload_time;
 export let dont_draw_actions = false;
 
 export function setDontDrawActions(dda: boolean) {
+  dda ? OnSetDontDraw() : OnUnsetDontDraw();
   dont_draw_actions = dda;
 }
 
@@ -155,7 +166,7 @@ export function setForceStopDraws(fsd: boolean) {
 
 // eslint-disable-next-line
 let shot_structure = {};
-let recursion_limit = 2;
+const recursion_limit = 2;
 
 function reset_modifiers(state: GunActionState) {
   ConfigGunActionInfo_Init(state);
@@ -225,15 +236,18 @@ function clone_action(source: Readonly<Spell>, target: Spell) {
 // various utilities
 
 function create_shot(num_of_cards_to_draw: number): Shot {
-  const shot: any = {};
-  shot.state = {};
+  const shot: Shot = {
+    num_of_cards_to_draw,
+    state: ConfigGunActionInfo_Create(),
+  };
+  // shot.state = {};
   reset_modifiers(shot.state);
-  shot.num_of_cards_to_draw = num_of_cards_to_draw;
+  // shot.num_of_cards_to_draw = num_of_cards_to_draw;
   return shot;
 }
 
 function draw_shot(shot: Shot, instant_reload_if_empty: boolean) {
-  let c_old = c;
+  const c_old = c;
 
   c = shot.state;
 
@@ -249,18 +263,18 @@ function draw_shot(shot: Shot, instant_reload_if_empty: boolean) {
 
 export function order_deck() {
   if (gun.shuffle_deck_when_empty) {
-    // SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() )
+    SetRandomSeed('__WAND__', GameGetFrameNum(), GameGetFrameNum());
     // shuffle the deck
     // state_shuffled = true;
 
-    let rand = Random;
-    let iterations = deck.length;
-    let new_deck: Spell[] = [];
+    const rand = Random;
+    const iterations = deck.length;
+    const new_deck: Spell[] = [];
 
     for (let i = iterations - 1; i >= 0; i--) {
       // looping from iterations to 1 (inclusive)
-      let index = rand(0, i);
-      let action = deck[index];
+      const index = rand('__WAND__', 0, i);
+      const action = deck[index];
       deck.splice(index, 1);
       new_deck.push(action);
     }
@@ -270,14 +284,14 @@ export function order_deck() {
     // sort the deck
     if (!force_stop_draws) {
       deck.sort((a, b) => {
-        let a_index = a.deck_index || 0;
-        let b_index = b.deck_index || 0;
+        const a_index = a.deck_index || 0;
+        const b_index = b.deck_index || 0;
         return a_index - b_index;
       });
     } else {
       deck.sort((a, b) => {
-        let a_ = a.deck_index || 0;
-        let b_ = b.deck_index || 0;
+        const a_ = a.deck_index || 0;
+        const b_ = b.deck_index || 0;
         return a_ - b_;
       });
     }
@@ -285,7 +299,7 @@ export function order_deck() {
 }
 
 function play_action(spell: Readonly<Spell>) {
-  OnActionPlayed(spell.id);
+  OnActionPlayed(spell, c, playing_permanent_card);
 
   hand.push(spell);
 
@@ -322,6 +336,7 @@ export function draw_action(instant_reload_if_empty: boolean) {
   let action = null;
 
   state_cards_drawn = state_cards_drawn + 1;
+  OnDraw(state_cards_drawn);
 
   // if (reflecting) {
   //   return;
@@ -374,7 +389,7 @@ export function draw_action(instant_reload_if_empty: boolean) {
 
 function handle_mana_addition(action: Spell) {
   if (action !== null) {
-    let action_mana_required = action.mana || 0;
+    const action_mana_required = action.mana || 0;
 
     if (action_mana_required < 0) {
       mana = mana - action_mana_required;
@@ -398,7 +413,7 @@ export function draw_actions(
     }
 
     for (let i = 0; i < how_many; i++) {
-      let ok = draw_action(instant_reload_if_empty);
+      const ok = draw_action(instant_reload_if_empty);
       if (!ok) {
         // attempt to draw other actions
         while (deck.length > 0) {
@@ -416,11 +431,6 @@ export function draw_actions(
 }
 
 export function add_projectile(entity_filename: string) {
-  // if (reflecting) {
-  //   Reflection_RegisterProjectile(entity_filename);
-  //   return;
-  // }
-
   BeginProjectile(entity_filename);
   EndProjectile();
 }
@@ -430,13 +440,8 @@ export function add_projectile_trigger_timer(
   delay_frames: number,
   action_draw_count: number,
 ) {
-  // if (reflecting) {
-  //   Reflection_RegisterProjectile(entity_filename);
-  //   return;
-  // }
-
   BeginProjectile(entity_filename);
-  BeginTriggerTimer(delay_frames);
+  BeginTriggerTimer(entity_filename, action_draw_count, delay_frames);
   draw_shot(create_shot(action_draw_count), true);
   EndTrigger();
   EndProjectile();
@@ -446,13 +451,8 @@ export function add_projectile_trigger_hit_world(
   entity_filename: string,
   action_draw_count: number,
 ) {
-  // if (reflecting) {
-  //   Reflection_RegisterProjectile(entity_filename);
-  //   return;
-  // }
-
   BeginProjectile(entity_filename);
-  BeginTriggerHitWorld();
+  BeginTriggerHitWorld(entity_filename, action_draw_count);
   draw_shot(create_shot(action_draw_count), true);
   EndTrigger();
   EndProjectile();
@@ -462,19 +462,15 @@ export function add_projectile_trigger_death(
   entity_filename: string,
   action_draw_count: number,
 ) {
-  // if (reflecting) {
-  //   Reflection_RegisterProjectile(entity_filename);
-  //   return;
-  // }
-
   BeginProjectile(entity_filename);
-  BeginTriggerDeath();
+  BeginTriggerDeath(entity_filename, action_draw_count);
   draw_shot(create_shot(action_draw_count), true);
   EndTrigger();
   EndProjectile();
 }
 
 export function move_discarded_to_deck() {
+  OnMoveDiscardedToDeck(discarded);
   discarded.forEach((action) => {
     deck.push(action);
   });
@@ -497,7 +493,8 @@ function move_hand_to_discarded() {
         } else if (action.is_identified) {
           // consume consumable actions
           action.uses_remaining = action.uses_remaining - 1;
-          let reduce_uses = ActionUsesRemainingChanged(
+          const reduce_uses = ActionUsesRemainingChanged(
+            '__WAND__',
             action.inventoryitem_id,
             action.uses_remaining,
           );
@@ -515,13 +512,13 @@ function move_hand_to_discarded() {
       action.is_identified = true;
     }
 
-    if (use_game_log) {
-      if (action.is_identified) {
-        LogAction(action.name);
-      } else {
-        LogAction('?');
-      }
-    }
+    // if (use_game_log) {
+    //   if (action.is_identified) {
+    //     LogAction(action.name);
+    //   } else {
+    //     LogAction('?');
+    //   }
+    // }
 
     if (action.uses_remaining !== 0 || action.custom_uses_logic) {
       if (action.permanently_attached == null) {
@@ -533,7 +530,7 @@ function move_hand_to_discarded() {
 }
 
 export function check_recursion(data: Readonly<Spell> | null, rec_: number) {
-  let rec = rec_ || 0;
+  const rec = rec_ || 0;
 
   if (data != null) {
     if (data.recursive !== null && data.recursive) {
@@ -610,7 +607,7 @@ function _handle_reload() {
     move_discarded_to_deck();
     order_deck();
 
-    StartReload(current_reload_time);
+    StartReload('__WAND__', current_reload_time);
     current_reload_time = gun.reload_time;
     start_reload = false;
   }
@@ -623,7 +620,7 @@ export function _set_gun(g: Gun) {
 }
 
 // this can be used to build a new deck
-export function _clear_deck(use_game_log_: boolean) {
+export function _clear_deck(/*use_game_log_: boolean*/) {
   hand = [];
   discarded = [];
   deck = [];
@@ -631,7 +628,7 @@ export function _clear_deck(use_game_log_: boolean) {
   current_reload_time = 0;
   reloading = false;
 
-  use_game_log = use_game_log_;
+  // use_game_log = use_game_log_;
 }
 
 // this can be used to build a new deck
@@ -645,7 +642,7 @@ export function _add_card_to_deck(
   // let action = actions[i];
   const spell = getSpellById(action_id);
   // if (action.id === action_id) {
-  let spell_clone = {} as Spell;
+  const spell_clone = {} as Spell;
   clone_action(spell, spell_clone);
   spell_clone.inventoryitem_id = inventoryitem_id;
   spell_clone.uses_remaining =
@@ -659,12 +656,13 @@ export function _add_card_to_deck(
 }
 
 // eslint-disable-next-line
-function _play_permanent_card(action_id: ActionId) {
+export function _play_permanent_card(action_id: ActionId) {
+  OnPlayPermanentCard(action_id, c);
   // for (let i = 0; i < actions.length; i++) {
   // let action = actions[i];
   const action = getSpellById(action_id);
   // if (action.id === action_id) {
-  let action_clone = {} as Spell;
+  const action_clone = {} as Spell;
   playing_permanent_card = true;
   clone_action(action, action_clone);
   action_clone.permanently_attached = true;
@@ -704,8 +702,7 @@ function _play_permanent_card(action_id: ActionId) {
 //   apply(hand);
 // }
 
-// eslint-disable-next-line
-function _add_extra_modifier_to_shot(name: ExtraModifier) {
+export function _add_extra_modifier_to_shot(name: ExtraModifier) {
   if (!extraModifiers[name]) {
     console.log(
       "_add_extra_modifier_to_shot() - function '" +
@@ -737,4 +734,9 @@ export function call_action(
     returnValue as number | undefined,
   );
   return returnValue;
+}
+
+// custom mock for find_the_wand_held() in gun_action_utils
+export function find_the_wand_held(caster_entity: EntityId) {
+  return 1;
 }

@@ -1,7 +1,7 @@
-import styled from 'styled-components/macro';
-import { ActionCall } from '../../calc/eval/types';
+import styled from 'styled-components';
 import { useConfig } from '../../redux';
 import { BaseAnnotation } from './BaseAnnotation';
+import type { ActionCall } from '../../calc/eval/ActionCall';
 
 const DontDrawDiv = styled(BaseAnnotation)`
   left: unset;
@@ -17,17 +17,17 @@ const DontDrawDiv = styled(BaseAnnotation)`
   font-family: var(--font-family-noita-default);
 `;
 
-type Props = {
-  dont_draw_actions?: boolean;
-} & Partial<ActionCall>;
-
-export function DontDrawAnnotation(props: Props) {
+export const DontDrawAnnotation = (
+  props: {
+    dont_draw_actions?: boolean;
+  } & Partial<ActionCall>,
+) => {
   const { dont_draw_actions = false } = props;
-  const { config } = useConfig();
+  const { showDontDraw } = useConfig();
 
-  if (!dont_draw_actions || !config.showDontDraw) {
+  if (!dont_draw_actions || !showDontDraw) {
     return null;
   }
 
-  return <DontDrawDiv>D</DontDrawDiv>;
-}
+  return <DontDrawDiv data-name="DontDrawAnnotation">D</DontDrawDiv>;
+};

@@ -1,20 +1,40 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const StyledButton = styled.button`
-  border: 1px solid #111;
+  border: 0;
   color: black;
-  background-color: #a33;
+  background-color: transparent;
   cursor: pointer;
+  font-size: 1em;
+  margin-left: 1em;
 
   &:hover {
     background-color: #c55;
   }
+  & > span {
+    filter: grayscale(1) brightness(2.2);
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 500px) {
+    margin-left: 0.4em;
+    font-size: 1.6em;
+    line-height: 1;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: black;
+    border-radius: 0 0 0 70% / 40%;
+    padding: 0.6em 0.6em 0.6em 0.9em;
+    z-index: var(--zindex-modal-closebutton);
+    border-color: var(--color-modal-bg);
+    border-style: solid;
+    border-width: 0 0 0.4em 0em;
+  }
 `;
 
-type Props = {
-  onClick: () => void;
-};
-
-export function CloseButton(props: Props) {
-  return <StyledButton onClick={props.onClick}>X</StyledButton>;
-}
+export const CloseButton = ({ onClick }: { onClick: () => void }) => (
+  <StyledButton onClick={onClick}>
+    <span>❌</span>
+  </StyledButton>
+);

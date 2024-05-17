@@ -1,27 +1,17 @@
-import React, { useState } from 'react';
-import { Button, Modal } from '../generic';
-import { ConfigEditor } from './ConfigEditor';
+import { useUIToggle } from '../../redux';
+import { Button } from '../generic';
 
-type Props = {};
-
-export function ConfigButton(props: Props) {
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const handleClose = () => {
-    setModalVisible(false);
-  };
-
+export const ConfigButton = ({ className = '' }: { className?: string }) => {
+  const [, setModalVisible] = useUIToggle('showModalConfigEditor');
   return (
-    <>
-      <Button
-        imgUrl={'data/sampo-config.png'}
-        onClick={() => setModalVisible(!modalVisible)}
-      >
-        Config
-      </Button>
-      <Modal visible={modalVisible} onClose={handleClose} title="Configuration">
-        <ConfigEditor />
-      </Modal>
-    </>
+    <Button
+      hotkeys={'p'}
+      imgUrl={'data/sampo-config.png'}
+      imgOnly={'600px'}
+      onClick={() => setModalVisible(true)}
+      className={className}
+    >
+      Config
+    </Button>
   );
-}
+};
