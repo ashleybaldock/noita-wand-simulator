@@ -9,8 +9,8 @@ import { isMainWandIndex } from './WandIndex';
 
 const initialState: WandEditorState = {
   cursorIndex: 0,
-  selectFrom: null,
-  selectTo: null,
+  selectFrom: 3,
+  selectTo: 6,
 } as const;
 
 export const editorSlice = createSlice({
@@ -20,22 +20,13 @@ export const editorSlice = createSlice({
     resetEditor: () => {
       return initialState;
     },
-    // TODO
     clearSelection: (state): void => {
       state.selectFrom = null;
       state.selectTo = null;
     },
-    // TODO
-    deleteSelection: (
-      state,
-      {
-        payload: { shift = 'none' },
-      }: PayloadAction<{ shift?: SpellShiftDirection }>,
-    ): void => {
-      state.selectFrom = null;
-      state.selectTo = null;
-    },
-    // TODO
+    /**
+     * Set selection bounds based on from and to index
+     */
     setSelection: (
       state,
       {
@@ -59,11 +50,55 @@ export const editorSlice = createSlice({
         }
       }
     },
-    // TODO
+    /**
+     * Change position of current selection
+     * Operates based on the start index, and preserves selection length
+     **/
     moveSelection: (
       state,
       { payload: { by, to } }: PayloadAction<{ by?: number; to?: number }>,
     ): void => {},
+
+    /**
+     * Set the next paste to insert the currently selected spells
+     */
+    copySelected: (): void => {},
+    /**
+     * As for copySelected, but also remove the selected spells from the wand
+     */
+    cutSelected: (): void => {},
+    /**
+     * Insert whatever was given to the last copySelected or cutSelected
+     */
+    pasteSelected: (): void => {},
+    /**
+     * Remove all spells in selection from the wand, and clear the selection
+     */
+    deleteSelected: (
+      state,
+      {
+        payload: { shift = 'none' },
+      }: PayloadAction<{ shift?: SpellShiftDirection }>,
+    ): void => {
+      state.selectFrom = null;
+      state.selectTo = null;
+    },
+    /**
+     * Insert a copy of the current selection just after itself
+     */
+    duplicateSelected: (): void => {},
+    /**
+     * Group spells so they move together
+     */
+    groupSelected: (): void => {},
+    /**
+     * Ungroup group of spells
+     */
+    ungroupSelected: (): void => {},
+    /**
+     * Saves the selected spells as a new wand snippet
+     */
+    saveSelected: (): void => {},
 
     /**
      * moves cursor and updates selection
@@ -160,9 +195,17 @@ export const editorSlice = createSlice({
 export const {
   moveCursorTo,
 
+  deleteSelected,
+  duplicateSelected,
+  copySelected,
+  cutSelected,
+  pasteSelected,
+  groupSelected,
+  ungroupSelected,
+  saveSelected,
+
   moveSelection,
   clearSelection,
-  deleteSelection,
   setSelection,
 } = editorSlice.actions;
 

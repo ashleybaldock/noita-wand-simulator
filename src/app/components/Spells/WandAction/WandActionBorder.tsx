@@ -24,7 +24,7 @@ const StyledDiv = styled.div<{
       : `background-image: url('/data/inventory/full_inventory_box.png');`}
 `;
 
-export const WandActionBorder = ({
+const WandActionBorder = ({
   className = '',
   children,
 }: React.PropsWithChildren<{

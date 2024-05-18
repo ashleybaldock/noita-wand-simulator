@@ -1,119 +1,207 @@
 import styled from 'styled-components';
 import type { WandSelection } from '../../../redux/Wand/wandSelection';
 import type { CursorStyle } from './Cursor';
+import { mergeRefs, type MergableRef } from '../../../util/mergeRefs';
+import { emptyBackgroundPart, type BackgroundPart } from './BackgroundPart';
+import { useDrop } from 'react-dnd';
+import {
+  isDragItemSelect,
+  isDragItemSpell,
+  type DragItem,
+  type DragItemSelect,
+  type DragItemSpell,
+} from './DragItems';
+import type { WandIndex } from '../../../redux/WandIndex';
+import { isMainWandIndex } from '../../../redux/WandIndex';
+import type { DropHint, DropHints } from './DropHint';
+import { useMergedBackgrounds } from './useMergeBackgrounds';
+import { useSelecting } from '../../../redux';
 
-export type DropHint = 'none' | 'forbidden' | 'shiftleft' | 'shiftright';
-
-type BackgroundPart = {
-  'background-image': string[];
-  'background-repeat': string[];
-  'background-size': string[];
-  'background-position': string[];
-};
-
-const cursors: Record<CursorStyle, Partial<BackgroundPart>> = {
+const cursors: Record<CursorStyle, BackgroundPart> = {
   caret: {
     'background-image': [
       `url('/data/inventory/cursor-top.png')`,
-      `
-      url('/data/inventory/cursor-mid.png')`,
+      `url('/data/inventory/cursor-mid.png')`,
     ],
     'background-repeat': [`no-repeat`, `repeat-y`],
-    'background-size': [`100%`, `100%`],
-    'background-position': [`top center`, `center center`],
+    'background-size': [
+      `var(--cursor-container-width)`,
+      `var(--cursor-container-width) `,
+    ],
+    'background-position': [`center top`, `center center`],
+    'cursor': [],
   },
   none: {
     'background-image': [],
     'background-repeat': [],
     'background-size': [],
     'background-position': [],
+    'cursor': [],
   },
 };
-const dropHints: Record<DropHint, Partial<BackgroundPart>> = {
-  none: {},
-  forbidden: {},
-  shiftleft: {},
-  shiftright: {},
+const dropHints: DropHints = {
+  none: emptyBackgroundPart,
+  dragging: {
+    none: emptyBackgroundPart,
+    forbidden: emptyBackgroundPart,
+    swap: emptyBackgroundPart,
+    replace: emptyBackgroundPart,
+    shiftleft: {
+      'background-image': [
+        'linear-gradient(135deg, transparent, yellow 50%, transparent 60%)',
+        'linear-gradient(225deg, transparent, yellow 50%, transparent 60%)',
+      ],
+      'background-repeat': [`no-repeat`, `no-repeat`],
+      'background-size': [`100%`, `100%`],
+      'background-position': [`center`, `center`],
+      'cursor': [],
+    },
+    shiftright: {
+      'background-image': [
+        'linear-gradient(45deg, transparent, orange 50%, transparent 60%)',
+        'linear-gradient(315deg, transparent, orange 50%, transparent 60%)',
+      ],
+      'background-repeat': [`no-repeat`, `no-repeat`],
+      'background-size': [`100%`, `100%`],
+      'background-position': [`center`, `center`],
+      'cursor': [],
+    },
+  },
+  over: {
+    none: emptyBackgroundPart,
+    swap: emptyBackgroundPart,
+    replace: emptyBackgroundPart,
+    forbidden: {
+      'background-image': ['linear-gradient(45deg, white, red, white)'],
+      'background-repeat': [`no-repeat`],
+      'background-size': [`100%`],
+      'background-position': [`center`],
+      'cursor': [],
+    },
+    shiftleft: {
+      'background-image': [
+        'linear-gradient(135deg, transparent, yellow 50%, transparent 60%)',
+        'linear-gradient(225deg, transparent, yellow 50%, transparent 60%)',
+      ],
+      'background-repeat': [`no-repeat`, `no-repeat`],
+      'background-size': [`100%`, `100%`],
+      'background-position': [`center`, `center`],
+      'cursor': [],
+    },
+    shiftright: {
+      'background-image': [
+        'linear-gradient(45deg, transparent, orange 50%, transparent 60%)',
+        'linear-gradient(315deg, transparent, orange 50%, transparent 60%)',
+      ],
+      'background-repeat': [`no-repeat`, `no-repeat`],
+      'background-size': [`100%`, `100%`],
+      'background-position': [`center`, `center`],
+      'cursor': [],
+    },
+  },
 };
-const selections: Record<WandSelection, Partial<BackgroundPart>> = {
-  none: {},
-  start: {},
-  thru: {},
-  end: {},
-  single: {},
+const selections: Record<WandSelection, BackgroundPart> = {
+  none: emptyBackgroundPart,
+  start: {
+    'background-image': [
+      `cursor-select-top-start.png`,
+      `url('/data/inventory/cursor-select-mid.png')`,
+      `cursor-select-bottom-start.png`,
+      `linear-gradient(to right, transparent, var(--color-selection-bg) 30%)`,
+    ],
+    'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`, `no-repeat`],
+    'background-size': [
+      `var(--cursor-container-width)`,
+      `var(--cursor-container-width)`,
+      `var(--cursor-container-width)`,
+      `100%`,
+    ],
+    'background-position': [
+      `center top`,
+      `center center`,
+      `center bottom`,
+      `center`,
+    ],
+    'cursor': ['ew-resize'],
+  },
+  thru: {
+    'background-image': [
+      `linear-gradient(to right, var(--color-selection-bg), var(--color-selection-bg))`,
+    ],
+    'background-repeat': [`no-repeat`],
+    'background-size': [`100%`],
+    'background-position': [`center`],
+    'cursor': [''],
+  },
+  end: {
+    'background-image': [
+      `cursor-select-top-end.png`,
+      `url('/data/inventory/cursor-select-mid.png')`,
+      `cursor-select-bottom-end.png`,
+      `linear-gradient(to left, transparent, var(--color-selection-bg) 30%)`,
+    ],
+    'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`, `no-repeat`],
+    'background-size': [
+      `var(--cursor-container-width)`,
+      `var(--cursor-container-width)`,
+      `var(--cursor-container-width)`,
+      `100%`,
+    ],
+    'background-position': [
+      `center top`,
+      `center center`,
+      `center bottom`,
+      `center`,
+    ],
+    'cursor': ['ew-resize'],
+  },
+  single: {
+    'background-image': [
+      `url('/data/inventory/cursor-select-mid.png')`,
+      `linear-gradient(to right, transparent, var(--color-selection-bg) 20%, transparent 80%)`,
+    ],
+    'background-repeat': [`no-repeat`],
+    'background-size': [`100%`],
+    'background-position': [`center`],
+    'cursor': ['ew-resize'],
+  },
 };
 
-export const BetweenSpellsDropTarget = styled.div<{
+const StyledBetweenSpellsDropTarget = styled.div<{
   onClick: React.MouseEventHandler<HTMLElement>;
 
-  $enabled: boolean;
   $pointerEvents: boolean;
-  $cursor: CursorStyle;
-
-  $dropHint: DropHint;
-
-  $selection: WandSelection;
-
-  $isDraggingAction: boolean;
-  $isDraggingOver: boolean;
-  $isDraggingSelect: boolean;
 }>`
   background-color: transparent;
   position: absolute;
   height: 100%;
   box-sizing: border-box;
+  image-rendering: pixelated;
 
   cursor: e-resize;
+  --cursor-container-width: calc(var(--bsize-spell) / 4);
 
   pointer-events: ${({ $pointerEvents }) => ($pointerEvents ? 'auto' : 'none')};
 
-  &:hover::before {
+  &&:hover::before {
     background-color: #f00c;
   }
   &::before {
-    z-index: var(--zindex-cursor-current);
-    --cursor-container-width: calc(var(--bsize-spell) / 4);
     content: '';
+
     position: absolute;
-    height: calc(var(--bsize-spell) * 1.22);
-    width: var(--cursor-container-width);
     top: calc(var(--bsize-spell) * -0.03);
     left: calc(50% - (var(--cursor-container-width) / 2));
+    height: calc(var(--bsize-spell) * 1.22);
+    width: var(--cursor-container-width);
+
+    z-index: var(--zindex-cursor-current);
 
     image-rendering: pixelated;
-    background-repeat: no-repeat, repeat-y;
-    background-size: 100%;
-    background-position: top center, center center;
-
-    ${({ $cursor, $dropHint }) => `
-      ${
-        $dropHint === 'shiftleft' || $dropHint === 'shiftright'
-          ? `filter: brightness(2);`
-          : `filter: brightness(0.5);`
-      }
-
-      ${
-        $cursor === 'caret'
-          ? `
-    background-image: url('/data/inventory/cursor-top.png'),
-      url('/data/inventory/cursor-mid.png');
-      `
-          : ``
-      }
-        ${
-          $cursor === 'none'
-            ? `
-      opacity: 0;
-      `
-            : ``
-        }
-    `}
   }
 
   /* Source for selection drag */
   &::after {
-    --cursor-container-width: calc(var(--bsize-spell) / 4);
-
     content: '';
     display: block;
     position: absolute;
@@ -127,17 +215,11 @@ export const BetweenSpellsDropTarget = styled.div<{
 
     image-rendering: pixelated;
 
-    background-repeat: no-repeat;
-    background-size: 100%;
-    background-position: center center;
-
     pointer-events: ${({ $pointerEvents }) =>
       $pointerEvents ? 'none' : 'auto'};
   }
 `;
 // ${WithDebugHints} && {
-//   background-color: ${({ $isDraggingAction, $isDraggingSelect }) =>
-//     $isDraggingAction || $isDraggingSelect ? 'green' : 'transparent'};
 // }
 // ${WithDebugHints} &&::after {
 //   ${({ $isDraggingOver }) =>
@@ -149,3 +231,97 @@ export const BetweenSpellsDropTarget = styled.div<{
 //       background-color: transparent;
 //       `}
 // }
+
+// ${({ $cursor, $dropHint }) => `
+//   ${
+//     $dropHint === 'shiftleft' || $dropHint === 'shiftright'
+//       ? `filter: brightness(2);`
+//       : `filter: brightness(0.5);`
+//   }
+
+//   ${
+//     $cursor === 'caret'
+//       ? `
+// background-image: url('/data/inventory/cursor-top.png'),
+//   url('/data/inventory/cursor-mid.png');
+//   `
+//       : ``
+//   }
+//     ${
+//       $cursor === 'none'
+//         ? `
+//   opacity: 0.6;
+//   `
+//         : ``
+//     }
+// `}
+export const BetweenSpellsDropTarget = ({
+  wandIndex,
+  className = '',
+  onClick,
+  onDropSpell,
+  onEndSelect,
+  ref,
+  cursor = 'none',
+  overHint = 'none',
+  selection = 'none',
+}: {
+  wandIndex: WandIndex;
+  className?: string;
+  onClick: React.MouseEventHandler<HTMLElement>;
+  onDropSpell: (item: DragItemSpell) => void;
+  onEndSelect: (item: DragItemSelect) => void;
+  ref: MergableRef<HTMLDivElement>;
+
+  cursor?: CursorStyle;
+  overHint?: DropHint;
+  selection?: WandSelection;
+}) => {
+  const [{ isOver, isDraggingSpell, isDraggingSelect }, dropRef] = useDrop(
+    () => ({
+      accept: ['spell', 'select'],
+      drop: (item: DragItem, monitor) => {
+        !monitor.didDrop() &&
+          ((isDragItemSpell(item) && onDropSpell(item)) ||
+            (isDragItemSelect(item) && onEndSelect(item)));
+      },
+      canDrop: (item: DragItem) =>
+        (isDragItemSpell(item) &&
+          item.sourceWandIndex !== wandIndex &&
+          isMainWandIndex(wandIndex) &&
+          isMainWandIndex(item.sourceWandIndex) &&
+          item.sourceWandIndex !== wandIndex + 1) ||
+        (isDragItemSelect(item) && isMainWandIndex(wandIndex)),
+      collect: (monitor) => ({
+        isDraggingSpell: monitor.getItemType() === 'spell',
+        isDraggingSelect: monitor.getItemType() === 'select',
+        isOver: monitor.isOver() && monitor.canDrop(),
+      }),
+    }),
+    [wandIndex, onDropSpell, onEndSelect],
+  );
+
+  const isSelecting = useSelecting();
+
+  const pointerEvents = isDraggingSpell || isDraggingSelect;
+
+  const style = useMergedBackgrounds({
+    cursorParts: cursors[cursor],
+    dropHintParts: isDraggingSpell
+      ? isOver
+        ? dropHints.over[overHint]
+        : dropHints.dragging[overHint]
+      : dropHints.none,
+    selectionParts: selections[selection],
+  });
+
+  return (
+    <StyledBetweenSpellsDropTarget
+      className={className}
+      style={style}
+      onClick={onClick}
+      ref={mergeRefs(ref, dropRef)}
+      $pointerEvents={pointerEvents}
+    ></StyledBetweenSpellsDropTarget>
+  );
+};

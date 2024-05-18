@@ -3,7 +3,7 @@ import type { ChangeEventHandler, MouseEventHandler } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '../../generic';
 
-const WrapperLabel = styled.label`
+const Wrapper = styled.fieldset`
   --bdr: 6px;
   --chint: var(--hint-color, white);
 
@@ -14,9 +14,15 @@ const WrapperLabel = styled.label`
   margin: 0.1em 0.2em;
   cursor: pointer;
   user-select: none;
+  border: 0 solid transparent;
 
-  &:focus-within {
-    box-shadow: 0 0 1px 0.4px var(--color-toggle-hover);
+  &:hover {
+    box-shadow: 0 0 4px 2px var(--color-numeric-hover);
+  }
+
+  &:focus-within,
+  &:focus-within:hover {
+    box-shadow: 0 0 1px 0.4px var(--color-numeric-focus);
   }
 `;
 
@@ -26,6 +32,7 @@ const NumberInput = styled.input.attrs({
   pattern: '^[1-9][0-9]*$',
 })`
   width: 100%;
+  height: 2em;
   flex: 1 1 100%;
   background-color: #000;
 
@@ -33,16 +40,16 @@ const NumberInput = styled.input.attrs({
   color: var(--chint);
   border: 1px solid #222;
   font: inherit;
-  font-size: 1.2em;
+  font-size: 1em;
   text-align: left;
-  padding: 0.3em 0 0.1em 0;
+  padding: 0.22em 0.4em 0 0.4em;
+  line-height: 1;
   margin: 0;
   display: flex;
   align-self: center;
+  box-sizing: border-box;
 
   &:focus-visible {
-    border: 1px solid #c76464;
-    box-shadow: 0 0 2px 1px currentColor inset;
   }
 `;
 
@@ -57,6 +64,7 @@ const NumericInputButton = styled(Button)`
   color: white;
   border-radius: 0;
   display: flex;
+  box-sizing: border-box;
   align-content: baseline;
   align-items: center;
   justify-content: center;
@@ -66,30 +74,48 @@ const NumericInputButton = styled(Button)`
   padding-right: var(--padding-sides);
   margin: 0;
   border: 1px solid #444;
-  padding-top: 0.5em;
+  padding-top: 0.6em;
   --padding-sides: 1em;
-  font-size: 1.1em;
-  line-height: 1.2em;
-  background-size: 36%;
+  font-size: 1em;
+  line-height: 1;
+  background-size: 44%;
+  z-index: 8;
+
+  --hover-radius: 2px;
+
+  &:hover {
+    border-color: #444;
+    box-shadow: 0 0 1px 2px var(--color-numeric-hover);
+    z-index: 10;
+    border-radius: var(--hover-radius);
+  }
+  &:first-of-type {
+    border-radius: var(--bdr) 0 0 var(--bdr);
+  }
+  &:first-of-type:hover {
+    border-radius: var(--bdr) var(--hover-radius) var(--hover-radius) var(--bdr);
+  }
+  &:last-of-type {
+    border-radius: 0 var(--bdr) var(--bdr) 0;
+  }
+  &:last-of-type:hover {
+    border-radius: var(--hover-radius) var(--bdr) var(--bdr) var(--hover-radius);
+  }
 `;
-const ButtonMin = styled(NumericInputButton)`
-  border-radius: var(--bdr) 0 0 var(--bdr);
-`;
+const ButtonMin = styled(NumericInputButton)``;
 const ButtonStepDown = styled(NumericInputButton)`
-  border-left-width: 0;
+  margin-left: -1px;
 `;
 const ButtonBigStepDown = styled(NumericInputButton)`
-  border-left-width: 0;
+  margin-left: -1px;
 `;
 const ButtonBigStepUp = styled(NumericInputButton)`
-  border-right-width: 0;
+  margin-right: -1px;
 `;
 const ButtonStepUp = styled(NumericInputButton)`
-  border-right-width: 0;
+  margin-right: -1px;
 `;
-const ButtonMax = styled(NumericInputButton)`
-  border-radius: 0 var(--bdr) var(--bdr) 0;
-`;
+const ButtonMax = styled(NumericInputButton)``;
 
 export const NumericInput = ({
   value,
@@ -101,7 +127,6 @@ export const NumericInput = ({
   bigStep = 100,
   showStep = true,
   showBigStep = true,
-  showSetToInfinite = true,
   showSetToMax = true,
   showSetToMin = true,
   parseValue = (v: string, min: number, max: number) =>
@@ -128,7 +153,6 @@ export const NumericInput = ({
   bigStep?: number;
   showStep?: boolean;
   showBigStep?: boolean;
-  showSetToInfinite?: boolean;
   showSetToMax?: boolean;
   showSetToMin?: boolean;
   formatForDisplay?: (n: number) => string;
@@ -152,9 +176,8 @@ export const NumericInput = ({
   }, []);
 
   return (
-    <WrapperLabel className={className}>
-      {children}
-      <ButtonMin minimal={true}>{`${min}`}</ButtonMin>
+    <Wrapper className={className}>
+      {showSetToMin && <ButtonMin minimal={true}>{`${min}`}</ButtonMin>}
       {showBigStep && (
         <ButtonBigStepDown
           minimal={true}
@@ -164,6 +187,7 @@ export const NumericInput = ({
       {showStep && (
         <ButtonStepDown minimal={true} imgUrl="data/arrows/down-single.png" />
       )}
+      {children}
       <NumberInput
         ref={inputRef}
         hidden={true}
@@ -177,9 +201,11 @@ export const NumericInput = ({
       {showBigStep && (
         <ButtonBigStepUp minimal={true} imgUrl="data/arrows/up-double.png" />
       )}
-      <ButtonMax minimal={true}>{`${
-        max === Number.POSITIVE_INFINITY ? '∞' : max
-      }`}</ButtonMax>
-    </WrapperLabel>
+      {showSetToMax && (
+        <ButtonMax minimal={true}>{`${
+          max === Number.POSITIVE_INFINITY ? '∞' : max
+        }`}</ButtonMax>
+      )}
+    </Wrapper>
   );
 };

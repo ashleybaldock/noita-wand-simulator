@@ -155,7 +155,7 @@ const SubSectionContent = styled.div<{
   flex-wrap: wrap;
   width: 100%;
   ${({ maxWidth }) => (maxWidth ? `max-width: ${maxWidth};` : '')}
-  gap: 0.2em;
+  gap: 0.6em;
 
   flex-direction: row;
   align-content: center;
@@ -275,13 +275,13 @@ const WrappedYesNoToggle = styled(YesNoToggle)`
   }
 `;
 
-const RandomInputWrapper = styled(InputWrapper)`
+const RandomInputWrapper = styled.div`
   flex: 1 1 46%;
+  display: flex;
   justify-content: space-evenly;
+  align-items: center;
 
-  input[type='text'] {
-    min-width: 4em;
-  }
+  column-gap: 0.4em;
 `;
 
 const RequiremementEveryOther = styled(RequirementToggle).attrs(() => ({
@@ -382,30 +382,12 @@ export const CastConfigEditor = () => {
             <span>Health</span>
           </SubSectionTitle>
           <SubSectionContent>
-            {/* <CheckboxInputWrapper> */}
-            {/*   <YesNoToggle */}
-            {/*     checked={config.infiniteHp} */}
-            {/*     onChange={handleConfigToggle('infiniteHp')} */}
-            {/*   > */}
-            {/*     <span style={{ whiteSpace: 'nowrap' }}>∞: </span> */}
-            {/*   </YesNoToggle> */}
-            {/* </CheckboxInputWrapper> */}
             <NumericInput
               min={0}
               max={Number.POSITIVE_INFINITY}
               value={config.var_hp}
               onChange={numberChangeHandler('var_hp')}
             ></NumericInput>
-            {/* <InputWrapper> */}
-            {/*   / */}
-            {/*   <input */}
-            {/*     type="text" */}
-            {/*     inputMode="numeric" */}
-            {/*     pattern="^[1-9][0-9]*$" */}
-            {/*     value={config.var_hp_max} */}
-            {/*     onChange={numberChangeHandler('var_hp_max')} */}
-            {/*   /> */}
-            {/* </InputWrapper> */}
           </SubSectionContent>
         </SubSectionDiv>
         <SubSectionDiv data-section="money">
@@ -423,14 +405,6 @@ export const CastConfigEditor = () => {
               value={config.var_money}
               onChange={numberChangeHandler('var_money')}
             ></NumericInput>
-            {/* <CheckboxInputWrapper> */}
-            {/*   <YesNoToggle */}
-            {/*     checked={config.infiniteMoney} */}
-            {/*     onChange={handleConfigToggle('infiniteMoney')} */}
-            {/*   > */}
-            {/*     <span>∞:</span> */}
-            {/*   </YesNoToggle> */}
-            {/* </CheckboxInputWrapper> */}
           </SubSectionContent>
         </SubSectionDiv>
         <SubSectionDiv data-section="random">
@@ -441,23 +415,31 @@ export const CastConfigEditor = () => {
           <SubSectionContent wrapq={true} maxWidth={'calc(100% - 2.2em)'}>
             <RandomInputWrapper>
               <span>Seed</span>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="^[1-9][0-9]*$"
+              <NumericInput
+                min={0}
+                max={Number.POSITIVE_INFINITY}
+                showBigStep={false}
+                showSetToMax={false}
+                // type="text"
+                // inputMode="numeric"
+                // pattern="^[1-9][0-9]*$"
                 value={worldSeed}
                 onChange={randomChangeHandler('random.worldSeed')}
-              />
+              ></NumericInput>
             </RandomInputWrapper>
             <RandomInputWrapper>
               <span>Frame:</span>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="^[1-9][0-9]*$"
+              <NumericInput
+                min={0}
+                max={Number.POSITIVE_INFINITY}
+                showBigStep={false}
+                showSetToMax={false}
+                // type="text"
+                // inputMode="numeric"
+                // pattern="^[1-9][0-9]*$"
                 value={frameNumber}
                 onChange={randomChangeHandler('random.frameNumber')}
-              />
+              ></NumericInput>
             </RandomInputWrapper>
           </SubSectionContent>
         </SubSectionDiv>

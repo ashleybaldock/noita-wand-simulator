@@ -1,5 +1,8 @@
+import { isObject } from './util';
+
 /**
  * Iterator utility functions
+ *
  *
  *     1. Brief guide to Iterators
  *
@@ -45,55 +48,82 @@
  *
  * ╴╴╴ Generator : IterableIterator<T> ╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶┤1.2.1├╶
  *
- * source:    IterableIterator<T>
- * predicate: Predicate<T>
- * callback:  Callback<T>
- * mapper:    Mapper<T, Tout>
+ *   source:    IterableIterator<T>
+ *   predicate: Predicate<T>
+ *   callback:  Callback<T>
+ *   mapper:    Mapper<T, Tout>
  *
  *
  * ╼══╾ Methods ╼═════════════════════════════════════════════════╡2.2╞═╾
  *
- * Subset (S -> Sʹ⊆ S)
- *  ├╴take(source: IterableIterator<T>, count: number): Iterator<>    ✅
- *  │  ├╴takeLazily
- *  │  ├╴takeArray
- *  │  ├╴takeOne
- *  │  └╴takeEagerly
- *  ├╴drop(source: IterableIterator<T>, count: number): Iterator<>     🔶
- *  │
- *  └╴filter( source, predicate: Predicate<T>        ): Iterator<T>;   ✅
- *
- * Reducing (S -> V)
- *  ├╴forEach( source, callback:  Callback<T>         ): void;         ✅
- *  ├╴reduce( source, reducer:    , initialValue?: T ): Tout;          🔶
- *  ├╴find( source, predicate: Predicate<T>        ): T;               ✅
- *  │
- *  ├╴every( source, predicate: Predicate<T>        ): boolean;        ✅
- *  └╴some( source, predicate: Predicate<T>        ): boolean;         ✅
- *
- * Mapping (S[i] -> S[f(i)])
- *  ├╴map( source, mapper:    Mapper<T, Tout> ): Iterator<T>;          ✅
- *  ├╴flatMap( source, mapper: Mapper<T, Iterable<Tout>>: Iterator<T>; ✅
- *  │
- *  ├╴enumerate(i)       i[n]      ▬▶︎ [[i[0], 0], … [i[n], n]]         🔶
- *  ├╴intersperse(i, f)  i[n]      ▬▶︎ [i[0], f(i[0]), … i[n], f(i[n])] 🔶
- *  └╴
- *
- * Combining (Sᴺ -> S)
- *  ├╴interleave(i, j)   i[n] j[n] ▬▶︎ [i[0], j[0], … i[n], j[n]]       🔶
- *  ├╴zip(...iters)                                                    ✅
- *  ├╴
- *  └╴intertwine
- *
- * entwine
- * weave
- * inject
- *
- * Hysteresis (S[x...y] -> Sʹ)
- * ├╴interpolate
- * ├╴debounce
- * ├╴throttle
- * └╴
+ * ╔════════╤══════════════╗
+ * ║ Subset │ (S -> Sʹ⊆ S) ║
+ * ╚╤═══════╧══════════════╝
+ *  ├╴take(source: IterableIterator<T>, count: number): Iterator<>      │ ✅
+ *  │  ├╴takeLazily                                                     │
+ *  │  ├╴takeArray                                                      │
+ *  │  ├╴takeOne                                                        │
+ *  │  └╴takeEagerly                                                    │
+ *  ├╴drop(source: IterableIterator<T>, count: number): Iterator<>      │ 🔶
+ *  │                                                                   │
+ *  └╴filter( source, predicate: Predicate<T>        ): Iterator<T>;    │ ✅
+ *                                                                      │
+ * ╔══════════╤══════════╗                                              │
+ * ║ Reducing │ (S -> V) ║                                              │
+ * ╚╤═════════╧══════════╝                                              │
+ *  ├╴forEach( source, callback:  Callback<T>         ): void;          │ ✅
+ *  ├╴reduce( source, reducer:    , initialValue?: T ): Tout;           │ 🔶
+ *  ├╴find( source, predicate: Predicate<T>        ): T;                │ ✅
+ *  │                                                                   │
+ *  ├╴every( source, predicate: Predicate<T>        ): boolean;         │ ✅
+ *  └╴some( source, predicate: Predicate<T>        ): boolean;          │ ✅
+ *                                                                      │
+ * ╔═════════╤═══════════════════╗                                      │
+ * ║ Mapping │ (S[i] -> S[f(i)]) ║                                      │
+ * ╚╤════════╧═══════════════════╝                                      │
+ *  ├╴map( source, mapper:    Mapper<T, Tout> ): Iterator<T>;           │ ✅
+ *  ├╴flatMap( source, mapper: Mapper<T, Iterable<Tout>>: Iterator<T>;  │ ✅
+ *  │                                                                   │
+ *  ├╴enumerate(i)       i[n]      ▬▶︎ [[i[0], 0], … [i[n], n]]          │ 🔶
+ *  ├╴intersperse(i, f)  i[n]      ▬▶︎ [i[0], f(i[0]), … i[n], f(i[n])]  │ 🔶
+ *  │                                                                   │
+ *                                                                      │
+ * ╔═══════════╤════════════════════════╗                               │
+ * ║ Splitting │ (S[i] -> [S1, S2, …SN] ║                               │
+ * ╚╤══════════╧════════════════════════╝                               │
+ *  ├╴fork(i)     i: [[A1, B1, … N1],         [A1, A2, …An]             │ 🔶
+ *  │                  [A2, B2, … N2],   ▬▶︎   [B1, B2, …Bn]             │
+ *  │                       ...                    ...                  │
+ *  │                  …[An, Bn, … Nn]]       [N1, N2, …Nn]             │
+ *  ├╴                                                                  │
+ *                                                                      │
+ * ╔═══════════╤═══════════╗                                            │
+ * ║ Combining │ (Sᴺ -> S) ║                                            │
+ * ╚╤══════════╧═══════════╝                                            │
+ *  ├╴concat(...i)      i[0], …i[N]  ▬▶︎  [i[0][0], …i[0][n],            │ ✅
+ *  │                                           ...                     │
+ *  │                                     i[N][0], …i[N][n]]            │
+ *  │                                                                   │
+ *  ├╴interleave(i, j)   i[n] j[n] ▬▶︎ [i[0], j[0], … i[n], j[n]]        │ 🔶
+ *  │                                                                   │
+ *  ├╴transpose(...i)  i[0]:⎧ [A1, A2, …An] ⎫     [[A1, B1, … N1],      │ ✅
+ *  │  (zip/unzip)     i[1]:⎪ [B1, B2, …Bn] ⎩  ▬▶︎  [A2, B2, … N2],      │
+ *  │                    …  ⎪      ...      ⎧            ...            │
+ *  │                  i[N]:⎩ [N1, N2, …Nn] ⎭      [An, Bn, … Nn]]      │
+ *  ├╴                                                                  │
+ *  └╴intertwine                                                        │
+ *                                                                      │
+ * entwine                                                              │
+ * weave                                                                │
+ * inject                                                               │
+ *                                                                      │
+ * ╔════════════╤══════════════════╗                                    │
+ * ║ Hysteresis │ (S[x...y] -> Sʹ) ║                                    │
+ * ╚╤═══════════╧══════════════════╝                                    │
+ *  ├╴interpolate                                                       │
+ *  ├╴debounce                                                          │
+ *  ├╴throttle                                                          │
+ *  └╴                                                                  │
  */
 export type Predicate<T> = (t: T, i: number) => boolean;
 export const anythingPredicate: Predicate<unknown> = () => true;
@@ -106,7 +136,22 @@ export type SequenceComparisonOptions<T> = {
   filterPredicate?: Predicate<T>;
 };
 
-export function* iterIter<T>(source: Iterator<T>): IterableIterator<T> {
+export const isIterable = (x: unknown): x is Iterable<unknown> =>
+  isObject(x) &&
+  Symbol.iterator in x &&
+  typeof x[Symbol.iterator] === 'function';
+
+// export const isIterator = (x: unknown): x is Iterator<unknown> => isObject(x) && 'next' in x && typeof x['next'] === 'function';
+
+/**
+ * Wrap an Iterable<T> or Iterator<T> in a Generator function, making it an IterableIterator<T>
+ */
+export function* iterIter<T>(
+  source: Iterator<T> | Iterable<T>,
+): IterableIterator<T> {
+  if (isIterable(source)) {
+    source = source[Symbol.iterator]();
+  }
   for (
     let { value, done } = source.next();
     !done;
@@ -136,24 +181,36 @@ export function* takeLazily<T>(
 
 /**
  * Like takeLazily, but eager
- *
  * !Beware, this immediately reads the requested (n) items from the source into memory
- *
  * @returns Array of n items from source
  */
 export function takeArray<T>(source: IterableIterator<T>, n: number): Array<T> {
   return Array.from(takeLazily(source, n));
 }
 
+/**
+ * Like takeArray, but take until iterator exhausted
+ * !Beware, this immediately reads the requested (n) items from the source into memory
+ * !Beware, do not use with infinite source iterator
+ * @returns Array of all items from source
+ */
+export function takeAll<T>(source: IterableIterator<T>): Array<T> {
+  return Array.from(takeLazily(source, Number.POSITIVE_INFINITY));
+}
+
+/**
+ * Get the next value from source
+ * @returns A single item from source
+ */
 export function takeOne<T>(source: IterableIterator<T>): T | undefined {
   return source.next().value;
 }
 
 /**
- * Like takeLazily, but eager
- *
- * !Beware, this immediately reads all items from source into memory, not for use with infinite sources
- *
+ * @summary Like takeLazily, but eager
+ * @desc !Beware, this immediately reads all items from source into memory, not for use with infinite sources
+ * @param source an array or iterator to repeat
+ * @param n number of items to take
  * @returns Iterable of n items from source
  */
 export function* takeEagerly<T>(
@@ -165,16 +222,23 @@ export function* takeEagerly<T>(
   }
 }
 
+/**
+ * Options for {repeatIter}
+ *
+ * @property {number} [repetitions=Number.POSITIVE_INFINITY] How many times to repeat
+ * @property {boolean} [repeatFromCache=true] If true, results of first run through iterator are cached and replayed; If false, the source is reset (if possible) and used again
+ */
 export type RepeatIterOptions = {
   repetitions?: number;
   repeatFromCache?: boolean;
 };
 /**
  * Caches and repeats the input
- * Repeats forever, and caches input by default
+ * @desc Repeats forever, and caches input by default
  *
- * @param source an array or iterator to repeat
+ * @param {(Array<T>|IterableIterator<T>)} source an array or iterator to repeat
  * @param {RepeatIterOptions} [options] input options
+ * @yields
  */
 export function* repeatIter<T>(
   source: Array<T> | IterableIterator<T>,
@@ -333,16 +397,32 @@ export function* uniqueIter<T>(
 }
 
 /**
- * Group sets of values from N inputs
- *  to one output of tuples of length N
- *
- * [A1, A2, … An]  ⎫     [[A1, B1, … X1],
- * [B1, B2, … Bn]  ⎬  ▬▶︎   [A2, B2, … X2],
- * [X1, X2, … Xn]  ⎭        …[An, Bn, … Xn]]
+ * Yield all values from multiple source iterators, in order
  */
-export function* zipIter<T extends IterableIterator<unknown>[]>(
+export function* concat<T>(
+  ...iterables: IterableIterator<T>[]
+): IterableIterator<T> {
+  for (const iterable of iterables) {
+    yield* iterable;
+  }
+}
+
+/**
+ * Transforms source iterators into
+ *  each made up of the Nth item of each iteration of the input
+ *
+ *   [[A1, B1, … X1],     ⎫     [A1, A2, … An]
+ *     [A2, B2, … X2],    ⎬  ▬▶︎ [B1, B2, … Bn]
+ *      …[An, Bn, … Xn]]  ⎭     [X1, X2, … Xn]
+ *
+ *   [A1, A2, … An]  ⎫     [[A1, B1, … X1],
+ *   [B1, B2, … Bn]  ⎬  ▬▶︎   [A2, B2, … X2],
+ *   [X1, X2, … Xn]  ⎭        …[An, Bn, … Xn]]
+ *
+ */
+export function* transpose<T extends IterableIterator<unknown>[]>(
   ...iterables: T
-): IterableIterator<{ [I in keyof T]: T[I] }> {
+): IterableIterator<{ [K in keyof T]: T[K] }> {
   while (true) {
     const results = iterables.map((i) => i.next());
 
@@ -353,22 +433,50 @@ export function* zipIter<T extends IterableIterator<unknown>[]>(
   }
 }
 
-export function* zip<T extends Array<unknown>[]>(...args: T) {
-  for (
-    let i = 0;
-    i <
-    Math.min(
-      ...args.map((e) => {
-        return e.length;
-      }),
-    );
-    ++i
-  ) {
-    yield args.map((e) => {
-      return e[i];
-    }) as { [I in keyof T]: T[I][number] };
-  }
-}
+/**
+ * Group sets of values from N inputs
+ *  to one output of tuples of length N
+ *
+ * [A1, A2, … An]  ⎫     [[A1, B1, … X1],
+ * [B1, B2, … Bn]  ⎬  ▬▶︎   [A2, B2, … X2],
+ * [X1, X2, … Xn]  ⎭        …[An, Bn, … Xn]]
+ */
+// export function* zip1<T>(
+//   ...args: T[] | [T[]]
+// ): Array<{ [K in keyof T]: T[K] }> {
+//   const arrays:  = args.length === 1 ? args.flat() : args
+//   return takeArray(transpose(arrays.map((array) => array.values())));
+// }
+
+// const toIterator = <T, I extends Iterator<T> | Iterable<T>>(thing: I): IterableIterator<T> => {
+//   if (isIterable(thing)) {
+//     return thing[Symbol.iterator]();
+//   }
+//   return thing;
+// }
+
+// export const zip = <T extends Iterable<unknown> | Iterator<unknown>>(...args: T[]): Array<{ [K in keyof T]: T[K] }> => {
+//   const iterators = args.map((arg) => iterIter(toIterator(arg)));
+
+//   return takeAll(transpose(iterators))
+// }
+
+// export function* zip<T extends Array<unknown>[]>(...args: T) {
+//   for (
+//     let i = 0;
+//     i <
+//     Math.min(
+//       ...args.map((e) => {
+//         return e.length;
+//       }),
+//     );
+//     ++i
+//   ) {
+//     yield args.map((e) => {
+//       return e[i];
+//     }) as { [I in keyof T]: T[I][number] };
+//   }
+// }
 
 /**
  * Does predicate hold true for some item in source
@@ -394,7 +502,8 @@ export function some<T>(
 /**
  * Does predicate hold true for every item in source
  *
- * @returns true if predicate true for all items, false if not
+ * @returns {true} if predicate true for all items
+ * @returns {false} if predicate false for any item
  * (Short-circuit evaluation: returns early on first failed predicate check)
  *
  * !Beware, in the worst-case this reads all items in source
@@ -432,11 +541,15 @@ export const compareSequencesIter = <T>(
   ]
 ): boolean =>
   every(
-    zipIter(
+    transpose(
       ...sequences.map((sequence) => filterIter(sequence, filterPredicate)),
     ),
     (group) => group.every((v) => v === group[0]),
   );
+
+/**
+ * Generators
+ */
 
 /**
  * Produce sequential IDs
@@ -455,3 +568,111 @@ export function* sequentialIter<T extends number>(
     next++;
   }
 }
+
+/**
+ * Generate range
+ *
+ *
+ *          ╭┈┈┈┈┈┈╸Behaviour╺┈┈┈┈┈┈┈┈┈╸Default╺┈┈┈┈┈╮
+ *  start╺─╮╺┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╸
+ *         │     start at N       │                  │
+ *  count╺╮╰────────────────────────────────────────╸│
+ *        │     + = stop after N  │ any: +inf        │
+ *  step╺╮│   -/0 = do nothing    │                  │
+ *       │╰─────────────────────────────────────────╸│
+ *  end╺╮│    +/- = step by N     │ start = end:  0  │
+ *      ││      0 = repeat start  │ start > end: -1  │
+ *      ││ ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ │ start < end: +1  │
+ *      ││    step:   -   0   +   │                  │
+ *      │╰──────────┬───┼───┼───────────────────────╸│
+ *      │   < start │ Y │ ⁃ ╎ ⁃   │ step > 1: +inf   │
+ *      │   = start │ ⁃ │ ⁃ ╎ ⁃   │ step = 0: start  │
+ *      │   > start │ ⁃ │ ⁃ ╎ Y   │ step < 1: -inf   │
+ *      ╰───────────────────────────────────────────╸╵
+ */
+export type RangeGeneratorConfig = {
+  start: number;
+  step?: number;
+  end?: number;
+  count?: number;
+};
+export function* rangeIter({
+  start,
+  step = 1,
+  count = Number.POSITIVE_INFINITY,
+  end = start + step * count,
+}: RangeGeneratorConfig): IterableIterator<number> {
+  for (
+    let next = start, i = 0;
+    i < count && step > 0 ? next < end : step < 0 ? next > end : true;
+    i++, next += step
+  ) {
+    yield next;
+  }
+}
+
+// const iterProxy: ProxyHandler<IterableIterator<T>> = {
+//     get: <K extends keyof IterableIterator<T>, V extends IterableIterator<T>[K]>(target: IterableIterator<T>, property: K) => {
+//       // return target[property];
+//       // return (value: IterableIterator<T>[typeof property]) => {
+//       return (value: V): IterableIterator<T> | IterableIterator<T>[K] => {
+//         if (value) {
+//           target[property] = value;
+//           return new Proxy(target, iterProxy);
+//         }
+//         return target[property];
+//       }
+//     }
+//   }
+// }
+
+const wrappedResult =
+  <F extends (...args: unknown[]) => unknown, T>(target: T, func: F) =>
+  (...params: Parameters<F>) => {
+    const result = func.apply(target, params);
+    return [result];
+  };
+
+export type IterTools = IterableIterator<unknown> & {
+  takeLazily: (source: IterableIterator<unknown>, n: number) => IterTools;
+};
+
+const wrapIterable = (iterable: IterableIterator<unknown>): IterTools => {
+  return new Proxy(iterable as IterTools, {
+    get: <K extends keyof IterTools, V extends IterTools[K]>(
+      target: IterTools,
+      property: K,
+      receiver: unknown,
+    ) => {
+      // return target[property];
+      // return (value: IterableIterator<T>[typeof property]) => {
+      return (value: V): IterTools | IterTools[K] => {
+        if (value) {
+          target[property] = value;
+          return wrapIterable(target);
+        }
+        return Reflect.get(target, property, receiver);
+      };
+    },
+  });
+};
+
+// const wrapIterable = <T>(iterable: IterableIterator<T>) => {
+//   return new Proxy(iterable, {
+//     get: <K extends keyof IterableIterator<T>, V extends IterableIterator<T>[K]>(target: IterableIterator<T>, property: K) => {
+//       // return target[property];
+//       // return (value: IterableIterator<T>[typeof property]) => {
+//       return (value: V): IterableIterator<T> | IterableIterator<T>[K] => {
+//         if (value) {
+//           target[property] = value;
+//           return new Proxy(target, iterProxy);
+//         }
+//         return target[property];
+//       }
+//     }
+//   })
+// };
+
+// export const itertools: IterTools<unknown> = {
+//   takeLazily: wrapGenerator(takeLazily),
+// };

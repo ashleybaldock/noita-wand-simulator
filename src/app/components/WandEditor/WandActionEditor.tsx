@@ -14,7 +14,7 @@ import {
 } from '../../redux/editorThunks';
 import {
   moveSelection,
-  deleteSelection,
+  deleteSelected,
   clearSelection,
 } from '../../redux/editorSlice';
 import type { Spell } from '../../calc/spell';
@@ -50,8 +50,10 @@ const ActionComponent = ({
 
   const { isDraggingAction } = useDragLayer((monitor) => ({
     isDragging: monitor.isDragging(),
-    isDraggingAction: monitor.getItemType() === 'action',
-    isDraggingSelect: monitor.getItemType() === 'select',
+    isDraggingAction:
+      monitor.isDragging() && monitor.getItemType() === 'action',
+    isDraggingSelect:
+      monitor.isDragging() && monitor.getItemType() === 'select',
   }));
   const handleDeleteSpell = (wandIndex: number) => {
     dispatch(setSpellAtIndex({ spellId: null, wandIndex }));
@@ -163,7 +165,7 @@ export const WandActionEditor = () => {
    *   visual change from in-progress/active selection to none */
   useHotkeys('Backspace, r, shift+x', () => {
     if (isSelecting) {
-      dispatch(deleteSelection({ shift: 'left' }));
+      dispatch(deleteSelected({ shift: 'left' }));
       dispatch(clearSelection());
     } else {
       dispatch(removeSpellBeforeCursor({ shift: 'left' }));
@@ -172,7 +174,7 @@ export const WandActionEditor = () => {
   });
   useHotkeys('ctrl+Backspace, ctrl+r', () => {
     if (isSelecting) {
-      dispatch(deleteSelection({ shift: 'right' }));
+      dispatch(deleteSelected({ shift: 'right' }));
       dispatch(clearSelection());
     } else {
       dispatch(removeSpellBeforeCursor({ shift: 'right' }));
@@ -180,7 +182,7 @@ export const WandActionEditor = () => {
   });
   useHotkeys('shift+Backspace, shift+r, x', () => {
     if (isSelecting) {
-      dispatch(deleteSelection({}));
+      dispatch(deleteSelected({}));
       dispatch(clearSelection());
     } else {
       dispatch(removeSpellAfterCursor({ shift: 'left' }));
@@ -188,7 +190,7 @@ export const WandActionEditor = () => {
   });
   useHotkeys('ctrl+shift+Backspace, ctrl+shift+r', () => {
     if (isSelecting) {
-      dispatch(deleteSelection({}));
+      dispatch(deleteSelected({}));
       dispatch(clearSelection());
     } else {
       dispatch(removeSpellAfterCursor({ shift: 'right' }));

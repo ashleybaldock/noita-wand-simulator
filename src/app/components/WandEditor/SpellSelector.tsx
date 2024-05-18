@@ -14,7 +14,7 @@ import {
 import { Tabs } from '../generic';
 import {
   DraggableWandAction,
-  WandActionBorder,
+  StyledWandActionBorder,
   WandActionDragSource,
 } from '../Spells/WandAction';
 import {
@@ -41,7 +41,7 @@ const SpellCategorySpellsDiv = styled.div`
   align-content: start;
 `;
 
-const SpellSelectorWandActionBorder = styled(WandActionBorder)`
+const SpellSelectorWandActionBorder = styled(StyledWandActionBorder)`
   position: relative;
   background-image: url('/data/inventory/grid_box_unknown.png');
   padding-left: 0px;

@@ -1,4 +1,4 @@
-import { WandActionBorder } from './WandActionBorder';
+import { StyledWandActionBorder } from './WandActionBorder';
 import { BeforeSpellDropTarget } from './BeforeSpellDropTarget';
 import { AfterSpellDropTarget } from './AfterSpellDropTarget';
 import { OverSpellDropTarget } from './OverSpellDropTarget';
@@ -12,19 +12,9 @@ export const WandActionDropTargets = ({
 }>) => {
   return (
     <OverSpellDropTarget wandIndex={wandIndex}>
-      <WandActionBorder>{children}</WandActionBorder>
+      <StyledWandActionBorder>{children}</StyledWandActionBorder>
       <BeforeSpellDropTarget wandIndex={wandIndex} />
       <AfterSpellDropTarget wandIndex={wandIndex} />
-      {/* <WandEditCursor */}
-      {/*   wandIndex={wandIndex} */}
-      {/*   isDropTarget={isDraggingSelect} */}
-      {/*   isDragSource={!isDraggingSelect && !isDraggingAction} */}
-      {/* /> */}
-      {/* <WandEditCursor */}
-      {/*   wandIndex={wandIndex} */}
-      {/*   isDropTarget={isDraggingSelect} */}
-      {/*   isDragSource={!isDraggingSelect && !isDraggingAction} */}
-      {/* /> */}
     </OverSpellDropTarget>
   );
 };

@@ -13,7 +13,11 @@ const isMutableRef = <T>(
   Object.hasOwnProperty.call(x, 'current') &&
   typeof x.current === typeof v;
 
-type MergableRef<T> = MutableRefObject<T> | LegacyRef<T> | undefined | null;
+export type MergableRef<T> =
+  | MutableRefObject<T>
+  | LegacyRef<T>
+  | undefined
+  | null;
 
 export const mergeRefs =
   <T>(...args: Array<MergableRef<T> | Array<MergableRef<T>>>): RefCallback<T> =>

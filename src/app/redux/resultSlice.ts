@@ -57,7 +57,7 @@ export const resultSlice = createSlice({
         };
       }>,
     ) => {
-      console.log('simulaton started:', spellIds);
+      // console.log('simulaton started:', spellIds);
 
       state.lastAlwaysIds = alwaysIds;
       state.lastSpellIds = spellIds;
@@ -72,7 +72,7 @@ export const resultSlice = createSlice({
         result: SerializedClickWandResult;
       }>,
     ) => {
-      console.log('serialized result:', result);
+      // console.log('serialized result:', result);
 
       state.last = result;
     },

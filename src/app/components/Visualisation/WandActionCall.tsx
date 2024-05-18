@@ -9,14 +9,14 @@ import {
   RecursionAnnotation,
 } from '../Annotations/';
 import { WrapAnnotation } from '../Annotations/WrapAnnotation';
-import { WandAction, WandActionBorder } from '../Spells/WandAction';
+import { WandAction, StyledWandActionBorder } from '../Spells/WandAction';
 import type { ActionCall } from '../../calc/eval/ActionCall';
 import { getSpellById } from '../../calc/spells';
 
 /*
   background-image: url(/data/inventory/action_tree_box.png);
  */
-const WandActionCallBorder = styled(WandActionBorder)`
+const WandActionCallBorder = styled(StyledWandActionBorder)`
   padding: 3px;
   border: 3px dotted #656565;
   border-radius: 12px;

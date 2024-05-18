@@ -5,14 +5,14 @@ import {
   DeckIndexAnnotation,
   FriendlyFireAnnotation,
 } from '../Annotations/';
-import { WandAction, WandActionBorder } from '../Spells/WandAction';
+import { WandAction, StyledWandActionBorder } from '../Spells/WandAction';
 import { getSpellById } from '../../calc/spells';
 import type { ShotProjectile } from '../../calc/eval/ShotProjectile';
 
 /*
   background-image: url(/data/inventory/action_tree_box.png);
  */
-const WandActionProjectileBorder = styled(WandActionBorder)`
+const WandActionProjectileBorder = styled(StyledWandActionBorder)`
   padding: 3px;
   border: 3px dotted #656565;
   border-radius: 12px;

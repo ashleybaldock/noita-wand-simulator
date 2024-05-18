@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import type { ShotProjectile } from '../../../calc/eval/ShotProjectile';
-import { WandAction, WandActionBorder } from '../../Spells/WandAction';
+import { WandAction, StyledWandActionBorder } from '../../Spells/WandAction';
 import { getSpellById } from '../../../calc/spells';
 import {
   ActionProxyAnnotation,
@@ -50,7 +50,7 @@ const MainDiv = styled.div`
 /*
   background-image: url(/data/inventory/action_tree_box.png);
  */
-const ShotTableProjectileBorder = styled(WandActionBorder)`
+const ShotTableProjectileBorder = styled(StyledWandActionBorder)`
   position: relative;
   padding: 3px;
   border: 3px dotted #656565;

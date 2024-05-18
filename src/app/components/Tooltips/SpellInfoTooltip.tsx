@@ -189,8 +189,6 @@ export const SpellInfoTooltip = ({
                 </>
               )}
             </Value>
-            <Label>Beta</Label>
-            <YesNo yes={Boolean(beta)} />
             {spawn_requires_flag !== undefined && (
               <>
                 <Label>Unlock</Label>

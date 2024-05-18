@@ -187,7 +187,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
 
       if (status === 'ok') {
         const { value } = result;
-        console.log('Child succeeded: ', value);
+        // console.log('Child succeeded: ', value);
 
         listenerApi.dispatch(
           newResult({

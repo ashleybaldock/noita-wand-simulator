@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useDrag } from 'react-dnd';
 import { StyledWandActionBorder } from '../Spells/WandAction';
 import { BaseAnnotation } from './BaseAnnotation';
 import { noop } from '../../util';
@@ -57,13 +56,6 @@ export const DeleteSpellAnnotation = ({
 }: {
   deleteSpell?: () => void;
 }) => {
-  const [{ isDragging }] = useDrag(() => ({
-    type: 'action',
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  }));
-
   return (
     <DeleteDiv
       onClick={deleteSpell}

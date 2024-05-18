@@ -1,6 +1,14 @@
 import type { ActionId } from '../../../calc/actionId';
 
-export interface DragItemSpell {
+export const dragItemNames = ['spell', 'select'] as const;
+
+export type DragItemName = (typeof dragItemNames)[number];
+
+export interface DragItem {
+  disc: DragItemName;
+}
+
+export interface DragItemSpell extends DragItem {
   disc: 'spell';
   actionId: ActionId;
   sourceWandIndex?: number;
@@ -8,9 +16,7 @@ export interface DragItemSpell {
 export const isDragItemSpell = (x: DragItem): x is DragItemSpell =>
   x.disc === 'spell';
 
-export type DragItem = DragItemSpell | DragItemSelect;
-
-export interface DragItemSelect {
+export interface DragItemSelect extends DragItem {
   disc: 'select';
   dragStartIndex: number;
 }
