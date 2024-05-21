@@ -2,6 +2,7 @@ import type { ActionId } from './actionId';
 import type { Action } from './action';
 import type { SpellType } from './spellTypes';
 import type { UnlockCondition } from './unlocks';
+import type { SpellSprite } from './spellSprite';
 
 export type SpellDeckInfo = {
   id: ActionId;
@@ -19,7 +20,7 @@ export type SpellProperties = {
   id: ActionId;
   name: string;
   description: string;
-  sprite: string;
+  sprite: SpellSprite;
   // Casting
   action: Action;
   type: SpellType;

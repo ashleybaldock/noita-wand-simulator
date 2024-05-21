@@ -57,7 +57,7 @@ const actions: Spell[] = [
     id: 'DRAW_EAT',
     name: '$DRAW_EAT',
     description: '$DRAW_EAT',
-    sprite: 'data/ui_gfx/gun_actions/draw_eat.png',
+    sprite: 'var(--sprite-action-draw-eat)',
     sprite_unidentified:
       'data/ui_gfx/gun_actions/spread_reduce_unidentified.png',
     type: 'other',

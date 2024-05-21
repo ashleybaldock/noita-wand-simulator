@@ -1,7 +1,7 @@
 /* Auto-generated file */
 
 export const unlockConditions = [
-  'card_unlocked_alchemy',
+'card_unlocked_alchemy',
   'card_unlocked_black_hole',
   'card_unlocked_bomb_holy',
   'card_unlocked_bomb_holy_giga',
@@ -41,6 +41,4 @@ export const unlockConditions = [
 ] as const;
 
 export type UnlockConditionTuple = typeof unlockConditions;
-
 export type UnlockCondition = UnlockConditionTuple[number];
-

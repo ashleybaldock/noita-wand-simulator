@@ -1,7 +1,7 @@
 /* Auto-generated file */
 
 export const actionIds = [
-  'ACCELERATING_SHOT',
+'ACCELERATING_SHOT',
   'ACIDSHOT',
   'ACID_TRAIL',
   'ADD_DEATH_TRIGGER',
@@ -422,8 +422,7 @@ export const actionIds = [
   'Y_SHAPE',
   'Y_SHOT',
   'ZERO_DAMAGE',
-  'ZETA',
+  'ZETA'
 ] as const;
 
 export type ActionId = typeof actionIds[number];
-

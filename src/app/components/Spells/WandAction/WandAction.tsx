@@ -48,7 +48,7 @@ const _WandAction = ({
       className={className}
       style={{
         ...style,
-        backgroundImage: `url('/${spellSprite}'), ${getBackgroundUrlForSpellType(
+        backgroundImage: `${spellSprite}, ${getBackgroundUrlForSpellType(
           spellType,
         )}`,
       }}
