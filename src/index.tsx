@@ -1,5 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import './app/calc/__generated__/main/spellSprites.css';
+import './app/calc/extraSpells/extraSpellSprites.css';
 import './index.css';
 import './fonts/NoitaPixel.ttf';
 import './fonts/NoitaGlyphScaled.ttf';

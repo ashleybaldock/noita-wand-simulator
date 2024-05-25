@@ -1,11 +1,16 @@
 import os
 import re
+import base64
 from dataclasses import dataclass
 from re import Match
 
+cssPrefix = '--sprite-action-'
+
+spriteDir = 'public/data/ui_gfx/gun_actions/'
+spriteDirBase = 'public/'
+
 srcFile = 'data/scripts/gun/gun_actions.lua'
 # srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
-
 spellsBefore = """/* Auto-generated file */
 
 import { GunActionState } from '../../actionState';
@@ -93,7 +98,14 @@ config = {
       'dst': 'src/app/calc/__generated__/main/unlocks.ts',
       'before': '',
       'after': '',
-    }
+    },
+    'sprites':
+    {
+      'src': 'data/scripts/gun/gun_actions.lua',
+      'dst':'src/app/calc/__generated__/main/spellSprites.ts',
+      'before': '',
+      'after': '',
+    },
   },
   # 'beta': {
   #   'actionIds':
@@ -127,6 +139,12 @@ actionArgTypes = {
   'recursion_level': ['number', 0],
   'iteration': ['number', 1],
 }
+
+def spriteForAction(actionId):
+  return f'{cssPrefix}{str.lower(actionId.replace("_", "-"))}'
+
+def spriteReplaceFn(m: Match):
+  return f'{m.group(1)}{m.group(2)}{m.group(3)}var({spriteForAction(m.group(2))}){m.group(5)}'
 
 def actionReplaceFn(m: Match):
   argsString = 'c: GunActionState'
@@ -168,6 +186,9 @@ patterns = [
 
   # relatedPattern
   PatternReplace(r'related_(\w+)\s*=\s*{(.*?)},', r'related_\1=[\2],', flags=re.MULTILINE),
+
+  # sprite
+  PatternReplace(r'(^\t+{\s*id\s*=\s*\")(\w+)(\"[^}]+?^\t+\s*sprite\s*=\s*\")(.+?)(\")', spriteReplaceFn, flags=re.MULTILINE),
 
   # propertiesPattern
   PatternReplace(r'^(\s*\w+)\s*=\s*(.*), *$', r'\1: \2,', flags=re.MULTILINE),
@@ -310,25 +331,76 @@ def processUnlocks(src, dst, before = '', after = ''):
   pattern = r'\t+\s*spawn_requires_flag\s*=\s*\"(\w+)\"'
   matches = sorted(list(dict.fromkeys(re.findall(pattern, content, re.DOTALL))))
   joined = ",\n  ".join(f'\'{m}\'' for m in matches)
-  content = f'/* Auto-generated file */\n\nexport const unlockConditions = [\n  {joined},\n] as const;\n\nexport type UnlockConditionTuple = typeof unlockConditions;\n\nexport type UnlockCondition = UnlockConditionTuple[number];\n\n'
+  content = """/* Auto-generated file */
 
+export const unlockConditions = [
+""" + joined + """,
+] as const;
+
+export type UnlockConditionTuple = typeof unlockConditions;
+export type UnlockCondition = UnlockConditionTuple[number];"""
 
   with open(dst, 'w') as outFile:
     outFile.write(before + content + after)
+
+
 
 def processActionIds(src, dst, before = '', after = ''):
   with open(src) as inFile:
     content = inFile.read()
 
   content = preProcess(content)
-
-  pattern = r'\t+{\s*id\s*=\s*\"(\w+)\"'
-  matches = sorted(list(dict.fromkeys(re.findall(pattern, content, re.DOTALL))))
-  joined = ",\n  ".join(f'\'{m}\'' for m in matches)
-  content = f'/* Auto-generated file */\n\nexport const actionIds = [\n  {joined},\n] as const;\n\nexport type ActionId = typeof actionIds[number];\n\n'
+  matches = sorted(list(dict.fromkeys(re.findall(r'\t+{\s*id\s*=\s*\"(\w+)\"', content, re.DOTALL))))
 
   with open(dst, 'w') as outFile:
-    outFile.write(before + content + after)
+    outFile.write("""/* Auto-generated file */
+
+export const actionIds = [
+""" + ",\n  ".join(f'\'{m}\'' for m in matches) + """
+] as const;
+
+export type ActionId = typeof actionIds[number];
+""")
+
+
+
+def processSprites(src, dst, before = '', after = ''):
+
+  def loadSpriteToBase64(file):
+    with open(f'{spriteDirBase}{file}', "rb") as image_file:
+      return base64.b64encode(image_file.read())
+
+  with open(src) as inFile:
+    content = inFile.read()
+
+  content = preProcess(content)
+
+  actionIdAndSpritePattern = r'^\s+{\s*id\s*=\s*\"(\w+)\"[^}]+?^\s*sprite\s*=\s*\"(.+?)\"'
+
+  matches = dict(re.findall(actionIdAndSpritePattern, content, re.MULTILINE))
+
+  with open('src/app/calc/__generated__/main/spellSprites.css', 'w') as outFile:
+    outFile.write("""/* Auto-generated file */
+
+:root {
+""" + "\n".join(f'  {spriteForAction(actionId)}: url(\'data:image/png;base64,{loadSpriteToBase64(spriteFilename).decode("utf-8")}\');' for actionId, spriteFilename in iter(matches.items())) + """
+}
+""")
+
+  with open(dst, 'w') as outFile:
+    outFile.write("""/* Auto-generated file */
+
+import { ActionId } from './actionIds';
+
+export const spellSprites = [
+""" + ",\n".join(f'  \'var({spriteForAction(actionId)})\'' for actionId, _ in iter(matches.items())) + """,
+] as const;
+
+export type SpellSprite = typeof spellSprites[number];
+""")
+
+
+
 
 def processSpells(src, dst, before = '', after = ''):
   with open(src) as inFile:
@@ -368,9 +440,14 @@ process = {
   'actionIds': processActionIds,
   'unlocks': processUnlocks,
   'spells': processSpells,
+  'sprites': processSprites,
 }
 
 for branch, tasks in config.items():
   print(branch, tasks)
   for task, args in tasks.items():
     process[task](**args)
+
+
+
+# vim:set sw=2 ts=2 sts=2

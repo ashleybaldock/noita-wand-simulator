@@ -96,7 +96,12 @@ const Value = styled.div`
 
   padding: 0.1em 0em 0.1em 0.6em;
 `;
-const Image = styled.img`
+
+const SpellImage = styled.img.attrs<{ $src?: string }>(({ $src = '' }) => ({
+  style: {
+    content: `${$src ?? ''}`,
+  },
+}))`
   grid-column: simage;
   grid-row: simage / -1;
   display: flex;
@@ -170,7 +175,7 @@ export const SpellInfoTooltip = ({
             <Name>{translate(name)}</Name>
             <Description>{translate(description)}</Description>
             <SpellId>{actionId}</SpellId>
-            <Image src={`/${sprite}`}></Image>
+            <SpellImage $src={sprite} />
             <Label>Type</Label>
             <Value>{spellTypeInfoMap[type].name}</Value>
             <Label iconSrc={'data/wand/icon_mana_drain.png'}>Mana Drain</Label>
