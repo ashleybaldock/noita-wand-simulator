@@ -1,5 +1,8 @@
 import { isNumber } from '../util';
 
+export const CUR = Symbol('CUR');
+export type CursorWandIndex = typeof CUR;
+
 export const AC1 = Symbol('AC1');
 export const AC2 = Symbol('AC2');
 export const AC3 = Symbol('AC3');
@@ -27,7 +30,13 @@ export const specialIndexSet: Set<SpecialWandIndex> = new Set([
 
 export type MainWandIndex = number;
 
-export type WandIndex = MainWandIndex | AlwaysCastWandIndex | SpecialWandIndex;
+export type SelectionWandIndex = MainWandIndex | CursorWandIndex;
+
+export type WandIndex =
+  | MainWandIndex
+  | AlwaysCastWandIndex
+  | CursorWandIndex
+  | SpecialWandIndex;
 
 export const isMainWandIndex = (id: unknown): id is MainWandIndex =>
   isNumber(id);
@@ -35,8 +44,14 @@ export const isMainWandIndex = (id: unknown): id is MainWandIndex =>
 export const isAlwaysCastIndex = (id: unknown): id is AlwaysCastWandIndex =>
   (alwaysCastIndexSet as Set<unknown>).has(id);
 
+export const isCursorWandIndex = (id: unknown): id is CursorWandIndex =>
+  id === CUR;
+
 export const isSpecialWandIndex = (id: unknown): id is SpecialWandIndex =>
   (specialIndexSet as Set<unknown>).has(id);
+
+export const isSelectionWandIndex = (id: unknown): id is SelectionWandIndex =>
+  isNumber(id) || isSelectionWandIndex(id);
 
 export const isWandIndex = (id: unknown): id is WandIndex =>
   isNumber(id) || isAlwaysCastIndex(id) || isSpecialWandIndex(id);

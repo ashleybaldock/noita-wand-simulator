@@ -46,9 +46,9 @@ const cursors: Record<CursorStyle, BackgroundPart> = {
     'cursor': [],
   },
 };
-const dropHints: DropHints = {
+const selectHints: DropHints = {
   none: emptyBackgroundPart,
-  dragging: {
+  overCanDrop: {
     none: emptyBackgroundPart,
     forbidden: emptyBackgroundPart,
     shiftleft: emptyBackgroundPart,
@@ -87,6 +87,65 @@ const dropHints: DropHints = {
       'background-position': [`center`, `center`],
       'cursor': [],
     },
+  },
+  dragging: {
+    none: emptyBackgroundPart,
+    forbidden: emptyBackgroundPart,
+    shiftleft: emptyBackgroundPart,
+    shiftright: emptyBackgroundPart,
+    swap: emptyBackgroundPart,
+    replace: emptyBackgroundPart,
+  },
+};
+const dropHints: DropHints = {
+  none: emptyBackgroundPart,
+  overCanDrop: {
+    none: emptyBackgroundPart,
+    forbidden: emptyBackgroundPart,
+    shiftleft: emptyBackgroundPart,
+    shiftright: emptyBackgroundPart,
+    swap: emptyBackgroundPart,
+    replace: emptyBackgroundPart,
+  },
+  over: {
+    none: emptyBackgroundPart,
+    shiftleft: emptyBackgroundPart,
+    shiftright: emptyBackgroundPart,
+    forbidden: {
+      'background-image': ['linear-gradient(45deg, white, red, white)'],
+      'background-repeat': [`no-repeat`],
+      'background-size': [`100%`],
+      'background-position': [`center`],
+      'cursor': [],
+    },
+    swap: {
+      'background-image': [
+        'linear-gradient(45deg, transparent, green 50%, transparent 60%)',
+        'linear-gradient(315deg, transparent, yellow 50%, transparent 60%)',
+      ],
+      'background-repeat': [`no-repeat`, `no-repeat`],
+      'background-size': [`100%`, `100%`],
+      'background-position': [`center`, `center`],
+      'cursor': [],
+    },
+    replace: {
+      'background-image': [
+        'linear-gradient(45deg, transparent, red 50%, transparent 60%)',
+        'linear-gradient(315deg, transparent, blue 50%, transparent 60%)',
+      ],
+      'background-repeat': [`no-repeat`, `no-repeat`],
+      'background-size': [`100%`, `100%`],
+      'background-position': [`center`, `center`],
+      'cursor': [],
+    },
+  },
+  dragging: {
+    none: emptyBackgroundPart,
+    forbidden: emptyBackgroundPart,
+    shiftleft: emptyBackgroundPart,
+    shiftright: emptyBackgroundPart,
+    swap: emptyBackgroundPart,
+    replace: emptyBackgroundPart,
   },
 };
 const selections: Record<WandSelection, BackgroundPart> = {
@@ -169,46 +228,71 @@ export const OverSpellDropTarget = ({
 
   const onEndSelect = useCallback(
     (item: DragItemSelect) => {
-      if (isMainWandIndex(item.dragStartIndex) && isMainWandIndex(wandIndex)) {
-        dispatch(setSelection({ from: item.dragStartIndex, to: wandIndex }));
-      }
+      dispatch(
+        setSelection({
+          from: item.dragStartIndex,
+          to: wandIndex,
+          selecting: false,
+        }),
+      );
     },
     [dispatch, wandIndex],
   );
 
-  const [{ isOver, isDraggingSpell, isDraggingSelect }, dropRef] = useDrop(
-    () => ({
-      accept: ['spell', 'select'],
-      drop: (item: DragItem, monitor) => {
-        !monitor.didDrop() &&
-          ((isDragItemSpell(item) && onDropSpell(item)) ||
-            (isDragItemSelect(item) && onEndSelect(item)));
-      },
-      canDrop: (item: DragItem) =>
-        (isDragItemSpell(item) &&
-          item.sourceWandIndex !== wandIndex &&
-          isMainWandIndex(wandIndex) &&
-          isMainWandIndex(item.sourceWandIndex) &&
-          item.sourceWandIndex !== wandIndex + 1) ||
-        (isDragItemSelect(item) && isMainWandIndex(wandIndex)),
-      collect: (monitor) => ({
-        isDraggingSpell: monitor.getItemType() === 'spell',
-        isDraggingSelect: monitor.getItemType() === 'select',
-        isOver: monitor.isOver() && monitor.canDrop(),
-      }),
-    }),
-    [wandIndex, onDropSpell, onEndSelect],
+  const onDragSelect = useCallback(
+    (item: DragItemSelect) => {
+      dispatch(
+        setSelection({
+          from: item.dragStartIndex,
+          to: wandIndex,
+          selecting: true,
+        }),
+      );
+    },
+    [dispatch, wandIndex],
   );
 
-  const isSelecting = useSelecting();
+  const [{ isOver, isDraggingSpell, isDraggingSelect, canDrop }, dropRef] =
+    useDrop(
+      () => ({
+        accept: ['spell', 'select'],
+        drop: (item: DragItem, monitor) => {
+          !monitor.didDrop() &&
+            ((isDragItemSpell(item) && onDropSpell(item)) ||
+              (isDragItemSelect(item) && onEndSelect(item)));
+        },
+        hover: (item: DragItem) => {
+          isDragItemSelect(item) && onDragSelect(item);
+        },
+        canDrop: (item: DragItem) =>
+          (isDragItemSpell(item) && item.sourceWandIndex !== wandIndex) ||
+          (isDragItemSelect(item) && isMainWandIndex(wandIndex)),
+        collect: (monitor) => ({
+          isDraggingSpell: monitor.getItemType() === 'spell',
+          isDraggingSelect: monitor.getItemType() === 'select',
+          isOver: monitor.isOver(),
+          canDrop: monitor.canDrop(),
+        }),
+      }),
+      [wandIndex, onDropSpell, onEndSelect, onDragSelect],
+    );
 
   const style = useMergedBackgrounds({
     cursorParts: cursors[cursor],
-    dropHintParts: isDraggingSpell
-      ? isOver
-        ? dropHints.over[overHint]
-        : dropHints.dragging[overHint]
-      : dropHints.none,
+    dropHintParts:
+      (isDraggingSpell &&
+        isOver &&
+        canDrop &&
+        dropHints.overCanDrop[overHint]) ||
+      (isDraggingSpell && isOver && dropHints.over[overHint]) ||
+      (isDraggingSpell && dropHints.dragging[overHint]) ||
+      (isDraggingSelect &&
+        isOver &&
+        canDrop &&
+        selectHints.overCanDrop[overHint]) ||
+      (isDraggingSelect && isOver && selectHints.over[overHint]) ||
+      (isDraggingSelect && selectHints.dragging[overHint]) ||
+      dropHints.none,
     selectionParts: selections[selection],
   });
 

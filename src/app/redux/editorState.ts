@@ -1,5 +1,8 @@
+import type { MainWandIndex } from './WandIndex';
+
 export type WandEditorState = {
-  cursorIndex: number;
-  selectFrom: number | null;
-  selectTo: number | null;
+  cursorIndex: MainWandIndex;
+  selecting: boolean;
+  selectFrom: MainWandIndex | null;
+  selectTo: MainWandIndex | null;
 };

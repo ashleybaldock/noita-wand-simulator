@@ -15,4 +15,7 @@ export type DropHints = {
   none: BackgroundPart;
   dragging: Record<DropHint, BackgroundPart>;
   over: Record<DropHint, BackgroundPart>;
+  overCanDrop: Record<DropHint, BackgroundPart>;
 };
+
+// `${type}.${dragging}.${isOver}.${canDrop}.${hint}`;

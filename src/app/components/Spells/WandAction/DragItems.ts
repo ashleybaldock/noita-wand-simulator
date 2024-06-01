@@ -1,4 +1,5 @@
 import type { ActionId } from '../../../calc/actionId';
+import type { MainWandIndex, WandIndex } from '../../../redux/WandIndex';
 
 export const dragItemNames = ['spell', 'select'] as const;
 
@@ -11,14 +12,14 @@ export interface DragItem {
 export interface DragItemSpell extends DragItem {
   disc: 'spell';
   actionId: ActionId;
-  sourceWandIndex?: number;
+  sourceWandIndex?: WandIndex;
 }
 export const isDragItemSpell = (x: DragItem): x is DragItemSpell =>
   x.disc === 'spell';
 
 export interface DragItemSelect extends DragItem {
   disc: 'select';
-  dragStartIndex: number;
+  dragStartIndex: WandIndex;
 }
 export const isDragItemSelect = (x: DragItem): x is DragItemSelect =>
   x.disc === 'select';

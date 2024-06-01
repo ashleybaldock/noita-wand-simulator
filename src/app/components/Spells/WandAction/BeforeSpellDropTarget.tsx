@@ -1,16 +1,13 @@
 import styled from 'styled-components';
 import { useCallback } from 'react';
-import { useAppDispatch, useCursors, useSelection } from '../../../redux/hooks';
+import { useAppDispatch, useCursor, useSelection } from '../../../redux/hooks';
 import { BetweenSpellsDropTarget } from './BetweenSpellsDropTarget';
 import { insertSpellBefore, moveSpell } from '../../../redux/wandSlice';
 import type { WandIndex } from '../../../redux/WandIndex';
 import { isMainWandIndex } from '../../../redux/WandIndex';
 import { moveCursorTo, setSelection } from '../../../redux/editorSlice';
 import { WithDebugHints } from '../../Debug';
-import type { Cursor } from './Cursor';
-import { defaultCursor } from './Cursor';
 import type { DragItemSelect, DragItemSpell } from './DragItems';
-import type { WandSelection } from '../../../redux/Wand/wandSelection';
 
 const DropTargetBefore = styled(BetweenSpellsDropTarget)`
   top: 0;
@@ -31,14 +28,8 @@ export const BeforeSpellDropTarget = ({
   className?: string;
 }) => {
   const dispatch = useAppDispatch();
-  const selections = useSelection();
-  const selection: WandSelection = isMainWandIndex(wandIndex)
-    ? selections[wandIndex]
-    : 'none';
-  const cursors = useCursors();
-  const cursor: Cursor = isMainWandIndex(wandIndex)
-    ? cursors[wandIndex]
-    : defaultCursor;
+  const selection = useSelection(wandIndex);
+  const cursor = useCursor(wandIndex);
 
   const handleDrop = useCallback(
     (item: DragItemSpell) => {
@@ -63,9 +54,26 @@ export const BeforeSpellDropTarget = ({
 
   const handleEndSelect = useCallback(
     (item: DragItemSelect) => {
-      if (isMainWandIndex(item.dragStartIndex) && isMainWandIndex(wandIndex)) {
-        dispatch(setSelection({ from: item.dragStartIndex, to: wandIndex }));
-      }
+      dispatch(
+        setSelection({
+          from: item.dragStartIndex,
+          to: wandIndex,
+          selecting: false,
+        }),
+      );
+    },
+    [dispatch, wandIndex],
+  );
+
+  const handleDragSelect = useCallback(
+    (item: DragItemSelect) => {
+      dispatch(
+        setSelection({
+          from: item.dragStartIndex,
+          to: wandIndex,
+          selecting: true,
+        }),
+      );
     },
     [dispatch, wandIndex],
   );
@@ -79,6 +87,7 @@ export const BeforeSpellDropTarget = ({
       onClick={() => dispatch(moveCursorTo({ to: wandIndex }))}
       onDropSpell={handleDrop}
       onEndSelect={handleEndSelect}
+      onDragSelect={handleDragSelect}
       className={className}
     ></DropTargetBefore>
   );

@@ -6,15 +6,20 @@ import { generateWikiWandV2 } from './Wand/toWiki';
 import { generateSearchFromWandState } from './Wand/toSearch';
 import type { KeyOfType } from '../util';
 import { sequencesMatch, sequencesMatchIgnoringHoles } from '../util';
-import type { WandSelection } from './Wand/wandSelection';
+import { defaultWandSelection, type WandSelection } from './Wand/wandSelection';
 import { getSelectionForId } from './Wand/toSelection';
 import type { Config, ConfigToggleField } from './configSlice';
 import { setConfigSetting, toggleConfigSetting } from './configSlice';
 import type { UIState, UIToggle } from './uiSlice';
 import { flipUiToggle, setUiToggle } from './uiSlice';
-import type { Cursor } from '../components/Spells/WandAction/Cursor';
+import {
+  defaultCursor,
+  type Cursor,
+} from '../components/Spells/WandAction/Cursor';
 import type { SpellId } from './Wand/spellId';
 import { useMemo } from 'react';
+import type { WandIndex } from './WandIndex';
+import { isMainWandIndex } from './WandIndex';
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -205,22 +210,17 @@ const selectCursors = createSelector(
 
 export const useCursors = () => useSelector(selectCursors);
 
-// const selectCursor = createSelector(
-//   selectCursors,
-
-// export const useCursor = (wandIndex: WandIndex): Cursor => {
-//   if (isMainWandIndex(wandIndex)) {
-//     return cursor[wandIndex];
-//   }
-//   return { position: 'none', style: 'none' };
-// };
+export const useCursor = (wandIndex: WandIndex): Cursor => {
+  const cursors = useCursors();
+  return isMainWandIndex(wandIndex) ? cursors[wandIndex] : defaultCursor;
+};
 
 const selectSelectionExtents = (state: RootState) => ({
   selectFrom: state.editor.selectFrom,
   selectTo: state.editor.selectTo,
 });
 
-const selectSelection = createSelector(
+const selectSelections = createSelector(
   selectSelectionExtents,
   selectSpells,
   ({ selectFrom, selectTo }, spellIds): WandSelection[] =>
@@ -228,7 +228,15 @@ const selectSelection = createSelector(
       getSelectionForId(wandIndex, selectFrom, selectTo),
     ),
 );
-export const useSelection = () => useSelector(selectSelection);
+export const useSelections = () => useSelector(selectSelections);
+
+export const useSelection = (wandIndex: WandIndex): WandSelection => {
+  const selections = useSelections();
+  return isMainWandIndex(wandIndex)
+    ? selections[wandIndex]
+    : defaultWandSelection;
+};
+
 const selectSelecting = createSelector(
   selectSelectionExtents,
   ({ selectFrom }): boolean => selectFrom !== null,

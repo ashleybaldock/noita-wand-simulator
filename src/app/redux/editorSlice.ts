@@ -1,14 +1,18 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { SpellShiftDirection, SelectionIndex } from '../types';
+import type { SpellShiftDirection } from '../types';
 import { useSliceWrapper } from './useSlice';
-import { isNotNullOrUndefined, isNumber, isString } from '../util';
 import type { WandEditorState } from './editorState';
-import type { WandIndex } from './WandIndex';
-import { isMainWandIndex } from './WandIndex';
+import type { SelectionWandIndex, WandIndex } from './WandIndex';
+import {
+  isCursorWandIndex,
+  isMainWandIndex,
+  isSelectionWandIndex,
+} from './WandIndex';
 
 const initialState: WandEditorState = {
   cursorIndex: 0,
+  selecting: false,
   selectFrom: 3,
   selectTo: 6,
 } as const;
@@ -21,35 +25,40 @@ export const editorSlice = createSlice({
       return initialState;
     },
     clearSelection: (state): void => {
+      state.selecting = false;
       state.selectFrom = null;
       state.selectTo = null;
     },
+
+    /**
+     * Confirm current selection bounds and end selecting mode
+     */
+    confirmSelection: (state): void => {
+      state.selecting = false;
+    },
+
     /**
      * Set selection bounds based on from and to index
      */
     setSelection: (
       state,
       {
-        payload: { from, to },
-      }: PayloadAction<{ from: SelectionIndex; to: SelectionIndex }>,
+        payload: { from, to, selecting = true },
+      }: PayloadAction<{
+        from: WandIndex;
+        to: WandIndex;
+        selecting?: boolean;
+      }>,
     ): void => {
-      if (isNotNullOrUndefined(from)) {
-        if (isString(from) && from === 'cursor') {
-          state.selectFrom = state.cursorIndex;
-        }
-        if (isNumber(from)) {
-          state.selectFrom = from;
-        }
+      state.selecting = selecting;
+      if (isSelectionWandIndex(from)) {
+        state.selectFrom = isCursorWandIndex(from) ? state.cursorIndex : from;
       }
-      if (isNotNullOrUndefined(to)) {
-        if (isString(to) && to === 'cursor') {
-          state.selectTo = state.cursorIndex - 1;
-        }
-        if (isNumber(to)) {
-          state.selectTo = to;
-        }
+      if (isSelectionWandIndex(to)) {
+        state.selectTo = isCursorWandIndex(to) ? state.cursorIndex : to;
       }
     },
+
     /**
      * Change position of current selection
      * Operates based on the start index, and preserves selection length
@@ -127,11 +136,9 @@ export const editorSlice = createSlice({
         const prevTo = state.selectTo;
 
         /* Adjust an existing selection */
-        if (isNotNullOrUndefined(prevFrom) && isNotNullOrUndefined(prevTo)) {
-          console.log(prevFrom, prevTo, oldCursor, newCursor);
+        if (isMainWandIndex(prevFrom) && isMainWandIndex(prevTo)) {
           /* shrink selection to new start point, cursor moves with selection */
           if (newCursor === oldCursor && oldCursor === prevFrom) {
-            console.log('a', newCursor, oldCursor);
             state.selectFrom = newCursor;
             state.cursorIndex = newCursor;
           }
@@ -171,7 +178,7 @@ export const editorSlice = createSlice({
             state.selectTo = newCursor - 1;
             state.cursorIndex = newCursor;
           }
-        } else if (isNotNullOrUndefined(prevFrom)) {
+        } else if (isMainWandIndex(prevFrom)) {
           if (newCursor < prevFrom) {
             state.cursorIndex = newCursor;
             state.selectFrom = newCursor;
