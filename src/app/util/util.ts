@@ -267,6 +267,15 @@ export const toUrl = (path: string) => {
   return `url('/${path}')`;
 };
 
+export const capitalize = <T extends string>(s: T) =>
+  (s[0].toUpperCase() + s.slice(1)) as Capitalize<typeof s>;
+
+export const manglePropName = (propName: string) =>
+  propName
+    .split('-')
+    .map((p, i) => (i === 0 ? p : capitalize(p)))
+    .join('');
+
 // https://stackoverflow.com/a/7616484
 export function hashString(s: string) {
   let hash = 0;

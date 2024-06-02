@@ -17,3 +17,8 @@ export const emptyBackgroundPart = {
 export type BackgroundPartName = (typeof backgroundParts)[number];
 
 export type BackgroundPart = Record<BackgroundPartName, string[]>;
+
+export type BackgroundPartSet = {
+  before: BackgroundPart;
+  after: BackgroundPart;
+};

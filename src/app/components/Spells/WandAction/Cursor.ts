@@ -1,4 +1,10 @@
-export type CursorStyle = 'none' | 'caret';
+export const cursorStyles = [
+  'none',
+  'caret-hover',
+  'caret',
+  'spell-over',
+] as const;
+export type CursorStyle = (typeof cursorStyles)[number];
 
 export type CursorPosition = 'none' | 'before' | 'after';
 

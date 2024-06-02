@@ -1,5 +1,5 @@
 import type { ActionId } from '../../../calc/actionId';
-import type { MainWandIndex, WandIndex } from '../../../redux/WandIndex';
+import type { WandIndex } from '../../../redux/WandIndex';
 
 export const dragItemNames = ['spell', 'select'] as const;
 

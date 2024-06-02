@@ -12,7 +12,6 @@ import {
   setSpellAtIndex,
   useAppDispatch,
   useConfig,
-  useSelecting,
 } from '../../../redux';
 import { useDrop } from 'react-dnd';
 import { moveCursorTo, setSelection } from '../../../redux/editorSlice';
@@ -20,32 +19,9 @@ import { isMainWandIndex, type WandIndex } from '../../../redux/WandIndex';
 import type { CursorStyle } from './Cursor';
 import { emptyBackgroundPart, type BackgroundPart } from './BackgroundPart';
 import type { DropHint, DropHints } from './DropHint';
-import { useMergedBackgrounds } from './useMergeBackgrounds';
-import type { MergableRef } from '../../../util/mergeRefs';
 import { noop } from '../../../util';
+import { useMergeBackgrounds } from './useMergeBackgrounds';
 
-const cursors: Record<CursorStyle, BackgroundPart> = {
-  caret: {
-    'background-image': [
-      `url('/data/inventory/cursor-top.png')`,
-      `url('/data/inventory/cursor-mid.png')`,
-    ],
-    'background-repeat': [`no-repeat`, `repeat-y`],
-    'background-size': [
-      `var(--cursor-container-width)`,
-      `var(--cursor-container-width) `,
-    ],
-    'background-position': [`center top`, `center center`],
-    'cursor': [],
-  },
-  none: {
-    'background-image': [],
-    'background-repeat': [],
-    'background-size': [],
-    'background-position': [],
-    'cursor': [],
-  },
-};
 const selectHints: DropHints = {
   none: emptyBackgroundPart,
   overCanDrop: {
@@ -277,13 +253,8 @@ export const OverSpellDropTarget = ({
       [wandIndex, onDropSpell, onEndSelect, onDragSelect],
     );
 
-  const style = useMergedBackgrounds({
-    cursorParts: cursors[cursor],
-    dropHintParts:
-      (isDraggingSpell &&
-        isOver &&
-        canDrop &&
-        dropHints.overCanDrop[overHint]) ||
+  const style = useMergeBackgrounds(
+    (isDraggingSpell && isOver && canDrop && dropHints.overCanDrop[overHint]) ||
       (isDraggingSpell && isOver && dropHints.over[overHint]) ||
       (isDraggingSpell && dropHints.dragging[overHint]) ||
       (isDraggingSelect &&
@@ -293,8 +264,8 @@ export const OverSpellDropTarget = ({
       (isDraggingSelect && isOver && selectHints.over[overHint]) ||
       (isDraggingSelect && selectHints.dragging[overHint]) ||
       dropHints.none,
-    selectionParts: selections[selection],
-  });
+    selections[selection],
+  );
 
   return (
     <DropTargetOver

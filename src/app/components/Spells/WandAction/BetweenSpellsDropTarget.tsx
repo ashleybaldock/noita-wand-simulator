@@ -2,7 +2,11 @@ import styled from 'styled-components';
 import type { WandSelection } from '../../../redux/Wand/wandSelection';
 import type { CursorStyle } from './Cursor';
 import { mergeRefs, type MergableRef } from '../../../util/mergeRefs';
-import { emptyBackgroundPart, type BackgroundPart } from './BackgroundPart';
+import {
+  BackgroundPartSet,
+  emptyBackgroundPart,
+  type BackgroundPart,
+} from './BackgroundPart';
 import { useDrag, useDrop } from 'react-dnd';
 import {
   isDragItemSelect,
@@ -14,24 +18,55 @@ import {
 import type { WandIndex } from '../../../redux/WandIndex';
 import { isMainWandIndex } from '../../../redux/WandIndex';
 import type { DropHint, DropHints } from './DropHint';
-import { useMergedBackgrounds } from './useMergeBackgrounds';
+import { useMergeBackgrounds } from './useMergeBackgrounds';
 import { useSelecting } from '../../../redux';
+import { mapIter, takeAll } from '../../../util';
 
 const cursors: Record<CursorStyle, BackgroundPart> = {
-  caret: {
+  'caret-hover': {
     'background-image': [
-      `url('/data/inventory/cursor-top.png')`,
-      `url('/data/inventory/cursor-mid.png')`,
+      `var(--sprite-cursor-caret-hover-top)`,
+      `var(--sprite-cursor-caret-hover-line)`,
+      `var(--sprite-cursor-caret-hover-bottom)`,
+    ],
+    'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+    'background-size': [
+      `var(--cursor-container-width)`,
+      `var(--cursor-container-width)`,
+      `var(--cursor-container-width)`,
+    ],
+    'background-position': [`center top`, `center center`, `center bottom`],
+    'cursor': ['text'],
+  },
+  'caret': {
+    'background-image': [
+      `var(--sprite-cursor-caret-top)`,
+      `var(--sprite-cursor-caret-line)`,
     ],
     'background-repeat': [`no-repeat`, `repeat-y`],
     'background-size': [
       `var(--cursor-container-width)`,
-      `var(--cursor-container-width) `,
+      `var(--cursor-container-width)`,
     ],
     'background-position': [`center top`, `center center`],
     'cursor': [],
   },
-  none: {
+  'spell-over': {
+    'background-image': [
+      `var(--sprite-cursor-spell-over-top)`,
+      `var(--sprite-cursor-spell-over-line)`,
+      `var(--sprite-cursor-spell-over-bottom)`,
+    ],
+    'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+    'background-size': [
+      `var(--cursor-container-width)`,
+      `var(--cursor-container-width)`,
+      `var(--cursor-container-width)`,
+    ],
+    'background-position': [`center top`, `center center`, `center bottom`],
+    'cursor': [],
+  },
+  'none': {
     'background-image': [],
     'background-repeat': [],
     'background-size': [],
@@ -46,58 +81,16 @@ const dropHints: DropHints = {
     forbidden: emptyBackgroundPart,
     swap: emptyBackgroundPart,
     replace: emptyBackgroundPart,
-    shiftleft: {
-      'background-image': [
-        'linear-gradient(135deg, transparent, yellow 50%, transparent 60%)',
-        'linear-gradient(225deg, transparent, yellow 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
-      'cursor': [],
-    },
-    shiftright: {
-      'background-image': [
-        'linear-gradient(45deg, transparent, orange 50%, transparent 60%)',
-        'linear-gradient(315deg, transparent, orange 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
-      'cursor': [],
-    },
+    shiftleft: emptyBackgroundPart,
+    shiftright: emptyBackgroundPart,
   },
   overCanDrop: {
     none: emptyBackgroundPart,
     swap: emptyBackgroundPart,
     replace: emptyBackgroundPart,
-    forbidden: {
-      'background-image': ['linear-gradient(45deg, white, red, white)'],
-      'background-repeat': [`no-repeat`],
-      'background-size': [`100%`],
-      'background-position': [`center`],
-      'cursor': [],
-    },
-    shiftleft: {
-      'background-image': [
-        'linear-gradient(135deg, transparent, yellow 50%, transparent 60%)',
-        'linear-gradient(225deg, transparent, yellow 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
-      'cursor': [],
-    },
-    shiftright: {
-      'background-image': [
-        'linear-gradient(45deg, transparent, orange 50%, transparent 60%)',
-        'linear-gradient(315deg, transparent, orange 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
-      'cursor': [],
-    },
+    forbidden: emptyBackgroundPart,
+    shiftleft: emptyBackgroundPart,
+    shiftright: emptyBackgroundPart,
   },
   over: {
     none: emptyBackgroundPart,
@@ -112,22 +105,32 @@ const dropHints: DropHints = {
     },
     shiftleft: {
       'background-image': [
-        'linear-gradient(135deg, transparent, yellow 50%, transparent 60%)',
-        'linear-gradient(225deg, transparent, yellow 50%, transparent 60%)',
+        `var(--sprite-cursor-spell-over-top)`,
+        `var(--sprite-cursor-spell-over-line)`,
+        `var(--sprite-cursor-spell-over-top)`,
       ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
+      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-size': [
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+      ],
+      'background-position': [`center top`, `center center`, `center bottom`],
       'cursor': [],
     },
     shiftright: {
       'background-image': [
-        'linear-gradient(45deg, transparent, orange 50%, transparent 60%)',
-        'linear-gradient(315deg, transparent, orange 50%, transparent 60%)',
+        `var(--sprite-cursor-spell-over-top)`,
+        `var(--sprite-cursor-spell-over-line)`,
+        `var(--sprite-cursor-spell-over-top)`,
       ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
+      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-size': [
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+      ],
+      'background-position': [`center top`, `center center`, `center bottom`],
       'cursor': [],
     },
   },
@@ -139,26 +142,8 @@ const selectHints: DropHints = {
     forbidden: emptyBackgroundPart,
     swap: emptyBackgroundPart,
     replace: emptyBackgroundPart,
-    shiftleft: {
-      'background-image': [
-        'linear-gradient(135deg, transparent, yellow 50%, transparent 60%)',
-        'linear-gradient(225deg, transparent, yellow 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
-      'cursor': [],
-    },
-    shiftright: {
-      'background-image': [
-        'linear-gradient(45deg, transparent, orange 50%, transparent 60%)',
-        'linear-gradient(315deg, transparent, orange 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
-      'cursor': [],
-    },
+    shiftleft: emptyBackgroundPart,
+    shiftright: emptyBackgroundPart,
   },
   overCanDrop: {
     none: emptyBackgroundPart,
@@ -172,23 +157,17 @@ const selectHints: DropHints = {
       'cursor': [],
     },
     shiftleft: {
-      'background-image': [
-        'linear-gradient(135deg, transparent, yellow 50%, transparent 60%)',
-        'linear-gradient(225deg, transparent, yellow 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
+      'background-image': ['var(--sprite-cursor-select-middle-toleft)'],
+      'background-repeat': [`no-repeat`],
+      'background-size': [`var(--cursor-container-width)`],
+      'background-position': [`center`],
       'cursor': [],
     },
     shiftright: {
-      'background-image': [
-        'linear-gradient(45deg, transparent, orange 50%, transparent 60%)',
-        'linear-gradient(315deg, transparent, orange 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
+      'background-image': ['var(--sprite-cursor-select-middle-toright)'],
+      'background-repeat': [`no-repeat`],
+      'background-size': [`var(--cursor-container-width)`],
+      'background-position': [`center`],
       'cursor': [],
     },
   },
@@ -204,182 +183,132 @@ const selectHints: DropHints = {
       'cursor': [],
     },
     shiftleft: {
-      'background-image': [
-        'linear-gradient(135deg, transparent, yellow 50%, transparent 60%)',
-        'linear-gradient(225deg, transparent, yellow 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
+      'background-image': ['var(--sprite-cursor-select-middle-toleft)'],
+      'background-repeat': [`no-repeat`],
+      'background-size': [`var(--cursor-container-width)`],
+      'background-position': [`center`],
       'cursor': [],
     },
     shiftright: {
-      'background-image': [
-        'linear-gradient(45deg, transparent, orange 50%, transparent 60%)',
-        'linear-gradient(315deg, transparent, orange 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
+      'background-image': ['var(--sprite-cursor-select-middle-toright)'],
+      'background-repeat': [`no-repeat`],
+      'background-size': [`var(--cursor-container-width)`],
+      'background-position': [`center`],
       'cursor': [],
     },
   },
 };
-const selections: Record<WandSelection, BackgroundPart> = {
-  none: emptyBackgroundPart,
+
+const selections: Record<WandSelection, BackgroundPartSet> = {
+  none: { before: emptyBackgroundPart, after: emptyBackgroundPart },
   start: {
-    'background-image': [
-      `cursor-select-top-start.png`,
-      `url('/data/inventory/cursor-select-mid.png')`,
-      `cursor-select-bottom-start.png`,
-      `linear-gradient(to right, transparent, var(--color-selection-bg) 30%)`,
-    ],
-    'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`, `no-repeat`],
-    'background-size': [
-      `var(--cursor-container-width)`,
-      `var(--cursor-container-width)`,
-      `var(--cursor-container-width)`,
-      `100%`,
-    ],
-    'background-position': [
-      `center top`,
-      `center center`,
-      `center bottom`,
-      `center`,
-    ],
-    'cursor': ['ew-resize'],
+    before: {
+      'background-image': [
+        'var(--sprite-cursor-select-start-top)',
+        'var(--sprite-cursor-select-over-line)',
+        'var(--sprite-cursor-select-start-bottom)',
+      ],
+      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-size': [
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+      ],
+      'background-position': [`center top`, `center center`, `center bottom`],
+      'cursor': ['w-resize'],
+    },
+    after: emptyBackgroundPart,
   },
   thru: {
-    'background-image': [
-      `linear-gradient(to right, var(--color-selection-bg), var(--color-selection-bg))`,
-    ],
-    'background-repeat': [`no-repeat`],
-    'background-size': [`100%`],
-    'background-position': [`center`],
-    'cursor': [''],
+    before: emptyBackgroundPart,
+    after: emptyBackgroundPart,
   },
   end: {
-    'background-image': [
-      `cursor-select-top-end.png`,
-      `url('/data/inventory/cursor-select-mid.png')`,
-      `cursor-select-bottom-end.png`,
-      `linear-gradient(to left, transparent, var(--color-selection-bg) 30%)`,
-    ],
-    'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`, `no-repeat`],
-    'background-size': [
-      `var(--cursor-container-width)`,
-      `var(--cursor-container-width)`,
-      `var(--cursor-container-width)`,
-      `100%`,
-    ],
-    'background-position': [
-      `center top`,
-      `center center`,
-      `center bottom`,
-      `center`,
-    ],
-    'cursor': ['ew-resize'],
+    before: emptyBackgroundPart,
+    after: {
+      'background-image': [
+        'var(--sprite-cursor-select-end-top)',
+        'var(--sprite-cursor-select-over-line)',
+        'var(--sprite-cursor-select-end-bottom)',
+      ],
+      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-size': [
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+      ],
+      'background-position': [`center top`, `center center`, `center bottom`],
+      'cursor': ['e-resize'],
+    },
   },
   single: {
-    'background-image': [
-      `url('/data/inventory/cursor-select-mid.png')`,
-      `linear-gradient(to right, transparent, var(--color-selection-bg) 20%, transparent 80%)`,
-    ],
-    'background-repeat': [`no-repeat`],
-    'background-size': [`100%`],
-    'background-position': [`center`],
-    'cursor': ['ew-resize'],
+    before: {
+      'background-image': [
+        'var(--sprite-cursor-select-start-top)',
+        'var(--sprite-cursor-select-over-line)',
+        'var(--sprite-cursor-select-start-bottom)',
+      ],
+      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-size': [
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+      ],
+      'background-position': [`center top`, `center center`, `center bottom`],
+      'cursor': ['w-resize'],
+    },
+    after: {
+      'background-image': [
+        'var(--sprite-cursor-select-end-top)',
+        'var(--sprite-cursor-select-over-line)',
+        'var(--sprite-cursor-select-end-bottom)',
+      ],
+      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-size': [
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+      ],
+      'background-position': [`center top`, `center center`, `center bottom`],
+      'cursor': ['e-resize'],
+    },
   },
 };
 
 const StyledBetweenSpellsDropTarget = styled.div<{
   onClick: React.MouseEventHandler<HTMLElement>;
-
-  $pointerEvents: boolean;
 }>`
-  background-color: transparent;
   position: absolute;
   height: 100%;
   box-sizing: border-box;
   image-rendering: pixelated;
 
-  cursor: e-resize;
-  --cursor-container-width: calc(var(--bsize-spell) / 4);
+  --cursor-container-width: calc(var(--bsize-spell) * 0.62);
 
-  pointer-events: ${({ $pointerEvents }) => ($pointerEvents ? 'auto' : 'none')};
+  background-color: transparent;
 
-  &&:hover::before {
-    background-color: #f00c;
-  }
-  &::before {
-    content: '';
+  background-image: var(--bg-image);
+  background-repeat: var(--bg-repeat);
+  background-size: var(--bg-size);
+  background-position: var(--bg-position);
+  cursor: var(--cursor);
 
-    position: absolute;
-    top: calc(var(--bsize-spell) * -0.03);
-    left: calc(50% - (var(--cursor-container-width) / 2));
-    height: calc(var(--bsize-spell) * 1.22);
-    width: var(--cursor-container-width);
-
-    z-index: var(--zindex-cursor-current);
-
-    image-rendering: pixelated;
-  }
-
-  /* Source for selection drag */
-  &::after {
-    content: '';
-    display: block;
-    position: absolute;
-    height: calc(var(--bsize-spell) * 1.22);
-    width: var(--cursor-container-width);
-    top: calc(var(--bsize-spell) * -0.03);
-    left: calc(50% - (var(--cursor-container-width) / 2));
-
-    border: none;
-    padding: 0;
-
-    image-rendering: pixelated;
-
-    pointer-events: ${({ $pointerEvents }) =>
-      $pointerEvents ? 'none' : 'auto'};
+  &:hover {
+    background-image: var(--bg-image-hover, --bg-image);
+    background-repeat: var(--bg-repeat-hover, --bg-repeat);
+    background-size: var(--bg-size-hover, --bg-size);
+    background-position: var(--bg-position-hover, --bg-position);
+    cursor: var(--cursor-hover, --cursor);
   }
 `;
-// ${WithDebugHints} && {
-// }
-// ${WithDebugHints} &&::after {
-//   ${({ $isDraggingOver }) =>
-//     $isDraggingOver
-//       ? `
-//       background-color: yellow;
-//       `
-//       : `
-//       background-color: transparent;
-//       `}
-// }
 
-// ${({ $cursor, $dropHint }) => `
-//   ${
-//     $dropHint === 'shiftleft' || $dropHint === 'shiftright'
-//       ? `filter: brightness(2);`
-//       : `filter: brightness(0.5);`
-//   }
+// --bg-image-hover: var();
+// --bg-repeat-hover: ;
+// --bg-size-hover: ;
+// --bg-position-hover: ;
 
-//   ${
-//     $cursor === 'caret'
-//       ? `
-// background-image: url('/data/inventory/cursor-top.png'),
-//   url('/data/inventory/cursor-mid.png');
-//   `
-//       : ``
-//   }
-//     ${
-//       $cursor === 'none'
-//         ? `
-//   opacity: 0.6;
-//   `
-//         : ``
-//     }
-// `}
+export type SpellTargetLocation = 'before' | 'after';
+
 export const BetweenSpellsDropTarget = ({
   wandIndex,
   className = '',
@@ -388,7 +317,8 @@ export const BetweenSpellsDropTarget = ({
   onEndSelect,
   onDragSelect,
   ref,
-  cursor = 'none',
+  location = 'before',
+  cursorCaret = 'none',
   overHint = 'none',
   selection = 'none',
 }: {
@@ -400,7 +330,8 @@ export const BetweenSpellsDropTarget = ({
   onDragSelect: (item: DragItemSelect) => void;
   ref: MergableRef<HTMLDivElement>;
 
-  cursor?: CursorStyle;
+  location: SpellTargetLocation;
+  cursorCaret?: CursorStyle;
   overHint?: DropHint;
   selection?: WandSelection;
 }) => {
@@ -435,15 +366,9 @@ export const BetweenSpellsDropTarget = ({
 
   const isSelecting = useSelecting();
 
-  const pointerEvents = isDraggingSpell || isDraggingSelect;
-
-  const style = useMergedBackgrounds({
-    cursorParts: cursors[cursor],
-    dropHintParts:
-      (isDraggingSpell &&
-        isOver &&
-        canDrop &&
-        dropHints.overCanDrop[overHint]) ||
+  const merged = useMergeBackgrounds(
+    cursors[cursorCaret],
+    (isDraggingSpell && isOver && canDrop && dropHints.overCanDrop[overHint]) ||
       (isDraggingSpell && isOver && dropHints.over[overHint]) ||
       (isDraggingSpell && dropHints.dragging[overHint]) ||
       (isDraggingSelect &&
@@ -453,8 +378,32 @@ export const BetweenSpellsDropTarget = ({
       (isDraggingSelect && isOver && selectHints.over[overHint]) ||
       (isDraggingSelect && selectHints.dragging[overHint]) ||
       dropHints.none,
-    selectionParts: selections[selection],
-  });
+    selections[selection][location],
+  );
+
+  const mapToVars = new Map([
+    ['background-image', '--bg-image'],
+    ['background-repeat', '--bg-repeat'],
+    ['background-size', '--bg-size'],
+    ['background-position', '--bg-position'],
+    ['cursor', '--cursor'],
+  ]);
+
+  const mapToHoverVars = new Map([
+    ['background-image', '--bg-image-hover'],
+    ['background-repeat', '--bg-repeat-hover'],
+    ['background-size', '--bg-size-hover'],
+    ['background-position', '--bg-position-hover'],
+    ['cursor', '--cursor-hover'],
+  ]);
+
+  const mergedHover = useMergeBackgrounds(cursors['caret-hover']);
+  const style = Object.fromEntries([
+    ...takeAll(mapIter(mapToVars.entries(), ([k, v]) => [v, merged[k]])),
+    ...takeAll(
+      mapIter(mapToHoverVars.entries(), ([k, v]) => [v, mergedHover[k]]),
+    ),
+  ]);
 
   return (
     <StyledBetweenSpellsDropTarget
@@ -462,7 +411,6 @@ export const BetweenSpellsDropTarget = ({
       style={style}
       onClick={onClick}
       ref={mergeRefs(ref, dropRef, dragRef)}
-      $pointerEvents={pointerEvents}
     ></StyledBetweenSpellsDropTarget>
   );
 };

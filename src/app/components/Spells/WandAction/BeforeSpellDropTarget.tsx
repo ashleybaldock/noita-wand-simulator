@@ -81,9 +81,10 @@ export const BeforeSpellDropTarget = ({
   return (
     <DropTargetBefore
       wandIndex={wandIndex}
+      location={'before'}
       overHint={'shiftleft'}
       selection={selection}
-      cursor={cursor?.position === 'before' ? cursor?.style : 'none'}
+      cursorCaret={cursor?.position === 'before' ? cursor?.style : 'none'}
       onClick={() => dispatch(moveCursorTo({ to: wandIndex }))}
       onDropSpell={handleDrop}
       onEndSelect={handleEndSelect}
