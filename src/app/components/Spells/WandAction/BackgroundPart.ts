@@ -22,3 +22,8 @@ export type BackgroundPartSet = {
   before: BackgroundPart;
   after: BackgroundPart;
 };
+
+export const emptyBackgroundPartSet = {
+  before: emptyBackgroundPart,
+  after: emptyBackgroundPart,
+};

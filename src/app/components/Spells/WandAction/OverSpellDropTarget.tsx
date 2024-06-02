@@ -18,31 +18,15 @@ import { moveCursorTo, setSelection } from '../../../redux/editorSlice';
 import { isMainWandIndex, type WandIndex } from '../../../redux/WandIndex';
 import type { CursorStyle } from './Cursor';
 import { emptyBackgroundPart, type BackgroundPart } from './BackgroundPart';
-import type { DropHint, DropHints } from './DropHint';
+import { emptyDropHintParts, type DropHint, type DropHints } from './DropHint';
 import { noop } from '../../../util';
 import { useMergeBackgrounds } from './useMergeBackgrounds';
 
 const selectHints: DropHints = {
   none: emptyBackgroundPart,
-  overCanDrop: {
-    none: emptyBackgroundPart,
-    forbidden: emptyBackgroundPart,
-    shiftleft: emptyBackgroundPart,
-    shiftright: emptyBackgroundPart,
-    swap: emptyBackgroundPart,
-    replace: emptyBackgroundPart,
-  },
+  overCanDrop: emptyDropHintParts,
   over: {
-    none: emptyBackgroundPart,
-    shiftleft: emptyBackgroundPart,
-    shiftright: emptyBackgroundPart,
-    forbidden: {
-      'background-image': ['linear-gradient(45deg, white, red, white)'],
-      'background-repeat': [`no-repeat`],
-      'background-size': [`100%`],
-      'background-position': [`center`],
-      'cursor': [],
-    },
+    ...emptyDropHintParts,
     swap: {
       'background-image': [
         'linear-gradient(45deg, transparent, green 50%, transparent 60%)',
@@ -64,29 +48,13 @@ const selectHints: DropHints = {
       'cursor': [],
     },
   },
-  dragging: {
-    none: emptyBackgroundPart,
-    forbidden: emptyBackgroundPart,
-    shiftleft: emptyBackgroundPart,
-    shiftright: emptyBackgroundPart,
-    swap: emptyBackgroundPart,
-    replace: emptyBackgroundPart,
-  },
+  dragging: emptyDropHintParts,
 };
 const dropHints: DropHints = {
   none: emptyBackgroundPart,
-  overCanDrop: {
-    none: emptyBackgroundPart,
-    forbidden: emptyBackgroundPart,
-    shiftleft: emptyBackgroundPart,
-    shiftright: emptyBackgroundPart,
-    swap: emptyBackgroundPart,
-    replace: emptyBackgroundPart,
-  },
+  overCanDrop: emptyDropHintParts,
   over: {
-    none: emptyBackgroundPart,
-    shiftleft: emptyBackgroundPart,
-    shiftright: emptyBackgroundPart,
+    ...emptyDropHintParts,
     forbidden: {
       'background-image': ['linear-gradient(45deg, white, red, white)'],
       'background-repeat': [`no-repeat`],
@@ -115,14 +83,7 @@ const dropHints: DropHints = {
       'cursor': [],
     },
   },
-  dragging: {
-    none: emptyBackgroundPart,
-    forbidden: emptyBackgroundPart,
-    shiftleft: emptyBackgroundPart,
-    shiftright: emptyBackgroundPart,
-    swap: emptyBackgroundPart,
-    replace: emptyBackgroundPart,
-  },
+  dragging: emptyDropHintParts,
 };
 const selections: Record<WandSelection, BackgroundPart> = {
   none: emptyBackgroundPart,

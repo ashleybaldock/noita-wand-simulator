@@ -1,4 +1,4 @@
-import type { BackgroundPart } from './BackgroundPart';
+import { emptyBackgroundPart, type BackgroundPart } from './BackgroundPart';
 
 export const dropHints = [
   'none',
@@ -11,11 +11,21 @@ export const dropHints = [
 
 export type DropHint = (typeof dropHints)[number];
 
+export type DropHintBackgroundParts = Record<DropHint, BackgroundPart>;
+
 export type DropHints = {
   none: BackgroundPart;
-  dragging: Record<DropHint, BackgroundPart>;
-  over: Record<DropHint, BackgroundPart>;
-  overCanDrop: Record<DropHint, BackgroundPart>;
+  dragging: DropHintBackgroundParts;
+  over: DropHintBackgroundParts;
+  overCanDrop: DropHintBackgroundParts;
 };
 
+export const emptyDropHintParts = {
+  none: emptyBackgroundPart,
+  forbidden: emptyBackgroundPart,
+  swap: emptyBackgroundPart,
+  replace: emptyBackgroundPart,
+  shiftleft: emptyBackgroundPart,
+  shiftright: emptyBackgroundPart,
+};
 // `${type}.${dragging}.${isOver}.${canDrop}.${hint}`;

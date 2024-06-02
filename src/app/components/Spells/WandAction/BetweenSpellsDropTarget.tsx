@@ -5,6 +5,7 @@ import { mergeRefs, type MergableRef } from '../../../util/mergeRefs';
 import {
   BackgroundPartSet,
   emptyBackgroundPart,
+  emptyBackgroundPartSet,
   type BackgroundPart,
 } from './BackgroundPart';
 import { useDrag, useDrop } from 'react-dnd';
@@ -17,7 +18,7 @@ import {
 } from './DragItems';
 import type { WandIndex } from '../../../redux/WandIndex';
 import { isMainWandIndex } from '../../../redux/WandIndex';
-import type { DropHint, DropHints } from './DropHint';
+import { emptyDropHintParts, type DropHint, type DropHints } from './DropHint';
 import { useMergeBackgrounds } from './useMergeBackgrounds';
 import { useSelecting } from '../../../redux';
 import { mapIter, takeAll } from '../../../util';
@@ -26,16 +27,16 @@ const cursors: Record<CursorStyle, BackgroundPart> = {
   'caret-hover': {
     'background-image': [
       `var(--sprite-cursor-caret-hover-top)`,
-      `var(--sprite-cursor-caret-hover-line)`,
       `var(--sprite-cursor-caret-hover-bottom)`,
+      `var(--sprite-cursor-caret-hover-line)`,
     ],
-    'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+    'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
     'background-size': [
       `var(--cursor-container-width)`,
       `var(--cursor-container-width)`,
       `var(--cursor-container-width)`,
     ],
-    'background-position': [`center top`, `center center`, `center bottom`],
+    'background-position': [`center top`, `center bottom`, `center center`],
     'cursor': ['text'],
   },
   'caret': {
@@ -54,16 +55,16 @@ const cursors: Record<CursorStyle, BackgroundPart> = {
   'spell-over': {
     'background-image': [
       `var(--sprite-cursor-spell-over-top)`,
-      `var(--sprite-cursor-spell-over-line)`,
       `var(--sprite-cursor-spell-over-bottom)`,
+      `var(--sprite-cursor-spell-over-line)`,
     ],
-    'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+    'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
     'background-size': [
       `var(--cursor-container-width)`,
       `var(--cursor-container-width)`,
       `var(--cursor-container-width)`,
     ],
-    'background-position': [`center top`, `center center`, `center bottom`],
+    'background-position': [`center top`, `center bottom`, `center center`],
     'cursor': [],
   },
   'none': {
@@ -76,79 +77,62 @@ const cursors: Record<CursorStyle, BackgroundPart> = {
 };
 const dropHints: DropHints = {
   none: emptyBackgroundPart,
-  dragging: {
-    none: emptyBackgroundPart,
-    forbidden: emptyBackgroundPart,
-    swap: emptyBackgroundPart,
-    replace: emptyBackgroundPart,
-    shiftleft: emptyBackgroundPart,
-    shiftright: emptyBackgroundPart,
-  },
+  dragging: emptyDropHintParts,
   overCanDrop: {
-    none: emptyBackgroundPart,
-    swap: emptyBackgroundPart,
-    replace: emptyBackgroundPart,
-    forbidden: emptyBackgroundPart,
-    shiftleft: emptyBackgroundPart,
-    shiftright: emptyBackgroundPart,
-  },
-  over: {
-    none: emptyBackgroundPart,
-    swap: emptyBackgroundPart,
-    replace: emptyBackgroundPart,
-    forbidden: {
-      'background-image': ['linear-gradient(45deg, white, red, white)'],
-      'background-repeat': [`no-repeat`],
-      'background-size': [`100%`],
-      'background-position': [`center`],
-      'cursor': [],
-    },
+    ...emptyDropHintParts,
     shiftleft: {
       'background-image': [
         `var(--sprite-cursor-spell-over-top)`,
+        `var(--sprite-cursor-spell-over-bottom)`,
         `var(--sprite-cursor-spell-over-line)`,
-        `var(--sprite-cursor-spell-over-top)`,
+        `var(--sprite-cursor-spell-middle-toleft)`,
       ],
-      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`, `no-repeat`],
       'background-size': [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center center`, `center bottom`],
+      'background-position': [
+        `center top`,
+        `center bottom`,
+        `center center`,
+        `center`,
+      ],
       'cursor': [],
     },
     shiftright: {
       'background-image': [
         `var(--sprite-cursor-spell-over-top)`,
+        `var(--sprite-cursor-spell-over-bottom)`,
         `var(--sprite-cursor-spell-over-line)`,
-        `var(--sprite-cursor-spell-over-top)`,
+        `var(--sprite-cursor-spell-middle-toright)`,
       ],
-      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`, `no-repeat`],
       'background-size': [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center center`, `center bottom`],
+      'background-position': [
+        `center top`,
+        `center bottom`,
+        `center center`,
+        `center`,
+      ],
       'cursor': [],
     },
   },
+  over: emptyDropHintParts,
 };
+
 const selectHints: DropHints = {
   none: emptyBackgroundPart,
-  dragging: {
-    none: emptyBackgroundPart,
-    forbidden: emptyBackgroundPart,
-    swap: emptyBackgroundPart,
-    replace: emptyBackgroundPart,
-    shiftleft: emptyBackgroundPart,
-    shiftright: emptyBackgroundPart,
-  },
+  dragging: emptyDropHintParts,
   overCanDrop: {
-    none: emptyBackgroundPart,
-    swap: emptyBackgroundPart,
-    replace: emptyBackgroundPart,
+    ...emptyDropHintParts,
     forbidden: {
       'background-image': ['linear-gradient(45deg, white, red, white)'],
       'background-repeat': [`no-repeat`],
@@ -172,9 +156,7 @@ const selectHints: DropHints = {
     },
   },
   over: {
-    none: emptyBackgroundPart,
-    swap: emptyBackgroundPart,
-    replace: emptyBackgroundPart,
+    ...emptyDropHintParts,
     forbidden: {
       'background-image': ['linear-gradient(45deg, white, red, white)'],
       'background-repeat': [`no-repeat`],
@@ -200,44 +182,41 @@ const selectHints: DropHints = {
 };
 
 const selections: Record<WandSelection, BackgroundPartSet> = {
-  none: { before: emptyBackgroundPart, after: emptyBackgroundPart },
+  none: emptyBackgroundPartSet,
   start: {
     before: {
       'background-image': [
         'var(--sprite-cursor-select-start-top)',
-        'var(--sprite-cursor-select-over-line)',
         'var(--sprite-cursor-select-start-bottom)',
+        'var(--sprite-cursor-select-over-line)',
       ],
-      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
       'background-size': [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center center`, `center bottom`],
+      'background-position': [`center top`, `center bottom`, `center center`],
       'cursor': ['w-resize'],
     },
     after: emptyBackgroundPart,
   },
-  thru: {
-    before: emptyBackgroundPart,
-    after: emptyBackgroundPart,
-  },
+  thru: emptyBackgroundPartSet,
   end: {
     before: emptyBackgroundPart,
     after: {
       'background-image': [
         'var(--sprite-cursor-select-end-top)',
-        'var(--sprite-cursor-select-over-line)',
         'var(--sprite-cursor-select-end-bottom)',
+        'var(--sprite-cursor-select-over-line)',
       ],
-      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
       'background-size': [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center center`, `center bottom`],
+      'background-position': [`center top`, `center bottom`, `center center`],
       'cursor': ['e-resize'],
     },
   },
@@ -245,31 +224,31 @@ const selections: Record<WandSelection, BackgroundPartSet> = {
     before: {
       'background-image': [
         'var(--sprite-cursor-select-start-top)',
-        'var(--sprite-cursor-select-over-line)',
         'var(--sprite-cursor-select-start-bottom)',
+        'var(--sprite-cursor-select-over-line)',
       ],
-      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
       'background-size': [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center center`, `center bottom`],
+      'background-position': [`center top`, `center bottom`, `center center`],
       'cursor': ['w-resize'],
     },
     after: {
       'background-image': [
         'var(--sprite-cursor-select-end-top)',
-        'var(--sprite-cursor-select-over-line)',
         'var(--sprite-cursor-select-end-bottom)',
+        'var(--sprite-cursor-select-over-line)',
       ],
-      'background-repeat': [`no-repeat`, `repeat-y`, `no-repeat`],
+      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
       'background-size': [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center center`, `center bottom`],
+      'background-position': [`center top`, `center bottom`, `center center`],
       'cursor': ['e-resize'],
     },
   },

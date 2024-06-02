@@ -39,6 +39,7 @@ const _WandAction = ({
 }) => {
   return (
     <div
+      data-name="WandAction"
       {...(tooltipId ?? false
         ? {
             'data-tooltip-id': tooltipId,

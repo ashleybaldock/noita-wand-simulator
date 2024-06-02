@@ -38,7 +38,7 @@ const Container = styled.div`
   justify-content: space-between;
   padding: 0.3em 0.6em 0.2em 2.2em;
 
-  background-image: url('/data/ui_gfx/gun_actions/zeta.png');
+  background-image: var(--sprite-action-zeta);
   background-position: 0.6em 50%;
   background-size: 1.2em;
   background-repeat: no-repeat;
@@ -54,7 +54,7 @@ export const ZetaEditor = styled(
         <SpellSlot>
           <SlottedSpell
             wandIndex={ZTA}
-            spellAction={
+            spell={
               isKnownSpell(zetaSpellId) ? getSpellById(zetaSpellId) : undefined
             }
             alwaysCast={true}

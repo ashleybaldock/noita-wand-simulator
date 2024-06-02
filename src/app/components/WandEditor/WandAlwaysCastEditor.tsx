@@ -4,6 +4,7 @@ import { useAlwaysCastLayout } from '../../redux/hooks';
 import { getSpellById } from '../../calc/spells';
 import { isKnownSpell } from '../../redux/Wand/spellId';
 import { SlottedSpell } from './SlottedSpell';
+import { AlwaysCastIndicies } from '../../redux/WandIndex';
 
 const SpellSlots = styled.ul`
   --grid-layout-gap: 0px;
@@ -98,12 +99,12 @@ export const WandAlwaysCastEditor = styled(
       <Container className={className}>
         <StyledName>{'Always casts'}</StyledName>
         <SpellSlots ref={gridRef}>
-          {alwaysActions.map((alwaysAction, wandIndex) => (
-            <SpellSlot key={wandIndex}>
+          {alwaysActions.map((alwaysAction, i) => (
+            <SpellSlot key={AlwaysCastIndicies[i].toString()}>
               <SlottedSpell
-                spellAction={alwaysAction}
+                spell={alwaysAction}
                 alwaysCast={true}
-                wandIndex={wandIndex}
+                wandIndex={AlwaysCastIndicies[i]}
                 deckIndex={alwaysAction !== undefined ? deckIndex++ : undefined}
               />
             </SpellSlot>

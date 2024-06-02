@@ -1,15 +1,15 @@
 import { isNumber } from '../util';
 
-export const CUR = Symbol('CUR');
+export const CUR = 'CUR';
 export type CursorWandIndex = typeof CUR;
 
-export const AC1 = Symbol('AC1');
-export const AC2 = Symbol('AC2');
-export const AC3 = Symbol('AC3');
-export const AC4 = Symbol('AC4');
-const AlwaysCastIndicies = [AC1, AC2, AC3, AC4] as const;
+export const AC1 = 'AC1';
+export const AC2 = 'AC2';
+export const AC3 = 'AC3';
+export const AC4 = 'AC4';
+export const AlwaysCastIndicies = [AC1, AC2, AC3, AC4] as const;
 
-export const ZTA = Symbol('ZTA');
+export const ZTA = 'ZTA';
 const SpecialWandIndices = [ZTA] as const;
 
 export type AlwaysCastWandIndex = (typeof AlwaysCastIndicies)[number];
@@ -17,10 +17,10 @@ export const alwaysCastIndexSet: Set<SpecialWandIndex> = new Set([
   ...SpecialWandIndices,
 ]);
 export const alwaysCastIndexMap: Record<AlwaysCastWandIndex, number> = {
-  [AC1]: 1,
-  [AC2]: 2,
-  [AC3]: 3,
-  [AC4]: 4,
+  AC1: 1,
+  AC2: 2,
+  AC3: 3,
+  AC4: 4,
 };
 
 export type SpecialWandIndex = (typeof SpecialWandIndices)[number];

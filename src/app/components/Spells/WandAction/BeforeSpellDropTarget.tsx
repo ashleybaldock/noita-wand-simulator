@@ -80,6 +80,7 @@ export const BeforeSpellDropTarget = ({
 
   return (
     <DropTargetBefore
+      data-name="DropTargetBefore"
       wandIndex={wandIndex}
       location={'before'}
       overHint={'shiftleft'}

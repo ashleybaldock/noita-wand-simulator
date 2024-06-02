@@ -80,6 +80,7 @@ export const AfterSpellDropTarget = ({
 
   return (
     <DropTargetAfter
+      data-name="DropTargetAfter"
       wandIndex={wandIndex}
       location={'after'}
       overHint={'shiftright'}

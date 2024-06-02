@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { SpellShiftDirection } from '../types';
 import { useSliceWrapper } from './useSlice';
 import type { WandEditorState } from './editorState';
-import type { SelectionWandIndex, WandIndex } from './WandIndex';
+import type { WandIndex } from './WandIndex';
 import {
   isCursorWandIndex,
   isMainWandIndex,

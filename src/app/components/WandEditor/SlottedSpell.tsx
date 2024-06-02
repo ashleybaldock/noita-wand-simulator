@@ -18,12 +18,12 @@ import {
 } from '../Spells/WandAction';
 
 export const SlottedSpell = ({
-  spellAction,
+  spell,
   wandIndex,
   deckIndex,
   alwaysCast = false,
 }: {
-  spellAction?: Spell;
+  spell?: Spell;
   wandIndex: WandIndex;
   deckIndex?: number;
   selection?: WandSelection;
@@ -31,9 +31,9 @@ export const SlottedSpell = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const { isDraggingAction } = useDragLayer((monitor) => ({
+  const { isDraggingSpell } = useDragLayer((monitor) => ({
     isDragging: monitor.isDragging(),
-    isDraggingAction: monitor.getItemType() === 'action',
+    isDraggingSpell: monitor.getItemType() === 'spell',
     isDraggingSelect: monitor.getItemType() === 'select',
   }));
   const handleDeleteSpell = (wandIndex: WandIndex) => {
@@ -42,27 +42,24 @@ export const SlottedSpell = ({
 
   return (
     <WandActionDropTargets wandIndex={wandIndex}>
-      {spellAction && (
+      {spell && (
         <>
-          <WandActionDragSource
-            actionId={spellAction.id}
-            sourceWandIndex={wandIndex}
-          >
+          <WandActionDragSource actionId={spell.id} sourceWandIndex={wandIndex}>
             <DraggableWandAction
-              spellId={spellAction.id}
-              spellType={spellAction.type}
-              spellSprite={spellAction.sprite}
+              spellId={spell.id}
+              spellType={spell.type}
+              spellSprite={spell.sprite}
               onDeleteSpell={() => handleDeleteSpell(wandIndex)}
             />
           </WandActionDragSource>
           {!alwaysCast && (
             <ChargesRemainingAnnotation
-              charges={spellAction.uses_remaining}
-              nounlimited={spellAction.never_unlimited}
+              charges={spell.uses_remaining}
+              nounlimited={spell.never_unlimited}
             />
           )}
           {!alwaysCast && <DeckIndexAnnotation deckIndex={deckIndex} />}
-          {!isDraggingAction && (
+          {!isDraggingSpell && (
             <>
               <DeleteSpellAnnotation
                 deleteSpell={() => handleDeleteSpell(wandIndex)}
