@@ -6,8 +6,8 @@ from re import Match
 
 cssPrefix = '--sprite-action-'
 
-spriteDir = 'public/data/ui_gfx/gun_actions/'
-spriteDirBase = 'public/'
+spriteDir = '/data/ui_gfx/gun_actions/'
+spriteDirBase = './'
 
 srcFile = 'data/scripts/gun/gun_actions.lua'
 # srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
@@ -107,27 +107,6 @@ config = {
       'after': '',
     },
   },
-  # 'beta': {
-  #   'actionIds':
-  #   {
-  #     'src': 'data/scripts/gun/gun_actions.beta.lua',
-  #     'dst': 'src/app/calc/__generated__/beta/actionIds.ts'
-  #   },
-  #   'spells':
-  #   {
-  #     'src': 'data/scripts/gun/gun_actions.beta.lua',
-  #     'dst': 'src/app/calc/__generated__/beta/spells.ts',
-  #     'before': spellsBefore,
-  #     'after': 'export const spells = actions;',
-  #   },
-  #   'unlocks':
-  #   {
-  #     'src': 'data/scripts/gun/gun_actions.beta.lua',
-  #     'dst': 'src/app/calc/__generated__/beta/unlocks.ts',
-  #     'before': '',
-  #     'after': '',
-  #   }
-  # }
 }
 
 
@@ -389,8 +368,6 @@ def processSprites(src, dst, before = '', after = ''):
 
   with open(dst, 'w') as outFile:
     outFile.write("""/* Auto-generated file */
-
-import { ActionId } from './actionIds';
 
 export const spellSprites = [
 """ + ",\n".join(f'  \'var({spriteForAction(actionId)})\'' for actionId, _ in iter(matches.items())) + """,

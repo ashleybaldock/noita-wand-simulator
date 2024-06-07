@@ -1,13 +1,14 @@
 import type { SpellId } from './Wand/spellId';
-import {
-  deleteSpellAtIndex,
-  insertSpellAfter,
-  insertSpellBefore,
-} from './wandSlice';
-import type { AppThunk } from './store';
-import { moveCursorTo } from './editorSlice';
+import { clearSelection, moveCursorTo } from './editorSlice';
 import type { SpellShiftDirection } from '../types';
 import { getNewCursorPosition } from './editorUtils';
+import type { AppThunk } from './store';
+import {
+  deleteSpellAtIndex,
+  deleteSpellsInRange,
+  moveSpell,
+} from './wandSlice';
+import { isMainWandIndex } from './WandIndex';
 
 /* Cursor shifts to the right, along with the rest
  *  of the spells on the wand
@@ -18,9 +19,11 @@ export const insertSpellBeforeCursor =
     const state = getState();
 
     dispatch(
-      insertSpellBefore({
-        spell: spellId,
-        index: state.editor.cursorIndex,
+      moveSpell({
+        spellId,
+        toIndex: state.editor.cursorIndex,
+        fromIndex: undefined,
+        mode: 'before',
       }),
     );
     dispatch(
@@ -43,9 +46,11 @@ export const insertSpellAfterCursor =
   (dispatch, getState): void => {
     const state = getState();
     dispatch(
-      insertSpellAfter({
-        spell: spellId,
-        index: state.editor.cursorIndex,
+      moveSpell({
+        spellId: spellId,
+        toIndex: state.editor.cursorIndex,
+        fromIndex: undefined,
+        mode: 'after',
       }),
     );
   };
@@ -90,4 +95,36 @@ export const moveCursor =
         }),
       }),
     );
+  };
+
+/**
+ * Remove all spells in current selection
+ *
+ * TODO - if deleting spells from a selection
+ *        make undo restore the selection
+ */
+export const removeSelectedSpells =
+  ({
+    shift = 'none',
+    clear = true,
+  }: {
+    shift?: SpellShiftDirection;
+    clear?: boolean;
+  }): AppThunk =>
+  (dispatch, getState): void => {
+    const {
+      editor: { selectFrom, selectTo },
+    } = getState();
+    if (isMainWandIndex(selectFrom) && isMainWandIndex(selectTo)) {
+      dispatch(
+        deleteSpellsInRange({
+          fromIndex: selectFrom,
+          toIndex: selectTo,
+          shift,
+        }),
+      );
+      if (clear) {
+        dispatch(clearSelection);
+      }
+    }
   };

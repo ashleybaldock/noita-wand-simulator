@@ -6,12 +6,21 @@ import { generateWikiWandV2 } from './Wand/toWiki';
 import { generateSearchFromWandState } from './Wand/toSearch';
 import type { KeyOfType } from '../util';
 import { sequencesMatch, sequencesMatchIgnoringHoles } from '../util';
-import { defaultWandSelection, type WandSelection } from './Wand/wandSelection';
+import type { WandSelectionSet } from './Wand/wandSelection';
+import {
+  defaultWandSelection,
+  defaultWandSelectionSet,
+  type WandSelection,
+} from './Wand/wandSelection';
 import { getSelectionForId } from './Wand/toSelection';
 import type { Config, ConfigToggleField } from './configSlice';
 import { setConfigSetting, toggleConfigSetting } from './configSlice';
 import type { UIState, UIToggle } from './uiSlice';
 import { flipUiToggle, setUiToggle } from './uiSlice';
+import type {
+  CursorPosition,
+  CursorStyle,
+} from '../components/Spells/WandAction/Cursor';
 import {
   defaultCursor,
   type Cursor,
@@ -20,8 +29,9 @@ import type { SpellId } from './Wand/spellId';
 import { useMemo } from 'react';
 import type { WandIndex } from './WandIndex';
 import { isMainWandIndex } from './WandIndex';
+import type { BackgoundPartLocation } from '../components/Spells/WandAction/BackgroundPart';
 
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
+// Typed versions of `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
@@ -197,22 +207,22 @@ const selectCursors = createSelector(
   (cursorIndex, spellIds): Cursor[] =>
     spellIds.map(
       (_, wandIndex): Cursor => ({
-        position:
-          cursorIndex === wandIndex
-            ? 'before'
-            : cursorIndex === wandIndex + 1
-            ? 'after'
-            : 'none',
-        style: 'caret',
+        before: cursorIndex === wandIndex ? 'caret' : 'none',
+        after: cursorIndex === wandIndex + 1 ? 'caret' : 'none',
       }),
     ),
 );
 
 export const useCursors = () => useSelector(selectCursors);
 
-export const useCursor = (wandIndex: WandIndex): Cursor => {
+export const useCursor = (
+  wandIndex: WandIndex,
+  location: 'before' | 'after',
+): CursorStyle => {
   const cursors = useCursors();
-  return isMainWandIndex(wandIndex) ? cursors[wandIndex] : defaultCursor;
+  return isMainWandIndex(wandIndex)
+    ? cursors[wandIndex][location]
+    : defaultCursor[location];
 };
 
 const selectSelectionExtents = (state: RootState) => ({
@@ -223,17 +233,27 @@ const selectSelectionExtents = (state: RootState) => ({
 const selectSelections = createSelector(
   selectSelectionExtents,
   selectSpells,
-  ({ selectFrom, selectTo }, spellIds): WandSelection[] =>
+  ({ selectFrom, selectTo }, spellIds): WandSelectionSet[] =>
     spellIds.map((_, wandIndex) =>
       getSelectionForId(wandIndex, selectFrom, selectTo),
     ),
 );
 export const useSelections = () => useSelector(selectSelections);
 
-export const useSelection = (wandIndex: WandIndex): WandSelection => {
+export const useSelectionSet = (wandIndex: WandIndex): WandSelectionSet => {
   const selections = useSelections();
   return isMainWandIndex(wandIndex)
     ? selections[wandIndex]
+    : defaultWandSelectionSet;
+};
+
+export const useSelection = (
+  wandIndex: WandIndex,
+  location: BackgoundPartLocation,
+): WandSelection => {
+  const selections = useSelections();
+  return isMainWandIndex(wandIndex)
+    ? selections[wandIndex][location]
     : defaultWandSelection;
 };
 

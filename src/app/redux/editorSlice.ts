@@ -17,6 +17,9 @@ const initialState: WandEditorState = {
   selectTo: 6,
 } as const;
 
+/**
+ * See also: editorThunks.ts
+ */
 export const editorSlice = createSlice({
   name: 'editor',
   initialState,
@@ -51,10 +54,10 @@ export const editorSlice = createSlice({
       }>,
     ): void => {
       state.selecting = selecting;
-      if (isSelectionWandIndex(from)) {
+      if (isSelectionWandIndex(from) || isCursorWandIndex(from)) {
         state.selectFrom = isCursorWandIndex(from) ? state.cursorIndex : from;
       }
-      if (isSelectionWandIndex(to)) {
+      if (isSelectionWandIndex(to) || isCursorWandIndex(to)) {
         state.selectTo = isCursorWandIndex(to) ? state.cursorIndex : to;
       }
     },
@@ -83,15 +86,6 @@ export const editorSlice = createSlice({
     /**
      * Remove all spells in selection from the wand, and clear the selection
      */
-    deleteSelected: (
-      state,
-      {
-        payload: { shift = 'none' },
-      }: PayloadAction<{ shift?: SpellShiftDirection }>,
-    ): void => {
-      state.selectFrom = null;
-      state.selectTo = null;
-    },
     /**
      * Insert a copy of the current selection just after itself
      */
@@ -202,7 +196,6 @@ export const editorSlice = createSlice({
 export const {
   moveCursorTo,
 
-  deleteSelected,
   duplicateSelected,
   copySelected,
   cutSelected,

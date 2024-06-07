@@ -9,14 +9,11 @@ import {
 import { setSpellAtIndex } from '../../redux/wandSlice';
 import {
   moveCursor,
+  removeSelectedSpells,
   removeSpellAfterCursor,
   removeSpellBeforeCursor,
 } from '../../redux/editorThunks';
-import {
-  moveSelection,
-  deleteSelected,
-  clearSelection,
-} from '../../redux/editorSlice';
+import { moveSelection, clearSelection } from '../../redux/editorSlice';
 import type { Spell } from '../../calc/spell';
 import { getSpellById } from '../../calc/spells';
 import {
@@ -165,7 +162,7 @@ export const WandActionEditor = () => {
    *   visual change from in-progress/active selection to none */
   useHotkeys('Backspace, r, shift+x', () => {
     if (isSelecting) {
-      dispatch(deleteSelected({ shift: 'left' }));
+      dispatch(removeSelectedSpells({ shift: 'left' }));
       dispatch(clearSelection());
     } else {
       dispatch(removeSpellBeforeCursor({ shift: 'left' }));
@@ -174,7 +171,7 @@ export const WandActionEditor = () => {
   });
   useHotkeys('ctrl+Backspace, ctrl+r', () => {
     if (isSelecting) {
-      dispatch(deleteSelected({ shift: 'right' }));
+      dispatch(removeSelectedSpells({ shift: 'right' }));
       dispatch(clearSelection());
     } else {
       dispatch(removeSpellBeforeCursor({ shift: 'right' }));
@@ -182,7 +179,7 @@ export const WandActionEditor = () => {
   });
   useHotkeys('shift+Backspace, shift+r, x', () => {
     if (isSelecting) {
-      dispatch(deleteSelected({}));
+      dispatch(removeSelectedSpells({}));
       dispatch(clearSelection());
     } else {
       dispatch(removeSpellAfterCursor({ shift: 'left' }));
@@ -190,7 +187,7 @@ export const WandActionEditor = () => {
   });
   useHotkeys('ctrl+shift+Backspace, ctrl+shift+r', () => {
     if (isSelecting) {
-      dispatch(deleteSelected({}));
+      dispatch(removeSelectedSpells({}));
       dispatch(clearSelection());
     } else {
       dispatch(removeSpellAfterCursor({ shift: 'right' }));

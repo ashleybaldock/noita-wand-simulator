@@ -7,107 +7,17 @@ import {
   isDragItemSpell,
   type DragItemSpell,
 } from './DragItems';
-import {
-  moveSpell,
-  setSpellAtIndex,
-  useAppDispatch,
-  useConfig,
-} from '../../../redux';
+import { moveSpell, useAppDispatch, useConfig } from '../../../redux';
 import { useDrop } from 'react-dnd';
 import { moveCursorTo, setSelection } from '../../../redux/editorSlice';
 import { isMainWandIndex, type WandIndex } from '../../../redux/WandIndex';
-import type { CursorStyle } from './Cursor';
-import { emptyBackgroundPart, type BackgroundPart } from './BackgroundPart';
-import { emptyDropHintParts, type DropHint, type DropHints } from './DropHint';
+import { cursorBackgrounds, type CursorStyle } from './Cursor';
 import { noop } from '../../../util';
-import { useMergeBackgrounds } from './useMergeBackgrounds';
+import type { DropHint } from './DropHint';
+import { dropHintBackgrounds, selectHintBackgrounds } from './DropHint';
+import { selectionBackgrounds } from './WandSelection';
+import { useMergedBackgrounds } from './useMergeBackgrounds';
 
-const selectHints: DropHints = {
-  none: emptyBackgroundPart,
-  overCanDrop: emptyDropHintParts,
-  over: {
-    ...emptyDropHintParts,
-    swap: {
-      'background-image': [
-        'linear-gradient(45deg, transparent, green 50%, transparent 60%)',
-        'linear-gradient(315deg, transparent, yellow 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
-      'cursor': [],
-    },
-    replace: {
-      'background-image': [
-        'linear-gradient(45deg, transparent, red 50%, transparent 60%)',
-        'linear-gradient(315deg, transparent, blue 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
-      'cursor': [],
-    },
-  },
-  dragging: emptyDropHintParts,
-};
-const dropHints: DropHints = {
-  none: emptyBackgroundPart,
-  overCanDrop: emptyDropHintParts,
-  over: {
-    ...emptyDropHintParts,
-    forbidden: {
-      'background-image': ['linear-gradient(45deg, white, red, white)'],
-      'background-repeat': [`no-repeat`],
-      'background-size': [`100%`],
-      'background-position': [`center`],
-      'cursor': [],
-    },
-    swap: {
-      'background-image': [
-        'linear-gradient(45deg, transparent, green 50%, transparent 60%)',
-        'linear-gradient(315deg, transparent, yellow 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
-      'cursor': [],
-    },
-    replace: {
-      'background-image': [
-        'linear-gradient(45deg, transparent, red 50%, transparent 60%)',
-        'linear-gradient(315deg, transparent, blue 50%, transparent 60%)',
-      ],
-      'background-repeat': [`no-repeat`, `no-repeat`],
-      'background-size': [`100%`, `100%`],
-      'background-position': [`center`, `center`],
-      'cursor': [],
-    },
-  },
-  dragging: emptyDropHintParts,
-};
-const selections: Record<WandSelection, BackgroundPart> = {
-  none: emptyBackgroundPart,
-  start: emptyBackgroundPart,
-  end: emptyBackgroundPart,
-  thru: {
-    'background-image': [
-      `linear-gradient(to right, var(--color-selection-bg), var(--color-selection-bg))`,
-    ],
-    'background-repeat': [`no-repeat`],
-    'background-size': [`100%`],
-    'background-position': [`center`],
-    'cursor': ['ew-resize'],
-  },
-  single: {
-    'background-image': [
-      `linear-gradient(to right, var(--color-selection-bg), var(--color-selection-bg))`,
-    ],
-    'background-repeat': [`no-repeat`],
-    'background-size': [`100%`],
-    'background-position': [`center`],
-    'cursor': ['ew-resize'],
-  },
-};
 const DropTargetOver = styled.div`
   --selection-bdcolor: #00dbff;
   --selection-bgcolor: #0000ff78;
@@ -146,19 +56,14 @@ export const OverSpellDropTarget = ({
 
   const onDropSpell = useCallback(
     (item: DragItemSpell) => {
-      if (item.sourceWandIndex === undefined) {
-        if (isMainWandIndex(wandIndex)) {
-          dispatch(setSpellAtIndex({ spellId: item.actionId, wandIndex }));
-        }
-      } else {
-        dispatch(
-          moveSpell({
-            fromIndex: item.sourceWandIndex,
-            toIndex: wandIndex,
-            mode: swapOnMove ? 'swap' : 'overwrite',
-          }),
-        );
-      }
+      dispatch(
+        moveSpell({
+          fromIndex: item.sourceWandIndex,
+          spellId: item.actionId,
+          toIndex: wandIndex,
+          mode: swapOnMove ? 'swap' : 'overwrite',
+        }),
+      );
     },
     [swapOnMove, dispatch, wandIndex],
   );
@@ -178,13 +83,13 @@ export const OverSpellDropTarget = ({
 
   const onDragSelect = useCallback(
     (item: DragItemSelect) => {
-      dispatch(
-        setSelection({
-          from: item.dragStartIndex,
-          to: wandIndex,
-          selecting: true,
-        }),
-      );
+      // dispatch(
+      //   setSelection({
+      //     from: item.dragStartIndex,
+      //     to: wandIndex,
+      //     selecting: true,
+      //   }),
+      // );
     },
     [dispatch, wandIndex],
   );
@@ -214,23 +119,24 @@ export const OverSpellDropTarget = ({
       [wandIndex, onDropSpell, onEndSelect, onDragSelect],
     );
 
-  const style = useMergeBackgrounds(
-    (isDraggingSpell && isOver && canDrop && dropHints.overCanDrop[overHint]) ||
-      (isDraggingSpell && isOver && dropHints.over[overHint]) ||
-      (isDraggingSpell && dropHints.dragging[overHint]) ||
+  const merged = useMergedBackgrounds(
+    cursorBackgrounds[cursor]['on'],
+    ((isDraggingSpell && isOver && canDrop && dropHintBackgrounds[overHint]) ||
+      (isDraggingSpell && isOver && dropHintBackgrounds[overHint]) ||
+      (isDraggingSpell && dropHintBackgrounds.dragging) ||
       (isDraggingSelect &&
         isOver &&
         canDrop &&
-        selectHints.overCanDrop[overHint]) ||
-      (isDraggingSelect && isOver && selectHints.over[overHint]) ||
-      (isDraggingSelect && selectHints.dragging[overHint]) ||
-      dropHints.none,
-    selections[selection],
+        selectHintBackgrounds[overHint]) ||
+      (isDraggingSelect && isOver && selectHintBackgrounds[overHint]) ||
+      (isDraggingSelect && selectHintBackgrounds.dragging) ||
+      dropHintBackgrounds.none)['on'],
+    selectionBackgrounds[selection]['on'],
   );
 
   return (
     <DropTargetOver
-      style={style}
+      style={merged}
       onClick={() => dispatch(moveCursorTo({ to: wandIndex }))}
       className={className}
       ref={dropRef}

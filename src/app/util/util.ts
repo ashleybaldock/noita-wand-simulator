@@ -26,6 +26,9 @@ export const isBoolean = (x: unknown): x is boolean => 'boolean' === typeof x;
 
 export const isObject = (x: unknown): x is object => 'object' === typeof x;
 
+export const isFunction = (x: unknown): x is () => unknown =>
+  'function' === typeof x;
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const assertNever = (_?: never): never => {
   throw new Error('This should never happen.');
@@ -70,6 +73,8 @@ export type KeyOfType<Obj extends object, KeyType> = {
   [k in keyof Obj]: Obj[k] extends KeyType ? k : never;
 }[keyof Obj];
 
+export type ObjectKey = string | number | symbol;
+
 export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
   Object.keys(obj) as (keyof T)[];
 
@@ -93,14 +98,26 @@ export const groupBy = <T, K extends string>(arr: T[], keyFn: (x: T) => K) =>
  * @param keys string[] of key names to add
  * @param defaultTo default value to set for each property
  */
-export const objectFromKeys = <const T extends ReadonlyArray<string>, const F>(
+export const objectFromKeys = <const T extends ReadonlyArray<ObjectKey>, F>(
   keys: T,
-  defaultTo: F,
+  defaultTo: F | (() => F),
 ): { [K in T[number]]: F } => {
-  return Object.fromEntries(keys.map((k) => [k, defaultTo])) as {
+  return Object.fromEntries(
+    keys.map((k) => [k, isFunction(defaultTo) ? defaultTo() : defaultTo]),
+  ) as {
     [K in T[number]]: F;
   };
 };
+
+export const objectFromObjectKeys = <
+  O extends object,
+  const T extends [keyof O],
+  F,
+>(
+  obj: O,
+  defaultTo: F | (() => F),
+): { [K in T[number]]: F } =>
+  objectFromKeys(objectKeys(obj), defaultTo) as { [K in T[number]]: F };
 
 export type ChangeFields<T, R> = Omit<T, keyof R> & R;
 

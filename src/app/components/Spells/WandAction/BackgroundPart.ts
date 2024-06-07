@@ -1,29 +1,49 @@
-export const backgroundParts = [
-  'background-image',
-  'background-repeat',
-  'background-size',
-  'background-position',
-  'cursor',
-] as const;
+import { objectFromKeys, objectKeys } from '../../../util';
 
-export const emptyBackgroundPart = {
-  'background-image': [],
-  'background-repeat': [],
-  'background-size': [],
-  'background-position': [],
-  'cursor': [],
+export const backgroundPartLocations = ['before', 'on', 'after'] as const;
+
+export type BackgoundPartLocation = (typeof backgroundPartLocations)[number];
+
+const backgroundPartDefinition = {
+  'background-image': { cssVar: 'bg-image', cssHoverVar: '--bg-image-hover' },
+  'background-repeat': {
+    cssVar: 'bg-repeat',
+    cssHoverVar: '--bg-repeat-hover',
+  },
+  'background-size': { cssVar: 'bg-size', cssHoverVar: '--bg-size-hover' },
+  'background-position': {
+    cssVar: 'bg-position',
+    cssHoverVar: '--bg-position-hover',
+  },
+  'cursor': { cssVar: 'cursor', cssHoverVar: '--cursor-hover' },
+} as const;
+
+export type BackgroundPartName = keyof typeof backgroundPartDefinition;
+
+type BackgroundPartInfo = {
+  cssVar: (typeof backgroundPartDefinition)[BackgroundPartName]['cssVar'];
+  cssHoverVar: (typeof backgroundPartDefinition)[BackgroundPartName]['cssHoverVar'];
 };
 
-export type BackgroundPartName = (typeof backgroundParts)[number];
+export type BackgroundPartInfoRecord = Readonly<
+  Record<BackgroundPartName, Readonly<BackgroundPartInfo>>
+>;
 
-export type BackgroundPart = Record<BackgroundPartName, string[]>;
+export const backgroundPartInfoRecord =
+  backgroundPartDefinition as BackgroundPartInfoRecord;
 
-export type BackgroundPartSet = {
-  before: BackgroundPart;
-  after: BackgroundPart;
-};
+export type BackgroundPart = Record<BackgroundPartName, readonly string[]>;
 
-export const emptyBackgroundPartSet = {
-  before: emptyBackgroundPart,
-  after: emptyBackgroundPart,
-};
+export type Background = Record<BackgoundPartLocation, BackgroundPart>;
+
+export const emptyBackgroundPart = (): BackgroundPart =>
+  objectFromKeys(objectKeys(backgroundPartDefinition), () => []);
+
+export const emptyBackground = (): Background =>
+  objectFromKeys(backgroundPartLocations, emptyBackgroundPart);
+
+export const getCssVarForProperty = (property: BackgroundPartName) =>
+  backgroundPartDefinition[property].cssVar;
+
+export const getCssHoverVarForProperty = (property: BackgroundPartName) =>
+  backgroundPartDefinition[property].cssHoverVar;

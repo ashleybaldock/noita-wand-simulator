@@ -44,7 +44,8 @@
     "generate-actions": "python scripts/generate_gun_actions.py",
     "generate-translations": "python scripts/generate_translations.py",
     "generate-entity-map": "python scripts/generate_entity_map.py",
-    "generate-css-sprites": "node scripts/generate-css-sprites.js"
+    "generate-css-sprites": "node scripts/generate-css-sprites.js",
+    "generate-wiki-sprites": "node scripts/generate-wiki-sprites.js"
   },
   "eslintConfig": {
     "extends": [

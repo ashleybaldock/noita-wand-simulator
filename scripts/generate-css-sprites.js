@@ -2,6 +2,7 @@ const fsPromises = require('fs/promises');
 const Jimp = require('jimp');
 const path = require('path');
 
+const prefix = 'sprite-cursor';
 const inputs = [
   {
     file: 'images/cursors-line-13x28.png',
@@ -10,7 +11,7 @@ const inputs = [
     or: 'h',
     names: [
       'caret-line',
-      'caret-hover-line',
+      'caret-hint-line',
       'spell-over-line',
       'select-over-line',
     ],
@@ -21,16 +22,22 @@ const inputs = [
     h: 7,
     or: 'v',
     names: [
-      'spell-middle-toright',
-      'spell-middle-toleft',
-      'spell-middle-leftright',
-      'spell-middle-fromright',
-      'spell-middle-fromleft',
-      'select-middle-toright',
-      'select-middle-toleft',
-      'select-middle-leftright',
-      'select-middle-fromright',
-      'select-middle-fromleft',
+      'caret-arrow-mid-toright',
+      'caret-arrow-mid-toleft',
+      'caret-select-mid-toright',
+      'caret-select-mid-toleft',
+      'caret-select-mid-toleftandright',
+      'caret-select-mid-fromright',
+      'caret-select-mid-fromleft',
+      'caret-select-mid-fromleftandright',
+      'caret-select-mid-fromlefttoright',
+      'caret-select-mid-fromrighttoleft',
+      'caret-spell-mid-toright',
+      'caret-spell-mid-toleft',
+      'caret-spell-mid-toleftandright',
+      'caret-spell-mid-fromright',
+      'caret-spell-mid-fromleft',
+      'caret-spell-mid-fromleftandright',
     ],
   },
   {
@@ -39,27 +46,50 @@ const inputs = [
     h: 7,
     or: 'v',
     names: [
+      'caret-bottom',
       'caret-top',
-      'caret-hint-top-none',
-      'caret-hint-top-toleft',
+      'caret-bottom-2',
+      'caret-top-2',
+      'caret-hint-bottom',
+      'caret-hint-top',
       'caret-hint-top-toright',
-      'caret-hover-top-toright',
-      'caret-hover-top-toleft',
-      'caret-hover-top',
-      'caret-hover-bottom',
-      'select-over-top',
-      'select-over-bottom',
-      'select-end-top',
-      'select-end-bottom',
-      'select-start-top',
-      'select-start-bottom',
-      'spell-over-top',
-      'spell-over-bottom',
+      'caret-hint-top-toleft',
+      'caret-hint-bottom-toright',
+      'caret-hint-bottom-toleft',
+      'caret-arrow-top-toright',
+      'caret-arrow-top-toleft',
+      'caret-arrow-bottom-toright',
+      'caret-arrow-bottom-toleft',
+      'caret-select-bottom',
+      'caret-select-top',
+      'caret-select-start-bottom',
+      'caret-select-start-top',
+      'caret-select-end-bottom',
+      'caret-select-end-top',
+      'caret-spell-bottom',
+      'caret-spell-top',
+      'caret-spell-drophint-bottom',
+      'caret-spell-drophint-top',
     ],
   },
 ];
 
-const outfile = 'src/app/calc/__generated__/main/sprites.css';
+const outfileCSS = 'src/app/calc/__generated__/main/sprites.css';
+const outfileTS = 'src/app/calc/__generated__/main/sprites.ts';
+
+fsPromises.writeFile(
+  path.join(process.cwd(), outfileTS),
+  `/* Auto-generated file */
+
+export const sprites = [
+  ${inputs.flatMap(({ names }) =>
+    names.flatMap((name) => `'var(--${prefix}-${name})',`),
+  ).join(`
+  `)}
+] as const;
+
+export type Sprite = typeof sprites[number];`,
+);
 
 Promise.all(
   inputs.flatMap(({ file, w, h, or, names }) =>
@@ -72,14 +102,14 @@ Promise.all(
           clone.crop(x, y, w, h);
           return clone
             .getBase64Async(Jimp.MIME_PNG)
-            .then((b64img) => `--sprite-cursor-${name}: url('${b64img}');`);
+            .then((b64img) => `--${prefix}-${name}: url('${b64img}');`);
         }),
       ),
     ),
   ),
 ).then((cssSprites) =>
   fsPromises.writeFile(
-    path.join(process.cwd(), outfile),
+    path.join(process.cwd(), outfileCSS),
     `:root {
   ${cssSprites.flat().join(`
 

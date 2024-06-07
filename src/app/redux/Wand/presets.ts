@@ -16,7 +16,7 @@ const defaultPreset: Readonly<Preset> = {
     speed: 1,
   },
   spells: [],
-  always: [],
+  always: ['MANA_REDUCE'],
 };
 
 const Kantele = {

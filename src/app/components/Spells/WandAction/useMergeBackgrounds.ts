@@ -1,51 +1,54 @@
-import { useMemo } from 'react';
-import { flatMapIter, mapIter, takeAll } from '../../../util';
-import type { BackgroundPart, BackgroundPartName } from './BackgroundPart';
+import { manglePropName, objectEntries, objectKeys } from '../../../util';
+import {
+  emptyBackgroundPart,
+  type BackgroundPart,
+  type BackgroundPartName,
+} from './BackgroundPart';
 
-export const useMergeBackgrounds = (...parts: BackgroundPart[]) => {
-  const orderedNames = new Set<BackgroundPartName>([
-    'background-image',
-    'background-repeat',
-    'background-size',
-    'background-position',
-    'cursor',
-  ]);
+const primary: BackgroundPartName = 'background-image';
 
-  return useMemo(
-    () =>
-      Object.fromEntries(
-        takeAll(
-          mapIter(
-            orderedNames.entries(),
-            ([propName, [cssvar, csshovervar]]) => [
-              propName,
-              `${takeAll(
-                flatMapIter(parts.values(), (part) => part[propName].values()),
-              ).join(',')}`,
-            ],
-          ),
-        ),
-      ),
-    [parts],
+const mapProperties = (
+  mapFn: (name: BackgroundPartName) => string,
+  properties: Record<BackgroundPartName, readonly unknown[]>,
+) => {
+  return objectEntries(properties).reduce(
+    (acc, [k, v]) => ({ ...acc, [mapFn(k)]: v }),
+    {},
   );
 };
-// return useMemo(
-//   () =>
-//     Object.fromEntries(
-//       takeAll(
-//         mapIter(
-//           orderedNames.keys()
-//             .map((propName) =>
-//               flatMapIter(parts.values(), (part) => part[propName].values()),
-//             )
-//             .values(),
-//           (x, i) => [
-//             manglePropName(propNamesInOrder[i]),
-//             takeAll(x).join(','),
-//           ],
-//         ),
-//       ),
-//     ),
-//   [parts],
-// );
-// };
+
+const combineParts = (parts: BackgroundPart[]): BackgroundPart => {
+  const compress = (parts: BackgroundPart[]): BackgroundPart =>
+    parts.reduce((acc: BackgroundPart, cur: BackgroundPart) => {
+      objectKeys(acc).forEach(
+        (backgroundPart) =>
+          (acc[backgroundPart] = [
+            ...(acc[backgroundPart] ?? []),
+            ...cur[backgroundPart],
+          ]),
+      );
+      return acc;
+    }, emptyBackgroundPart());
+
+  const normalisePartLengths = (parts: BackgroundPart[]): BackgroundPart[] => {
+    parts.forEach((part) =>
+      objectEntries(part).forEach(
+        ([name, vals]) =>
+          (part[name] = part[primary].flatMap((_, i) => vals[i % vals.length])),
+      ),
+    );
+    return parts;
+  };
+
+  return compress(normalisePartLengths(parts));
+};
+
+export const useMergedBackgrounds = (
+  ...parts: BackgroundPart[]
+): { [key: string]: string[] } =>
+  mapProperties(manglePropName, combineParts(parts));
+
+export const useMergedBackgroundVars = (
+  varMapFn: (property: BackgroundPartName) => string,
+  ...parts: BackgroundPart[]
+): { [key: string]: string[] } => mapProperties(varMapFn, combineParts(parts));

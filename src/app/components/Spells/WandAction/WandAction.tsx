@@ -4,6 +4,7 @@ import type { SpellType } from '../../../calc/spellTypes';
 import { getBackgroundUrlForSpellType } from '../../../calc/spellTypes';
 import type { TooltipId } from '../../Tooltips/tooltipId';
 import type { CSSProperties } from 'react';
+import { MergableRef } from '../../../util/mergeRefs';
 
 const SpellTypeBorder = styled.div`
   --size-spell: var(--bsize-spell, 48px);
@@ -27,6 +28,7 @@ const _WandAction = ({
   className,
   style,
   tooltipId,
+  ref,
 }: {
   onDeleteSpell?: () => void;
   className?: string;
@@ -36,9 +38,11 @@ const _WandAction = ({
   spellSprite?: string;
   keyHint?: string;
   tooltipId?: TooltipId;
+  ref?: MergableRef<HTMLDivElement>;
 }) => {
   return (
     <div
+      ref={ref}
       data-name="WandAction"
       {...(tooltipId ?? false
         ? {

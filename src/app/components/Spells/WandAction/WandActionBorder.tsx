@@ -41,7 +41,12 @@ const WandActionBorder = ({
     [],
   );
   return (
-    <StyledDiv $highlight={canDrop} ref={dropRef} className={className}>
+    <StyledDiv
+      data-name="WandActionBorder"
+      $highlight={canDrop}
+      ref={dropRef}
+      className={className}
+    >
       {children}
     </StyledDiv>
   );

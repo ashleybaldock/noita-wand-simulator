@@ -1,4 +1,4 @@
-import { isNumber } from '../util';
+import { isNotNullOrUndefined, isNumber } from '../util';
 
 export const CUR = 'CUR';
 export type CursorWandIndex = typeof CUR;
@@ -17,10 +17,10 @@ export const alwaysCastIndexSet: Set<SpecialWandIndex> = new Set([
   ...SpecialWandIndices,
 ]);
 export const alwaysCastIndexMap: Record<AlwaysCastWandIndex, number> = {
-  AC1: 1,
-  AC2: 2,
-  AC3: 3,
-  AC4: 4,
+  AC1: 0,
+  AC2: 1,
+  AC3: 2,
+  AC4: 3,
 };
 
 export type SpecialWandIndex = (typeof SpecialWandIndices)[number];
@@ -51,7 +51,14 @@ export const isSpecialWandIndex = (id: unknown): id is SpecialWandIndex =>
   (specialIndexSet as Set<unknown>).has(id);
 
 export const isSelectionWandIndex = (id: unknown): id is SelectionWandIndex =>
-  isNumber(id) || isSelectionWandIndex(id);
+  isNumber(id);
 
 export const isWandIndex = (id: unknown): id is WandIndex =>
   isNumber(id) || isAlwaysCastIndex(id) || isSpecialWandIndex(id);
+
+export const isWithinBounds = (
+  id: WandIndex | undefined,
+  capacity: number,
+): boolean =>
+  isNotNullOrUndefined(id) &&
+  (!isMainWandIndex(id) || (id >= 0 && id < capacity));

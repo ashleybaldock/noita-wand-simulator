@@ -13,7 +13,8 @@ import { ReleaseInfo } from './ReleaseInfo';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Tooltips } from './Tooltips';
 import { Modals } from './Modals/Modals';
-import { SpellDragPreview } from './DragPreview';
+import { DragPreview } from './DragPreview';
+import { HTML5toTouchPreview } from './DragPipeline';
 
 const Column = styled.div`
   display: flex;
@@ -49,7 +50,7 @@ export const WandSimulator = () => {
 
   return (
     <DebugHints>
-      <DndProvider options={HTML5toTouch}>
+      <DndProvider options={HTML5toTouchPreview}>
         <Column>
           <MainHeader></MainHeader>
           <Column>
@@ -69,7 +70,7 @@ export const WandSimulator = () => {
           <Tooltips />
           <ReleaseInfo />
         </Column>
-        <SpellDragPreview />
+        <DragPreview />
       </DndProvider>
     </DebugHints>
   );

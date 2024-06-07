@@ -10,17 +10,16 @@ type ActionDragSourceMonitor = {
 };
 
 const ActionDragSource = styled.div<{
-  isDragging: boolean;
+  $isDragging: boolean;
 }>`
   flex: 1 1;
   max-width: max-content;
   max-width: fit-content;
   min-width: min-content;
 
-  ${({ isDragging }) =>
-    isDragging
+  ${({ $isDragging }) =>
+    $isDragging
       ? `
-    opacity: 0.4;
     pointer-events: none;
     cursor: grabbing;
       `
@@ -57,7 +56,7 @@ export const WandActionDragSource = ({
   }));
 
   return (
-    <ActionDragSource ref={dragRef} isDragging={isDragging} onClick={onClick}>
+    <ActionDragSource ref={dragRef} $isDragging={isDragging} onClick={onClick}>
       {children}
     </ActionDragSource>
   );

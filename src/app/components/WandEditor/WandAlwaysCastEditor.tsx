@@ -100,7 +100,7 @@ export const WandAlwaysCastEditor = styled(
         <StyledName>{'Always casts'}</StyledName>
         <SpellSlots ref={gridRef}>
           {alwaysActions.map((alwaysAction, i) => (
-            <SpellSlot key={AlwaysCastIndicies[i].toString()}>
+            <SpellSlot key={AlwaysCastIndicies[i]}>
               <SlottedSpell
                 spell={alwaysAction}
                 alwaysCast={true}

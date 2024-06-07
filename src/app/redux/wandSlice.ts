@@ -13,13 +13,18 @@ import {
 import type { WandState } from './Wand/wandState';
 import type { Wand } from './Wand/wand';
 import type { SpellId } from './Wand/spellId';
+import type { MainWandIndex } from './WandIndex';
 import {
   alwaysCastIndexMap,
   isAlwaysCastIndex,
   isMainWandIndex,
+  isSpecialWandIndex,
+  isWandIndex,
+  isWithinBounds,
   ZTA,
   type WandIndex,
 } from './WandIndex';
+import type { ActionId } from '../calc/actionId';
 const {
   wand,
   spellIds = [],
@@ -102,36 +107,6 @@ export const wandSlice = createSlice({
 
       state.spellIds = fixedLengthCopy(state.spellIds, wand.deck_capacity);
     },
-    insertSpellBefore: (
-      state,
-      {
-        payload: { spell, index },
-      }: PayloadAction<{ index: number; spell: SpellId | null }>,
-    ): void => {
-      state.spellIds = fixedLengthCopy(
-        [
-          ...state.spellIds.slice(0, index),
-          spell,
-          ...state.spellIds.slice(index),
-        ],
-        state.wand.deck_capacity,
-      );
-    },
-    insertSpellAfter: (
-      state,
-      {
-        payload: { spell, index },
-      }: PayloadAction<{ index: number; spell: SpellId | null }>,
-    ): void => {
-      state.spellIds = fixedLengthCopy(
-        [
-          ...state.spellIds.slice(0, index + 1),
-          spell,
-          ...state.spellIds.slice(index + 1),
-        ],
-        state.wand.deck_capacity,
-      );
-    },
     setSpellAtIndex: (
       state,
       {
@@ -151,76 +126,79 @@ export const wandSlice = createSlice({
     clearSpells: (state): void => {
       state.spellIds = fixedLengthCopy([], state.spellIds.length);
     },
+    deleteSpellsInRange: (
+      state,
+      {
+        payload: { fromIndex, toIndex, shift = 'none' },
+      }: PayloadAction<{
+        fromIndex: MainWandIndex;
+        toIndex: MainWandIndex;
+        shift: SpellShiftDirection;
+      }>,
+    ): void => {
+      const [a, b] = [
+        Math.min(fromIndex, toIndex),
+        Math.max(fromIndex, toIndex),
+      ];
+      state.spellIds = fixedLengthCopy(
+        [
+          ...(shift === 'right' ? new Array(b - a).fill(null) : []),
+          ...state.spellIds.slice(0, a),
+          ...(shift === 'none' ? new Array(b - a).fill(null) : []),
+          ...state.spellIds.slice(b + 1),
+        ],
+        state.wand.deck_capacity,
+      );
+    },
     deleteSpellAtIndex: (
       state,
       {
         payload: { wandIndex, shift = 'none' },
       }: PayloadAction<{ wandIndex: WandIndex; shift: SpellShiftDirection }>,
     ): void => {
-      if (isMainWandIndex(wandIndex)) {
-        if (shift === 'left') {
-          state.spellIds = fixedLengthCopy(
-            [
-              ...state.spellIds.slice(0, wandIndex),
-              ...state.spellIds.slice(wandIndex + 1),
-            ],
-            state.wand.deck_capacity,
-          );
-        }
-        if (shift === 'right') {
-          state.spellIds = fixedLengthCopy(
-            [
-              null,
-              ...state.spellIds.slice(0, wandIndex),
-              ...state.spellIds.slice(wandIndex + 1),
-            ],
-            state.wand.deck_capacity,
-          );
-        }
-      }
-      if (shift === 'none') {
+      if (shift === 'none' || !isMainWandIndex(wandIndex)) {
         setSpellId(state, wandIndex, null);
+      } else if (isMainWandIndex(wandIndex)) {
+        state.spellIds = fixedLengthCopy(
+          [
+            ...(shift === 'right' ? [null] : []),
+            ...state.spellIds.slice(0, wandIndex),
+            ...state.spellIds.slice(wandIndex + 1),
+          ],
+          state.wand.deck_capacity,
+        );
       }
     },
     moveSpell: (
       state,
       {
-        payload: { fromIndex, toIndex, mode = 'swap' },
+        payload: { fromIndex, toIndex, spellId, mode = 'swap' },
       }: PayloadAction<{
-        fromIndex: WandIndex;
+        fromIndex: WandIndex | undefined;
         toIndex: WandIndex;
+        spellId: SpellId;
         mode?: SpellEditMode;
       }>,
     ): void => {
-      if (fromIndex === toIndex) {
-        // TODO change if needed when implementing charge usage
-        return;
-      }
+      const { deck_capacity: capacity } = state.wand;
       if (
-        (isMainWandIndex(fromIndex) &&
-          (fromIndex >= state.wand.deck_capacity || fromIndex < 0)) ||
-        (isMainWandIndex(toIndex) &&
-          (toIndex >= state.wand.deck_capacity || toIndex < 0))
+        fromIndex === toIndex ||
+        (fromIndex !== undefined && !isWithinBounds(fromIndex, capacity)) ||
+        !isWithinBounds(toIndex, capacity)
       ) {
         return;
       }
-      if (
-        mode === 'swap' &&
-        isNotNullOrUndefined(fromIndex) &&
-        isNotNullOrUndefined(toIndex)
-      ) {
-        const temp = getSpellId(state, fromIndex);
-        setSpellId(state, fromIndex, getSpellId(state, toIndex));
-        setSpellId(state, toIndex, temp);
-      }
-      if (mode === 'overwrite') {
-        setSpellId(state, toIndex, popSpellId(state, fromIndex));
-      }
-      /* Target wandIndex shifted right to make room for insertion*/
-      if (isMainWandIndex(toIndex)) {
-        if (isMainWandIndex(fromIndex)) {
-          /* Moving spell within wand, so will always fit */
-          if (mode === 'before') {
+      /*
+       * insert strategies
+       * shiftright: from Target to end are shifted right
+       *             may fall off the end of the wand
+       * shiftleft:  start to Target are shifted left
+       *             may fall off the start of the wand
+       */
+      if (mode === 'before' || mode === 'after') {
+        if (isMainWandIndex(toIndex)) {
+          if (isMainWandIndex(fromIndex)) {
+            /* Moving spell within wand, so will always fit */
             if (fromIndex < toIndex) {
               state.spellIds = fixedLengthCopy(
                 [
@@ -242,48 +220,35 @@ export const wandSlice = createSlice({
                 state.wand.deck_capacity,
               );
             }
+          } else {
+            /* Moving spell into wand, so may cause overflow TODO */
+            state.spellIds = fixedLengthCopy(
+              [
+                ...state.spellIds.slice(0, toIndex),
+                isWandIndex(fromIndex) ? popSpellId(state, fromIndex) : spellId,
+                ...state.spellIds.slice(toIndex),
+              ],
+              state.wand.deck_capacity,
+            );
           }
-          if (mode === 'after') {
-            /* Target wandIndex shifted left to make room for insertion*/
-            if (fromIndex < toIndex) {
-              state.spellIds = fixedLengthCopy(
-                [
-                  ...state.spellIds.slice(0, fromIndex),
-                  ...state.spellIds.slice(fromIndex + 1, toIndex),
-                  state.spellIds[fromIndex],
-                  ...state.spellIds.slice(toIndex),
-                ],
-                state.wand.deck_capacity,
-              );
-            } else {
-              state.spellIds = fixedLengthCopy(
-                [
-                  ...state.spellIds.slice(0, toIndex),
-                  state.spellIds[fromIndex],
-                  ...state.spellIds.slice(toIndex, fromIndex),
-                  ...state.spellIds.slice(fromIndex + 1),
-                ],
-                state.wand.deck_capacity,
-              );
-            }
-          }
-        } else if (isNotNullOrUndefined(fromIndex)) {
-          /* Moving spell into wand, so may cause overflow TODO */
-          state.spellIds = fixedLengthCopy(
-            [
-              ...state.spellIds.slice(0, toIndex),
-              popSpellId(state, fromIndex),
-              ...state.spellIds.slice(toIndex),
-            ],
-            state.wand.deck_capacity,
-          );
         }
-        /* Inserting into Always Cast block   TODO
-         * This is like the main wand but only 4 cap */
-      } else if (isAlwaysCastIndex(toIndex)) {
-        setSpellId(state, toIndex, popSpellId(state, fromIndex));
-      } else if (typeof toIndex === typeof ZTA) {
-        setSpellId(state, toIndex, popSpellId(state, fromIndex));
+      } else if (mode === 'swap') {
+        const fromSpellId = isWandIndex(fromIndex)
+          ? popSpellId(state, fromIndex)
+          : spellId;
+        const toSpellId = getSpellId(state, toIndex);
+        if (fromIndex !== undefined) {
+          setSpellId(state, fromIndex, toSpellId);
+        }
+        setSpellId(state, toIndex, fromSpellId);
+      } else if (mode === 'overwrite') {
+        setSpellId(
+          state,
+          toIndex,
+          isWandIndex(fromIndex) ? popSpellId(state, fromIndex) : spellId,
+        );
+      } else {
+        assertNever();
       }
     },
   },
@@ -295,8 +260,7 @@ export const {
   clearSpells,
   setSpells,
   setSpellAtIndex,
-  insertSpellBefore,
-  insertSpellAfter,
+  deleteSpellsInRange,
   deleteSpellAtIndex,
   moveSpell,
 } = wandSlice.actions;

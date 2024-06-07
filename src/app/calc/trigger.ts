@@ -1,6 +1,4 @@
-import { isNotNullOrUndefined } from '../util';
 import type { WandEventName } from './eval/wandEvent';
-import { WandEventBase } from './eval/wandEvent';
 
 export const TriggerConditionDefinition = {
   hit: { event: 'BeginTriggerHitWorld', sprite: 'data/icons/trigger-mod.png' },
