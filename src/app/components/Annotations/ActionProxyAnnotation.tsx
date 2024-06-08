@@ -55,6 +55,14 @@ export const ActionProxyAnnotation = ({
 }) => {
   const { showProxies } = useConfig();
 
+  const triggerType = isWithTriggerActionId(spell?.id)
+    ? 'trigger'
+    : isWithTimerActionId(spell?.id)
+    ? 'timer'
+    : isWithExpirationActionId(spell?.id)
+    ? 'death'
+    : '';
+
   if (showProxies && isNotNullOrUndefined(proxy)) {
     return (
       <ProxyDiv
@@ -63,28 +71,11 @@ export const ActionProxyAnnotation = ({
       />
     );
   } else if (isNotNullOrUndefined(spell?.id)) {
-    if (isWithTriggerActionId(spell?.id)) {
-      return (
-        <ProxyDiv
-          data-name="ActionProxyAnnotation-Trigger"
-          imgUrl={'data/icons/trigger-mod.png'}
-        />
-      );
-    } else if (isWithTimerActionId(spell?.id)) {
-      return (
-        <ProxyDiv
-          data-name="ActionProxyAnnotation-Timer"
-          imgUrl={'data/icons/timer-mod.png'}
-        />
-      );
-    } else if (isWithExpirationActionId(spell?.id)) {
-      return (
-        <ProxyDiv
-          data-name="ActionProxyAnnotation-Expiration"
-          imgUrl={'data/icons/death-mod.png'}
-        />
-      );
-    }
+    const imgUrl = `data/icons/${triggerType}-mod${
+      spell?.permanently_attached ? `-disabled` : ''
+    }.png`;
+
+    return <ProxyDiv data-name="ActionProxyAnnotation" imgUrl={imgUrl} />;
   }
   return null;
 };

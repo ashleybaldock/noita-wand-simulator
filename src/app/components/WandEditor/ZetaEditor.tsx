@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { SlottedSpell } from './SlottedSpell';
-import { ZTA } from '../../redux/WandIndex';
 import { useZeta } from '../../redux';
 import { isKnownSpell } from '../../redux/Wand/spellId';
 import { getSpellById } from '../../calc/spells';
 
 const SpellSlot = styled.li`
+  --grid-layout-gap: 0px;
+  --bsize-spell: 38px;
+
   display: flex;
   flex: 0 1 auto;
   list-style-type: none;
@@ -53,11 +55,10 @@ export const ZetaEditor = styled(
         <StyledName>{'Zeta will copy'}</StyledName>
         <SpellSlot>
           <SlottedSpell
-            wandIndex={ZTA}
+            wandIndex={'ZTA'}
             spell={
               isKnownSpell(zetaSpellId) ? getSpellById(zetaSpellId) : undefined
             }
-            alwaysCast={true}
           />
         </SpellSlot>
       </Container>

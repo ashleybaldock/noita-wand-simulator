@@ -20,6 +20,7 @@ const RequirementInputImageLabel = styled(InputImageLabel)`
   margin: 0;
   min-width: 32px;
 `;
+
 export const _RequirementToggle = ({
   className = '',
   checked,
@@ -27,7 +28,7 @@ export const _RequirementToggle = ({
   customYes,
   customNo,
   size = 32,
-  sprite = 'data/ui_gfx/gun_actions/if_half.png',
+  sprite = 'var(--sprite-action-if-half)',
 }: {
   className?: string;
   checked: boolean;
@@ -48,7 +49,7 @@ export const _RequirementToggle = ({
       ></YesNoToggleWithoutArrow>
       <RequirementInputImageLabel
         size={size}
-        imgUrl={'data/ui_gfx/gun_actions/if_else.png'}
+        imgUrl={'var(--sprite-action-if-else)'}
       />
       <YesNoToggleWithoutArrow
         checked={!checked}
@@ -59,7 +60,7 @@ export const _RequirementToggle = ({
 
       <RequirementInputImageLabel
         size={size}
-        imgUrl={'data/ui_gfx/gun_actions/if_end.png'}
+        imgUrl={'var(--sprite-action-if-end)'}
       />
     </RequirementToggleWrapper>
   );
@@ -76,3 +77,18 @@ export const RequirementToggle = styled(_RequirementToggle)`
   & > :last-child {
   }
 `;
+
+export const RequiremementEveryOther = styled(RequirementToggle).attrs(() => ({
+  sprite: 'var(--sprite-action-if-half)',
+}))``;
+export const RequiremementIfEnemy = styled(RequirementToggle).attrs(() => ({
+  sprite: 'var(--sprite-action-if-enemy)',
+}))``;
+export const RequiremementIfProjectiles = styled(RequirementToggle).attrs(
+  () => ({
+    sprite: 'var(--sprite-action-if-projectile)',
+  }),
+)``;
+export const RequiremementIfHp = styled(RequirementToggle).attrs(() => ({
+  sprite: 'var(--sprite-action-if-hp)',
+}))``;

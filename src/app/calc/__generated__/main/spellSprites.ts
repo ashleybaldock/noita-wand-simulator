@@ -1,7 +1,5 @@
 /* Auto-generated file */
 
-import { ActionId } from './actionIds';
-
 export const spellSprites = [
   'var(--sprite-action-bomb)',
   'var(--sprite-action-light-bullet)',

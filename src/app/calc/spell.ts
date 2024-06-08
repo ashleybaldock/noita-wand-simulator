@@ -3,12 +3,14 @@ import type { Action } from './action';
 import type { SpellType } from './spellTypes';
 import type { UnlockCondition } from './unlocks';
 import type { SpellSprite } from './spellSprite';
+import type { AlwaysCastWandIndex } from '../redux/WandIndex';
 
 export type SpellDeckInfo = {
   id: ActionId;
   deck_index?: number;
   /* Always Cast */
   permanently_attached?: boolean;
+  always_cast_index?: AlwaysCastWandIndex;
 };
 
 export type SpellExtraInfo = {

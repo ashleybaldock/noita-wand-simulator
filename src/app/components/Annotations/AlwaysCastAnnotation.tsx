@@ -21,13 +21,15 @@ const Wrapped = styled.div`
 `;
 
 export const AlwaysCastAnnotation = ({
-  permanently_attached = false,
+  deckIndex,
 }: {
-  permanently_attached?: boolean;
+  deckIndex?: number | string;
 }) => {
-  if (!permanently_attached) {
-    return null;
-  }
-
-  return <Wrapped data-name="AlwaysCastAnnotation">{'AC'}</Wrapped>;
+  return (
+    <Wrapped data-name="AlwaysCastAnnotation">
+      <span>A</span>
+      <span>C</span>
+      <span>deckIndex</span>
+    </Wrapped>
+  );
 };

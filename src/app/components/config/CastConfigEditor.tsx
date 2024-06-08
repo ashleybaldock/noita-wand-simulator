@@ -14,7 +14,12 @@ import {
 import type { ChangeEvent } from 'react';
 import { YesNoToggle } from '../Input';
 import { SectionToolbar } from '../SectionToolbar';
-import { RequirementToggle } from '../Input/RequirementToggle/RequirementToggle';
+import {
+  RequiremementEveryOther,
+  RequiremementIfEnemy,
+  RequiremementIfHp,
+  RequiremementIfProjectiles,
+} from '../Input/RequirementToggle/RequirementToggle';
 import { InputImageLabel } from '../Input/ImageLabel/InputImageLabel';
 import { NumericInput } from '../Input/NumericInput/NumericInput';
 
@@ -283,19 +288,6 @@ const RandomInputWrapper = styled.div`
 
   column-gap: 0.4em;
 `;
-
-const RequiremementEveryOther = styled(RequirementToggle).attrs(() => ({
-  sprite: 'data/ui_gfx/gun_actions/if_half.png',
-}))``;
-const RequiremementIfEnemy = styled(RequirementToggle).attrs(() => ({
-  sprite: 'data/ui_gfx/gun_actions/if_enemy.png',
-}))``;
-const RequiremementIfProjectiles = styled(RequirementToggle).attrs(() => ({
-  sprite: 'data/ui_gfx/gun_actions/if_projectile.png',
-}))``;
-const RequiremementIfHp = styled(RequirementToggle).attrs(() => ({
-  sprite: 'data/ui_gfx/gun_actions/if_hp.png',
-}))``;
 
 // const SimPaused = styled.span`
 //   display: inline-block;

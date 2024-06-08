@@ -25,7 +25,7 @@ export const SlottedSpell = ({
 }: {
   spell?: Spell;
   wandIndex: WandIndex;
-  deckIndex?: number;
+  deckIndex?: number | string;
   selection?: WandSelection;
   alwaysCast?: boolean;
 }) => {
@@ -58,7 +58,7 @@ export const SlottedSpell = ({
               nounlimited={spell.never_unlimited}
             />
           )}
-          {!alwaysCast && <DeckIndexAnnotation deckIndex={deckIndex} />}
+          <DeckIndexAnnotation deckIndex={deckIndex} wandIndex={wandIndex} />
           {!isDraggingSpell && (
             <>
               <DeleteSpellAnnotation

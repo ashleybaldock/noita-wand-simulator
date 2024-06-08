@@ -87,7 +87,10 @@ export const ShotTableProjectile = ({
           spell={projectile.spell}
           proxy={projectile.proxy}
         />
-        <DeckIndexAnnotation deckIndex={projectile.deckIndex} />
+        <DeckIndexAnnotation
+          deckIndex={projectile.deckIndex}
+          wandIndex={projectile.spell?.always_cast_index}
+        />
         <FriendlyFireAnnotation />
       </ShotTableProjectileBorder>
     </MainDiv>

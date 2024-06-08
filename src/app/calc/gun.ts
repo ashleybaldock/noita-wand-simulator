@@ -41,6 +41,7 @@ import {
   OnPlayPermanentCard,
 } from './eval/dispatch';
 import type { EntityId } from '@reduxjs/toolkit';
+import type { AlwaysCastWandIndex } from '../redux/WandIndex';
 
 // constants
 export const ACTION_DRAW_RELOAD_TIME_INCREASE = 0;
@@ -656,13 +657,17 @@ export function _add_card_to_deck(
 }
 
 // eslint-disable-next-line
-export function _play_permanent_card(action_id: ActionId) {
-  OnPlayPermanentCard(action_id, c);
+export function _play_permanent_card(
+  action_id: ActionId,
+  always_cast_index: AlwaysCastWandIndex,
+) {
+  OnPlayPermanentCard(action_id, c, always_cast_index);
   // for (let i = 0; i < actions.length; i++) {
   // let action = actions[i];
   const action = getSpellById(action_id);
   // if (action.id === action_id) {
   const action_clone = {} as Spell;
+  action_clone.always_cast_index = always_cast_index;
   playing_permanent_card = true;
   clone_action(action, action_clone);
   action_clone.permanently_attached = true;

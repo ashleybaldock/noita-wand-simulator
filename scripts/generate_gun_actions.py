@@ -13,8 +13,8 @@ srcFile = 'data/scripts/gun/gun_actions.lua'
 # srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
 spellsBefore = """/* Auto-generated file */
 
-import { GunActionState } from '../../actionState';
-import { Spell } from '../../spell';
+import type { GunActionState } from '../../actionState';
+import type { Spell } from '../../spell';
 import { ipairs, luaFor } from "../../lua/loops";
 import {
   hand,

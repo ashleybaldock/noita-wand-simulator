@@ -27,6 +27,7 @@ import { nextWandShotId, type WandShot } from './WandShot';
 import type { MapTree } from '../../util/MapTree';
 import { mapTreeToMapTree } from '../../util/MapTree';
 import type { TreeNode } from '../../util/TreeNode';
+import { AlwaysCastIndicies } from '../../redux/WandIndex';
 
 export type ClickWandResult = {
   shots: WandShot[];
@@ -461,8 +462,8 @@ export const clickWand = ({
       );
       _start_shot(state.mana);
 
-      alwaysCastSpells.forEach((spell) => {
-        _play_permanent_card(spell.id);
+      alwaysCastSpells.forEach((spell, i) => {
+        _play_permanent_card(spell.id, AlwaysCastIndicies[i]);
       });
 
       _draw_actions_for_shot(true);

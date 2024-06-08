@@ -1,7 +1,7 @@
 /* Auto-generated file */
 
-import { GunActionState } from '../../actionState';
-import { Spell } from '../../spell';
+import type { GunActionState } from '../../actionState';
+import type { Spell } from '../../spell';
 import { ipairs, luaFor } from "../../lua/loops";
 import {
   hand,
@@ -2665,7 +2665,7 @@ const actions: Spell[] = [
   },
   {
     id: "DELAYED_SPELL",
-    name: "$action_add-delayed_spell",
+    name: "$action_delayed_spell",
     description: "$actiondesc_delayed_spell",
     sprite: "var(--sprite-action-delayed-spell)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",

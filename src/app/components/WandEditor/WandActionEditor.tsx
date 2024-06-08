@@ -75,7 +75,10 @@ const ActionComponent = ({
             charges={spellAction.uses_remaining}
             nounlimited={spellAction.never_unlimited}
           />
-          <DeckIndexAnnotation deckIndex={deckIndex} />
+          <DeckIndexAnnotation
+            deckIndex={deckIndex}
+            wandIndex={spellAction.always_cast_index}
+          />
           {!isDraggingAction && (
             <>
               <DeleteSpellAnnotation

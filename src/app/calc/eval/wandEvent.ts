@@ -1,3 +1,4 @@
+import type { AlwaysCastWandIndex } from '../../redux/WandIndex';
 import type { ActionId } from '../actionId';
 import type { ActionSource } from '../actionSources';
 import type { GunActionState } from '../actionState';
@@ -154,6 +155,7 @@ export type WandEventBase = {
   OnPlayPermanentCard: {
     actionId: ActionId | WandId;
     c: GunActionState;
+    always_cast_index?: AlwaysCastWandIndex;
   };
   OnSetDontDraw: Record<string, never>;
   OnUnsetDontDraw: Record<string, never>;

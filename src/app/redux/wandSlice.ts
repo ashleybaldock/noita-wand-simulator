@@ -186,6 +186,7 @@ export const wandSlice = createSlice({
         (fromIndex !== undefined && !isWithinBounds(fromIndex, capacity)) ||
         !isWithinBounds(toIndex, capacity)
       ) {
+        console.log('outofbounds');
         return;
       }
       /*

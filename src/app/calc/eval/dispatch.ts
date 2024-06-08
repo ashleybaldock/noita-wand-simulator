@@ -14,6 +14,7 @@ import {
 } from '../lua/random';
 import { observer } from './wandObserver';
 import type { UnlockCondition } from '../unlocks';
+import type { AlwaysCastWandIndex } from '../../redux/WandIndex';
 
 export type WandId = '__WAND__';
 
@@ -366,10 +367,11 @@ export function OnActionPlayed(
 export function OnPlayPermanentCard(
   actionId: ActionId | WandId,
   c: GunActionState,
+  always_cast_index: AlwaysCastWandIndex,
 ): void {
   observer.onEvent({
     name: 'OnPlayPermanentCard',
-    payload: { actionId, c },
+    payload: { actionId, c, always_cast_index },
   });
 }
 

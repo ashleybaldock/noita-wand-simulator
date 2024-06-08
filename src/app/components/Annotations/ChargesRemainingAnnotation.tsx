@@ -41,8 +41,8 @@ export const ChargesRemainingAnnotation = ({
   const { infiniteSpells } = useConfig();
 
   return charges === undefined && !nounlimited ? null : infiniteSpells ? (
-    <Infinite data-name="DeckIndexAnnotation-Infinite" />
+    <Infinite data-name="ChargesRemainingAnnotation" />
   ) : (
-    <Zero data-name="DeckIndexAnnotation-Zero" />
+    <Zero data-name="ChargesRemainingAnnotation-Zero" />
   );
 };
