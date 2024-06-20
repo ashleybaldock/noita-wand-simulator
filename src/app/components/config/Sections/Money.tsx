@@ -1,0 +1,32 @@
+import { useConfigSetting } from '../../../redux';
+import { InputImageLabel } from '../../Input/ImageLabel/InputImageLabel';
+import { NumericInput } from '../../Input/NumericInput/NumericInput';
+import {
+  SubSectionContent,
+  SubSectionDiv,
+  SubSectionTitle,
+} from '../Components';
+
+export const MoneyConfigSection = () => {
+  const [var_money, , handleOnChangeMoney] = useConfigSetting('var_money');
+
+  return (
+    <SubSectionDiv data-section="money">
+      <SubSectionTitle>
+        <InputImageLabel size={20} imgUrl={'data/config/goldnugget2.png'} />
+        <span>Money</span>
+      </SubSectionTitle>
+      <SubSectionContent>
+        <NumericInput
+          min={0}
+          max={Number.POSITIVE_INFINITY}
+          // type="text"
+          // inputMode="numeric"
+          // pattern="^[1-9][0-9]*$"
+          value={var_money}
+          onChange={handleOnChangeMoney}
+        ></NumericInput>
+      </SubSectionContent>
+    </SubSectionDiv>
+  );
+};
