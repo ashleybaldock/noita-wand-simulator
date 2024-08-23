@@ -42,7 +42,7 @@ export const EndingConfigSection = () => {
           onChange={handleRefreshCountConfig}
         >
           <InputWrapper>
-            <InputImageLabel size={22} sprite={'var(--sprite-action-reset)'} />
+            <InputImageLabel $size={22} icon={'icon.spell.RESET'} />
             <span>Wand Refresh</span>
           </InputWrapper>
         </WrappedYesNoToggle>

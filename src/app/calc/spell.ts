@@ -2,7 +2,7 @@ import type { ActionId } from './actionId';
 import type { Action } from './action';
 import type { SpellType } from './spellTypes';
 import type { UnlockCondition } from './unlocks';
-import type { SpellSprite } from './spellSprite';
+import type { SpellSpritePath } from './spellSprite';
 import type { AlwaysCastWandIndex } from '../redux/WandIndex';
 
 export type SpellDeckInfo = {
@@ -22,7 +22,7 @@ export type SpellProperties = {
   id: ActionId;
   name: string;
   description: string;
-  sprite: SpellSprite;
+  sprite: SpellSpritePath;
   // Casting
   action: Action;
   type: SpellType;

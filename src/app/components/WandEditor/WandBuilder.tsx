@@ -93,8 +93,8 @@ export const WandBuilder = () => {
   return (
     <>
       <WandBuilderToolbar />
-      <MainDiv>
-        <WandBorder>
+      <MainDiv data-name="WandBuilder">
+        <WandBorder data-name="WandBorder">
           <ContentDiv
             ref={wandRef as LegacyRef<HTMLDivElement>}
             className={'saveImageRoot'}

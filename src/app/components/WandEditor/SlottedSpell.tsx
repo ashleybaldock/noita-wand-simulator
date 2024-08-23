@@ -48,7 +48,6 @@ export const SlottedSpell = ({
             <DraggableWandAction
               spellId={spell.id}
               spellType={spell.type}
-              spellSprite={spell.sprite}
               onDeleteSpell={() => handleDeleteSpell(wandIndex)}
             />
           </WandActionDragSource>

@@ -3,6 +3,9 @@ import { isNotNullOrUndefined, isNumber } from '../util';
 export const CUR = 'CUR';
 export type CursorWandIndex = typeof CUR;
 
+export const END = 'END';
+export type EndOfWandIndex = typeof END;
+
 export const INV = 'INV';
 export type InventoryWandIndex = typeof INV;
 
@@ -33,6 +36,7 @@ export type SelectionWandIndex = MainWandIndex | CursorWandIndex;
 
 export type WandIndex =
   | InventoryWandIndex
+  | EndOfWandIndex
   | CursorWandIndex
   | MainWandIndex
   | AlwaysCastWandIndex

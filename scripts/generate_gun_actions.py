@@ -28,7 +28,6 @@ import {
   setDontDrawActions,
   force_stop_draws,
   setForceStopDraws,
-  clearDiscarded,
   clearHand,
   clearDeck,
   add_projectile,
@@ -370,10 +369,11 @@ def processSprites(src, dst, before = '', after = ''):
     outFile.write("""/* Auto-generated file */
 
 export const spellSprites = [
-""" + ",\n".join(f'  \'var({spriteForAction(actionId)})\'' for actionId, _ in iter(matches.items())) + """,
+""" + ",\n".join(f'  [\'icon.spell.{actionId}\', \'var({spriteForAction(actionId)})\']' for actionId, _ in iter(matches.items())) + """,
 ] as const;
 
-export type SpellSprite = typeof spellSprites[number];
+export type SpellSpriteName = typeof spellSprites[number][0];
+export type SpellSpritePath = typeof spellSprites[number][1];
 """)
 
 

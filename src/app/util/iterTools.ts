@@ -626,53 +626,53 @@ export function* rangeIter({
 //   }
 // }
 
-const wrappedResult =
-  <F extends (...args: unknown[]) => unknown, T>(target: T, func: F) =>
-  (...params: Parameters<F>) => {
-    const result = func.apply(target, params);
-    return [result];
-  };
+// const wrappedResult =
+// <F extends (...args: unknown[]) => unknown, T>(target: T, func: F) =>
+// (...params: Parameters<F>) => {
+// const result = func.apply(target, params);
+// return [result];
+// };
 
-export type IterTools = IterableIterator<unknown> & {
-  takeLazily: (source: IterableIterator<unknown>, n: number) => IterTools;
-};
+// export type IterTools = IterableIterator<unknown> & {
+// takeLazily: (source: IterableIterator<unknown>, n: number) => IterTools;
+// };
 
-const wrapIterable = (iterable: IterableIterator<unknown>): IterTools => {
-  return new Proxy(iterable as IterTools, {
-    get: <K extends keyof IterTools, V extends IterTools[K]>(
-      target: IterTools,
-      property: K,
-      receiver: unknown,
-    ) => {
-      // return target[property];
-      // return (value: IterableIterator<T>[typeof property]) => {
-      return (value: V): IterTools | IterTools[K] => {
-        if (value) {
-          target[property] = value;
-          return wrapIterable(target);
-        }
-        return Reflect.get(target, property, receiver);
-      };
-    },
-  });
-};
-
-// const wrapIterable = <T>(iterable: IterableIterator<T>) => {
-//   return new Proxy(iterable, {
-//     get: <K extends keyof IterableIterator<T>, V extends IterableIterator<T>[K]>(target: IterableIterator<T>, property: K) => {
-//       // return target[property];
-//       // return (value: IterableIterator<T>[typeof property]) => {
-//       return (value: V): IterableIterator<T> | IterableIterator<T>[K] => {
-//         if (value) {
-//           target[property] = value;
-//           return new Proxy(target, iterProxy);
-//         }
-//         return target[property];
-//       }
+// const wrapIterable = (iterable: IterableIterator<unknown>): IterTools => {
+// return new Proxy(iterable as IterTools, {
+// get: <K extends keyof IterTools, V extends IterTools[K]>(
+//   target: IterTools,
+//   property: K,
+//   receiver: unknown,
+// ) => {
+//   // return target[property];
+//   // return (value: IterableIterator<T>[typeof property]) => {
+//   return (value: V): IterTools | IterTools[K] => {
+//     if (value) {
+//       target[property] = value;
+//       return wrapIterable(target);
 //     }
-//   })
+//     return Reflect.get(target, property, receiver);
+//   };
+// },
+// });
 // };
 
-// export const itertools: IterTools<unknown> = {
-//   takeLazily: wrapGenerator(takeLazily),
-// };
+// // const wrapIterable = <T>(iterable: IterableIterator<T>) => {
+// //   return new Proxy(iterable, {
+// //     get: <K extends keyof IterableIterator<T>, V extends IterableIterator<T>[K]>(target: IterableIterator<T>, property: K) => {
+// //       // return target[property];
+// //       // return (value: IterableIterator<T>[typeof property]) => {
+// //       return (value: V): IterableIterator<T> | IterableIterator<T>[K] => {
+// //         if (value) {
+// //           target[property] = value;
+// //           return new Proxy(target, iterProxy);
+// //         }
+// //         return target[property];
+// //       }
+// //     }
+// //   })
+// // };
+
+// // export const itertools: IterTools<unknown> = {
+// //   takeLazily: wrapGenerator(takeLazily),
+// // };

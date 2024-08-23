@@ -75,12 +75,7 @@ export const VisualisationList = () => {
 
   return (
     <ParentDiv>
-      <SimulationStatus
-        simulationRunning={simulationRunning}
-        lastRunStopReasons={endConditions}
-        lastRunEndConditions={['shotCount']}
-        elapsedTime={elapsedTime}
-      />
+      <SimulationStatus />
       <ShotList
         simulationRunning={simulationRunning}
         endReasons={endConditions}

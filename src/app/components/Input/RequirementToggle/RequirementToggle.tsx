@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { YesNoToggle } from '../YesNoToggle/YesNoToggle';
 import { InputImageLabel } from '../ImageLabel/InputImageLabel';
+import type { SpriteName } from '../../../calc/sprite';
 
 const RequirementToggleWrapper = styled.div``;
 
@@ -28,7 +29,7 @@ export const _RequirementToggle = ({
   customYes,
   customNo,
   size = 32,
-  sprite = 'var(--sprite-action-if-half)',
+  icon = 'icon.spell.IF_HALF',
 }: {
   className?: string;
   checked: boolean;
@@ -36,21 +37,18 @@ export const _RequirementToggle = ({
   customYes?: JSX.Element;
   customNo?: JSX.Element;
   size?: number;
-  sprite?: string;
+  icon?: SpriteName;
 }) => {
   return (
     <RequirementToggleWrapper className={className}>
-      <RequirementInputImageLabel size={size} imgUrl={sprite} />
+      <RequirementInputImageLabel $size={size} icon={icon} />
       <YesNoToggleWithoutArrow
         checked={checked}
         onChange={onChange}
         customYes={customYes}
         customNo={customNo}
       ></YesNoToggleWithoutArrow>
-      <RequirementInputImageLabel
-        size={size}
-        imgUrl={'var(--sprite-action-if-else)'}
-      />
+      <RequirementInputImageLabel $size={size} icon={'icon.spell.IF_ELSE'} />
       <YesNoToggleWithoutArrow
         checked={!checked}
         onChange={onChange}
@@ -58,10 +56,7 @@ export const _RequirementToggle = ({
         customNo={customNo}
       ></YesNoToggleWithoutArrow>
 
-      <RequirementInputImageLabel
-        size={size}
-        imgUrl={'var(--sprite-action-if-end)'}
-      />
+      <RequirementInputImageLabel $size={size} icon={'icon.spell.IF_END'} />
     </RequirementToggleWrapper>
   );
 };
@@ -79,16 +74,16 @@ export const RequirementToggle = styled(_RequirementToggle)`
 `;
 
 export const RequiremementEveryOther = styled(RequirementToggle).attrs(() => ({
-  sprite: 'var(--sprite-action-if-half)',
+  icon: 'icon.spell.IF_HALF',
 }))``;
 export const RequiremementIfEnemy = styled(RequirementToggle).attrs(() => ({
-  sprite: 'var(--sprite-action-if-enemy)',
+  icon: 'icon.spell.IF_ENEMY',
 }))``;
 export const RequiremementIfProjectiles = styled(RequirementToggle).attrs(
   () => ({
-    sprite: 'var(--sprite-action-if-projectile)',
+    icon: 'icon.spell.IF_PROJECTILE',
   }),
 )``;
 export const RequiremementIfHp = styled(RequirementToggle).attrs(() => ({
-  sprite: 'var(--sprite-action-if-hp)',
+  icon: 'icon.spell.IF_HP',
 }))``;

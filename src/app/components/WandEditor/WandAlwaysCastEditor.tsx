@@ -78,19 +78,6 @@ export const WandAlwaysCastEditor = styled(
     const alwaysIds = useAlwaysCastLayout();
     const gridRef = useRef(null);
 
-    /* Move cursor */
-    // useHotkeys('a, h', () => {
-    //   dispatch(moveCursor({ by: -1, always: true }));
-    // });
-    // useHotkeys('d, l', () => {
-    //   dispatch(moveCursor({ by: 1, always: true }));
-    // });
-
-    // useHotkeys('Backspace, r, shift+x', () => {
-    //   dispatch(deleteSelection({ shift: 'left' }));
-    //   dispatch(clearSelection());
-    // });
-
     const alwaysActions = alwaysIds.map((alwaysId) =>
       isKnownSpell(alwaysId) ? getSpellById(alwaysId) : undefined,
     );

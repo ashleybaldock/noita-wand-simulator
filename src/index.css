@@ -12,6 +12,8 @@
 
 /* see also app/RootCSSVars.tsx */
 :root {
+  --𝚽: 1.618; /* var(--𝚽) */
+
   --input-border: 2px solid #555555;
   --input-border-radius: 0 2px 0 2px;
 
@@ -45,6 +47,7 @@
   /* --color-toggle-chosen: var(--color-emphasis); */
   --color-toggle-chosen: rgb(207, 207, 206);
   --color-toggle-alternatives: var(--color-base);
+  --color-toggle-hover: #ffffbb;
 
   --color-numeric-hover: rgb(200 200 178 / 0.3);
   --color-numeric-focus: rgb(200 200 178 / 0.8);
@@ -159,4 +162,8 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+:root {
+  --sprite-missing: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOBAMAAADtZjDiAAAAD1BMVEUAAAAAAACFZgCofAIDAgAmXIGsAAAAAnRSTlMA+iv71joAAABGSURBVHheZcnRCcAgEAPQgF1A6ABFHUBOB7Dt7T9Tk8O/Jh8PEkzPyP5iQTloGj20UsPCSoQkXYiYWJr3vx30tze/cfrzAaPhBxxo96f6AAAAAElFTkSuQmCC);
 }

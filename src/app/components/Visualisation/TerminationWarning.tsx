@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import type { StopCondition, StopReason } from '../../types';
+import type { StopReason } from '../../types';
+import { isNotNullOrUndefined } from '../../util';
 
 const ResultError = styled.span`
   font-weight: bold;
@@ -39,20 +40,16 @@ const reasonMap: Record<StopReason, TerminationInfo> = {
 } as const;
 
 export const TerminationWarning = styled(
-  ({
-    reason,
-    condition,
-    className,
-  }: {
-    reason: StopReason;
-    condition: StopCondition;
-    className?: string;
-  }) => {
-    const { success, message } = reasonMap[reason];
-    return success ? (
-      <ResultSuccess className={className}>{message}</ResultSuccess>
-    ) : (
-      <ResultError className={className}>{message}</ResultError>
-    );
+  ({ reason, className }: { reason?: StopReason; className?: string }) => {
+    if (isNotNullOrUndefined(reason)) {
+      const { success, message } = reasonMap[reason];
+      return success ? (
+        <ResultSuccess className={className}>{message}</ResultSuccess>
+      ) : (
+        <ResultError className={className}>{message}</ResultError>
+      );
+    }
+
+    return <></>;
   },
 )``;

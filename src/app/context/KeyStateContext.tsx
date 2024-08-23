@@ -97,6 +97,8 @@ export const KeyStateContextProvider = ({
   );
 };
 
+export const useKeyState = (): KeyState => useContext(KeyStateContext);
+
 const KeyStateDebug = styled.div`
   position: fixed;
   bottom: 20px;
@@ -113,7 +115,8 @@ const KeyStateKey = styled.span<{ $pressed: boolean }>`
   line-height: 1em;
   border-radius: 2px;
   font-size: 10px;
-  border-color: ${({ $pressed }) => ($pressed ? 'var(--color-base)' : '#333333')};
+  border-color: ${({ $pressed }) =>
+    $pressed ? 'var(--color-base)' : '#333333'};
   color: ${({ $pressed }) => ($pressed ? 'var(--color-base)' : '#333333')};
 `;
 

@@ -1,9 +1,9 @@
-import { noop } from '../../util';
 import type { WandEvent, WandObserverCb } from './wandEvent';
 
 export const observer = (() => {
-  let listener: WandObserverCb = noop;
-  const remove = () => (listener = noop);
+  const defaultListener = (payload: WandEvent) => payload?.default;
+  let listener: WandObserverCb = defaultListener;
+  const remove = () => (listener = defaultListener);
   return {
     subscribe: (callback: WandObserverCb) => {
       listener = callback;

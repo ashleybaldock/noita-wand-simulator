@@ -10,7 +10,7 @@ export const UndoButton = () => {
   return (
     <Button
       hotkeys={'u, ctrl+z'}
-      imgUrl={'data/undo.png'}
+      icon={'icon.undo'}
       imgOnly={'600px'}
       onClick={() => undo()}
     >

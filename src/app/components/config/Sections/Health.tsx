@@ -13,7 +13,7 @@ export const HealthConfigSection = () => {
   return (
     <SubSectionDiv data-section="health">
       <SubSectionTitle>
-        <InputImageLabel size={22} imgUrl={'data/config/heart2.png'} />
+        <InputImageLabel $size={22} icon={'icon.config.heart2'} />
         <span>Health</span>
       </SubSectionTitle>
       <SubSectionContent>

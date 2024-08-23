@@ -1,15 +1,13 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type {
-  ClickWandResult,
-  SerializedClickWandResult,
-} from '../calc/eval/clickWand';
+import type { SerializedClickWandResult } from '../calc/eval/clickWand';
 import { useSliceWrapper } from './useSlice';
 import type { SpellId } from './Wand/spellId';
 import type { Wand } from './Wand/wand';
 import { defaultWand } from './Wand/presets';
 
 export type ResultState = {
+  simulationsSinceStart: number;
   last: SerializedClickWandResult;
   lastWand: Wand;
   lastSpellIds: SpellId[];
@@ -18,6 +16,7 @@ export type ResultState = {
 };
 
 const initialState: ResultState = {
+  simulationsSinceStart: 0,
   last: {
     shots: [],
     reloadTime: undefined,
@@ -57,7 +56,7 @@ export const resultSlice = createSlice({
         };
       }>,
     ) => {
-      // console.log('simulaton started:', spellIds);
+      console.log('simulation started:', spellIds);
 
       state.lastAlwaysIds = alwaysIds;
       state.lastSpellIds = spellIds;
@@ -75,6 +74,7 @@ export const resultSlice = createSlice({
       // console.log('serialized result:', result);
 
       state.last = result;
+      state.simulationsSinceStart = state.simulationsSinceStart + 1;
     },
   },
 });

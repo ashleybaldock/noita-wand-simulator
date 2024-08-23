@@ -36,7 +36,7 @@ export function RegisterGunShotEffects(recoil_knockback: number): void {
 export function BeginProjectile(entity_filename: string): void {
   observer.onEvent({
     name: 'BeginProjectile',
-    payload: { entityFilename: entity_filename },
+    payload: { entity_filename },
   });
 }
 
@@ -123,7 +123,7 @@ export function EntityGetWithTag(
 ): EntityID[] {
   return observer.onEvent({
     name: 'EntityGetWithTag',
-    default: [],
+    default: [0],
     payload: { tag },
   });
 }

@@ -9,83 +9,100 @@ import type { AppStartListening } from './listenerMiddleware';
 import { newResult, newSimulation } from './resultSlice';
 import type { RootState } from './store';
 
+type ListenerPredicate<T> = (
+  action: Action,
+  currentState: T,
+  previousState: T,
+) => boolean;
+
 /**
- * @returns true if sequences are the same, false if they differ
+ * @returns true if main spell sequence has changed
  */
-const spellSequencesMatchPredicate = (
-  _unused: unknown,
-  currentState: RootState,
-  previousState: RootState,
-): boolean => {
-  const res = compareSequencesIter<SpellId>(
-    { filterPredicate: isNotNullOrUndefined },
-    currentState.wand.present.spellIds.values(),
-    previousState.result.lastSpellIds.values(),
+const spellSequenceHasChanged: ListenerPredicate<RootState> = (
+  _unused,
+  currentState,
+) => {
+  const prev = currentState.result.lastSpellIds.values(),
+    cur = currentState.wand.present.spellIds.values(),
+    changed = !compareSequencesIter<SpellId>(
+      { filterPredicate: isNotNullOrUndefined },
+      prev,
+      cur,
+    );
+  console.debug(
+    `alwaysCastSeqChanged? '${changed}', present: '${cur}', previous: '${prev} `,
   );
-  return res;
+  return changed;
 };
 
 /**
- * @returns true if sequences are the same, false if they differ
+ * @returns true if sequence of always cast spells has changed
  */
-const alwaysCastSequencesMatchPredicate = (
-  _unused: unknown,
-  currentState: RootState,
-  previousState: RootState,
-): boolean => {
-  const res = compareSequencesIter<SpellId>(
-    { filterPredicate: isNotNullOrUndefined },
-    currentState.wand.present.alwaysIds.values(),
-    previousState.result.lastAlwaysIds.values(),
+const alwaysCastSequenceHasChanged: ListenerPredicate<RootState> = (
+  _unused,
+  currentState,
+) => {
+  const prev = currentState.result.lastAlwaysIds.values(),
+    cur = currentState.wand.present.alwaysIds.values(),
+    changed = !compareSequencesIter<SpellId>(
+      { filterPredicate: isNotNullOrUndefined },
+      prev,
+      cur,
+    );
+  console.debug(
+    `alwaysCastSeqChanged? '${changed}', present: '${cur}', previous: '${prev} `,
   );
-  // console.log(
-  //   'alwaysIdsSequenceChangedPredicate',
-  //   currentState.wand.present.alwaysIds.values(),
-  //   previousState.result.lastAlwaysIds.values(),
-  //   res,
-  // );
-  return res;
+  return changed;
 };
 
 /**
- * @returns true if all wand stats that affect simulation results are the same, false if they differ
+ * @returns true if any wand stats (that affect simulation
+ *               results) have changed
  */
-const wandStatsMatchPredicate = (
-  _unused: unknown,
-  currentState: RootState,
-  previousState: RootState,
-): boolean => {
-  const res = wandsMatchForSimulation(
-    currentState.wand.present.wand,
-    previousState.result.lastWand,
+const wandStatsHaveChanged: ListenerPredicate<RootState> = (
+  _unused,
+  currentState,
+) => {
+  const prev = currentState.result.lastWand,
+    cur = currentState.wand.present.wand,
+    changed = !wandsMatchForSimulation(cur, prev);
+  console.debug(
+    `wandStatsChanged? ${changed}, present: '${cur}', previous: '${prev} `,
   );
-  // console.log(
-  //   'wandStatsChangedPredicate',
-  //   currentState.wand.present.wand,
-  //   previousState.result.lastWand,
-  //   res,
-  // );
-  return res;
+  return changed;
 };
 
 /**
- * @returns true if zetaId matches, false otherwise
+ * @returns true if zetaId has changed
  */
-const zetaIdsMatchPredicate = (
-  _unused: unknown,
-  currentState: RootState,
-  previousState: RootState,
-): boolean => {
-  // console.log(
-  //   'zetaIdChangedPredicate',
-  //   currentState.wand.present.zetaId,
-  //   previousState.result.lastZetaId,
-  // );
-  return currentState.wand.present.zetaId === previousState.result.lastZetaId;
+const zetaIdHasChanged: ListenerPredicate<RootState> = (
+  _unused,
+  currentState,
+) => {
+  const prev = currentState.wand.present.zetaId,
+    cur = currentState.result.lastZetaId,
+    changed = prev !== cur;
+  console.debug(
+    `zetaIdChanged? ${changed}, present: '${cur}', previous: '${prev}'`,
+  );
+  return changed;
+};
+
+/**
+ * @returns true if no simulation has yet been performed since start
+ */
+const simulationHasNeverRun: ListenerPredicate<RootState> = (
+  _unused,
+  currentState,
+) => {
+  const hasNeverRun = currentState.result.simulationsSinceStart === 0;
+  console.debug(
+    `simHasNeverRun? '${hasNeverRun}', runsSinceStart: ${currentState.result.simulationsSinceStart}`,
+  );
+  return hasNeverRun;
 };
 
 // TODO also depends on config
-
 // TODO memoise previous sim results to avoid re-running
 /**
  * Checks if simulation needs to be re-run
@@ -93,33 +110,39 @@ const zetaIdsMatchPredicate = (
  * Composed of several match predicates, if any of those
  * returns false the simulation needs to be refreshed
  *
- * @returns {true} if changes require a new simulation run
- * @returns {false} if previous simulation result is still valid
+ * @returns true if changes require a new simulation run
+ * @returns false if previous simulation result is still valid
  */
-const simulationNeedsUpdatePredicate = (
-  action: Action,
-  currentState: RootState,
-  previousState: RootState,
-): boolean =>
+const simulationNeedsUpdate: ListenerPredicate<RootState> = (
+  action,
+  currentState,
+  previousState,
+) =>
   [
-    spellSequencesMatchPredicate,
-    alwaysCastSequencesMatchPredicate,
-    wandStatsMatchPredicate,
-    zetaIdsMatchPredicate,
-  ].some((predicate) => !predicate(action, currentState, previousState));
+    spellSequenceHasChanged,
+    alwaysCastSequenceHasChanged,
+    wandStatsHaveChanged,
+    zetaIdHasChanged,
+    simulationHasNeverRun,
+  ].some((predicate) => predicate(action, currentState, previousState));
+
+const simulationEnabled: ListenerPredicate<RootState> = (
+  _action,
+  currentState,
+) => !currentState.config.config.pauseCalculations;
 
 /**
  * Update Simulation result when wand has been changed
  */
 export const startUpdateListener = (startAppListening: AppStartListening) =>
   startAppListening({
-    predicate: simulationNeedsUpdatePredicate,
+    predicate: (...args) =>
+      simulationEnabled(...args) && simulationNeedsUpdate(...args),
     effect: async (_action, listenerApi) => {
       const {
         endSimulationOnShotCount,
         endSimulationOnReloadCount,
         endSimulationOnRefreshCount,
-        endSimulationOnRepeatCount,
         limitSimulationIterations,
         limitSimulationDuration,
         'random.worldSeed': rng_worldSeed,
@@ -130,12 +153,12 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
         'requirements.half': req_half,
       } = listenerApi.getState().config.config;
 
-      const spellIds = listenerApi.getState().wand.present.spellIds;
-      const alwaysIds = listenerApi.getState().wand.present.alwaysIds;
+      const spellIds = [...listenerApi.getState().wand.present.spellIds];
+      const alwaysIds = [...listenerApi.getState().wand.present.alwaysIds];
       const zetaId = listenerApi.getState().wand.present.zetaId;
       const wand = listenerApi.getState().wand.present.wand;
 
-      console.log('running new simulation');
+      console.debug('running new simulation');
       listenerApi.dispatch(
         newSimulation({
           wandState: {
@@ -159,7 +182,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
           : undefined;
 
       /* TODO spellsWithUses */
-      const task = listenerApi.fork(async (forkApi) =>
+      const task = listenerApi.fork(async (/*forkApi*/) =>
         clickWand({
           wand,
           spells,
@@ -176,18 +199,16 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
           endSimulationOnShotCount,
           endSimulationOnReloadCount,
           endSimulationOnRefreshCount,
-          endSimulationOnRepeatCount,
           limitSimulationIterations,
           limitSimulationDuration,
-        }),
-      );
+        }));
 
       const result = await task.result;
       const { status } = result;
 
       if (status === 'ok') {
         const { value } = result;
-        // console.log('Child succeeded: ', value);
+        // console.debug('Child succeeded: ', value);
 
         listenerApi.dispatch(
           newResult({
@@ -196,7 +217,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
         );
       } else {
         const { error } = result;
-        console.log('Child failed: ', status, error);
+        console.warn('Child failed: ', status, error);
       }
     },
   });

@@ -16,10 +16,7 @@ export const ExportButton = () => {
 
   return (
     <>
-      <Button
-        imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
-        onClick={() => openExportDialog()}
-      >
+      <Button icon={'icon.export'} onClick={() => openExportDialog()}>
         Export
       </Button>
       <Modal visible={modalVisible} onClose={handleClose} title="Export as...">

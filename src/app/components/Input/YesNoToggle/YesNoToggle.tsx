@@ -3,6 +3,10 @@ import type { ChangeEventHandler, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import { YesNo } from '../../Presentation';
 import { EditableWithLabel } from '../../Presentation/Editable';
+import type { ConfigToggleField } from '../../../redux';
+import { useConfigToggle } from '../../../redux';
+
+const InteractiveYesNo = styled(YesNo)``;
 
 type CheckboxProps = {
   $hidden?: boolean;
@@ -40,14 +44,13 @@ export const Checkbox = styled.input.attrs({ type: 'checkbox' })<CheckboxProps>`
     transition: 20ms transform ease-in-out;
     box-shadow: inset 1em 1em var(--form-control-color);
   }
-  &&:checked::before {
+
+  &:checked::before {
     transform: scale(1);
   }
 `;
 
 const Wrapper = styled(EditableWithLabel)``;
-
-const InteractiveYesNo = styled(YesNo)``;
 
 export const YesNoToggle = ({
   checked,
@@ -66,7 +69,7 @@ export const YesNoToggle = ({
   className?: string;
 }>) => {
   return (
-    <Wrapper className={className}>
+    <Wrapper data-name="YesNoToggle" className={className}>
       {children}
       <Checkbox
         hidden={true}
@@ -82,3 +85,66 @@ export const YesNoToggle = ({
     </Wrapper>
   );
 };
+
+export const YesNoConfigToggle = ({
+  configToggle,
+  onClick = noop,
+  children,
+  className,
+  customYes,
+  customNo,
+}: React.PropsWithChildren<{
+  configToggle: ConfigToggleField;
+  onClick?: MouseEventHandler<HTMLInputElement>;
+  customYes?: JSX.Element;
+  customNo?: JSX.Element;
+  className?: string;
+}>) => {
+  const [toggleState, , , handleToggle] = useConfigToggle(configToggle);
+  // customYes, TODO get from configuration of toggle field
+  // customNo,
+  return (
+    <Wrapper data-name="YesNoConfigToggle" className={className}>
+      {children}
+      <Checkbox
+        hidden={true}
+        checked={toggleState}
+        onChange={handleToggle}
+        onClick={onClick}
+      />
+      <InteractiveYesNo
+        yes={toggleState}
+        customYes={customYes}
+        customNo={customNo}
+      />
+    </Wrapper>
+  );
+};
+
+/*
+.khukTi {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.jqbwYa > :first-child {
+  flex: 1 1 50%;
+}
+
+
+.gowlYD > :last-child::before {
+}
+
+.jqbwYa > :last-child {
+  flex: 1 1 50%;
+}
+
+.jcCOeu {
+  position: relative;
+  display: grid;
+  place-items: center start;
+}
+
+.gowlYD > :last-child:hover::before {
+}
+ */

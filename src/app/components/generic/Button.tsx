@@ -1,9 +1,11 @@
 import { useHotkeys } from 'react-hotkeys-hook';
 import styled from 'styled-components';
 import { isString, noop } from '../../util';
-import type { TooltipId } from '../Tooltips/tooltipId';
-import type { ActionHintId } from '../Tooltips/actionHintId';
+import { tipToAttributes } from '../Tooltips/tooltipId';
+import type { Tip } from '../Tooltips/tooltipId';
 import { HotkeyHint } from '../Tooltips/HotkeyHint';
+import type { SpriteName } from '../../calc/sprite';
+import { useIcon } from '../../calc/sprite';
 
 const ButtonShapes = [
   'rectangle',
@@ -53,12 +55,13 @@ export const isBreakpoint = (
 export type ImgOnlyOption = 'never' | 'always' | BreakPoint;
 
 const StyledButton = styled.button<{
-  imgUrl: string;
-  imgDataUrl: string;
-  imgAfter: boolean;
-  imgOnly: ImgOnlyOption;
-  minimal: boolean;
-  shape: ButtonShape;
+  $background: string;
+  $imgUrl: string;
+  $imgDataUrl: string;
+  $imgAfter: boolean;
+  $imgOnly: ImgOnlyOption;
+  $minimal: boolean;
+  $shape: ButtonShape;
 }>`
   position: relative;
   color: var(--color-button);
@@ -77,8 +80,8 @@ const StyledButton = styled.button<{
   padding-top: 0.2em;
   padding-bottom: 0;
 
-  ${({ imgAfter }) =>
-    imgAfter
+  ${({ $imgAfter }) =>
+    $imgAfter
       ? `padding-right: var(--pad-img-side);
          padding-left: var(--pad-other-side);
          background-position: 90% 50%;`
@@ -86,12 +89,15 @@ const StyledButton = styled.button<{
          padding-left: var(--pad-img-side);
          background-position: 10% 50%;`}
 
-  ${({ shape }) => borderForShape.get(shape)};
+  ${({ $shape }) => borderForShape.get($shape)};
 
-  ${({ imgUrl }) =>
-    imgUrl.length > 0 ? `background-image: url('/${imgUrl}')` : ''};
-  ${({ imgDataUrl }) =>
-    imgDataUrl.length > 0 ? `background-image: url("${imgDataUrl}")` : ''};
+  ${({ $imgUrl }) =>
+    $imgUrl.length > 0 ? `background-image: url('/${$imgUrl}');` : ''}
+  ${({ $imgDataUrl }) =>
+    $imgDataUrl.length > 0 ? `background-image: url("${$imgDataUrl}");` : ''}
+
+  ${(props) => props?.$background && `background-image: ${props.$background};`}
+
   background-origin: padding-box;
   background-size: var(--background-size);
   background-repeat: no-repeat;
@@ -116,8 +122,8 @@ const StyledButton = styled.button<{
     transition-property: border-color, color, opacity;
   }
 
-  ${({ minimal }) =>
-    minimal
+  ${({ $minimal }) =>
+    $minimal
       ? `
     --background-size: 0.42em;
     --pad-img-side: calc(var(--background-size) + 1.9em);
@@ -141,15 +147,15 @@ const StyledButton = styled.button<{
     `
       : ``};
 
-  ${({ imgOnly }) =>
-    imgOnly === 'always' &&
+  ${({ $imgOnly }) =>
+    $imgOnly === 'always' &&
     `
       background-position: center center;
   `}
-  ${({ imgOnly }) =>
-    isBreakpoint(imgOnly) &&
+  ${({ $imgOnly }) =>
+    isBreakpoint($imgOnly) &&
     `
-    @media screen and (max-width: ${imgOnly}) {
+    @media screen and (max-width: ${$imgOnly}) {
       background-position: center center;
     }
   `}
@@ -167,9 +173,11 @@ export const Button = ({
   onMouseOut = noop,
   hotkeys = '',
 
-  tooltipId,
-  tooltipActionHintId,
+  tip,
+  // tooltipId,
+  // tooltipActionHintId,
 
+  icon = 'none',
   imgUrl = '',
   imgDataUrl = '',
   imgAfter = false,
@@ -184,34 +192,37 @@ export const Button = ({
   onMouseOver?: () => void;
   onMouseOut?: () => void;
   hotkeys?: string;
-  imgUrl?: string;
-  imgDataUrl?: string;
+  icon?: SpriteName | 'none';
   imgAfter?: boolean;
   imgOnly?: ImgOnlyOption;
   minimal?: boolean;
   shape?: ButtonShape;
-  tooltipId?: TooltipId;
-  tooltipActionHintId?: ActionHintId;
+  tip?: Tip;
+  /**
+   * @deprecated use @param {icon} instead
+   */
+  imgUrl?: string;
+  /**
+   * @deprecated use @param {icon} instead
+   */
+  imgDataUrl?: string;
 }>) => {
   useHotkeys(hotkeys, onClick, { enabled: hotkeys !== '' });
+  const iconPath = icon === 'none' ? '' : useIcon(icon);
   return (
     <StyledButton
       className={className}
-      minimal={minimal}
-      shape={shape}
-      imgUrl={imgUrl}
-      imgDataUrl={imgDataUrl}
-      imgAfter={imgAfter}
-      imgOnly={imgOnly}
+      $minimal={minimal}
+      $shape={shape}
+      $background={iconPath}
+      $imgUrl={imgUrl}
+      $imgDataUrl={imgDataUrl}
+      $imgAfter={imgAfter}
+      $imgOnly={imgOnly}
       onClick={onClick}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-      {...(tooltipId ?? false
-        ? {
-            'data-tooltip-id': tooltipId,
-            'data-tooltip-content': `${tooltipActionHintId}`,
-          }
-        : {})}
+      {...(tip ? tipToAttributes(tip) : {})}
     >
       {isBreakpoint(imgOnly) ? (
         <MobileHidden>{children}</MobileHidden>

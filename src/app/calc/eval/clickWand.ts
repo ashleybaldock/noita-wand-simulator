@@ -22,14 +22,24 @@ import { isValidActionCallSource } from '../spellTypes';
 import type { StopReason } from '../../types';
 import type { WandEvent } from './wandEvent';
 import { isNotNullOrUndefined, type ChangeFields } from '../../util';
-import type { ActionCall } from './ActionCall';
-import { nextWandShotId, type WandShot } from './WandShot';
+import { nextActionCallSequenceId, type ActionCall } from './ActionCall';
+import { getShot, nextWandShotId, type WandShot } from './WandShot';
 import type { MapTree } from '../../util/MapTree';
 import { mapTreeToMapTree } from '../../util/MapTree';
 import type { TreeNode } from '../../util/TreeNode';
 import { AlwaysCastIndicies } from '../../redux/WandIndex';
 
 export type ClickWandResult = {
+  /**
+   * Ordered list of WandShots
+   *
+   * Each of which has:
+   *
+   * - a list of projectiles
+   * - a tree representing the action call sequence
+   * - a set containing action call counts
+   *
+   */
   shots: WandShot[];
   reloadTime: number | undefined;
   endConditions: StopReason[];
@@ -103,9 +113,19 @@ export type ClickWandSetup = {
   endSimulationOnShotCount: number;
   endSimulationOnReloadCount: number;
   endSimulationOnRefreshCount: number;
-  endSimulationOnRepeatCount: number;
+  // endSimulationOnRepeatCount: number;
   limitSimulationIterations: number;
   limitSimulationDuration: number;
+};
+
+type StartingState = {
+  mana?: number;
+  rng_worldSeed?: number;
+  rng_frameNumber?: number;
+  req_half?: boolean;
+  req_hp?: boolean;
+  req_projectiles?: boolean;
+  req_enemies?: boolean;
 };
 
 type ClickWandState = {
@@ -114,43 +134,49 @@ type ClickWandState = {
   parentShot: WandShot | undefined;
   currentShotStack: WandShot[];
   lastCalledAction: ActionCall | undefined;
-  lastDrawnAction: ActionCall | undefined;
+  lastDrawnAndCalledAction: ActionCall | undefined;
   lastPlayed: Readonly<Spell> | undefined;
   alwaysCastsPlayed: ActionId[];
   calledActions: ActionCall[];
   validSourceCalledActions: ActionCall[];
   currentNode: TreeNode<ActionCall> | undefined;
   rootNodes: TreeNode<ActionCall>[];
+  startingState: Readonly<Required<StartingState>>;
+} & Required<StartingState>;
+
+const defaultStartingState: Required<StartingState> = {
+  mana: 1000,
+  req_half: false,
+  rng_worldSeed: 0,
+  rng_frameNumber: 1,
+  req_hp: false,
+  req_projectiles: false,
+  req_enemies: false,
 };
 
-const startTimer =
-  (start = performance.now()) =>
-  () =>
-    performance.now() - start;
-
-export const clickWand = ({
-  wand,
-  spells,
-  alwaysCastSpells,
-  zetaSpell,
-  req_enemies,
-  req_projectiles,
-  req_hp,
-  req_half,
-  rng_frameNumber,
-  rng_worldSeed,
-  wand_available_mana,
-  wand_cast_delay,
-  endSimulationOnShotCount = 10,
-  endSimulationOnReloadCount = 1,
-  endSimulationOnRefreshCount = 2,
-  endSimulationOnRepeatCount = 1,
-  limitSimulationIterations = 200,
-  limitSimulationDuration = 5000,
-}: ClickWandSetup): SerializedClickWandResult => {
-  const getElapsedTime = startTimer();
-
-  const result: ClickWandResult = {
+// } & Required<StartingState>;
+const resetState = (
+  startingState: StartingState,
+): {
+  state: ClickWandState;
+  result: ClickWandResult;
+} => ({
+  state: {
+    ...{ ...defaultStartingState, ...startingState },
+    startingState: { ...defaultStartingState, ...startingState },
+    calledActions: [],
+    validSourceCalledActions: [],
+    currentShotStack: [],
+    rootNodes: [],
+    currentNode: undefined,
+    currentShot: getShot(),
+    lastCalledAction: undefined,
+    lastDrawnAndCalledAction: undefined,
+    lastPlayed: undefined,
+    alwaysCastsPlayed: [],
+    parentShot: undefined,
+  },
+  result: {
     shots: [],
     reloadTime: undefined,
     endConditions: [],
@@ -160,48 +186,19 @@ export const clickWand = ({
     reloadCount: 0,
     refreshCount: 0,
     repeatCount: 0,
-  };
+  },
+});
 
-  if (spells.filter((s) => s != null).length === 0) {
-    result.endConditions.push('noSpells');
-    return result;
-  }
+const startTimer =
+  (start = performance.now()) =>
+  () =>
+    performance.now() - start;
 
-  const getShot = (): WandShot => ({
-    id: nextWandShotId(),
-    projectiles: [],
-    actionCalls: [],
-    actionCallTrees: [],
-    castState: { ...defaultGunActionState },
-    wraps: [],
-  });
-
-  const resetState = (): ClickWandState => ({
-    calledActions: [],
-    validSourceCalledActions: [],
-    currentShotStack: [],
-    rootNodes: [],
-    currentNode: undefined,
-
-    mana: wand_available_mana,
-    currentShot: getShot(),
-    lastCalledAction: undefined,
-    lastDrawnAction: undefined,
-    lastPlayed: undefined,
-    alwaysCastsPlayed: [],
-    parentShot: undefined,
-  });
-
-  const state: ClickWandState = resetState();
-
-  // action call tree
-
-  const if_half_state = req_half ? 1 : 0;
-
-  const unsub = observer.subscribe(({ name, payload }: WandEvent) => {
+const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
+  observer.subscribe(({ name, payload }: WandEvent) => {
     switch (name) {
-      case 'BeginProjectile':
-        const { entityFilename } = payload;
+      case 'BeginProjectile': {
+        const { entity_filename } = payload;
 
         let sourceAction =
           state.validSourceCalledActions[
@@ -213,41 +210,42 @@ export const clickWand = ({
           // fallback to most likely entity source if no action
           // if (!entityToActions(entity)) {
           if (
-            !isValidEntityPath(entityFilename) ||
-            entityToActions(entityFilename) === undefined
+            !isValidEntityPath(entity_filename) ||
+            entityToActions(entity_filename) === undefined
           ) {
-            throw Error(`missing entity: ${entityFilename}`);
+            throw Error(`missing entity: ${entity_filename}`);
           }
-          sourceAction = getSpellById(entityToActions(entityFilename)?.[0]);
+          sourceAction = getSpellById(entityToActions(entity_filename)?.[0]);
         }
 
         if (
-          entityFilename !==
+          entity_filename !==
           getSpellById(sourceAction.id).related_projectiles?.[0]
         ) {
-          if (!entityToActions(entityFilename)) {
-            throw Error(`missing entity: ${entityFilename}`);
+          if (!entityToActions(entity_filename)) {
+            throw Error(`missing entity: ${entity_filename}`);
           }
 
           // check for bugged actions (missing the correct related_projectile)
-          if (entityToActions(entityFilename)[0] !== sourceAction.id) {
+          if (entityToActions(entity_filename)[0] !== sourceAction.id) {
             // this probably means another action caused this projectile (like ADD_TRIGGER)
             proxy = sourceAction;
-            sourceAction = getSpellById(entityToActions(entityFilename)?.[0]);
+            sourceAction = getSpellById(entityToActions(entity_filename)?.[0]);
           }
         }
 
         state.currentShot.projectiles.push({
           _typeName: 'Projectile',
-          entity: entityFilename,
+          entity: entity_filename,
           spell: sourceAction,
           proxy: proxy,
           deckIndex: proxy?.deck_index || sourceAction?.deck_index,
         });
         break;
+      }
       case 'BeginTriggerTimer':
       case 'BeginTriggerHitWorld':
-      case 'BeginTriggerDeath':
+      case 'BeginTriggerDeath': {
         // TODO type for entity_filename
         const { entity_filename, action_draw_count } = payload;
         const delay_frames =
@@ -269,8 +267,8 @@ export const clickWand = ({
         state.parentShot.projectiles[
           state.parentShot.projectiles.length - 1
         ].trigger = state.currentShot.id;
-        if (state.lastDrawnAction) {
-          state.lastDrawnAction.wasLastToBeDrawnBeforeBeginTrigger =
+        if (state.lastDrawnAndCalledAction) {
+          state.lastDrawnAndCalledAction.wasLastToBeDrawnBeforeBeginTrigger =
             state.currentShot.id;
         }
         if (state.lastCalledAction) {
@@ -278,16 +276,20 @@ export const clickWand = ({
             state.currentShot.id;
         }
         break;
-      case 'EndTrigger':
+      }
+      case 'EndTrigger': {
         state.currentShot = state.currentShotStack.pop()!;
         break;
-      case 'EndProjectile':
+      }
+      case 'EndProjectile': {
         break;
-      case 'RegisterGunAction':
+      }
+      case 'RegisterGunAction': {
         const { s: castState } = payload;
         state.currentShot.castState = Object.assign({}, castState);
         break;
-      case 'OnDraw':
+      }
+      case 'OnDraw': {
         const { state_cards_drawn: totalDrawn } = payload;
         if (state.currentShot.castState) {
           state.currentShot.castState.state_cards_drawn =
@@ -296,6 +298,7 @@ export const clickWand = ({
               0) + 1;
         }
         break;
+      }
       case 'OnActionPlayed': {
         const { spell, c: castState, playing_permanent_card } = payload;
         state.lastPlayed = spell;
@@ -312,9 +315,10 @@ export const clickWand = ({
         const { discarded } = payload;
         result.wraps += 1;
         state.currentShot.wraps.push(result.wraps);
-        if (state.lastDrawnAction) {
-          state.lastDrawnAction.wasLastToBeDrawnBeforeWrapNr = result.wraps;
-          state.lastDrawnAction.wrappingInto = [...discarded];
+        if (state.lastDrawnAndCalledAction) {
+          state.lastDrawnAndCalledAction.wasLastToBeDrawnBeforeWrapNr =
+            result.wraps;
+          state.lastDrawnAndCalledAction.wrappingInto = [...discarded];
         }
         if (state.lastCalledAction) {
           state.lastCalledAction.wasLastToBeCalledBeforeWrapNr = result.wraps;
@@ -330,6 +334,7 @@ export const clickWand = ({
         console.log(`OnActionCalled gunMana: ${gunMana}`);
         state.lastCalledAction = {
           _typeName: 'ActionCall',
+          sequenceId: nextActionCallSequenceId(),
           spell: {
             id: spell.id,
             deck_index: spell.deck_index,
@@ -343,7 +348,7 @@ export const clickWand = ({
           dont_draw_actions: dont_draw_actions,
         };
         if (source === 'draw') {
-          state.lastDrawnAction = state.lastCalledAction;
+          state.lastDrawnAndCalledAction = state.lastCalledAction;
         }
 
         if (!state.currentNode) {
@@ -385,18 +390,28 @@ export const clickWand = ({
 
       case 'GameGetFrameNum': {
         // TODO - this ought to increment/change with each shot cycle
-        return rng_frameNumber;
+        return state.rng_frameNumber;
       }
       case 'SetRandomSeed': {
-        return rng_worldSeed;
+        return state.rng_worldSeed;
+      }
+      case 'EntityGetWithTag': {
+        const { tag } = payload;
+        if (tag === 'black_hole_giga') {
+          return [0];
+        }
+        if (tag === 'player_unit') {
+          return [];
+        }
+        break;
       }
       // These are used currently only by requirements
       case 'EntityGetInRadiusWithTag': {
         const { x, y, radius, tag } = payload;
         if (tag === 'homing_target') {
-          return req_enemies ? new Array(15) : [];
+          return state.req_enemies ? new Array(15) : [];
         } else if (tag === 'projectile') {
-          return req_projectiles ? new Array(20) : [];
+          return state.req_projectiles ? new Array(20) : [];
         }
         break;
       }
@@ -411,7 +426,7 @@ export const clickWand = ({
         const { component_id, key } = payload;
         if (component_id === 'IF_HP') {
           if (key === 'hp') {
-            return req_hp ? 25000 / 25 : 100000 / 25;
+            return state.req_hp ? 25000 / 25 : 100000 / 25;
           } else if (key === 'max_hp') {
             return 100000 / 25;
           }
@@ -421,7 +436,7 @@ export const clickWand = ({
       case 'GlobalsGetValue': {
         const { key, defaultValue } = payload;
         if (key === 'GUN_ACTION_IF_HALF_STATUS') {
-          return `${if_half_state}`;
+          return `${state.req_half ? 1 : 0}`;
         }
         break;
       }
@@ -440,9 +455,47 @@ export const clickWand = ({
     }
   });
 
-  try {
-    resetState();
+export const clickWand = ({
+  wand,
+  spells,
+  alwaysCastSpells,
+  zetaSpell,
+  req_enemies,
+  req_projectiles,
+  req_hp,
+  req_half,
+  rng_frameNumber,
+  rng_worldSeed,
+  wand_available_mana,
+  wand_cast_delay,
+  endSimulationOnShotCount = 30,
+  endSimulationOnReloadCount = 1,
+  endSimulationOnRefreshCount = 2,
+  // endSimulationOnRepeatCount = 1,
+  limitSimulationIterations = 200,
+  limitSimulationDuration = 5000,
+}: ClickWandSetup): SerializedClickWandResult => {
+  const getElapsedTime = startTimer();
 
+  const { result, state } = resetState({
+    mana: wand_available_mana,
+    req_enemies,
+    req_projectiles,
+    req_hp,
+    req_half,
+    rng_frameNumber,
+    rng_worldSeed,
+  });
+
+  /* No spells makes for an easy simulation */
+  if (spells.filter((s) => s != null).length === 0) {
+    result.endConditions.push('noSpells');
+    return result;
+  }
+
+  const endObservation = beginObservation(result, state);
+
+  try {
     _set_gun(wand);
     _clear_deck(/*false*/);
 
@@ -457,8 +510,8 @@ export const clickWand = ({
       result.shotCount++;
       state_from_game.fire_rate_wait = wand_cast_delay;
 
-      console.log(
-        `shot#${result.shotCount}(_start_shot) mana: ${state.mana}, cast_delay: ${wand_cast_delay}`,
+      console.debug(
+        `shot#${result.shotCount}->_start_shot(): mana: ${state.mana}, cast_delay: ${wand_cast_delay}`,
       );
       _start_shot(state.mana);
 
@@ -470,8 +523,8 @@ export const clickWand = ({
       state.currentShot.actionCalls = state.calledActions!;
       state.currentShot.actionCallTrees = state.rootNodes;
       state.currentShot.manaDrain = state.mana - gunMana;
-      console.log(
-        `shot#${result.shotCount}(currentShot.manaDrain) mana: ${state.mana}, gunMana: ${gunMana}`,
+      console.debug(
+        `shot#${result.shotCount}, .manaDrain: ${state.currentShot.manaDrain} (${state.mana} - ${gunMana})`,
       );
       result.shots.push(state.currentShot);
       state.mana = gunMana;
@@ -489,9 +542,9 @@ export const clickWand = ({
       if (result.refreshCount >= endSimulationOnRefreshCount) {
         result.endConditions.push('refreshCount');
       }
-      if (result.repeatCount >= endSimulationOnRepeatCount) {
-        result.endConditions.push('repeatCount');
-      }
+      // if (result.repeatCount >= endSimulationOnRepeatCount) {
+      //   result.endConditions.push('repeatCount');
+      // }
       if (simIterations++ >= limitSimulationIterations) {
         result.endConditions.push('iterationCount');
       }
@@ -516,10 +569,9 @@ export const clickWand = ({
   } catch (err) {
     console.error(err);
     result.endConditions.push('exception');
+  } finally {
+    endObservation();
   }
-
-  resetState();
-  unsub();
 
   return serializeClickWandResult(result);
 };

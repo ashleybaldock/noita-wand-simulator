@@ -47,7 +47,8 @@ import type { AlwaysCastWandIndex } from '../redux/WandIndex';
 export const ACTION_DRAW_RELOAD_TIME_INCREASE = 0;
 const ACTION_MANA_DRAIN_DEFAULT = 10;
 const ACTION_UNIDENTIFIED_SPRITE_DEFAULT =
-  'data/ui_gfx/gun_actions/unidentified.png';
+  // 'data/ui_gfx/gun_actions/unidentified.png';
+  'var(--sprite-action-unidentified)';
 
 /* Does (almost) nothing in the sim - leave as false */
 export const reflecting = false;

@@ -24,12 +24,59 @@ const Wrapper = styled.fieldset`
   &:focus-within:hover {
     box-shadow: 0 0 1px 0.4px var(--color-numeric-focus);
   }
+
+  & > button {
+    height: 2em;
+    background-size: 32%;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    display: flex;
+    background-position: center;
+    aspect-ratio: var(--𝚽);
+    text-align: center;
+    padding: 0;
+    width: auto;
+    font-size: 1em;
+    line-height: 1;
+    border-radius: 0;
+    border-left-width: 1px;
+    border-right-width: 1px;
+
+    transition-property: box-shadow, border-radius;
+    transition-duration: 80ms;
+    transition-timing-function: ease;
+  }
+
+  & > button:first-of-type {
+    border-radius: 4px 0 0 4px;
+    border-left-width: 2px;
+  }
+
+  & > button:last-of-type {
+    border-radius: 0 4px 4px 0;
+    border-right-width: 2px;
+  }
+
+  & > button:hover {
+    border-radius: 4px;
+    scale: 1.08;
+
+    transition-property: box-shadow, border-radius, scale;
+    transition-duration: 80ms;
+    transition-timing-function: ease;
+  }
+
+  & input:focus-visible {
+    z-index: 100;
+  }
 `;
 
 const NumberInput = styled.input.attrs({
   type: 'text',
   inputMode: 'numeric',
-  pattern: '^[1-9][0-9]*$',
+  pattern: '[.0-9]+',
 })`
   width: 100%;
   height: 2em;
@@ -176,19 +223,30 @@ export const NumericInput = ({
   }, []);
 
   return (
-    <Wrapper className={className}>
-      {showSetToMin && <ButtonMin minimal={true}>{`${min}`}</ButtonMin>}
+    <Wrapper data-name="NumericInput" className={className}>
+      {showSetToMin && (
+        <ButtonMin data-name="SetMinimum" minimal={true}>{`${min}`}</ButtonMin>
+      )}
       {showBigStep && (
         <ButtonBigStepDown
+          data-name="BigStepDown"
           minimal={true}
-          imgUrl="data/arrows/down-double.png"
+          icon={'icon.chevron.d2x'}
+          // hotkeys={'shift+down,ctrl+shift+x'}
         />
       )}
       {showStep && (
-        <ButtonStepDown minimal={true} imgUrl="data/arrows/down-single.png" />
+        <ButtonStepDown
+          data-name="StepDown"
+          minimal={true}
+          icon={'icon.chevron.d'}
+          hotkeys={'down,ctrl+x'}
+          onClick={}
+        />
       )}
       {children}
       <NumberInput
+        data-name="NumberInput"
         ref={inputRef}
         hidden={true}
         onBlur={() => saveChanges()}
@@ -196,13 +254,23 @@ export const NumericInput = ({
         onChange={(e) => {}}
       />
       {showStep && (
-        <ButtonStepUp minimal={true} imgUrl="data/arrows/up-single.png" />
+        <ButtonStepUp
+          data-name="StepUp"
+          minimal={true}
+          icon={'icon.chevron.u'}
+          hotkeys={'up,ctrl+a'}
+        />
       )}
       {showBigStep && (
-        <ButtonBigStepUp minimal={true} imgUrl="data/arrows/up-double.png" />
+        <ButtonBigStepUp
+          data-name="BigStepUp"
+          minimal={true}
+          icon={'icon.chevron.u2x'}
+          // hotkeys={'shift+up,ctrl+shift+a'}
+        />
       )}
       {showSetToMax && (
-        <ButtonMax minimal={true}>{`${
+        <ButtonMax data-name="SetMaximum" minimal={true}>{`${
           max === Number.POSITIVE_INFINITY ? '∞' : max
         }`}</ButtonMax>
       )}

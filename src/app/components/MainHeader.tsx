@@ -58,7 +58,7 @@ export function MainHeader({ children }: React.PropsWithChildren) {
   );
 
   return (
-    <HeaderDiv imgUrl={logoVariant}>
+    <HeaderDiv data-name="MainHeader" imgUrl={logoVariant}>
       <HeaderLink href="/"></HeaderLink>
       <SpacerDiv />
       <ExtraDiv>{children}</ExtraDiv>

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import type { ShotProjectile } from '../../../calc/eval/ShotProjectile';
-import { WandAction, StyledWandActionBorder } from '../../Spells/WandAction';
 import { getSpellById } from '../../../calc/spells';
 import {
   ActionProxyAnnotation,
@@ -8,6 +7,7 @@ import {
   FriendlyFireAnnotation,
 } from '../../Annotations';
 import { WithDebugHints } from '../../Debug';
+import { StyledWandActionBorder, WandAction } from '../../Spells/WandAction';
 
 const ArrayGroupDiv = styled.div`
   display: flex;
@@ -77,10 +77,7 @@ export const ShotTableProjectile = ({
             (projectile.spell && getSpellById(projectile.spell.id).type) ??
             'projectile'
           }
-          spellSprite={
-            (projectile.spell && getSpellById(projectile.spell.id).sprite) ??
-            'missing-sprite'
-          }
+          spellId={projectile.spell?.id}
         />
 
         <ActionProxyAnnotation

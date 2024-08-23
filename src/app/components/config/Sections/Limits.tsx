@@ -1,35 +1,64 @@
-import { useConfigToggle } from '../../../redux';
+import styled from 'styled-components';
 import {
+  InputWrapper,
   SubSectionContent,
   SubSectionDiv,
   SubSectionTitle,
-  WrappedYesNoToggle,
+  WrappedYesNoConfigToggle,
 } from '../Components';
+import { InputImageLabel } from '../../Input/ImageLabel/InputImageLabel';
+
+const Col = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  flex-direction: row;
+  align-items: center;
+
+  & > :first-child {
+    flex: 1 1 50%;
+  }
+`;
+
+const Hint = styled.span`
+  margin-top: 0.4em;
+  font-size: 0.6em;
+`;
 
 export const LimitsConfigSection = () => {
-  const [unlimitedSpells, , , handleUnlimitedSpellsToggle] =
-    useConfigToggle('unlimitedSpells');
-  const [infiniteSpells, , , handleInfiniteSpellsToggle] =
-    useConfigToggle('infiniteSpells');
-
   return (
     <SubSectionDiv data-section="limits">
       <SubSectionTitle>
         <span>Limits</span>
       </SubSectionTitle>
-      <SubSectionContent>
-        <WrappedYesNoToggle
-          checked={unlimitedSpells}
-          onChange={handleUnlimitedSpellsToggle}
+      <SubSectionContent data-subsection="spellcharges">
+        <WrappedYesNoConfigToggle
+          data-toggle="unlimitedSpells"
+          configToggle={'unlimitedSpells'}
         >
-          <span>Unlimited Spells Perk</span>
-        </WrappedYesNoToggle>
-        <WrappedYesNoToggle
-          checked={infiniteSpells}
-          onChange={handleInfiniteSpellsToggle}
+          <InputWrapper>
+            <InputImageLabel $size={42} icon={'unlimited_spells'} />
+            <Col>
+              <span>Unlimited Spells Perk</span>
+            </Col>
+          </InputWrapper>
+        </WrappedYesNoConfigToggle>
+        <WrappedYesNoConfigToggle
+          data-toggle="infiniteSpells"
+          configToggle={'infiniteSpells'}
         >
-          <span>∞ Spells (Ignore usage limits)</span>
-        </WrappedYesNoToggle>
+          <Col>
+            <span>Ignore spell charge limits</span>
+          </Col>
+        </WrappedYesNoConfigToggle>
+        <WrappedYesNoConfigToggle
+          data-toggle="showChargeUsage"
+          configToggle={'infiniteSpells'}
+        >
+          <Col>
+            <span>Highlight spells that consume charges</span>
+          </Col>
+        </WrappedYesNoConfigToggle>
       </SubSectionContent>
     </SubSectionDiv>
   );

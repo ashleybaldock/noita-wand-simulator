@@ -19,7 +19,7 @@ export const CastConfigEditor = () => {
   return (
     <>
       <SectionToolbar title={'Cast Config'} />
-      <MainDiv>
+      <MainDiv data-name={'CastConfigEditor'}>
         <HealthConfigSection />
         <MoneyConfigSection />
         <RandomConfigSection />

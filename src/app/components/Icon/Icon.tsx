@@ -1,22 +1,26 @@
 import styled from 'styled-components';
-import type { Perk } from '../../calc/perks';
-import { getSpriteForPerk } from '../../calc/perks';
-import type { IconUrl} from '../../calc/sprite';
-import { missingSprite } from '../../calc/sprite';
+import { useIcon, type SpriteName, type SpritePath } from '../../calc/sprite';
 
-export const Icon = styled.span.attrs<{
-  $src?: IconUrl;
-}>(({ $src = missingSprite }) => ({
+export const StyledIcon = styled.span.attrs<{
+  $background: SpritePath;
+}>(({ $background }) => ({
   style: {
-    backgroundImage: $src,
+    backgroundImage: $background,
   },
 }))``;
 
-export const InlineIcon = styled(Icon).attrs<{
-  $perk?: Perk;
-}>(({ $perk }) => ({
-  $src: getSpriteForPerk($perk),
-}))`
+export const Icon = ({
+  icon,
+  className = '',
+}: React.PropsWithChildren<{
+  className?: string;
+  icon?: SpriteName;
+}>) => {
+  const iconPath = useIcon(icon);
+  return <StyledIcon $background={iconPath} className={className}></StyledIcon>;
+};
+
+export const InlineIcon = styled(Icon)`
   display: inline-block;
   background-position: center center;
   background-repeat: no-repeat;

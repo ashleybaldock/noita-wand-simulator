@@ -13,8 +13,8 @@ import {
 const initialState: WandEditorState = {
   cursorIndex: 0,
   selecting: false,
-  selectFrom: 3,
-  selectTo: 6,
+  selectFrom: null,
+  selectTo: null,
 } as const;
 
 /**

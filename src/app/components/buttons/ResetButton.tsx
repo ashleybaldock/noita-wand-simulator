@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { KeyStateContext } from '../../context/KeyStateContext';
+import { useKeyState } from '../../context/KeyStateContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { clearSpells, resetWand } from '../../redux/wandSlice';
 import { Button } from '../generic';
@@ -23,14 +22,15 @@ const Stack = ({ children }: React.PropsWithChildren) => {
 export const ResetButton = () => {
   const dispatch = useAppDispatch();
 
-  const { shift } = useContext(KeyStateContext);
+  const { shift } = useKeyState();
 
   return (
     <>
       <Button
         imgOnly="600px"
         hotkeys={'shift+t'}
-        imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
+        tip={{ kind: 'uihint', id: 'clear' }}
+        icon={'icon.clear'}
         onClick={() => dispatch(clearSpells())}
       >
         Clear
@@ -38,7 +38,8 @@ export const ResetButton = () => {
       <Button
         imgOnly="600px"
         hotkeys={'t'}
-        imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
+        tip={{ kind: 'uihint', id: 'reset' }}
+        icon={'icon.reset'}
         onClick={() => dispatch(resetWand())}
       >
         Reset

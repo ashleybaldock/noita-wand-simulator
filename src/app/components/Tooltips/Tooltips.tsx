@@ -1,4 +1,4 @@
-import { ActionHintTooltip } from './ActionHintTooltip';
+import { UiHintTooltip } from './UiHintTooltip';
 import { KeyHintIndicator } from './HotkeyHint';
 import { SpellInfoTooltip } from './SpellInfoTooltip';
 
@@ -7,7 +7,7 @@ export const Tooltips = () => {
     <>
       <KeyHintIndicator />
       <SpellInfoTooltip />
-      <ActionHintTooltip />
+      <UiHintTooltip />
     </>
   );
 };

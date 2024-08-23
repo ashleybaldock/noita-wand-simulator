@@ -15,7 +15,6 @@ import {
   setDontDrawActions,
   force_stop_draws,
   setForceStopDraws,
-  clearDiscarded,
   clearHand,
   clearDeck,
   add_projectile,

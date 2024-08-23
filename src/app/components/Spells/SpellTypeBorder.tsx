@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import type { SpellType } from '../../calc/spellTypes';
-import { getBackgroundUrlForSpellType } from '../../calc/spellTypes';
+import { getSpriteForSpellType } from '../../calc/spellTypes';
 
 export const SpellTypeBorder = styled.div.attrs<{
   spellType?: SpellType;
 }>(({ spellType }) => ({
   style: {
-    borderImageSource: getBackgroundUrlForSpellType(spellType),
+    borderImageSource: getSpriteForSpellType(spellType),
   },
 }))`
   display: block;

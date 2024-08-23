@@ -7,11 +7,10 @@ import { isNotNullOrUndefined } from '../../util';
 import { translate } from '../../util/i18n';
 import { spellTypeInfoMap } from '../../calc/spellTypes';
 import { WithDebugHints } from '../Debug';
-import type { Perk } from '../../calc/perks';
-import { getSpriteForPerk } from '../../calc/perks';
 import { getUnlockName } from '../../calc/unlocks';
 import { YesNo } from '../Presentation';
 import { useHideTooltips } from './useHideTooltips';
+import { InlineIcon } from '../Icon/Icon';
 
 const StyledTooltipBase = styled(TooltipBase)``;
 
@@ -114,22 +113,6 @@ const SpellImage = styled.img.attrs<{ $src?: string }>(({ $src = '' }) => ({
   height: 64px;
 `;
 
-const InlineIcon = styled.span.attrs<{
-  perk?: Perk;
-}>(({ perk }) => ({
-  style: {
-    backgroundImage: `url('${getSpriteForPerk(perk)}')`,
-  },
-}))`
-  display: inline-block;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: 1em;
-  image-rendering: pixelated;
-  width: 1em;
-  height: 1em;
-`;
-
 export const SpellInfoTooltip = ({
   className = '',
 }: {
@@ -141,6 +124,7 @@ export const SpellInfoTooltip = ({
     <StyledTooltipBase
       className={className}
       id={'tooltip-spellinfo'}
+      data-name={'SpellInfoTooltip'}
       hidden={hidden}
       ref={tooltipRef}
       disableStyleInjection={true}
@@ -189,7 +173,7 @@ export const SpellInfoTooltip = ({
               ) : (
                 <>
                   {`${max_uses}`}
-                  <InlineIcon perk={'unlimited_spells'} />
+                  <InlineIcon icon={'unlimited_spells'} />
                   <YesNo yes={Boolean(never_unlimited)} />
                 </>
               )}

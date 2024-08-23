@@ -35,7 +35,7 @@ const defaultResultState: ResultContextState = {
 
 export const ResultContext = createContext(defaultResultState);
 
-export const KeyStateContextProvider = ({
+export const ResultStateContextProvider = ({
   children,
   debug = false,
 }: React.PropsWithChildren<{ debug?: boolean }>) => {

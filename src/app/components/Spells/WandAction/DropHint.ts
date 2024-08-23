@@ -1,4 +1,5 @@
-import { Background, emptyBackground } from './BackgroundPart';
+import type { Background } from './BackgroundPart';
+import { emptyBackground } from './BackgroundPart';
 
 export const dropHints = [
   'none',

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { YesNoToggle } from '../Input';
+import { YesNoConfigToggle, YesNoToggle } from '../Input';
 
 export const SubSectionDiv = styled.div<{
   'data-section'?: string;
@@ -199,6 +199,31 @@ export const InputWrapper = styled.label`
   }
 `;
 
+export const WrappedYesNoConfigToggle = styled(YesNoConfigToggle)`
+  flex: 0 1;
+  padding: 0.6em 0.2em;
+  flex: 1 1 100%;
+
+  & > :first-child {
+    flex: 1 0;
+  }
+  & > :last-child {
+    flex: 0 0;
+  }
+  @media screen and (max-width: 600px) {
+    align-self: stretch;
+    padding: 0.6em 1.8em;
+
+    & > :first-child {
+      flex: 1 0;
+    }
+    & > :last-child {
+      flex: 0 0;
+    }
+    & > :last-child::before {
+    }
+  }
+`;
 export const WrappedYesNoToggle = styled(YesNoToggle)`
   flex: 0 1;
   padding: 0.6em 0.2em;

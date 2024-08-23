@@ -278,7 +278,7 @@ const HotKeyCombos = ({ hotkeys }: { hotkeys: string }) => {
 const KeyHintIndicatorWrapper = styled.div<{ $visible: boolean }>`
   display: ${({ $visible }) => ($visible ? 'flex' : 'none')};
   position: fixed;
-  top: 5px;
+  bottom: 5px;
   font-size: 0.7em;
   margin-left: 50%;
   font-size: 0.7em;
@@ -288,6 +288,8 @@ const KeyHintIndicatorWrapper = styled.div<{ $visible: boolean }>`
   background-color: black;
   z-index: var(--zindex-tooltips);
   padding: 0.3em 0.7em;
+  border: 0.3em double var(--color-keyhint-border);
+  border-radius: 0.44em / 1.2em;
   border-radius: 0.5em;
 `;
 
@@ -302,7 +304,11 @@ export const KeyHintIndicator = ({ className }: { className?: string }) => {
   useHotkeys('i', () => toggleShowKeyHints());
 
   return (
-    <KeyHintIndicatorWrapper $visible={show} className={className}>
+    <KeyHintIndicatorWrapper
+      data-name="KeyHintIndicator"
+      $visible={show}
+      className={className}
+    >
       Showing Hotkey hints - press
       <InlineHotkeyHint>
         <HotKeyCombos hotkeys={'i'}></HotKeyCombos>

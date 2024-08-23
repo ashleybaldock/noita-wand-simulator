@@ -1,20 +1,30 @@
 import { StyledWandActionBorder } from './WandActionBorder';
-import { BeforeSpellDropTarget } from './BeforeSpellDropTarget';
-import { AfterSpellDropTarget } from './AfterSpellDropTarget';
 import { OverSpellDropTarget } from './OverSpellDropTarget';
-import type { WandIndex } from '../../../redux/WandIndex';
+import { END, isMainWandIndex, type WandIndex } from '../../../redux/WandIndex';
+import { BetweenSpellsDropTarget } from './BetweenSpellsDropTarget';
 
 export const WandActionDropTargets = ({
   wandIndex,
+  lastIndex,
   children,
 }: React.PropsWithChildren<{
   wandIndex: WandIndex;
+  lastIndex?: WandIndex;
 }>) => {
   return (
-    <OverSpellDropTarget wandIndex={wandIndex}>
+    <OverSpellDropTarget
+      data-name={'OverSpellDropTarget'}
+      wandIndex={wandIndex}
+    >
       <StyledWandActionBorder>{children}</StyledWandActionBorder>
-      <BeforeSpellDropTarget wandIndex={wandIndex} />
-      <AfterSpellDropTarget wandIndex={wandIndex} />
+      {isMainWandIndex(wandIndex) && (
+        <>
+          <BetweenSpellsDropTarget
+            indexOfSpellBefore={wandIndex}
+            indexOfSpellAfter={wandIndex === 0 ? END : wandIndex - 1}
+          />
+        </>
+      )}
     </OverSpellDropTarget>
   );
 };

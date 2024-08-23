@@ -1,60 +1,64 @@
 import { isNotNullOrUndefined } from '../util';
+import type { ActionId } from './actionId';
+
+type PartialInfo = {
+  exampleId: ActionId;
+};
 
 const SpellTypeInfoMapDefinition = {
   projectile: {
     name: 'Projectile',
-    src: 'data/spelltypes/item_bg_projectile.png',
-    egSrc: 'var(--sprite-action-light-bullet)',
+    sprite: 'icon.spelltype.projectile',
+    exampleId: 'LIGHT_BULLET',
     description: '',
     url: '',
   },
   static: {
     name: 'Static',
-    src: 'data/spelltypes/item_bg_static_projectile.png',
-    egSrc: 'var(--sprite-action-delayed-spell)',
+    sprite: 'icon.spelltype.static',
+    exampleId: 'DELAYED_SPELL',
     description: '',
     url: '',
   },
   modifier: {
     name: 'Modifier',
-    src: 'data/spelltypes/item_bg_modifier.png',
-    egSrc: 'var(--sprite-action-mana-reduce)',
-
+    sprite: 'icon.spelltype.modifier',
+    exampleId: 'MANA_REDUCE',
     description: '',
     url: '',
   },
   multicast: {
     name: 'Multicast',
-    src: 'data/spelltypes/item_bg_draw_many.png',
-    egSrc: 'var(--sprite-action-burst-2)',
+    sprite: 'icon.spelltype.multicast',
+    exampleId: 'BURST_2',
     description: '',
     url: '',
   },
   material: {
     name: 'Material',
-    src: 'data/spelltypes/item_bg_material.png',
-    egSrc: 'var(--sprite-action-material-acid)',
+    sprite: 'icon.spelltype.material',
+    exampleId: 'MATERIAL_ACID',
     description: '',
     url: '',
   },
   other: {
     name: 'Other',
-    src: 'data/spelltypes/item_bg_other.png',
-    egSrc: 'var(--sprite-action-add-trigger)',
+    sprite: 'icon.spelltype.other',
+    exampleId: 'ADD_TRIGGER',
     description: '',
     url: '',
   },
   utility: {
     name: 'Utility',
-    src: 'data/spelltypes/item_bg_utility.png',
-    egSrc: 'var(--sprite-action-teleport-cast)',
+    sprite: 'icon.spelltype.utility',
+    exampleId: 'TELEPORT_CAST',
     description: '',
     url: '',
   },
   passive: {
     name: 'Passive',
-    src: 'data/spelltypes/item_bg_passive.png',
-    egSrc: 'var(--sprite-action-tiny-ghost)',
+    sprite: 'icon.spelltype.passive',
+    exampleId: 'TINY_GHOST',
     description: '',
     url: '',
   },
@@ -62,7 +66,8 @@ const SpellTypeInfoMapDefinition = {
 
 export type SpellType = keyof typeof SpellTypeInfoMapDefinition;
 
-export type SpellTypeInfo = (typeof SpellTypeInfoMapDefinition)[SpellType];
+export type SpellTypeInfo = (typeof SpellTypeInfoMapDefinition)[SpellType] &
+  PartialInfo;
 
 export type SpellTypeName =
   (typeof SpellTypeInfoMapDefinition)[SpellType]['name'];
@@ -73,8 +78,8 @@ export type SpellTypeDescription =
 export type SpellTypeUrl =
   (typeof SpellTypeInfoMapDefinition)[SpellType]['url'];
 
-export type SpellTypeSrc =
-  (typeof SpellTypeInfoMapDefinition)[SpellType]['src'];
+export type SpellTypeSpriteName =
+  (typeof SpellTypeInfoMapDefinition)[SpellType]['sprite'];
 
 export type SpellTypeInfoMap = Record<SpellType, Readonly<SpellTypeInfo>>;
 
@@ -83,10 +88,12 @@ export const spellTypeInfoMap = SpellTypeInfoMapDefinition as SpellTypeInfoMap;
 export const isValidSpellType = (x: string): x is SpellType =>
   Object.prototype.hasOwnProperty.call(spellTypeInfoMap, x);
 
-export const getBackgroundUrlForSpellType = (spellType?: SpellType) =>
+export const getSpriteForSpellType = (
+  spellType?: SpellType,
+): SpellTypeSpriteName | 'missing' =>
   isNotNullOrUndefined(spellType)
-    ? `url('/${spellTypeInfoMap[spellType].src}')`
-    : `url('/data/spelltypes/item_bg_unknown.png')`;
+    ? spellTypeInfoMap[spellType].sprite
+    : 'missing';
 
 const groups = ['prj', 'mod', 'umo', 'smp'] as const;
 

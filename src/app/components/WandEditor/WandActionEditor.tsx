@@ -27,20 +27,42 @@ import {
   DraggableWandAction,
   WandActionDropTargets,
   WandActionDragSource,
+  StyledWandActionBorder,
 } from '../Spells/WandAction';
 import { useDragLayer } from 'react-dnd';
 import { getComputedColumns } from './hooks';
 import type { WandSelection } from '../../redux/Wand/wandSelection';
 import { isKnownSpell } from '../../redux/Wand/spellId';
+import { END, type WandIndex } from '../../redux/WandIndex';
+import { WandIndexAnnotation } from '../Annotations/WandIndexAnnotation';
+import { OverSpellDropTarget } from '../Spells/WandAction/OverSpellDropTarget';
+import { BetweenSpellsDropTarget } from '../Spells/WandAction/BetweenSpellsDropTarget';
 
+const PlaceHolder = styled(StyledWandActionBorder)`
+  background-image: none;
+`;
+const EndOfWand = ({ wandIndex }: { wandIndex: WandIndex }) => {
+  return (
+    <OverSpellDropTarget data-name={'EndOfWandDropTarget'} wandIndex={END}>
+      <PlaceHolder></PlaceHolder>
+      <BetweenSpellsDropTarget
+        indexOfSpellBefore={wandIndex}
+        indexOfSpellAfter={END}
+      />
+      <WandIndexAnnotation wandIndex={END} />
+    </OverSpellDropTarget>
+  );
+};
 const ActionComponent = ({
   spellAction,
   wandIndex,
   deckIndex,
+  lastIndex,
 }: {
   spellAction?: Spell;
-  wandIndex: number;
+  wandIndex: WandIndex;
   deckIndex?: number;
+  lastIndex?: WandIndex;
   selection?: WandSelection;
 }) => {
   const dispatch = useAppDispatch();
@@ -52,12 +74,12 @@ const ActionComponent = ({
     isDraggingSelect:
       monitor.isDragging() && monitor.getItemType() === 'select',
   }));
-  const handleDeleteSpell = (wandIndex: number) => {
+  const handleDeleteSpell = (wandIndex: WandIndex) => {
     dispatch(setSpellAtIndex({ spellId: null, wandIndex }));
   };
 
   return (
-    <WandActionDropTargets wandIndex={wandIndex}>
+    <WandActionDropTargets wandIndex={wandIndex} lastIndex={lastIndex}>
       {spellAction && (
         <>
           <WandActionDragSource
@@ -67,7 +89,6 @@ const ActionComponent = ({
             <DraggableWandAction
               spellId={spellAction.id}
               spellType={spellAction.type}
-              spellSprite={spellAction.sprite}
               onDeleteSpell={() => handleDeleteSpell(wandIndex)}
             />
           </WandActionDragSource>
@@ -90,6 +111,7 @@ const ActionComponent = ({
           )}
         </>
       )}
+      <WandIndexAnnotation wandIndex={wandIndex} />
     </WandActionDropTargets>
   );
 };
@@ -231,24 +253,37 @@ export const WandActionEditor = () => {
   /* Selection needs control nodes to grab for drag and drop */
   /* Cut selection to new wand/storage */
   /* Duplicate selection */
-  /* Select spells in current cast state */
+  /* Select spells in current cast state
+   * mouseover spell to highlight related spells
+   * e.g. green border for multicast group
+   *      yellow for trigger payload
+   *      white for grouping divides
+   *      etc.
+   *
+   * */
 
+  const lastSpellIndex = spellIds.length - 1;
+  const extraSpellIndex = spellIds.length;
   const spellActions = spellIds.map((spellId) =>
     isKnownSpell(spellId) ? getSpellById(spellId) : undefined,
   );
   let deckIndex = 0;
 
   return (
-    <SpellSlots ref={gridRef}>
+    <SpellSlots ref={gridRef} data-name="WandActionEditor">
       {spellActions.map((spellAction, wandIndex) => (
         <SpellSlot key={wandIndex}>
           <ActionComponent
             spellAction={spellAction}
             wandIndex={wandIndex}
             deckIndex={spellAction !== undefined ? deckIndex++ : undefined}
+            lastIndex={lastSpellIndex}
           />
         </SpellSlot>
       ))}
+      <SpellSlot key={'endslot'}>
+        <EndOfWand wandIndex={extraSpellIndex} />
+      </SpellSlot>
     </SpellSlots>
   );
 };

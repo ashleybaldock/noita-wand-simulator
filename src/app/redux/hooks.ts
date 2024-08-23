@@ -2,10 +2,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
 import type { AppDispatch, RootState } from './store';
 import { createSelector } from 'reselect';
-import { generateWikiWandV2 } from './Wand/toWiki';
+import { generateWikiSpellSequence, generateWikiWandV2 } from './Wand/toWiki';
 import { generateSearchFromWandState } from './Wand/toSearch';
 import type { KeyOfType } from '../util';
-import { sequencesMatch, sequencesMatchIgnoringHoles } from '../util';
+import {
+  isBoolean,
+  isNumber,
+  sequencesMatch,
+  sequencesMatchIgnoringHoles,
+} from '../util';
 import type { WandSelectionSet } from './Wand/wandSelection';
 import {
   defaultWandSelection,
@@ -14,22 +19,27 @@ import {
 } from './Wand/wandSelection';
 import { getSelectionForId } from './Wand/toSelection';
 import type { Config, ConfigToggleField } from './configSlice';
-import { setConfigSetting, toggleConfigSetting } from './configSlice';
+import {
+  setConfigSetting,
+  toggleConfigSetting,
+  updateConfig,
+} from './configSlice';
 import type { UIState, UIToggle } from './uiSlice';
 import { flipUiToggle, setUiToggle } from './uiSlice';
-import type {
-  CursorPosition,
-  CursorStyle,
-} from '../components/Spells/WandAction/Cursor';
+import type { CursorStyle } from '../components/Spells/WandAction/Cursor';
 import {
   defaultCursor,
   type Cursor,
 } from '../components/Spells/WandAction/Cursor';
 import type { SpellId } from './Wand/spellId';
+import type { ChangeEvent } from 'react';
 import { useMemo } from 'react';
-import type { WandIndex } from './WandIndex';
-import { isMainWandIndex } from './WandIndex';
+import type { MainWandIndex, WandIndex } from './WandIndex';
+import { ZTA, isMainWandIndex } from './WandIndex';
 import type { BackgoundPartLocation } from '../components/Spells/WandAction/BackgroundPart';
+import { useKeyState } from '../context/KeyStateContext';
+import type { EditMode } from './EditMode';
+import { setSpellAtIndex } from './wandSlice';
 
 // Typed versions of `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -72,6 +82,7 @@ export const useConfigToggle = <N extends ConfigToggleField>(
   value: Config[N],
   set: (newValue: Config[N]) => void,
   toggle: () => void,
+  changeHandler: (e: ChangeEvent<HTMLInputElement>) => void,
 ] => {
   const dispatch = useAppDispatch();
   return [
@@ -79,6 +90,13 @@ export const useConfigToggle = <N extends ConfigToggleField>(
     (newValue: Config[N]) =>
       dispatch(setConfigSetting({ name: fieldName, newValue })),
     () => dispatch(toggleConfigSetting({ name: fieldName })),
+    (e: ChangeEvent<HTMLInputElement>) => {
+      dispatch(
+        updateConfig({
+          [fieldName]: e.target.checked,
+        }),
+      );
+    },
   ];
 };
 
@@ -87,11 +105,31 @@ export const useConfigSetting = <
   N extends KeyOfType<Config, T>,
 >(
   fieldName: N,
-): [value: Config[N], set: (newValue: T) => void] => {
+): [
+  value: Config[N],
+  set: (newValue: T) => void,
+  changeHandler: (e: ChangeEvent<HTMLInputElement>) => void,
+] => {
   const dispatch = useAppDispatch();
   return [
     useAppSelector(selectConfig).config[fieldName],
     (newValue: T) => dispatch(setConfigSetting({ name: fieldName, newValue })),
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (isNumber(e.currentTarget.value)) {
+        dispatch(
+          updateConfig({
+            [fieldName]: Number.parseInt(e.target.value),
+          }),
+        );
+      }
+      if (isBoolean(e.currentTarget.value)) {
+        dispatch(
+          updateConfig({
+            [fieldName]: e.target.checked,
+          }),
+        );
+      }
+    },
   ];
 };
 
@@ -128,8 +166,48 @@ const selectWand = createSelector(
 );
 export const useWand = () => useSelector(selectWand);
 
-const selectWikiExport = createSelector(selectWandState, generateWikiWandV2);
-export const useWikiExport = () => useSelector(selectWikiExport);
+/**
+ * Full Spell sequence (Including empty slots)
+ */
+const selectSpellSequence = createSelector(
+  selectWandState,
+  (wandState) => wandState.spellIds,
+);
+
+/**
+ * Spell sequence as on the wand (Includes empty slots)
+ *
+ * Considered to have changed if any spell is moved,
+ * even if the sequence is the same
+ */
+export const useSpellLayout = () =>
+  useSelector(selectSpellSequence, sequencesMatch);
+
+/**
+ * Spell sequence as executed (Ignores empty slots)
+ *
+ * Considered to have changed only if order changes
+ */
+export const useSpellSequence = () =>
+  useSelector(selectSpellSequence, sequencesMatchIgnoringHoles);
+
+const selectMessages = createSelector(
+  selectWandState,
+  (wandState) => wandState.messages,
+);
+export const useMessages = () => useSelector(selectMessages);
+
+const selectWikiExportWand = createSelector(
+  selectWandState,
+  generateWikiWandV2,
+);
+export const useWikiExportWand = () => useSelector(selectWikiExportWand);
+
+const selectWikiExportSeq = createSelector(
+  selectSpellSequence,
+  generateWikiSpellSequence,
+);
+export const useWikiSequenceExport = () => useSelector(selectWikiExportSeq);
 
 const selectURLSearch = createSelector(
   selectWandState,
@@ -150,14 +228,14 @@ const selectIsZetaOnWand = createSelector(selectWandState, (wandState) =>
 export const useZeta = (): [
   zetaOnWand: boolean,
   zetaSpellId: SpellId | null,
-  // setZetaSpellId: (spellId: SpellId) => void,
+  setZetaSpellId: (spellId: SpellId) => void,
 ] => {
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   return [
     useSelector(selectIsZetaOnWand) ?? false,
     useSelector(selectZeta) ?? null,
-    // (spellId: SpellId) =>
-    //   dispatch(setSpellAtIndex({ wandIndex: ZTA, spellId })),
+    (spellId: SpellId) =>
+      dispatch(setSpellAtIndex({ wandIndex: ZTA, spellId })),
   ];
 };
 
@@ -172,29 +250,6 @@ const selectAlwaysCastSpells = createSelector(
 export const useAlwaysCastLayout = () =>
   useSelector(selectAlwaysCastSpells, sequencesMatch);
 
-/**
- * Full Spell sequence
- */
-const selectSpells = createSelector(
-  selectWandState,
-  (wandState) => wandState.spellIds,
-);
-
-export const useSpellLayout = () => useSelector(selectSpells, sequencesMatch);
-
-/**
- * Spell sequence
- * - Considered to have changed only if order changes
- */
-export const useSpellSequence = () =>
-  useSelector(selectSpells, sequencesMatchIgnoringHoles);
-
-const selectMessages = createSelector(
-  selectWandState,
-  (wandState) => wandState.messages,
-);
-export const useMessages = () => useSelector(selectMessages);
-
 ///****************************************/
 //**            editorSlice             **/
 /****************************************/
@@ -203,26 +258,26 @@ const selectCursorIndex = (state: RootState) => state.editor.cursorIndex;
 
 const selectCursors = createSelector(
   selectCursorIndex,
-  selectSpells,
-  (cursorIndex, spellIds): Cursor[] =>
+  selectSpellSequence,
+  (cursorIndex, spellIds): CursorStyle[] =>
     spellIds.map(
-      (_, wandIndex): Cursor => ({
-        before: cursorIndex === wandIndex ? 'caret' : 'none',
-        after: cursorIndex === wandIndex + 1 ? 'caret' : 'none',
-      }),
+      (_, wandIndex: MainWandIndex): CursorStyle =>
+        cursorIndex === wandIndex ? 'caret' : 'none',
     ),
 );
 
 export const useCursors = () => useSelector(selectCursors);
 
-export const useCursor = (
-  wandIndex: WandIndex,
-  location: 'before' | 'after',
-): CursorStyle => {
-  const cursors = useCursors();
-  return isMainWandIndex(wandIndex)
-    ? cursors[wandIndex][location]
-    : defaultCursor[location];
+/*
+ * Returns cursor info for the 'between' spell locations
+ * i.e. for 'before' spell index 1, return the cursor info for 'after' spell 0 as well
+ */
+export const useCursor = (wandIndex: WandIndex): CursorStyle => {
+  const cursors = useSelector(selectCursors);
+  if (isMainWandIndex(wandIndex)) {
+    return cursors[wandIndex] ?? defaultCursor['before'];
+  }
+  return defaultCursor['before'];
 };
 
 const selectSelectionExtents = (state: RootState) => ({
@@ -232,7 +287,7 @@ const selectSelectionExtents = (state: RootState) => ({
 
 const selectSelections = createSelector(
   selectSelectionExtents,
-  selectSpells,
+  selectSpellSequence,
   ({ selectFrom, selectTo }, spellIds): WandSelectionSet[] =>
     spellIds.map((_, wandIndex) =>
       getSelectionForId(wandIndex, selectFrom, selectTo),
@@ -252,7 +307,8 @@ export const useSelection = (
   location: BackgoundPartLocation,
 ): WandSelection => {
   const selections = useSelections();
-  return isMainWandIndex(wandIndex)
+  const { 'editor.enableSelection': enableSelection } = useConfig();
+  return enableSelection && isMainWandIndex(wandIndex)
     ? selections[wandIndex][location]
     : defaultWandSelection;
 };
@@ -263,6 +319,20 @@ const selectSelecting = createSelector(
 );
 
 export const useSelecting = () => useSelector(selectSelecting);
+
+export const useEditMode = (): EditMode => {
+  const { shift, alt, ctrl, meta } = useKeyState();
+  const { 'editor.swapOnMove': swapOnMove } = useConfig();
+
+  return {
+    insert: 'push',
+    direction: 'right',
+    replace: 'swap',
+    overflow: 'truncate',
+    delete: 'blank',
+    cursor: 'fixed',
+  };
+};
 
 ///****************************************/
 //**            resultSlice             **/

@@ -8,9 +8,11 @@ import type { SpellDeckInfo } from '../../calc/spell';
 import { useConfig } from '../../redux';
 import { isNotNullOrUndefined } from '../../util';
 import { getSpellById } from '../../calc/spells';
+import type { SpriteName } from '../../calc/sprite';
+import { useIcon } from '../../calc/sprite';
 
 export const ProxyDiv = styled.div<{
-  imgUrl: string;
+  background: string;
 }>`
   --size: 0.58;
   --bsize: calc(var(--size-spell) * var(--size));
@@ -18,7 +20,7 @@ export const ProxyDiv = styled.div<{
   pointer-events: none;
   font-family: var(--font-family-noita-default);
   position: absolute;
-  background-image: url(/${({ imgUrl }) => imgUrl});
+  ${(props) => props?.background && `background-image: ${props.background};`}
   background-size: cover;
 
   top: calc(var(--bsize) * -0.25);
@@ -31,20 +33,20 @@ export const ProxyDiv = styled.div<{
   box-sizing: border-box;
 `;
 
-const ProxyDivNoBorder = styled.div<{
-  imgUrl: string;
-}>`
-  --size-spell: var(--bsize-spell, 48px);
-  position: relative;
-  min-width: var(--size-spell);
-  width: var(--size-spell);
-  height: var(--size-spell);
-  background-size: cover;
-  font-family: monospace;
-  font-weight: bold;
-  user-select: none;
-  image-rendering: pixelated;
-`;
+// const ProxyDivNoBorder = styled.div<{
+//   imgUrl: string;
+// }>`
+//   --size-spell: var(--bsize-spell, 48px);
+//   position: relative;
+//   min-width: var(--size-spell);
+//   width: var(--size-spell);
+//   height: var(--size-spell);
+//   background-size: cover;
+//   font-family: monospace;
+//   font-weight: bold;
+//   user-select: none;
+//   image-rendering: pixelated;
+// `;
 
 export const ActionProxyAnnotation = ({
   proxy,
@@ -55,27 +57,30 @@ export const ActionProxyAnnotation = ({
 }) => {
   const { showProxies } = useConfig();
 
-  const triggerType = isWithTriggerActionId(spell?.id)
-    ? 'trigger'
+  const icon: SpriteName | undefined = isWithTriggerActionId(spell?.id)
+    ? `icon.trigger${spell?.permanently_attached ? '.disabled' : ''}`
     : isWithTimerActionId(spell?.id)
-    ? 'timer'
+    ? `icon.timer${spell?.permanently_attached ? '.disabled' : ''}`
     : isWithExpirationActionId(spell?.id)
-    ? 'death'
-    : '';
+    ? `icon.expiration${spell?.permanently_attached ? '.disabled' : ''}`
+    : undefined;
+
+  const iconPath = useIcon(icon);
 
   if (showProxies && isNotNullOrUndefined(proxy)) {
     return (
       <ProxyDiv
         data-name="ActionProxyAnnotation-Proxy"
-        imgUrl={getSpellById(proxy.id).sprite}
+        background={getSpellById(proxy.id).sprite}
       />
     );
   } else if (isNotNullOrUndefined(spell?.id)) {
-    const imgUrl = `data/icons/${triggerType}-mod${
-      spell?.permanently_attached ? `-disabled` : ''
-    }.png`;
-
-    return <ProxyDiv data-name="ActionProxyAnnotation" imgUrl={imgUrl} />;
+    return (
+      <ProxyDiv
+        data-name="ActionProxyAnnotation"
+        background={icon ? iconPath : 'none'}
+      />
+    );
   }
   return null;
 };

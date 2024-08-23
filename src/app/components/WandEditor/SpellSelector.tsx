@@ -6,7 +6,7 @@ import { spells } from '../../calc/spells';
 import { useAppDispatch, useConfig } from '../../redux/hooks';
 import type { Config, ConfigState } from '../../redux/configSlice';
 import {
-  getBackgroundUrlForSpellType,
+  getSpriteForSpellType,
   spellTypeGroupInfoMap,
   spellTypeGroupsOrdered,
   spellTypeInfoMap,
@@ -69,11 +69,10 @@ const SpellSelectorWandActionDragSource = styled(WandActionDragSource)`
 `;
 
 const SpellSelectorWandAction = styled(DraggableWandAction)`
-  --transition-props: opacity, transform;
+  --transition-props: opacity, background;
 
   opacity: 0.84;
   padding: 0.04em;
-  transform-origin: 0.8em 0.8em;
 
   &:hover {
     opacity: 0.9;
@@ -114,11 +113,7 @@ const WandActionSelect = ({
         key={id}
         onClick={dragSourceOnClick}
       >
-        <SpellSelectorWandAction
-          spellId={id}
-          spellType={type}
-          spellSprite={sprite}
-        />
+        <SpellSelectorWandAction spellId={id} spellType={type} />
       </SpellSelectorWandActionDragSource>
     </SpellSelectorWandActionBorder>
   );
@@ -146,12 +141,12 @@ export const SpellSelector = () => {
           const { contains } = spellTypeGroupInfoMap[spellTypeGroup];
           return {
             titleParts: contains.map((spellType) => {
-              const { name, src, egSrc } = spellTypeInfoMap[spellType];
+              const { name, sprite, exampleId } = spellTypeInfoMap[spellType];
               return {
                 text: name,
                 type: spellType,
-                bgSrc: src,
-                egSrc: egSrc,
+                bgSrc: sprite,
+                egSrc: exampleId,
                 key: `part-${name}`,
               };
             }),
@@ -179,7 +174,7 @@ export const SpellSelector = () => {
   const tabPerType = useMemo(() => {
     return objectEntries(spellsByType)
       .map(([spellType, actions]) => {
-        const { name, src } = spellTypeInfoMap[spellType];
+        const { name, sprite } = spellTypeInfoMap[spellType];
 
         return {
           titleParts: [
@@ -187,11 +182,11 @@ export const SpellSelector = () => {
               text: name,
               type: spellType,
               style: {
-                backgroundImage: getBackgroundUrlForSpellType(spellType),
+                backgroundImage: getSpriteForSpellType(spellType),
               },
             },
           ],
-          iconSrc: src,
+          iconSrc: sprite,
           content: (
             <SpellCategorySpellsDiv>
               {actions.map((spell) => (

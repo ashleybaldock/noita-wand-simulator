@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-import { useConfig } from '../../../redux';
+import { useConfigToggle } from '../../../redux';
 import {
-  InputWrapper,
   SubSectionContent,
   SubSectionDiv,
   SubSectionTitle,
+  WrappedYesNoToggle,
 } from '../Components';
-import { noop } from '../../../util';
 
 const SimPaused = styled.span`
   display: inline-block;
@@ -19,31 +18,21 @@ const SimRunning = styled.span`
   width: 4em;
   padding-left: 4px;
 `;
-const CheckboxWrapper = styled.span``;
 
 export const SimulationConfigSection = () => {
-  const config = useConfig();
+  const [pauseCalculations, , handlePauseCalculations] =
+    useConfigToggle('pauseCalculations');
 
   return (
     <SubSectionDiv>
-      <SubSectionTitle>
-        Simulation:{' '}
-        {config.pauseCalculations ? (
-          <SimPaused>Paused</SimPaused>
-        ) : (
-          <SimRunning>Running</SimRunning>
-        )}
-      </SubSectionTitle>
+      <SubSectionTitle>Simulation: </SubSectionTitle>
       <SubSectionContent>
-        <InputWrapper>
-          <CheckboxWrapper>
-            <input
-              type="checkbox"
-              checked={config.pauseCalculations}
-              onChange={noop}
-            />
-          </CheckboxWrapper>
-        </InputWrapper>
+        <WrappedYesNoToggle
+          checked={pauseCalculations}
+          onChange={handlePauseCalculations}
+        >
+          <span>Pause Simulation</span>
+        </WrappedYesNoToggle>
       </SubSectionContent>
     </SubSectionDiv>
   );

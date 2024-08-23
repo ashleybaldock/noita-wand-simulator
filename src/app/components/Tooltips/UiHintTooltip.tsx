@@ -23,6 +23,7 @@ export const UiHintTooltip = () => {
   return (
     <TooltipBase
       id={'tooltip-uihint'}
+      data-name={'UiHintTooltip'}
       hidden={hidden}
       ref={tooltipRef}
       disableStyleInjection={true}
@@ -32,12 +33,11 @@ export const UiHintTooltip = () => {
         blur: true,
         click: true,
       }}
-      render={({ content }) => {
-        if (isUiHint(content)) {
-          return <UiHint>{getUiHintDescription(content)}</UiHint>;
-        }
-        return null;
-      }}
+      render={({ content }) =>
+        isUiHint(content) ? (
+          <UiHint>{getUiHintDescription(content)}</UiHint>
+        ) : null
+      }
     />
   );
 };

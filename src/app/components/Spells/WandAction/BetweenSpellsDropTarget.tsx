@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { cursorBackgrounds } from './Cursor';
 import { mergeRefs, type MergableRef } from '../../../util/mergeRefs';
-import type { BackgoundPartLocation } from './BackgroundPart';
 import { useDrag, useDrop } from 'react-dnd';
 import {
   isDragItemSelect,
@@ -10,7 +9,7 @@ import {
   type DragItemSelect,
   type DragItemSpell,
 } from './DragItems';
-import type { WandIndex } from '../../../redux/WandIndex';
+import type { MainWandIndex, WandIndex } from '../../../redux/WandIndex';
 import { isMainWandIndex } from '../../../redux/WandIndex';
 import { dropHintBackgrounds, selectHintBackgrounds } from './DropHint';
 import { useMergedBackgrounds } from './useMergeBackgrounds';
@@ -21,77 +20,114 @@ import { moveCursorTo, setSelection } from '../../../redux/editorSlice';
 import {
   moveSpell,
   useAppDispatch,
+  useConfig,
   useCursor,
+  useEditMode,
   useSelection,
 } from '../../../redux';
-import { noop } from '../../../util';
 import { useCallback } from 'react';
 
-const StyledBetweenSpellsDropTarget = styled(DynamicBackground)<{
+// right: calc(var(--width) * -0.5);
+// z-index: var(--zindex-insert-after);
+
+const DropTargetBackground = styled(DynamicBackground)<{
   onClick: React.MouseEventHandler<HTMLElement>;
-  $location: BackgoundPartLocation;
 }>`
   position: absolute;
   height: 100%;
   top: 0;
-  width: calc(var(--bsize-spell) * 0.625);
-  ${({ $location }) =>
-    $location === 'before'
-      ? `
-  left: calc(var(--bsize-spell) * -0.3125);
-  z-index: var(--zindex-insert-before);
-    `
-      : $location === 'after'
-      ? `
-    right: calc(var(--bsize-spell) * -0.3125);
-    z-index: var(--zindex-insert-before);
-    `
-      : ''}
-
+  width: var(--width);
   box-sizing: border-box;
   image-rendering: pixelated;
 
-  --cursor-container-width: calc(var(--bsize-spell) * 0.625);
+  --width: calc(var(--bsize-spell) * 0.625);
+  --cursor-container-width: var(--width);
 
   background-color: transparent;
 
+  transition-property: background-image, opacity;
+  transition-duration: 100ms;
+  transition-timing-function: ease;
+  transition-delay: 0;
+
+  left: calc(var(--width) * -0.5);
+  z-index: var(--zindex-insert-before);
+
   ${WithDebugHints} && {
-    background-color: rgba(255, 0, 0, 0.2);
+    background-color: rgba(255, 0, 0, 0.1);
+
+    &:before {
+      content: 'DROP    TARGET';
+      position: absolute;
+      font-family: monospace;
+      position: absolute;
+      word-wrap: anywhere;
+      text-wrap: wrap;
+      display: block;
+      top: 6px;
+      position: absolute;
+      color: aqua;
+      line-height: 0.8;
+      letter-spacing: 6px;
+      left: 6px;
+      text-align: center;
+      white-space-collapse: break-spaces;
+      font-size: 9px;
+      font-variant: super;
+      filter: drop-shadow(0.6px 0.6px 0 black)
+        drop-shadow(-0.6px 0.6px 0.6px black)
+        drop-shadow(-0.6px -0.6px 0.6px black)
+        drop-shadow(0.6px -0.6px 0.6px black);
+    }
   }
 `;
 
-// --bg-image-hover: var();
-// --bg-repeat-hover: ;
-// --bg-size-hover: ;
-// --bg-position-hover: ;
+const HoverBackground = styled(DynamicBackground)`
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+  pointer-events: none;
+
+  transition-property: background-image, opacity;
+  transition-duration: 100ms;
+  transition-timing-function: ease;
+  transition-delay: 0;
+
+  ${DropTargetBackground}:hover & {
+    opacity: 1;
+  }
+  ${WithDebugHints} && {
+    // background-color: red;
+  }
+  ${WithDebugHints} ${DropTargetBackground}:hover & {
+    // background-color: #ff06;
+  }
+`;
 
 export const BetweenSpellsDropTarget = ({
-  wandIndex,
+  indexOfSpellBefore,
+  indexOfSpellAfter,
   className = '',
-  onClick = noop,
   ref,
-  location = 'before',
 }: {
-  wandIndex: WandIndex;
+  indexOfSpellBefore: WandIndex;
+  indexOfSpellAfter: WandIndex;
   className?: string;
-  onClick?: React.MouseEventHandler<HTMLElement>;
   ref?: MergableRef<HTMLDivElement>;
-
-  location: 'before' | 'after';
 }) => {
   const dispatch = useAppDispatch();
-  const selection = useSelection(wandIndex, location);
-  const cursor = useCursor(wandIndex, location);
-  const insertIndex =
-    location === 'after' && isMainWandIndex(wandIndex)
-      ? wandIndex - 1
-      : wandIndex;
-  const overHint =
-    location === 'before'
-      ? 'shiftright'
-      : location === 'after'
-      ? 'shiftleft'
-      : 'none';
+
+  const { 'editor.enableSelection': enableSelection } = useConfig();
+  const selectionForSpellBefore = useSelection(indexOfSpellBefore, 'after');
+  const cursorForSpellBefore = useCursor(indexOfSpellBefore);
+
+  const selectionForSpellAfter = useSelection(indexOfSpellBefore, 'before');
+  const cursorForSpellAfter = useCursor(indexOfSpellAfter);
+
+  const editMode = useEditMode();
+  const insertIndex: MainWandIndex = isMainWandIndex(indexOfSpellBefore)
+    ? indexOfSpellBefore
+    : 0;
 
   const handleDropSpell = useCallback(
     (item: DragItemSpell) => {
@@ -99,36 +135,31 @@ export const BetweenSpellsDropTarget = ({
         moveSpell({
           fromIndex: item.sourceWandIndex,
           spellId: item.actionId,
-          toIndex: wandIndex,
-          mode: location,
+          toIndex: insertIndex,
         }),
       );
     },
-    [dispatch, wandIndex, location],
+    [dispatch, insertIndex],
   );
 
   const handleEndSelect = useCallback(
     (item: DragItemSelect) => {
       const from = item.dragStartIndex;
-      if (isMainWandIndex(from) && isMainWandIndex(wandIndex)) {
-        if (from < wandIndex) {
-          // selecting to right
-          if (location === 'after') {
-            return dispatch(
-              setSelection({
-                from: item.dragStartIndex,
-                to: wandIndex,
-                selecting: false,
-              }),
-            );
-          }
-        }
-        if (from > wandIndex) {
-          // selecting to left
-        }
+      if (isMainWandIndex(from) && isMainWandIndex(insertIndex)) {
+        const direction = from > insertIndex ? 'left' : 'right';
+        return dispatch(
+          setSelection({
+            from: Math.min(from, insertIndex),
+            to: Math.max(from, insertIndex + 1),
+            // direction === 'left' || $location === 'after'
+            // ? insertIndex
+            // : Math.max(0, insertIndex - 1),
+            selecting: false,
+          }),
+        );
       }
     },
-    [dispatch, wandIndex],
+    [dispatch, insertIndex],
   );
 
   const handleDragSelect = useCallback(
@@ -136,12 +167,12 @@ export const BetweenSpellsDropTarget = ({
       dispatch(
         setSelection({
           from: item.dragStartIndex,
-          to: wandIndex,
+          to: insertIndex,
           selecting: true,
         }),
       );
     },
-    [dispatch, wandIndex],
+    [dispatch, insertIndex],
   );
 
   const [{ isOver, canDrop, isDraggingSpell, isDraggingSelect }, dropRef] =
@@ -157,8 +188,8 @@ export const BetweenSpellsDropTarget = ({
           isDragItemSelect(item) && handleDragSelect(item);
         },
         canDrop: (item: DragItem) =>
-          (isDragItemSpell(item) && item.sourceWandIndex !== wandIndex) ||
-          (isDragItemSelect(item) && isMainWandIndex(wandIndex)),
+          (isDragItemSpell(item) && item.sourceWandIndex !== insertIndex) ||
+          (isDragItemSelect(item) && isMainWandIndex(insertIndex)),
         collect: (monitor) => ({
           isDraggingSpell: monitor.getItemType() === 'spell',
           isDraggingSelect: monitor.getItemType() === 'select',
@@ -166,45 +197,52 @@ export const BetweenSpellsDropTarget = ({
           canDrop: monitor.canDrop(),
         }),
       }),
-      [wandIndex, handleDropSpell, handleEndSelect, handleEndSelect],
+      [insertIndex, handleDropSpell, handleEndSelect, handleEndSelect],
     );
-  const [, dragRef, dragPreviewRef] = useDrag<
-    DragItemSelect,
-    DragItemSelect,
-    unknown
-  >(
+  const [, dragRef] = useDrag<DragItemSelect, DragItemSelect, unknown>(
     () => ({
       type: 'select',
-      item: { disc: 'select', dragStartIndex: wandIndex },
+      item: { disc: 'select', dragStartIndex: insertIndex },
     }),
-    [wandIndex],
+    [insertIndex],
   );
 
+  // const merged = useMergedBackgroundVars(
+  //   getCssVarForProperty,
+  // const overHint = `${editMode.insert.mode}${editMode.insert.direction}`;
   const merged = useMergedBackgrounds(
-    cursorBackgrounds[cursor][location],
-    ((isDraggingSpell && isOver && canDrop && dropHintBackgrounds[overHint]) ||
-      (isDraggingSpell && isOver && dropHintBackgrounds[overHint]) ||
+    cursorBackgrounds[cursorForSpellBefore]['before'],
+    cursorBackgrounds[cursorForSpellAfter]['after'],
+    ((isDraggingSpell &&
+      isOver &&
+      canDrop &&
+      dropHintBackgrounds['shiftright']) ||
+      (isDraggingSpell && isOver && dropHintBackgrounds['shiftright']) ||
       (isDraggingSpell && dropHintBackgrounds.dragging) ||
       (isDraggingSelect &&
         isOver &&
         canDrop &&
-        selectHintBackgrounds[overHint]) ||
-      (isDraggingSelect && isOver && selectHintBackgrounds[overHint]) ||
-      (isDraggingSelect && selectHintBackgrounds.dragging) ||
-      dropHintBackgrounds.none)[location],
-    selectionBackgrounds[selection][location],
+        selectHintBackgrounds['shiftright']) ||
+      (isDraggingSelect && isOver && selectHintBackgrounds['shiftright']) ||
+      (isDraggingSelect && selectHintBackgrounds['dragging']) ||
+      dropHintBackgrounds.none)['before'],
+    selectionBackgrounds[selectionForSpellBefore]['after'],
+    selectionBackgrounds[selectionForSpellAfter]['before'],
   );
+  // const mergedHover = useMergedBackgroundVars(
+  //   getCssHoverVarForProperty,
   const mergedHover = useMergedBackgrounds(
-    selectionBackgrounds[selection][location],
-    cursorBackgrounds['caret-hover'][location],
+    cursorBackgrounds['caret-hover']['before'],
+    cursorBackgrounds['caret-hover']['after'],
+    selectionBackgrounds[selectionForSpellBefore]['after'],
+    selectionBackgrounds[selectionForSpellAfter]['before'],
   );
-  const style = { ...merged, ...mergedHover };
+  // const style = { ...merged, ...mergedHover };
 
   return (
-    <StyledBetweenSpellsDropTarget
+    <DropTargetBackground
       className={className}
       style={merged}
-      // style={style}
       onClick={() =>
         dispatch(
           moveCursorTo({
@@ -212,8 +250,13 @@ export const BetweenSpellsDropTarget = ({
           }),
         )
       }
-      $location={location}
-      ref={mergeRefs(ref, dropRef, dragRef)}
-    ></StyledBetweenSpellsDropTarget>
+      ref={
+        enableSelection
+          ? mergeRefs(ref, dropRef, dragRef)
+          : mergeRefs(ref, dropRef)
+      }
+    >
+      <HoverBackground style={mergedHover} />
+    </DropTargetBackground>
   );
 };

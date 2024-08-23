@@ -1,5 +1,6 @@
 import type { WandSelection } from '../../../redux/Wand/wandSelection';
-import { Background, emptyBackground } from './BackgroundPart';
+import type { Background } from './BackgroundPart';
+import { emptyBackground } from './BackgroundPart';
 
 export const selectionBackgrounds: Record<WandSelection, Background> = {
   none: { ...emptyBackground() },

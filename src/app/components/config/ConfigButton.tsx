@@ -6,7 +6,7 @@ export const ConfigButton = ({ className = '' }: { className?: string }) => {
   return (
     <Button
       hotkeys={'p'}
-      imgUrl={'data/sampo-config.png'}
+      icon={'icon.config'}
       imgOnly={'600px'}
       onClick={() => setModalVisible(true)}
       className={className}

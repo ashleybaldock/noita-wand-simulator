@@ -121,7 +121,7 @@ const ConfigToggleGroup = styled(
   }>) => {
     const dispatch = useAppDispatch();
     return (
-      <div className={className}>
+      <div className={className} data-name={'ConfigToggleGroup'}>
         {title && <ConfigSectionHeading>{title}</ConfigSectionHeading>}
         {bulkSelectControls && section && (
           <>
@@ -162,7 +162,7 @@ export const ConfigEditor = () => {
   }, [unlockConditions]);
 
   return (
-    <MainDiv>
+    <MainDiv data-name="ConfigEditor">
       <ConfigDiv>
         <ConfigToggleGroup title={'Visualisation'}>
           <ConfigToggle field={'castShowChanged'}>

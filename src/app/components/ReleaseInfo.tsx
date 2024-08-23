@@ -44,10 +44,10 @@ const Link = styled.a`
   }
 `;
 
-export function ReleaseInfo() {
+export const ReleaseInfo = () => {
   const { isRelease, branch, hash } = useReleaseInfo();
   return (
-    <Row isRelease={isRelease}>
+    <Row data-name="ReleaseInfo" isRelease={isRelease}>
       {isRelease ? `Release` : <Dev>{`Development`}</Dev>}
       {'/'}
       <Link
@@ -59,4 +59,4 @@ export function ReleaseInfo() {
       >{`${hash}`}</Link>
     </Row>
   );
-}
+};

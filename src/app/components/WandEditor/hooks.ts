@@ -2,6 +2,20 @@ import type { RefObject } from 'react';
 import { useEffect, useState } from 'react';
 
 const defaultColumnCount = 1;
+const defaultRowCount = 1;
+
+export const getComputedRows = <T extends HTMLElement>(
+  ref: RefObject<T>,
+): number => {
+  if (!ref.current) return defaultRowCount;
+
+  // https://stackoverflow.com/a/58393617/5389588
+  return window
+    .getComputedStyle(ref.current)
+    .getPropertyValue('grid-template-rows')
+    .replace(' 0px', '')
+    .split(' ').length;
+};
 
 export const getComputedColumns = <T extends HTMLElement>(
   ref: RefObject<T>,

@@ -1,9 +1,21 @@
+import { sequentialId } from '../../util';
 import type { ActionSource } from '../actionSources';
 import type { SpellDeckInfo } from '../spell';
 import type { WandShotId } from './WandShot';
 
+/**
+ * Unique ID (within session) to identity an action call
+ */
+export type ActionCallSequenceId = number;
+
+/**
+ * Represents:
+ * - a node in the action call tree (via TreeNode<ActionCall>)
+ * - an event in the list of called actions
+ */
 export type ActionCall = {
   _typeName: 'ActionCall';
+  sequenceId: ActionCallSequenceId;
   spell: SpellDeckInfo;
   source: ActionSource;
   currentMana: number;
@@ -17,3 +29,5 @@ export type ActionCall = {
   wasLastToBeDrawnBeforeBeginTrigger?: WandShotId;
   wasLastToBeCalledBeforeBeginTrigger?: WandShotId;
 };
+
+export const nextActionCallSequenceId = sequentialId<ActionCallSequenceId>();

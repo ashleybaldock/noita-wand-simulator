@@ -1,20 +1,25 @@
 import { toSeconds } from '../../util';
 import type { SpellId } from './spellId';
 import type { WandState } from './wandState';
-
+export type SpellSequenceOptions = {
+  tooltips: boolean;
+};
 export type WikiWandOptions = {
   pretty: boolean;
   vertical: boolean;
   wandCard: boolean;
   hideLink: boolean;
-  tooltips: boolean;
-};
+} & SpellSequenceOptions;
 
-const defaultOptions: WikiWandOptions = {
+const defaultWandOptions: WikiWandOptions = {
   pretty: true,
   vertical: false,
   wandCard: false,
   hideLink: false,
+  tooltips: true,
+};
+
+const defaultSpellSequenceOptions: SpellSequenceOptions = {
   tooltips: true,
 };
 
@@ -60,7 +65,7 @@ export const generateWikiWandV2 = (
     wandCard,
     hideLink,
     tooltips,
-  }: WikiWandOptions = defaultOptions,
+  }: WikiWandOptions = defaultWandOptions,
 ): string => `{{Wand2
 | vertical     = ${formatBoolean(vertical)}
 | wandCard     = ${formatBoolean(wandCard)}
@@ -78,6 +83,15 @@ export const generateWikiWandV2 = (
 | spread       = ${spread}
 | speed        = ${speed}
 | alwaysCasts  = ${formatSpellsPretty(alwaysIds, indent)}
+| spells =
+${formatSpellsPretty(spellIds, '')}
+}}`;
+
+export const generateWikiSpellSequence = (
+  spellIds: SpellId[],
+  { tooltips }: SpellSequenceOptions = defaultSpellSequenceOptions,
+): string => `{{Wand2
+| tooltips     = ${formatBoolean(tooltips)}
 | spells =
 ${formatSpellsPretty(spellIds, '')}
 }}`;

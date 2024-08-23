@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import type { SpellType } from '../../calc/spellTypes';
 import { WandAction } from '../Spells/WandAction';
 import { HotkeyHint } from '../Tooltips/HotkeyHint';
+import type { ActionId } from '../../calc/actionId';
 
 const MainDiv = styled.div`
   font-size: 14px;
@@ -133,7 +134,7 @@ type TabTitlePart = {
   text: string;
   type?: SpellType;
   bgSrc?: string;
-  egSrc?: string;
+  egSrc?: ActionId;
   style?: React.CSSProperties;
 };
 
@@ -182,7 +183,7 @@ export function Tabs({
               <TabsWandAction
                 key={type}
                 spellType={type}
-                spellSprite={egSrc}
+                spellId={egSrc}
                 keyHint={`Shortcut: ${index}`}
               />
             ))}

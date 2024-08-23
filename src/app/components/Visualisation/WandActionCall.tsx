@@ -36,7 +36,7 @@ export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
       <NextActionArrow />
       <WandAction
         spellType={getSpellById(actionCall.spell.id).type}
-        spellSprite={getSpellById(actionCall.spell.id).sprite}
+        spellId={actionCall.spell.id}
       />
       <RecursionAnnotation {...actionCall} />
       <ActionSourceAnnotation {...actionCall} />

@@ -13,10 +13,8 @@ import {
   tally,
 } from '../../../util/util';
 import type { Config } from '../../../redux/configSlice';
-import { getBackgroundUrlForDamageType } from '../../../calc/damage';
 import {
   FNSP,
-  NBSP,
   SIGN_MULTIPLY,
   SUFFIX_BILLION,
   SUFFIX_MILLION,
@@ -27,6 +25,8 @@ import { WithDebugHints } from '../../Debug';
 import { Duration } from '../Duration';
 import { Unchanged, YesNo, YesOr } from '../../Presentation';
 import { useConfig } from '../../../redux';
+import type { SpriteName } from '../../../calc/sprite';
+import { useIcon } from '../../../calc/sprite';
 
 // TODO: handle extra_entities that affect damage/etc
 
@@ -67,15 +67,41 @@ const GridRowItem = styled.div<{
   `}
 `;
 
-const PropertyIcon = styled(GridRowItem)<{ $icon?: string }>`
+const StyledPropertyIcon = styled(GridRowItem)<{ $background?: string }>`
   position: sticky;
   left: -10px;
   z-index: var(--zindex-stickyheader-shotgrid);
   background-position: center center;
   background-size: 1.1em;
-  ${({ $icon }) => ($icon ? `${$icon}` : 'background-image: none;')};
   background-color: black;
+  background-image: none;
+  ${(props) => props?.$background && `background-image: ${props.$background};`}
 `;
+
+const PropertyIcon = ({
+  $firstValue,
+  $firstInGroup,
+  $isTotal,
+  icon,
+  className,
+}: {
+  $firstValue?: boolean;
+  $firstInGroup?: boolean;
+  $isTotal?: boolean;
+  icon?: SpriteName;
+  className?: string;
+}) => {
+  const iconPath = useIcon(icon);
+  return (
+    <StyledPropertyIcon
+      className={className}
+      $background={iconPath}
+      $firstValue={$firstValue}
+      $firstInGroup={$firstInGroup}
+      $isTotal={$isTotal}
+    ></StyledPropertyIcon>
+  );
+};
 
 const PropertyName = styled(GridRowItem)`
   justify-content: end;
@@ -338,7 +364,7 @@ type ExtendedActionState = GunActionState & {
 
 type FieldDescription = {
   hidden?: boolean;
-  icon?: string;
+  icon?: SpriteName;
   ignoredInTrigger?: boolean;
   noTotal?: boolean;
   key?: string;
@@ -361,7 +387,7 @@ const fieldSections: FieldSection[] = [
     title: 'Timing',
     fields: [
       {
-        icon: `background-image: url('/data/wand/icon_mana_drain.png');`,
+        icon: `icon.manadrain`,
         key: 'action_mana_drain',
         displayName: 'Mana Drain',
         render: ({ manaDrain: v }) =>
@@ -374,13 +400,13 @@ const fieldSections: FieldSection[] = [
           ),
       },
       {
-        icon: `background-image: url('/data/wand/icon_reload_time-s.png');`,
+        icon: `icon.reloadtime`,
         key: 'reload_time',
         displayName: 'Recharge Time',
         render: ({ reload_time }) => <Duration unit={'f'} f={reload_time} />,
       },
       {
-        icon: `background-image: url('/data/wand/icon_fire_rate_wait.png');`,
+        icon: `icon.castdelay`,
         key: 'fire_rate_wait',
         ignoredInTrigger: true,
         displayName: 'Cast Delay',
@@ -389,7 +415,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: `background-image: url('/data/wand/icon_lifetime.png');`,
+        icon: `icon.lifetime`,
         key: 'lifetime_add',
         displayName: 'Lifetime',
         render: ({ lifetime_add, isTotal }) => {
@@ -406,7 +432,7 @@ const fieldSections: FieldSection[] = [
       },
       {
         hidden: true, // TODO
-        icon: `background-image: url('/data/icons/lifetime_infinite.png');`,
+        icon: `icon.lifetime.infinite`,
         key: 'wisp_chance',
         noTotal: true,
         displayName: 'Wisp Chance',
@@ -426,7 +452,7 @@ const fieldSections: FieldSection[] = [
     fields: [
       {
         hidden: true, // TODO
-        icon: `background-image: url('/data/wand/icon_spread_degrees.png');`,
+        icon: `icon.spread`,
         key: 'spread_degrees',
         displayName: 'Spread',
         render: ({ spread_degrees: v }) => (
@@ -434,14 +460,14 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: `background-image: url('/data/icons/t_shape.png');`,
+        icon: `icon.tshape`,
         key: 'pattern_degrees',
         displayName: 'Pattern Angle', // ⊾
         render: ({ pattern_degrees: v }) => `${round(Number(v), 1)}°`,
       },
       {
         hidden: true, // TODO
-        icon: `background-image: url('/data/wand/icon_bounces.png');`,
+        icon: `icon.bounces`,
         key: 'bounces',
         displayName: 'Bounces',
         render: ({ bounces: v }) => (
@@ -455,7 +481,7 @@ const fieldSections: FieldSection[] = [
         render: ({ gravity: v }) => <SignZero n={Number(v)} />,
       },
       {
-        icon: `background-image: url('/data/wand/icon_speed_multiplier.png');`,
+        icon: `icon.speedmulti`,
         key: 'speed_multiplier1',
         displayName: 'Speed',
         toolTip: 'Initial speed of the projectile.',
@@ -497,7 +523,7 @@ const fieldSections: FieldSection[] = [
       },
       {
         // TODO - needs extended spell info
-        icon: `background-image: url('/data/wand/icon_speed_bonus.png');`,
+        icon: `icon.speedbonus`,
         key: 'speed_multiplier2',
         displayName: 'Speed Bonus',
         toolTip: 'Speed Scaled Damage Multiplier',
@@ -528,7 +554,7 @@ const fieldSections: FieldSection[] = [
     title: 'Crit',
     fields: [
       {
-        icon: `background-image: url('/data/status/wet.png');`,
+        icon: `icon.stain.wet`,
         key: 'crit_on_wet',
         displayName: 'Crit On: Wet',
         noTotal: true,
@@ -539,7 +565,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: `background-image: url('/data/status/oiled.png');`,
+        icon: `icon.stain.oiled`,
         key: 'crit_on_oil',
         displayName: 'Crit On: Oil',
         noTotal: true,
@@ -550,7 +576,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: `background-image: url('/data/status/bloody.png');`,
+        icon: `icon.stain.bloody`,
         key: 'crit_on_blood',
         displayName: 'Crit On: Blood',
         noTotal: true,
@@ -561,7 +587,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: `background-image: url('/data/status/burning.png');`,
+        icon: `icon.stain.burning`,
         key: 'crit_on_fire',
         displayName: 'Crit On: Fire',
         render: ({ game_effect_entities: v, isTotal }) =>
@@ -575,7 +601,7 @@ const fieldSections: FieldSection[] = [
           ),
       },
       {
-        icon: `background-image: url('/data/wand/icon_damage_critical_chance.png');`,
+        icon: `icon.critchance`,
         key: 'damage_critical_chance',
         displayName: 'Crit Chance',
         render: ({ damage_critical_chance: v }) => `${Number(v)}%`,
@@ -594,7 +620,7 @@ const fieldSections: FieldSection[] = [
     title: 'Damage',
     fields: [
       {
-        icon: `background-image: url('/data/warnings/icon_danger.png');`,
+        icon: `icon.danger`,
         key: 'friendly_fire',
         displayName: 'Friendly Fire',
         render: ({ friendly_fire: v, isTotal }) => (
@@ -606,7 +632,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: `background-image: url('/data/ui_gfx/gun_actions/zero_damage.png');`,
+        icon: `icon.zerodamage`,
         key: 'damage_null_all',
         displayName: 'All Null',
         render: ({ damage_null_all: v }) => (
@@ -614,7 +640,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: getBackgroundUrlForDamageType('melee'),
+        icon: `icon.damage.melee`,
         key: 'damage_melee_add',
         displayName: 'Melee',
         render: ({ damage_melee_add: v }) => (
@@ -625,7 +651,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: getBackgroundUrlForDamageType('projectile'),
+        icon: `icon.damage.projectile`,
         key: 'damage_projectile_add',
         displayName: 'Projectile',
         render: ({ damage_projectile_add: v }) => (
@@ -636,7 +662,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: getBackgroundUrlForDamageType('electricity'),
+        icon: `icon.damage.electricity`,
         key: 'damage_electricity_add',
         displayName: 'Electric',
         render: ({ damage_electricity_add: v }) => (
@@ -644,7 +670,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: getBackgroundUrlForDamageType('fire'),
+        icon: `icon.damage.fire`,
         key: 'damage_fire_add',
         displayName: 'Fire',
         render: ({ damage_fire_add: v }) => (
@@ -652,7 +678,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: getBackgroundUrlForDamageType('ice'),
+        icon: `icon.damage.ice`,
         key: 'damage_ice_add',
         displayName: 'Ice',
         render: ({ damage_ice_add: v }) => (
@@ -660,7 +686,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: getBackgroundUrlForDamageType('slice'),
+        icon: `icon.damage.slice`,
         key: 'damage_slice_add',
         displayName: 'Slice',
         render: ({ damage_slice_add: v }) => (
@@ -668,7 +694,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: getBackgroundUrlForDamageType('heal'),
+        icon: `icon.damage.heal`,
         key: 'damage_healing_add',
         displayName: 'Healing',
         render: ({ damage_healing_add: v }) => (
@@ -676,7 +702,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: getBackgroundUrlForDamageType('curse'),
+        icon: `icon.damage.curse`,
         key: 'damage_curse_add',
         displayName: 'Curse',
         render: ({ damage_curse_add: v }) => (
@@ -684,7 +710,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: getBackgroundUrlForDamageType('holy'),
+        icon: `icon.damage.holy`,
         key: 'damage_holy_add',
         displayName: 'Holy',
         render: ({ damage_holy_add: v }) => (
@@ -692,7 +718,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: getBackgroundUrlForDamageType('drill'),
+        icon: `icon.damage.drill`,
         key: 'damage_drill_add',
         displayName: 'Drill',
         render: ({ damage_drill_add: v }) => (
@@ -700,7 +726,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: getBackgroundUrlForDamageType('explosion'),
+        icon: `icon.damage.explosion`,
         key: 'damage_explosion_add',
         displayName: 'Explosion',
         render: ({ damage_explosion_add: v }) => (
@@ -708,7 +734,7 @@ const fieldSections: FieldSection[] = [
         ),
       },
       {
-        icon: `background-image: url('/data/wand/icon_explosion_radius.png');`,
+        icon: `icon.explosionradius`,
         key: 'explosion_radius',
         displayName: 'Expl. Radius',
         render: ({ explosion_radius: v }) => (
@@ -728,7 +754,7 @@ const fieldSections: FieldSection[] = [
     title: 'Impact',
     fields: [
       {
-        icon: `background-image: url('/data/wand/icon_recoil.png');`,
+        icon: `icon.recoil`,
         key: 'recoil',
         displayName: 'Recoil',
         render: ({ recoil: v }) => {
@@ -737,7 +763,7 @@ const fieldSections: FieldSection[] = [
         },
       },
       {
-        icon: `background-image: url('/data/wand/icon_knockback.png');`,
+        icon: `icon.knockback`,
         key: 'knockback_force',
         displayName: 'Knockback',
         render: ({ knockback_force: v }) => <>{`${v}`}</>,
@@ -776,7 +802,7 @@ const fieldSections: FieldSection[] = [
 
       /* TODO + memoise */
       {
-        icon: `background-image: url('/data/trail/trail_oil.png');`,
+        icon: `icon.trail.oil`,
         key: 'trail_material_oil',
         displayName: 'Oil Trail',
         render: ({ trail_material: v, isTotal }) =>
@@ -796,7 +822,7 @@ const fieldSections: FieldSection[] = [
           ),
       },
       {
-        icon: `background-image: url('/data/trail/trail_water.png');`,
+        icon: `icon.trail.water`,
         key: 'trail_material_water',
         displayName: 'Water Trail',
         render: ({ trail_material: v, isTotal }) =>
@@ -816,7 +842,7 @@ const fieldSections: FieldSection[] = [
           ),
       },
       {
-        icon: `background-image: url('/data/trail/trail_acid.png');`,
+        icon: `icon.trail.acid`,
         key: 'trail_material_acid',
         displayName: 'Acid Trail',
         render: ({ trail_material: v, isTotal }) =>
@@ -836,7 +862,7 @@ const fieldSections: FieldSection[] = [
           ),
       },
       {
-        icon: `background-image: url('/data/trail/trail_posion.png');`,
+        icon: `icon.trail.poison`,
         key: 'trail_material_poison',
         displayName: 'Poison Trail',
         render: ({ trail_material: v, isTotal }) =>
@@ -856,7 +882,7 @@ const fieldSections: FieldSection[] = [
           ),
       },
       {
-        icon: `background-image: url('/data/trail/trail_Fire.png');`,
+        icon: `icon.trail.fire`,
         key: 'trail_material_fire',
         displayName: 'Fire Trail',
         render: ({ trail_material: v, isTotal }) =>
@@ -920,7 +946,7 @@ export const IconsColumn = styled(
                 key={key ?? `${i1}-${i2}-${key}`}
                 $firstValue={i1 === 0}
                 $firstInGroup={i2 === 0}
-                $icon={icon ?? ''}
+                icon={icon}
               />
             )),
           )}

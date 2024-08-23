@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { useConfig } from '../redux';
-import type { StopCondition, StopReason } from '../types';
+import { useConfig, useResult, useSimulationStatus } from '../redux';
 import { TerminationWarning } from './Visualisation/TerminationWarning';
 import { FNSP } from '../util';
 import { Duration } from './Visualisation/Duration';
@@ -47,23 +46,16 @@ const Value = styled.span`
 `;
 
 export const SimulationStatus = styled(
-  ({
-    simulationRunning,
-    lastRunStopReasons,
-    lastRunEndConditions,
-    elapsedTime = 0,
-    className,
-  }: {
-    className?: string;
-    simulationRunning: boolean;
-    lastRunStopReasons: StopReason[];
-    lastRunEndConditions: StopCondition[];
-    elapsedTime: number;
-  }) => {
+  ({ className }: { className?: string }) => {
+    const [simulationRunning] = useSimulationStatus();
     const { pauseCalculations } = useConfig();
+    const {
+      endConditions: lastRunEndConditions,
+      elapsedTime: lastRunElapsedTime,
+    } = useResult();
 
     return (
-      <StyledStatus className={className}>
+      <StyledStatus data-name={'SimulationStatus'} className={className}>
         <Value>
           <Label>Simulation State</Label>
           {simulationRunning
@@ -75,16 +67,15 @@ export const SimulationStatus = styled(
         <Value>
           <Label>Time Elapsed</Label>
           <>
-            {elapsedTime < 1 ? `<${FNSP}` : ''}
-            <Duration unit="ms" ms={Math.max(elapsedTime, 1)} />
+            {lastRunElapsedTime < 1 ? `<${FNSP}` : ''}
+            <Duration unit="ms" ms={Math.max(lastRunElapsedTime, 1)} />
           </>
         </Value>
         <Value>
           <Label>Result</Label>
           <TerminationWarning
             // TODO - use all
-            reason={lastRunStopReasons?.[0] ?? 'unknown'}
-            condition={lastRunEndConditions?.[0] ?? 'unknown'}
+            reason={lastRunEndConditions?.[0] ?? 'unknown'}
           />
         </Value>
       </StyledStatus>

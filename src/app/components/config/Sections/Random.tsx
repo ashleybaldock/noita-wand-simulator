@@ -26,7 +26,7 @@ export const RandomConfigSection = () => {
   return (
     <SubSectionDiv data-section="random">
       <SubSectionTitle>
-        <InputImageLabel size={22} imgUrl={'data/config/die2.png'} />
+        <InputImageLabel $size={22} icon={'icon.config.die2'} />
         <span>Random</span>
       </SubSectionTitle>
       <SubSectionContent wrapq={true} maxWidth={'calc(100% - 2.2em)'}>

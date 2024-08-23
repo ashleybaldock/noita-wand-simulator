@@ -67,6 +67,16 @@ export const range = (n: number) => [...Array(n).keys()];
 //   return result as DiffResult<T>;
 // }
 
+type StyleSource = Promise<string> | string | (() => string);
+
+const isThenable = <T>(x: unknown): x is Promise<T> =>
+  isNotNullOrUndefined(x) &&
+  typeof x === 'object' &&
+  'then' in x! &&
+  typeof x.then === 'function';
+
+const x = (a: Promise<string> | string | (() => string)): number => 0;
+
 export type ValueOf<T> = T[keyof T];
 
 export type KeyOfType<Obj extends object, KeyType> = {

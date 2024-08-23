@@ -22,7 +22,6 @@ export const SpellDragPreview = () => {
     <WandAction
       spellId={spell.id}
       spellType={spell.type}
-      spellSprite={spell.sprite}
       style={style}
     ></WandAction>
   );

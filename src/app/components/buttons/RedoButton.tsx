@@ -10,7 +10,7 @@ export const RedoButton = () => {
   return (
     <Button
       hotkeys={'r, ctrl+r, shift+mod+z'}
-      imgUrl={'data/redo.png'}
+      icon={'icon.redo'}
       imgOnly={'600px'}
       onClick={() => redo()}
     >

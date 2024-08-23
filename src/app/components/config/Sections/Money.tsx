@@ -13,7 +13,7 @@ export const MoneyConfigSection = () => {
   return (
     <SubSectionDiv data-section="money">
       <SubSectionTitle>
-        <InputImageLabel size={20} imgUrl={'data/config/goldnugget2.png'} />
+        <InputImageLabel $size={20} icon={'icon.config.goldnugget2'} />
         <span>Money</span>
       </SubSectionTitle>
       <SubSectionContent>

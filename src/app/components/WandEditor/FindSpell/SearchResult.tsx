@@ -165,7 +165,6 @@ export const SearchResult = ({
         <FuzzySearchWandAction
           spellId={result.spell.id}
           spellType={result.spell.type}
-          spellSprite={result.spell.sprite}
         ></FuzzySearchWandAction>
         <ResultDetails>
           <ResultName>

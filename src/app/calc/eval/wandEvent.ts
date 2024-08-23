@@ -18,7 +18,7 @@ export type WandEventBase = {
     recoil_knockback: number;
   };
   BeginProjectile: {
-    entityFilename: string;
+    entity_filename: string;
   };
   EndProjectile: {};
   BeginTriggerHitWorld: {

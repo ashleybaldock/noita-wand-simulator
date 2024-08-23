@@ -1,26 +1,47 @@
+import { concat, isNotNullOrUndefined } from '../util';
 import type { Sprite as GenSprite } from './__generated__/main/sprites';
-import type { PerkSprite } from './perks';
-import type { SpellSprite } from './spellSprite';
-import type { UiSprite } from './uiSprite';
+import { perkSprites, type Perk, type PerkSprite } from './perks';
+import {
+  spellSprites,
+  type SpellSpriteName,
+  type SpellSpritePath,
+} from './spellSprite';
+import type { SpellTypeSpriteName } from './spellTypes';
+import { uiSprites } from './uiSprite';
+import type { UiSpriteName, UiSpritePath } from './uiSprite';
 
 /* This one is hard-coded in index.css */
-export const missingSprite = 'var(--sprite-missing)';
+const missingSprite = ['missing', 'var(--sprite-missing)'] as const;
+export type MissingSprite = (typeof missingSprite)[0];
+export type MissingSpritePath = (typeof missingSprite)[1];
+
+export type SpriteName =
+  | SpellSpriteName
+  | SpellTypeSpriteName
+  | UiSpriteName
+  | Perk
+  | MissingSprite;
+export type SpritePath =
+  | UiSpritePath
+  | PerkSprite
+  | SpellSpritePath
+  | MissingSpritePath;
 
 export type Sprite = {
-  'url': string;
-  'background-image'?: string;
-  'content'?: string;
+  name: SpriteName;
+  path: SpritePath;
 };
 
-export type MissingSprite = typeof missingSprite;
-
 export type IconUrl =
-  | MissingSprite
-  | SpellSprite
+  | UiSpritePath
   | PerkSprite
+  | SpellSpritePath
   | GenSprite
-  | UiSprite;
+  | MissingSprite;
 
-export type IconSprite = MissingSprite | SpellSprite | PerkSprite | UiSprite;
-
-export type IconSpriteId = keyof IconSprite[number];
+const spriteMap = new Map<SpriteName, Sprite>(
+  concat(uiSprites(), perkSprites(), spellSprites()),
+);
+export const useIcon = (spriteName: SpriteName | undefined) =>
+  (isNotNullOrUndefined(spriteName) && spriteMap.get(spriteName)?.path) ||
+  missingSprite[1];

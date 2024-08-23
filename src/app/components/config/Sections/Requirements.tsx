@@ -55,7 +55,7 @@ export const RequirementsConfigSection = () => {
   return (
     <RequirementsSubSection>
       <SubSectionTitle minWidth={'fit-content'}>
-        <InputImageLabel size={22} imgUrl={'data/config/req.png'} />
+        <InputImageLabel $size={22} icon={'icon.config.req'} />
         <span>Requirements</span>
       </SubSectionTitle>
       <SubSectionContent wrapq={true}>

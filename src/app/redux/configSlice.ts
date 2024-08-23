@@ -1,12 +1,12 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, isAnyOf } from '@reduxjs/toolkit';
+import type { WritableDraft } from 'immer/dist/internal';
 import type { UnlockCondition } from '../calc/unlocks';
 import { unlockConditions } from '../calc/unlocks';
-import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { loadState, saveState } from '../localStorage';
-import { startAppListening } from './listenerMiddleware';
-import type { WritableDraft } from 'immer/dist/internal';
-import { objectFromKeys } from '../util';
 import type { KeyOfType } from '../util';
+import { objectFromKeys } from '../util';
+import { startAppListening } from './listenerMiddleware';
 
 type ConfigBase = {
   condenseShots: boolean;
@@ -22,13 +22,13 @@ type ConfigBase = {
   showProxies: boolean;
   showSources: boolean;
   showDontDraw: boolean;
-  swapOnMove: boolean;
   showActionTree: boolean;
   showWraps: boolean;
   showDraw: boolean;
   showSpellsInCategories: boolean;
   showBeta: boolean;
   showExtra: boolean;
+  showChargeUsage: boolean;
   castShowChanged: boolean;
   showDurationsInFrames: boolean;
   var_money: number;
@@ -43,6 +43,11 @@ type ConfigBase = {
   limitSimulationDuration: number;
   hideAccessibilityHints: boolean;
   mirrorControls: boolean;
+  swapOnMove: boolean;
+};
+export type ConfigEditing = {
+  'editor.swapOnMove': boolean;
+  'editor.enableSelection': boolean;
 };
 export type ConfigRandom = {
   'random.worldSeed': number;
@@ -66,6 +71,7 @@ export type ConfigUnlockCondition = {
 export type Config = ConfigBase &
   ConfigRequirements &
   ConfigRandom &
+  ConfigEditing &
   ConfigDebug &
   ConfigUnlockCondition;
 
@@ -116,6 +122,7 @@ export const initialState: ConfigState = {
     'limitSimulationDuration': 10,
     'showBeta': true,
     'showExtra': false,
+    'showChargeUsage': true,
     'castShowChanged': true,
     'showDurationsInFrames': false,
     'var_money': 10000,
@@ -130,6 +137,8 @@ export const initialState: ConfigState = {
     'pauseCalculations': false,
     'hideAccessibilityHints': false,
     'mirrorControls': false,
+    'editor.swapOnMove': true,
+    'editor.enableSelection': true,
   },
 };
 

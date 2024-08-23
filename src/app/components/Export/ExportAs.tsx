@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { useWikiExport } from '../../redux';
+import { useWikiExportWand } from '../../redux';
 
 const _ExportAs = ({ className }: { className?: string }) => {
-  const wikiTemplate = useWikiExport();
+  const wikiTemplate = useWikiExportWand();
   return (
     <div className={className}>
       <div>Wiki Wand Template</div>

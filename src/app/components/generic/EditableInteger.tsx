@@ -108,7 +108,9 @@ export const EditableInteger = (props: {
         $isEditing={isEditing}
         ref={inputRef as RefObject<HTMLInputElement>}
         step={step}
-        type="number"
+        type="text"
+        inputMode="numeric"
+        pattern="[.0-9]+"
         value={displayedValue}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           const displayValue = Number.parseFloat(e.target.value);

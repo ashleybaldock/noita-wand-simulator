@@ -83,7 +83,14 @@ export const removeSpellAfterCursor =
   };
 
 export const moveCursor =
-  ({ by }: { by: number; select?: SpellShiftDirection }): AppThunk =>
+  ({
+    by,
+    wrap = false,
+  }: {
+    by: number;
+    select?: SpellShiftDirection;
+    wrap?: boolean;
+  }): AppThunk =>
   (dispatch, getState): void => {
     const state = getState();
     dispatch(
@@ -92,6 +99,7 @@ export const moveCursor =
           currentPosition: state.editor.cursorIndex,
           wandLength: state.wand.present.wand.deck_capacity,
           moveBy: by,
+          wrap,
         }),
       }),
     );
@@ -124,7 +132,7 @@ export const removeSelectedSpells =
         }),
       );
       if (clear) {
-        dispatch(clearSelection);
+        dispatch(clearSelection());
       }
     }
   };
