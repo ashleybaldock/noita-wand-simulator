@@ -53,7 +53,7 @@ const SectionHeaderContainer = styled.div`
 
   filter: var(--filter-floating-shadow);
 
-  & button {
+  & > button {
     border-radius: 0 0 0.2em 15.1em / 0 0 0 64.4em;
     border-right-style: hidden;
     padding-top: 0.4em;
@@ -83,7 +83,7 @@ export const SectionToolbar = ({
   className?: string;
 }>) => {
   return (
-    <SectionHeaderContainer className={className}>
+    <SectionHeaderContainer data-name="SectionToolbar" className={className}>
       <StickyHeaderTopBar />
       <GridSectionHeader title={title} />
       {children}

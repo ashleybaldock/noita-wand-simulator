@@ -8,7 +8,7 @@ import {
 } from '../Components';
 
 export const MoneyConfigSection = () => {
-  const [var_money, , handleOnChangeMoney] = useConfigSetting('var_money');
+  const [value, setValue, changeHandler] = useConfigSetting('var_money');
 
   return (
     <SubSectionDiv data-section="money">
@@ -23,8 +23,9 @@ export const MoneyConfigSection = () => {
           // type="text"
           // inputMode="numeric"
           // pattern="^[1-9][0-9]*$"
-          value={var_money}
-          onChange={handleOnChangeMoney}
+          setValue={setValue}
+          value={value}
+          onChange={changeHandler}
         ></NumericInput>
       </SubSectionContent>
     </SubSectionDiv>

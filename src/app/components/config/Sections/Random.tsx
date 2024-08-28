@@ -18,9 +18,9 @@ const RandomInputWrapper = styled.div`
 `;
 
 export const RandomConfigSection = () => {
-  const [frameNumber, , frameNumberChangeHandler] =
+  const [frameNumber, setFrameNumber, frameNumberChangeHandler] =
     useConfigSetting('random.frameNumber');
-  const [worldSeed, , worldSeedChangeHandler] =
+  const [worldSeed, setWorldSeed, worldSeedChangeHandler] =
     useConfigSetting('random.worldSeed');
 
   return (
@@ -41,6 +41,7 @@ export const RandomConfigSection = () => {
             // inputMode="numeric"
             // pattern="^[1-9][0-9]*$"
             value={worldSeed}
+            setValue={setWorldSeed}
             onChange={worldSeedChangeHandler}
           ></NumericInput>
         </RandomInputWrapper>
@@ -55,6 +56,7 @@ export const RandomConfigSection = () => {
             // inputMode="numeric"
             // pattern="^[1-9][0-9]*$"
             value={frameNumber}
+            setValue={setFrameNumber}
             onChange={frameNumberChangeHandler}
           ></NumericInput>
         </RandomInputWrapper>

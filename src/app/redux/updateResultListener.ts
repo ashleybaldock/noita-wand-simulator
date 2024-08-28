@@ -158,7 +158,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
       const zetaId = listenerApi.getState().wand.present.zetaId;
       const wand = listenerApi.getState().wand.present.wand;
 
-      console.debug('running new simulation');
+      console.debug('dispatch: newSimulation');
       listenerApi.dispatch(
         newSimulation({
           wandState: {
@@ -210,6 +210,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
         const { value } = result;
         // console.debug('Child succeeded: ', value);
 
+        console.debug('dispatch: newResult');
         listenerApi.dispatch(
           newResult({
             result: value,

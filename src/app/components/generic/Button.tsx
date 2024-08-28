@@ -55,6 +55,7 @@ export const isBreakpoint = (
 export type ImgOnlyOption = 'never' | 'always' | BreakPoint;
 
 const StyledButton = styled.button<{
+  $disabled: boolean;
   $background: string;
   $imgUrl: string;
   $imgDataUrl: string;
@@ -63,9 +64,11 @@ const StyledButton = styled.button<{
   $minimal: boolean;
   $shape: ButtonShape;
 }>`
+  ${(props) => `
   position: relative;
   color: var(--color-button);
   background-color: var(--color-button-background);
+  background-repeat: no-repeat;
   border: 0.16em solid var(--color-button-border);
   font-family: var(--font-family-noita-default);
   font-size: 14px;
@@ -80,34 +83,82 @@ const StyledButton = styled.button<{
   padding-top: 0.2em;
   padding-bottom: 0;
 
-  ${({ $imgAfter }) =>
-    $imgAfter
-      ? `padding-right: var(--pad-img-side);
-         padding-left: var(--pad-other-side);
-         background-position: 90% 50%;`
-      : `padding-right: var(--pad-other-side);
-         padding-left: var(--pad-img-side);
-         background-position: 10% 50%;`}
+  ${
+    props.$imgAfter
+      ? `
+  padding-right: var(--pad-img-side);
+  padding-left: var(--pad-other-side);
+  background-position: 90% 50%;
+  `
+      : `
+  padding-right: var(--pad-other-side);
+  padding-left: var(--pad-img-side);
+  background-position: 10% 50%;
+  `
+  }
 
-  ${({ $shape }) => borderForShape.get($shape)};
+  ${borderForShape.get(props.$shape)}
 
-  ${({ $imgUrl }) =>
-    $imgUrl.length > 0 ? `background-image: url('/${$imgUrl}');` : ''}
-  ${({ $imgDataUrl }) =>
-    $imgDataUrl.length > 0 ? `background-image: url("${$imgDataUrl}");` : ''}
+  ${
+    props.$imgUrl.length > 0
+      ? `background-image: url('/${props.$imgUrl}');`
+      : ''
+  }
 
-  ${(props) => props?.$background && `background-image: ${props.$background};`}
+  ${
+    props.$imgDataUrl.length > 0
+      ? `background-image: url("${props.$imgDataUrl}");`
+      : ''
+  }
 
-  background-origin: padding-box;
-  background-size: var(--background-size);
-  background-repeat: no-repeat;
-  image-rendering: pixelated;
+  ${props.$background && `background-image: ${props.$background};`}
 
   & {
     transition: var(--transition-hover-out);
     transition-property: border-color, color, opacity;
   }
 
+  ${
+    props.$minimal
+      ? `
+  --background-size: 0.42em;
+  --pad-img-side: calc(var(--background-size) + 1.9em);
+  --pad-other-side: 1em;
+
+  margin: 0;
+  cursor: pointer;
+  padding-top: 0.5em;
+  padding-bottom: 0.4em;
+  font-size: 0.6em;
+  line-height: 1.1em;
+  border-radius: 0.2em;
+  background-size: auto calc(var(--background-size) * 3.2);
+  color: var(--color-emphasis);
+  opacity: 0.7;
+  `
+      : ``
+  }
+
+  ${
+    props.$minimal && !props.$disabled
+      ? `
+  &:hover {
+    opacity: 1;
+    color: var(--color-emphasis);
+  }
+  `
+      : ''
+  }
+
+
+  ${
+    props.$disabled
+      ? `
+  filter: grayscale(1) contrast(0.7) brightness(0.4);
+  background-color: #222;
+  cursor: not-allowed;
+  `
+      : `
   &:hover {
     color: var(--color-button-hover);
     border-color: var(--color-button-border-hover);
@@ -121,44 +172,24 @@ const StyledButton = styled.button<{
     transition: var(--transition-activate);
     transition-property: border-color, color, opacity;
   }
-
-  ${({ $minimal }) =>
-    $minimal
-      ? `
-    --background-size: 0.42em;
-    --pad-img-side: calc(var(--background-size) + 1.9em);
-    --pad-other-side: 1em;
-
-    margin: 0;
-    cursor: pointer;
-    padding-top: 0.5em;
-    padding-bottom: 0.4em;
-    font-size: 0.6em;
-    line-height: 1.1em;
-    border-radius: 0.2em;
-    background-size: auto calc(var(--background-size) * 3.2);
-    color: var(--color-emphasis);
-    opacity: 0.7;
-
-    &:hover {
-      opacity: 1;
-      color: var(--color-emphasis);
-    }
+  `
+  }
+  ${
+    props.$imgOnly === 'always' &&
     `
-      : ``};
+  background-position: center center;
+  `
+  }
 
-  ${({ $imgOnly }) =>
-    $imgOnly === 'always' &&
+  ${
+    isBreakpoint(props.$imgOnly) &&
     `
-      background-position: center center;
-  `}
-  ${({ $imgOnly }) =>
-    isBreakpoint($imgOnly) &&
-    `
-    @media screen and (max-width: ${$imgOnly}) {
-      background-position: center center;
-    }
-  `}
+  @media screen and (max-width: ${props.$imgOnly}) {
+    background-position: center center;
+  }
+  `
+  }
+`}
 `;
 
 const MobileHidden = styled.div<React.PropsWithChildren>`
@@ -182,6 +213,7 @@ export const Button = ({
   imgDataUrl = '',
   imgAfter = false,
   imgOnly = 'never',
+  disabled = false,
   minimal = false,
   shape = 'pill',
   children,
@@ -195,6 +227,7 @@ export const Button = ({
   icon?: SpriteName | 'none';
   imgAfter?: boolean;
   imgOnly?: ImgOnlyOption;
+  disabled?: boolean;
   minimal?: boolean;
   shape?: ButtonShape;
   tip?: Tip;
@@ -212,6 +245,7 @@ export const Button = ({
   return (
     <StyledButton
       className={className}
+      $disabled={disabled}
       $minimal={minimal}
       $shape={shape}
       $background={iconPath}

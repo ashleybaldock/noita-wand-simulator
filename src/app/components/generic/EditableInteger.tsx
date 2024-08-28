@@ -110,7 +110,7 @@ export const EditableInteger = (props: {
         step={step}
         type="text"
         inputMode="numeric"
-        pattern="[.0-9]+"
+        pattern="-?\d*\.?\d*"
         value={displayedValue}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           const displayValue = Number.parseFloat(e.target.value);

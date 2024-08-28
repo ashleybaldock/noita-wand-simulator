@@ -10,7 +10,7 @@ import {
 import { mergeRefs } from '../../../util/mergeRefs';
 import type { Spell } from '../../../calc/spell';
 import { SearchResultList } from '../FindSpell/SearchResultList';
-import { noop } from '../../../util/util';
+import { isNotNullOrUndefined, noop } from '../../../util/util';
 import { HotkeyHint } from '../../Tooltips/HotkeyHint';
 import { useFocus } from '../../../hooks/useFocus';
 import { useAppDispatch } from '../../../redux/hooks';
@@ -198,17 +198,14 @@ export const FindSpell = ({
       : setSelectedResult(selectedResult - 1);
 
   const insertSpell = (before = true) => {
-    before
-      ? dispatch(
-          insertSpellBeforeCursor({
-            spellId: filteredResults[selectedResult].item.spell.id,
-          }),
-        )
-      : dispatch(
-          insertSpellAfterCursor({
-            spellId: filteredResults[selectedResult].item.spell.id,
-          }),
-        );
+    const spellId = filteredResults[selectedResult]?.item?.spell?.id;
+    if (isNotNullOrUndefined(spellId)) {
+      dispatch(
+        (before ? insertSpellBeforeCursor : insertSpellAfterCursor)({
+          spellId,
+        }),
+      );
+    }
   };
 
   const selectResult = (n: ResultIndex) => {
@@ -226,16 +223,19 @@ export const FindSpell = ({
         (typeof inKeys)[number],
         (keyEvent: KeyboardEvent, hotkey: Hotkey) => void
       > = {
-        w: (e, { ctrl }) => {
-          if (ctrl) {
+        w: (e, { shift, ctrl }) => {
+          console.log(`shift: ${shift}, ctrl: ${ctrl}`);
+          if (e.ctrlKey) {
             e.preventDefault();
             setSearchValue('');
           }
         },
         escape: () => (noQuery ? setHidden(true) : setSearchValue('')),
-        enter: (_, { shift, ctrl }) => {
-          insertSpell(shift);
-          if (ctrl) {
+        enter: (e, { shift, ctrl }) => {
+          console.log(`shift: ${shift}, ctrl: ${ctrl}`);
+          console.log(e);
+          insertSpell(e.shiftKey);
+          if (e.ctrlKey) {
             setSearchValue('');
           }
         },

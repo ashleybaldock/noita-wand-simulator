@@ -160,14 +160,22 @@ export const SearchResult = ({
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }) => {
   return (
-    <SearchResultInputWrapper onClick={(e) => onClick(e)}>
-      <SearchResultBase $highlight={highlight} className={className}>
+    <SearchResultInputWrapper
+      data-name="ResultWrapper"
+      onClick={(e) => onClick(e)}
+    >
+      <SearchResultBase
+        data-name="ResultBase"
+        $highlight={highlight}
+        className={className}
+      >
         <FuzzySearchWandAction
+          data-name="ResultAction"
           spellId={result.spell.id}
           spellType={result.spell.type}
         ></FuzzySearchWandAction>
-        <ResultDetails>
-          <ResultName>
+        <ResultDetails data-name="ResultDetails">
+          <ResultName data-name="ResultName">
             {convertMatches(result.name, matches).map(
               ([resultPart, shouldHighlight], idx) =>
                 shouldHighlight ? (
@@ -177,7 +185,7 @@ export const SearchResult = ({
                 ),
             )}
           </ResultName>
-          <ResultDebug>
+          <ResultDebug data-name="ResultDebug">
             {/* <ResultId>{result.id}</ResultId> */}
             <ResultMatches>
               {matches

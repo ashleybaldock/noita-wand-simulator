@@ -8,7 +8,7 @@ import {
 } from '../Components';
 
 export const HealthConfigSection = () => {
-  const [value, , changeHandler] = useConfigSetting('var_hp');
+  const [value, setValue, changeHandler] = useConfigSetting('var_hp');
 
   return (
     <SubSectionDiv data-section="health">
@@ -21,6 +21,7 @@ export const HealthConfigSection = () => {
           min={0}
           max={Number.POSITIVE_INFINITY}
           value={value}
+          setValue={setValue}
           onChange={changeHandler}
         ></NumericInput>
       </SubSectionContent>
