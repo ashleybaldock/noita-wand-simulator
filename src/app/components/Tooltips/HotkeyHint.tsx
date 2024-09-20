@@ -46,7 +46,19 @@ const lookup = new Map<string, Key>([
   ['f19', { symbol: 'Fn19', text: 'Fn19' }],
 ]);
 
-export type HintPosition = 'above' | 'below' | 'ne-corner' | 'left' | 'right';
+export type HintPosition =
+  | 'above'
+  | 'below'
+  | 'top'
+  | 'bottom'
+  | 'ne-corner'
+  | 'left'
+  | 'right';
+
+export type HotkeyConfig = {
+  hotkeys: string;
+  position: HintPosition;
+};
 
 const HotkeyHintBase = styled.div`
   --shadow-offx: 0;
@@ -95,7 +107,7 @@ const HotkeyHintPositioned = styled(HotkeyHintBase)<{ position: HintPosition }>`
   ${({ position }) => {
     if (position === 'above') {
       return `
-  top: -1.3em;
+  top: -0.8em;
   left: unset;
   right: 6%;
   bottom: unset;
@@ -104,6 +116,22 @@ const HotkeyHintPositioned = styled(HotkeyHintBase)<{ position: HintPosition }>`
     if (position === 'below') {
       return `
   top: 74%;
+  bottom: unset;
+  left: unset;
+  right: 6%;
+      `;
+    }
+    if (position === 'top') {
+      return `
+  top: -100%;
+  left: unset;
+  right: 6%;
+  bottom: unset;
+      `;
+    }
+    if (position === 'bottom') {
+      return `
+  top: 100%;
   bottom: unset;
   left: unset;
   right: 6%;

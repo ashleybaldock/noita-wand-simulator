@@ -16,6 +16,8 @@ const StyledSearchButton = styled(SearchButton)`
   padding-top: 0.4em;
   padding-bottom: 0.3em;
   margin-left: -0.4em;
+  align-self: start;
+  padding: 0.3em 1em 0.2em 2.4em;
 `;
 
 const SearchWrapper = styled.div`
@@ -25,14 +27,14 @@ const SearchWrapper = styled.div`
 
 export const WandBuilderToolbar = () => {
   return (
-    <SectionToolbar title={'Wand Editor'}>
+    <SectionToolbar data-name="WandBuilderToolbar" title={'Wand Editor'}>
       <UndoButton />
       <RedoButton />
       <ResetButton />
       <LoadButton />
       <ConfigButton />
-      <SearchWrapper>
-        <StyledSearchButton />
+      <SearchWrapper data-name="SearchWrapper">
+        <StyledSearchButton data-name="SearchButton" />
       </SearchWrapper>
     </SectionToolbar>
   );

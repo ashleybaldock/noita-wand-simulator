@@ -1,4 +1,4 @@
-import { manglePropName, objectEntries, objectKeys } from '../../../util';
+import { manglePropName, objectEntries, objectKeys } from '../../../../util';
 import {
   emptyBackgroundPart,
   type BackgroundPart,

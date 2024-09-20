@@ -34,7 +34,6 @@ const Wrapper = styled.fieldset<{ $valid: boolean }>`
     align-self: center;
     display: flex;
     background-position: center;
-    aspect-ratio: calc(1 / var(--𝚽));
     aspect-ratio: calc(var(--𝚽) * 2 / 3);
     text-align: center;
     padding: 0;

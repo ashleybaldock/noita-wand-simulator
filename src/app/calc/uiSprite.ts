@@ -13,6 +13,8 @@ const uiSpriteDefinition = [
   ['icon.lock', 'var(--icon-lock)'],
   ['icon.unlock', 'var(--icon-unlock)'],
   ['icon.config', 'var(--icon-config)'],
+  ['icon.download.png', `var(--icon-download-png)`],
+  ['icon.hamburger.menu', `var(--icon-hamburger-menu)`],
 
   ['icon.config.heart2', `url('/data/config/heart2.png')`],
   ['icon.config.die2', `url('/data/config/die2.png')`],

@@ -1,11 +1,16 @@
 import styled from 'styled-components';
 import { Button } from '../generic/Button';
 import { copyToClipboard } from '../../util';
-import { useWikiExportWand, useWikiSequenceExport } from '../../redux';
+import {
+  useWikiExampleExport,
+  useWikiExportWand,
+  useWikiSequenceExport,
+} from '../../redux';
 
 const _ExportWikiButton = () => {
   const wikiTemplateWand = useWikiExportWand();
   const wikiTemplateSeq = useWikiSequenceExport();
+  const wikiTemplateExample = useWikiExampleExport();
 
   const onCopySuccess = () => {};
   const onCopyFailure = () => {};
@@ -13,7 +18,7 @@ const _ExportWikiButton = () => {
   return (
     <>
       <Button
-        hotkeys={'e'}
+        hotkeys={{ hotkeys: 'ctrl+e', position: 'bottom' }}
         minimal
         tip={{ kind: 'uihint', id: 'copywiki' }}
         onClick={() =>
@@ -26,7 +31,7 @@ const _ExportWikiButton = () => {
         <span>WIKI:Wand</span>
       </Button>
       <Button
-        hotkeys={'shift+e'}
+        hotkeys={{ hotkeys: 'ctrl+shift+e', position: 'bottom' }}
         minimal
         tip={{ kind: 'uihint', id: 'copywikiseq' }}
         onClick={() =>
@@ -37,6 +42,18 @@ const _ExportWikiButton = () => {
         icon={'icon.copy'}
       >
         <span>WIKI:SpellSequence</span>
+      </Button>
+      <Button // hotkeys={{ hotkeys: 'ctrl+e', position: 'bottom' }}
+        minimal
+        tip={{ kind: 'uihint', id: 'copywikiexample' }}
+        onClick={() =>
+          copyToClipboard(wikiTemplateExample)
+            .then(onCopySuccess)
+            .catch(onCopyFailure)
+        }
+        icon={'icon.copy'}
+      >
+        <span>WIKI:Example</span>
       </Button>
     </>
   );

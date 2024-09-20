@@ -90,8 +90,16 @@ ${formatSpellsPretty(spellIds, '')}
 export const generateWikiSpellSequence = (
   spellIds: SpellId[],
   { tooltips }: SpellSequenceOptions = defaultSpellSequenceOptions,
-): string => `{{Wand2
+): string => `{{SpellSequence
 | tooltips     = ${formatBoolean(tooltips)}
 | spells =
 ${formatSpellsPretty(spellIds, '')}
 }}`;
+
+export const generateWikiExample = (
+  wandState: WandState,
+  options: WikiWandOptions = defaultWandOptions,
+): string => `{{example/start|title=A title for this example}}
+A description of this example.
+${generateWikiWandV2(wandState, options)}
+{{example/end}}`;

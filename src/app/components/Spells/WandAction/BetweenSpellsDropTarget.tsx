@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { cursorBackgrounds } from './Cursor';
 import { mergeRefs, type MergableRef } from '../../../util/mergeRefs';
 import { useDrag, useDrop } from 'react-dnd';
 import {
@@ -11,21 +10,24 @@ import {
 } from './DragItems';
 import type { MainWandIndex, WandIndex } from '../../../redux/WandIndex';
 import { isMainWandIndex } from '../../../redux/WandIndex';
-import { dropHintBackgrounds, selectHintBackgrounds } from './DropHint';
-import { useMergedBackgrounds } from './useMergeBackgrounds';
-import { selectionBackgrounds } from './WandSelection';
 import { WithDebugHints } from '../../Debug';
-import { DynamicBackground } from './DynamicBackground';
+import { DynamicBackground } from './Backgrounds/DynamicBackground';
 import { moveCursorTo, setSelection } from '../../../redux/editorSlice';
 import {
   moveSpell,
   useAppDispatch,
   useConfig,
-  useCursor,
-  useEditMode,
+  useCaret,
   useSelection,
 } from '../../../redux';
 import { useCallback } from 'react';
+import { useMergedBackgrounds } from './Backgrounds/useMergeBackgrounds';
+import { caretBackgrounds, type CaretStyle } from './Backgrounds/Caret';
+import { selectionBackgrounds } from './Backgrounds/WandSelection';
+import {
+  dropHintBackgrounds,
+  selectHintBackgrounds,
+} from './Backgrounds/DropHint';
 
 // right: calc(var(--width) * -0.5);
 // z-index: var(--zindex-insert-after);
@@ -48,7 +50,7 @@ const DropTargetBackground = styled(DynamicBackground)<{
   transition-property: background-image, opacity;
   transition-duration: 100ms;
   transition-timing-function: ease;
-  transition-delay: 0;
+  transition-delay: 0ms;
 
   left: calc(var(--width) * -0.5);
   z-index: var(--zindex-insert-before);
@@ -86,21 +88,20 @@ const HoverBackground = styled(DynamicBackground)`
   width: 100%;
   height: 100%;
   opacity: 0.1;
-  pointer-events: none;
 
   transition-property: background-image, opacity;
   transition-duration: 100ms;
   transition-timing-function: ease;
-  transition-delay: 0;
+  transition-delay: 0ms;
 
   ${DropTargetBackground}:hover & {
     opacity: 1;
   }
   ${WithDebugHints} && {
-    // background-color: red;
+    background-color: red;
   }
   ${WithDebugHints} ${DropTargetBackground}:hover & {
-    // background-color: #ff06;
+    background-color: #ff06;
   }
 `;
 
@@ -119,12 +120,12 @@ export const BetweenSpellsDropTarget = ({
 
   const { 'editor.enableSelection': enableSelection } = useConfig();
   const selectionForSpellBefore = useSelection(indexOfSpellBefore, 'after');
-  const cursorForSpellBefore = useCursor(indexOfSpellBefore);
+  const cursorForSpellBefore = useCaret(indexOfSpellBefore);
 
   const selectionForSpellAfter = useSelection(indexOfSpellBefore, 'before');
-  const cursorForSpellAfter = useCursor(indexOfSpellAfter);
+  const cursorForSpellAfter = useCaret(indexOfSpellAfter);
 
-  const editMode = useEditMode();
+  // const editMode = useEditMode();
   const insertIndex: MainWandIndex = isMainWandIndex(indexOfSpellBefore)
     ? indexOfSpellBefore
     : 0;
@@ -146,7 +147,7 @@ export const BetweenSpellsDropTarget = ({
     (item: DragItemSelect) => {
       const from = item.dragStartIndex;
       if (isMainWandIndex(from) && isMainWandIndex(insertIndex)) {
-        const direction = from > insertIndex ? 'left' : 'right';
+        // const direction = from > insertIndex ? 'left' : 'right';
         return dispatch(
           setSelection({
             from: Math.min(from, insertIndex),
@@ -210,9 +211,9 @@ export const BetweenSpellsDropTarget = ({
   // const merged = useMergedBackgroundVars(
   //   getCssVarForProperty,
   // const overHint = `${editMode.insert.mode}${editMode.insert.direction}`;
-  const merged = useMergedBackgrounds(
-    cursorBackgrounds[cursorForSpellBefore]['before'],
-    cursorBackgrounds[cursorForSpellAfter]['after'],
+  const mergedA = useMergedBackgrounds(
+    caretBackgrounds[cursorForSpellBefore]['before'],
+    caretBackgrounds[cursorForSpellAfter]['after'],
     ((isDraggingSpell &&
       isOver &&
       canDrop &&
@@ -229,14 +230,22 @@ export const BetweenSpellsDropTarget = ({
     selectionBackgrounds[selectionForSpellBefore]['after'],
     selectionBackgrounds[selectionForSpellAfter]['before'],
   );
+  const merged = {
+    ...mergedA,
+    cursor: mergedA.cursor[mergedA.cursor.length - 1],
+  };
   // const mergedHover = useMergedBackgroundVars(
   //   getCssHoverVarForProperty,
-  const mergedHover = useMergedBackgrounds(
-    cursorBackgrounds['caret-hover']['before'],
-    cursorBackgrounds['caret-hover']['after'],
+  const mergedHoverA = useMergedBackgrounds(
+    caretBackgrounds['caret-hover']['before'],
+    caretBackgrounds['caret-hover']['after'],
     selectionBackgrounds[selectionForSpellBefore]['after'],
     selectionBackgrounds[selectionForSpellAfter]['before'],
   );
+  const mergedHover = {
+    ...mergedHoverA,
+    cursor: mergedHoverA.cursor[mergedHoverA.cursor.length - 1],
+  };
   // const style = { ...merged, ...mergedHover };
 
   return (

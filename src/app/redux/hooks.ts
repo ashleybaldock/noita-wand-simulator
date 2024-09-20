@@ -2,7 +2,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
 import type { AppDispatch, RootState } from './store';
 import { createSelector } from 'reselect';
-import { generateWikiSpellSequence, generateWikiWandV2 } from './Wand/toWiki';
+import {
+  generateWikiExample,
+  generateWikiSpellSequence,
+  generateWikiWandV2,
+} from './Wand/toWiki';
 import { generateSearchFromWandState } from './Wand/toSearch';
 import type { KeyOfType } from '../util';
 import {
@@ -26,17 +30,14 @@ import {
 } from './configSlice';
 import type { UIState, UIToggle } from './uiSlice';
 import { flipUiToggle, setUiToggle } from './uiSlice';
-import type { CursorStyle } from '../components/Spells/WandAction/Cursor';
-import {
-  defaultCursor,
-  type Cursor,
-} from '../components/Spells/WandAction/Cursor';
+import type { CaretStyle } from '../components/Spells/WandAction/Backgrounds/Caret';
+import { defaultCaret } from '../components/Spells/WandAction/Backgrounds/Caret';
 import type { SpellId } from './Wand/spellId';
 import type { ChangeEvent } from 'react';
 import { useMemo } from 'react';
 import type { MainWandIndex, WandIndex } from './WandIndex';
 import { ZTA, isMainWandIndex } from './WandIndex';
-import type { BackgoundPartLocation } from '../components/Spells/WandAction/BackgroundPart';
+import type { BackgoundPartLocation } from '../components/Spells/WandAction/Backgrounds/BackgroundPart';
 import { useKeyState } from '../context/KeyStateContext';
 import type { EditMode } from './EditMode';
 import { setSpellAtIndex } from './wandSlice';
@@ -209,6 +210,12 @@ const selectWikiExportSeq = createSelector(
 );
 export const useWikiSequenceExport = () => useSelector(selectWikiExportSeq);
 
+const selectWikiExportExample = createSelector(
+  selectWandState,
+  generateWikiExample,
+);
+export const useWikiExampleExport = () => useSelector(selectWikiExportExample);
+
 const selectURLSearch = createSelector(
   selectWandState,
   generateSearchFromWandState,
@@ -256,28 +263,28 @@ export const useAlwaysCastLayout = () =>
 
 const selectCursorIndex = (state: RootState) => state.editor.cursorIndex;
 
-const selectCursors = createSelector(
+const selectCarets = createSelector(
   selectCursorIndex,
   selectSpellSequence,
-  (cursorIndex, spellIds): CursorStyle[] =>
+  (cursorIndex, spellIds): CaretStyle[] =>
     spellIds.map(
-      (_, wandIndex: MainWandIndex): CursorStyle =>
+      (_, wandIndex: MainWandIndex): CaretStyle =>
         cursorIndex === wandIndex ? 'caret' : 'none',
     ),
 );
 
-export const useCursors = () => useSelector(selectCursors);
+export const useCarets = () => useSelector(selectCarets);
 
 /*
- * Returns cursor info for the 'between' spell locations
- * i.e. for 'before' spell index 1, return the cursor info for 'after' spell 0 as well
+ * Returns caret info for the 'between' spell locations
+ * i.e. for 'before' spell index 1, return the caret info for 'after' spell 0 as well
  */
-export const useCursor = (wandIndex: WandIndex): CursorStyle => {
-  const cursors = useSelector(selectCursors);
+export const useCaret = (wandIndex: WandIndex): CaretStyle => {
+  const cursors = useSelector(selectCarets);
   if (isMainWandIndex(wandIndex)) {
-    return cursors[wandIndex] ?? defaultCursor['before'];
+    return cursors[wandIndex] ?? defaultCaret['before'];
   }
-  return defaultCursor['before'];
+  return defaultCaret['before'];
 };
 
 const selectSelectionExtents = (state: RootState) => ({

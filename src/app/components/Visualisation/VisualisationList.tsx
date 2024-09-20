@@ -1,4 +1,3 @@
-import type { LegacyRef } from 'react';
 import { useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import { isNotNullOrUndefined } from '../../util';
@@ -39,8 +38,8 @@ const SectionDiv = styled.div`
 export const VisualisationList = () => {
   const spellIds = useSpellSequence();
   const [simulationRunning] = useSimulationStatus();
-  const actionsCalledRef = useRef<HTMLDivElement>();
-  const actionCallTreeRef = useRef<HTMLDivElement>();
+  const actionsCalledRef = useRef<HTMLDivElement>(null);
+  const actionCallTreeRef = useRef<HTMLDivElement>(null);
 
   const { unlimitedSpells, infiniteSpells, showActionTree } = useConfig();
 
@@ -86,13 +85,11 @@ export const VisualisationList = () => {
         <>
           <SectionToolbar title={'Simulation: Action Call Tree'} />
           <ScrollWrapper>
-            <SectionDiv
-              ref={actionCallTreeRef as LegacyRef<HTMLDivElement>}
-              className={'saveImageRoot'}
-            >
+            <SectionDiv ref={actionCallTreeRef} className={'saveImageRoot'}>
               <SaveImageButton
+                name={'Action Call Tree'}
                 targetRef={actionCallTreeRef}
-                fileName={'action_tree'}
+                fileName={'action_call_tree'}
                 enabled={shots.length > 0}
               />
               {shots.map((shot, index) => (
@@ -104,13 +101,11 @@ export const VisualisationList = () => {
       )}
       <SectionToolbar title={'Simulation: Action Call Sequence'} />
       <ScrollWrapper>
-        <SectionDiv
-          ref={actionsCalledRef as LegacyRef<HTMLDivElement>}
-          className={'saveImageRoot'}
-        >
+        <SectionDiv ref={actionsCalledRef} className={'saveImageRoot'}>
           <SaveImageButton
             targetRef={actionsCalledRef}
-            fileName={'actions_called'}
+            name={'Action Call Sequence'}
+            fileName={'action_call_sequence'}
             enabled={shots.length > 0}
           />
           {shots.map((shot, index) => (

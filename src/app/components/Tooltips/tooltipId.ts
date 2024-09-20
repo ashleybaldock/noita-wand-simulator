@@ -25,6 +25,12 @@ const uiHintDefinition = [
     },
   ],
   [
+    'copywikiexample',
+    {
+      desc: 'Copies the current wand to the clipboard as a minimal Wiki Wand template, wrapped with an Example template.',
+    },
+  ],
+  [
     'copyxml',
     {
       desc: 'Copies the current wand to the clipboard in NXML format suitable for modding.',

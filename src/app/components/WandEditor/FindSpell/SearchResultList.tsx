@@ -12,6 +12,7 @@ const ResultNoMatch = styled(SearchResultBase)`
 `;
 
 const ListWrapper = styled.ol`
+  width: 100%;
   overflow-y: scroll;
   margin: 0.4em 0;
   padding: 0;
@@ -39,7 +40,7 @@ export const SearchResultList = ({
   return (
     <ListWrapper className={className}>
       {noResults ? (
-        <ResultNoMatch>No Matches</ResultNoMatch>
+        <ResultNoMatch data-name="SearchNoMatch">No Matches</ResultNoMatch>
       ) : (
         results.map(({ item: result, matches, score }, idx) => (
           <SearchResult

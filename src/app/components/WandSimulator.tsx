@@ -15,6 +15,16 @@ import { Tooltips } from './Tooltips';
 import { Modals } from './Modals/Modals';
 import { DragPreview } from './DragPreview';
 import { HTML5toTouchPreview } from './DragPipeline';
+import { WandBuilderToolbar } from './WandEditor/WandBuilderToolbar';
+
+const StickyGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Overlays = styled.div`
+  display: contents;
+`;
 
 const Column = styled.div`
   display: flex;
@@ -53,22 +63,25 @@ export const WandSimulator = () => {
       <DndProvider options={HTML5toTouchPreview}>
         <Column>
           <MainHeader></MainHeader>
-          <Column>
+          <StickyGroup>
+            <WandBuilderToolbar />
             <WandBuilder />
             <SpellShortcuts>
               <SpellHotbar></SpellHotbar>
             </SpellShortcuts>
             <SpellSelector />
-          </Column>
-          <Column>
+          </StickyGroup>
+          <StickyGroup>
             <CastConfigEditor />
-          </Column>
-          <Column>
+          </StickyGroup>
+          <StickyGroup>
             <VisualisationList />
-          </Column>
-          <Modals />
-          <Tooltips />
-          <ReleaseInfo />
+          </StickyGroup>
+          <Overlays>
+            <Modals />
+            <Tooltips />
+            <ReleaseInfo />
+          </Overlays>
         </Column>
         <DragPreview />
       </DndProvider>

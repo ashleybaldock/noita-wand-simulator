@@ -24,8 +24,14 @@ export const SearchButton = ({ hotkeys = 'f, `, /' }: { hotkeys?: string }) => {
   );
   return (
     <>
-      <FindSpell hotkeys={hotkeys} hidden={hidden} setHidden={setHidden} />
+      <FindSpell
+        data-name="FindSpellInput"
+        hotkeys={hotkeys}
+        hidden={hidden}
+        setHidden={setHidden}
+      />
       <StyledButton
+        data-name="FindSpellButton"
         hotkeys={hotkeys}
         imgOnly={'600px'}
         icon={'icon.search'}

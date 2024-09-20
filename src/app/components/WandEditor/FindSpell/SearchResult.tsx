@@ -27,6 +27,16 @@ const SearchResultInputWrapper = styled.button`
   flex: 1 1 100%;
   width: 100%;
   overflow: hidden;
+
+  &&:nth-of-type(1) ${FuzzySearchWandAction} {
+    font-size: 1.91em;
+  }
+  &&:nth-of-type(n + 2) ${FuzzySearchWandAction} {
+    max-height: 1.8em;
+    aspect-ratio: 1;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
 `;
 
 export const SearchResultBase = styled.li<{ $highlight?: boolean }>`
@@ -43,8 +53,8 @@ export const SearchResultBase = styled.li<{ $highlight?: boolean }>`
   ${({ $highlight = false }) =>
     $highlight
       ? `
-    background: #1b1b1b;
-    border: 2px solid #383838;
+  background: #1b1b1b;
+  border: 2px solid #383838;
     `
       : `
   &:hover {
@@ -83,8 +93,8 @@ const ResultName = styled.span`
   letter-spacing: 0.04em;
   white-space: pre;
 
-  font-variant: all-small-caps;
-  margin-left: 0.8em;
+  margin-left: 0.4em;
+  font-variant: small-caps;
 `;
 
 const ResultScore = styled.span`

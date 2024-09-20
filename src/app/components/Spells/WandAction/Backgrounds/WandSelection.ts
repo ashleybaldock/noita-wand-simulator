@@ -1,4 +1,4 @@
-import type { WandSelection } from '../../../redux/Wand/wandSelection';
+import type { WandSelection } from '../../../../redux/Wand/wandSelection';
 import type { Background } from './BackgroundPart';
 import { emptyBackground } from './BackgroundPart';
 
@@ -19,7 +19,7 @@ export const selectionBackgrounds: Record<WandSelection, Background> = {
         `var(--cursor-container-width)`,
       ],
       'background-position': [`center top`, `center bottom`, `center center`],
-      'cursor': ['w-resize'],
+      cursor: ['w-resize'],
     },
   },
   thru: { ...emptyBackground() },
@@ -38,7 +38,7 @@ export const selectionBackgrounds: Record<WandSelection, Background> = {
         `var(--cursor-container-width)`,
       ],
       'background-position': [`center top`, `center bottom`, `center center`],
-      'cursor': ['e-resize'],
+      cursor: ['e-resize'],
     },
   },
   single: {
@@ -56,7 +56,7 @@ export const selectionBackgrounds: Record<WandSelection, Background> = {
         `var(--cursor-container-width)`,
       ],
       'background-position': [`center top`, `center bottom`, `center center`],
-      'cursor': ['w-resize'],
+      cursor: ['w-resize'],
     },
     after: {
       'background-image': [
@@ -71,7 +71,7 @@ export const selectionBackgrounds: Record<WandSelection, Background> = {
         `var(--cursor-container-width)`,
       ],
       'background-position': [`center top`, `center bottom`, `center center`],
-      'cursor': ['e-resize'],
+      cursor: ['e-resize'],
     },
   },
 };

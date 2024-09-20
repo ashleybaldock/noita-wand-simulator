@@ -171,9 +171,10 @@ export function Tabs({
 
   return (
     <MainDiv>
-      <TabTitlesDiv>
+      <TabTitlesDiv data-name="TabsTitles">
         {tabs.map(({ titleParts }, index) => (
           <TitleDiv
+            data-name="TabTitle"
             selected={selectedTabIndex === index}
             onClick={() => setSelectedTabIndex(index)}
             key={titleParts.reduce((acc, { text }) => `${acc}-${text}`, 'tab-')}
@@ -182,6 +183,7 @@ export function Tabs({
             {titleParts.map(({ text, type, bgSrc, egSrc }) => (
               <TabsWandAction
                 key={type}
+                tooltip={false}
                 spellType={type}
                 spellId={egSrc}
                 keyHint={`Shortcut: ${index}`}
@@ -191,7 +193,9 @@ export function Tabs({
           </TitleDiv>
         ))}
       </TabTitlesDiv>
-      <ContentDiv>{tabs[displayIndex].content}</ContentDiv>
+      <ContentDiv data-name="ActiveTabContent">
+        {tabs[displayIndex].content}
+      </ContentDiv>
     </MainDiv>
   );
 }

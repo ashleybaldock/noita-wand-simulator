@@ -1,7 +1,7 @@
 import type { Background } from './BackgroundPart';
 import { emptyBackground } from './BackgroundPart';
 
-export const cursorStyles = [
+export const caretStyles = [
   'none',
   'caret-hover',
   'caret',
@@ -9,19 +9,19 @@ export const cursorStyles = [
   'spell-over',
 ] as const;
 
-export type CursorStyle = (typeof cursorStyles)[number];
+export type CaretStyle = (typeof caretStyles)[number];
 
-export type CursorPosition = 'none' | 'before' | 'after';
+export type CaretPosition = 'none' | 'before' | 'after';
 
-export type Cursor = {
-  before: CursorStyle;
-  after: CursorStyle;
+export type Caret = {
+  before: CaretStyle;
+  after: CaretStyle;
 };
 
-export const defaultCursor: Cursor = { before: 'none', after: 'none' };
+export const defaultCaret: Caret = { before: 'none', after: 'none' };
 
-export const cursorBackgrounds: Record<CursorStyle, Background> = {
-  'none': { ...emptyBackground() },
+export const caretBackgrounds: Record<CaretStyle, Background> = {
+  none: { ...emptyBackground() },
   'caret-hover': {
     ...emptyBackground(),
     before: {
@@ -37,10 +37,10 @@ export const cursorBackgrounds: Record<CursorStyle, Background> = {
         `var(--cursor-container-width)`,
       ],
       'background-position': [`center top`, `center bottom`, `center center`],
-      'cursor': ['text'],
+      cursor: ['text'],
     },
   },
-  'caret': {
+  caret: {
     ...emptyBackground(),
     before: {
       'background-image': [
@@ -53,7 +53,7 @@ export const cursorBackgrounds: Record<CursorStyle, Background> = {
         `var(--cursor-container-width)`,
       ],
       'background-position': [`center top`, `center center`],
-      'cursor': ['text'],
+      cursor: ['text'],
     },
   },
   'spell-over': {
@@ -71,7 +71,7 @@ export const cursorBackgrounds: Record<CursorStyle, Background> = {
         `var(--cursor-container-width)`,
       ],
       'background-position': [`center top`, `center bottom`, `center center`],
-      'cursor': [''],
+      cursor: [''],
     },
   },
   'caret-select': {
@@ -89,7 +89,7 @@ export const cursorBackgrounds: Record<CursorStyle, Background> = {
         `var(--cursor-container-width)`,
       ],
       'background-position': [`center top`, `center bottom`, `center center`],
-      'cursor': [''],
+      cursor: ['text'],
     },
   },
 };

@@ -28,6 +28,8 @@ import type { MapTree } from '../../util/MapTree';
 import { mapTreeToMapTree } from '../../util/MapTree';
 import type { TreeNode } from '../../util/TreeNode';
 import { AlwaysCastIndicies } from '../../redux/WandIndex';
+import type { SimulationRequestId } from '../../redux/SimulationRequest';
+import type { SpellId } from '../../redux/Wand/spellId';
 
 export type ClickWandResult = {
   /**
@@ -40,6 +42,7 @@ export type ClickWandResult = {
    * - a set containing action call counts
    *
    */
+  simulationRequestId: SimulationRequestId;
   shots: WandShot[];
   reloadTime: number | undefined;
   endConditions: StopReason[];
@@ -98,10 +101,11 @@ const serializeClickWandResult = (
 });
 
 export type ClickWandSetup = {
-  wand: Gun;
-  spells: Spell[];
-  alwaysCastSpells: Spell[];
-  zetaSpell?: Spell;
+  simulationRequestId: SimulationRequestId;
+  wand: Readonly<Gun>;
+  spellIds: Readonly<SpellId>[];
+  alwaysCastSpellIds: Readonly<SpellId>[];
+  zetaSpellId?: Readonly<SpellId>;
   req_enemies: boolean;
   req_projectiles: boolean;
   req_hp: boolean;
@@ -128,7 +132,18 @@ type StartingState = {
   req_enemies?: boolean;
 };
 
+const defaultStartingState: Required<StartingState> = {
+  mana: 1000,
+  rng_worldSeed: 0,
+  rng_frameNumber: 1,
+  req_half: false,
+  req_hp: false,
+  req_projectiles: false,
+  req_enemies: false,
+};
+
 type ClickWandState = {
+  simulationRequestId: SimulationRequestId;
   mana: number;
   currentShot: WandShot;
   parentShot: WandShot | undefined;
@@ -144,19 +159,9 @@ type ClickWandState = {
   startingState: Readonly<Required<StartingState>>;
 } & Required<StartingState>;
 
-const defaultStartingState: Required<StartingState> = {
-  mana: 1000,
-  req_half: false,
-  rng_worldSeed: 0,
-  rng_frameNumber: 1,
-  req_hp: false,
-  req_projectiles: false,
-  req_enemies: false,
-};
-
-// } & Required<StartingState>;
 const resetState = (
   startingState: StartingState,
+  simulationRequestId: SimulationRequestId,
 ): {
   state: ClickWandState;
   result: ClickWandResult;
@@ -164,6 +169,7 @@ const resetState = (
   state: {
     ...{ ...defaultStartingState, ...startingState },
     startingState: { ...defaultStartingState, ...startingState },
+    simulationRequestId: simulationRequestId,
     calledActions: [],
     validSourceCalledActions: [],
     currentShotStack: [],
@@ -177,6 +183,7 @@ const resetState = (
     parentShot: undefined,
   },
   result: {
+    simulationRequestId: simulationRequestId,
     shots: [],
     reloadTime: undefined,
     endConditions: [],
@@ -456,10 +463,11 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
   });
 
 export const clickWand = ({
+  simulationRequestId,
   wand,
-  spells,
-  alwaysCastSpells,
-  zetaSpell,
+  spellIds,
+  alwaysCastSpellIds,
+  zetaSpellId,
   req_enemies,
   req_projectiles,
   req_hp,
@@ -477,15 +485,28 @@ export const clickWand = ({
 }: ClickWandSetup): SerializedClickWandResult => {
   const getElapsedTime = startTimer();
 
-  const { result, state } = resetState({
-    mana: wand_available_mana,
-    req_enemies,
-    req_projectiles,
-    req_hp,
-    req_half,
-    rng_frameNumber,
-    rng_worldSeed,
-  });
+  const spells = spellIds.flatMap((id) =>
+    isValidActionId(id) ? getSpellById(id) : [],
+  );
+  const alwaysCastSpells = alwaysCastSpellIds.flatMap((id) =>
+    isValidActionId(id) ? getSpellById(id) : [],
+  );
+  const zetaSpell = isValidActionId(zetaSpellId)
+    ? getSpellById(zetaSpellId)
+    : undefined;
+
+  const { result, state } = resetState(
+    {
+      mana: wand_available_mana,
+      req_enemies,
+      req_projectiles,
+      req_hp,
+      req_half,
+      rng_frameNumber,
+      rng_worldSeed,
+    },
+    simulationRequestId,
+  );
 
   /* No spells makes for an easy simulation */
   if (spells.filter((s) => s != null).length === 0) {

@@ -1,9 +1,9 @@
 import { usePreview } from 'react-dnd-multi-backend';
 import type { DragItemSelect } from './DragItems';
-import { cursorBackgrounds } from './Cursor';
+import { caretBackgrounds } from './Backgrounds/Caret';
 import styled from 'styled-components';
-import { useMergedBackgrounds } from './useMergeBackgrounds';
-import { DynamicBackground } from './DynamicBackground';
+import { useMergedBackgrounds } from './Backgrounds/useMergeBackgrounds';
+import { DynamicBackground } from './Backgrounds/DynamicBackground';
 
 const Cursor = styled(DynamicBackground)`
   background-image: var(--bg-image);
@@ -17,7 +17,7 @@ const Cursor = styled(DynamicBackground)`
 export const SelectionDragPreview = () => {
   const preview = usePreview<DragItemSelect>();
   const background = useMergedBackgrounds(
-    cursorBackgrounds['caret-select']['before'],
+    caretBackgrounds['caret-select']['before'],
   );
 
   if (!preview.display) {

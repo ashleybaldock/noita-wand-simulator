@@ -4,12 +4,7 @@ import type { SpellEditMode, SpellShiftDirection } from '../types';
 import { defaultWand } from './Wand/presets';
 import { useSliceWrapper } from './useSlice';
 import { generateWandStateFromSearch } from './Wand/fromSearch';
-import {
-  MAX_ALWAYS,
-  fixedLengthCopy,
-  isNotNullOrUndefined,
-  assertNever,
-} from '../util';
+import { MAX_ALWAYS, fixedLengthCopy, assertNever } from '../util';
 import type { WandState } from './Wand/wandState';
 import type { Wand } from './Wand/wand';
 import type { SpellId } from './Wand/spellId';
@@ -18,13 +13,11 @@ import {
   alwaysCastIndexMap,
   isAlwaysCastIndex,
   isMainWandIndex,
-  isSpecialWandIndex,
   isWandIndex,
   isWithinBounds,
   ZTA,
   type WandIndex,
 } from './WandIndex';
-import type { ActionId } from '../calc/actionId';
 const {
   wand,
   spellIds = [],

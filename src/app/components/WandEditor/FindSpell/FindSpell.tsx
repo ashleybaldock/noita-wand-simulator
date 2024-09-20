@@ -27,6 +27,7 @@ const inKeys = [
   'up',
   'down',
   'w',
+  '/',
   // 'shift+tab',
   // 'shift+enter',
 ] as const;
@@ -86,7 +87,7 @@ const SearchInput = styled.input.attrs({ type: 'text' })`
   box-sizing: border-box;
 
   width: auto;
-  min-width: 4em;
+  min-width: 100%;
   caret-color: var(--color-wand-edit-cursor);
   color: #fff;
   background-color: #222;
@@ -183,10 +184,13 @@ export const FindSpell = ({
   const noQuery = resultCount === 0 && searchValue === '';
 
   const firstResultIsSelected = () => selectedResult <= 0;
+
   const lastResultIsSelected = () => selectedResult >= resultCount - 1;
 
   const selectFirstResult = () => setSelectedResult(0);
+
   const selectLastResult = () => setSelectedResult(resultCount - 1);
+
   const selectNextResult = () =>
     lastResultIsSelected()
       ? selectFirstResult()
@@ -231,10 +235,15 @@ export const FindSpell = ({
           }
         },
         escape: () => (noQuery ? setHidden(true) : setSearchValue('')),
+        '/': (e) => {
+          e.preventDefault();
+          setHidden(true);
+        },
         enter: (e, { shift, ctrl }) => {
           console.log(`shift: ${shift}, ctrl: ${ctrl}`);
           console.log(e);
-          insertSpell(e.shiftKey);
+          console.log(selectedResult, filteredResults);
+          insertSpell(!e.shiftKey);
           if (e.ctrlKey) {
             setSearchValue('');
           }
@@ -247,21 +256,6 @@ export const FindSpell = ({
           e.preventDefault();
           selectNextResult();
         },
-        // tab: (e, { shift }) => {
-        //   if (shift) {
-        //     if (!firstResultIsSelected()) {
-        //       e.stopImmediatePropagation();
-        //       e.preventDefault();
-        //       selectPreviousResult();
-        //     }
-        //   } else {
-        //     if (!lastResultIsSelected()) {
-        //       e.stopImmediatePropagation();
-        //       e.preventDefault();
-        //       selectNextResult();
-        //     }
-        //   }
-        // },
       };
       // console.log(_, handler.keys, handler.shift, handler);
 
@@ -273,12 +267,24 @@ export const FindSpell = ({
       enableOnFormTags: ['INPUT'],
       ignoreModifiers: true,
     },
-    [noQuery, resultCount, selectedResult],
+    [
+      noQuery,
+      resultCount,
+      setSearchValue,
+      setHidden,
+      selectPreviousResult,
+      selectNextResult,
+      selectedResult,
+      insertSpell,
+    ],
   );
 
   const [inputFocusRef, focusSearchInput, blurSearchInput] =
     useFocus<HTMLInputElement>();
-  useEffect(() => (hidden ? blurSearchInput() : focusSearchInput()), [hidden]);
+  useEffect(
+    () => (hidden ? blurSearchInput() : focusSearchInput()),
+    [hidden, blurSearchInput, focusSearchInput],
+  );
 
   const preventLossOfFocus = (e: MouseEvent) => {
     e.stopPropagation();
@@ -288,10 +294,12 @@ export const FindSpell = ({
   return (
     <>
       <Container
+        data-name="SearchWrapper"
         className={className}
         onMouseDown={(e) => !hidden && preventLossOfFocus(e)}
       >
         <SearchInput
+          data-name="SearchInput"
           ref={mergeRefs(useHotkeysRef, inputFocusRef)}
           value={searchValue}
           onChange={(e) => {

@@ -48,7 +48,7 @@ export const ShotList = ({
   shots: WandShot[];
   totalRechargeTime: number | undefined;
 }) => {
-  const shotListRef = useRef<HTMLDivElement>();
+  const shotListRef = useRef<HTMLDivElement>(null);
 
   const totalManaDrain = shots.reduce(
     (tsf, shot) => tsf + (shot.manaDrain ?? 0),
@@ -60,8 +60,9 @@ export const ShotList = ({
       <ScrollWrapper>
         <SaveButtons>
           <SaveImageButton
+            name={'Shot List'}
             targetRef={shotListRef}
-            fileName={'projectiles'}
+            fileName={'shot_list'}
             enabled={shots.length > 0}
           />
         </SaveButtons>

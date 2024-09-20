@@ -11,12 +11,15 @@ import { moveSpell, useAppDispatch, useConfig } from '../../../redux';
 import { useDrop } from 'react-dnd';
 import { moveCursorTo, setSelection } from '../../../redux/editorSlice';
 import { isMainWandIndex, type WandIndex } from '../../../redux/WandIndex';
-import { cursorBackgrounds, type CursorStyle } from './Cursor';
+import { caretBackgrounds, type CaretStyle } from './Backgrounds/Caret';
 import { noop } from '../../../util';
-import type { DropHint } from './DropHint';
-import { dropHintBackgrounds, selectHintBackgrounds } from './DropHint';
-import { selectionBackgrounds } from './WandSelection';
-import { useMergedBackgrounds } from './useMergeBackgrounds';
+import type { DropHint } from './Backgrounds/DropHint';
+import {
+  dropHintBackgrounds,
+  selectHintBackgrounds,
+} from './Backgrounds/DropHint';
+import { selectionBackgrounds } from './Backgrounds/WandSelection';
+import { useMergedBackgrounds } from './Backgrounds/useMergeBackgrounds';
 
 const DropTargetOver = styled.div`
   --selection-bdcolor: #00dbff;
@@ -47,7 +50,7 @@ export const OverSpellDropTarget = ({
   className?: string;
   onClick?: React.MouseEventHandler<HTMLElement>;
 
-  cursor?: CursorStyle;
+  cursor?: CaretStyle;
   overHint?: DropHint;
   selection?: WandSelection;
 }>) => {
@@ -120,7 +123,7 @@ export const OverSpellDropTarget = ({
     );
 
   const merged = useMergedBackgrounds(
-    cursorBackgrounds[cursor]['on'],
+    caretBackgrounds[cursor]['on'],
     ((isDraggingSpell && isOver && canDrop && dropHintBackgrounds[overHint]) ||
       (isDraggingSpell && isOver && dropHintBackgrounds[overHint]) ||
       (isDraggingSpell && dropHintBackgrounds.dragging) ||

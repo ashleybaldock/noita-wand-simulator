@@ -1,4 +1,4 @@
-import { objectFromKeys, objectKeys } from '../../../util';
+import { objectFromKeys, objectKeys } from '../../../../util';
 
 export const backgroundPartLocations = ['before', 'on', 'after'] as const;
 
@@ -15,7 +15,7 @@ const backgroundPartDefinition = {
     cssVar: 'bg-position',
     cssHoverVar: '--bg-position-hover',
   },
-  'cursor': { cssVar: 'cursor', cssHoverVar: '--cursor-hover' },
+  cursor: { cssVar: 'cursor', cssHoverVar: '--cursor-hover' },
 } as const;
 
 export type BackgroundPartName = keyof typeof backgroundPartDefinition;

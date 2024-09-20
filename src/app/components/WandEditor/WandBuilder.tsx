@@ -1,14 +1,11 @@
-import type { LegacyRef } from 'react';
 import { useRef } from 'react';
 import styled from 'styled-components';
 import { WandActionEditor } from './WandActionEditor';
-import { WandBuilderToolbar } from './WandBuilderToolbar';
 import { WandStatsEditor } from './WandStatsEditor';
 import { WandBorder } from './WandBorder';
-import { SaveImageButton } from '../generic';
-import { ExportWikiButton } from '../Export/ExportWikiButton';
 import { WandAlwaysCastEditor } from './WandAlwaysCastEditor';
 import { ZetaEditor } from './ZetaEditor';
+import { ExportOptions } from '../Export';
 
 const MainDiv = styled.div`
   display: flex;
@@ -29,22 +26,6 @@ const ContentDiv = styled.div`
   background-color: var(--color-button-background);
 
   padding: 0.8em 1em 0.6em 1em;
-`;
-
-const CopySpells = styled.div`
-  position: absolute;
-  right: 0;
-  bottom: -0.4em;
-  display: flex;
-  flex-direction: row;
-  justify-content: end;
-  align-items: end;
-  font-family: var(--font-family-noita-default);
-  z-index: var(--zindex-copy-png);
-
-  @media screen and (max-width: 800px) {
-    bottom: -0.8em;
-  }
 `;
 
 const WandActionEditorWrapper = styled.div`
@@ -87,40 +68,24 @@ const StyledZetaEditor = styled(ZetaEditor)`
 `;
 
 export const WandBuilder = () => {
-  const wandRef = useRef<HTMLDivElement>();
-  const spellsRef = useRef<HTMLDivElement>();
+  const wandRef = useRef<HTMLDivElement>(null);
+  const spellsRef = useRef<HTMLDivElement>(null);
 
   return (
-    <>
-      <WandBuilderToolbar />
-      <MainDiv data-name="WandBuilder">
-        <WandBorder data-name="WandBorder">
-          <ContentDiv
-            ref={wandRef as LegacyRef<HTMLDivElement>}
-            className={'saveImageRoot'}
-          >
-            <ColumnsContainer>
-              <StyledWandStatsEditor />
-              <StyledAlwaysCastEditor />
-              <StyledZetaEditor />
-            </ColumnsContainer>
-            <WandActionEditorWrapper
-              ref={spellsRef as LegacyRef<HTMLDivElement>}
-              className={'saveImageRoot'}
-            >
-              <WandActionEditor />
-              <CopySpells>
-                <SaveImageButton
-                  targetRef={spellsRef}
-                  fileName={'spells'}
-                  enabled={true}
-                />
-                <ExportWikiButton />
-              </CopySpells>
-            </WandActionEditorWrapper>
-          </ContentDiv>
-        </WandBorder>
-      </MainDiv>
-    </>
+    <MainDiv data-name="WandBuilder">
+      <WandBorder data-name="WandBorder">
+        <ContentDiv ref={wandRef} className={'saveImageRoot'}>
+          <ColumnsContainer>
+            <StyledWandStatsEditor />
+            <StyledAlwaysCastEditor />
+            <StyledZetaEditor />
+          </ColumnsContainer>
+          <WandActionEditorWrapper ref={spellsRef} className={'saveImageRoot'}>
+            <WandActionEditor />
+            <ExportOptions />
+          </WandActionEditorWrapper>
+        </ContentDiv>
+      </WandBorder>
+    </MainDiv>
   );
 };

@@ -18,6 +18,7 @@ const StickyHeaderTopBar = styled.div`
 const SectionHeaderContainer = styled.div`
   position: sticky;
   top: -0.36em;
+  bottom: 0;
   z-index: var(--zindex-stickyheader-controls, 220);
   display: grid;
   grid-template-columns:
@@ -27,24 +28,10 @@ const SectionHeaderContainer = styled.div`
   grid-template-rows:
     [top line-start] auto
     [line-end title-start buttons-start] 1fr
-    [buttons-end search-start] 1fr
+    [buttons-end search-start] auto
     [search-end title-end bottom];
 
   @media screen and (max-width: 500px) {
-    grid-template-columns:
-      [left
-      title-start
-      search-start
-      buttons-start] auto repeat(6, 1fr) [title-end
-      search-end
-      buttons-end
-      right];
-    grid-template-rows:
-      [top
-      line-start] auto [line-end
-      buttons-start] 3em [buttons-end
-      search-start] 2em [search-end
-      bottom];
     grid-template-columns:
       [left title-start search-start buttons-start] auto repeat(5, 1fr)
       [title-end search-end buttons-end right];

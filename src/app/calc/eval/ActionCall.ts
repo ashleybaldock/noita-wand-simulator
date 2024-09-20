@@ -4,7 +4,7 @@ import type { SpellDeckInfo } from '../spell';
 import type { WandShotId } from './WandShot';
 
 /**
- * Unique ID (within session) to identity an action call
+ * Session-Unique ID to identify an action call
  */
 export type ActionCallSequenceId = number;
 

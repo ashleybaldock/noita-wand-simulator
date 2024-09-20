@@ -1,7 +1,7 @@
 // It would be ideal to be able to switch between the beta and release versions of actions at runtime, but that seems like excessive complexity given the current changes mostly add entirely new spells
 
 import * as main from './__generated__/main/actionIds';
-import { isNotNullOrUndefined } from '../util';
+import { isNotNullOrUndefined, isString } from '../util';
 import type { CustomActionId } from './customActionIds';
 import { customActionIds } from './customActionIds';
 // import * as beta from './__generated__/beta/actionIds';
@@ -13,9 +13,8 @@ export const actionIdSet: Set<ActionId> = new Set([
   ...customActionIds,
 ]);
 
-export function isValidActionId(id: string): id is ActionId {
-  return (actionIdSet as Set<string>).has(id);
-}
+export const isValidActionId = (id: unknown): id is ActionId =>
+  isString(id) && (actionIdSet as Set<string>).has(id);
 
 // TODO - derive this info automatically based on gun_actions
 const withTriggerActionIds = [

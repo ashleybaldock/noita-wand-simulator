@@ -304,6 +304,20 @@ export function forEachIter<T>(
 }
 
 /**
+ * Execute callback for every item in source
+ */
+export function* forEachSideEffectIter<T>(
+  source: IterableIterator<Readonly<T>>,
+  callback: Callback<Readonly<T>>,
+): IterableIterator<Readonly<T>> {
+  let i = 0;
+  for (const s of source) {
+    callback(s, i++);
+    yield s;
+  }
+}
+
+/**
  * Apply a mapping function to each item in source iterable
  * (To map to multiple (or omit) items, use flatMapIter
  */

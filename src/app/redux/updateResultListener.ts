@@ -1,13 +1,12 @@
 import type { Action } from '@reduxjs/toolkit';
-import { isValidActionId } from '../calc/actionId';
 import { clickWand } from '../calc/eval/clickWand';
-import { getSpellById } from '../calc/spells';
 import { isNotNullOrUndefined, compareSequencesIter } from '../util';
 import type { SpellId } from './Wand/spellId';
 import { wandsMatchForSimulation } from './Wand/wand';
 import type { AppStartListening } from './listenerMiddleware';
 import { newResult, newSimulation } from './resultSlice';
 import type { RootState } from './store';
+import { nextSimulationRequestId } from './SimulationRequest';
 
 type ListenerPredicate<T> = (
   action: Action,
@@ -30,7 +29,9 @@ const spellSequenceHasChanged: ListenerPredicate<RootState> = (
       cur,
     );
   console.debug(
-    `alwaysCastSeqChanged? '${changed}', present: '${cur}', previous: '${prev} `,
+    `spellSequenceChanged? '${changed}', present: '${currentState.wand.present.spellIds.join(
+      ',',
+    )}', previous: '${currentState.result.lastSpellIds.join(',')}`,
   );
   return changed;
 };
@@ -50,7 +51,7 @@ const alwaysCastSequenceHasChanged: ListenerPredicate<RootState> = (
       cur,
     );
   console.debug(
-    `alwaysCastSeqChanged? '${changed}', present: '${cur}', previous: '${prev} `,
+    `alwaysCastSeqChanged? '${changed}', present: '${currentState.wand.present.alwaysIds}', previous: '${currentState.result.lastAlwaysIds} `,
   );
   return changed;
 };
@@ -67,7 +68,7 @@ const wandStatsHaveChanged: ListenerPredicate<RootState> = (
     cur = currentState.wand.present.wand,
     changed = !wandsMatchForSimulation(cur, prev);
   console.debug(
-    `wandStatsChanged? ${changed}, present: '${cur}', previous: '${prev} `,
+    `wandStatsChanged? ${changed}, present: '${currentState.wand.present.wand}', previous: '${currentState.result.lastWand} `,
   );
   return changed;
 };
@@ -79,27 +80,13 @@ const zetaIdHasChanged: ListenerPredicate<RootState> = (
   _unused,
   currentState,
 ) => {
-  const prev = currentState.wand.present.zetaId,
-    cur = currentState.result.lastZetaId,
+  const prev = currentState.result.lastZetaId,
+    cur = currentState.wand.present.zetaId,
     changed = prev !== cur;
   console.debug(
-    `zetaIdChanged? ${changed}, present: '${cur}', previous: '${prev}'`,
+    `zetaIdChanged? ${changed}, present: '${currentState.wand.present.zetaId}', previous: '${currentState.result.lastZetaId}'`,
   );
   return changed;
-};
-
-/**
- * @returns true if no simulation has yet been performed since start
- */
-const simulationHasNeverRun: ListenerPredicate<RootState> = (
-  _unused,
-  currentState,
-) => {
-  const hasNeverRun = currentState.result.simulationsSinceStart === 0;
-  console.debug(
-    `simHasNeverRun? '${hasNeverRun}', runsSinceStart: ${currentState.result.simulationsSinceStart}`,
-  );
-  return hasNeverRun;
 };
 
 // TODO also depends on config
@@ -123,7 +110,6 @@ const simulationNeedsUpdate: ListenerPredicate<RootState> = (
     alwaysCastSequenceHasChanged,
     wandStatsHaveChanged,
     zetaIdHasChanged,
-    simulationHasNeverRun,
   ].some((predicate) => predicate(action, currentState, previousState));
 
 const simulationEnabled: ListenerPredicate<RootState> = (
@@ -154,40 +140,35 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
       } = listenerApi.getState().config.config;
 
       const spellIds = [...listenerApi.getState().wand.present.spellIds];
-      const alwaysIds = [...listenerApi.getState().wand.present.alwaysIds];
-      const zetaId = listenerApi.getState().wand.present.zetaId;
-      const wand = listenerApi.getState().wand.present.wand;
+      const alwaysCastSpellIds = [
+        ...listenerApi.getState().wand.present.alwaysIds,
+      ];
+      const zetaSpellId = listenerApi.getState().wand.present.zetaId;
+      const wand = { ...listenerApi.getState().wand.present.wand };
+
+      const simulationRequestId = nextSimulationRequestId();
 
       console.debug('dispatch: newSimulation');
       listenerApi.dispatch(
         newSimulation({
+          simulationRequestId,
           wandState: {
             spellIds,
-            alwaysIds,
-            zetaId,
+            alwaysIds: alwaysCastSpellIds,
+            zetaId: zetaSpellId,
             wand,
           },
         }),
       );
 
-      const spells = spellIds.flatMap((id) =>
-        isNotNullOrUndefined(id) && isValidActionId(id) ? getSpellById(id) : [],
-      );
-      const alwaysCastSpells = alwaysIds.flatMap((id) =>
-        isNotNullOrUndefined(id) && isValidActionId(id) ? getSpellById(id) : [],
-      );
-      const zetaSpell =
-        isNotNullOrUndefined(zetaId) && isValidActionId(zetaId)
-          ? getSpellById(zetaId)
-          : undefined;
-
       /* TODO spellsWithUses */
       const task = listenerApi.fork(async (/*forkApi*/) =>
         clickWand({
+          simulationRequestId,
           wand,
-          spells,
-          alwaysCastSpells,
-          zetaSpell,
+          spellIds,
+          alwaysCastSpellIds,
+          zetaSpellId,
           req_enemies,
           req_projectiles,
           req_hp,

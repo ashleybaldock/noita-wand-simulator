@@ -16,7 +16,7 @@ export type DropHint = (typeof dropHints)[number];
 // `${type}.${dragging}.${isOver}.${canDrop}.${hint}`;
 
 export const dropHintBackgrounds: Record<DropHint, Background> = {
-  none: { ...emptyBackground() },
+  none: emptyBackground(),
   dragging: {
     ...emptyBackground(),
     before: {
@@ -24,21 +24,21 @@ export const dropHintBackgrounds: Record<DropHint, Background> = {
       'background-repeat': [`no-repeat`],
       'background-size': [`var(--cursor-container-width)`],
       'background-position': [`center top`],
-      'cursor': [''],
+      cursor: [''],
     },
     on: {
       'background-image': [`var(--sprite-cursor-caret-spell-drophint-top)`],
       'background-repeat': [`no-repeat`],
       'background-size': [`var(--cursor-container-width)`],
       'background-position': [`center top`],
-      'cursor': [''],
+      cursor: [''],
     },
     after: {
       'background-image': [`var(--sprite-cursor-caret-spell-drophint-top)`],
       'background-repeat': [`no-repeat`],
       'background-size': [`var(--cursor-container-width)`],
       'background-position': [`center top`],
-      'cursor': [''],
+      cursor: [''],
     },
   },
   forbidden: { ...emptyBackground() },
@@ -66,7 +66,7 @@ export const dropHintBackgrounds: Record<DropHint, Background> = {
         `center center`,
         `center`,
       ],
-      'cursor': ['w-resize'],
+      cursor: ['w-resize'],
     },
   },
   shiftright: {
@@ -91,7 +91,7 @@ export const dropHintBackgrounds: Record<DropHint, Background> = {
         `center center`,
         `center`,
       ],
-      'cursor': ['e-resize'],
+      cursor: ['e-resize'],
     },
   },
 };
@@ -111,14 +111,14 @@ export const selectHintBackgrounds: Record<DropHint, Background> = {
       'background-repeat': [`no-repeat`],
       'background-size': [`var(--cursor-container-width)`],
       'background-position': [`center`],
-      'cursor': [],
+      cursor: [],
     },
     after: {
       'background-image': ['var(--sprite-cursor-caret-select-mid-toleft)'],
       'background-repeat': [`no-repeat`],
       'background-size': [`var(--cursor-container-width)`],
       'background-position': [`center`],
-      'cursor': [],
+      cursor: [],
     },
   },
   shiftright: {
@@ -128,7 +128,7 @@ export const selectHintBackgrounds: Record<DropHint, Background> = {
       'background-repeat': [`no-repeat`],
       'background-size': [`var(--cursor-container-width)`],
       'background-position': [`center`],
-      'cursor': [],
+      cursor: [],
     },
   },
 };

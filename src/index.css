@@ -47,7 +47,7 @@
   /* --color-toggle-chosen: var(--color-emphasis); */
   --color-toggle-chosen: rgb(207, 207, 206);
   --color-toggle-alternatives: var(--color-base);
-  --color-toggle-hover: #ffffbb;
+  --color-toggle-hover: #ffe4a4;
 
   --color-numeric-hover: rgb(200 200 178 / 0.3);
   --color-numeric-focus: rgb(200 200 178 / 0.8);
@@ -66,7 +66,7 @@
   --bd-radius-arrow: 0 0 0 20px/0 0 0 23px;
   --color-arrow-action: #ffbf00;
   --color-arrow-action-text: #dddddd;
-  --color-arrow-action-highlight: #ffe29c;
+  --color-arrow-action-highlight: #c28900;
 
   --color-arrow-copy-nodraw: #ffbf00;
   --color-arrow-copy: #ffbf00;

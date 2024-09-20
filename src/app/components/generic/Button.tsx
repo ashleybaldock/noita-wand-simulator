@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { isString, noop } from '../../util';
 import { tipToAttributes } from '../Tooltips/tooltipId';
 import type { Tip } from '../Tooltips/tooltipId';
+import type { HotkeyConfig } from '../Tooltips/HotkeyHint';
 import { HotkeyHint } from '../Tooltips/HotkeyHint';
 import type { SpriteName } from '../../calc/sprite';
 import { useIcon } from '../../calc/sprite';
@@ -69,12 +70,13 @@ const StyledButton = styled.button<{
   color: var(--color-button);
   background-color: var(--color-button-background);
   background-repeat: no-repeat;
-  border: 0.16em solid var(--color-button-border);
+  border: var(--border-thickness) solid var(--color-button-border);
   font-family: var(--font-family-noita-default);
   font-size: 14px;
   font-variant: small-caps;
   cursor: pointer;
 
+  --border-thickness: 0.16em;
   --background-size: 1.4em;
   --pad-img-side: 2.2em;
   --pad-other-side: 0.6em;
@@ -125,12 +127,19 @@ const StyledButton = styled.button<{
   --pad-img-side: calc(var(--background-size) + 1.9em);
   --pad-other-side: 1em;
 
+  --pad-top: 0.5em;
+  --pad-bottom: 0.4em;
+  --fsize: 0.6rem;
+  --min-height: calc(var(--pad-top) + var(--pad-bottom) + var(--fsize) + (var(--border-thickness) * 2));
+
+  min-height: var(--min-height);
+  
   margin: 0;
   cursor: pointer;
-  padding-top: 0.5em;
-  padding-bottom: 0.4em;
-  font-size: 0.6em;
-  line-height: 1.1em;
+  padding-top: var(--pad-top);
+  padding-bottom: var(--pad-bottom);
+  font-size: var(--fsize);
+  line-height: 1.1;
   border-radius: 0.2em;
   background-size: auto calc(var(--background-size) * 3.2);
   color: var(--color-emphasis);
@@ -223,7 +232,7 @@ export const Button = ({
   onClick?: () => void;
   onMouseOver?: () => void;
   onMouseOut?: () => void;
-  hotkeys?: string;
+  hotkeys?: string | HotkeyConfig;
   icon?: SpriteName | 'none';
   imgAfter?: boolean;
   imgOnly?: ImgOnlyOption;
@@ -240,7 +249,9 @@ export const Button = ({
    */
   imgDataUrl?: string;
 }>) => {
-  useHotkeys(hotkeys, onClick, { enabled: hotkeys !== '' });
+  useHotkeys(isString(hotkeys) ? hotkeys : hotkeys.hotkeys, onClick, {
+    enabled: hotkeys !== '',
+  });
   const iconPath = icon === 'none' ? '' : useIcon(icon);
   return (
     <StyledButton
@@ -263,7 +274,11 @@ export const Button = ({
       ) : (
         children
       )}
-      {<HotkeyHint hotkeys={hotkeys} position={minimal ? 'above' : 'below'} />}
+      {isString(hotkeys) ? (
+        <HotkeyHint hotkeys={hotkeys} position={minimal ? 'above' : 'below'} />
+      ) : (
+        <HotkeyHint {...hotkeys} />
+      )}
     </StyledButton>
   );
 };

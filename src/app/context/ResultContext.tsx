@@ -15,6 +15,7 @@ export type ResultContextState = {
 };
 const defaultResultState: ResultContextState = {
   result: {
+    simulationRequestId: 0,
     shots: [],
     reloadTime: undefined,
     endConditions: [],

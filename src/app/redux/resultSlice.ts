@@ -5,9 +5,18 @@ import { useSliceWrapper } from './useSlice';
 import type { SpellId } from './Wand/spellId';
 import type { Wand } from './Wand/wand';
 import { defaultWand } from './Wand/presets';
+import {
+  getEmptySimulationStats,
+  nextSimulationRequestId,
+  type SimulationRequestId,
+  type SimulationStats,
+} from './SimulationRequest';
+import { isNotNullOrUndefined } from '../util';
 
 export type ResultState = {
-  simulationsSinceStart: number;
+  stats: SimulationStats;
+  lastSimulationRequested: SimulationRequestId | null;
+  lastSimulationCompleted: SimulationRequestId | null;
   last: SerializedClickWandResult;
   lastWand: Wand;
   lastSpellIds: SpellId[];
@@ -16,8 +25,11 @@ export type ResultState = {
 };
 
 const initialState: ResultState = {
-  simulationsSinceStart: 0,
+  stats: getEmptySimulationStats(),
+  lastSimulationRequested: null,
+  lastSimulationCompleted: null,
   last: {
+    simulationRequestId: 0,
     shots: [],
     reloadTime: undefined,
     endConditions: [],
@@ -45,9 +57,11 @@ export const resultSlice = createSlice({
       state,
       {
         payload: {
+          simulationRequestId,
           wandState: { spellIds, alwaysIds, zetaId, wand },
         },
       }: PayloadAction<{
+        simulationRequestId: SimulationRequestId;
         wandState: {
           spellIds: SpellId[];
           alwaysIds: SpellId[];
@@ -56,10 +70,15 @@ export const resultSlice = createSlice({
         };
       }>,
     ) => {
-      console.log('simulation started:', spellIds);
+      console.log(
+        `new simulation requested, requestId: ${simulationRequestId} , spells:`,
+        spellIds,
+      );
 
-      state.lastAlwaysIds = alwaysIds;
+      state.lastSimulationRequested = simulationRequestId;
+
       state.lastSpellIds = spellIds;
+      state.lastAlwaysIds = alwaysIds;
       state.lastZetaId = zetaId;
       state.lastWand = wand;
     },
@@ -73,8 +92,19 @@ export const resultSlice = createSlice({
     ) => {
       // console.log('serialized result:', result);
 
+      if (
+        isNotNullOrUndefined(state.lastSimulationCompleted) &&
+        state.lastSimulationCompleted >= result.simulationRequestId
+      ) {
+        console.warn(
+          `Igoring result for stale simulation request (id:${result.simulationRequestId})`,
+        );
+        state.stats.failed += 1;
+        return;
+      }
+
+      state.lastSimulationCompleted = result.simulationRequestId;
       state.last = result;
-      state.simulationsSinceStart = state.simulationsSinceStart + 1;
     },
   },
 });
