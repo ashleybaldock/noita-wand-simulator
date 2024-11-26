@@ -105,6 +105,13 @@ config = {
       'before': '',
       'after': '',
     },
+    'extraEntities':
+    {
+      'src': 'data/scripts/gun/gun_actions.lua',
+      'dst':'src/app/calc/__generated__/main/extraEntities.ts',
+      'before': '',
+      'after': '',
+    },
   },
 }
 
@@ -378,6 +385,34 @@ export type SpellSpritePath = typeof spellSprites[number][1];
 
 
 
+def processExtraEntities(src, dst, before = '', after = ''):
+
+  with open(src) as inFile:
+    content = inFile.read()
+
+  content = preProcess(content)
+
+  actionIdAndRelatedExtraEntitiesPattern = r'^\s+{\s*id\s*=\s*\"(\w+)\"[^}]+?^\s*related_extra_entities\s*=\s*\"(.+?)\"'
+
+  actionIdAndActionExtraEntitiesPattern = r'^\s+{\s*id\s*=\s*\"(\w+)\"[^}]+?^\s*c\.extra_entities\s*=\s*\"(.+?)\"'
+
+  relatedMatches = dict(re.findall(actionIdAndRelatedExtraEntitiesPattern, content, re.MULTILINE))
+  actionMatches = dict(re.findall(actionIdAndRelatedExtraEntitiesPattern, content, re.MULTILINE))
+
+  with open(dst, 'w') as outFile:
+    outFile.write("""/* Auto-generated file */
+
+export const extraEntities = [
+""" + ",\n".join(f'  [\'{actionId}\', \'{extra}\']' for actionId, extra in iter(relatedMatches.items())) + """,
+""" + ",\n".join(f'  [\'{actionId}\', \'{extra}\']' for actionId, extra in iter(actionMatches.items())) + """,
+] as const;
+
+export type SpellSpriteName = typeof spellSprites[number][0];
+export type SpellSpritePath = typeof spellSprites[number][1];
+""")
+
+
+
 
 def processSpells(src, dst, before = '', after = ''):
   with open(src) as inFile:
@@ -418,6 +453,7 @@ process = {
   'unlocks': processUnlocks,
   'spells': processSpells,
   'sprites': processSprites,
+  'extraEntities': processExtraEntities,
 }
 
 for branch, tasks in config.items():
