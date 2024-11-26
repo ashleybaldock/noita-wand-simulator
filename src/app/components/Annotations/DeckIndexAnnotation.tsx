@@ -9,6 +9,7 @@ import { isNotNullOrUndefined, isNumber } from '../../util';
 
 const IndexDiv = styled.div`
   pointer-events: none;
+  user-select: none;
   position: absolute;
   bottom: -2px;
   right: 2px;

@@ -10,13 +10,11 @@ const primary: BackgroundPartName = 'background-image';
 const mapProperties = (
   mapFn: (name: BackgroundPartName) => string,
   properties: Record<BackgroundPartName, readonly unknown[]>,
-) => {
-  return objectEntries(properties).reduce(
+) =>
+  objectEntries(properties).reduce(
     (acc, [k, v]) => ({ ...acc, [mapFn(k)]: v }),
     {},
   );
-};
-
 const combineParts = (parts: BackgroundPart[]): BackgroundPart => {
   const compress = (parts: BackgroundPart[]): BackgroundPart =>
     parts.reduce((acc: BackgroundPart, cur: BackgroundPart) => {

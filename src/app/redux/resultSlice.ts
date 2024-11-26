@@ -70,7 +70,7 @@ export const resultSlice = createSlice({
         };
       }>,
     ) => {
-      console.log(
+      console.debug(
         `new simulation requested, requestId: ${simulationRequestId} , spells:`,
         spellIds,
       );

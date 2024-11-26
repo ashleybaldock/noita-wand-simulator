@@ -15,10 +15,11 @@ import {
   TotalsColumnHeading,
 } from './ColumnHeading';
 import { Fragment } from 'react';
-import type { WandShot, WandShotId } from '../../../calc/eval/WandShot';
-import { useResult } from '../../../redux';
+import type { WandShotId } from '../../../calc/eval/WandShot';
+import { useShotLookup } from '../../../redux';
 import type { ShotProjectile } from '../../../calc/eval/ShotProjectile';
 import { ShotTableProjectile } from './ShotTableProjectile';
+import type { WandShotResult } from '../../../calc/eval/clickWand';
 
 const StyledShotTable = styled.div`
   --nesting-offset: var(--sizes-nesting-offset, 16px);
@@ -117,12 +118,12 @@ export const ShotTableHeadings = ({
   shotId: WandShotId;
   nestingPrefix?: Array<number>;
 }) => {
-  const { shotLookup } = useResult();
+  const shotLookup = useShotLookup();
   const shot = shotLookup.get(shotId);
   if (!shot) {
     return null;
   }
-  const { castState, manaDrain, triggerType, projectiles } = shot;
+  const { triggerType, projectiles } = shot;
 
   return (
     <Headings>
@@ -182,15 +183,13 @@ export const ShotTableHeadings = ({
 };
 
 export const ShotTableColumns = ({
-  shotIndex,
   shotId,
   nestingPrefix = [],
 }: {
-  shotIndex: number;
   shotId: WandShotId;
   nestingPrefix?: Array<number>;
 }) => {
-  const { shotLookup } = useResult();
+  const shotLookup = useShotLookup();
   const shot = shotLookup.get(shotId);
   if (!shot) {
     return null;
@@ -231,7 +230,6 @@ export const ShotTableColumns = ({
             {isNotNullOrUndefined(triggerShot) && (
               <ShotTableColumns
                 shotId={triggerShot.id}
-                shotIndex={index}
                 nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
               />
             )}
@@ -247,7 +245,7 @@ export const ShotTable = ({
   shot,
 }: {
   shotIndex: number;
-  shot: WandShot;
+  shot: WandShotResult;
 }) => {
   return (
     <StyledShotTable>
@@ -255,10 +253,7 @@ export const ShotTable = ({
         shotIndex={shotIndex}
         shotId={shot.id}
       ></ShotTableHeadings>
-      <ShotTableColumns
-        shotIndex={shotIndex}
-        shotId={shot.id}
-      ></ShotTableColumns>
+      <ShotTableColumns shotId={shot.id}></ShotTableColumns>
     </StyledShotTable>
   );
 };

@@ -121,13 +121,13 @@ const StyledValue = styled.span`
   width: 10em;
 `;
 const StyledUtilisationPlaceholder = styled.span`
-  width: 5em;
+  width: 0;
 `;
 const StyledUtilisation = styled.span`
   text-align: left;
   flex 1 1 auto;
   white-space: nowrap;
-  width: 5em;
+  width: 0;
 `;
 
 export const WandStatsEditor = ({ className = '' }: { className?: string }) => {

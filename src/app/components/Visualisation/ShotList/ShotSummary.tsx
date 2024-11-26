@@ -3,7 +3,7 @@ import { Duration } from '../Duration';
 import { NBSP, isNotNullOrUndefined } from '../../../util';
 import type { StopReason } from '../../../types';
 import { useConfig } from '../../../redux';
-import type { WandShot } from '../../../calc/eval/WandShot';
+import type { WandShotResult } from '../../../calc/eval/clickWand';
 
 const SummaryItem = styled.div`
   line-height: 1.7em;
@@ -49,13 +49,13 @@ export const ShotSummary = styled(
     shots,
     endReason,
     totalRechargeTime,
-    totalFiringTime = 30,
+    totalFiringTime = 0,
     totalManaDrain,
     className,
   }: {
     pending: boolean;
     endReason: StopReason;
-    shots: WandShot[];
+    shots: WandShotResult[];
     totalRechargeTime?: number;
     totalFiringTime?: number;
     totalManaDrain?: number;
@@ -73,8 +73,10 @@ export const ShotSummary = styled(
       <StickyContainer className={className}>
         <SummaryItem>
           {`Fired${NBSP}`}
-          <Emphasis>{`${shots?.length ?? '??'}${NBSP}shots`}</Emphasis>
-          {totalFiringTime ? (
+          <Emphasis>{`${shots?.length ?? '??'}${NBSP}shot${
+            shots?.length === 1 ? '' : 's'
+          }`}</Emphasis>
+          {totalFiringTime > 0 ? (
             <>
               {`${NBSP}in${NBSP}`}
               <Emphasis>
@@ -87,7 +89,9 @@ export const ShotSummary = styled(
         </SummaryItem>
         <SummaryItem>
           {`Shot cycles per second:${NBSP}`}
-          <Emphasis>{totalFiringTime / shots.length}</Emphasis>
+          <Emphasis>
+            {shots.length > 0 ? totalFiringTime / shots.length : 0}
+          </Emphasis>
         </SummaryItem>
         {isNotNullOrUndefined(totalRechargeTime) && (
           <SummaryItem>

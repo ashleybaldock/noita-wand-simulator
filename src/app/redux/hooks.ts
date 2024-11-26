@@ -352,14 +352,9 @@ const selectResult = createSelector(
   (resultState) => resultState,
 );
 export const useResult = () => {
-  const result = useAppSelector(selectResult);
-  const { shots } = result;
-  const shotLookupMap = useMemo(
-    () => new Map(shots.map((shot) => [shot.id, shot])),
-    [shots],
-  );
-  return {
-    ...result,
-    shotLookup: shotLookupMap,
-  };
+  return useAppSelector(selectResult);
+};
+export const useShotLookup = () => {
+  const { shots } = useAppSelector(selectResult);
+  return useMemo(() => new Map(shots.map((shot) => [shot.id, shot])), [shots]);
 };

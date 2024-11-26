@@ -1,7 +1,7 @@
 import type { Stack } from './Stack';
 import { createStack } from './Stack';
 import { takeArray } from './iterTools';
-import { isNotNullOrUndefined, sequentialId } from './util';
+import { isNotNullOrUndefined, sequentialId, tee } from './util';
 import type { TreeNode } from './TreeNode';
 
 /**
@@ -31,17 +31,19 @@ import type { TreeNode } from './TreeNode';
  * Assumes that the tree is acyclic, excepting only
  * direct links from children to parent
  */
-type MapTreeId = number;
+export type MapTreeId = number;
 
 /**
  * Record of a tree node with links replaced with IDs
  */
-type MapTreeNode<T> = {
+export type MapTreeNode<T> = {
   value: T;
   id: MapTreeId;
   parentId?: MapTreeId;
   childIds: MapTreeId[];
 };
+
+export type SerialisedMapTree<T> = Map<MapTreeId, MapTreeNode<T>>;
 
 /**
  * Wrapper around MapTreeNode<T>
@@ -59,9 +61,11 @@ export type MapTree<T> = {
  *
  * TODO - this could expose a generator for doing ordered traversals
  */
-export const mapTreeToMapTree = <T extends object>(
+export const mapTreeToMap = <T extends object>(
   rootNode?: TreeNode<T>,
-): MapTree<T> => {
+): Map<MapTreeId, MapTreeNode<T>> => {
+  console.log(rootNode);
+
   const nextNodeId = sequentialId<MapTreeId>();
 
   const mapTree = new Map<MapTreeId, MapTreeNode<T>>();
@@ -72,17 +76,17 @@ export const mapTreeToMapTree = <T extends object>(
       nodeIdMap = new Map<T, MapTreeId>(),
       traversalStack: Stack<TreeNode<T>> = createStack();
     isNotNullOrUndefined(currentNode);
-    currentNode = traversalStack.pop(/* O(1) */), currentNodeId = nextNodeId()
+    currentNode = traversalStack.pop(/* O️(1) */), currentNodeId = nextNodeId()
   ) {
-    nodeIdMap.set(/* WC O(log n) */ currentNode.value, nextNodeId());
+    nodeIdMap.set(/* WC O️(log n) */ currentNode.value, currentNodeId);
 
     /* For any node that has a parent, that parent ought to
      * already be in the mapping (else how did we get here..?) */
     const parentId =
       (currentNode.parent &&
-        nodeIdMap.get(/* WC O(log n) */ currentNode.parent.value)) ??
+        nodeIdMap.get(/* WC O️(log n) */ currentNode.parent.value)) ??
       undefined;
-    mapTree.set(/* WC O(log n) */ currentNodeId, {
+    mapTree.set(/* WC O️(log n) */ currentNodeId, {
       id: currentNodeId,
       value: currentNode.value,
       parentId: parentId,
@@ -91,18 +95,22 @@ export const mapTreeToMapTree = <T extends object>(
 
     /* Update parent's children to include this node */
     if (isNotNullOrUndefined(parentId)) {
-      const parent = mapTree.get(/* WC O(log n) */ parentId);
-      parent?.childIds.push(/* O(1) */ currentNodeId);
+      const parent = mapTree.get(/* WC O️(log n) */ parentId);
+      parent?.childIds.push(/* O️(1) */ currentNodeId);
     }
     currentNode.children.forEach((child) =>
-      traversalStack.push(/* O(1) */ child),
+      traversalStack.push(/* O️(1︎) */ child),
     );
   }
 
-  return wrapMapNode(mapTree);
+  return tee.log(mapTree);
 };
 
-const wrapMapNode = <T>(
+/*
+ * Turn serialised tree traversal back into
+ * something resembling a tree
+ */
+export const mappedTreeToTreeMap = <T>(
   mapTree: Map<MapTreeId, MapTreeNode<T>>,
 ): MapTree<T> => {
   const makeSubTree = ({
@@ -110,6 +118,7 @@ const wrapMapNode = <T>(
     childIds,
     parentId,
   }: MapTreeNode<T>): MapTree<T> => {
+    console.log(value, childIds, parentId);
     return {
       value,
       // TODO memoize this

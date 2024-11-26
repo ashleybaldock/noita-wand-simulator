@@ -82,7 +82,7 @@ export const WandBuilder = () => {
           </ColumnsContainer>
           <WandActionEditorWrapper ref={spellsRef} className={'saveImageRoot'}>
             <WandActionEditor />
-            <ExportOptions />
+            <ExportOptions wandRef={wandRef} spellsRef={spellsRef} />
           </WandActionEditorWrapper>
         </ContentDiv>
       </WandBorder>

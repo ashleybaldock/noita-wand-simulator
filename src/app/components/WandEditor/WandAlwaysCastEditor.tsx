@@ -9,10 +9,10 @@ import { isNotNullOrUndefined } from '../../util';
 
 const SpellSlots = styled.ul`
   --grid-layout-gap: 0px;
-  --bsize-spell: 38px;
+  --bsize-spell: 32px;
 
   margin: 0;
-  padding: 0 16px;
+  padding: 0;
   background-color: var(--color-wand-editor-bg);
 
   @media screen and (max-width: 500px) {
@@ -22,9 +22,7 @@ const SpellSlots = styled.ul`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 2px 0;
-  padding-left: 0;
-  padding: 0 4px;
-  width: min-content;
+  width: auto;
 
   justify-content: center;
   align-items: center;

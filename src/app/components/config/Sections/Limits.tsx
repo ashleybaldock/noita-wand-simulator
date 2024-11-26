@@ -53,7 +53,7 @@ export const LimitsConfigSection = () => {
         </WrappedYesNoConfigToggle>
         <WrappedYesNoConfigToggle
           data-toggle="showChargeUsage"
-          configToggle={'infiniteSpells'}
+          configToggle={'showChargeUsage'}
         >
           <Col>
             <span>Highlight spells that consume charges</span>

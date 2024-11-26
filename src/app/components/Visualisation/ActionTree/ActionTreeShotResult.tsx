@@ -4,6 +4,7 @@ import type { ActionCall } from '../../../calc/eval/ActionCall';
 import type { WandShotResult } from '../../../calc/eval/clickWand';
 import type { TreeNode } from '../../../util/TreeNode';
 import { isNotNullOrUndefined } from '../../../util';
+import { mappedTreeToTreeMap } from '../../../util/MapTree';
 
 export const ActionTreeShotResultMainDiv = styled.div`
   --arrow-hz: 40px;
@@ -86,8 +87,14 @@ const ActionTreeComponent = ({ node }: { node: TreeNode<ActionCall> }) => {
       data-twig={isTwig}
       data-trigger={isTriggerParent}
       data-wrap={causedWrap}
+      data-deckindex={node?.value.deckIndex}
+      data-seqid={node?.value.sequenceId}
+      data-recursion={node?.value.recursion}
+      data-iteration={node?.value.iteration}
+      data-source={node?.value.source}
+      data-dontdraw={node?.value.dont_draw_actions ?? false}
     >
-      <WandActionCall data-name="AcTreeNodeAction" actionCall={node.value} />
+      <WandActionCall data-name="AcTreeActionCall" actionCall={node.value} />
       {hasChildren && (
         <ChildrenDiv
           data-name="AcTreeChildren"
@@ -107,7 +114,7 @@ export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
   return (
     <ActionTreeShotResultMainDiv data-name="ActionTreeShotResultMainDiv">
       {shot.actionCallTrees.map((n, index) => (
-        <ActionTreeComponent node={n} key={index} />
+        <ActionTreeComponent node={mappedTreeToTreeMap(n)} key={index} />
       ))}
     </ActionTreeShotResultMainDiv>
   );

@@ -8,6 +8,7 @@ import { ShotTable } from './ShotTable';
 import { ShotSummary } from './ShotSummary';
 import { SectionToolbar } from '../../SectionToolbar';
 import type { WandShot } from '../../../calc/eval/WandShot';
+import type { WandShotResult } from '../../../calc/eval/clickWand';
 
 const SectionDiv = styled.div`
   display: flex;
@@ -45,7 +46,7 @@ export const ShotList = ({
 }: {
   simulationRunning: boolean;
   endReasons: StopReason[];
-  shots: WandShot[];
+  shots: WandShotResult[];
   totalRechargeTime: number | undefined;
 }) => {
   const shotListRef = useRef<HTMLDivElement>(null);

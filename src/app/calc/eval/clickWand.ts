@@ -21,11 +21,14 @@ import { triggerConditionFor } from '../trigger';
 import { isValidActionCallSource } from '../spellTypes';
 import type { StopReason } from '../../types';
 import type { WandEvent } from './wandEvent';
-import { isNotNullOrUndefined, type ChangeFields } from '../../util';
-import { nextActionCallSequenceId, type ActionCall } from './ActionCall';
-import { getShot, nextWandShotId, type WandShot } from './WandShot';
-import type { MapTree } from '../../util/MapTree';
-import { mapTreeToMapTree } from '../../util/MapTree';
+import { isNotNullOrUndefined } from '../../util';
+import type { ChangeFields } from '../../util';
+import { nextActionCallSequenceId } from './ActionCall';
+import type { ActionCall } from './ActionCall';
+import { getShot, nextWandShotId } from './WandShot';
+import type { WandShot } from './WandShot';
+import type { SerialisedMapTree } from '../../util/MapTree';
+import { mapTreeToMap } from '../../util/MapTree';
 import type { TreeNode } from '../../util/TreeNode';
 import { AlwaysCastIndicies } from '../../redux/WandIndex';
 import type { SimulationRequestId } from '../../redux/SimulationRequest';
@@ -54,7 +57,7 @@ export type ClickWandResult = {
   repeatCount: number;
 };
 
-export type EvalTree = MapTree<ActionCall>;
+export type EvalTree = SerialisedMapTree<ActionCall>;
 
 export type WandShotResult = ChangeFields<
   WandShot,
@@ -73,7 +76,7 @@ export type SerializedClickWandResult = ChangeFields<
 const serializeSpell = (spell: SpellDeckInfo) => ({
   id: spell?.id,
   deck_index: spell?.deck_index,
-  permanently_attached: spell?.permanently_attached,
+  permanently_attached: spell?.permanently_attached ?? false,
 });
 const maybeSerializeSpell = (spell?: SpellDeckInfo) =>
   isNotNullOrUndefined(spell) ? serializeSpell(spell) : undefined;
@@ -96,7 +99,7 @@ const serializeClickWandResult = (
         serializeSpell(wrapInto),
       ),
     })),
-    actionCallTrees: shot.actionCallTrees.map(mapTreeToMapTree),
+    actionCallTrees: shot.actionCallTrees.map(mapTreeToMap),
   })),
 });
 
@@ -307,12 +310,12 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
         break;
       }
       case 'OnActionPlayed': {
-        const { spell, c: castState, playing_permanent_card } = payload;
+        const { spell /*, c: castState, playing_permanent_card*/ } = payload;
         state.lastPlayed = spell;
         break;
       }
       case 'OnPlayPermanentCard': {
-        const { actionId, c: castState } = payload;
+        const { actionId /*, c: castState*/ } = payload;
         if (isValidActionId(actionId)) {
           state.alwaysCastsPlayed.push(actionId);
         }
@@ -414,7 +417,7 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
       }
       // These are used currently only by requirements
       case 'EntityGetInRadiusWithTag': {
-        const { x, y, radius, tag } = payload;
+        const { /*x, y, radius,*/ tag } = payload;
         if (tag === 'homing_target') {
           return state.req_enemies ? new Array(15) : [];
         } else if (tag === 'projectile') {
@@ -423,7 +426,7 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
         break;
       }
       case 'EntityGetFirstComponent': {
-        const { entity_id, component } = payload;
+        const { /*entity_id,*/ component } = payload;
         if (component === 'DamageModelComponent') {
           return 'IF_HP'; // just has to be non-null
         }
@@ -441,21 +444,21 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
         break;
       }
       case 'GlobalsGetValue': {
-        const { key, defaultValue } = payload;
+        const { key /*, defaultValue*/ } = payload;
         if (key === 'GUN_ACTION_IF_HALF_STATUS') {
           return `${state.req_half ? 1 : 0}`;
         }
         break;
       }
       case 'HasFlagPersistent': {
-        const { flag } = payload;
+        // const { flag } = payload;
         // TODO link this to the unlocks config screen
         return true;
-        break;
+        // break;
       }
       // Used by Zeta
       case 'EntityGetAllChildren': {
-        const { actionId, entityId } = payload;
+        // const { actionId, entityId } = payload;
         break;
       }
       default:
@@ -511,7 +514,7 @@ export const clickWand = ({
   /* No spells makes for an easy simulation */
   if (spells.filter((s) => s != null).length === 0) {
     result.endConditions.push('noSpells');
-    return result;
+    return serializeClickWandResult(result);
   }
 
   const endObservation = beginObservation(result, state);

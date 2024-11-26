@@ -23,6 +23,7 @@ function _SaveImageButton({
 
   const handleClick = useCallback(() => {
     if (targetRef.current === null) {
+      console.log('SaveImageButton click with no targetRef');
       return;
     }
 
@@ -37,6 +38,7 @@ function _SaveImageButton({
       cacheBust: true,
     })
       .then((dataUrl) => {
+        console.log(dataUrl);
         const link = document.createElement('a');
         link.download = `${fileName}.png`;
         link.href = dataUrl;

@@ -80,7 +80,6 @@ const Wrapper = styled.fieldset<{ $valid: boolean }>`
 
 const NumberInput = styled.input`
   width: 100%;
-  height: 2em;
   flex: 1 1 100%;
   background-color: #000;
 
@@ -90,49 +89,50 @@ const NumberInput = styled.input`
   font: inherit;
   font-size: 1em;
   text-align: left;
-  padding: 0.22em 0.4em 0 0.4em;
+  padding: 0.28ch 0.5ch 0 0.5ch;
   line-height: 1;
-  margin: 0;
+  margin: 0 0.5ch;
   display: flex;
   align-self: center;
   box-sizing: border-box;
 
   &:focus-visible {
+    outline: 1.6px inset #d18811;
+    border-radius: 7px;
+    outline-offset: -1px;
+    box-shadow: 0 1px 0 1px #704d14, 1px 0 0 1px #7c4f05, -1px 0 0 1px #a7782c,
+      0 -1px 0 1px #ffb53e;
   }
 `;
 
 const NumericInputButton = styled(Button)`
-  flex: 1 1;
+  --padding-sides: 1em;
+  --hover-radius: 4px;
   aspect-ratio: 1;
-  align-self: center;
   height: 2em;
+  color: white;
   font: inherit;
+  font-size: 1em;
+  line-height: 1;
   background-color: black;
   background-position: center center;
-  color: white;
+  background-size: 44%;
+  border: 1px solid #444;
   border-radius: 0;
-  display: flex;
   box-sizing: border-box;
+  flex: 1 1;
+  display: flex;
+  align-self: center;
   align-content: baseline;
   align-items: center;
   justify-content: center;
-  padding-top: 0.1em;
-  --padding-sides: 0.6em;
+  padding-top: 0.6em;
   padding-left: var(--padding-sides);
   padding-right: var(--padding-sides);
   margin: 0;
-  border: 1px solid #444;
-  padding-top: 0.6em;
-  --padding-sides: 1em;
-  font-size: 1em;
-  line-height: 1;
-  background-size: 44%;
   z-index: 8;
 
-  --hover-radius: 4px;
-
-  ${(props) => `
-  ${
+  ${(props) =>
     props.disabled
       ? ''
       : `
@@ -143,40 +143,17 @@ const NumericInputButton = styled(Button)`
     border-radius: var(--hover-radius);
     scale: 1.08;
   }
-  `
-  }
-  ${
-    props.disabled
-      ? ''
-      : `
   &:first-of-type:hover {
     border-radius: var(--bdr) var(--hover-radius) var(--hover-radius) var(--bdr);
   }
-  `
-  }
-  ${
-    props.disabled
-      ? ''
-      : `
   &:last-of-type:hover {
     border-radius: var(--hover-radius) var(--bdr) var(--bdr) var(--hover-radius);
-  }
-  `
-  }
-
-  ${
-    props.disabled
-      ? ''
-      : `
   &:active {
     border-color: #666;
     box-shadow: 0 0 1px 2px var(--color-numeric-hover);
     z-index: 10;
     border-radius: var(--hover-radius);
     scale: 1.04;
-  }
-  `
-  }
   `}
 `;
 const ButtonMin = styled(NumericInputButton)``;

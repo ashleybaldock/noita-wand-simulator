@@ -22,20 +22,29 @@ const SectionHeaderContainer = styled.div`
   z-index: var(--zindex-stickyheader-controls, 220);
   display: grid;
   grid-template-columns:
-    [left title-start] 3fr
-    [title-end search-start buttons-start] repeat(6, 1fr)
-    [search-end buttons-end right];
+    [left
+    title-start] 3fr [title-end
+    search-start buttons-start] repeat(6, 1fr) [search-end buttons-end
+    right];
   grid-template-rows:
-    [top line-start] auto
-    [line-end title-start buttons-start] 1fr
-    [buttons-end search-start] auto
-    [search-end title-end bottom];
+    [top
+    line-start] auto [line-end
+    title-start buttons-start] 1fr [buttons-end
+    search-start] auto [search-end title-end
+    bottom];
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 600px) {
     grid-template-columns:
-      [left title-start search-start buttons-start] auto repeat(5, 1fr)
-      [title-end search-end buttons-end right];
-    grid-template-rows: [top line-start] auto [line-end buttons-start] 3em [buttons-end search-start] 2em [search-end bottom];
+      [left
+      title-start search-start buttons-start] auto repeat(5, 1fr)
+      [title-end search-end buttons-end
+      right];
+    grid-template-rows:
+      [top
+      line-start] auto [line-end
+      buttons-start] 3em [buttons-end
+      search-start] 2em [search-end
+      bottom];
   }
 
   filter: var(--filter-floating-shadow);

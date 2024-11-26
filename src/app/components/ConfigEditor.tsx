@@ -166,7 +166,7 @@ export const ConfigEditor = () => {
       <ConfigDiv>
         <ConfigToggleGroup title={'Visualisation'}>
           <ConfigToggle field={'castShowChanged'}>
-            {'Hide Unaltered Cast State'}
+            {'Hide Unaltered State Variables'}
           </ConfigToggle>
           <ConfigToggle field={'showDurationsInFrames'}>
             {'Show Durations in Frames'}
