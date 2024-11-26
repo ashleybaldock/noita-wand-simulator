@@ -37,5 +37,5 @@ export const WrapAnnotation = ({
     return null;
   }
 
-  return <Wrapped>{wasLastToBeCalledBeforeWrapNr}</Wrapped>;
+  return <Wrapped data-name="Wrapped">{wasLastToBeCalledBeforeWrapNr}</Wrapped>;
 };

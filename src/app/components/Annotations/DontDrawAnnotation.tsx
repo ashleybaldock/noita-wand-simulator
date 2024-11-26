@@ -29,5 +29,5 @@ export const DontDrawAnnotation = (
     return null;
   }
 
-  return <DontDrawDiv data-name="DontDrawAnnotation">D</DontDrawDiv>;
+  return <DontDrawDiv data-name="DrawDisabled">D</DontDrawDiv>;
 };

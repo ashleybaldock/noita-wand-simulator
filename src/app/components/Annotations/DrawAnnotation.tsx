@@ -37,7 +37,7 @@ export const DrawAnnotation = ({
   const delta = drawAfter - drawBefore;
 
   return (
-    <Wrapped data-name="DrawAnnotation">{`${drawBefore} >> Draw(${
+    <Wrapped data-name="Draw">{`${drawBefore} >> Draw(${
       delta > 0 ? `-1|+${delta}` : delta < 0 ? `-${delta}|+0` : `-1|+1`
     }) >> ${drawAfter}`}</Wrapped>
   );

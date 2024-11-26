@@ -1,6 +1,20 @@
 import { createGlobalStyle } from 'styled-components';
 import { DEFAULT_SIZE, NESTING_OFFSET } from './util';
 
+import 'react';
+
+/* Allow style={{}} prop objects to contain custom CSS
+ * variables prefixed with '--data-', e.g.
+ *
+ *  <Foo style={{'--data-name': 'some-name', '--data-count': 42}} />
+ *
+ */
+declare module 'react' {
+  interface CSSProperties {
+    [key: `--data-${string}`]: string | number;
+  }
+}
+
 /* see also index.css
  * --[flags][category]-[area]-[css-property]
  * --[u]size-spell-margin-right

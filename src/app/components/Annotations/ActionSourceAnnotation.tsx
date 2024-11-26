@@ -42,7 +42,7 @@ export const ActionSourceAnnotation = ({
   return (
     <SourceDiv
       colors={sourceDisplayMap[source][1]}
-      data-name="ActionSourceAnnotation"
+      data-name="ActionSource"
       data-source={source}
       data-content={sourceDisplayMap[source][0]}
     >

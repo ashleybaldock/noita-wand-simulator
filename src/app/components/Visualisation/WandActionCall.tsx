@@ -44,7 +44,7 @@ export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
         {...actionCall}
         dont_draw_actions={actionCall.dont_draw_actions}
       />
-      <DrawAnnotation />
+      <DrawAnnotation drawBefore={1} drawAfter={1} />
       <DeckIndexAnnotation deckIndex={actionCall.deckIndex} />
       <FriendlyFireAnnotation />
       <WrapAnnotation

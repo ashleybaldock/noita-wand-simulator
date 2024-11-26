@@ -229,7 +229,7 @@ export const ConfigEditor = () => {
             {'Show Spells in Categories'}
           </ConfigToggle>
           <ConfigToggle field={'showBeta'}>{'Show Beta Spells'}</ConfigToggle>
-          <ConfigToggle field={'showExtra'}>{'Show Beta Spells'}</ConfigToggle>
+          <ConfigToggle field={'showExtra'}>{'Show Debug Spells'}</ConfigToggle>
         </ConfigToggleGroup>
         <ConfigToggleGroup
           title={'Unlockable Spells'}

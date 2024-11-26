@@ -62,14 +62,14 @@ export const DeckIndexAnnotation = ({
   if (showDeckIndexes) {
     if (isSpecialWandIndex(wandIndex)) {
       return (
-        <SpecialIndexDiv data-name="SpecialDeckIndexAnnotation">
+        <SpecialIndexDiv data-name="SpecialDeckIndex">
           {wandIndex}
         </SpecialIndexDiv>
       );
     }
     if (isAlwaysCastIndex(wandIndex)) {
       return (
-        <AlwaysIndexDiv data-name="AlwaysCastAnnotation">
+        <AlwaysIndexDiv data-name="AlwaysCast">
           <span>{a}</span>
           <span>{c}</span>
           <span>{n}</span>
@@ -78,7 +78,7 @@ export const DeckIndexAnnotation = ({
     }
     if (isNotNullOrUndefined(deckIndex)) {
       return (
-        <IndexDiv data-name="DeckIndexAnnotation">
+        <IndexDiv data-name="DeckIndex">
           {isNumber(deckIndex) ? deckIndex + 1 : deckIndex}
         </IndexDiv>
       );

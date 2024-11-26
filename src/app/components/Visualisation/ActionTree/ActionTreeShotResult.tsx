@@ -67,7 +67,15 @@ const ChildrenDiv = styled.div`
   border-bottom: 0;
 `;
 
-const ActionTreeComponent = ({ node }: { node: TreeNode<ActionCall> }) => {
+const ActionTreeComponent = ({
+  node,
+  level,
+  triggerLevel: currentTriggerLevel,
+}: {
+  node: TreeNode<ActionCall>;
+  level: number;
+  triggerLevel: number;
+}) => {
   const childCount = node.children.length;
   const hasChildren = childCount > 0;
   const isLeaf = childCount === 0;
@@ -75,6 +83,7 @@ const ActionTreeComponent = ({ node }: { node: TreeNode<ActionCall> }) => {
   const isTriggerParent = isNotNullOrUndefined(
     node.value.wasLastToBeCalledBeforeBeginTrigger,
   );
+  const triggerLevel = currentTriggerLevel + (isTriggerParent ? 1 : 0);
   const causedWrap = isNotNullOrUndefined(
     node.value.wasLastToBeDrawnBeforeWrapNr,
   );
@@ -85,7 +94,9 @@ const ActionTreeComponent = ({ node }: { node: TreeNode<ActionCall> }) => {
       childCount={childCount}
       data-leaf={isLeaf}
       data-twig={isTwig}
+      data-level={level}
       data-trigger={isTriggerParent}
+      data-triggerlevel={triggerLevel}
       data-wrap={causedWrap}
       data-deckindex={node?.value.deckIndex}
       data-seqid={node?.value.sequenceId}
@@ -93,6 +104,7 @@ const ActionTreeComponent = ({ node }: { node: TreeNode<ActionCall> }) => {
       data-iteration={node?.value.iteration}
       data-source={node?.value.source}
       data-dontdraw={node?.value.dont_draw_actions ?? false}
+      style={{ '--data-triggerlevel': triggerLevel, '--data-level': level }}
     >
       <WandActionCall data-name="AcTreeActionCall" actionCall={node.value} />
       {hasChildren && (
@@ -102,7 +114,12 @@ const ActionTreeComponent = ({ node }: { node: TreeNode<ActionCall> }) => {
           data-trigger={isTriggerParent}
         >
           {node.children.map((childNode, index) => (
-            <ActionTreeComponent node={childNode} key={index} />
+            <ActionTreeComponent
+              node={childNode}
+              key={index}
+              level={level + 1}
+              triggerLevel={triggerLevel}
+            />
           ))}
         </ChildrenDiv>
       )}
@@ -111,10 +128,17 @@ const ActionTreeComponent = ({ node }: { node: TreeNode<ActionCall> }) => {
 };
 
 export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
+  const level = 0;
+  const triggerLevel = 0;
   return (
     <ActionTreeShotResultMainDiv data-name="ActionTreeShotResultMainDiv">
       {shot.actionCallTrees.map((n, index) => (
-        <ActionTreeComponent node={mappedTreeToTreeMap(n)} key={index} />
+        <ActionTreeComponent
+          node={mappedTreeToTreeMap(n)}
+          key={index}
+          level={level + 1}
+          triggerLevel={triggerLevel}
+        />
       ))}
     </ActionTreeShotResultMainDiv>
   );

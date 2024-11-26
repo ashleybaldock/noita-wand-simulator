@@ -63,13 +63,10 @@ export const RecursionAnnotation = (props: {
   return (
     <>
       {showRecursion && (
-        <RecursionDiv data-name="RecursionAnnotation">{recursion}</RecursionDiv>
+        <RecursionDiv data-name="Recursion">{recursion}</RecursionDiv>
       )}
       {showIteration && (
-        <IterationDiv
-          data-name="IterationAnnotation"
-          $offset={showRecursion ?? false}
-        >
+        <IterationDiv data-name="Iteration" $offset={showRecursion ?? false}>
           {iteration}
         </IterationDiv>
       )}

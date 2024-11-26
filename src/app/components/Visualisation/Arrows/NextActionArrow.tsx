@@ -48,9 +48,7 @@ const LineDiv = styled.div<{
   }
 `;
 
-const ArrowHeadDiv = styled.div<{
-  size: number;
-}>`
+const ArrowHeadDiv = styled.div`
   position: absolute;
   top: calc(50% - (var(--ahead-h) * 0.5));
   height: var(--ahead-h);
@@ -77,8 +75,8 @@ export const NextActionArrow = ({
 }) => {
   return (
     <>
-      <LineDiv size={size} swept={swept} />
-      <ArrowHeadDiv size={size} />
+      <LineDiv size={size} swept={swept} data-name="ArrowLine" />
+      <ArrowHeadDiv data-name="ArrowHead" />
     </>
   );
 };
