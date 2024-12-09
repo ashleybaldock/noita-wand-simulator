@@ -7,8 +7,7 @@ import { SaveImageButton, ScrollWrapper } from '../../generic';
 import { ShotTable } from './ShotTable';
 import { ShotSummary } from './ShotSummary';
 import { SectionToolbar } from '../../SectionToolbar';
-import type { WandShot } from '../../../calc/eval/WandShot';
-import type { WandShotResult } from '../../../calc/eval/clickWand';
+import type { WandShotResult } from '../../../calc/eval/WandShot';
 
 const SectionDiv = styled.div`
   display: flex;
@@ -19,24 +18,16 @@ const SectionDiv = styled.div`
   padding: 0px 20px 0 10px;
 `;
 
-const SaveButtons = styled.div`
-  position: absolute;
-  left: 200px;
-  top: 37px;
-`;
-
 const StyledConfigButton = styled(ConfigButton)`
   grid-row: buttons;
   grid-column: -2;
 `;
 
-const ShotListToolbar = () => {
-  return (
-    <SectionToolbar title={'Simulation: Shot List'}>
-      <StyledConfigButton />
-    </SectionToolbar>
-  );
-};
+const StyledSaveImageButton = styled(SaveImageButton)`
+  justify-self: end;
+  grid-row: buttons;
+  grid-column: -3;
+`;
 
 export const ShotList = ({
   simulationRunning,
@@ -57,16 +48,16 @@ export const ShotList = ({
   );
   return (
     <>
-      <ShotListToolbar />
+      <SectionToolbar title={'Simulation: Shot List'}>
+        <StyledSaveImageButton
+          name={'Shot List'}
+          targetRef={shotListRef}
+          fileName={'shot_list'}
+          enabled={shots.length > 0}
+        />
+        <StyledConfigButton />
+      </SectionToolbar>
       <ScrollWrapper>
-        <SaveButtons>
-          <SaveImageButton
-            name={'Shot List'}
-            targetRef={shotListRef}
-            fileName={'shot_list'}
-            enabled={shots.length > 0}
-          />
-        </SaveButtons>
         <SectionDiv
           ref={shotListRef as LegacyRef<HTMLDivElement>}
           className={'saveImageRoot'}

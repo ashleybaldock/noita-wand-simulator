@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react';
-import type { ClickWandResult } from '../calc/eval/clickWand';
+import type { ClickWandResult } from '../calc/eval/ClickWandResult';
 import type { SpellId } from '../redux/Wand/spellId';
 import type { Wand } from '../redux/Wand/wand';
 import { defaultWand } from '../redux/Wand/presets';

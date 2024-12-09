@@ -6,7 +6,7 @@ import {
   FriendlyFireAnnotation,
 } from '../Annotations/';
 import { WandAction, StyledWandActionBorder } from '../Spells/WandAction';
-import { getSpellById } from '../../calc/spells';
+import { getSpellByActionId } from '../../calc/spells';
 import type { ShotProjectile } from '../../calc/eval/ShotProjectile';
 
 /*
@@ -36,7 +36,7 @@ export const WandActionProjectile = ({
       <NextActionArrow />
       <WandAction
         spellType={
-          (projectile.spell && getSpellById(projectile.spell.id).type) ??
+          (projectile.spell && getSpellByActionId(projectile.spell.id).type) ??
           'projectile'
         }
         spellId={projectile.spell?.id}

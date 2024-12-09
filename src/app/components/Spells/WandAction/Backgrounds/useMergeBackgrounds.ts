@@ -1,20 +1,10 @@
-import { manglePropName, objectEntries, objectKeys } from '../../../../util';
-import {
-  emptyBackgroundPart,
-  type BackgroundPart,
-  type BackgroundPartName,
-} from './BackgroundPart';
+import type { CSSProperties } from 'react';
+import { objectEntries, objectKeys } from '../../../../util';
+import { emptyBackgroundPart } from './BackgroundPart';
+import type { BackgroundPart, BackgroundPartName } from './BackgroundPart';
 
-const primary: BackgroundPartName = 'background-image';
+const primary: BackgroundPartName = 'backgroundImage';
 
-const mapProperties = (
-  mapFn: (name: BackgroundPartName) => string,
-  properties: Record<BackgroundPartName, readonly unknown[]>,
-) =>
-  objectEntries(properties).reduce(
-    (acc, [k, v]) => ({ ...acc, [mapFn(k)]: v }),
-    {},
-  );
 const combineParts = (parts: BackgroundPart[]): BackgroundPart => {
   const compress = (parts: BackgroundPart[]): BackgroundPart =>
     parts.reduce((acc: BackgroundPart, cur: BackgroundPart) => {
@@ -41,12 +31,21 @@ const combineParts = (parts: BackgroundPart[]): BackgroundPart => {
   return compress(normalisePartLengths(parts));
 };
 
+const mergeProperties = (background: BackgroundPart): CSSProperties => {
+  return objectEntries(background).reduce(
+    (acc, [k, v]) => ({
+      ...acc,
+      [k]: k === 'cursor' ? v[v.length - 1] ?? '' : v.join(','),
+    }),
+    {},
+  );
+};
+
 export const useMergedBackgrounds = (
   ...parts: BackgroundPart[]
-): { [key: string]: string[] } =>
-  mapProperties(manglePropName, combineParts(parts));
+): CSSProperties => mergeProperties(combineParts(parts));
 
-export const useMergedBackgroundVars = (
-  varMapFn: (property: BackgroundPartName) => string,
-  ...parts: BackgroundPart[]
-): { [key: string]: string[] } => mapProperties(varMapFn, combineParts(parts));
+// export const useMergedBackgroundVars = (
+//   varMapFn: (property: BackgroundPartName) => string,
+//   ...parts: BackgroundPart[]
+// ): { [key: string]: string[] } => mapProperties(varMapFn, combineParts(parts));

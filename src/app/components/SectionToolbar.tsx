@@ -68,6 +68,13 @@ const GridSectionHeader = styled(SectionHeader)`
 
   @media screen and (max-width: 500px) {
   }
+  font-size: 15px;
+  font-weight: normal;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 0 0.2em 15.1em 0 / 0 0 64.4em 0;
+  border-left-style: hidden;
+  padding: 0.3em 1ch 0.2em 0.6ch;
 `;
 
 export const SectionToolbar = ({

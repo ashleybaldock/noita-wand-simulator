@@ -25,70 +25,70 @@ export const caretBackgrounds: Record<CaretStyle, Background> = {
   'caret-hover': {
     ...emptyBackground(),
     before: {
-      'background-image': [
+      backgroundImage: [
         `var(--sprite-cursor-caret-hint-top)`,
         `var(--sprite-cursor-caret-hint-bottom)`,
         `var(--sprite-cursor-caret-hint-line)`,
       ],
-      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
-      'background-size': [
+      backgroundRepeat: [`no-repeat`, `no-repeat`, `repeat-y`],
+      backgroundSize: [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center bottom`, `center center`],
+      backgroundPosition: [`center top`, `center bottom`, `center center`],
       cursor: ['text'],
     },
   },
   caret: {
     ...emptyBackground(),
     before: {
-      'background-image': [
+      backgroundImage: [
         `var(--sprite-cursor-caret-top)`,
         `var(--sprite-cursor-caret-line)`,
       ],
-      'background-repeat': [`no-repeat`, `repeat-y`],
-      'background-size': [
+      backgroundRepeat: [`no-repeat`, `repeat-y`],
+      backgroundSize: [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center center`],
+      backgroundPosition: [`center top`, `center center`],
       cursor: ['text'],
     },
   },
   'spell-over': {
     ...emptyBackground(),
     before: {
-      'background-image': [
+      backgroundImage: [
         `var(--sprite-cursor-caret-spell-top)`,
         `var(--sprite-cursor-caret-spell-bottom)`,
         `var(--sprite-cursor-caret-spell-over-line)`,
       ],
-      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
-      'background-size': [
+      backgroundRepeat: [`no-repeat`, `no-repeat`, `repeat-y`],
+      backgroundSize: [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center bottom`, `center center`],
+      backgroundPosition: [`center top`, `center bottom`, `center center`],
       cursor: [''],
     },
   },
   'caret-select': {
     ...emptyBackground(),
     before: {
-      'background-image': [
+      backgroundImage: [
         `var(--sprite-cursor-carat-select-top)`,
         `var(--sprite-cursor-carat-select-bottom)`,
         `var(--sprite-cursor-select-over-line)`,
       ],
-      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
-      'background-size': [
+      backgroundRepeat: [`no-repeat`, `no-repeat`, `repeat-y`],
+      backgroundSize: [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center bottom`, `center center`],
+      backgroundPosition: [`center top`, `center bottom`, `center center`],
       cursor: ['text'],
     },
   },

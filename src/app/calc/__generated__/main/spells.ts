@@ -3684,7 +3684,7 @@ const actions: Spell[] = [
             
             setMana(mana - (data.mana ?? 0))
           } else {
-            OnNotEnoughManaForAction()
+            OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
           }
         }
@@ -3727,7 +3727,7 @@ const actions: Spell[] = [
             
             setMana(mana - (data.mana ?? 0))
           } else {
-            OnNotEnoughManaForAction()
+            OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
           }
         }
@@ -3770,7 +3770,7 @@ const actions: Spell[] = [
             
             setMana(mana - (data.mana ?? 0))
           } else {
-            OnNotEnoughManaForAction()
+            OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
           }
         }
@@ -3813,7 +3813,7 @@ const actions: Spell[] = [
             
             setMana(mana - (data.mana ?? 0))
           } else {
-            OnNotEnoughManaForAction()
+            OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
           }
         }
@@ -3856,7 +3856,7 @@ const actions: Spell[] = [
             
             setMana(mana - (data.mana ?? 0))
           } else {
-            OnNotEnoughManaForAction()
+            OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
           }
         }
@@ -3899,7 +3899,7 @@ const actions: Spell[] = [
             
             setMana(mana - (data.mana ?? 0))
           } else {
-            OnNotEnoughManaForAction()
+            OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
           }
         }
@@ -3942,7 +3942,7 @@ const actions: Spell[] = [
             
             setMana(mana - (data.mana ?? 0))
           } else {
-            OnNotEnoughManaForAction()
+            OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
           }
         }

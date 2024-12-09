@@ -34,6 +34,8 @@ const uiSpriteDefinition = [
   ['icon.chevron.l2x', 'var(--icon-arrow-l-chev2x)'],
   ['icon.chevron.r2x', 'var(--icon-arrow-r-chev2x)'],
 
+  ['icon.arrowhead.r', `var(--icon-arrowhead-right)`],
+
   ['icon.trigger', 'var(--icon-trigger)'],
   ['icon.trigger.disabled', 'var(--icon-trigger-disabled)'],
   ['icon.timer', 'var(--icon-timer)'],
@@ -49,8 +51,10 @@ const uiSpriteDefinition = [
   ['icon.spread', `url('/data/wand/icon_spread_degrees.png')`],
   ['icon.tshape', `url('/data/icons/t_shape.png')`],
   ['icon.bounces', `url('/data/wand/icon_bounces.png')`],
-  ['icon.speedmulti', `url('/data/wand/icon_speed_multiplier.png')`],
-  ['icon.speedbonus', `url('/data/wand/icon_speed_bonus.png')`],
+  ['icon.speed.base', `url('/data/wand/icon_speed_base.png')`],
+  ['icon.speed.initial', `url('/data/wand/icon_speed_initial.png')`],
+  ['icon.speed.multi', `url('/data/wand/icon_speed_multiplier.png')`],
+  ['icon.speed.bonus', `url('/data/wand/icon_speed_bonus.png')`],
   ['icon.stain.wet', `url('/data/status/wet.png')`],
   ['icon.stain.oiled', `url('/data/status/oiled.png')`],
   ['icon.stain.bloody', `url('/data/status/bloody.png')`],

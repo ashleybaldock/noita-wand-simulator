@@ -1,17 +1,13 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { SerializedClickWandResult } from '../calc/eval/clickWand';
 import { useSliceWrapper } from './useSlice';
 import type { SpellId } from './Wand/spellId';
 import type { Wand } from './Wand/wand';
 import { defaultWand } from './Wand/presets';
-import {
-  getEmptySimulationStats,
-  nextSimulationRequestId,
-  type SimulationRequestId,
-  type SimulationStats,
-} from './SimulationRequest';
+import type { SimulationRequestId, SimulationStats } from './SimulationRequest';
+import { getEmptySimulationStats } from './SimulationRequest';
 import { isNotNullOrUndefined } from '../util';
+import type { SerializedClickWandResult } from '../calc/eval/clickWand';
 
 export type ResultState = {
   stats: SimulationStats;

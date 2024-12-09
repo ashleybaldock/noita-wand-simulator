@@ -299,11 +299,22 @@ export const toUrl = (path: string) => {
 export const capitalize = <T extends string>(s: T) =>
   (s[0].toUpperCase() + s.slice(1)) as Capitalize<typeof s>;
 
-export const manglePropName = (propName: string) =>
+export type CamelCase<T> = {
+  [Property in keyof T as KebabToCamel<Property & string>]: T[Property];
+};
+
+export type KebabToCamel<T extends string> =
+  T extends `${infer Head}-${infer Tail}`
+    ? `${Head}${Capitalize<KebabToCamel<Tail>>}`
+    : T;
+
+export const manglePropName = <T extends string>(
+  propName: T,
+): KebabToCamel<T> =>
   propName
     .split('-')
     .map((p, i) => (i === 0 ? p : capitalize(p)))
-    .join('');
+    .join('') as KebabToCamel<T>;
 
 // https://stackoverflow.com/a/7616484
 export function hashString(s: string) {

@@ -17,7 +17,7 @@ export const spellByIdMap = Object.fromEntries(
   ),
 ) as ActionIdToSpellMap;
 
-export function getSpellById(id: Readonly<ActionId>) {
+export function getSpellByActionId(id: Readonly<ActionId>) {
   return spellByIdMap[id];
 }
 

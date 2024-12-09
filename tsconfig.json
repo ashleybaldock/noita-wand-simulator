@@ -23,9 +23,9 @@
       "build",
       "data",
       "data_base",
-      "public",
-      "scripts",
-      "images",
+      "public/*",
+      "scripts/*",
+      "images/*",
       "imgsrc",
       "temp/*"
     ]

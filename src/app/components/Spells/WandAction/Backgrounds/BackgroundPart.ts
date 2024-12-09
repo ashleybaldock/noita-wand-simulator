@@ -5,13 +5,13 @@ export const backgroundPartLocations = ['before', 'on', 'after'] as const;
 export type BackgoundPartLocation = (typeof backgroundPartLocations)[number];
 
 const backgroundPartDefinition = {
-  'background-image': { cssVar: 'bg-image', cssHoverVar: '--bg-image-hover' },
-  'background-repeat': {
+  backgroundImage: { cssVar: 'bg-image', cssHoverVar: '--bg-image-hover' },
+  backgroundRepeat: {
     cssVar: 'bg-repeat',
     cssHoverVar: '--bg-repeat-hover',
   },
-  'background-size': { cssVar: 'bg-size', cssHoverVar: '--bg-size-hover' },
-  'background-position': {
+  backgroundSize: { cssVar: 'bg-size', cssHoverVar: '--bg-size-hover' },
+  backgroundPosition: {
     cssVar: 'bg-position',
     cssHoverVar: '--bg-position-hover',
   },

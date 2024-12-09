@@ -15,6 +15,7 @@ import {
 import { observer } from './wandObserver';
 import type { UnlockCondition } from '../unlocks';
 import type { AlwaysCastWandIndex } from '../../redux/WandIndex';
+import {serializeSpell} from './serialize';
 
 export type WandId = '__WAND__';
 
@@ -22,8 +23,8 @@ export function SetProjectileConfigs(): void {
   observer.onEvent({ name: 'SetProjectileConfigs', payload: {} });
 }
 
-export function OnNotEnoughManaForAction(): void {
-  observer.onEvent({ name: 'OnNotEnoughManaForAction', payload: {} });
+export function OnNotEnoughManaForAction(mana_required: number,mana_available: number,spell:Spell ): void {
+  observer.onEvent({ name: 'OnNotEnoughManaForAction', payload: {mana_required,mana_available,spell: serializeSpell(spell)} });
 }
 
 export function RegisterGunShotEffects(recoil_knockback: number): void {
@@ -360,7 +361,7 @@ export function OnActionPlayed(
 ): void {
   observer.onEvent({
     name: 'OnActionPlayed',
-    payload: { spell, c, playing_permanent_card },
+    payload: { spell: serializeSpell(spell), c, playing_permanent_card },
   });
 }
 
@@ -389,17 +390,27 @@ export const OnSetDontDraw = (): void => {
 };
 
 /* Each time the wand 'wraps' naturally */
+export const OnWrap = (deck: readonly Spell[], hand: readonly Spell[],  discard: readonly Spell[]): void => {
+  observer.onEvent({
+    name: 'OnWrap',
+    payload: {
+      deck: deck.map<SpellDeckInfo>(serializeSpell)
+      hand: hand.map<SpellDeckInfo>(serializeSpell)
+      discard: discard.map<SpellDeckInfo>(serializeSpell)
+    },
+  });
+};
+export const OnCantWrap = (): void => {
+  observer.onEvent({
+    name: 'OnCantWrap',
+    payload: {}
+  });
+};
 export const OnMoveDiscardedToDeck = (discarded: readonly Spell[]): void => {
   observer.onEvent({
     name: 'OnMoveDiscardedToDeck',
     payload: {
-      discarded: discarded.map<SpellDeckInfo>(
-        ({ id, deck_index, permanently_attached }) => ({
-          id,
-          deck_index,
-          permanently_attached,
-        }),
-      ),
+      discarded: discarded.map<SpellDeckInfo>(serializeSpell)
     },
   });
 };
@@ -413,7 +424,7 @@ export function OnActionCalled(
 ): void {
   observer.onEvent({
     name: 'OnActionCalled',
-    payload: { source, spell, c, recursion, iteration },
+    payload: { source, spell: serializeSpell(spell), c, recursion, iteration },
   });
 }
 
@@ -429,7 +440,7 @@ export function OnActionFinished(
     name: 'OnActionFinished',
     payload: {
       source,
-      spell,
+      spell: serializeSpell(spell),
       c,
       recursion,
       iteration,

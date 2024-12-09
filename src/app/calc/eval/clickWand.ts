@@ -1,7 +1,6 @@
 import type { Spell, SpellDeckInfo } from '../spell';
-import { getSpellById } from '../spells';
+import { getSpellByActionId } from '../spells';
 import { observer } from './wandObserver';
-import type { Gun } from '../gun';
 import {
   _add_card_to_deck,
   _clear_deck,
@@ -14,116 +13,22 @@ import {
   state_from_game,
 } from '../gun';
 import { isValidEntityPath, entityToActions } from '../entityLookup';
-import type { ActionId } from '../actionId';
 import { isIterativeActionId, isValidActionId } from '../actionId';
 import { defaultGunActionState } from '../defaultActionState';
 import { triggerConditionFor } from '../trigger';
 import { isValidActionCallSource } from '../spellTypes';
-import type { StopReason } from '../../types';
 import type { WandEvent } from './wandEvent';
-import { isNotNullOrUndefined } from '../../util';
-import type { ChangeFields } from '../../util';
 import { nextActionCallSequenceId } from './ActionCall';
 import type { ActionCall } from './ActionCall';
 import { getShot, nextWandShotId } from './WandShot';
-import type { WandShot } from './WandShot';
-import type { SerialisedMapTree } from '../../util/MapTree';
-import { mapTreeToMap } from '../../util/MapTree';
+import type { WandShot, WandShotResult } from './WandShot';
 import type { TreeNode } from '../../util/TreeNode';
 import { AlwaysCastIndicies } from '../../redux/WandIndex';
 import type { SimulationRequestId } from '../../redux/SimulationRequest';
-import type { SpellId } from '../../redux/Wand/spellId';
-
-export type ClickWandResult = {
-  /**
-   * Ordered list of WandShots
-   *
-   * Each of which has:
-   *
-   * - a list of projectiles
-   * - a tree representing the action call sequence
-   * - a set containing action call counts
-   *
-   */
-  simulationRequestId: SimulationRequestId;
-  shots: WandShot[];
-  reloadTime: number | undefined;
-  endConditions: StopReason[];
-  elapsedTime: number;
-  wraps: number;
-  shotCount: number;
-  reloadCount: number;
-  refreshCount: number;
-  repeatCount: number;
-};
-
-export type EvalTree = SerialisedMapTree<ActionCall>;
-
-export type WandShotResult = ChangeFields<
-  WandShot,
-  {
-    actionCallTrees: EvalTree[];
-  }
->;
-
-export type SerializedClickWandResult = ChangeFields<
-  ClickWandResult,
-  {
-    shots: WandShotResult[];
-  }
->;
-
-const serializeSpell = (spell: SpellDeckInfo) => ({
-  id: spell?.id,
-  deck_index: spell?.deck_index,
-  permanently_attached: spell?.permanently_attached ?? false,
-});
-const maybeSerializeSpell = (spell?: SpellDeckInfo) =>
-  isNotNullOrUndefined(spell) ? serializeSpell(spell) : undefined;
-
-const serializeClickWandResult = (
-  result: ClickWandResult,
-): SerializedClickWandResult => ({
-  ...result,
-  shots: result.shots.map((shot) => ({
-    ...shot,
-    projectiles: shot.projectiles.map((projectile) => ({
-      ...projectile,
-      spell: maybeSerializeSpell(projectile.spell),
-      proxy: maybeSerializeSpell(projectile.proxy),
-    })),
-    actionCallGroups: shot.actionCalls.map((actionCallGroup) => ({
-      ...actionCallGroup,
-      spell: serializeSpell(actionCallGroup.spell),
-      wrappingInto: (actionCallGroup.wrappingInto ?? []).map((wrapInto) =>
-        serializeSpell(wrapInto),
-      ),
-    })),
-    actionCallTrees: shot.actionCallTrees.map(mapTreeToMap),
-  })),
-});
-
-export type ClickWandSetup = {
-  simulationRequestId: SimulationRequestId;
-  wand: Readonly<Gun>;
-  spellIds: Readonly<SpellId>[];
-  alwaysCastSpellIds: Readonly<SpellId>[];
-  zetaSpellId?: Readonly<SpellId>;
-  req_enemies: boolean;
-  req_projectiles: boolean;
-  req_hp: boolean;
-  req_half: boolean;
-  rng_frameNumber: number;
-  rng_worldSeed: number;
-  wand_available_mana: number;
-  wand_cast_delay: number;
-  endSimulationOnShotCount: number;
-  endSimulationOnReloadCount: number;
-  endSimulationOnRefreshCount: number;
-  // endSimulationOnRepeatCount: number;
-  limitSimulationIterations: number;
-  limitSimulationDuration: number;
-};
+import { serializeClickWandResult } from './serialize';
+import type { ChangeFields } from '../../util';
+import type { ClickWandResult } from './ClickWandResult';
+import type { ClickWandSetup } from './ClickWandSetup';
 
 type StartingState = {
   mana?: number;
@@ -154,7 +59,7 @@ type ClickWandState = {
   lastCalledAction: ActionCall | undefined;
   lastDrawnAndCalledAction: ActionCall | undefined;
   lastPlayed: Readonly<Spell> | undefined;
-  alwaysCastsPlayed: ActionId[];
+  alwaysCastsPlayed: SpellDeckInfo[];
   calledActions: ActionCall[];
   validSourceCalledActions: ActionCall[];
   currentNode: TreeNode<ActionCall> | undefined;
@@ -225,12 +130,14 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
           ) {
             throw Error(`missing entity: ${entity_filename}`);
           }
-          sourceAction = getSpellById(entityToActions(entity_filename)?.[0]);
+          sourceAction = getSpellByActionId(
+            entityToActions(entity_filename)?.[0],
+          );
         }
 
         if (
           entity_filename !==
-          getSpellById(sourceAction.id).related_projectiles?.[0]
+          getSpellByActionId(sourceAction.id).related_projectiles?.[0]
         ) {
           if (!entityToActions(entity_filename)) {
             throw Error(`missing entity: ${entity_filename}`);
@@ -240,7 +147,9 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
           if (entityToActions(entity_filename)[0] !== sourceAction.id) {
             // this probably means another action caused this projectile (like ADD_TRIGGER)
             proxy = sourceAction;
-            sourceAction = getSpellById(entityToActions(entity_filename)?.[0]);
+            sourceAction = getSpellByActionId(
+              entityToActions(entity_filename)?.[0],
+            );
           }
         }
 
@@ -315,16 +224,22 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
         break;
       }
       case 'OnPlayPermanentCard': {
-        const { actionId /*, c: castState*/ } = payload;
+        const { actionId, always_cast_index /*, c: castState*/ } = payload;
         if (isValidActionId(actionId)) {
-          state.alwaysCastsPlayed.push(actionId);
+          state.alwaysCastsPlayed.push({ id: actionId, always_cast_index });
         }
+        break;
+      }
+      case 'OnWrap': {
+        result.wraps += 1;
+        state.currentShot.wraps.push(result.wraps);
+        break;
+      }
+      case 'OnCantWrap': {
         break;
       }
       case 'OnMoveDiscardedToDeck': {
         const { discarded } = payload;
-        result.wraps += 1;
-        state.currentShot.wraps.push(result.wraps);
         if (state.lastDrawnAndCalledAction) {
           state.lastDrawnAndCalledAction.wasLastToBeDrawnBeforeWrapNr =
             result.wraps;
@@ -341,14 +256,15 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
         const { source, spell /*, c: castState */, recursion, iteration } =
           payload;
         const { id, deck_index, recursive } = spell;
-        console.log(`OnActionCalled gunMana: ${gunMana}`);
+        console.debug(`OnActionCalled gunMana: ${gunMana}`);
         state.lastCalledAction = {
           _typeName: 'ActionCall',
           sequenceId: nextActionCallSequenceId(),
           spell: {
             id: spell.id,
             deck_index: spell.deck_index,
-            permanently_attached: spell.permanently_attached,
+            permanently_attached: spell.permanently_attached ?? false,
+            always_cast_index: spell.always_cast_index,
           },
           source,
           currentMana: gunMana,
@@ -391,7 +307,7 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
         break;
       }
       case 'StartReload': {
-        console.log('increment reload count');
+        console.debug('increment reload count');
         // actionId = payload.actionId;
         result.reloadCount = result.reloadCount + 1;
         result.reloadTime = payload.reload_time;
@@ -488,14 +404,14 @@ export const clickWand = ({
 }: ClickWandSetup): SerializedClickWandResult => {
   const getElapsedTime = startTimer();
 
-  const spells = spellIds.flatMap((id) =>
-    isValidActionId(id) ? getSpellById(id) : [],
+  const spells = spellIds.map((id) =>
+    isValidActionId(id) ? getSpellByActionId(id) : null,
   );
   const alwaysCastSpells = alwaysCastSpellIds.flatMap((id) =>
-    isValidActionId(id) ? getSpellById(id) : [],
+    isValidActionId(id) ? getSpellByActionId(id) : [],
   );
   const zetaSpell = isValidActionId(zetaSpellId)
-    ? getSpellById(zetaSpellId)
+    ? getSpellByActionId(zetaSpellId)
     : undefined;
 
   const { result, state } = resetState(
@@ -512,9 +428,11 @@ export const clickWand = ({
   );
 
   /* No spells makes for an easy simulation */
-  if (spells.filter((s) => s != null).length === 0) {
+  if (
+    spells.filter((s) => s != null).length === 0 &&
+    alwaysCastSpells.length === 0
+  ) {
     result.endConditions.push('noSpells');
-    return serializeClickWandResult(result);
   }
 
   const endObservation = beginObservation(result, state);
@@ -555,7 +473,7 @@ export const clickWand = ({
 
       result.elapsedTime = getElapsedTime();
 
-      console.log(result);
+      console.debug(result);
       /* Check for end conditions */
       if (result.shotCount >= endSimulationOnShotCount) {
         result.endConditions.push('shotCount');
@@ -599,3 +517,10 @@ export const clickWand = ({
 
   return serializeClickWandResult(result);
 };
+
+export type SerializedClickWandResult = ChangeFields<
+  ClickWandResult,
+  {
+    shots: WandShotResult[];
+  }
+>;

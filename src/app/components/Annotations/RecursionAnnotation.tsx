@@ -12,7 +12,7 @@ const RecursionDiv = styled.div`
   width: calc(var(--bsize-spell) / 4);
   height: calc(var(--bsize-spell) / 4);
   border: 1px solid #999;
-  color: black;
+  color: #fff;
   background-color: #3bb;
   font-size: 10px;
   line-height: calc(var(--bsize-spell) / 3 - 2px);
@@ -32,7 +32,7 @@ const IterationDiv = styled.div<{
   height: calc(var(--bsize-spell) / 4);
 
   border: 1px solid #999;
-  color: black;
+  color: #fff;
   background-color: #a5e;
   font-size: 10px;
   line-height: calc(var(--bsize-spell) / 3 - 2px);

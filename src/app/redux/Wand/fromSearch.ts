@@ -1,4 +1,4 @@
-import { WandState } from './wandState';
+import type { WandState } from './wandState';
 import { isKnownSpell } from './spellId';
 import { v2WandStateMapping } from './wand';
 import {

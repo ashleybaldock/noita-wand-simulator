@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { WandActionCall } from '../WandActionCall';
 import type { ActionCall } from '../../../calc/eval/ActionCall';
-import type { WandShotResult } from '../../../calc/eval/clickWand';
 import type { TreeNode } from '../../../util/TreeNode';
 import { isNotNullOrUndefined } from '../../../util';
 import { mappedTreeToTreeMap } from '../../../util/MapTree';
+import type { WandShotResult } from '../../../calc/eval/WandShot';
 
-export const ActionTreeShotResultMainDiv = styled.div`
+export const ActionTreeRoot = styled.div`
   --arrow-hz: 40px;
   --ahead-h: 16px;
   --row-h: 68px;
@@ -21,43 +21,12 @@ export const ActionTreeShotResultMainDiv = styled.div`
   margin: 1px;
 `;
 
-export const ActionTreeShotResultNodeDiv = styled.div<{
-  childCount: number;
-}>`
-  --arrow-w: var(--size-arrow-w, 3px);
+export const ActionTreeShotResultNodeDiv = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
   border-left: 4px solid #777;
   border-width: 0px;
-
-  &:nth-child(1)::before {
-    position: absolute;
-    border-left: var(--arrow-w) solid #ffbf00;
-    content: '';
-    display: block;
-    height: calc(100% - (var(--row-h) / 2));
-    top: calc(var(--row-h) / 2);
-    width: 0;
-    top: calc((var(--row-h) / 2) - var(--arrow-w) / 2);
-    left: calc(var(--col-spacing) - var(--arrow-hz));
-  }
-  &:nth-child(1):only-child::before,
-  &:last-child::before {
-    content: '';
-    display: block;
-    top: 0;
-    width: 0;
-    height: 100%;
-    border-left: var(--arrow-w) dotted #33ffaa11;
-  }
-  &:nth-child(1):last-child::before {
-    border-left: none;
-  }
-  &:first-child {
-    border-left: none;
-    border-top: 0px solid transparent;
-  }
 `;
 
 const ChildrenDiv = styled.div`
@@ -66,6 +35,8 @@ const ChildrenDiv = styled.div`
   border-top: 0;
   border-bottom: 0;
 `;
+
+const ArrowColumn = styled.div``;
 
 const ActionTreeComponent = ({
   node,
@@ -91,10 +62,10 @@ const ActionTreeComponent = ({
   return (
     <ActionTreeShotResultNodeDiv
       data-name="AcTreeNode"
-      childCount={childCount}
       data-leaf={isLeaf}
       data-twig={isTwig}
       data-level={level}
+      data-childcount={childCount}
       data-trigger={isTriggerParent}
       data-triggerlevel={triggerLevel}
       data-wrap={causedWrap}
@@ -104,8 +75,13 @@ const ActionTreeComponent = ({
       data-iteration={node?.value.iteration}
       data-source={node?.value.source}
       data-dontdraw={node?.value.dont_draw_actions ?? false}
-      style={{ '--data-triggerlevel': triggerLevel, '--data-level': level }}
+      style={{
+        '--data-triggerlevel': triggerLevel,
+        '--data-level': level,
+        '--data-childcount': childCount,
+      }}
     >
+      <ArrowColumn data-name="Arrows" />
       <WandActionCall data-name="AcTreeActionCall" actionCall={node.value} />
       {hasChildren && (
         <ChildrenDiv
@@ -131,7 +107,7 @@ export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
   const level = 0;
   const triggerLevel = 0;
   return (
-    <ActionTreeShotResultMainDiv data-name="ActionTreeShotResultMainDiv">
+    <ActionTreeRoot data-name="ActionTreeRoot">
       {shot.actionCallTrees.map((n, index) => (
         <ActionTreeComponent
           node={mappedTreeToTreeMap(n)}
@@ -140,6 +116,6 @@ export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
           triggerLevel={triggerLevel}
         />
       ))}
-    </ActionTreeShotResultMainDiv>
+    </ActionTreeRoot>
   );
 };

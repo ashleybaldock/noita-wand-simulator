@@ -3,7 +3,7 @@ import { Duration } from '../Duration';
 import { NBSP, isNotNullOrUndefined } from '../../../util';
 import type { StopReason } from '../../../types';
 import { useConfig } from '../../../redux';
-import type { WandShotResult } from '../../../calc/eval/clickWand';
+import type { WandShotResult } from '../../../calc/eval/WandShot';
 
 const SummaryItem = styled.div`
   line-height: 1.7em;

@@ -2,7 +2,7 @@ import { useMemo, useRef } from 'react';
 import styled from 'styled-components';
 import { isNotNullOrUndefined } from '../../util';
 import { isValidActionId } from '../../calc/actionId';
-import { getSpellById } from '../../calc/spells';
+import { getSpellByActionId } from '../../calc/spells';
 import {
   useConfig,
   useResult,
@@ -15,6 +15,7 @@ import { ActionTreeShotResult } from './ActionTree';
 import { ShotList } from './ShotList';
 import { SimulationStatus } from '../SimulationStatus';
 import { SectionToolbar } from '../SectionToolbar';
+import { ActionTreeKey } from './ActionTree/ActionTreeKey';
 
 const ParentDiv = styled.div`
   display: flex;
@@ -47,7 +48,9 @@ export const VisualisationList = () => {
   const spells = useMemo(
     () =>
       spellIds.flatMap((id) =>
-        isNotNullOrUndefined(id) && isValidActionId(id) ? getSpellById(id) : [],
+        isNotNullOrUndefined(id) && isValidActionId(id)
+          ? getSpellByActionId(id)
+          : [],
       ),
     [spellIds],
   );
@@ -83,15 +86,18 @@ export const VisualisationList = () => {
       />
       {showActionTree && (
         <>
-          <SectionToolbar title={'Simulation: Action Call Tree'} />
+          <SectionToolbar title={'Simulation: Action Call Tree'}>
+            <SaveImageButton
+              name={'Action Call Tree'}
+              targetRef={actionCallTreeRef}
+              fileName={'action_call_tree'}
+              enabled={shots.length > 0}
+            />
+            {/* <ShowKeyButton/> */}
+          </SectionToolbar>
+          <ActionTreeKey />
           <ScrollWrapper>
             <SectionDiv ref={actionCallTreeRef} className={'saveImageRoot'}>
-              <SaveImageButton
-                name={'Action Call Tree'}
-                targetRef={actionCallTreeRef}
-                fileName={'action_call_tree'}
-                enabled={shots.length > 0}
-              />
               {shots.map((shot, index) => (
                 <ActionTreeShotResult key={index} shot={shot} />
               ))}
@@ -99,15 +105,16 @@ export const VisualisationList = () => {
           </ScrollWrapper>
         </>
       )}
-      <SectionToolbar title={'Simulation: Action Call Sequence'} />
+      <SectionToolbar title={'Simulation: Action Call Sequence'}>
+        <SaveImageButton
+          targetRef={actionsCalledRef}
+          name={'Action Call Sequence'}
+          fileName={'action_call_sequence'}
+          enabled={shots.length > 0}
+        />
+      </SectionToolbar>
       <ScrollWrapper>
         <SectionDiv ref={actionsCalledRef} className={'saveImageRoot'}>
-          <SaveImageButton
-            targetRef={actionsCalledRef}
-            name={'Action Call Sequence'}
-            fileName={'action_call_sequence'}
-            enabled={shots.length > 0}
-          />
           {shots.map((shot, index) => (
             <ActionCalledShotResult key={index} shot={shot} />
           ))}

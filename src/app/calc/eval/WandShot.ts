@@ -3,8 +3,10 @@ import type { GunActionState } from '../actionState';
 import type { TriggerCondition } from '../trigger';
 import type { ActionCall } from './ActionCall';
 import type { TreeNode } from '../../util/TreeNode';
+import type { ChangeFields } from '../../util';
 import { sequentialId } from '../../util';
 import { defaultGunActionState } from '../defaultActionState';
+import type { EvalTree } from './serialize';
 
 export type WandShotId = number;
 
@@ -55,4 +57,13 @@ export const getShot = (): WandShot => ({
   wraps: [],
 });
 
+/*
+ * Serializable Form of WandShot
+ */
 export const nextWandShotId = sequentialId<WandShotId>();
+export type WandShotResult = ChangeFields<
+  WandShot,
+  {
+    actionCallTrees: EvalTree[];
+  }
+>;

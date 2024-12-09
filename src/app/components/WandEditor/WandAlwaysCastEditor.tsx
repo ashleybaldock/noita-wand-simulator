@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useRef } from 'react';
 import { useAlwaysCastLayout } from '../../redux/hooks';
-import { getSpellById } from '../../calc/spells';
+import { getSpellByActionId } from '../../calc/spells';
 import { isKnownSpell } from '../../redux/Wand/spellId';
 import { SlottedSpell } from './SlottedSpell';
 import { AlwaysCastIndicies } from '../../redux/WandIndex';
@@ -77,7 +77,7 @@ export const WandAlwaysCastEditor = styled(
     const gridRef = useRef(null);
 
     const alwaysActions = alwaysIds.map((alwaysId) =>
-      isKnownSpell(alwaysId) ? getSpellById(alwaysId) : undefined,
+      isKnownSpell(alwaysId) ? getSpellByActionId(alwaysId) : undefined,
     );
     let deckIndex = 0;
 
@@ -95,6 +95,7 @@ export const WandAlwaysCastEditor = styled(
                     ? AlwaysCastIndicies[deckIndex++]
                     : undefined
                 }
+                // droppable={isNotNullOrUndefined(alwaysAction)}
               />
             </SpellSlot>
           ))}

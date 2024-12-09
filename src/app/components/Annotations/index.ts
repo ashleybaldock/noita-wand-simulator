@@ -1,3 +1,6 @@
+export * from './AddExtraEntityAnnotation';
+export * from './AddProjectileAnnotation';
+export * from './AddModificationAnnotation';
 export * from './ActionProxyAnnotation';
 export * from './ActionSourceAnnotation';
 export * from './AlwaysCastAnnotation';
@@ -13,5 +16,6 @@ export * from './DrawAnnotation';
 export * from './FriendlyFireAnnotation';
 export * from './NoManaAnnotation';
 export * from './RecursionAnnotation';
+export * from './IterationAnnotation';
 export * from './WandIndexAnnotation';
 export * from './WrapAnnotation';

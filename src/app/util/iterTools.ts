@@ -56,6 +56,26 @@ import { isObject } from './util';
  *
  * ╼══╾ Methods ╼═════════════════════════════════════════════════╡2.2╞═╾
  *
+ * ╔════════════╗
+ * ║ Buffering: ╚════════════════════════════╗
+ * ║ Repetition │ (S[a,b,…] -> S[a,b,…,a,b…] ║
+ * ╚╤═══════════╧════════════════════════════╝
+ *  ├╴repeat(source: IterableIterator<T>,
+ *  │       options: RepeatIterOptions): Iterator<T>
+ *  │                ├╴repetitions                                      │
+ *  │                └╴repeatFromCache                                  │
+ * ╔════════════╗
+ * ║ Buffering: ╚═══════════════════════════╗
+ * ║ Reordering │ (S[a,b,c,…] -> S[c,a,b,…] ║
+ * ╚╤═══════════╧═══════════════════════════╝
+ *  ├╴stack(source: IterableIterator<T>): IterStack<T>
+ *  │    IterStack: {
+ *  │      push(source: IterableIterator<T>))
+ *  │      next() => IteratorResult<T>;
+ *  │    }
+ *  │                                                                   │
+ *  ├╴queue(source: IterableIterator<T>): IterStack<T>
+ *
  * ╔════════╤══════════════╗
  * ║ Subset │ (S -> Sʹ⊆ S) ║
  * ╚╤═══════╧══════════════╝
@@ -690,3 +710,32 @@ export function* rangeIter({
 // // export const itertools: IterTools<unknown> = {
 // //   takeLazily: wrapGenerator(takeLazily),
 // // };
+
+/*
+ * A stack of Iterables
+ *
+ * The most recently pushed iterable yields the next() value
+ *
+ * push([r])                          r
+ * next() -> r                       / \
+ * push([a,b])                      a   b
+ * next() -> a                     /|\
+ * push([c,d,e])                  c d e
+ * next() -> c                      |
+ * next() -> d                      f
+ * push([f])
+ * next() -> f                 r,a,c,d,f,e,b
+ * next() -> e             (Pre-order traversal)
+ * next() -> b
+ *
+ */
+// export type IterStack<T> = {
+//   push: (valIter: IterableIterator<T>) => void;
+//   pop: () => T | undefined;
+//   peek: () => T;
+
+//   next: (x?: unknown) => IteratorResult<T>;
+// };
+
+// export const createIterStack = <T>(): IterStack<T> => {
+// };

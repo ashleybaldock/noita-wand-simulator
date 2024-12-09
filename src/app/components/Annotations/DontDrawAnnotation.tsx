@@ -4,14 +4,11 @@ import { BaseAnnotation } from './BaseAnnotation';
 import type { ActionCall } from '../../calc/eval/ActionCall';
 
 const DontDrawDiv = styled(BaseAnnotation)`
-  left: unset;
   left: calc(-1 * var(--sizes-spell-base) / 4 + 12px);
-  pointer-events: none;
   top: 50%;
   transform: translateY(-50%);
-  border: 1px solid #999;
-  color: black;
-  background-color: #c55;
+  user-select: none;
+  color: #0000;
   font-size: 12px;
   text-align: center;
   font-family: var(--font-family-noita-default);
@@ -29,5 +26,5 @@ export const DontDrawAnnotation = (
     return null;
   }
 
-  return <DontDrawDiv data-name="DrawDisabled">D</DontDrawDiv>;
+  return <DontDrawDiv data-name="DrawDisabled">D⃠</DontDrawDiv>;
 };

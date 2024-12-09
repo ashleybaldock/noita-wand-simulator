@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { WandActionCall } from '../WandActionCall';
-import type { WandShotResult } from '../../../calc/eval/clickWand';
+import type { Key } from 'react';
+import type { ActionCall } from '../../../calc/eval/ActionCall';
+import type { WandShotResult } from '../../../calc/eval/WandShot';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -14,13 +16,15 @@ const StyledDiv = styled.div`
 export const ActionCalledShotResult = ({ shot }: { shot: WandShotResult }) => {
   return (
     <StyledDiv>
-      {shot.actionCalls.map((actionCall, index) => {
-        return (
-          <div key={index}>
-            <WandActionCall actionCall={actionCall} />
-          </div>
-        );
-      })}
+      {shot.actionCalls.map(
+        (actionCall: ActionCall, index: Key | null | undefined) => {
+          return (
+            <div key={index}>
+              <WandActionCall actionCall={actionCall} />
+            </div>
+          );
+        },
+      )}
     </StyledDiv>
   );
 };

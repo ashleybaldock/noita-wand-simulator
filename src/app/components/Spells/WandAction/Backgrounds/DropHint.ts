@@ -20,24 +20,24 @@ export const dropHintBackgrounds: Record<DropHint, Background> = {
   dragging: {
     ...emptyBackground(),
     before: {
-      'background-image': [`var(--sprite-cursor-caret-spell-drophint-top)`],
-      'background-repeat': [`no-repeat`],
-      'background-size': [`var(--cursor-container-width)`],
-      'background-position': [`center top`],
+      backgroundImage: [`var(--sprite-cursor-caret-spell-drophint-top)`],
+      backgroundRepeat: [`no-repeat`],
+      backgroundSize: [`var(--cursor-container-width)`],
+      backgroundPosition: [`center top`],
       cursor: [''],
     },
     on: {
-      'background-image': [`var(--sprite-cursor-caret-spell-drophint-top)`],
-      'background-repeat': [`no-repeat`],
-      'background-size': [`var(--cursor-container-width)`],
-      'background-position': [`center top`],
+      backgroundImage: [`var(--sprite-cursor-caret-spell-drophint-top)`],
+      backgroundRepeat: [`no-repeat`],
+      backgroundSize: [`var(--cursor-container-width)`],
+      backgroundPosition: [`center top`],
       cursor: [''],
     },
     after: {
-      'background-image': [`var(--sprite-cursor-caret-spell-drophint-top)`],
-      'background-repeat': [`no-repeat`],
-      'background-size': [`var(--cursor-container-width)`],
-      'background-position': [`center top`],
+      backgroundImage: [`var(--sprite-cursor-caret-spell-drophint-top)`],
+      backgroundRepeat: [`no-repeat`],
+      backgroundSize: [`var(--cursor-container-width)`],
+      backgroundPosition: [`center top`],
       cursor: [''],
     },
   },
@@ -47,20 +47,20 @@ export const dropHintBackgrounds: Record<DropHint, Background> = {
   shiftleft: {
     ...emptyBackground(),
     before: {
-      'background-image': [
+      backgroundImage: [
         `var(--sprite-cursor-caret-spell-top)`,
         `var(--sprite-cursor-caret-spell-bottom)`,
         `var(--sprite-cursor-caret-spell-over-line)`,
         `var(--sprite-cursor-caret-spell-mid-toleft)`,
       ],
-      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`, `no-repeat`],
-      'background-size': [
+      backgroundRepeat: [`no-repeat`, `no-repeat`, `repeat-y`, `no-repeat`],
+      backgroundSize: [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [
+      backgroundPosition: [
         `center top`,
         `center bottom`,
         `center center`,
@@ -72,20 +72,20 @@ export const dropHintBackgrounds: Record<DropHint, Background> = {
   shiftright: {
     ...emptyBackground(),
     before: {
-      'background-image': [
+      backgroundImage: [
         `var(--sprite-cursor-caret-spell-top)`,
         `var(--sprite-cursor-caret-spell-bottom)`,
         `var(--sprite-cursor-caret-spell-over-line)`,
         `var(--sprite-cursor-caret-spell-mid-toright)`,
       ],
-      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`, `no-repeat`],
-      'background-size': [
+      backgroundRepeat: [`no-repeat`, `no-repeat`, `repeat-y`, `no-repeat`],
+      backgroundSize: [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [
+      backgroundPosition: [
         `center top`,
         `center bottom`,
         `center center`,
@@ -107,27 +107,27 @@ export const selectHintBackgrounds: Record<DropHint, Background> = {
   shiftleft: {
     ...emptyBackground(),
     before: {
-      'background-image': ['var(--sprite-cursor-caret-select-mid-toleft)'],
-      'background-repeat': [`no-repeat`],
-      'background-size': [`var(--cursor-container-width)`],
-      'background-position': [`center`],
+      backgroundImage: ['var(--sprite-cursor-caret-select-mid-toleft)'],
+      backgroundRepeat: [`no-repeat`],
+      backgroundSize: [`var(--cursor-container-width)`],
+      backgroundPosition: [`center`],
       cursor: [],
     },
     after: {
-      'background-image': ['var(--sprite-cursor-caret-select-mid-toleft)'],
-      'background-repeat': [`no-repeat`],
-      'background-size': [`var(--cursor-container-width)`],
-      'background-position': [`center`],
+      backgroundImage: ['var(--sprite-cursor-caret-select-mid-toleft)'],
+      backgroundRepeat: [`no-repeat`],
+      backgroundSize: [`var(--cursor-container-width)`],
+      backgroundPosition: [`center`],
       cursor: [],
     },
   },
   shiftright: {
     ...emptyBackground(),
     after: {
-      'background-image': ['var(--sprite-cursor-caret-select-mid-toright)'],
-      'background-repeat': [`no-repeat`],
-      'background-size': [`var(--cursor-container-width)`],
-      'background-position': [`center`],
+      backgroundImage: ['var(--sprite-cursor-caret-select-mid-toright)'],
+      backgroundRepeat: [`no-repeat`],
+      backgroundSize: [`var(--cursor-container-width)`],
+      backgroundPosition: [`center`],
       cursor: [],
     },
   },

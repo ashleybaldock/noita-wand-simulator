@@ -3,8 +3,6 @@ import type { Spell } from '../../../calc/spell';
 import { DEFAULT_SIZE } from '../../../util';
 import { ActionTreeShotResultNodeDiv } from '../ActionTree';
 
-type ArrowPath = 'down-right' | 'down' | '↳';
-
 const LineDiv = styled.div<{
   size: number;
   swept: boolean;
@@ -54,11 +52,10 @@ const ArrowHeadDiv = styled.div`
   height: var(--ahead-h);
   left: calc(var(--arrow-hz, 48px) * -1);
   width: var(--arrow-hz, 48px);
-  border-radius: var(--radius-arrow);
   height: 16px;
   transform: translate(0px, 0);
   border: none;
-  background-image: url(/data/arrowhead_right.png);
+  background-image: url('/data/arrowhead_right.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: right center;

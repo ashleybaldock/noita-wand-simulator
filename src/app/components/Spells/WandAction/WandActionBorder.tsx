@@ -3,6 +3,7 @@ import { useDrop } from 'react-dnd';
 
 const StyledDiv = styled.div<{
   $highlight: boolean;
+  $disabled: boolean;
 }>`
   --size-spell: var(--bsize-spell, 1em);
   --xsize-spell-border: var(--bxsize-spell-border, 0.0625);
@@ -18,8 +19,12 @@ const StyledDiv = styled.div<{
   background-size: cover;
   image-rendering: pixelated;
 
-  ${({ $highlight }) =>
-    $highlight
+  background-image: url('/data/inventory/full_inventory_box.png');
+
+  ${({ $highlight, $disabled }) =>
+    $disabled
+      ? `background-image: url('/data/inventory/inventory_box_inactive_overlay.png'), url('/data/inventory/full_inventory_box.png');`
+      : $highlight
       ? `background-image: url('/data/inventory/full_inventory_box_highlight.png'), url('/data/inventory/full_inventory_box.png');`
       : `background-image: url('/data/inventory/full_inventory_box.png');`}
 `;
@@ -27,8 +32,10 @@ const StyledDiv = styled.div<{
 const WandActionBorder = ({
   className = '',
   children,
+  droppable = true,
 }: React.PropsWithChildren<{
   className?: string;
+  droppable?: boolean;
 }>) => {
   const [{ canDrop }, dropRef] = useDrop(
     () => ({
@@ -43,7 +50,8 @@ const WandActionBorder = ({
   return (
     <StyledDiv
       data-name="WandActionBorder"
-      $highlight={canDrop}
+      $highlight={droppable && canDrop}
+      $disabled={!droppable}
       ref={dropRef}
       className={className}
     >

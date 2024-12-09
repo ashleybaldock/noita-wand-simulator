@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 // import { TooltipId } from './tooltipId';
 import { TooltipBase } from './TooltipBase';
-import { getSpellById } from '../../calc/spells';
+import { getSpellByActionId } from '../../calc/spells';
 import { isValidActionId } from '../../calc/actionId';
 import { isNotNullOrUndefined } from '../../util';
 import { translate } from '../../util/i18n';
@@ -153,7 +153,7 @@ export const SpellInfoTooltip = ({
           never_unlimited,
           beta,
           spawn_requires_flag,
-        } = getSpellById(content);
+        } = getSpellByActionId(content);
         return (
           <SpellTooltipContainer>
             <Name>{translate(name)}</Name>

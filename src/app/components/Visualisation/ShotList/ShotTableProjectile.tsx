@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import type { ShotProjectile } from '../../../calc/eval/ShotProjectile';
-import { getSpellById } from '../../../calc/spells';
+import { getSpellByActionId } from '../../../calc/spells';
 import {
   ActionProxyAnnotation,
   DeckIndexAnnotation,
@@ -74,7 +74,8 @@ export const ShotTableProjectile = ({
       >
         <WandAction
           spellType={
-            (projectile.spell && getSpellById(projectile.spell.id).type) ??
+            (projectile.spell &&
+              getSpellByActionId(projectile.spell.id).type) ??
             'projectile'
           }
           spellId={projectile.spell?.id}

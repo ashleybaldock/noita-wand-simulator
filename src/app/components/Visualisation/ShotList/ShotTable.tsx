@@ -19,7 +19,7 @@ import type { WandShotId } from '../../../calc/eval/WandShot';
 import { useShotLookup } from '../../../redux';
 import type { ShotProjectile } from '../../../calc/eval/ShotProjectile';
 import { ShotTableProjectile } from './ShotTableProjectile';
-import type { WandShotResult } from '../../../calc/eval/clickWand';
+import type { WandShotResult } from '../../../calc/eval/WandShot';
 
 const StyledShotTable = styled.div`
   --nesting-offset: var(--sizes-nesting-offset, 16px);

@@ -481,9 +481,18 @@ const fieldSections: FieldSection[] = [
         render: ({ gravity: v }) => <SignZero n={Number(v)} />,
       },
       {
-        icon: `icon.speedmulti`,
+        icon: `icon.speed.base`,
+        key: 'speed_base',
+        displayName: 'Base Speed',
+        toolTip: 'The configured initial speed of this projectile',
+        render: ({ speed_multiplier: v }) => {
+          return <NotApplicable />;
+        },
+      },
+      {
+        icon: `icon.speed.multi`,
         key: 'speed_multiplier1',
-        displayName: 'Speed',
+        displayName: 'Speed Multiplier',
         toolTip: 'Initial speed of the projectile.',
         render: ({ speed_multiplier: v }) => {
           const n = Number(v);
@@ -522,8 +531,18 @@ const fieldSections: FieldSection[] = [
         },
       },
       {
+        icon: `icon.speed.initial`,
+        key: 'speed_initial',
+        displayName: 'Initial Speed',
+        toolTip:
+          'The initial speed of this projectile given the speed multiplier',
+        render: ({ speed_multiplier: v }) => {
+          return <NotApplicable />;
+        },
+      },
+      {
         // TODO - needs extended spell info
-        icon: `icon.speedbonus`,
+        icon: `icon.speed.bonus`,
         key: 'speed_multiplier2',
         displayName: 'Speed Bonus',
         toolTip: 'Speed Scaled Damage Multiplier',

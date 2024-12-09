@@ -7,18 +7,18 @@ export const selectionBackgrounds: Record<WandSelection, Background> = {
   start: {
     ...emptyBackground(),
     before: {
-      'background-image': [
+      backgroundImage: [
         'var(--sprite-cursor-caret-select-start-top)',
         'var(--sprite-cursor-caret-select-start-bottom)',
         'var(--sprite-cursor-select-over-line)',
       ],
-      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
-      'background-size': [
+      backgroundRepeat: [`no-repeat`, `no-repeat`, `repeat-y`],
+      backgroundSize: [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center bottom`, `center center`],
+      backgroundPosition: [`center top`, `center bottom`, `center center`],
       cursor: ['w-resize'],
     },
   },
@@ -26,51 +26,51 @@ export const selectionBackgrounds: Record<WandSelection, Background> = {
   end: {
     ...emptyBackground(),
     after: {
-      'background-image': [
+      backgroundImage: [
         'var(--sprite-cursor-caret-select-end-top)',
         'var(--sprite-cursor-caret-select-end-bottom)',
         'var(--sprite-cursor-select-over-line)',
       ],
-      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
-      'background-size': [
+      backgroundRepeat: [`no-repeat`, `no-repeat`, `repeat-y`],
+      backgroundSize: [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center bottom`, `center center`],
+      backgroundPosition: [`center top`, `center bottom`, `center center`],
       cursor: ['e-resize'],
     },
   },
   single: {
     ...emptyBackground(),
     before: {
-      'background-image': [
+      backgroundImage: [
         'var(--sprite-cursor-caret-select-start-top)',
         'var(--sprite-cursor-caret-select-start-bottom)',
         'var(--sprite-cursor-select-over-line)',
       ],
-      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
-      'background-size': [
+      backgroundRepeat: [`no-repeat`, `no-repeat`, `repeat-y`],
+      backgroundSize: [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center bottom`, `center center`],
+      backgroundPosition: [`center top`, `center bottom`, `center center`],
       cursor: ['w-resize'],
     },
     after: {
-      'background-image': [
+      backgroundImage: [
         'var(--sprite-cursor-caret-select-end-top)',
         'var(--sprite-cursor-caret-select-end-bottom)',
         'var(--sprite-cursor-select-over-line)',
       ],
-      'background-repeat': [`no-repeat`, `no-repeat`, `repeat-y`],
-      'background-size': [
+      backgroundRepeat: [`no-repeat`, `no-repeat`, `repeat-y`],
+      backgroundSize: [
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
         `var(--cursor-container-width)`,
       ],
-      'background-position': [`center top`, `center bottom`, `center center`],
+      backgroundPosition: [`center top`, `center bottom`, `center center`],
       cursor: ['e-resize'],
     },
   },

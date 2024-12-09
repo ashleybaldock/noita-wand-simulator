@@ -6,7 +6,7 @@ import type { TooltipId } from '../../Tooltips/tooltipId';
 import type { CSSProperties } from 'react';
 import type { MergableRef } from '../../../util/mergeRefs';
 import { useIcon } from '../../../calc/sprite';
-import { getSpellById } from '../../../calc/spells';
+import { getSpellByActionId } from '../../../calc/spells';
 import { isNotNullOrUndefined } from '../../../util';
 
 const SpellTypeBorder = styled.div`
@@ -47,7 +47,7 @@ const _WandAction = ({
   const spellTypeSpritePath = useIcon(spellTypeSpriteName);
 
   const spellSpritePath = isNotNullOrUndefined(spellId)
-    ? getSpellById(spellId).sprite
+    ? getSpellByActionId(spellId).sprite
     : useIcon('icon.spell.unidentified');
 
   return (

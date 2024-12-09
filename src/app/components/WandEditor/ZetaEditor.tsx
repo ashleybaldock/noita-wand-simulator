@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { SlottedSpell } from './SlottedSpell';
 import { useZeta } from '../../redux';
 import { isKnownSpell } from '../../redux/Wand/spellId';
-import { getSpellById } from '../../calc/spells';
+import { getSpellByActionId } from '../../calc/spells';
 
 const SpellSlot = styled.li`
   --grid-layout-gap: 0px;
@@ -57,7 +57,9 @@ export const ZetaEditor = styled(
           <SlottedSpell
             wandIndex={'ZTA'}
             spell={
-              isKnownSpell(zetaSpellId) ? getSpellById(zetaSpellId) : undefined
+              isKnownSpell(zetaSpellId)
+                ? getSpellByActionId(zetaSpellId)
+                : undefined
             }
           />
         </SpellSlot>

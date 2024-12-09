@@ -11,7 +11,7 @@ import {
 import { WrapAnnotation } from '../Annotations/WrapAnnotation';
 import { WandAction, StyledWandActionBorder } from '../Spells/WandAction';
 import type { ActionCall } from '../../calc/eval/ActionCall';
-import { getSpellById } from '../../calc/spells';
+import { getSpellByActionId } from '../../calc/spells';
 
 /*
   background-image: url(/data/inventory/action_tree_box.png);
@@ -35,7 +35,7 @@ export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
     >
       <NextActionArrow />
       <WandAction
-        spellType={getSpellById(actionCall.spell.id).type}
+        spellType={getSpellByActionId(actionCall.spell.id).type}
         spellId={actionCall.spell.id}
       />
       <RecursionAnnotation {...actionCall} />
@@ -45,7 +45,10 @@ export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
         dont_draw_actions={actionCall.dont_draw_actions}
       />
       <DrawAnnotation drawBefore={1} drawAfter={1} />
-      <DeckIndexAnnotation deckIndex={actionCall.deckIndex} />
+      <DeckIndexAnnotation
+        wandIndex={actionCall?.spell.always_cast_index}
+        deckIndex={actionCall.deckIndex}
+      />
       <FriendlyFireAnnotation />
       <WrapAnnotation
         wrappingInto={actionCall.wrappingInto}

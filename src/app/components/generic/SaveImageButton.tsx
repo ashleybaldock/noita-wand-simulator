@@ -12,12 +12,14 @@ function _SaveImageButton({
   fileName,
   targetRef,
   hotkeys,
+  className = '',
 }: {
   targetRef: MutableRefObject<HTMLDivElement | null>;
   name: string;
   fileName: string;
   enabled: boolean;
   hotkeys?: string | HotkeyConfig;
+  className?: string;
 }) {
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -60,6 +62,7 @@ function _SaveImageButton({
         imgAfter
         icon={'icon.download.png'}
         hotkeys={hotkeys}
+        className={className}
       >
         <span>.PNG</span>
       </Button>
@@ -69,17 +72,7 @@ function _SaveImageButton({
 }
 
 export const SaveImageButton = styled(_SaveImageButton)`
-  display: inline flex;
-  display: none;
-  align-items: end;
   cursor: pointer;
-  vertical-align: baseline;
-
-  margin: 0;
-
-  & span {
-    font-size: 0.7em;
-  }
 `;
 
 // const stateHash = useMemo(() => {

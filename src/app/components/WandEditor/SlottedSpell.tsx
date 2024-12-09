@@ -13,6 +13,7 @@ import {
 import type { WandIndex } from '../../redux/WandIndex';
 import {
   DraggableWandAction,
+  StyledWandActionBorder,
   WandActionDragSource,
   WandActionDropTargets,
 } from '../Spells/WandAction';
@@ -22,12 +23,14 @@ export const SlottedSpell = ({
   wandIndex,
   deckIndex,
   alwaysCast = false,
+  droppable = true,
 }: {
   spell?: Spell;
   wandIndex: WandIndex;
   deckIndex?: number | string;
   selection?: WandSelection;
   alwaysCast?: boolean;
+  droppable?: boolean;
 }) => {
   const dispatch = useAppDispatch();
 
@@ -41,34 +44,46 @@ export const SlottedSpell = ({
   };
 
   return (
-    <WandActionDropTargets wandIndex={wandIndex}>
-      {spell && (
-        <>
-          <WandActionDragSource actionId={spell.id} sourceWandIndex={wandIndex}>
-            <DraggableWandAction
-              spellId={spell.id}
-              spellType={spell.type}
-              onDeleteSpell={() => handleDeleteSpell(wandIndex)}
-            />
-          </WandActionDragSource>
-          {!alwaysCast && (
-            <ChargesRemainingAnnotation
-              charges={spell.uses_remaining}
-              nounlimited={spell.never_unlimited}
-            />
-          )}
-          <DeckIndexAnnotation deckIndex={deckIndex} wandIndex={wandIndex} />
-          {!isDraggingSpell && (
+    <>
+      {droppable ? (
+        <WandActionDropTargets wandIndex={wandIndex}>
+          {spell && (
             <>
-              <DeleteSpellAnnotation
-                deleteSpell={() => handleDeleteSpell(wandIndex)}
+              <WandActionDragSource
+                actionId={spell.id}
+                sourceWandIndex={wandIndex}
+              >
+                <DraggableWandAction
+                  spellId={spell.id}
+                  spellType={spell.type}
+                  onDeleteSpell={() => handleDeleteSpell(wandIndex)}
+                />
+              </WandActionDragSource>
+              {!alwaysCast && (
+                <ChargesRemainingAnnotation
+                  charges={spell.uses_remaining}
+                  nounlimited={spell.never_unlimited}
+                />
+              )}
+              <DeckIndexAnnotation
+                deckIndex={deckIndex}
+                wandIndex={wandIndex}
               />
-              {!alwaysCast && <NoManaAnnotation />}
-              <FriendlyFireAnnotation />
+              {!isDraggingSpell && (
+                <>
+                  <DeleteSpellAnnotation
+                    deleteSpell={() => handleDeleteSpell(wandIndex)}
+                  />
+                  {!alwaysCast && <NoManaAnnotation />}
+                  <FriendlyFireAnnotation />
+                </>
+              )}
             </>
           )}
-        </>
+        </WandActionDropTargets>
+      ) : (
+        <StyledWandActionBorder droppable={droppable}></StyledWandActionBorder>
       )}
-    </WandActionDropTargets>
+    </>
   );
 };

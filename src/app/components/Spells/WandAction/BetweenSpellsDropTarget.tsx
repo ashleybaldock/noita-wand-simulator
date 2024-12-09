@@ -1,13 +1,9 @@
 import styled from 'styled-components';
-import { mergeRefs, type MergableRef } from '../../../util/mergeRefs';
+import { mergeRefs } from '../../../util/mergeRefs';
+import type { MergableRef } from '../../../util/mergeRefs';
 import { useDrag, useDrop } from 'react-dnd';
-import {
-  isDragItemSelect,
-  isDragItemSpell,
-  type DragItem,
-  type DragItemSelect,
-  type DragItemSpell,
-} from './DragItems';
+import { isDragItemSelect, isDragItemSpell } from './DragItems';
+import type { DragItem, DragItemSelect, DragItemSpell } from './DragItems';
 import type { MainWandIndex, WandIndex } from '../../../redux/WandIndex';
 import { isMainWandIndex } from '../../../redux/WandIndex';
 import { WithDebugHints } from '../../Debug';
@@ -22,7 +18,7 @@ import {
 } from '../../../redux';
 import { useCallback } from 'react';
 import { useMergedBackgrounds } from './Backgrounds/useMergeBackgrounds';
-import { caretBackgrounds, type CaretStyle } from './Backgrounds/Caret';
+import { caretBackgrounds } from './Backgrounds/Caret';
 import { selectionBackgrounds } from './Backgrounds/WandSelection';
 import {
   dropHintBackgrounds,
@@ -211,7 +207,7 @@ export const BetweenSpellsDropTarget = ({
   // const merged = useMergedBackgroundVars(
   //   getCssVarForProperty,
   // const overHint = `${editMode.insert.mode}${editMode.insert.direction}`;
-  const mergedA = useMergedBackgrounds(
+  const merged = useMergedBackgrounds(
     caretBackgrounds[cursorForSpellBefore]['before'],
     caretBackgrounds[cursorForSpellAfter]['after'],
     ((isDraggingSpell &&
@@ -230,22 +226,14 @@ export const BetweenSpellsDropTarget = ({
     selectionBackgrounds[selectionForSpellBefore]['after'],
     selectionBackgrounds[selectionForSpellAfter]['before'],
   );
-  const merged = {
-    ...mergedA,
-    cursor: mergedA.cursor[mergedA.cursor.length - 1],
-  };
   // const mergedHover = useMergedBackgroundVars(
   //   getCssHoverVarForProperty,
-  const mergedHoverA = useMergedBackgrounds(
+  const mergedHover = useMergedBackgrounds(
     caretBackgrounds['caret-hover']['before'],
     caretBackgrounds['caret-hover']['after'],
     selectionBackgrounds[selectionForSpellBefore]['after'],
     selectionBackgrounds[selectionForSpellAfter]['before'],
   );
-  const mergedHover = {
-    ...mergedHoverA,
-    cursor: mergedHoverA.cursor[mergedHoverA.cursor.length - 1],
-  };
   // const style = { ...merged, ...mergedHover };
 
   return (

@@ -270,7 +270,7 @@ patterns = [
   PatternReplace(r'ACTION_TYPE_PASSIVE', r'"passive"', flags=re.MULTILINE),
 
   PatternReplace(r'(GameGetFrameNum)\(', r'\1(', flags=re.MULTILINE),
-  PatternReplace(r'(OnNotEnoughManaForAction)\(', r'\1(', flags=re.MULTILINE),
+  PatternReplace(r'(OnNotEnoughManaForAction)\(', r'\1(data.mana ?? 0, mana, data', flags=re.MULTILINE),
 
   PatternReplace(r'(' + '|'.join([
       "ActionUsesRemainingChanged",
@@ -392,23 +392,29 @@ def processExtraEntities(src, dst, before = '', after = ''):
 
   content = preProcess(content)
 
-  actionIdAndRelatedExtraEntitiesPattern = r'^\s+{\s*id\s*=\s*\"(\w+)\"[^}]+?^\s*related_extra_entities\s*=\s*\"(.+?)\"'
+  # actionIdAndRelatedExtraEntitiesPattern = '^\s+{\s*id\s*=\s*\"(\w+)\".+?(?:^\s+}|^\s+related_extra_entities\s*=\s*{\s*\"([^}]+?)\"\s+})'
+  # relatedMatches = dict(re.findall(actionIdAndRelatedExtraEntitiesPattern, content, re.MULTILINE|re.DOTALL))
 
-  actionIdAndActionExtraEntitiesPattern = r'^\s+{\s*id\s*=\s*\"(\w+)\"[^}]+?^\s*c\.extra_entities\s*=\s*\"(.+?)\"'
+  # actionIdAndActionExtraEntitiesPattern = r'^\s+{\s*id\s*=\s*\"(\w+)\".+?(?:^\s+}|^\s+c\.extra_entities\s*=\s*c\.extra_entities\s+\.\.\s*\"([^}]+?)\")'
+  # actionMatches = dict(re.findall(actionIdAndActionExtraEntitiesPattern, content, re.MULTILINE|re.DOTALL))
 
-  relatedMatches = dict(re.findall(actionIdAndRelatedExtraEntitiesPattern, content, re.MULTILINE))
-  actionMatches = dict(re.findall(actionIdAndRelatedExtraEntitiesPattern, content, re.MULTILINE))
+  extraEntitiesPattern = '^\s+{\s*id\s*=\s*\"(\w+)\".+?(?:^\s+}|^\s+related_extra_entities\s*=\s*{\s*\"([^}]+?)\"\s+})|(?:^\s+c\.extra_entities\s*=\s*c\.extra_entities\s+\.\.\s*\"([^}]+?)\")'
+  # print("\n".join(re.findall(extraEntitiesPattern, content, re.MULTILINE|re.DOTALL)))
+
+  matches = {actionId: set(rawRelated.replace('"', '').split(','))|set(rawExtra.replace('"', '').split(',')) for actionId, rawRelated, rawExtra in re.findall(extraEntitiesPattern, content, re.MULTILINE|re.DOTALL)}
+  print(",".join(f'\'{x}\'' for x, y in matches.items()))
+
+  def uniqueEntities(entities):
+    return ",".join(f'\'{x}\'' for x in entities)
 
   with open(dst, 'w') as outFile:
     outFile.write("""/* Auto-generated file */
 
 export const extraEntities = [
-""" + ",\n".join(f'  [\'{actionId}\', \'{extra}\']' for actionId, extra in iter(relatedMatches.items())) + """,
-""" + ",\n".join(f'  [\'{actionId}\', \'{extra}\']' for actionId, extra in iter(actionMatches.items())) + """,
+""" + ",\n".join(f'  [\'{actionId}\',[{uniqueEntities(extra)}]]' for actionId, extra in iter(matches.items())) + """,
 ] as const;
 
-export type SpellSpriteName = typeof spellSprites[number][0];
-export type SpellSpritePath = typeof spellSprites[number][1];
+export type ExtraEntity = typeof extraEntities;
 """)
 
 

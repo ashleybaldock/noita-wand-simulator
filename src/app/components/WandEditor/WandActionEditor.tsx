@@ -15,7 +15,7 @@ import {
 } from '../../redux/editorThunks';
 import { moveSelection, clearSelection } from '../../redux/editorSlice';
 import type { Spell } from '../../calc/spell';
-import { getSpellById } from '../../calc/spells';
+import { getSpellByActionId } from '../../calc/spells';
 import {
   ChargesRemainingAnnotation,
   DeckIndexAnnotation,
@@ -266,7 +266,7 @@ export const WandActionEditor = () => {
   const lastSpellIndex = spellIds.length - 1;
   const extraSpellIndex = spellIds.length;
   const spellActions = spellIds.map((spellId) =>
-    isKnownSpell(spellId) ? getSpellById(spellId) : undefined,
+    isKnownSpell(spellId) ? getSpellByActionId(spellId) : undefined,
   );
   let deckIndex = 0;
 

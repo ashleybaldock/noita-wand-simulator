@@ -7,7 +7,7 @@ import {
 import type { SpellDeckInfo } from '../../calc/spell';
 import { useConfig } from '../../redux';
 import { isNotNullOrUndefined } from '../../util';
-import { getSpellById } from '../../calc/spells';
+import { getSpellByActionId } from '../../calc/spells';
 import type { SpriteName } from '../../calc/sprite';
 import { useIcon } from '../../calc/sprite';
 
@@ -71,7 +71,7 @@ export const ActionProxyAnnotation = ({
     return (
       <ProxyDiv
         data-name="ActionProxyAnnotation-Proxy"
-        background={getSpellById(proxy.id).sprite}
+        background={getSpellByActionId(proxy.id).sprite}
       />
     );
   } else if (isNotNullOrUndefined(spell?.id)) {

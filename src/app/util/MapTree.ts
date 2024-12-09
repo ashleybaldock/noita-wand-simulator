@@ -98,9 +98,18 @@ export const mapTreeToMap = <T extends object>(
       const parent = mapTree.get(/* WC O️(log n) */ parentId);
       parent?.childIds.push(/* O️(1) */ currentNodeId);
     }
-    currentNode.children.forEach((child) =>
-      traversalStack.push(/* O️(1︎) */ child),
-    );
+    // currentNode.children.forEach((child) =>
+    // traversalStack.push(/* O️(1︎) */ child),
+    // );
+    /* This is a hack to avoid reversing the order
+     * of the children by pushing them in reverse reverse
+     * order onto the stack
+     * TODO - a better stack */
+    currentNode.children.findLast((child, i, arr) => {
+      if (i in arr) {
+        traversalStack.push(/* O️(1︎) */ child);
+      }
+    });
   }
 
   return tee.log(mapTree);

@@ -1,7 +1,7 @@
 import type { ActionId } from './actionId';
 import type { ActionSource } from './actionSources';
 import type { Spell } from './spell';
-import { getSpellById } from './spells';
+import { getSpellByActionId } from './spells';
 import type { GunActionState } from './actionState';
 import {
   ConfigGunActionInfo_Create,
@@ -346,10 +346,12 @@ export function draw_action(instant_reload_if_empty: boolean) {
 
   if (deck.length <= 0) {
     if (instant_reload_if_empty && !force_stop_draws) {
+      OnWrap(deck, hand, discard);
       move_discarded_to_deck();
       order_deck();
       start_reload = true;
     } else {
+      OnCantWrap();
       reloading = true;
       return true;
     }
@@ -362,13 +364,13 @@ export function draw_action(instant_reload_if_empty: boolean) {
     deck.shift();
 
     // update mana
-    let action_mana_required = action.mana;
-    if (action.mana == null) {
-      action_mana_required = ACTION_MANA_DRAIN_DEFAULT;
-    }
+    const action_mana_required = action.mana ?? ACTION_MANA_DRAIN_DEFAULT;
+    // if (action.mana == null) {
+    //   action_mana_required = ACTION_MANA_DRAIN_DEFAULT;
+    // }
 
-    if (action_mana_required! > mana) {
-      OnNotEnoughManaForAction();
+    if (action_mana_required > mana) {
+      OnNotEnoughManaForAction(action_mana_required, mana, action);
       discarded.push(action);
       return false;
     }
@@ -642,7 +644,7 @@ export function _add_card_to_deck(
 ) {
   // for (let i = 0; i < actions.length; i++) {
   // let action = actions[i];
-  const spell = getSpellById(action_id);
+  const spell = getSpellByActionId(action_id);
   // if (action.id === action_id) {
   const spell_clone = {} as Spell;
   clone_action(spell, spell_clone);
@@ -665,7 +667,7 @@ export function _play_permanent_card(
   OnPlayPermanentCard(action_id, c, always_cast_index);
   // for (let i = 0; i < actions.length; i++) {
   // let action = actions[i];
-  const action = getSpellById(action_id);
+  const action = getSpellByActionId(action_id);
   // if (action.id === action_id) {
   const action_clone = {} as Spell;
   action_clone.always_cast_index = always_cast_index;
