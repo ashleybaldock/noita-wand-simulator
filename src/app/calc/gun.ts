@@ -39,9 +39,12 @@ import {
   OnSetDontDraw,
   OnUnsetDontDraw,
   OnPlayPermanentCard,
+  OnWrap,
+  OnCantWrap,
+  OnNoUsesRemaining,
 } from './eval/dispatch';
-import type { EntityId } from '@reduxjs/toolkit';
 import type { AlwaysCastWandIndex } from '../redux/WandIndex';
+import type { EntityId } from '@reduxjs/toolkit';
 
 // constants
 export const ACTION_DRAW_RELOAD_TIME_INCREASE = 0;
@@ -346,7 +349,7 @@ export function draw_action(instant_reload_if_empty: boolean) {
 
   if (deck.length <= 0) {
     if (instant_reload_if_empty && !force_stop_draws) {
-      OnWrap(deck, hand, discard);
+      OnWrap(deck, hand, discarded);
       move_discarded_to_deck();
       order_deck();
       start_reload = true;
@@ -360,14 +363,13 @@ export function draw_action(instant_reload_if_empty: boolean) {
   if (deck.length > 0) {
     // draw from the start of the deck
     action = deck[0];
-
     deck.shift();
 
     // update mana
-    const action_mana_required = action.mana ?? ACTION_MANA_DRAIN_DEFAULT;
     // if (action.mana == null) {
     //   action_mana_required = ACTION_MANA_DRAIN_DEFAULT;
     // }
+    const action_mana_required = action.mana ?? ACTION_MANA_DRAIN_DEFAULT;
 
     if (action_mana_required > mana) {
       OnNotEnoughManaForAction(action_mana_required, mana, action);
@@ -376,6 +378,7 @@ export function draw_action(instant_reload_if_empty: boolean) {
     }
 
     if (action.uses_remaining === 0) {
+      OnNoUsesRemaining(action);
       discarded.push(action);
       return false;
     }

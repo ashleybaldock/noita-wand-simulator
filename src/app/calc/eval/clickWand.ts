@@ -58,7 +58,7 @@ type ClickWandState = {
   currentShotStack: WandShot[];
   lastCalledAction: ActionCall | undefined;
   lastDrawnAndCalledAction: ActionCall | undefined;
-  lastPlayed: Readonly<Spell> | undefined;
+  lastPlayed: Readonly<SpellDeckInfo> | undefined;
   alwaysCastsPlayed: SpellDeckInfo[];
   calledActions: ActionCall[];
   validSourceCalledActions: ActionCall[];
@@ -218,6 +218,15 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
         }
         break;
       }
+      case 'OnNotEnoughManaForAction': {
+        const { /*mana_required, mana_available,*/ spell } = payload;
+        break;
+      }
+      case 'OnNoUsesRemaining': {
+        const { spell /*, c: castState, playing_permanent_card*/ } = payload;
+        state.lastPlayed = spell;
+        break;
+      }
       case 'OnActionPlayed': {
         const { spell /*, c: castState, playing_permanent_card*/ } = payload;
         state.lastPlayed = spell;
@@ -231,15 +240,9 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
         break;
       }
       case 'OnWrap': {
+        const { deck, hand, discarded } = payload;
         result.wraps += 1;
         state.currentShot.wraps.push(result.wraps);
-        break;
-      }
-      case 'OnCantWrap': {
-        break;
-      }
-      case 'OnMoveDiscardedToDeck': {
-        const { discarded } = payload;
         if (state.lastDrawnAndCalledAction) {
           state.lastDrawnAndCalledAction.wasLastToBeDrawnBeforeWrapNr =
             result.wraps;
@@ -249,13 +252,20 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
           state.lastCalledAction.wasLastToBeCalledBeforeWrapNr = result.wraps;
           state.lastCalledAction.wrappingInto = [...discarded];
         }
+        break;
+      }
+      case 'OnCantWrap': {
+        break;
+      }
+      case 'OnMoveDiscardedToDeck': {
+        const { discarded } = payload;
 
         break;
       }
       case 'OnActionCalled': {
         const { source, spell /*, c: castState */, recursion, iteration } =
           payload;
-        const { id, deck_index, recursive } = spell;
+        const { id, deck_index } = spell;
         console.debug(`OnActionCalled gunMana: ${gunMana}`);
         state.lastCalledAction = {
           _typeName: 'ActionCall',
@@ -269,7 +279,9 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
           source,
           currentMana: gunMana,
           deckIndex: deck_index,
-          recursion: recursive ? recursion ?? 0 : recursion,
+          recursion: getSpellByActionId(id).recursive
+            ? recursion ?? 0
+            : undefined,
           iteration: isIterativeActionId(id) ? iteration ?? 1 : undefined,
           dont_draw_actions: dont_draw_actions,
         };
@@ -293,7 +305,7 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
           state.currentNode = newNode;
         }
         state.calledActions.push(state.lastCalledAction);
-        if (isValidActionCallSource(spell.type)) {
+        if (isValidActionCallSource(getSpellByActionId(spell.id).type)) {
           state.validSourceCalledActions.push(state.lastCalledAction);
         }
         break;

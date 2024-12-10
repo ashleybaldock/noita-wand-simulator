@@ -15,7 +15,7 @@ import {
 import { observer } from './wandObserver';
 import type { UnlockCondition } from '../unlocks';
 import type { AlwaysCastWandIndex } from '../../redux/WandIndex';
-import {serializeSpell} from './serialize';
+import { serializeSpell } from './serialize';
 
 export type WandId = '__WAND__';
 
@@ -23,8 +23,22 @@ export function SetProjectileConfigs(): void {
   observer.onEvent({ name: 'SetProjectileConfigs', payload: {} });
 }
 
-export function OnNotEnoughManaForAction(mana_required: number,mana_available: number,spell:Spell ): void {
-  observer.onEvent({ name: 'OnNotEnoughManaForAction', payload: {mana_required,mana_available,spell: serializeSpell(spell)} });
+export function OnNoUsesRemaining(spell: Spell): void {
+  observer.onEvent({
+    name: 'OnNoUsesRemaining',
+    payload: { spell: serializeSpell(spell) },
+  });
+}
+
+export function OnNotEnoughManaForAction(
+  mana_required: number,
+  mana_available: number,
+  spell: Spell,
+): void {
+  observer.onEvent({
+    name: 'OnNotEnoughManaForAction',
+    payload: { mana_required, mana_available, spell: serializeSpell(spell) },
+  });
 }
 
 export function RegisterGunShotEffects(recoil_knockback: number): void {
@@ -390,27 +404,31 @@ export const OnSetDontDraw = (): void => {
 };
 
 /* Each time the wand 'wraps' naturally */
-export const OnWrap = (deck: readonly Spell[], hand: readonly Spell[],  discard: readonly Spell[]): void => {
+export const OnWrap = (
+  deck: readonly Spell[],
+  hand: readonly Spell[],
+  discard: readonly Spell[],
+): void => {
   observer.onEvent({
     name: 'OnWrap',
     payload: {
-      deck: deck.map<SpellDeckInfo>(serializeSpell)
-      hand: hand.map<SpellDeckInfo>(serializeSpell)
-      discard: discard.map<SpellDeckInfo>(serializeSpell)
+      deck: deck.map<SpellDeckInfo>(serializeSpell),
+      hand: hand.map<SpellDeckInfo>(serializeSpell),
+      discarded: discard.map<SpellDeckInfo>(serializeSpell),
     },
   });
 };
 export const OnCantWrap = (): void => {
   observer.onEvent({
     name: 'OnCantWrap',
-    payload: {}
+    payload: {},
   });
 };
 export const OnMoveDiscardedToDeck = (discarded: readonly Spell[]): void => {
   observer.onEvent({
     name: 'OnMoveDiscardedToDeck',
     payload: {
-      discarded: discarded.map<SpellDeckInfo>(serializeSpell)
+      discarded: discarded.map<SpellDeckInfo>(serializeSpell),
     },
   });
 };

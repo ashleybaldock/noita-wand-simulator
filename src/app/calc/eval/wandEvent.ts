@@ -2,7 +2,7 @@ import type { AlwaysCastWandIndex } from '../../redux/WandIndex';
 import type { ActionId } from '../actionId';
 import type { ActionSource } from '../actionSources';
 import type { GunActionState } from '../actionState';
-import type { Spell, SpellDeckInfo } from '../spell';
+import type { SpellDeckInfo } from '../spell';
 import type { UnlockCondition } from '../unlocks';
 import type { WandId } from './dispatch';
 
@@ -12,15 +12,22 @@ export type InventoryItemID = number | undefined;
 export type EntityTransform = [x: number, y: number];
 
 export type WandEventBase = {
-  SetProjectileConfigs: {};
-  OnNotEnoughManaForAction: {};
+  SetProjectileConfigs: Record<string, never>;
+  OnNotEnoughManaForAction: {
+    mana_required: number;
+    mana_available: number;
+    spell: SpellDeckInfo;
+  };
+  OnNoUsesRemaining: {
+    spell: SpellDeckInfo;
+  };
   RegisterGunShotEffects: {
     recoil_knockback: number;
   };
   BeginProjectile: {
     entity_filename: string;
   };
-  EndProjectile: {};
+  EndProjectile: Record<string, never>;
   BeginTriggerHitWorld: {
     entity_filename: string;
     action_draw_count: number;
@@ -148,7 +155,7 @@ export type WandEventBase = {
     _returns: boolean;
   };
   OnActionPlayed: {
-    spell: Readonly<Spell>;
+    spell: Readonly<SpellDeckInfo>;
     c: GunActionState;
     playing_permanent_card: boolean;
   };
@@ -162,19 +169,25 @@ export type WandEventBase = {
   OnDraw: {
     state_cards_drawn: number;
   };
+  OnWrap: {
+    deck: readonly SpellDeckInfo[];
+    hand: readonly SpellDeckInfo[];
+    discarded: readonly SpellDeckInfo[];
+  };
+  OnCantWrap: Record<string, never>;
   OnMoveDiscardedToDeck: {
     discarded: readonly SpellDeckInfo[];
   };
   OnActionCalled: {
     source: ActionSource;
-    spell: Readonly<Spell>;
+    spell: Readonly<SpellDeckInfo>;
     c: GunActionState;
     recursion?: number;
     iteration?: number;
   };
   OnActionFinished: {
     source: string;
-    spell: Readonly<Spell>;
+    spell: Readonly<SpellDeckInfo>;
     c: GunActionState;
     recursion?: number;
     iteration?: number;
