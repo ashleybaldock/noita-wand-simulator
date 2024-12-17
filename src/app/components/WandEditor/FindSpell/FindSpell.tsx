@@ -11,7 +11,7 @@ import { mergeRefs } from '../../../util/mergeRefs';
 import type { Spell } from '../../../calc/spell';
 import { SearchResultList } from '../FindSpell/SearchResultList';
 import { isNotNullOrUndefined, noop } from '../../../util/util';
-import { HotkeyHint } from '../../Tooltips/HotkeyHint';
+import { HotkeyHint, HotkeyMultiHint } from '../../Tooltips/HotkeyHint';
 import { useFocus } from '../../../hooks/useFocus';
 import { useAppDispatch } from '../../../redux/hooks';
 import { spells } from '../../../calc/spells';
@@ -312,7 +312,24 @@ export const FindSpell = ({
           autoFocus={true}
           placeholder="spell name/id"
         ></SearchInput>
-        {<HotkeyHint hotkeys={hotkeys} position={'below'} />}
+        {
+          <HotkeyMultiHint
+            anchor={'ℹ︎'}
+            position={'below'}
+            hotkeys={[
+              { hotkeys: 'enter', description: 'Insert match at cursor' },
+              {
+                hotkeys: 'shift+enter',
+                description: 'Insert match before cursor',
+              },
+              { hotkeys: 'ctrl+enter', description: 'Insert and clear match' },
+              {
+                hotkeys: 'ctrl+shift+enter',
+                description: 'Insert before and clear match',
+              },
+            ]}
+          />
+        }
         {hidden ? null : noQuery ? (
           <NoQuery>Start typing to see suggestions</NoQuery>
         ) : (

@@ -16,12 +16,13 @@ import {
 } from './ColumnHeading';
 import { Fragment } from 'react';
 import type { WandShotId } from '../../../calc/eval/WandShot';
-import { useShotLookup } from '../../../redux';
+import { useShot, useShotLookup } from '../../../redux';
 import type { ShotProjectile } from '../../../calc/eval/ShotProjectile';
 import { ShotTableProjectile } from './ShotTableProjectile';
 import type { WandShotResult } from '../../../calc/eval/WandShot';
+import { shotTableGridRows } from './ShotTableRowConfig';
 
-const StyledShotTable = styled.div`
+const StyledShotTable = styled.div<{ $rows?: string }>`
   --nesting-offset: var(--sizes-nesting-offset, 16px);
 
   display: grid;
@@ -35,12 +36,7 @@ const StyledShotTable = styled.div`
     [shots-end right];
   grid-template-rows:
     [heading] min-content
-    [timing] repeat(5, min-content)
-    [motion] repeat(6, min-content)
-    [crit] repeat(6, min-content)
-    [damage] repeat(15, min-content)
-    [impact] repeat(5, min-content)
-    [material] repeat(4, min-content);
+    ${(props) => props.$rows};
 
   margin: 0.1em 0em 0.4em 0em;
 `;
@@ -118,12 +114,12 @@ export const ShotTableHeadings = ({
   shotId: WandShotId;
   nestingPrefix?: Array<number>;
 }) => {
-  const shotLookup = useShotLookup();
-  const shot = shotLookup.get(shotId);
+  const shot = useShot(shotId);
   if (!shot) {
     return null;
   }
   const { triggerType, projectiles } = shot;
+  const shotLookup = useShotLookup();
 
   return (
     <Headings>
@@ -189,12 +185,12 @@ export const ShotTableColumns = ({
   shotId: WandShotId;
   nestingPrefix?: Array<number>;
 }) => {
-  const shotLookup = useShotLookup();
-  const shot = shotLookup.get(shotId);
+  const shot = useShot(shotId);
   if (!shot) {
     return null;
   }
   const { castState, manaDrain, triggerType, projectiles } = shot;
+  const shotLookup = useShotLookup();
 
   return (
     <>
@@ -248,7 +244,7 @@ export const ShotTable = ({
   shot: WandShotResult;
 }) => {
   return (
-    <StyledShotTable>
+    <StyledShotTable $rows={shotTableGridRows()}>
       <ShotTableHeadings
         shotIndex={shotIndex}
         shotId={shot.id}

@@ -71,6 +71,12 @@
   --color-arrow-copy-nodraw: #ffbf00;
   --color-arrow-copy: #ffbf00;
   --color-arrow-draw: #ffeeff;
+  --hue-arrow-draw: 240deg;
+  --hue-arrow-action: 50deg;
+  --hue-arrow-perk: 0deg;
+  --hue-arrow-perm: 160deg;
+  --hue-arrow-related: 240deg;
+  --hue-arrow-multiple: 290deg;
 
   --arrow-action-bdcolor: #ffbf00;
 

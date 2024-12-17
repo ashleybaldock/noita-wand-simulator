@@ -14,9 +14,13 @@ const LineDiv = styled.div<{
   text-align: center;
   color: var(--color-arrow-action-text);
 
-  border: var(--arrow-w) hidden var(--color-arrow-action);
-  border-bottom-style: solid;
-  border-left-style: solid;
+  border: var(--arrow-w) inset #0000;
+  bottom: -6px;
+  right: -6px;
+  border-top-color: hsl(var(--hue) 67% 40%);
+  border-right-width: 0;
+  border-bottom-width: 0;
+  border-left-color: hsl(var(--hue) 67% 40%);
 
   ${({ swept }) =>
     swept
@@ -55,11 +59,13 @@ const ArrowHeadDiv = styled.div`
   height: 16px;
   transform: translate(0px, 0);
   border: none;
-  background-image: url('/data/arrowhead_right.png');
+  background-image: var(--icon-arrowhead-right);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: right center;
   image-rendering: pixelated;
+  filter: hue-rotate(calc(var(--arrowhead-hue-norm-angle) + var(--hue)))
+    drop-shadow(0 0 0 #000);
 `;
 
 export const NextActionArrow = ({

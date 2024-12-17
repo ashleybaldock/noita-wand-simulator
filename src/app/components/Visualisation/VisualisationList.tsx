@@ -5,7 +5,7 @@ import { isValidActionId } from '../../calc/actionId';
 import { getSpellByActionId } from '../../calc/spells';
 import {
   useConfig,
-  useResult,
+  useLatestResult,
   useSimulationStatus,
   useSpellSequence,
 } from '../../redux';
@@ -73,7 +73,7 @@ export const VisualisationList = () => {
     reloadTime: totalRechargeTime,
     endConditions,
     elapsedTime,
-  } = useResult();
+  } = useLatestResult();
 
   return (
     <ParentDiv>

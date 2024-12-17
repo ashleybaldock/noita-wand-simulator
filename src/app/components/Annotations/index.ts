@@ -11,6 +11,7 @@ export * from './DeltaCastDelayAnnotation';
 export * from './DeltaDrawAnnotation';
 export * from './DeltaManaAnnotation';
 export * from './DeltaRechargeAnnotation';
+export * from './DiscardedAnnotation';
 export * from './DontDrawAnnotation';
 export * from './DrawAnnotation';
 export * from './FriendlyFireAnnotation';

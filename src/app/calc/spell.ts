@@ -4,6 +4,7 @@ import type { SpellType } from './spellTypes';
 import type { UnlockCondition } from './unlocks';
 import type { SpellSpritePath } from './spellSprite';
 import type { AlwaysCastWandIndex } from '../redux/WandIndex';
+import type { ExtraEntity } from './extraEntities';
 
 export type SpellDeckInfo = {
   id: ActionId;
@@ -28,7 +29,7 @@ export type SpellProperties = {
   type: SpellType;
   custom_xml_file?: string;
   related_projectiles?: [string, number?];
-  related_extra_entities?: string[];
+  related_extra_entities?: ExtraEntity[];
   mana?: number;
   max_uses?: number;
   uses_remaining?: number;

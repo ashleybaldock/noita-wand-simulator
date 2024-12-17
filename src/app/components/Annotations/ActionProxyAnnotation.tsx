@@ -74,7 +74,7 @@ export const ActionProxyAnnotation = ({
         background={getSpellByActionId(proxy.id).sprite}
       />
     );
-  } else if (isNotNullOrUndefined(spell?.id)) {
+  } else if (isNotNullOrUndefined(icon)) {
     return (
       <ProxyDiv
         data-name="ActionProxyAnnotation"

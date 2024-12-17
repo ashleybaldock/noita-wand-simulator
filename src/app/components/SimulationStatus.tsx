@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useConfig, useResult, useSimulationStatus } from '../redux';
+import { useConfig, useLatestResult, useSimulationStatus } from '../redux';
 import { TerminationWarning } from './Visualisation/TerminationWarning';
 import { FNSP } from '../util';
 import { Duration } from './Visualisation/Duration';
@@ -52,7 +52,7 @@ export const SimulationStatus = styled(
     const {
       endConditions: lastRunEndConditions,
       elapsedTime: lastRunElapsedTime,
-    } = useResult();
+    } = useLatestResult();
 
     return (
       <StyledStatus data-name={'SimulationStatus'} className={className}>

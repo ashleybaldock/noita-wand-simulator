@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import type { TriggerCondition } from '../../../calc/trigger';
 import { getSpriteForTrigger } from '../../../calc/trigger';
-import { isNotNullOrUndefined, toUrl } from '../../../util';
+import { isNotNullOrUndefined, ordinalSuffix, toUrl } from '../../../util';
 import { WithDebugHints } from '../../Debug';
 import { LineSpacer } from './LineSpacer';
 
@@ -208,16 +208,7 @@ export const ShotIndexColumnHeading = styled(BaseColumnHeading)<{
     position: relative;
     top: 1.6em;
     left: 0.9em;
-    content: '${({ index }) =>
-      index > 4 && index < 20
-        ? 'th'
-        : index % 20 === 1
-        ? 'st'
-        : index % 20 === 2
-        ? 'nd'
-        : index % 20 === 3
-        ? 'rd'
-        : 'th'}';
+    content: '${(props) => ordinalSuffix(props.index)}';
     font-size: 0.4em;
     white-space: nowrap;
     padding-bottom: 0.6em;

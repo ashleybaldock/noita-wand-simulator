@@ -48,6 +48,7 @@ const StyledKeyItem = styled.li`
 
 const StyledKeyExample = styled.div`
   display: flex;
+  align-items: center;
   min-width: 1lh;
 `;
 

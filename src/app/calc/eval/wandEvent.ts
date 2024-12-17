@@ -2,6 +2,7 @@ import type { AlwaysCastWandIndex } from '../../redux/WandIndex';
 import type { ActionId } from '../actionId';
 import type { ActionSource } from '../actionSources';
 import type { GunActionState } from '../actionState';
+import type { ExtraModifier } from '../extraModifiers';
 import type { SpellDeckInfo } from '../spell';
 import type { UnlockCondition } from '../unlocks';
 import type { WandId } from './dispatch';
@@ -12,22 +13,31 @@ export type InventoryItemID = number | undefined;
 export type EntityTransform = [x: number, y: number];
 
 export type WandEventBase = {
-  SetProjectileConfigs: Record<string, never>;
-  OnNotEnoughManaForAction: {
-    mana_required: number;
-    mana_available: number;
-    spell: SpellDeckInfo;
+  // ConfigGunActionInfo_Create: {
+  //   _returns: GunActionState;
+  // };
+  // ConfigGunActionInfo_Init: {
+  //   source: GunActionState;
+  //   _returns: GunActionState;
+  // };
+  BaabInstruction: {
+    /* Unused ?? */ name: string;
   };
-  OnNoUsesRemaining: {
-    spell: SpellDeckInfo;
+  ActionUsed: {
+    /* Not sure this is useful */ itemId: InventoryItemID | undefined;
   };
+  SetProjectileConfigs: /* Unused ?? */ Record<string, never>;
   RegisterGunShotEffects: {
     recoil_knockback: number;
   };
+  RegisterGunAction: {
+    s: GunActionState;
+  };
+
+  /* Begin Sequence: Projectile */
   BeginProjectile: {
     entity_filename: string;
   };
-  EndProjectile: Record<string, never>;
   BeginTriggerHitWorld: {
     entity_filename: string;
     action_draw_count: number;
@@ -41,32 +51,110 @@ export type WandEventBase = {
     entity_filename: string;
     action_draw_count: number;
   };
-  EndTrigger: Record<string, never>;
-  BaabInstruction: {
-    name: string;
+  OnCreateShot: {
+    num_of_cards_to_draw: number;
   };
+  EndTrigger: Record<string, never>;
+  EndProjectile: Record<string, never>;
+  /* End Sequence: Projectile */
+
+  /* Begin Sequence: Reload */
   ActionUsesRemainingChanged: {
     item_id: InventoryItemID;
     uses_remaining: number;
-    _returns: boolean;
-  };
-  ActionUsed: {
-    itemId: InventoryItemID | undefined;
+    _returns: boolean /* return false to cancel use reduction */;
   };
   StartReload: {
     actionId: ActionId | WandId;
     reload_time: number;
   };
-  RegisterGunAction: {
-    s: GunActionState;
+  /* End Sequence: Reload */
+
+  /* Begin Sequence: Always Cast */
+  OnPlayPermanentCard: {
+    /* flag: playing_permanent_card */ actionId: ActionId | WandId;
+    c: GunActionState;
+    always_cast_index?: AlwaysCastWandIndex;
+  };
+  /* OnHandleManaAddition - add mana hack for always casts */
+  /* End Sequence: Always Cast */
+
+  OnSetDontDraw: Record<string, never>;
+  OnUnsetDontDraw: Record<string, never>;
+
+  /* Begin Sequence: Draw */
+  OnDraw: {
+    state_cards_drawn: number;
+  };
+  OnWrap: {
+    deck: readonly SpellDeckInfo[];
+    hand: readonly SpellDeckInfo[];
+    discarded: readonly SpellDeckInfo[];
+  };
+  OnMoveDiscardedToDeck: {
+    discarded: readonly SpellDeckInfo[];
+  };
+  OnCantWrap: Record<string, never>;
+  OnNotEnoughManaForAction: {
+    mana_required: number;
+    mana_available: number;
+    spell: SpellDeckInfo;
+  };
+  OnNoUsesRemaining: {
+    spell: SpellDeckInfo;
+  };
+  /* End Sequence: Draw */
+
+  /* Begin Sequence: Action */
+  OnActionPlayed: {
+    /* From Sequence: Draw OR Always Cast */ playing_permanent_card: boolean;
+    spell: Readonly<SpellDeckInfo>;
+    c: GunActionState;
+  };
+  /* OnSetCurrentAction */
+  OnActionCalled: {
+    source: ActionSource /* __WAND__ (draw) or a previous action */;
+    spell: Readonly<SpellDeckInfo>;
+    c: GunActionState;
+    recursion?: number;
+    iteration?: number;
+  };
+  OnExtraModifier: {
+    /* perk effects */ modifier: ExtraModifier;
+    c: GunActionState;
+    playing_permanent_card: boolean;
+  };
+  OnActionFinished: {
+    source: string;
+    spell: Readonly<SpellDeckInfo>;
+    c: GunActionState;
+    recursion?: number;
+    iteration?: number;
+    returnValue?: number;
+  };
+  /* End Sequence: Action */
+
+  /* ----- Mocked API calls made by specific spells ----- */
+  /* Component */
+  ComponentGetValue2: {
+    actionId: ActionId | WandId;
+    component_id: string;
+    key: string;
+    _returns: number;
+  };
+  ComponentSetValue2: {
+    component: ComponentID;
+    key: string;
+    value: number | boolean;
+  };
+  /* Entity */
+  GetUpdatedEntityID: {
+    actionId: ActionId | WandId;
+    _returns: EntityID;
   };
   EntityGetWithTag: {
     tag: string;
     _returns: EntityID[];
-  };
-  GetUpdatedEntityID: {
-    actionId: ActionId | WandId;
-    _returns: EntityID;
   };
   EntityGetComponent: {
     entity_id: EntityID;
@@ -84,17 +172,6 @@ export type WandEventBase = {
     entity_id: EntityID;
     component: string;
     _returns: ComponentID;
-  };
-  ComponentGetValue2: {
-    actionId: ActionId | WandId;
-    component_id: string;
-    key: string;
-    _returns: number;
-  };
-  ComponentSetValue2: {
-    component: ComponentID;
-    key: string;
-    value: number | boolean;
   };
   EntityInflictDamage: {
     entityId: EntityID;
@@ -139,6 +216,7 @@ export type WandEventBase = {
     tag: string;
     _returns: number[];
   };
+  /* Globals */
   GlobalsGetValue: {
     key: string;
     defaultValue: string;
@@ -154,45 +232,7 @@ export type WandEventBase = {
     defaultValue: boolean;
     _returns: boolean;
   };
-  OnActionPlayed: {
-    spell: Readonly<SpellDeckInfo>;
-    c: GunActionState;
-    playing_permanent_card: boolean;
-  };
-  OnPlayPermanentCard: {
-    actionId: ActionId | WandId;
-    c: GunActionState;
-    always_cast_index?: AlwaysCastWandIndex;
-  };
-  OnSetDontDraw: Record<string, never>;
-  OnUnsetDontDraw: Record<string, never>;
-  OnDraw: {
-    state_cards_drawn: number;
-  };
-  OnWrap: {
-    deck: readonly SpellDeckInfo[];
-    hand: readonly SpellDeckInfo[];
-    discarded: readonly SpellDeckInfo[];
-  };
-  OnCantWrap: Record<string, never>;
-  OnMoveDiscardedToDeck: {
-    discarded: readonly SpellDeckInfo[];
-  };
-  OnActionCalled: {
-    source: ActionSource;
-    spell: Readonly<SpellDeckInfo>;
-    c: GunActionState;
-    recursion?: number;
-    iteration?: number;
-  };
-  OnActionFinished: {
-    source: string;
-    spell: Readonly<SpellDeckInfo>;
-    c: GunActionState;
-    recursion?: number;
-    iteration?: number;
-    returnValue?: number;
-  };
+  /* RNG */
   Random: {
     min: number;
     max: number;
@@ -206,13 +246,6 @@ export type WandEventBase = {
   GameGetFrameNum: {
     _returns: number;
   };
-  // ConfigGunActionInfo_Create: {
-  //   _returns: GunActionState;
-  // };
-  // ConfigGunActionInfo_Init: {
-  //   source: GunActionState;
-  //   _returns: GunActionState;
-  // };
 };
 
 type WandEventPayloadRecord = {

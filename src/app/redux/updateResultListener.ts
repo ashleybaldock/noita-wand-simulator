@@ -148,6 +148,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
 
       const simulationRequestId = nextSimulationRequestId();
 
+      console.group(`Simulation Request #${simulationRequestId}`);
       console.debug('dispatch: newSimulation');
       listenerApi.dispatch(
         newSimulation({
@@ -184,12 +185,15 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
           limitSimulationDuration,
         }));
 
+      console.debug('fork');
+      console.group();
       const result = await task.result;
+      console.groupEnd();
       const { status } = result;
 
       if (status === 'ok') {
         const { value } = result;
-        // console.debug('Child succeeded: ', value);
+        console.debug('Simulation done, result: ', value);
 
         console.debug('dispatch: newResult');
         listenerApi.dispatch(
@@ -201,5 +205,6 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
         const { error } = result;
         console.warn('Child failed: ', status, error);
       }
+      console.groupEnd();
     },
   });

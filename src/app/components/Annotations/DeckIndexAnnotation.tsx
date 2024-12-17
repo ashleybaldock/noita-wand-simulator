@@ -11,8 +11,9 @@ const IndexDiv = styled.div`
   pointer-events: none;
   user-select: none;
   position: absolute;
-  bottom: -2px;
-  right: 2px;
+  width: 1.4em;
+  height: 1.4em;
+  padding: 2px 1px 2px 2px;
   z-index: var(--zindex-note-deckidx);
   color: rgb(255, 255, 255);
   font-size: 14px;
@@ -26,6 +27,8 @@ const IndexDiv = styled.div`
     var(--shadow-bg) -1px -1px var(--shadow-w), var(--shadow-bg) 1px 1px 1px,
     var(--shadow-bg) 1px -1px 1px, var(--shadow-bg) -1px 1px 1px,
     var(--shadow-bg) -1px -1px 1px;
+  bottom: -6px;
+  right: -6px;
 `;
 
 const SpecialIndexDiv = styled(IndexDiv)`

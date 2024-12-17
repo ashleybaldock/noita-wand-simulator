@@ -180,6 +180,46 @@ export const HotkeyHint = ({
   );
 };
 
+export type HotkeyDescription = {
+  hotkeys: string;
+  description?: string;
+};
+
+const HotkeyMultiRow = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+const HotkeyDescription = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+/**
+ * Mini-overview of multiple hotkeys for
+ * a single control, e.g. search input
+ */
+export const HotkeyMultiHint = ({
+  anchor,
+  hotkeys = [],
+  position = 'ne-corner',
+}: {
+  anchor: string;
+  hotkeys?: Array<HotkeyDescription>;
+  position: HintPosition;
+}) => {
+  const [showKeyHints] = useUIToggle('showKeyHints');
+  return !showKeyHints ? null : (
+    <HotkeyHintPositioned position={position}>
+      {hotkeys.map(({ hotkeys, description }) => (
+        <HotkeyMultiRow key={hotkeys}>
+          <HotkeyDescription>{description}</HotkeyDescription>
+          <HotKeyCombos hotkeys={hotkeys}></HotKeyCombos>
+        </HotkeyMultiRow>
+      ))}
+    </HotkeyHintPositioned>
+  );
+};
+
 const KeyCombo = styled.div`
   display: flex;
   flex-direction: row;
@@ -234,7 +274,6 @@ const KeyCap = styled.kbd`
   border-right: 2px inset #c9ced2;
   border-left: 1px solid #5c5f61;
   border-top: 1px solid white;
-  background-color: #a7a7a7;
   color: black;
   font-weight: bold;
   font-family: monospace;

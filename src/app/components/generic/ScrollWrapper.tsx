@@ -15,7 +15,7 @@ const ChildDiv = styled.div`
   width: fit-content;
   margin: 0 auto;
   display: flex;
-  padding: 0 4em 0 1em;
+  padding: 0 1em 0 1em;
 `;
 
 export const ScrollWrapper = (props: PropsWithChildren) => {

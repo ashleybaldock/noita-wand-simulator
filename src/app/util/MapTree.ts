@@ -64,7 +64,7 @@ export type MapTree<T> = {
 export const mapTreeToMap = <T extends object>(
   rootNode?: TreeNode<T>,
 ): Map<MapTreeId, MapTreeNode<T>> => {
-  console.log(rootNode);
+  // console.log(rootNode);
 
   const nextNodeId = sequentialId<MapTreeId>();
 
@@ -127,7 +127,7 @@ export const mappedTreeToTreeMap = <T>(
     childIds,
     parentId,
   }: MapTreeNode<T>): MapTree<T> => {
-    console.log(value, childIds, parentId);
+    // console.log(value, childIds, parentId);
     return {
       value,
       // TODO memoize this

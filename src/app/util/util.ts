@@ -239,6 +239,8 @@ export const toFrames = (durationInSeconds: number, fps: number = FPS) =>
 export const toSeconds = (durationInFrames: number, fps: number = FPS) =>
   round(durationInFrames / fps, 2);
 
+export const ordinalSuffix = (n: number) =>
+  n % 20 === 1 ? 'st' : n % 20 === 2 ? 'nd' : n % 20 === 3 ? 'rd' : 'th';
 /**
  * min: lifetime - variation, max: lifetime + variation
  * range: abs(max - min) + 1

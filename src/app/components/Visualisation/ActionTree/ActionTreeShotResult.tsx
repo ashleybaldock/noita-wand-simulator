@@ -2,9 +2,10 @@ import styled from 'styled-components';
 import { WandActionCall } from '../WandActionCall';
 import type { ActionCall } from '../../../calc/eval/ActionCall';
 import type { TreeNode } from '../../../util/TreeNode';
-import { isNotNullOrUndefined } from '../../../util';
+import { isNotNullOrUndefined, ordinalSuffix } from '../../../util';
 import { mappedTreeToTreeMap } from '../../../util/MapTree';
 import type { WandShotResult } from '../../../calc/eval/WandShot';
+import type { ActionSource } from '../../../calc/actionSources';
 
 export const ActionTreeRoot = styled.div`
   --arrow-hz: 40px;
@@ -15,7 +16,6 @@ export const ActionTreeRoot = styled.div`
   --col-spacing: 48px;
 
   display: flex;
-  flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
   margin: 1px;
@@ -32,6 +32,13 @@ export const ActionTreeShotResultNodeDiv = styled.div`
 const ChildrenDiv = styled.div`
   display: flex;
   flex-direction: column;
+  border-top: 0;
+  border-bottom: 0;
+`;
+
+const ActionTreeSourceGroup = styled.div<{ $source: ActionSource }>`
+  display: flex;
+  flex-direction: ${(props) => (props.$source === 'action' ? 'row' : 'column')};
   border-top: 0;
   border-bottom: 0;
 `;
@@ -62,6 +69,7 @@ const ActionTreeComponent = ({
   return (
     <ActionTreeShotResultNodeDiv
       data-name="AcTreeNode"
+      data-spell={node?.value.spell.id}
       data-leaf={isLeaf}
       data-twig={isTwig}
       data-level={level}
@@ -89,19 +97,47 @@ const ActionTreeComponent = ({
           data-twig={isTwig}
           data-trigger={isTriggerParent}
         >
-          {node.children.map((childNode, index) => (
-            <ActionTreeComponent
-              node={childNode}
-              key={index}
-              level={level + 1}
-              triggerLevel={triggerLevel}
-            />
-          ))}
+          {/* TODO memoise this */}
+          {node.children
+            .reduce<TreeNode<ActionCall>[][]>((runs, cur) => {
+              if (
+                runs.length > 0 &&
+                runs[runs.length - 1][runs[runs.length - 1].length - 1]?.value
+                  ?.source === cur.value.source
+              ) {
+                runs[runs.length - 1].push(cur);
+                return runs;
+              } else {
+                runs.push([cur]);
+                return runs;
+              }
+            }, [])
+            .map((run, runIdx) => (
+              <ActionTreeSourceGroup
+                data-name={'ActionSourceGroup'}
+                data-source={run[0]?.value?.source ?? 'draw'}
+                key={runIdx}
+                $source={run[0]?.value?.source ?? 'draw'}
+              >
+                {run.map((childNode, index) => (
+                  <ActionTreeComponent
+                    node={childNode}
+                    key={index}
+                    level={level + 1}
+                    triggerLevel={triggerLevel}
+                  />
+                ))}
+              </ActionTreeSourceGroup>
+            ))}
         </ChildrenDiv>
       )}
     </ActionTreeShotResultNodeDiv>
   );
 };
+
+const ActionTreeCast = styled.div``;
+const ActionTreeCastSummary = styled.div``;
+const StartingDraw = styled.div``;
 
 export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
   const level = 0;
@@ -109,12 +145,21 @@ export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
   return (
     <ActionTreeRoot data-name="ActionTreeRoot">
       {shot.actionCallTrees.map((n, index) => (
-        <ActionTreeComponent
-          node={mappedTreeToTreeMap(n)}
+        <ActionTreeCast
+          data-name="AcTreeCast"
+          data-cast={index + 1}
           key={index}
-          level={level + 1}
-          triggerLevel={triggerLevel}
-        />
+        >
+          <ActionTreeCastSummary data-name="AcTreeSummary">
+            {`${index + 1}${ordinalSuffix(index + 1)} cast`}
+          </ActionTreeCastSummary>
+          <StartingDraw data-name="AcTreeSpCast">Spells/cast: </StartingDraw>
+          <ActionTreeComponent
+            node={mappedTreeToTreeMap(n)}
+            level={level + 1}
+            triggerLevel={triggerLevel}
+          />
+        </ActionTreeCast>
       ))}
     </ActionTreeRoot>
   );

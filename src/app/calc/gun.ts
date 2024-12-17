@@ -42,6 +42,8 @@ import {
   OnWrap,
   OnCantWrap,
   OnNoUsesRemaining,
+  OnExtraModifier,
+  OnCreateShot,
 } from './eval/dispatch';
 import type { AlwaysCastWandIndex } from '../redux/WandIndex';
 import type { EntityId } from '@reduxjs/toolkit';
@@ -241,6 +243,7 @@ function clone_action(source: Readonly<Spell>, target: Spell) {
 // various utilities
 
 function create_shot(num_of_cards_to_draw: number): Shot {
+  OnCreateShot(num_of_cards_to_draw);
   const shot: Shot = {
     num_of_cards_to_draw,
     state: ConfigGunActionInfo_Create(),
@@ -330,6 +333,7 @@ function play_action(spell: Readonly<Spell>) {
 
   if (is_projectile) {
     active_extra_modifiers.forEach((modifier) => {
+      OnExtraModifier(modifier, c, playing_permanent_card);
       extraModifiers[modifier](c);
     });
   }

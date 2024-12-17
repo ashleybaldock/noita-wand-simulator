@@ -4,7 +4,7 @@ import {
   ActionSourceAnnotation,
   DeckIndexAnnotation,
   DontDrawAnnotation,
-  DrawAnnotation,
+  DrawAnnotations,
   FriendlyFireAnnotation,
   RecursionAnnotation,
 } from '../Annotations/';
@@ -44,7 +44,7 @@ export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
         {...actionCall}
         dont_draw_actions={actionCall.dont_draw_actions}
       />
-      <DrawAnnotation drawBefore={1} drawAfter={1} />
+      <DrawAnnotations draws={1} eats={1} />
       <DeckIndexAnnotation
         wandIndex={actionCall?.spell.always_cast_index}
         deckIndex={actionCall.deckIndex}

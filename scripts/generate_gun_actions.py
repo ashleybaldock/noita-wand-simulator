@@ -3,6 +3,7 @@ import re
 import base64
 from dataclasses import dataclass
 from re import Match
+from itertools import chain
 
 cssPrefix = '--sprite-action-'
 
@@ -112,8 +113,24 @@ config = {
       'before': '',
       'after': '',
     },
+    'projectiles':
+    {
+      'src': 'data/scripts/gun/gun_actions.lua',
+      'dst':'src/app/calc/__generated__/main/relatedProjectiles.ts',
+      'before': '',
+      'after': '',
+    },
   },
 }
+
+def parseInt(s):
+    try:
+        return int(float(s))
+    except:
+        return 0
+
+def joinList(items):
+    return ",".join(f'\'{x}\'' for x in items)
 
 
 # Convert action functions,
@@ -392,31 +409,66 @@ def processExtraEntities(src, dst, before = '', after = ''):
 
   content = preProcess(content)
 
-  # actionIdAndRelatedExtraEntitiesPattern = '^\s+{\s*id\s*=\s*\"(\w+)\".+?(?:^\s+}|^\s+related_extra_entities\s*=\s*{\s*\"([^}]+?)\"\s+})'
-  # relatedMatches = dict(re.findall(actionIdAndRelatedExtraEntitiesPattern, content, re.MULTILINE|re.DOTALL))
-
-  # actionIdAndActionExtraEntitiesPattern = r'^\s+{\s*id\s*=\s*\"(\w+)\".+?(?:^\s+}|^\s+c\.extra_entities\s*=\s*c\.extra_entities\s+\.\.\s*\"([^}]+?)\")'
-  # actionMatches = dict(re.findall(actionIdAndActionExtraEntitiesPattern, content, re.MULTILINE|re.DOTALL))
-
   extraEntitiesPattern = '^\s+{\s*id\s*=\s*\"(\w+)\".+?(?:^\s+}|^\s+related_extra_entities\s*=\s*{\s*\"([^}]+?)\"\s+})|(?:^\s+c\.extra_entities\s*=\s*c\.extra_entities\s+\.\.\s*\"([^}]+?)\")'
   # print("\n".join(re.findall(extraEntitiesPattern, content, re.MULTILINE|re.DOTALL)))
 
-  matches = {actionId: set(rawRelated.replace('"', '').split(','))|set(rawExtra.replace('"', '').split(',')) for actionId, rawRelated, rawExtra in re.findall(extraEntitiesPattern, content, re.MULTILINE|re.DOTALL)}
-  print(",".join(f'\'{x}\'' for x, y in matches.items()))
-
-  def uniqueEntities(entities):
-    return ",".join(f'\'{x}\'' for x in entities)
+  matches = {actionId: set(filter(len, [x.strip() for x in rawRelated.replace('"', '').split(',')]))|set(filter(len, [x.strip() for x in rawExtra.replace('"', '').split(',')])) for actionId, rawRelated, rawExtra in re.findall(extraEntitiesPattern, content, re.MULTILINE|re.DOTALL)}
+  # print(",".join(f'\'{x}\'' for x, y in matches.items()))
 
   with open(dst, 'w') as outFile:
     outFile.write("""/* Auto-generated file */
 
 export const extraEntities = [
-""" + ",\n".join(f'  [\'{actionId}\',[{uniqueEntities(extra)}]]' for actionId, extra in iter(matches.items())) + """,
+""" + ",\n".join(f'  \'{uniqueEntity}\'' for uniqueEntity in iter(set(x for l in matches.values() for x in l))) + """,
 ] as const;
 
-export type ExtraEntity = typeof extraEntities;
+export const actionIdExtraEntities = {
+""" + ",\n".join(f'  \'{actionId}\': [{joinList(extra)}]' for actionId, extra in iter(matches.items())) + """,
+} as const;
 """)
 
+
+# TODO - this only gets the first projectile, they are typically all the same but it would be good to check them all
+# - Use this to build the 
+def processProjectiles(src, dst, before = '', after = ''):
+
+  with open(src) as inFile:
+    content = inFile.read()
+
+  content = preProcess(content)
+
+  # projectilesPattern = '^\s+{\s*id\s*=\s*\"(\w+)\".+?(?:^\s+}|^\s+related_projectiles\s*=\s*\{([\s\w/.,"]*)\})|(?:^\s+add_projectile(?:|_trigger_hit_world|_trigger_timer|_trigger_death)\(\"([\w/.]+)\")'
+
+  projectilesPattern = '^\s+{\s*id\s*=\s*\"(\w+)\".+?(?:^\s+}|^\s+related_projectiles\s*=\s*\{\s*\"([\s\w/.]*)\"(?:,(\d*))?\s*\})|(?:^\s+add_projectile(?:|_trigger_hit_world|_trigger_timer|_trigger_death)\(\"([\w/.]+)\")'
+
+  # , *_ = re.findall(projectilesPattern, content, re.MULTILINE|re.DOTALL)
+
+
+  all_matches = chain((x.strip() for x in relatedProj.replace('"', '').split(',') if len(x)), (x.strip() for x in addedProj.replace('"', '').split(',') if len(x)) for actionId, relatedProj, relProjCount, addedProj in re.findall(projectilesPattern, content, re.MULTILINE|re.DOTALL))
+
+  # all_matches.extend(filter(len, [x.strip() for x in addedProj.replace('"', '').split(',')]))
+
+
+  print([x for x in all_matches])
+                    #.extend(filter(len, [z.strip() for y in [x.replace('"', '').split(',').strip() for x in iter(addedProj)] for z in y])))
+
+                    # .extend(filter(len, [x.strip() for x in addedProj.replace('"', '').split(',')])))
+
+  matches = {actionId: {'added': set(filter(len, [x.strip() for x in addedProj.replace('"', '').split(',')])), 'relatedCount': max(parseInt(relProjCount),len(relatedProj)), 'addedCount': len(addedProj)} for actionId, relatedProj, relProjCount, addedProj in re.findall(projectilesPattern, content, re.MULTILINE|re.DOTALL)}
+
+  # print(matches)
+
+  with open(dst, 'w') as outFile:
+    outFile.write("""/* Auto-generated file */
+
+export const relatedProjectiles = [
+""" + ",\n".join(str(x) for x in all_matches) + """,
+] as const;
+
+export const relatedAddedCounts = {
+""" + ",\n".join(f'  \'{actionId}\': {x}' for actionId, x in iter(matches.items())) + """,
+} as const;
+""")
 
 
 
@@ -460,6 +512,7 @@ process = {
   'spells': processSpells,
   'sprites': processSprites,
   'extraEntities': processExtraEntities,
+  'projectiles': processProjectiles,
 }
 
 for branch, tasks in config.items():

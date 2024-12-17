@@ -467,6 +467,8 @@ export const clickWand = ({
       console.debug(
         `shot#${result.shotCount}->_start_shot(): mana: ${state.mana}, cast_delay: ${wand_cast_delay}`,
       );
+
+      /* Simulate shot */
       _start_shot(state.mana);
 
       alwaysCastSpells.forEach((spell, i) => {
@@ -474,6 +476,8 @@ export const clickWand = ({
       });
 
       _draw_actions_for_shot(true);
+      /* End Simulate shot */
+
       state.currentShot.actionCalls = state.calledActions!;
       state.currentShot.actionCallTrees = state.rootNodes;
       state.currentShot.manaDrain = state.mana - gunMana;
@@ -488,7 +492,7 @@ export const clickWand = ({
       console.debug(result);
       /* Check for end conditions */
       if (result.shotCount >= endSimulationOnShotCount) {
-        result.endConditions.push('shotCount');
+        // result.endConditions.push('shotCount');
       }
       if (result.reloadCount >= endSimulationOnReloadCount) {
         result.endConditions.push('reloadCount');

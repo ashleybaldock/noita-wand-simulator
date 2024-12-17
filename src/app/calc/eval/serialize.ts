@@ -18,6 +18,11 @@ export const serializeSpell = (spell: SpellDeckInfo) => ({
 const maybeSerializeSpell = (spell?: SpellDeckInfo) =>
   isNotNullOrUndefined(spell) ? serializeSpell(spell) : undefined;
 
+/**
+ *  Spell -> SpellDeckInfo
+ *
+ */
+
 export const serializeClickWandResult = (
   result: ClickWandResult,
 ): SerializedClickWandResult => ({

@@ -73,8 +73,8 @@
 
   /* */
   --arrow-hue-draw: 184deg;
-  --arrow-hue-perk: 145deg;
-  --arrow-hue-action: 45deg;
+  --arrow-hue-perk: 45deg;
+  --arrow-hue-action: 145deg;
   --arrow-hue-perm: 245deg;
   --arrow-hue-related: 300deg;
   --arrow-hue-multiple: 10deg;
@@ -84,7 +84,7 @@
   --arrow-right: 30px;
   --arrow-radius: 20px;
   --arrow-line-w: 3px;
-  /* Norises hue for source image so that using absolute hue
+  /* Normalises hue for source image so that using absolute hue
    * angles as offsets in hue-rotate() produces the right colours */
   --arrowhead-hue-norm-angle: -42deg;
   --arrowhead-h: 16px;
@@ -119,6 +119,7 @@
   --arrow-adjust-h: -18px;
   margin-top: 0;
 }
+[data-name='ActionSourceGroup'],
 [data-name='AcTreeChildren'] {
   row-gap: var(--row-spacing);
 }
@@ -128,6 +129,7 @@
 [data-name='ActionTreeRoot'] {
   row-gap: var(--row-spacing);
   flex-direction: column;
+  padding: 2em 0;
 }
 
 :is([data-name='ActionTreeRoot']) :is([data-name='ArrowLine']) {
@@ -141,13 +143,23 @@
   background-image: linear-gradient(45deg, #000, #111, #000);
   box-shadow: 0 0 0 2px #000;
   padding: var(--padding);
-  margin: calc((var(--padding) + var(--bdw)) * -1) -14px calc(
-      (var(--padding) + var(--bdw)) * -1
-    ) 0;
-  margin: calc((var(--padding) + var(--bdw)) * -1)
-    calc(var(--ts-spell-pad) - var(--padding))
-    calc((var(--padding) + var(--bdw)) * -1)
-    calc(var(--ts-spell-pad) - var(--padding));
+  margin: 0;
+}
+[data-name='ActionTreeRoot']
+  > div
+  > [data-name='AcTreeNode']
+  > :is(
+    [data-name='Arrows'],
+    [data-name='Arrows']::after,
+    [data-name='Arrows']::before
+  ) {
+  display: none;
+}
+
+[data-name='AcTreeCast'] {
+  border: 3px solid #666;
+  border-radius: var(--base-radius);
+  padding: 1em 2em;
 }
 
 /*{{{1 arrows */
@@ -202,6 +214,22 @@
   border: none;
   filter: drop-shadow(0 0 0 #000);
 }
+[data-name='ActionSourceGroup'][data-source='action']
+  > [data-name='AcTreeNode'][data-childcount='0']
+  > [data-name='Arrows'] {
+  --width: 32px;
+}
+[data-name='AcTreeNode'][data-childcount='1'] > [data-name='Arrows'] {
+  --width: 32px;
+}
+[data-childcount='1']
+  > div
+  > div
+  > [data-childcount='1']
+  > [data-name='Arrows'] {
+  --width: 32px;
+}
+
 [data-name='Arrows']::before,
 [data-name='Arrows']::after {
   content: '';
@@ -244,10 +272,7 @@
     (var(--spell-size) / 2) + var(--row-spacing) - (var(--arrow-line-w) / 2)
   );
   --width: calc(var(--arrow-right-w) - (var(--arrow-line-w) / 2));
-  top: calc(
-    (var(--row-spacing) + (var(--spell-size) / 2) + (var(--arrow-line-w) / 2)) *
-      -1
-  );
+  top: calc(((var(--spell-size) / 2) + (var(--arrow-line-w) / 2)) * -1);
   right: unset;
   bottom: unset;
   left: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2));
@@ -260,6 +285,7 @@
   left: 0;
   border-radius: var(--arrow-radius-➜);
   border-width: var(--arrow-line-➜);
+  /* left: calc(var(--width) * -0.5); */
 }
 
 /*{{{3 Arrows Debug */
@@ -312,8 +338,16 @@
 
 /*{{{1 Collapsed groups */
 
+[data-name='ActionSourceGroup'][data-source='draw']
+  > div
+  > div
+  > [data-name='ActionSourceGroup'][data-source='action']
+  > [data-name='AcTreeNode']:nth-of-type(n + 2) {
+  visibility: collapse;
+}
+
 /* Divide By */
-[data-name='AcTreeChildren'].collapsed
+[data-name='AcTreeGroup'].collapsed
   > [data-name='AcTreeNode'][data-leaf='true']:nth-of-type(
     n + 1
   ):nth-last-of-type(n + 2) {
@@ -431,32 +465,42 @@
   font-size: 0.82em;
   align-items: flex-end;
 }
-[data-name='ActionSource'] {
-  padding: 2px;
-  border-radius: 5px;
-  outline: 1px solid #666;
-  text-shadow: 0 1.5px 0 #000, 0 -1px 0 #000, 1.5px 0 0 #000, -1px 0 0 #000;
-  left: -24px;
+[data-name='ActionSource'],
+[data-name='Discarded'] {
+  pointer-events: none;
+  position: absolute;
+  width: calc(var(--bsize-spell) / 4);
+  height: calc(var(--bsize-spell) / 4);
   top: 6px;
   right: unset;
   bottom: unset;
+  left: -24px;
+  padding: 3px;
+  line-height: calc(var(--bsize-spell) / 3 - 2px);
+  text-align: center;
+  font-size: 13px;
+  text-shadow: 0 1.5px 0 #000, 0 -1px 0 #000, 1.5px 0 0 #000, -1px 0 0 #000;
+  outline: 1px solid #666;
   box-shadow: -0.2px -0.2px 0.4px 0.1px hsl(var(--hue) 100% 20%) inset,
     0 0 0 0.6px #000;
+  border: 2px ridge hsl(var(--hue) 67% 40%);
+  background-color: hsl(var(--hue) 67% 40% / 90%);
+}
+[data-name='ActionSource'] {
+  border-radius: 50%;
+  font-size: 13px;
   background-image: linear-gradient(
     -45deg,
     hsl(var(--hue) 54% 43% / 1),
     hsl(var(--hue) 54% 43% / 65%),
     hsl(var(--hue) 54% 43% / 50%)
   );
-  border: 2px ridge hsl(var(--hue) 67% 40%);
-  font-size: 0.9em;
 }
 [data-name='ActionSource'][data-source='perk'] {
-  --rgb: #995;
-  --hue: 50deg;
+  --hue: 0deg;
 }
 [data-name='ActionSource'][data-source='action'] {
-  --hue: 0deg;
+  --hue: 50deg;
 }
 [data-name='ActionSource'][data-source='draw'] {
   --hue: 240deg;
@@ -472,6 +516,43 @@
 [data-name='ActionSource'][data-source='multiple'] {
   --rgb: #747;
   --hue: 290deg;
+}
+[data-name='Discarded'] {
+  top: 6px;
+  right: unset;
+  bottom: unset;
+  left: -24px;
+  background-image: var(--icon),
+    linear-gradient(
+      -45deg,
+      hsl(var(--hue) 54% 43% / 1),
+      hsl(var(--hue) 54% 43% / 65%),
+      hsl(var(--hue) 54% 43% / 50%)
+    );
+  border-radius: 50%;
+  font-size: 13px;
+  width: 1em;
+  height: 1em;
+  background-size: contain;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+[data-name='Discarded'][data-reason='mana'] {
+  --icon: url('../data/wand/icon_mana_max.png');
+  --hue: 206deg;
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+[data-name='Discarded'][data-reason='charges'] {
+  --icon: url('../data/wand/icon_action_max_uses.png');
+  --hue: 50deg;
+}
+[data-name='Discarded'][data-reason='action'] {
+  --hue: 50deg;
 }
 
 [data-name='DeckIndex'] {
@@ -491,6 +572,13 @@
   padding: 2px 1.5px 2px 2px;
   font-size: 0.8em;
   text-align: center;
+  bottom: -8px;
+  right: -6px;
+}
+
+[data-name='WandAction'] {
+  --padding: var(--spell-pad, 3px);
+  outline: none;
 }
 
 /* Draw Disabled annotation */
@@ -503,57 +591,70 @@
   right: -28px;
   --bdw: inherit;
   color: #0000;
-  left: unset;
   background-color: #0000;
   border: none;
   font-size: 2em;
-  height: 3px;
   position: absolute;
   border-bottom: var(--bdw) dotted #eee;
   display: flex;
-  line-height: 1;
-  width: var(--nodraw-arrow-w);
   background-image: url('data:image/svg+xml,%3Csvg style=%22fill: %23ff0000%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22%3E%3Cpath d=%22M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z%22%3E%3C/path%3E%3C/svg%3E'),
     var(--icon-arrowhead-right), var(--data-inventory-icon-draw-plus);
-}
-
-[data-name='WandAction'] {
-  --padding: var(--spell-pad, 3px);
-  outline: none;
+  left: calc(-1 * var(--bsize-spell) / 4 + 6px);
+  width: calc(var(--bsize-spell) / 5);
+  height: calc(var(--bsize-spell) / 5);
+  line-height: calc(var(--bsize-spell) / 5 - -2px);
 }
 
 [data-name='DrawDisabled']::after {
   /* filter: drop-shadow(0px 2px 0 #000) drop-shadow\(0px 2px 0 # !important; */
-  content: url('data:image/svg+xml,%3Csvg style=%22fill: %23ff0000%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22%3E%3Cpath d=%22M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z%22%3E%3C/path%3E%3C/svg%3E');
-  display: block;
-  position: absolute;
-  width: 70%;
-  left: 12px;
-  top: -6px;
-  filter: drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000)
-    drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000);
-  left: calc(var(--ts-spell-pad) - var(--padding) + var(--nodraw-arrow-w));
   top: -11px;
-  content: '';
-  background-repeat: no-repeat;
   image-rendering: pixelated;
-  height: calc(var(--arrowhead-w) * 2);
-  left: 23px;
-  top: -12.5px;
-  background-size: calc(var(--arrowhead-w) * 1.6), var(--arrowhead-w);
-  background-size: calc(var(--arrowhead-w) * 1.8),
-    calc(var(--arrowhead-w) * 1.1);
-  background-position: center;
-  width: var(--nodraw-arrow-w);
-  --data-inventory-icon-draw-plus: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjAQAAAAA2oo70AAAAAnRSTlMAAHaTzTgAAAA0SURBVHjaY2BgYP//gAEbyWD/gKH+/wEc5PGD+MgDDAxo5P9/6OQPO9wkgzwDXvL/P5wkAD+/VLYKlkf/AAAAAElFTkSuQmCC');
-  background-image: url('data:image/svg+xml,%3Csvg style=%22fill: %23ff0000%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22%3E%3Cpath d=%22M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z%22%3E%3C/path%3E%3C/svg%3E'),
-    var(--data-inventory-icon-draw-plus);
-  background-clip: padding-box;
-  padding: 2px;
 }
 /* end annotations */
 
 /*{{{1 Trigger Scope borders */
+[data-trigger='true'] > [data-name='AcTreeChildren'] {
+  --bdw: var(--ts-scope-bdw, 3px);
+  --rpad: 10px;
+  --vpad: 22px;
+  --lpad: 22px;
+  outline: var(--bdw) dashed
+    hsl(var(--ts-hue) var(--ts-sat) calc(var(--ts-lum) - 10%));
+  outline-offset: calc(var(--bdw) * -1);
+  border-radius: calc(
+    var(--base-radius) + max(var(--vpad), var(--rpad)) + var(--bdw)
+  );
+  border: var(--bdw) solid #333;
+  box-shadow: inset 0 0 4px 1px #000;
+  background-image: repeating-linear-gradient(
+    60deg,
+    hsl(var(--ts-hue) var(--ts-sat) var(--ts-lum) / 2%),
+    hsl(var(--ts-hue) var(--ts-sat) var(--ts-lum) / 8%),
+    hsl(var(--ts-hue) var(--ts-sat) var(--ts-lum) / 2%) 40%
+  );
+  background-color: #111;
+  margin: calc((var(--vpad) + var(--ts-scope-pad) + var(--bdw)) * -1)
+    calc((var(--rpad) + var(--ts-scope-pad) + var(--bdw)) * -1)
+    calc((var(--ts-scope-pad) + var(--bdw)) * -1)
+    calc(var(--lpad) - var(--ts-scope-pad));
+  padding: calc(var(--vpad) + var(--ts-scope-pad))
+    calc(var(--rpad) + var(--ts-scope-pad))
+    calc(var(--vpad) + var(--ts-scope-pad))
+    calc(var(--vpad) + var(--ts-scope-pad));
+  margin-left: calc((var(--lpad) - var(--ts-scope-pad)) * -1);
+}
+/* non-overlapping nested trigger ts boxes */
+.tbox [data-trigger='true'] > [data-name='AcTreeChildren'] {
+  margin: calc((var(--vpad)) * -1) calc((var(--rpad)) * -1)
+    calc((var(--vpad) + var(--bdw)) * -1) var(--lpad);
+  border-radius: calc(
+    var(--base-radius) + max(var(--vpad), var(--rpad)) +
+      calc(
+        var(--bdw) * (var(--data-deepest-trigger) - var(--data-triggerlevel))
+      )
+  );
+}
+
 [data-trigger='true'] > [data-name='AcTreeChildren']::before {
   content: 'Trigger Scope: 1';
   font-size: 0.8em;
@@ -563,12 +664,14 @@
   border: var(--bdw) dashed
     hsl(var(--ts-hue) var(--ts-sat) calc(var(--ts-lum) - 10%));
   top: 0;
-  right: 0;
   display: block;
   --bdw: inherit;
   border-width: 0 var(--bdw) 0 var(--bdw);
   padding: 3px 4px 1px 4px;
   border-radius: 0 10px;
+  top: -8px;
+  left: 130px;
+  right: unset;
 }
 [data-name='AcTreeNode'][data-trigger='true'] {
   --bdw: var(--ts-spell-bdw);
@@ -590,61 +693,205 @@
   outline-offset: calc(var(--bdw) * -1);
 }
 
-[data-trigger='true'] > [data-name='AcTreeChildren'] {
-  --bdw: var(--ts-scope-bdw, 3px);
-  --vpad: 4px;
-  --rpad: 10px;
-  --lpad: -2px;
-  outline: var(--bdw) dashed
-    hsl(var(--ts-hue) var(--ts-sat) calc(var(--ts-lum) - 10%));
-  outline-offset: calc(var(--bdw) * -1);
-  border-radius: calc(
-    var(--base-radius) + max(var(--vpad), var(--rpad)) + var(--bdw)
-  );
-  border: var(--bdw) solid #333;
-  box-shadow: inset 0 0 4px 1px #000;
-  background-image: repeating-linear-gradient(
-    60deg,
-    hsl(var(--ts-hue) var(--ts-sat) var(--ts-lum) / 2%),
-    hsl(var(--ts-hue) var(--ts-sat) var(--ts-lum) / 8%),
-    hsl(var(--ts-hue) var(--ts-sat) var(--ts-lum) / 2%) 40%
-  );
-  background-color: #111;
-  margin: calc((var(--vpad) + var(--ts-scope-pad) + var(--bdw)) * -1)
-    calc((var(--rpad) + var(--ts-scope-pad) + var(--bdw)) * -1)
-    calc((var(--vpad) + var(--ts-scope-pad) + var(--bdw)) * -1)
-    calc(var(--lpad) - var(--ts-scope-pad));
-  padding: calc(var(--vpad) + var(--ts-scope-pad))
-    calc(var(--rpad) + var(--ts-scope-pad))
-    calc(var(--vpad) + var(--ts-scope-pad))
-    calc(var(--vpad) + var(--ts-scope-pad));
-}
-/* non-overlapping nested trigger ts boxes */
-.tbox [data-trigger='true'] > [data-name='AcTreeChildren'] {
-  margin: calc((var(--vpad)) * -1) calc((var(--rpad)) * -1)
-    calc((var(--vpad) + var(--bdw)) * -1) var(--lpad);
-  border-radius: calc(
-    var(--base-radius) + max(var(--vpad), var(--rpad)) +
-      calc(
-        var(--bdw) * (var(--data-deepest-trigger) - var(--data-triggerlevel))
-      )
-  );
-}
-
 [data-name='AcTreeNode'][data-trigger='true']
   > [data-name='AcTreeChildren']
   > [data-name='AcTreeNode'][data-trigger='false']:first-of-type {
   margin-top: var(--bdw);
 }
 [data-name='AcTreeNode'][data-childcount='0']::after {
-  content: '';
+  /* content: ''; */
   width: var(--spell-size);
   height: 100%;
   outline: 1px solid darkblue;
+  visibility: hidden;
+}
+[data-name='AcTreeNode'][data-trigger='true'] > [data-name='Arrows'] {
+  --width: 50px;
+}
+
+/*{{{1 Add Trigger targeting */
+:is(
+    [data-spell='ADD_TRIGGER'],
+    [data-spell='ADD_TIMER'],
+    [data-spell='ADD_DEATH_TRIGGER']
+  )
+  > [data-name='AcTreeChildren']
+  > [data-name='ActionSourceGroup'][data-source='action'] {
+  flex-direction: row;
+}
+
+/* [data-name="AcTreeNode"][data-iteration="3"] > [data-name="WandActionBorder"], [data-name="AcTreeNode"][data-iteration="4"] > [data-name="WandActionBorder"], [data-name="AcTreeNode"][data-spell^="DIVIDE_"] { */
+/* box-shadow: 0 0 2px pink; */
+/* outline: 2px dotted #d300a2; */
+/* outline-offset: 0; */
+/* } */
+
+/* Row of spells copied by add trigger */
+
+/* Arrows */
+[data-spell='ADD_TRIGGER']
+  > [data-name='AcTreeChildren']
+  > [data-name='ActionSourceGroup'][data-source='action']
+  > div
+  > [data-name='Arrows'] {
+  /*   outline: 2px solid orange; */
+}
+/* after */
+[data-spell='ADD_TRIGGER']
+  > [data-name='AcTreeChildren']
+  > [data-name='ActionSourceGroup'][data-source='action']
+  > div
+  > [data-name='Arrows']::after {
+  --width: calc(var(--arrow-right-w) + var(--arrow-left-w));
+  top: calc((var(--spell-size) / 2) + (var(--arrow-line-w) / 2) * -1);
+  left: 0;
+  border-radius: var(--arrow-radius-➜);
+  border-width: var(--arrow-line-➜);
+}
+/* before */
+[data-spell='ADD_TRIGGER']
+  > [data-name='AcTreeChildren']
+  > [data-name='ActionSourceGroup'][data-source='action']
+  > div
+  > [data-name='Arrows']::before {
+  content: none;
+}
+[data-name='AcTreeNode']:first-of-type > [data-name='Arrows']::after {
 }
 
 /* Divide By targeting */
 
+[data-spell^='DIVIDE_']
+  > [data-name='AcTreeChildren']
+  > [data-name='ActionSourceGroup'][data-source='action'] {
+  flex-direction: column;
+}
+/* Above limit */
+:is([data-spell^='DIVIDE_'][data-iteration]) > [data-name='WandActionBorder'] {
+  outline: 2px solid red;
+}
+/* At limit */
+:is(
+    [data-spell='DIVIDE_10']:is([data-iteration='3']),
+    :is([data-spell='DIVIDE_4'][data-spell='DIVIDE_3']):is(
+        [data-iteration='4']
+      ),
+    [data-spell='DIVIDE_2']:is([data-iteration='5']),
+
+  )
+  > [data-name='WandActionBorder'] {
+  outline: 2px solid blue;
+}
+/* Below limit */
+:is(
+    [data-spell='DIVIDE_10']:is([data-iteration='1'], [data-iteration='2']),
+    :is([data-spell='DIVIDE_4'][data-spell='DIVIDE_3']):is(
+        [data-iteration='1'],
+        [data-iteration='2'],
+        [data-iteration='3']
+      ),
+    [data-spell='DIVIDE_2']:is(
+        [data-iteration='1'],
+        [data-iteration='2'],
+        [data-iteration='3'],
+        [data-iteration='4']
+      ),
+
+  )
+  > [data-name='WandActionBorder'] {
+  outline: none;
+}
+
+/*{{{1 Greek Spell Targeting - Mu & Omega */
+:is(
+    [data-name='AcTreeNode'][data-spell='MU'],
+    [data-name='AcTreeNode'][data-spell='OMEGA'],
+
+  )
+  > div
+  > [data-name='ActionSourceGroup'][data-source='action'] {
+  --pad: 10px;
+  padding: var(--pad) var(--pad) var(--pad) calc(var(--bsize-spell) * 2);
+  margin-top: calc(var(--pad) * -1);
+  margin-left: calc(var(--bsize-spell) * -1.5);
+  border: 2px dotted #f9d470;
+  border-radius: 1em;
+}
+
+[data-name='AcTreeNode']:is(
+    [data-spell='ADD_TRIGGER'] [data-spell='ADD_TIMER'],
+    [data-spell='ADD_DEATH_TRIGGER'] [data-spell='MU'],
+    [data-spell='OMEGA'],
+
+  )
+  > div
+  > [data-name='ActionSourceGroup'][data-source='action']
+  > [data-name='AcTreeNode']
+  > [data-name='Arrows']::before {
+  border: none;
+}
+:is(
+    [data-name='AcTreeNode'][data-spell='MU'],
+    [data-name='AcTreeNode'][data-spell='OMEGA'],
+
+  )
+  > div
+  > [data-name='ActionSourceGroup'][data-source='action']
+  > [data-name='AcTreeNode']:first-of-type
+  > [data-name='Arrows']::before {
+  border-color: red;
+}
+:is(
+    [data-name='AcTreeNode'][data-spell='MU'],
+    [data-name='AcTreeNode'][data-spell='OMEGA'],
+
+  )
+  > div
+  > [data-name='ActionSourceGroup'][data-source='action']
+  > [data-name='AcTreeNode']
+  > [data-name='Arrows']::after {
+  border-left-width: 0;
+  border-radius: 0;
+}
+
+/*{{{1 Greek spell targeting - TAU */
+li:has([data-tooltip-content='TAU']):hover {
+  position: relative;
+  box-shadow: -2px 0 0 #ff0, 0 2px 0 #ff0, 0 -2px 0 #ff0;
+}
+
+li:has([data-tooltip-content='TAU']):hover + li,
+li:has([data-tooltip-content='TAU']):hover + li + li {
+  position: relative;
+  box-shadow: 0 2px 0 #ff0, 0 -2px 0 #ff0;
+  border-radius: 8px;
+}
+li:has([data-tooltip-content='TAU']):hover + li::after,
+li:has([data-tooltip-content='TAU']):hover + li + li::after {
+  content: '1st';
+  position: absolute;
+  top: -8px;
+  display: block;
+  left: 50%;
+  text-align: center;
+  font-size: 0.7em;
+  transform: translateX(-50%);
+  background-color: #000;
+  border: 1px solid #ff0;
+  border-width: 1px 2px;
+  padding: 1px 4px 0 4px;
+  border-radius: 6px;
+}
+li:has([data-tooltip-content='TAU']):hover + li + li::after {
+  content: '2nd';
+}
+
+/* TODO */
+/*{{{1 Alpha & Gamma */
+/*{{{1 Phi & Sigma */
+/*{{{1 Zeta */
+
+/*{{{1 Wand Builder Hints - Divide By */
 li:not(:has([data-tooltip-content^='DIVIDE_']))
   + li:has([data-tooltip-content^='DIVIDE_']):hover,
 li:first-of-type:has([data-tooltip-content^='DIVIDE_']):hover,
@@ -679,37 +926,5 @@ li:has([data-tooltip-content^='DIVIDE_'])
               inset -1px 0 0 #fff, inset 0 1px 0 #fff, inset 0 -1px 0 #fff, inset 1px 0 0 #fff;
   border-radius: 8px;
 } */
-
-/* Greek spell targeting - TAU */
-li:has([data-tooltip-content='TAU']):hover {
-  position: relative;
-  box-shadow: -2px 0 0 #ff0, 0 2px 0 #ff0, 0 -2px 0 #ff0;
-}
-
-li:has([data-tooltip-content='TAU']):hover + li,
-li:has([data-tooltip-content='TAU']):hover + li + li {
-  position: relative;
-  box-shadow: 0 2px 0 #ff0, 0 -2px 0 #ff0;
-  border-radius: 8px;
-}
-li:has([data-tooltip-content='TAU']):hover + li::after,
-li:has([data-tooltip-content='TAU']):hover + li + li::after {
-  content: '1st';
-  position: absolute;
-  top: -8px;
-  display: block;
-  left: 50%;
-  text-align: center;
-  font-size: 0.7em;
-  transform: translateX(-50%);
-  background-color: #000;
-  border: 1px solid #ff0;
-  border-width: 1px 2px;
-  padding: 1px 4px 0 4px;
-  border-radius: 6px;
-}
-li:has([data-tooltip-content='TAU']):hover + li + li::after {
-  content: '2nd';
-}
 
 /* vim: set fdl=3 fdm=marker: */

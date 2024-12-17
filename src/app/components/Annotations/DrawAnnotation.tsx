@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useConfig } from '../../redux';
 
-const Wrapped = styled.div`
+const DrawAnnotation = styled.div`
   pointer-events: none;
   position: absolute;
   bottom: -12px;
@@ -21,12 +21,15 @@ const Wrapped = styled.div`
     var(--shadow-bg) -1px -1px 1px;
 `;
 
-export const DrawAnnotation = ({
-  drawBefore = 0,
-  drawAfter = 0,
+export const DrawAnnotationConsumed = styled.div``;
+export const DrawAnnotationDraws = styled.div``;
+
+export const DrawAnnotations = ({
+  draws = 0,
+  eats = 1,
 }: {
-  drawBefore?: number;
-  drawAfter?: number;
+  draws: number;
+  eats: number;
 }) => {
   const { showDraw } = useConfig();
 
@@ -34,11 +37,12 @@ export const DrawAnnotation = ({
     return null;
   }
 
-  const delta = drawAfter - drawBefore;
-
   return (
-    <Wrapped data-name="Draw">{`${drawBefore} >> Draw(${
-      delta > 0 ? `-1|+${delta}` : delta < 0 ? `-${delta}|+0` : `-1|+1`
-    }) >> ${drawAfter}`}</Wrapped>
+    <>
+      <DrawAnnotationConsumed data-name="draw-down">
+        {eats}
+      </DrawAnnotationConsumed>
+      <DrawAnnotationDraws data-name="draw-up">{draws}</DrawAnnotationDraws>
+    </>
   );
 };

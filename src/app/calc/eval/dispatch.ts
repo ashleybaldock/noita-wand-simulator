@@ -16,6 +16,7 @@ import { observer } from './wandObserver';
 import type { UnlockCondition } from '../unlocks';
 import type { AlwaysCastWandIndex } from '../../redux/WandIndex';
 import { serializeSpell } from './serialize';
+import type { ExtraModifier } from '../extraModifiers';
 
 export type WandId = '__WAND__';
 
@@ -91,6 +92,12 @@ export function BeginTriggerDeath(
   observer.onEvent({
     name: 'BeginTriggerDeath',
     payload: { entity_filename, action_draw_count },
+  });
+}
+export function OnCreateShot(num_of_cards_to_draw: number) {
+  observer.onEvent({
+    name: 'OnCreateShot',
+    payload: { num_of_cards_to_draw },
   });
 }
 
@@ -443,6 +450,21 @@ export function OnActionCalled(
   observer.onEvent({
     name: 'OnActionCalled',
     payload: { source, spell: serializeSpell(spell), c, recursion, iteration },
+  });
+}
+
+export function OnExtraModifier(
+  modifier: ExtraModifier,
+  c: GunActionState,
+  playing_permanent_card: boolean,
+): void {
+  observer.onEvent({
+    name: 'OnExtraModifier',
+    payload: {
+      modifier,
+      c,
+      playing_permanent_card,
+    },
   });
 }
 
