@@ -262,21 +262,27 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
 
         break;
       }
-      case 'OnActionCalled': {
+      case 'OnCallActionPre': {
         const { source, spell /*, c: castState */, recursion, iteration } =
           payload;
-        const { id, deck_index } = spell;
-        console.debug(`OnActionCalled gunMana: ${gunMana}`);
+        const {
+          id,
+          deck_index,
+          permanently_attached = false,
+          always_cast_index,
+        } = spell;
+        console.debug(`OnCallActionPre, gunMana: ${gunMana}, id: ${id}`);
         state.lastCalledAction = {
           _typeName: 'ActionCall',
           sequenceId: nextActionCallSequenceId(),
           spell: {
-            id: spell.id,
-            deck_index: spell.deck_index,
-            permanently_attached: spell.permanently_attached ?? false,
-            always_cast_index: spell.always_cast_index,
+            id,
+            deck_index,
+            permanently_attached,
+            always_cast_index,
           },
           source,
+          manaPre: gunMana,
           currentMana: gunMana,
           deckIndex: deck_index,
           recursion: getSpellByActionId(id).recursive

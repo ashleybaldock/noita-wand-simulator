@@ -440,7 +440,7 @@ export const OnMoveDiscardedToDeck = (discarded: readonly Spell[]): void => {
   });
 };
 
-export function OnActionCalled(
+export function OnCallActionPre(
   source: ActionSource,
   spell: Readonly<Spell>,
   c: GunActionState,
@@ -448,7 +448,7 @@ export function OnActionCalled(
   iteration?: number,
 ): void {
   observer.onEvent({
-    name: 'OnActionCalled',
+    name: 'OnCallActionPre',
     payload: { source, spell: serializeSpell(spell), c, recursion, iteration },
   });
 }

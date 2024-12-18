@@ -9,7 +9,8 @@ export const SaveButton = () => {
   return (
     <Button
       hotkeys={'s, mod+s'}
-      imgUrl={'data/ui_gfx/gun_actions/heavy_bullet_unidentified.png'}
+      tip={{ kind: 'uihint', id: 'save' }}
+      icon={'icon.save'}
       onClick={() => save()}
     >
       Save

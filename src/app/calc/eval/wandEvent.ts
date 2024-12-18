@@ -112,7 +112,10 @@ export type WandEventBase = {
     c: GunActionState;
   };
   /* OnSetCurrentAction */
-  OnActionCalled: {
+  /**
+   * Called just before execution of the next action
+   */
+  OnCallActionPre: {
     source: ActionSource /* __WAND__ (draw) or a previous action */;
     spell: Readonly<SpellDeckInfo>;
     c: GunActionState;
@@ -295,7 +298,7 @@ export type WandEvent = {
   [K in keyof WandEventRecord]: WandEventRecord[K];
 }[keyof WandEventRecord];
 
-export type WandEventName = keyof WandEventRecord;
+export type WandEventName = keyof WandEventBase;
 export type OverridableWandEventName = keyof OverridableWandEventRecord;
 
 export type WandEventOverrideRecord = {

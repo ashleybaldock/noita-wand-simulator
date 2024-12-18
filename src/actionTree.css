@@ -162,7 +162,8 @@
   padding: 1em 2em;
 }
 
-/*{{{1 arrows */
+/*{{{1 Arrows */
+
 /* Arrow Head */
 :is([data-name='AcTreeNode'])
   > [data-name='WandActionBorder']
@@ -172,28 +173,25 @@
   filter: hue-rotate(calc(var(--arrowhead-hue-norm-angle) + var(--hue)))
     drop-shadow(0 0 0 #000);
 }
-[data-source='draw'] > [data-name='Arrows'],
-[data-source='draw'] > * > [data-name='ArrowHead'] {
+[data-source='draw'] > :is([data-name='Arrows'], * > [data-name='ArrowHead']) {
   --hue: var(--arrow-hue-draw);
 }
-[data-source='perk'] > [data-name='Arrows'],
-[data-source='perk'] > * > [data-name='ArrowHead'] {
+[data-source='perk'] > :is([data-name='Arrows'], * > [data-name='ArrowHead']) {
   --hue: var(--arrow-hue-perk);
 }
-[data-source='action'] > [data-name='Arrows'],
-[data-source='action'] > * > [data-name='ArrowHead'] {
+[data-source='action']
+  > :is([data-name='Arrows'], * > [data-name='ArrowHead']) {
   --hue: var(--arrow-hue-action);
 }
-[data-source='perm'] > [data-name='Arrows'],
-[data-source='perm'] > * > [data-name='ArrowHead'] {
+[data-source='perm'] > :is([data-name='Arrows'], * > [data-name='ArrowHead']) {
   --hue: var(--arrow-hue-perm);
 }
-[data-source='related'] > [data-name='Arrows'],
-[data-source='related'] > * > [data-name='ArrowHead'] {
+[data-source='related']
+  > :is([data-name='Arrows'], * > [data-name='ArrowHead']) {
   --hue: var(--arrow-hue-related);
 }
-[data-source='multiple'] > [data-name='Arrows'],
-[data-source='multiple'] > * > [data-name='ArrowHead'] {
+[data-source='multiple']
+  > :is([data-name='Arrows'], * > [data-name='ArrowHead']) {
   --hue: var(--arrow-hue-multiple);
 }
 
@@ -285,7 +283,6 @@
   left: 0;
   border-radius: var(--arrow-radius-➜);
   border-width: var(--arrow-line-➜);
-  /* left: calc(var(--width) * -0.5); */
 }
 
 /*{{{3 Arrows Debug */
@@ -293,7 +290,6 @@
 }
 .debug :is([data-name="Arrows"], ::after, ::before) /* → */ {
   outline: 1px dotted green;
-  /*   outline-offset: 5px; */
   white-space: pre;
   font-size: 1em;
   font-family: monospace;

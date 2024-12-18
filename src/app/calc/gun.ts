@@ -25,7 +25,7 @@ import {
   EndProjectile,
   EndTrigger,
   /* LogAction,*/
-  OnActionCalled,
+  OnCallActionPre,
   OnActionFinished,
   OnActionPlayed,
   OnDraw,
@@ -738,7 +738,7 @@ export function call_action(
   recursion?: number,
   iteration?: number,
 ) {
-  OnActionCalled(source, spell, c, recursion, iteration);
+  OnCallActionPre(source, spell, c, recursion, iteration);
   const returnValue = spell.action(c, recursion, iteration);
   OnActionFinished(
     source,

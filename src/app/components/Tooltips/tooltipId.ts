@@ -9,25 +9,25 @@ const uiHintDefinition = [
   [
     'copyurl',
     {
-      desc: 'Copies the current wand URL to the clipboard.',
+      desc: 'Copies the current wand URL to the clipboard. Share this URL to share your wand build with others.',
     },
   ],
   [
     'copywiki',
     {
-      desc: 'Copies the current wand to the clipboard as a Wiki Wand template.',
+      desc: 'Copies the current wand to the clipboard, formatted as a Wand2 template. (Can be pasted directly into Wiki pages).',
     },
   ],
   [
     'copywikiseq',
     {
-      desc: 'Copies the current wand to the clipboard as a Wiki SpellSequence template.',
+      desc: 'Copies the current wand to the clipboard, formatted as a SpellSequence template. (Can be pasted directly into Wiki pages).',
     },
   ],
   [
     'copywikiexample',
     {
-      desc: 'Copies the current wand to the clipboard as a minimal Wiki Wand template, wrapped with an Example template.',
+      desc: 'Copies the current wand to the clipboard, formatted as an Example template wrapping a Wand template.  (Can be pasted directly into Wiki pages)',
     },
   ],
   [
@@ -58,6 +58,12 @@ const uiHintDefinition = [
     'reset',
     {
       desc: 'Reset the wand to the initial state when it was loaded.',
+    },
+  ],
+  [
+    'save',
+    {
+      desc: 'Save this wand. (Saved locally by your web browser).',
     },
   ],
   [
