@@ -119,6 +119,33 @@ export const ProjectileHeading = styled(ColumnHeadingWithLineSpacer)`
   background-color: black;
 `;
 
+export const WandStatsColumnHeading = styled(ColumnHeadingWithLineSpacer)`
+  height: 100%;
+
+  font-size: 1em;
+
+  min-width: 5.6em;
+  justify-content: start;
+
+  border-left: 1px dotted var(--color-vis-cs-inborder);
+  background-color: black;
+
+  && ${HeadingInner}::before {
+    margin-top: 10px;
+    display: initial;
+
+    height: 2.4em;
+    background-position: center center;
+    background-size: 3em;
+    background-image: url('/data/items_gfx/wands/wand_0104.png');
+  }
+
+  ${WithDebugHints} && {
+    border-left: 1px solid #580058;
+    border-top: 1px solid #630063;
+  }
+`;
+
 export const TotalsColumnHeading = styled(ColumnHeadingWithLineSpacer)`
   height: 100%;
 
@@ -130,7 +157,7 @@ export const TotalsColumnHeading = styled(ColumnHeadingWithLineSpacer)`
   border-left: 1px dotted var(--color-vis-cs-inborder);
   background-color: black;
 
-  & ${HeadingInner}::before {
+  && ${HeadingInner}::before {
     margin-top: 10px;
     display: initial;
 
@@ -143,10 +170,6 @@ export const TotalsColumnHeading = styled(ColumnHeadingWithLineSpacer)`
     background-image: ${toUrl(getSpriteForTrigger(triggerType))}
         `
         : `
-    height: 2.4em;
-    background-position: center center;
-    background-size: 3em;
-        background-image: url('/data/items_gfx/wands/wand_0104.png');
         `}
   }
 

@@ -1,4 +1,4 @@
-/* Auto-generated file */
+/* Auto-generated file - last built: 2024-12-26T16:38:01.626135 */
 
 export const actionIds = [
 'ACCELERATING_SHOT',
@@ -426,3 +426,5 @@ export const actionIds = [
 ] as const;
 
 export type ActionId = typeof actionIds[number];
+
+/* vim: set readonly nomodifiable: Auto-generated file */

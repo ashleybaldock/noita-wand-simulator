@@ -1,4 +1,4 @@
-/* Auto-generated file */
+/* Auto-generated file - last built: 2024-12-26T16:38:01.626135 */
 
 export const spellSprites = [
   ['icon.spell.BOMB', 'var(--sprite-action-bomb)'],
@@ -427,3 +427,5 @@ export const spellSprites = [
 
 export type SpellSpriteName = typeof spellSprites[number][0];
 export type SpellSpritePath = typeof spellSprites[number][1];
+
+/* vim: set readonly nomodifiable: Auto-generated file */

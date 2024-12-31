@@ -1,3 +1,4 @@
+import { getSpellByActionId } from '../../../calc/spells';
 import {
   ActionSourceAnnotation,
   DiscardedAnnotation,
@@ -90,28 +91,50 @@ export const ActionTreeKey = () => {
             'Iteration counter value when action was called (only shown for Divide By). If the Iteration count exceeds its limit, Divide By makes only a single copy. Limits: D10: 2, D4: 3, D3: 3, D2: 4'
           }
         >
-          <IterationAnnotation iteration={2} limit={2} />
+          <IterationAnnotation
+            iteration={3}
+            spell={getSpellByActionId('DIVIDE_3')}
+          />
         </KeyItem>
         <KeyItem
           description={
             'Iteration count 1 above limit (chain is Draw Cancelled)'
           }
         >
-          <IterationAnnotation iteration={3} limit={2} />
+          <IterationAnnotation
+            iteration={4}
+            spell={getSpellByActionId('DIVIDE_3')}
+          />
         </KeyItem>
         <KeyItem
           description={
-            'Iteration count 2 or more above limit (usually a waste of Divides)'
+            'Iteration count 2 or more above limit (often this is a waste of Divides)'
           }
         >
-          <IterationAnnotation iteration={4} limit={2} />
+          <IterationAnnotation
+            iteration={5}
+            spell={getSpellByActionId('DIVIDE_3')}
+          />
         </KeyItem>
         <KeyItem
           description={
-            'Recursion count when action was called (only shown for recursive spells)'
+            'Identifies this as a recursive spell, and shows the recursion depth when its action was called. Recursive spells can only copy other recursive spells if the recursion depth is below 2.'
           }
         >
-          {/* <RecursionAnnotation recursion={3} /> */}
+          <RecursionAnnotation
+            recursion={1}
+            spell={getSpellByActionId('GAMMA')}
+          />
+        </KeyItem>
+        <KeyItem
+          description={
+            'Identifies a recursive action that was skipped having reached the maximum recursion depth. Shown only for recursive spells.'
+          }
+        >
+          <RecursionAnnotation
+            recursion={2}
+            spell={getSpellByActionId('GAMMA')}
+          />
         </KeyItem>
       </KeyGroup>
       <KeyGroup title={'Triggers & Scope'}>

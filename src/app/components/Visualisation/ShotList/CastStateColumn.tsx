@@ -3,7 +3,7 @@ import type { GunActionState } from '../../../calc/actionState';
 import type { TriggerCondition } from '../../../calc/trigger';
 import { WithDebugHints } from '../../Debug';
 import { Unchanged } from '../../Presentation';
-import { useConfig } from '../../../redux';
+import { useConfig, useWand } from '../../../redux';
 import type { SpriteName } from '../../../calc/sprite';
 import { useIcon } from '../../../calc/sprite';
 import { shotTableSections } from './ShotTableRowConfig';
@@ -223,6 +223,65 @@ export const TotalsColumn = styled(
                 </PropertyValue>
               ),
             ),
+          )}
+      </>
+    );
+  },
+)`
+  ${WithDebugHints} && {
+    background-color: #00a;
+  }
+`;
+
+export const WandStatsColumn = styled(
+  ({
+    castState,
+    manaDrain,
+    insideTrigger = false,
+    triggerType,
+  }: {
+    castState?: GunActionState;
+    manaDrain?: number;
+    insideTrigger?: boolean;
+    triggerType?: TriggerCondition;
+    showValues?: boolean;
+  }) => {
+    const config = useConfig();
+    const { castShowChanged } = config;
+    const { cast_delay, spread, speed, reload_time } = useWand();
+    const wandStats = new Map([
+      ['reload_time', reload_time],
+      ['fire_rate_wait', cast_delay],
+      ['speed_multiplier', speed],
+      ['spread_degrees', spread],
+    ]);
+
+    return (
+      <>
+        {castState &&
+          shotTableSections.map(({ fields }, i1) =>
+            fields.map(({ key, render }, i2) => (
+              <PropertyValue
+                key={key ? `wandStats-${key}` : `wandStats-${i1}-${i2}`}
+                $firstValue={i1 === 0}
+                $firstInGroup={i2 === 0}
+                $isTotal={true}
+              >
+                {wandStats.has(key) ? (
+                  render(
+                    {
+                      ...Object.fromEntries(wandStats),
+                      insideTrigger: false,
+                      isTotal: false,
+                      manaDrain,
+                    },
+                    config,
+                  )
+                ) : (
+                  <Unchanged />
+                )}
+              </PropertyValue>
+            )),
           )}
       </>
     );

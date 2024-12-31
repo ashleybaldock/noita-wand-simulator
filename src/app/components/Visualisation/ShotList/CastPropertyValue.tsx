@@ -1,6 +1,5 @@
-import styled from 'styled-components';
-import { GunActionState } from '../../../calc/actionState';
-import { Config } from '../../../redux/configSlice';
+import type { GunActionState } from '../../../calc/actionState';
+import type { Config } from '../../../redux/configSlice';
 
 export const CastPropertyValue = ({
   castState,

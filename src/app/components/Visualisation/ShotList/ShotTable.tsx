@@ -5,6 +5,7 @@ import {
   ProjectileColumn,
   SubTotalsColumn,
   TotalsColumn,
+  WandStatsColumn,
 } from './CastStateColumn';
 import { isNotNullOrUndefined, NBSP } from '../../../util';
 import {
@@ -13,11 +14,12 @@ import {
   ShotIndexColumnHeading,
   SubTotalsColumnHeading,
   TotalsColumnHeading,
+  WandStatsColumnHeading,
 } from './ColumnHeading';
 import { Fragment } from 'react';
 import type { WandShotId } from '../../../calc/eval/WandShot';
 import { useShot, useShotLookup } from '../../../redux';
-import type { ShotProjectile } from '../../../calc/eval/ShotProjectile';
+import type { WandShotProjectile } from '../../../calc/eval/WandShotProjectile';
 import { ShotTableProjectile } from './ShotTableProjectile';
 import type { WandShotResult } from '../../../calc/eval/WandShot';
 import { shotTableGridRows } from './ShotTableRowConfig';
@@ -126,21 +128,36 @@ export const ShotTableHeadings = ({
       {nestingPrefix.length === 0 ? (
         <>
           <ShotIndexColumnHeading
+            data-name={'IndexHeading'}
             index={shotIndex}
             nestingPrefix={nestingPrefix}
           >
             {shotIndex}
           </ShotIndexColumnHeading>
-          <IconsColumnHeading nestingPrefix={nestingPrefix}>
+          <IconsColumnHeading
+            data-name={'IconHeading'}
+            nestingPrefix={nestingPrefix}
+          >
             {''}
           </IconsColumnHeading>
-          <TotalsColumnHeading origin={true} nestingPrefix={nestingPrefix}>
+          <TotalsColumnHeading
+            data-name={'TotalHeading'}
+            origin={true}
+            nestingPrefix={nestingPrefix}
+          >
             {`Shot${NBSP}Totals`}
           </TotalsColumnHeading>
+          <WandStatsColumnHeading
+            data-name={'WandHeading'}
+            nestingPrefix={nestingPrefix}
+          >
+            {`Wand Stats`}
+          </WandStatsColumnHeading>
         </>
       ) : (
         <>
           <SubTotalsColumnHeading
+            data-name={'SubTotalHeading'}
             nestingPrefix={[...nestingPrefix, 1]}
             triggerType={triggerType}
           >
@@ -148,11 +165,11 @@ export const ShotTableHeadings = ({
           </SubTotalsColumnHeading>
         </>
       )}
-      {projectiles.map((projectile: ShotProjectile, index, arr) => {
+      {projectiles.map((projectile: WandShotProjectile, index, arr) => {
         const isEndOfTrigger = index === arr.length - 1;
         const triggerShot = ((lookupResult) =>
           ((lookupResult?.projectiles?.length ?? 0) > 0 && lookupResult) ||
-          undefined)(shotLookup.get(projectile?.trigger ?? -1));
+          undefined)(shotLookup.get(projectile?.payload ?? -1));
         const isStartOfTrigger = isNotNullOrUndefined(triggerShot);
 
         return (
@@ -199,6 +216,7 @@ export const ShotTableColumns = ({
           <FieldNamesColumn castState={castState} />
           <IconsColumn castState={castState} />
           <TotalsColumn castState={castState} manaDrain={manaDrain} />
+          <WandStatsColumn castState={castState} />
         </>
       ) : (
         <>
@@ -213,7 +231,7 @@ export const ShotTableColumns = ({
         const isEndOfTrigger = index === arr.length - 1;
         const triggerShot = ((lookupResult) =>
           ((lookupResult?.projectiles?.length ?? 0) > 0 && lookupResult) ||
-          undefined)(shotLookup.get(projectile?.trigger ?? -1));
+          undefined)(shotLookup.get(projectile?.payload ?? -1));
         // const isStartOfTrigger = isNotNullOrUndefined(triggerShot);
 
         return (

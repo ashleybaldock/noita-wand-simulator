@@ -62,27 +62,51 @@
   --ts-inc-lum: 2%;
   --ts-scope-bdw: 3px;
   --ts-scope-pad: 3px;
-  --ts-spell-bdw: 3px;
-  --ts-spell-pad: calc(var(--spell-pad) + 4px);
+
+  /* --ts-spell-pad: calc(var(--spell-pad) + 4px); */
+
+  --spell-size: 48px;
+  --spell-pad: 3px;
+  --spell-bdw: 3px;
+
+  --spell-box-shadow-w: 3px;
+  --spell-outline: 2px;
+  --spell-margin: calc(var(--spell-box-shadow-w) + 2px);
+  --row-height: calc(
+    var(--spell-size) +
+      ((var(--spell-margin) + var(--spell-pad) + var(--spell-bdw)) * 2)
+  );
 
   --row-spacing: 24px;
+
+  /* --radius-arrow: 0 0 0 20px/0 0 0 23px; */
+
   --col-spacing: 48px;
 
-  --arrow-adjust-h: -10px;
-  --arrow-hz: 11px;
+  --arrow-radius: 20px; /* For ⤵︎⤷ */
+  --arrow-lead-w: 4px; /* Length of tail ‾͎⃖⤵︎ before radius curve begins */
+  --arrow-trail-w: 4px; /* Length of arrow  ⤷  after radius curve ends */
+  --arrowcol-left-w: calc(
+    ͎ max(var(--arrow-lead-w), var(--arrow-radius)) + (var(--arrow-line-w) / 2)
+  );
+  --arrowcol-right-w: calc(
+    max(var(--arrow-trail-w), var(--arrow-radius)) + (var(--arrow-line-w) / 2)
+  );
+  --arrowcol-width: calc(var(--arrowcol-left-w) + var(var(--arrowcol-right-w)));
+
+  --base-radius: 12px;
 
   /* */
-  --arrow-hue-draw: 184deg;
-  --arrow-hue-perk: 45deg;
-  --arrow-hue-action: 145deg;
-  --arrow-hue-perm: 245deg;
-  --arrow-hue-related: 300deg;
+  --arrow-hue-draw: 184deg; /*    #40b7bf */
+  --arrow-hue-perk: 145deg; /*    #40bf75 */
+  --arrow-hue-action: 45deg; /*   #ffc744 */
+  --arrow-hue-perm: 245deg; /*    #4a40bf */
+  --arrow-hue-related: 300deg; /* #bf40bf */
   --arrow-hue-multiple: 10deg;
   --arrow-sat: 50%;
   --arrow-lum: 50%;
   --arrow-left: 4px;
   --arrow-right: 30px;
-  --arrow-radius: 20px;
   --arrow-line-w: 3px;
   /* Normalises hue for source image so that using absolute hue
    * angles as offsets in hue-rotate() produces the right colours */
@@ -104,12 +128,6 @@
   --arrow-radius-ↆ: 0 0 0 0;
   --arrow-line-➜: var(--arrow-line-w) 0 0 0;
   --arrow-radius-➜: 0 0 0 0;
-
-  --spell-size: 48px;
-  --spell-pad: 3px;
-  --spell-bdw: 3px;
-
-  --base-radius: 12px;
 
   /* TODO get from graph */
   --data-deepest-trigger: 9;
@@ -148,11 +166,7 @@
 [data-name='ActionTreeRoot']
   > div
   > [data-name='AcTreeNode']
-  > :is(
-    [data-name='Arrows'],
-    [data-name='Arrows']::after,
-    [data-name='Arrows']::before
-  ) {
+  > :is([data-name='Arrows']::after, [data-name='Arrows']::before) {
   display: none;
 }
 
@@ -168,9 +182,12 @@
 :is([data-name='AcTreeNode'])
   > [data-name='WandActionBorder']
   > [data-name='ArrowHead'] {
-  left: calc(var(--arrowhead-w) * -1);
-  --hue: var(--arrowhead-hue-norm-angle);
-  filter: hue-rotate(calc(var(--arrowhead-hue-norm-angle) + var(--hue)))
+  filter: hue-rotate(
+      calc(
+        var(--arrowhead-hue-norm-angle) -
+          var(--hue, var(--arrowhead-hue-norm-angle))
+      )
+    )
     drop-shadow(0 0 0 #000);
 }
 [data-source='draw'] > :is([data-name='Arrows'], * > [data-name='ArrowHead']) {
@@ -196,7 +213,7 @@
 }
 
 [data-trigger='true'] > [data-name='ArrowHead'] {
-  left: calc((var(--arrowhead-w) + var(--ts-spell-pad)) * -1);
+  left: calc((var(--arrowhead-w) + var(--spell-pad)) * -1);
 }
 
 [data-name='Arrows'] {
@@ -230,65 +247,155 @@
 
 [data-name='Arrows']::before,
 [data-name='Arrows']::after {
-  content: '';
-  height: var(--height);
-  width: var(--width);
-  display: flex;
-  position: absolute;
-  top: unset;
-  right: unset;
-  bottom: unset;
-  left: unset;
-  border-style: solid;
-  border-width: var(--arrow-line-w);
-  border-color: var(--arrow-color);
-  box-sizing: content-box;
-  filter: drop-shadow(-1px 2px 2px #000);
+  content: none;
+  display: none;
+  /* content: ''; */
+  /* height: var(--height); */
+  /* width: var(--width); */
+  /* display: flex; */
+  /* position: absolute; */
+  /* top: unset; */
+  /* right: unset; */
+  /* bottom: unset; */
+  /* left: unset; */
+  /* border-style: solid; */
+  /* border-width: var(--arrow-line-w); */
+  /* border-color: var(--arrow-color); */
+  /* box-sizing: content-box; */
+  /* filter: drop-shadow(-1px 2px 2px #000); */
+  /* opacity: 0.4; */
 }
-[data-name="Arrows"]::before /* ⤵ ↆ */ {
-  width: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2));
-  border-width: var(--arrow-line-⤵);
-  border-radius: var(--arrow-radius-⤵);
-  right: unset;
-  bottom: 0;
-  left: 0;
-  top: calc((var(--spell-size) / 2) + (var(--arrow-line-w) / 2) * -1);
-}
+/* [data-name='Arrows']::before /1* ⤵ ↆ *1/ { */
+/*   width: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2)); */
+/*   border-width: var(--arrow-line-⤵); */
+/*   border-radius: var(--arrow-radius-⤵); */
+/*   right: unset; */
+/*   bottom: 0; */
+/*   left: 0; */
+/*   top: calc((var(--spell-size) / 2) + (var(--arrow-line-w) / 2) * -1); */
+/* } */
 [data-name='AcTreeNode']:nth-of-type(n + 2) > [data-name='Arrows']::before /* ↆ */ {
-  border-width: var(--arrow-line-ↆ);
-  border-radius: var(--arrow-radius-ↆ);
-  top: calc(((var(--col-spacing) / 2) - var(--arrow-line-w)) * -1);
-  --height: calc((var(--col-spacing) / 2) + 100%);
+  /* border-width: var(--arrow-line-ↆ); */
+  /* border-radius: var(--arrow-radius-ↆ); */
+  /* top: calc(((var(--col-spacing) / 2) - var(--arrow-line-w)) * -1); */
+  /* --height: calc((var(--col-spacing) / 2) + 100%); */
 }
 [data-name='AcTreeNode']:last-of-type > [data-name='Arrows']::before {
-  border-radius: 0;
-  border-width: 0;
+  /* border-radius: 0; */
+  /* border-width: 0; */
 }
 
-[data-name="Arrows"]::after /* → ⤷  */ {
-  --height: calc(
-    (var(--spell-size) / 2) + var(--row-spacing) - (var(--arrow-line-w) / 2)
-  );
-  --width: calc(var(--arrow-right-w) - (var(--arrow-line-w) / 2));
-  top: calc(((var(--spell-size) / 2) + (var(--arrow-line-w) / 2)) * -1);
-  right: unset;
-  bottom: unset;
-  left: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2));
-  border-radius: var(--arrow-radius-⤷);
-  border-width: var(--arrow-line-⤷);
+[data-name='TreeArrow'][data-arrow='⤵︎'] {
+  --height: 100%;
+  height: 100%;
+}
+[data-name='AcTreeNode']:last-child
+  > [data-name='Arrows']
+  > [data-name='TreeArrow'][data-arrow='⤵︎'] {
+  display: none;
+}
+[data-name='AcTreeNode']:first-child
+  > [data-name='Arrows']
+  > [data-name='TreeArrow'][data-arrow='⤷ '] {
+  display: none;
+}
+
+[data-name='TreeArrow'][data-arrow='⤷ '] {
+  --height: 100%;
+  height: 100%;
+}
+
+[data-name='Arrows']::after /* → ⤷  */ {
+  /* --height: calc( */
+  /*   (var(--spell-size) / 2) + var(--row-spacing) - (var(--arrow-line-w) / 2) */
+  /* ); */
+  /* --width: calc(var(--arrow-right-w) - (var(--arrow-line-w) / 2)); */
+  /* top: calc(((var(--spell-size) / 2) + (var(--arrow-line-w) / 2)) * -1); */
+  /* right: unset; */
+  /* bottom: unset; */
+  /* left: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2)); */
+  /* border-radius: var(--arrow-radius-⤷); */
+  /* border-width: var(--arrow-line-⤷); */
 }
 [data-name='AcTreeNode']:first-of-type > [data-name='Arrows']::after /* ➜ */ {
-  --width: calc(var(--arrow-right-w) + var(--arrow-left-w));
-  top: calc((var(--spell-size) / 2) + (var(--arrow-line-w) / 2) * -1);
-  left: 0;
-  border-radius: var(--arrow-radius-➜);
-  border-width: var(--arrow-line-➜);
+  /* --width: calc(var(--arrow-right-w) + var(--arrow-left-w)); */
+  /* top: calc((var(--spell-size) / 2) + (var(--arrow-line-w) / 2) * -1); */
+  /* left: 0; */
+  /* border-radius: var(--arrow-radius-➜); */
+  /* border-width: var(--arrow-line-➜); */
+}
+
+[data-name='TreeArrow'][data-arrow='⤵︎'] {
+  --height: 100%;
+  height: 100%;
+}
+
+[data-name='TreeArrow'][data-arrow='⤷ '] {
+  --height: 100%;
+  left: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2));
+  top: unset;
+}
+
+[data-childcount='0']
+  > [data-name='Arrows']
+  > [data-name='TreeArrow'][data-arrow='⤷ '] {
+  outline: 1px solid red;
+}
+
+[data-name='ActionSourceGroup']
+  > [data-name='AcTreeNode']
+  > [data-name='Arrows']
+  > [data-name='TreeArrow'][data-arrow='⭢ '],
+[data-name='ActionSourceGroup']:nth-child(2)
+  > [data-name='AcTreeNode']
+  > [data-name='Arrows']
+  > [data-name='TreeArrow'][data-arrow='⤷ '] {
+  display: none;
+}
+[data-name='AcTreeNode']:first-child
+  > [data-name='Arrows']
+  > [data-name='TreeArrow'][data-arrow='⭢ '] {
+  display: flex;
+}
+
+[data-name='TreeArrow'][data-arrow='⤷ '] {
+  left: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2));
+  top: calc((var(--row-height) * -0.5));
+  height: calc(
+    var(--row-height) - (var(--spell-size) * 0.5) + var(--arrow-line-w)
+  );
+}
+
+[data-arrow='ↆ'] {
+  height: 100%;
+  content: '';
+  border-right: 3px solid #fa807285;
+  top: 0;
+  right: var(--spell-size);
+  padding-right: 128px;
+}
+
+[data-name='AcTreeNode'][data-leaf='false']:first-child
+  > [data-name='Arrows']
+  > [data-name='TreeArrow'][data-arrow='⤵︎'] {
+  display: none;
+}
+[data-name='TreeArrow'][data-arrow='⤵︎'] {
+  bottom: unset;
+  --height: var(--row-height);
+  height: calc(var(--height) * 0.5);
+  margin-top: calc(var(--row-height) * 0.5);
+  top: 0;
 }
 
 /*{{{3 Arrows Debug */
-.debug [data-name='AcTreeNode'] > :is([data-name='Arrows']::before, ::after) {
-}
-.debug :is([data-name="Arrows"], ::after, ::before) /* → */ {
+[data-arrow='⤵︎']
+[data-arrow='⤵︎']
+[data-arrow='ↆ']
+[data-arrow='⤷ ']
+[data-arrow='⭢ ']
+
+.debug :is([data-name='Arrows'], ::after, ::before) /* → */ {
   outline: 1px dotted green;
   white-space: pre;
   font-size: 1em;
@@ -301,10 +408,10 @@
   background-color: #000;
   outline-color: white;
 }
-.debug [data-name="Arrows"]::before /*⤵ↆ */ {
+.debug [data-name='Arrows']::before /*⤵ↆ */ {
   outline: 1px dotted yellowgreen;
 }
-.debug [data-name="Arrows"]::after  /* ↆ⤷ */ {
+.debug [data-name='Arrows']::after  /* ↆ⤷ */ {
   outline: 1px dotted darkgreen;
 }
 .debug [data-name='AcTreeNode']:last-of-type > [data-name='Arrows']::before {
@@ -343,20 +450,20 @@
 }
 
 /* Divide By */
-[data-name='AcTreeGroup'].collapsed
+[data-name='ActionSourceGroup'].collapsed
   > [data-name='AcTreeNode'][data-leaf='true']:nth-of-type(
     n + 1
   ):nth-last-of-type(n + 2) {
   visibility: collapse;
 }
-[data-name='AcTreeChildren'].collapsed
+[data-name='ActionSourceGroup'].collapsed
   > [data-name='AcTreeNode'][data-leaf='true']:last-of-type
   > [data-name='WandActionBorder'] {
   flex-direction: row-reverse;
   display: flex;
   column-gap: 4px;
 }
-[data-name='AcTreeChildren'].collapsed
+[data-name='ActionSourceGroup'].collapsed
   > [data-name='AcTreeNode'][data-leaf='true']:last-of-type
   > [data-name='WandActionBorder']::after {
   content: 'x' counter(spells);
@@ -377,7 +484,7 @@
   line-height: 1;
   box-sizing: border-box;
 }
-:is([data-name='AcTreeChildren'].collapsed)
+:is([data-name='ActionSourceGroup'].collapsed)
   > [data-name='AcTreeNode'][data-leaf='true']:last-of-type
   > [data-name='WandActionBorder'] {
   border: 2px inset #444;
@@ -388,37 +495,28 @@
   margin-right: 4px;
 }
 
-:is([data-name='AcTreeChildren'].collapsed)
+:is([data-name='ActionSourceGroup'].collapsed)
   > [data-name='AcTreeNode'][data-leaf='true']:last-of-type
   > [data-name='WandActionBorder']
   > div:nth-of-type(1) {
-  --arrow-hz: 42px;
-  --arrow-adjust-h: -10px;
   border-radius: 0;
   border-left-width: 0;
 }
-[data-name='AcTreeChildren'].collapsed
+[data-name='ActionSourceGroup'].collapsed
   > [data-name='AcTreeNode'][data-leaf='true'] {
   counter-increment: spells;
 }
-[data-name='AcTreeChildren'].collapsed {
+[data-name='ActionSourceGroup'].collapsed {
   counter-set: spells 0;
 }
-[data-name='AcTreeChildren'].collapsed
+[data-name='ActionSourceGroup'].collapsed
   > [data-name='AcTreeNode'][data-leaf='true']:last-of-type
   [data-name='DontDraw'] {
   display: none;
 }
-[data-name='AcTreeChildren'].collapsed
+[data-name='ActionSourceGroup'].collapsed
   > [data-name='AcTreeNode'][data-leaf='true']:first-of-type
   [data-name='DontDraw'] {
-}
-[data-name='AcTreeChildren']:has(
-    > [data-name='AcTreeNode']
-      > [data-name='WandActionBorder']
-      > [data-tooltip-content^='DIVIDE_']
-  ) {
-  box-shadow: 0 0 1px 1px #d00;
 }
 /*}}}1*/
 
@@ -529,8 +627,6 @@
   font-size: 13px;
   width: 1em;
   height: 1em;
-  background-size: contain;
-  background-repeat: no-repeat;
   image-rendering: pixelated;
   background-size: 90%;
   background-repeat: no-repeat;
@@ -670,7 +766,7 @@
   right: unset;
 }
 [data-name='AcTreeNode'][data-trigger='true'] {
-  --bdw: var(--ts-spell-bdw);
+  --bdw: var(--spell-bdw);
   --ts-hue: calc(
     var(--ts-base-hue) + (var(--ts-inc-hue) * var(--data-triggerlevel))
   );
@@ -683,8 +779,8 @@
 }
 
 [data-trigger='true'] > [data-name='WandActionBorder'] {
-  --bdw: var(--ts-spell-bdw);
-  --padding: var(--ts-spell-pad);
+  --bdw: var(--spell-bdw);
+  --padding: var(--spell-pad);
   outline: var(--bdw) dashed hsl(var(--ts-hue) var(--ts-sat) var(--ts-lum));
   outline-offset: calc(var(--bdw) * -1);
 }
@@ -716,7 +812,7 @@
   flex-direction: row;
 }
 
-/* [data-name="AcTreeNode"][data-iteration="3"] > [data-name="WandActionBorder"], [data-name="AcTreeNode"][data-iteration="4"] > [data-name="WandActionBorder"], [data-name="AcTreeNode"][data-spell^="DIVIDE_"] { */
+/* [data-name='AcTreeNode'][data-iteration='3'] > [data-name='WandActionBorder'], [data-name='AcTreeNode'][data-iteration='4'] > [data-name='WandActionBorder'], [data-name='AcTreeNode'][data-spell^='DIVIDE_'] { */
 /* box-shadow: 0 0 2px pink; */
 /* outline: 2px dotted #d300a2; */
 /* outline-offset: 0; */
@@ -763,16 +859,17 @@
   flex-direction: column;
 }
 /* Above limit */
-:is([data-spell^='DIVIDE_'][data-iteration]) > [data-name='WandActionBorder'] {
+:is([data-spell^='DIVIDE_']):is([data-iteration])
+  > :is([data-name='WandActionBorder']) {
   outline: 2px solid red;
 }
 /* At limit */
 :is(
-    [data-spell='DIVIDE_10']:is([data-iteration='3']),
-    :is([data-spell='DIVIDE_4'][data-spell='DIVIDE_3']):is(
+    :is([data-spell='DIVIDE_10']):is([data-iteration='3']),
+    :is([data-spell='DIVIDE_4'], [data-spell='DIVIDE_3']):is(
         [data-iteration='4']
       ),
-    [data-spell='DIVIDE_2']:is([data-iteration='5']),
+    :is([data-spell='DIVIDE_2']):is([data-iteration='5']),
 
   )
   > [data-name='WandActionBorder'] {
@@ -780,19 +877,21 @@
 }
 /* Below limit */
 :is(
-    [data-spell='DIVIDE_10']:is([data-iteration='1'], [data-iteration='2']),
-    :is([data-spell='DIVIDE_4'][data-spell='DIVIDE_3']):is(
+    :is([data-spell='DIVIDE_10']):is(
+        [data-iteration='1'],
+        [data-iteration='2']
+      ),
+    :is([data-spell='DIVIDE_4'], [data-spell='DIVIDE_3']):is(
         [data-iteration='1'],
         [data-iteration='2'],
         [data-iteration='3']
       ),
-    [data-spell='DIVIDE_2']:is(
+    :is([data-spell='DIVIDE_2']):is(
         [data-iteration='1'],
         [data-iteration='2'],
         [data-iteration='3'],
         [data-iteration='4']
-      ),
-
+      )
   )
   > [data-name='WandActionBorder'] {
   outline: none;
@@ -917,7 +1016,7 @@ li:has([data-tooltip-content^='DIVIDE_'])
     inset 1px 0 0 #fff;
   border-radius: 8px;
 }
-/* li:has([data-tooltip-content^="DIVIDE_"]) + li:has([data-tooltip-content="TAU"]):not(#not) {
+/* li:has([data-tooltip-content^='DIVIDE_']) + li:has([data-tooltip-content='TAU']):not(#not) {
   box-shadow: -1px 0 0 #ff0, 0 1px 0 #ff0, 0 -1px 0 #ff0, 1px 0 0 #ff0,
               inset -1px 0 0 #fff, inset 0 1px 0 #fff, inset 0 -1px 0 #fff, inset 1px 0 0 #fff;
   border-radius: 8px;

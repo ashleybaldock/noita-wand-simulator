@@ -1,3 +1,5 @@
+/* Auto-generated file - last built: 2024-12-26T16:38:04.954490 */
+
 export const entityToActionIds = {
   'data/entities/projectiles/bomb.xml': ['BOMB'],
   'data/entities/projectiles/deck/light_bullet.xml': ['LIGHT_BULLET','LIGHT_BULLET_TRIGGER','LIGHT_BULLET_TIMER'],
@@ -199,6 +201,7 @@ export const entityToActionIds = {
   'data/entities/projectiles/deck/meteor_rain.xml': ['METEOR_RAIN'],
   'data/entities/projectiles/deck/worm_rain.xml': ['WORM_RAIN'],
   'data/entities/projectiles/deck/worm_big.xml': ['WORM_RAIN'],
+  'data/entities/projectiles/deck/caster_cast.xml': ['CASTER_CAST'],
   'data/entities/projectiles/deck/fireworks/firework_pink.xml': ['FIREWORK'],
   'data/entities/projectiles/deck/fireworks/firework_green.xml': ['FIREWORK'],
   'data/entities/projectiles/deck/fireworks/firework_blue.xml': ['FIREWORK'],
@@ -207,4 +210,6 @@ export const entityToActionIds = {
   'data/entities/items/pickup/egg_slime.xml': ['SUMMON_EGG'],
   'data/entities/items/pickup/egg_red.xml': ['SUMMON_EGG'],
   'data/entities/items/pickup/egg_fire.xml': ['SUMMON_EGG'],
-}
+};
+
+/* vim: set readonly nomodifiable: Auto-generated file */

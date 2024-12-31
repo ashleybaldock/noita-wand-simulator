@@ -1,4 +1,5 @@
 import { sequentialId } from '../../util';
+import type { SpellPileSnapshot } from '../SpellPileSnapshot';
 import type { ActionSource } from '../actionSources';
 import type { SpellDeckInfo } from '../spell';
 import type { WandShotId } from './WandShot';
@@ -18,16 +19,13 @@ export type ActionCall = {
   sequenceId: ActionCallSequenceId;
   /**
    * Spell associated with this action, this is the spell that this action call belongs to.
+   * spell.deck_index: The index of this action in the original wand ordering
    */
-  spell: SpellDeckInfo;
+  spell: SpellDeckInfo /* serialisable */;
   /**
    * Origin of this action
    */
   source: ActionSource;
-  /**
-   * @deprecated Use manaPre instead
-   */
-  currentMana: number;
   /**
    * Mana before action executed
    */
@@ -38,29 +36,44 @@ export type ActionCall = {
    */
   manaPost?: number;
   /**
-   * The index of this action
+   * recursion level action was executed with
+   * (undefined for non-recursive actions)
    */
+  recursion?: number;
+  /**
+   * iteration level action was executed with
+   * (undefined for non-iterative actions)
+   */
+  iteration?: number;
+  /**
+   * Was draw disabled when this action was called
+   */
+  dont_draw_actions?: boolean;
+  /**
+   * State of the three lists that spells move between
+   * [Pre, Post]
+   * (undefined if nothing changed)
+   */
+  piles?: [pre: SpellPileSnapshot, post: SpellPileSnapshot];
+  /**
+   * Next spell to be executed after this one when a wrap happens
+   */
+  wrappingInto?: SpellDeckInfo[];
+  wasLastToBeDrawnBeforeWrapNr?: number;
+  /**
+   * If true then this was likely the action call that caused the wrap
+   */
+  wasLastToBeCalledBeforeWrapNr?: number;
+  wasLastToBeDrawnBeforeBeginTrigger?: WandShotId;
+  wasLastToBeCalledBeforeBeginTrigger?: WandShotId;
+  /**
+   * @deprecated Use manaPre instead
+   */
+  currentMana: number;
   /**
    * @deprecated Use spell.deck_index instead
    */
   deckIndex?: string | number;
-  /**
-   * recursion level under which this action will execute, undefined for non-recursive actions
-   */
-  recursion?: number;
-  /**
-   * iteration level under which this action will execute, undefined for non-iterative actions
-   */
-  iteration?: number;
-  /**
-   * Whether draw is disabled when this action was called
-   */
-  dont_draw_actions?: boolean;
-  wrappingInto?: SpellDeckInfo[];
-  wasLastToBeDrawnBeforeWrapNr?: number;
-  wasLastToBeCalledBeforeWrapNr?: number;
-  wasLastToBeDrawnBeforeBeginTrigger?: WandShotId;
-  wasLastToBeCalledBeforeBeginTrigger?: WandShotId;
 };
 
 /**

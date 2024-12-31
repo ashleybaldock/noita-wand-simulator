@@ -26,6 +26,7 @@ const initialState: ResultState = {
   lastSimulationCompleted: null,
   last: {
     simulationRequestId: 0,
+    salvos: [],
     shots: [],
     reloadTime: undefined,
     endConditions: [],

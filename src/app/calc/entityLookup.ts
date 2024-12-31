@@ -1,23 +1,21 @@
 import type { ActionId } from './actionId';
-import { entityToActionIds as entityToActionIdsRelease } from './__generated__/main/entityMap';
-// import { entityToActionIds as entityToActionIdsBeta } from './__generated__/entityProjectileMap.beta';
+import * as main from './__generated__/main/entityMap';
+import type { ProjectileId } from './projectile';
 
-// It would be ideal to be able to switch between the beta and release versions of actions at runtime, but that seems like excessive complexity given the current changes mostly add entirely new spells
+export type EntityToIdsMap = Partial<
+  Record<ProjectileId, Array<Readonly<ActionId>>>
+>;
 
-export type EntityPath = keyof typeof entityToActionIdsRelease;
+export const entityToIdsMap = main.entityToActionIds as EntityToIdsMap;
 
-export type EntityToIdsMap = Record<EntityPath, Array<Readonly<ActionId>>>;
-
-export const entityToIdsMap = entityToActionIdsRelease as EntityToIdsMap;
-
-export function isValidEntityPath(x: string): x is EntityPath {
+export function isValidEntityPath(x: string): x is keyof typeof entityToIdsMap {
   return Object.prototype.hasOwnProperty.call(entityToIdsMap, x);
 }
 
-export function getIdsForEntity(path: EntityPath) {
+export function getIdsForEntity(path: ProjectileId) {
   return entityToIdsMap[path] ?? [];
 }
 
-export function entityToActions(x: string) {
+export function entityToActions(x: ProjectileId) {
   return isValidEntityPath(x) ? getIdsForEntity(x) : [];
 }

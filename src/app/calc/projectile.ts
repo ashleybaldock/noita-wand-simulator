@@ -1,3 +1,10 @@
+import * as main from './__generated__/main/projectileIds';
+
+export type ProjectileId = (typeof main.projectileIds)[number];
+
+export const relatedProjectileIds =
+  main.projectileIds as ReadonlyArray<ProjectileId>;
+
 export type ConfigExplosion = {
   /* ProjectileComponent.config_explosion */
   damage: number;
@@ -20,6 +27,7 @@ export type ProjectileComponent = {
 };
 
 export type Projectile = {
+  id: ProjectileId;
   entityName: string;
   entityTags: string[];
   baseFile: string;

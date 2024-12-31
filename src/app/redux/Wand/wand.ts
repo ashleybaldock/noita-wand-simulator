@@ -60,6 +60,7 @@ type V2ParamName = (typeof v2ParamNames)[number];
 type v2WandStateRecord = Record<keyof Wand, V2ParamName>;
 
 // [ v1param, v2param ]
+//
 export const v2WandStateMapping: v2WandStateRecord = {
   cast_delay: 'd',
   mana_max: 'm',

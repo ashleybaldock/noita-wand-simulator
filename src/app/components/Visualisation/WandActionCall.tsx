@@ -6,6 +6,7 @@ import {
   DontDrawAnnotation,
   DrawAnnotations,
   FriendlyFireAnnotation,
+  IterationAnnotation,
   RecursionAnnotation,
 } from '../Annotations/';
 import { WrapAnnotation } from '../Annotations/WrapAnnotation';
@@ -17,8 +18,8 @@ import { getSpellByActionId } from '../../calc/spells';
   background-image: url(/data/inventory/action_tree_box.png);
  */
 const WandActionCallBorder = styled(StyledWandActionBorder)`
-  padding: 3px;
-  border: 3px dotted #656565;
+  padding: var(--spell-pad);
+  border: var(--spell-bdw) dotted #656565;
   border-radius: 12px;
   background-image: none;
   background-color: rgba(108, 76, 34, 0.1);
@@ -27,6 +28,7 @@ const WandActionCallBorder = styled(StyledWandActionBorder)`
 `;
 
 export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
+  const spell = getSpellByActionId(actionCall.spell.id);
   return (
     <WandActionCallBorder
       data-grouping="none"
@@ -34,11 +36,9 @@ export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
       data-name="WandActionCall"
     >
       <NextActionArrow />
-      <WandAction
-        spellType={getSpellByActionId(actionCall.spell.id).type}
-        spellId={actionCall.spell.id}
-      />
-      <RecursionAnnotation {...actionCall} />
+      <WandAction spellType={spell.type} spellId={actionCall.spell.id} />
+      <IterationAnnotation spell={spell} iteration={actionCall.iteration} />
+      <RecursionAnnotation spell={spell} recursion={actionCall.recursion} />
       <ActionSourceAnnotation {...actionCall} />
       <DontDrawAnnotation
         {...actionCall}

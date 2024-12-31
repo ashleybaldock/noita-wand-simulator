@@ -68,7 +68,7 @@ export const SimulationStatus = styled(
           <Label>Time Elapsed</Label>
           <>
             {lastRunElapsedTime < 1 ? `<${FNSP}` : ''}
-            <Duration unit="ms" ms={Math.max(lastRunElapsedTime, 1)} />
+            <Duration ms={Math.max(lastRunElapsedTime, 1)} />
           </>
         </Value>
         <Value>

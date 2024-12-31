@@ -1,13 +1,12 @@
 import type { LegacyRef } from 'react';
 import { useRef } from 'react';
 import styled from 'styled-components';
-import type { StopReason } from '../../../types';
 import { ConfigButton } from '../../buttons';
 import { SaveImageButton, ScrollWrapper } from '../../generic';
 import { ShotTable } from './ShotTable';
-import { ShotSummary } from './ShotSummary';
+import { SimulationSummary } from './ShotSummary';
 import { SectionToolbar } from '../../SectionToolbar';
-import type { WandShotResult } from '../../../calc/eval/WandShot';
+import { useLatestResult } from '../../../redux';
 
 const SectionDiv = styled.div`
   display: flex;
@@ -29,23 +28,10 @@ const StyledSaveImageButton = styled(SaveImageButton)`
   grid-column: -3;
 `;
 
-export const ShotList = ({
-  simulationRunning,
-  endReasons,
-  shots,
-  totalRechargeTime,
-}: {
-  simulationRunning: boolean;
-  endReasons: StopReason[];
-  shots: WandShotResult[];
-  totalRechargeTime: number | undefined;
-}) => {
+export const ShotList = () => {
+  const { shots } = useLatestResult();
   const shotListRef = useRef<HTMLDivElement>(null);
 
-  const totalManaDrain = shots.reduce(
-    (tsf, shot) => tsf + (shot.manaDrain ?? 0),
-    0,
-  );
   return (
     <>
       <SectionToolbar title={'Simulation: Shot List'}>
@@ -62,13 +48,7 @@ export const ShotList = ({
           ref={shotListRef as LegacyRef<HTMLDivElement>}
           className={'saveImageRoot'}
         >
-          <ShotSummary
-            pending={simulationRunning}
-            shots={shots}
-            endReason={endReasons?.[0] ?? 'unknown'}
-            totalRechargeTime={totalRechargeTime}
-            totalManaDrain={totalManaDrain}
-          />
+          <SimulationSummary />
           {shots.map((shot, index) => (
             <ShotTable shot={shot} shotIndex={index + 1} key={index} />
           ))}

@@ -1,9 +1,12 @@
 import styled from 'styled-components';
 import { Duration } from '../Duration';
-import { NBSP, isNotNullOrUndefined } from '../../../util';
-import type { StopReason } from '../../../types';
-import { useConfig } from '../../../redux';
-import type { WandShotResult } from '../../../calc/eval/WandShot';
+import { isNotNullOrUndefined, round } from '../../../util';
+import {
+  useConfig,
+  useLatestResult,
+  useSimulationStatus,
+} from '../../../redux';
+import type { WandSalvo } from '../../../calc/eval/ClickWandResult';
 
 const SummaryItem = styled.div`
   line-height: 1.7em;
@@ -43,73 +46,121 @@ const StickyContainer = styled.div`
   }
 `;
 
-export const ShotSummary = styled(
-  ({
-    pending,
-    shots,
-    endReason,
-    totalRechargeTime,
-    totalFiringTime = 0,
-    totalManaDrain,
-    className,
-  }: {
-    pending: boolean;
-    endReason: StopReason;
-    shots: WandShotResult[];
-    totalRechargeTime?: number;
-    totalFiringTime?: number;
-    totalManaDrain?: number;
-    className?: string;
-  }) => {
+const totalDelayForSalvo = ({ shots, reloadTime = 1 }: WandSalvo) => {
+  const totalCastDelayForShots = shots.reduce(
+    (tsf, shot) => tsf + (shot.castState?.fire_rate_wait ?? 1),
+    0,
+  );
+  const lastCastDelay = shots[shots.length - 1]?.castState?.fire_rate_wait ?? 1;
+  const largerDelay = Math.max(reloadTime, lastCastDelay);
+  const totalDelay = totalCastDelayForShots - lastCastDelay + largerDelay;
+
+  return {
+    framesDelay: totalDelay,
+    framesFiring: shots.length,
+    framesTotal: totalDelay + shots.length,
+  };
+};
+
+export const SimulationSummary = styled(
+  ({ className }: { className?: string }) => {
+    const [simulationRunning] = useSimulationStatus();
+    const { salvos, reloadTime = 0, endConditions } = useLatestResult();
+
+    const salvoDelayTotals = salvos.map(totalDelayForSalvo);
+    const totalExtraDelay = salvoDelayTotals.reduce(
+      (tsf, salvo) => tsf + salvo.framesDelay,
+      0,
+    );
+    const totalFiring = salvoDelayTotals.reduce(
+      (tsf, salvo) => tsf + salvo.framesFiring,
+      0,
+    );
+    const total = salvoDelayTotals.reduce(
+      (tsf, salvo) => tsf + salvo.framesTotal,
+      0,
+    );
+
+    const totalShotCount = salvos.reduce(
+      (tsf, { shots }) => tsf + shots.length,
+      0,
+    );
+    const totalManaDrain = salvos.reduce(
+      (tsf, { shots }) =>
+        tsf + shots.reduce((tsf, shot) => tsf + (shot.manaDrain ?? 0), 0),
+      0,
+    );
+
+    const endReason = endConditions?.[0] ?? 'unknown';
     const { pauseCalculations } = useConfig();
     if (pauseCalculations) {
       return (
         <>{`-- Simulation Paused ${
-          pending && `(Pending changes - unpause to update)`
+          simulationRunning && `(Pending changes - unpause to update)`
         }--`}</>
       );
     }
     return (
       <StickyContainer className={className}>
         <SummaryItem>
-          {`Fired${NBSP}`}
-          <Emphasis>{`${shots?.length ?? '??'}${NBSP}shot${
-            shots?.length === 1 ? '' : 's'
+          {`Fired a total of `}
+          <Emphasis>{`${totalShotCount} shot${
+            totalShotCount === 1 ? '' : 's'
           }`}</Emphasis>
-          {totalFiringTime > 0 ? (
-            <>
-              {`${NBSP}in${NBSP}`}
-              <Emphasis>
-                <Duration unit="f" f={totalFiringTime} />
-              </Emphasis>
-            </>
-          ) : (
-            ''
-          )}
+          {` in `}
+          <Emphasis>{`${salvos?.length} salvo${
+            salvos?.length === 1 ? '' : 's'
+          }`}</Emphasis>
         </SummaryItem>
         <SummaryItem>
-          {`Shot cycles per second:${NBSP}`}
-          <Emphasis>
-            {shots.length > 0 ? totalFiringTime / shots.length : 0}
-          </Emphasis>
+          {`Total time: `}
+          {total === totalFiring ? (
+            <CouldImprove>{total}</CouldImprove>
+          ) : (
+            <Optimal>{total}</Optimal>
+          )}
+          {` delay: `}
+          {totalExtraDelay > 0 ? (
+            <CouldImprove>{totalExtraDelay}</CouldImprove>
+          ) : (
+            <Optimal>{totalExtraDelay}</Optimal>
+          )}
+          {` ) `}
         </SummaryItem>
-        {isNotNullOrUndefined(totalRechargeTime) && (
+        {/* <SummaryItem> */}
+        {/*   {`Seconds per shot cycle: `} */}
+        {/*   <Emphasis> */}
+        {/*     {shots.length > 0 ? ( */}
+        {/*       <Duration s={totalCycleTime / shots.length} /> */}
+        {/*     ) : null} */}
+        {/*   </Emphasis> */}
+        {/* </SummaryItem> */}
+        {/* <SummaryItem> */}
+        {/*   {`Shot cycles per second: `} */}
+        {/*   <Emphasis> */}
+        {/*     {round( */}
+        {/*       shots.length > 0 ? 60 / totalCycleTime / shots.length : 0, */}
+        {/*       2, */}
+        {/*     )} */}
+        {/*   </Emphasis> */}
+        {/* </SummaryItem> */}
+        {isNotNullOrUndefined(reloadTime) && (
           <SummaryItem>
-            {`Total recharge delay:${NBSP}`}
-            {totalRechargeTime > 0 ? (
+            {`Total recharge delay: `}
+            {reloadTime > 0 ? (
               <CouldImprove>
-                <Duration unit="f" f={totalRechargeTime} />
+                <Duration f={reloadTime} />
               </CouldImprove>
             ) : (
               <Optimal>
-                <Duration unit="f" f={totalRechargeTime} />
+                <Duration f={reloadTime} />
               </Optimal>
             )}
           </SummaryItem>
         )}
         {isNotNullOrUndefined(totalManaDrain) && (
           <SummaryItem>
-            {`Total mana drain:${NBSP}`}
+            {`Total mana drain: `}
             {totalManaDrain > 0 ? (
               <CouldImprove>{totalManaDrain}</CouldImprove>
             ) : (

@@ -1,8 +1,8 @@
-/* Auto-generated file */
+/* Auto-generated file - last built: 2024-12-26T16:38:01.626135 */
 
 import type { GunActionState } from '../../actionState';
 import type { Spell } from '../../spell';
-import { ipairs, luaFor } from "../../lua/loops";
+import { ipairs, luaFor } from '../../lua/loops';
 import {
   hand,
   deck,
@@ -2271,7 +2271,7 @@ const actions: Spell[] = [
       let types = ["monster","slime","red","fire"]
       let rnd = Random(this.id, 1, types.length)
       let egg_name = "egg_" + String(types[rnd - 1]) + ".xml"
-      add_projectile("data/entities/items/pickup/" + egg_name)
+      add_projectile("data/entities/items/pickup/")
     },
   },
   {
@@ -3192,11 +3192,12 @@ const actions: Spell[] = [
     mana: 70,
     max_uses: 25,
     action: function(c: GunActionState) {
-      SetRandomSeed(this.id,  GameGetFrameNum(), GameGetFrameNum() )
-      let types = ["pink","green","blue","orange"]
-      let rnd = Random(this.id, 1, types.length)
-      let firework_name = "firework_" + String(types[rnd - 1]) + ".xml"
-      add_projectile("data/entities/projectiles/deck/fireworks/" + firework_name)
+      // SetRandomSeed(this.id,  GameGetFrameNum(), GameGetFrameNum() )
+      // let types = ["pink","green","blue","orange"]
+      // let rnd = Random(this.id, 1, types.length)
+      // let firework_name = "firework_" + String(types[rnd - 1]) + ".xml"
+      // add_projectile("data/entities/projectiles/deck/fireworks/" + firework_name)
+      add_projectile("data/entities/projectiles/deck/fireworks/firework_pink.xml")
       c.fire_rate_wait = c.fire_rate_wait + 60
       
       c.ragdoll_fx = 2
@@ -9988,3 +9989,5 @@ const actions: Spell[] = [
 
 
 export const spells = actions;
+
+/* vim: set readonly nomodifiable: Auto-generated file */

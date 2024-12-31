@@ -68,22 +68,12 @@ export const VisualisationList = () => {
     });
   }, [infiniteSpells, unlimitedSpells, spells]);
 
-  const {
-    shots,
-    reloadTime: totalRechargeTime,
-    endConditions,
-    elapsedTime,
-  } = useLatestResult();
+  const { shots } = useLatestResult();
 
   return (
     <ParentDiv>
       <SimulationStatus />
-      <ShotList
-        simulationRunning={simulationRunning}
-        endReasons={endConditions}
-        shots={shots}
-        totalRechargeTime={totalRechargeTime}
-      />
+      <ShotList />
       {showActionTree && (
         <>
           <SectionToolbar title={'Simulation: Action Call Tree'}>
@@ -123,49 +113,6 @@ export const VisualisationList = () => {
     </ParentDiv>
   );
 };
-
-// TODO remove/reimplement if needed
-// const {
-//   shots,
-//   reloadTime: totalRechargeTime,
-//   endConditions,
-//   elapsedTime,
-// } = useMemo(() => {
-//   setSimulationRunning(true);
-//   const result = clickWand(wand, spellsWithUses, {
-//     req_enemies: req_enemies,
-//     req_projectiles: req_projectiles,
-//     req_hp: req_hp,
-//     req_half: req_half,
-//     rng_frameNumber: frameNumber,
-//     rng_worldSeed: worldSeed,
-//     wand_available_mana: wand.mana_max,
-//     wand_cast_delay: wand.cast_delay,
-//     endSimulationOnShotCount,
-//     endSimulationOnReloadCount,
-//     endSimulationOnRefreshCount,
-//     endSimulationOnRepeatCount,
-//     limitSimulationIterations,
-//     limitSimulationDuration,
-//   });
-//   setSimulationRunning(false);
-//   return result;
-// }, [
-//   endSimulationOnShotCount,
-//   endSimulationOnReloadCount,
-//   endSimulationOnRefreshCount,
-//   endSimulationOnRepeatCount,
-//   limitSimulationIterations,
-//   limitSimulationDuration,
-//   frameNumber,
-//   req_enemies,
-//   req_projectiles,
-//   req_hp,
-//   req_half,
-//   spellsWithUses,
-//   wand,
-//   worldSeed,
-// ]);
 
 // const shotsNoDivides = useMemo(() => {
 //   if (!showDivides) {

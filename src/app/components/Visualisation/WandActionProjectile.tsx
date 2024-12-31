@@ -7,7 +7,7 @@ import {
 } from '../Annotations/';
 import { WandAction, StyledWandActionBorder } from '../Spells/WandAction';
 import { getSpellByActionId } from '../../calc/spells';
-import type { ShotProjectile } from '../../calc/eval/ShotProjectile';
+import type { WandShotProjectile } from '../../calc/eval/WandShotProjectile';
 
 /*
   background-image: url(/data/inventory/action_tree_box.png);
@@ -25,7 +25,7 @@ const WandActionProjectileBorder = styled(StyledWandActionBorder)`
 export const WandActionProjectile = ({
   projectile,
 }: {
-  projectile: ShotProjectile;
+  projectile: WandShotProjectile;
 }) => {
   return (
     <WandActionProjectileBorder
@@ -43,7 +43,7 @@ export const WandActionProjectile = ({
       />
 
       <ActionProxyAnnotation proxy={projectile.proxy} />
-      <DeckIndexAnnotation deckIndex={projectile.deckIndex} />
+      <DeckIndexAnnotation deckIndex={projectile.spell?.deck_index} />
       <FriendlyFireAnnotation />
     </WandActionProjectileBorder>
   );

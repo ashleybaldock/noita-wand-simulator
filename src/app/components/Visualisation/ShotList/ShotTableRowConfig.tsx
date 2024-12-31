@@ -243,11 +243,11 @@ type FieldDescription = {
   icon?: SpriteName;
   ignoredInTrigger?: boolean;
   noTotal?: boolean;
-  key?: string;
+  key: string;
   displayName: string;
   toolTip?: string;
   render: (
-    actionState: ExtendedActionState,
+    actionState: Partial<ExtendedActionState>,
     config: Config,
   ) => JSX.Element | string;
 };
@@ -287,16 +287,14 @@ export const shotTableSections: FieldSection[] = [
         icon: `icon.reloadtime`,
         key: 'reload_time',
         displayName: 'Recharge Time',
-        render: ({ reload_time }) => <Duration unit={'f'} f={reload_time} />,
+        render: ({ reload_time }) => <Duration f={reload_time ?? 0} />,
       },
       {
         icon: `icon.castdelay`,
         key: 'fire_rate_wait',
         ignoredInTrigger: true,
         displayName: 'Cast Delay',
-        render: ({ fire_rate_wait }) => (
-          <Duration unit="f" f={fire_rate_wait} />
-        ),
+        render: ({ fire_rate_wait }) => <Duration f={fire_rate_wait ?? 0} />,
       },
       {
         icon: `icon.lifetime`,
@@ -305,8 +303,8 @@ export const shotTableSections: FieldSection[] = [
         render: ({ lifetime_add, isTotal }) => {
           if (isTotal) {
             return (
-              <Sign n={lifetime_add}>
-                <Duration unit="f" f={lifetime_add} />
+              <Sign n={lifetime_add ?? 0}>
+                <Duration f={lifetime_add ?? 0} />
               </Sign>
             );
           }
@@ -375,7 +373,7 @@ export const shotTableSections: FieldSection[] = [
       },
       {
         icon: `icon.speed.multi`,
-        key: 'speed_multiplier1',
+        key: 'speed_multiplier',
         displayName: 'Speed Multiplier',
         toolTip: 'Initial speed of the projectile.',
         render: ({ speed_multiplier: v }) => {
@@ -427,7 +425,7 @@ export const shotTableSections: FieldSection[] = [
       {
         // TODO - needs extended spell info
         icon: `icon.speed.bonus`,
-        key: 'speed_multiplier2',
+        key: 'speed_damage_multiplier',
         displayName: 'Speed Bonus',
         toolTip: 'Speed Scaled Damage Multiplier',
         render: ({ speed_multiplier: v }) => {
@@ -462,7 +460,7 @@ export const shotTableSections: FieldSection[] = [
         displayName: 'Crit On: Wet',
         noTotal: true,
         render: ({ game_effect_entities: v }) => (
-          <YesOr yes={v.includes('effect_apply_wet')}>
+          <YesOr yes={v?.includes('effect_apply_wet') ?? false}>
             <Unchanged />
           </YesOr>
         ),
@@ -473,7 +471,7 @@ export const shotTableSections: FieldSection[] = [
         displayName: 'Crit On: Oil',
         noTotal: true,
         render: ({ game_effect_entities: v }) => (
-          <YesOr yes={v.includes('effect_apply_oiled')}>
+          <YesOr yes={v?.includes('effect_apply_oiled') ?? false}>
             <Unchanged />
           </YesOr>
         ),
@@ -484,7 +482,7 @@ export const shotTableSections: FieldSection[] = [
         displayName: 'Crit On: Blood',
         noTotal: true,
         render: ({ game_effect_entities: v }) => (
-          <YesOr yes={v.includes('effect_apply_bloody')}>
+          <YesOr yes={v?.includes('effect_apply_bloody') ?? false}>
             <Unchanged />
           </YesOr>
         ),
@@ -496,7 +494,7 @@ export const shotTableSections: FieldSection[] = [
         render: ({ game_effect_entities: v, isTotal }) =>
           isTotal ? (
             <YesNo
-              yes={v.includes('effect_apply_on_fire')}
+              yes={v?.includes('effect_apply_on_fire') ?? false}
               customNo={<Unchanged content={'No'} />}
             />
           ) : (

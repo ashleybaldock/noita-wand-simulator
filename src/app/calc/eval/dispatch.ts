@@ -17,6 +17,7 @@ import type { UnlockCondition } from '../unlocks';
 import type { AlwaysCastWandIndex } from '../../redux/WandIndex';
 import { serializeSpell } from './serialize';
 import type { ExtraModifier } from '../extraModifiers';
+import type { ProjectileId } from '../projectile';
 
 export type WandId = '__WAND__';
 
@@ -49,26 +50,31 @@ export function RegisterGunShotEffects(recoil_knockback: number): void {
   });
 }
 
-export function BeginProjectile(entity_filename: string): void {
+export function BeginProjectile(
+  actionId: ActionId | WandId,
+  entity_filename: ProjectileId,
+): void {
   observer.onEvent({
     name: 'BeginProjectile',
-    payload: { entity_filename },
+    payload: { actionId, projectileId: entity_filename },
   });
 }
 
-export function EndProjectile(): void {
-  observer.onEvent({ name: 'EndProjectile', payload: {} });
+export function EndProjectile(actionId: ActionId | WandId): void {
+  observer.onEvent({ name: 'EndProjectile', payload: { actionId } });
 }
 
 export function BeginTriggerTimer(
-  entity_filename: string,
+  actionId: ActionId | WandId,
+  entity_filename: ProjectileId,
   action_draw_count: number,
   delay_frames: number,
 ): void {
   observer.onEvent({
     name: 'BeginTriggerTimer',
     payload: {
-      entity_filename,
+      actionId,
+      projectileId: entity_filename,
       action_draw_count,
       delay_frames,
     },
@@ -76,33 +82,38 @@ export function BeginTriggerTimer(
 }
 
 export function BeginTriggerHitWorld(
-  entity_filename: string,
+  actionId: ActionId | WandId,
+  entity_filename: ProjectileId,
   action_draw_count: number,
 ) {
   observer.onEvent({
     name: 'BeginTriggerHitWorld',
-    payload: { entity_filename, action_draw_count },
+    payload: { actionId, projectileId: entity_filename, action_draw_count },
   });
 }
 
 export function BeginTriggerDeath(
-  entity_filename: string,
+  actionId: ActionId | WandId,
+  entity_filename: ProjectileId,
   action_draw_count: number,
 ) {
   observer.onEvent({
     name: 'BeginTriggerDeath',
-    payload: { entity_filename, action_draw_count },
+    payload: { actionId, projectileId: entity_filename, action_draw_count },
   });
 }
-export function OnCreateShot(num_of_cards_to_draw: number) {
+export function OnCreateShot(
+  actionId: ActionId | WandId,
+  num_of_cards_to_draw: number,
+) {
   observer.onEvent({
     name: 'OnCreateShot',
-    payload: { num_of_cards_to_draw },
+    payload: { actionId, num_of_cards_to_draw },
   });
 }
 
-export function EndTrigger() {
-  observer.onEvent({ name: 'EndTrigger', payload: {} });
+export function EndTrigger(actionId: ActionId | WandId) {
+  observer.onEvent({ name: 'EndTrigger', payload: { actionId } });
 }
 
 export function BaabInstruction(name: string) {
@@ -118,6 +129,7 @@ export function ActionUsesRemainingChanged(
     name: 'ActionUsesRemainingChanged',
     default: false,
     payload: {
+      actionId,
       item_id,
       uses_remaining,
     },
@@ -146,7 +158,7 @@ export function EntityGetWithTag(
   return observer.onEvent({
     name: 'EntityGetWithTag',
     default: [0],
-    payload: { tag },
+    payload: { actionId, tag },
   });
 }
 
@@ -167,6 +179,7 @@ export const EntityGetComponent = (
     name: 'EntityGetComponent',
     default: [component],
     payload: {
+      actionId,
       entity_id,
       component,
     },
@@ -233,7 +246,7 @@ export function ComponentSetValue2(
 ): void {
   observer.onEvent({
     name: 'ComponentSetValue2',
-    payload: { component, key, value },
+    payload: { actionId, component, key, value },
   });
 }
 
@@ -251,6 +264,7 @@ export function EntityInflictDamage(
   observer.onEvent({
     name: 'EntityInflictDamage',
     payload: {
+      actionId,
       entityId,
       selfDamage,
       damageType,
@@ -284,7 +298,7 @@ export function EntityLoad(
   return observer.onEvent({
     name: 'EntityLoad',
     default: 0,
-    payload: { entityXml, x, y },
+    payload: { actionId, entityXml, x, y },
   });
 }
 
@@ -318,7 +332,7 @@ export function EntityHasTag(
   return observer.onEvent({
     name: 'EntityHasTag',
     default: false,
-    payload: { entityId, tag },
+    payload: { actionId, entityId, tag },
   });
 }
 
@@ -333,6 +347,7 @@ export function EntityGetInRadiusWithTag(
     name: 'EntityGetInRadiusWithTag',
     default: [0],
     payload: {
+      actionId,
       x,
       y,
       radius,
@@ -350,7 +365,7 @@ export function GlobalsGetValue(
   return observer.onEvent({
     name: 'GlobalsGetValue',
     default: defaultValue,
-    payload: { key, defaultValue },
+    payload: { actionId, key, defaultValue },
   });
 }
 
@@ -360,7 +375,10 @@ export function GlobalsSetValue(
   key: string,
   value: string,
 ): void {
-  observer.onEvent({ name: 'GlobalsSetValue', payload: { key, value } });
+  observer.onEvent({
+    name: 'GlobalsSetValue',
+    payload: { actionId, key, value },
+  });
 }
 
 /* At time of writing, this is only used by Requirement: Every Other */
@@ -497,7 +515,7 @@ export function Random(
   return observer.onEvent({
     name: 'Random',
     default: RandomExt(min, max),
-    payload: { min, max },
+    payload: { actionId, min, max },
   });
 }
 
@@ -510,7 +528,7 @@ export function SetRandomSeed(
     observer.onEvent({
       name: 'SetRandomSeed',
       default: 1,
-      payload: { a, b },
+      payload: { actionId, a, b },
     }),
     a,
     b,

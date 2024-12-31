@@ -33,8 +33,8 @@ const LineDiv = styled.div<{
     `
       : `
       
-  left: calc(var(--arrow-hz) * -1);
-  width: var(--arrow-hz);
+  left: calc(var(--arrowhead-w) * -1);
+  width: var(--arrowhead-w);
   height: calc(50% - var(--arrow-w) / 2);
   top: 0;
   border-radius: var(--radius-arrow);
@@ -52,10 +52,10 @@ const LineDiv = styled.div<{
 
 const ArrowHeadDiv = styled.div`
   position: absolute;
-  top: calc(50% - (var(--ahead-h) * 0.5));
-  height: var(--ahead-h);
-  left: calc(var(--arrow-hz, 48px) * -1);
-  width: var(--arrow-hz, 48px);
+  top: calc(50% - (var(--arrowhead-h) * 0.5));
+  height: var(--arrowhead-h);
+  left: calc(var(--arrowhead-w) * -1);
+  width: var(--arrowhead-w);
   height: 16px;
   transform: translate(0px, 0);
   border: none;
@@ -79,7 +79,6 @@ export const NextActionArrow = ({
   return (
     <>
       <LineDiv size={size} swept={swept} data-name="ArrowLine" />
-      <ArrowHeadDiv data-name="ArrowHead" />
     </>
   );
 };

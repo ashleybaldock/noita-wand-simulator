@@ -3,12 +3,13 @@ import type { Action } from './action';
 import type { SpellType } from './spellTypes';
 import type { UnlockCondition } from './unlocks';
 import type { SpellSpritePath } from './spellSprite';
-import type { AlwaysCastWandIndex } from '../redux/WandIndex';
+import type { AlwaysCastWandIndex, MainWandIndex } from '../redux/WandIndex';
 import type { ExtraEntity } from './extraEntities';
+import type { ProjectileId } from './projectile';
 
 export type SpellDeckInfo = {
   id: ActionId;
-  deck_index?: number;
+  deck_index?: MainWandIndex;
   /* Always Cast */
   permanently_attached?: boolean;
   always_cast_index?: AlwaysCastWandIndex;
@@ -28,7 +29,7 @@ export type SpellProperties = {
   action: Action;
   type: SpellType;
   custom_xml_file?: string;
-  related_projectiles?: [string, number?];
+  related_projectiles?: [ProjectileId, number?];
   related_extra_entities?: ExtraEntity[];
   mana?: number;
   max_uses?: number;

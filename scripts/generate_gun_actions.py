@@ -1,9 +1,9 @@
 import os
 import re
 import base64
-from dataclasses import dataclass
 from re import Match
 from itertools import chain
+from common import *
 
 cssPrefix = '--sprite-action-'
 
@@ -12,11 +12,9 @@ spriteDirBase = './'
 
 srcFile = 'data/scripts/gun/gun_actions.lua'
 # srcFileBeta = 'data/scripts/gun/gun_actions.beta.lua'
-spellsBefore = """/* Auto-generated file */
-
-import type { GunActionState } from '../../actionState';
+spellsBefore = '''import type { GunActionState } from '../../actionState';
 import type { Spell } from '../../spell';
-import { ipairs, luaFor } from "../../lua/loops";
+import { ipairs, luaFor } from '../../lua/loops';
 import {
   hand,
   deck,
@@ -71,11 +69,11 @@ import {
 
 } from "../../eval/dispatch";
 
-"""
+'''
 
-spellsAfter = """
+spellsAfter = '''
 
-export const spells = actions;"""
+export const spells = actions;'''
 
 
 config = {
@@ -113,25 +111,8 @@ config = {
       'before': '',
       'after': '',
     },
-    'projectiles':
-    {
-      'src': 'data/scripts/gun/gun_actions.lua',
-      'dst':'src/app/calc/__generated__/main/relatedProjectiles.ts',
-      'before': '',
-      'after': '',
-    },
   },
 }
-
-def parseInt(s):
-    try:
-        return int(float(s))
-    except:
-        return 0
-
-def joinList(items):
-    return ",".join(f'\'{x}\'' for x in items)
-
 
 # Convert action functions,
 # replacing cast state global with param
@@ -158,23 +139,6 @@ def actionReplaceFn(m: Match):
     argsString += f', {arg}: {a[0]} = {a[1]}'
 
   return f'action: function({argsString}) {{{m.group(2)}{m.group(3)}}},{m.group(4)}'
-
-@dataclass
-class PatternReplace:
-  pattern: str
-  replace: str
-  flags: int = 0
-  repeat: bool = False
-  expectedSubCount: int = 0
-
-preprocessorPatterns = [
-  # remove comments
-  PatternReplace(r'--\[\[.*?]]--', '', flags=re.MULTILINE | re.DOTALL),
-  PatternReplace(r'--.*?$', '', flags=re.MULTILINE),
-  # remove dofile
-  PatternReplace(r'dofile_once.*?$', '', flags=re.MULTILINE),
-]
-
 # These are run in sequence
 # Ordering matters as each operates on the output of the last
 # (Run preprocessorPatterns first)
@@ -277,18 +241,34 @@ patterns = [
   PatternReplace(r'data\.type\s*(!==|===)\s*5', r'data.type \1 ACTION_TYPE_OTHER', flags=re.MULTILINE),
   PatternReplace(r'data\.type\s*(!==|===)\s*6', r'data.type \1 ACTION_TYPE_UTILITY', flags=re.MULTILINE),
   PatternReplace(r'data\.type\s*(!==|===)\s*7', r'data.type \1 ACTION_TYPE_PASSIVE', flags=re.MULTILINE),
-  PatternReplace(r'ACTION_TYPE_PROJECTILE', r'"projectile"', flags=re.MULTILINE),
-  PatternReplace(r'ACTION_TYPE_STATIC_PROJECTILE', r'"static"', flags=re.MULTILINE),
-  PatternReplace(r'ACTION_TYPE_MODIFIER', r'"modifier"', flags=re.MULTILINE),
-  PatternReplace(r'ACTION_TYPE_DRAW_MANY', r'"multicast"', flags=re.MULTILINE),
-  PatternReplace(r'ACTION_TYPE_MATERIAL', r'"material"', flags=re.MULTILINE),
-  PatternReplace(r'ACTION_TYPE_OTHER', r'"other"', flags=re.MULTILINE),
-  PatternReplace(r'ACTION_TYPE_UTILITY', r'"utility"', flags=re.MULTILINE),
-  PatternReplace(r'ACTION_TYPE_PASSIVE', r'"passive"', flags=re.MULTILINE),
+  PatternReplace(r'ACTION_TYPE_PROJECTILE', r"'projectile'", flags=re.MULTILINE),
+  PatternReplace(r'ACTION_TYPE_STATIC_PROJECTILE', r"'static'", flags=re.MULTILINE),
+  PatternReplace(r'ACTION_TYPE_MODIFIER', r"'modifier'", flags=re.MULTILINE),
+  PatternReplace(r'ACTION_TYPE_DRAW_MANY', r"'multicast'", flags=re.MULTILINE),
+  PatternReplace(r'ACTION_TYPE_MATERIAL', r"'material'", flags=re.MULTILINE),
+  PatternReplace(r'ACTION_TYPE_OTHER', r"'other'", flags=re.MULTILINE),
+  PatternReplace(r'ACTION_TYPE_UTILITY', r"'utility'", flags=re.MULTILINE),
+  PatternReplace(r'ACTION_TYPE_PASSIVE', r"'passive'", flags=re.MULTILINE),
 
   PatternReplace(r'(GameGetFrameNum)\(', r'\1(', flags=re.MULTILINE),
   PatternReplace(r'(OnNotEnoughManaForAction)\(', r'\1(data.mana ?? 0, mana, data', flags=re.MULTILINE),
 
+
+  # Hack to Replace problematic actions nobody will ever simulate
+  PatternReplace(r'let types = ["monster","slime","red","fire"]', r'let types = ["data/entities/items/pickup/egg_monster.xml", "data/entities/items/pickup/egg_slime.xml", "data/entities/items/pickup/egg_red.xml", "data/entities/items/pickup/egg_fire.xml" ];', flags=re.MULTILINE),
+  # PatternReplace(r'let egg_name = "egg_" + String\(types[rnd - 1]) + ".xml"', r'/* \1 */', flags=re.MULTILINE),
+  # PatternReplace(r'add_projectile\("data/entities/items/pickup/" + egg_name\)'. r'add_projectile(types[rnd - 1])' flags=re.MULTILINE),
+
+# // SetRandomSeed(this.id,  GameGetFrameNum(), GameGetFrameNum() )
+# // let types = ["pink","green","blue","orange"]
+# // let rnd = Random(this.id, 1, types.length)
+# // let firework_name = "firework_" + String(types[rnd - 1]) + ".xml"
+# // add_projectile("data/entities/projectiles/deck/fireworks/" + firework_name)
+# add_projectile("data/entities/projectiles/deck/fireworks/firework_pink.xml")
+
+  # For these API calls, inject current action function's name as first
+  # argument so it's easy to tell what the context was for them being 
+  # called and provide the correct mock implementation
   PatternReplace(r'(' + '|'.join([
       "ActionUsesRemainingChanged",
       "ComponentGetValue2",
@@ -313,16 +293,40 @@ patterns = [
       "HasFlagPersistent",
       ]) + r')\(', r'\1(this.id, ', flags=re.MULTILINE),
 
-      PatternReplace(r'\t', r'  ', flags=re.MULTILINE),
-  ]
+  PatternReplace(r'(' + '|'.join([
+    # 'hand',
+    # 'deck',
+    # 'discarded',
+    # 'mana',
+    # 'shot_effects',
+    # 'current_reload_time',
+    # 'force_stop_draws',
+    # 'ACTION_DRAW_RELOAD_TIME_INCREASE',
+    # 'reflecting',
+    'setCurrentReloadTime',     # reload time changes
+    'setMana',
+    'setDontDrawActions',
+    'setForceStopDraws',
+    'draw_actions',             # spells that draw
+    'add_projectile',
+    'add_projectile_trigger_hit_world',
+    'add_projectile_trigger_timer',
+    'add_projectile_trigger_death',
+    'call_action',              # spells that copy
+    'check_recursion',          # recursive spells
+    'clearHand',                # RESET
+    'clearDeck',                # RESET
+    'move_discarded_to_deck',   # RESET
+    'order_deck',               # RESET
+    'find_the_wand_held',       # CESSATION
+      ]) + r')\(', r'\1(this.id, ', flags=re.MULTILINE),
+  # Tabs -> Spaces
+  PatternReplace(r'\t', r'  ', flags=re.MULTILINE),
 
+  # Double Quote strings -> Single Quote strings
+  PatternReplace(r'''"([^']*)"''', r"'\1'", flags=re.MULTILINE),
+]
 
-# Remove comments etc.
-def preProcess(content):
-  for pattern in preprocessorPatterns:
-    content, subCount = re.subn(pattern.pattern, pattern.replace, content, flags=pattern.flags)
-
-  return content
 
 def processUnlocks(src, dst, before = '', after = ''):
   with open(src) as inFile:
@@ -332,15 +336,15 @@ def processUnlocks(src, dst, before = '', after = ''):
 
   pattern = r'\t+\s*spawn_requires_flag\s*=\s*\"(\w+)\"'
   matches = sorted(list(dict.fromkeys(re.findall(pattern, content, re.DOTALL))))
-  joined = ",\n  ".join(f'\'{m}\'' for m in matches)
-  content = """/* Auto-generated file */
+  joined = ',\n  '.join(f'\'{m}\'' for m in matches)
+  content = '''/* Auto-generated file */
 
 export const unlockConditions = [
-""" + joined + """,
+''' + joined + ''',
 ] as const;
 
 export type UnlockConditionTuple = typeof unlockConditions;
-export type UnlockCondition = UnlockConditionTuple[number];"""
+export type UnlockCondition = UnlockConditionTuple[number];'''
 
   with open(dst, 'w') as outFile:
     outFile.write(before + content + after)
@@ -355,15 +359,15 @@ def processActionIds(src, dst, before = '', after = ''):
   matches = sorted(list(dict.fromkeys(re.findall(r'\t+{\s*id\s*=\s*\"(\w+)\"', content, re.DOTALL))))
 
   with open(dst, 'w') as outFile:
-    outFile.write("""/* Auto-generated file */
+    outFile.write(autoHeader() + '''
 
 export const actionIds = [
-""" + ",\n  ".join(f'\'{m}\'' for m in matches) + """
+''' + ",\n  ".join(f'\'{m}\'' for m in matches) + '''
 ] as const;
 
 export type ActionId = typeof actionIds[number];
-""")
 
+''' + autoFooter())
 
 
 def processSprites(src, dst, before = '', after = ''):
@@ -382,23 +386,25 @@ def processSprites(src, dst, before = '', after = ''):
   matches = dict(re.findall(actionIdAndSpritePattern, content, re.MULTILINE))
 
   with open('src/app/calc/__generated__/main/spellSprites.css', 'w') as outFile:
-    outFile.write("""/* Auto-generated file */
+    outFile.write(autoHeader() + '''
 
 :root {
-""" + "\n".join(f'  {spriteForAction(actionId)}: url(\'data:image/png;base64,{loadSpriteToBase64(spriteFilename).decode("utf-8")}\');' for actionId, spriteFilename in iter(matches.items())) + """
+''' + "\n".join(f'  {spriteForAction(actionId)}: url(\'data:image/png;base64,{loadSpriteToBase64(spriteFilename).decode("utf-8")}\');' for actionId, spriteFilename in iter(matches.items())) + '''
 }
-""")
+
+''' + autoFooter())
 
   with open(dst, 'w') as outFile:
-    outFile.write("""/* Auto-generated file */
+    outFile.write(autoHeader() + '''
 
 export const spellSprites = [
-""" + ",\n".join(f'  [\'icon.spell.{actionId}\', \'var({spriteForAction(actionId)})\']' for actionId, _ in iter(matches.items())) + """,
+''' + ",\n".join(f'  [\'icon.spell.{actionId}\', \'var({spriteForAction(actionId)})\']' for actionId, _ in iter(matches.items())) + ''',
 ] as const;
 
 export type SpellSpriteName = typeof spellSprites[number][0];
 export type SpellSpritePath = typeof spellSprites[number][1];
-""")
+
+''' + autoFooter())
 
 
 
@@ -410,66 +416,21 @@ def processExtraEntities(src, dst, before = '', after = ''):
   content = preProcess(content)
 
   extraEntitiesPattern = '^\s+{\s*id\s*=\s*\"(\w+)\".+?(?:^\s+}|^\s+related_extra_entities\s*=\s*{\s*\"([^}]+?)\"\s+})|(?:^\s+c\.extra_entities\s*=\s*c\.extra_entities\s+\.\.\s*\"([^}]+?)\")'
-  # print("\n".join(re.findall(extraEntitiesPattern, content, re.MULTILINE|re.DOTALL)))
 
   matches = {actionId: set(filter(len, [x.strip() for x in rawRelated.replace('"', '').split(',')]))|set(filter(len, [x.strip() for x in rawExtra.replace('"', '').split(',')])) for actionId, rawRelated, rawExtra in re.findall(extraEntitiesPattern, content, re.MULTILINE|re.DOTALL)}
-  # print(",".join(f'\'{x}\'' for x, y in matches.items()))
 
   with open(dst, 'w') as outFile:
-    outFile.write("""/* Auto-generated file */
+    outFile.write(autoHeader() + '''
 
 export const extraEntities = [
-""" + ",\n".join(f'  \'{uniqueEntity}\'' for uniqueEntity in iter(set(x for l in matches.values() for x in l))) + """,
+''' + ",\n".join(f'  \'{uniqueEntity}\'' for uniqueEntity in iter(set(x for l in matches.values() for x in l))) + ''',
 ] as const;
 
 export const actionIdExtraEntities = {
-""" + ",\n".join(f'  \'{actionId}\': [{joinList(extra)}]' for actionId, extra in iter(matches.items())) + """,
+''' + ",\n".join(f'  \'{actionId}\': [{joinList(extra)}]' for actionId, extra in iter(matches.items())) + ''',
 } as const;
-""")
 
-
-# TODO - this only gets the first projectile, they are typically all the same but it would be good to check them all
-# - Use this to build the 
-def processProjectiles(src, dst, before = '', after = ''):
-
-  with open(src) as inFile:
-    content = inFile.read()
-
-  content = preProcess(content)
-
-  # projectilesPattern = '^\s+{\s*id\s*=\s*\"(\w+)\".+?(?:^\s+}|^\s+related_projectiles\s*=\s*\{([\s\w/.,"]*)\})|(?:^\s+add_projectile(?:|_trigger_hit_world|_trigger_timer|_trigger_death)\(\"([\w/.]+)\")'
-
-  projectilesPattern = '^\s+{\s*id\s*=\s*\"(\w+)\".+?(?:^\s+}|^\s+related_projectiles\s*=\s*\{\s*\"([\s\w/.]*)\"(?:,(\d*))?\s*\})|(?:^\s+add_projectile(?:|_trigger_hit_world|_trigger_timer|_trigger_death)\(\"([\w/.]+)\")'
-
-  # , *_ = re.findall(projectilesPattern, content, re.MULTILINE|re.DOTALL)
-
-
-  all_matches = chain((x.strip() for x in relatedProj.replace('"', '').split(',') if len(x)), (x.strip() for x in addedProj.replace('"', '').split(',') if len(x)) for actionId, relatedProj, relProjCount, addedProj in re.findall(projectilesPattern, content, re.MULTILINE|re.DOTALL))
-
-  # all_matches.extend(filter(len, [x.strip() for x in addedProj.replace('"', '').split(',')]))
-
-
-  print([x for x in all_matches])
-                    #.extend(filter(len, [z.strip() for y in [x.replace('"', '').split(',').strip() for x in iter(addedProj)] for z in y])))
-
-                    # .extend(filter(len, [x.strip() for x in addedProj.replace('"', '').split(',')])))
-
-  matches = {actionId: {'added': set(filter(len, [x.strip() for x in addedProj.replace('"', '').split(',')])), 'relatedCount': max(parseInt(relProjCount),len(relatedProj)), 'addedCount': len(addedProj)} for actionId, relatedProj, relProjCount, addedProj in re.findall(projectilesPattern, content, re.MULTILINE|re.DOTALL)}
-
-  # print(matches)
-
-  with open(dst, 'w') as outFile:
-    outFile.write("""/* Auto-generated file */
-
-export const relatedProjectiles = [
-""" + ",\n".join(str(x) for x in all_matches) + """,
-] as const;
-
-export const relatedAddedCounts = {
-""" + ",\n".join(f'  \'{actionId}\': {x}' for actionId, x in iter(matches.items())) + """,
-} as const;
-""")
-
+''' + autoFooter())
 
 
 def processSpells(src, dst, before = '', after = ''):
@@ -500,11 +461,13 @@ def processSpells(src, dst, before = '', after = ''):
       print(f'{variance}')
 
   with open(dst, 'w') as outFile:
-    outFile.write(before + content + after)
+    outFile.write(autoHeader() + '''
 
+''' + before + content + after + '''
+
+''' + autoFooter())
 
 os.makedirs(os.path.dirname('src/app/calc/__generated__/main/'), exist_ok=True)
-# os.makedirs(os.path.dirname('src/app/calc/__generated__/beta/'), exist_ok=True)
 
 process = {
   'actionIds': processActionIds,
@@ -512,7 +475,6 @@ process = {
   'spells': processSpells,
   'sprites': processSprites,
   'extraEntities': processExtraEntities,
-  'projectiles': processProjectiles,
 }
 
 for branch, tasks in config.items():

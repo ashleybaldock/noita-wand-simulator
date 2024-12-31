@@ -6,10 +6,10 @@ import { isNotNullOrUndefined, ordinalSuffix } from '../../../util';
 import { mappedTreeToTreeMap } from '../../../util/MapTree';
 import type { WandShotResult } from '../../../calc/eval/WandShot';
 import type { ActionSource } from '../../../calc/actionSources';
+import { useMemo } from 'react';
+import { TreeArrow } from './TreeArrow';
 
 export const ActionTreeRoot = styled.div`
-  --arrow-hz: 40px;
-  --ahead-h: 16px;
   --row-h: 68px;
   --radius-arrow: 0 0 0 20px/0 0 0 23px;
 
@@ -47,15 +47,18 @@ const ArrowColumn = styled.div``;
 
 const ActionTreeComponent = ({
   node,
+  position,
   level,
   triggerLevel: currentTriggerLevel,
 }: {
   node: TreeNode<ActionCall>;
   level: number;
+  position: number;
   triggerLevel: number;
 }) => {
   const childCount = node.children.length;
   const hasChildren = childCount > 0;
+  const childHasSiblings = childCount > 1;
   const isLeaf = childCount === 0;
   const isTwig = node.children.every((child) => child.children.length === 0);
   const isTriggerParent = isNotNullOrUndefined(
@@ -65,6 +68,29 @@ const ActionTreeComponent = ({
   const causedWrap = isNotNullOrUndefined(
     node.value.wasLastToBeDrawnBeforeWrapNr,
   );
+  /**
+   * Find 'runs' of single draw actions,
+   *  e.g. several modifiers in a row
+   * (To be displayed in a more compact form)
+   */
+  const runs = useMemo(
+    () =>
+      node.children.reduce<TreeNode<ActionCall>[][]>((runs, cur) => {
+        if (
+          runs.length > 0 &&
+          runs[runs.length - 1][runs[runs.length - 1].length - 1]?.value
+            ?.source === cur.value.source
+        ) {
+          runs[runs.length - 1].push(cur);
+          return runs;
+        } else {
+          runs.push([cur]);
+          return runs;
+        }
+      }, []),
+    [node],
+  );
+  const branches = runs.length > 1;
 
   return (
     <ActionTreeShotResultNodeDiv
@@ -72,16 +98,17 @@ const ActionTreeComponent = ({
       data-spell={node?.value.spell.id}
       data-leaf={isLeaf}
       data-twig={isTwig}
+      data-branches={branches}
       data-level={level}
       data-childcount={childCount}
       data-trigger={isTriggerParent}
       data-triggerlevel={triggerLevel}
       data-wrap={causedWrap}
-      data-deckindex={node?.value.deckIndex}
+      data-deckindex={node?.value.spell.deck_index}
       data-seqid={node?.value.sequenceId}
       data-recursion={node?.value.recursion}
       data-iteration={node?.value.iteration}
-      data-source={node?.value.source}
+      data-source={node?.value.source ?? 'draw'}
       data-dontdraw={node?.value.dont_draw_actions ?? false}
       style={{
         '--data-triggerlevel': triggerLevel,
@@ -89,7 +116,16 @@ const ActionTreeComponent = ({
         '--data-childcount': childCount,
       }}
     >
-      <ArrowColumn data-name="Arrows" />
+      <ArrowColumn data-name="Arrows">
+        <TreeArrow arrow={'⭢ '} source={node.value?.source} />
+        {isLeaf && <TreeArrow arrow={'⤵︎'} source={node.value?.source} />}
+        {position > 0 && (
+          <>
+            <TreeArrow arrow={'⤷ '} source={node.value?.source} />
+            <TreeArrow arrow={'ↆ'} source={node.value?.source} />
+          </>
+        )}
+      </ArrowColumn>
       <WandActionCall data-name="AcTreeActionCall" actionCall={node.value} />
       {hasChildren && (
         <ChildrenDiv
@@ -97,38 +133,28 @@ const ActionTreeComponent = ({
           data-twig={isTwig}
           data-trigger={isTriggerParent}
         >
-          {/* TODO memoise this */}
-          {node.children
-            .reduce<TreeNode<ActionCall>[][]>((runs, cur) => {
-              if (
-                runs.length > 0 &&
-                runs[runs.length - 1][runs[runs.length - 1].length - 1]?.value
-                  ?.source === cur.value.source
-              ) {
-                runs[runs.length - 1].push(cur);
-                return runs;
-              } else {
-                runs.push([cur]);
-                return runs;
-              }
-            }, [])
-            .map((run, runIdx) => (
-              <ActionTreeSourceGroup
-                data-name={'ActionSourceGroup'}
-                data-source={run[0]?.value?.source ?? 'draw'}
-                key={runIdx}
-                $source={run[0]?.value?.source ?? 'draw'}
-              >
-                {run.map((childNode, index) => (
-                  <ActionTreeComponent
-                    node={childNode}
-                    key={index}
-                    level={level + 1}
-                    triggerLevel={triggerLevel}
-                  />
-                ))}
-              </ActionTreeSourceGroup>
-            ))}
+          {runs.map((run, runIdx, runs) => (
+            <ActionTreeSourceGroup
+              data-name={'ActionSourceGroup'}
+              data-source={run[0]?.value?.source}
+              data-run={runIdx}
+              data-has-siblings={runs.length > 1}
+              key={runIdx}
+              $source={run[0]?.value?.source}
+            >
+              {run.map((childNode, index, run) => (
+                <ActionTreeComponent
+                  data-first-of-run={index === 0}
+                  data-last-of-run={index === run.length - 1}
+                  position={index}
+                  node={childNode}
+                  key={index}
+                  level={level + 1}
+                  triggerLevel={triggerLevel}
+                />
+              ))}
+            </ActionTreeSourceGroup>
+          ))}
         </ChildrenDiv>
       )}
     </ActionTreeShotResultNodeDiv>
@@ -155,6 +181,7 @@ export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
           </ActionTreeCastSummary>
           <StartingDraw data-name="AcTreeSpCast">Spells/cast: </StartingDraw>
           <ActionTreeComponent
+            position={0}
             node={mappedTreeToTreeMap(n)}
             level={level + 1}
             triggerLevel={triggerLevel}

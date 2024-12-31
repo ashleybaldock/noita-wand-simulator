@@ -15,6 +15,7 @@ import {
 } from './gunshoteffects_generated';
 import type { ExtraModifier } from './extraModifiers';
 import { extraModifiers } from './extraModifiers';
+import type { WandId } from './eval/dispatch';
 import {
   ActionUsed,
   ActionUsesRemainingChanged,
@@ -47,6 +48,7 @@ import {
 } from './eval/dispatch';
 import type { AlwaysCastWandIndex } from '../redux/WandIndex';
 import type { EntityId } from '@reduxjs/toolkit';
+import type { ProjectileId } from './projectile';
 
 // constants
 export const ACTION_DRAW_RELOAD_TIME_INCREASE = 0;
@@ -242,8 +244,11 @@ function clone_action(source: Readonly<Spell>, target: Spell) {
 
 // various utilities
 
-function create_shot(num_of_cards_to_draw: number): Shot {
-  OnCreateShot(num_of_cards_to_draw);
+function create_shot(
+  actionId: ActionId | WandId,
+  num_of_cards_to_draw: number,
+): Shot {
+  OnCreateShot(actionId, num_of_cards_to_draw);
   const shot: Shot = {
     num_of_cards_to_draw,
     state: ConfigGunActionInfo_Create(),
@@ -254,7 +259,11 @@ function create_shot(num_of_cards_to_draw: number): Shot {
   return shot;
 }
 
-function draw_shot(shot: Shot, instant_reload_if_empty: boolean) {
+function draw_shot(
+  actionId: ActionId | WandId,
+  shot: Shot,
+  instant_reload_if_empty: boolean,
+) {
   const c_old = c;
 
   c = shot.state;
@@ -441,43 +450,49 @@ export function draw_actions(
   }
 }
 
-export function add_projectile(entity_filename: string) {
-  BeginProjectile(entity_filename);
-  EndProjectile();
+export function add_projectile(
+  actionId: ActionId | WandId,
+  entity_filename: ProjectileId,
+) {
+  BeginProjectile(actionId, entity_filename);
+  EndProjectile(actionId);
 }
 
 export function add_projectile_trigger_timer(
-  entity_filename: string,
+  actionId: ActionId | WandId,
+  entity_filename: ProjectileId,
   delay_frames: number,
   action_draw_count: number,
 ) {
-  BeginProjectile(entity_filename);
-  BeginTriggerTimer(entity_filename, action_draw_count, delay_frames);
-  draw_shot(create_shot(action_draw_count), true);
-  EndTrigger();
-  EndProjectile();
+  BeginProjectile(actionId, entity_filename);
+  BeginTriggerTimer(actionId, entity_filename, action_draw_count, delay_frames);
+  draw_shot(actionId, create_shot(actionId, action_draw_count), true);
+  EndTrigger(actionId);
+  EndProjectile(actionId);
 }
 
 export function add_projectile_trigger_hit_world(
-  entity_filename: string,
+  actionId: ActionId | WandId,
+  entity_filename: ProjectileId,
   action_draw_count: number,
 ) {
-  BeginProjectile(entity_filename);
-  BeginTriggerHitWorld(entity_filename, action_draw_count);
-  draw_shot(create_shot(action_draw_count), true);
-  EndTrigger();
-  EndProjectile();
+  BeginProjectile(actionId, entity_filename);
+  BeginTriggerHitWorld(actionId, entity_filename, action_draw_count);
+  draw_shot(actionId, create_shot(actionId, action_draw_count), true);
+  EndTrigger(actionId);
+  EndProjectile(actionId);
 }
 
 export function add_projectile_trigger_death(
-  entity_filename: string,
+  actionId: ActionId | WandId,
+  entity_filename: ProjectileId,
   action_draw_count: number,
 ) {
-  BeginProjectile(entity_filename);
-  BeginTriggerDeath(entity_filename, action_draw_count);
-  draw_shot(create_shot(action_draw_count), true);
-  EndTrigger();
-  EndProjectile();
+  BeginProjectile(actionId, entity_filename);
+  BeginTriggerDeath(actionId, entity_filename, action_draw_count);
+  draw_shot(actionId, create_shot(actionId, action_draw_count), true);
+  EndTrigger(actionId);
+  EndProjectile(actionId);
 }
 
 export function move_discarded_to_deck() {
@@ -572,7 +587,7 @@ export function _start_shot(current_mana: number) {
   force_stop_draws = false;
 
   // create the initial shot
-  root_shot = create_shot(1);
+  root_shot = create_shot('__WAND__', 1);
   c = root_shot.state;
 
   // set up the initial state for the selected gun
@@ -596,7 +611,7 @@ export function _start_shot(current_mana: number) {
 
 export function _draw_actions_for_shot(can_reload_at_end: boolean) {
   // draw  actions
-  draw_shot(root_shot!, false);
+  draw_shot('__WAND__', root_shot!, false);
 
   register_gunshoteffects(shot_effects);
 

@@ -3,6 +3,7 @@ import type { ActionId } from '../actionId';
 import type { ActionSource } from '../actionSources';
 import type { GunActionState } from '../actionState';
 import type { ExtraModifier } from '../extraModifiers';
+import type { ProjectileId } from '../projectile';
 import type { SpellDeckInfo } from '../spell';
 import type { UnlockCondition } from '../unlocks';
 import type { WandId } from './dispatch';
@@ -36,26 +37,30 @@ export type WandEventBase = {
 
   /* Begin Sequence: Projectile */
   BeginProjectile: {
-    entity_filename: string;
+    projectileId: ProjectileId;
   };
   BeginTriggerHitWorld: {
-    entity_filename: string;
+    projectileId: ProjectileId;
     action_draw_count: number;
   };
   BeginTriggerTimer: {
-    entity_filename: string;
+    projectileId: ProjectileId;
     action_draw_count: number;
     delay_frames: number;
   };
   BeginTriggerDeath: {
-    entity_filename: string;
+    projectileId: ProjectileId;
     action_draw_count: number;
   };
   OnCreateShot: {
     num_of_cards_to_draw: number;
   };
-  EndTrigger: Record<string, never>;
-  EndProjectile: Record<string, never>;
+  EndTrigger: {
+    actionId: ActionId | WandId;
+  };
+  EndProjectile: {
+    actionId: ActionId | WandId;
+  };
   /* End Sequence: Projectile */
 
   /* Begin Sequence: Reload */

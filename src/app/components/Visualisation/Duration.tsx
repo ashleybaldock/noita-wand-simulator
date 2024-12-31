@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import {
-  assertNever,
   FNSP,
   round,
   SUFFIX_FRAME,
@@ -11,19 +10,20 @@ import {
 } from '../../util';
 import { useConfig } from '../../redux';
 
-type TimeUnit = 'f' | 's' | 'ms';
-
 type DurationProps =
   | {
-      unit: 'f';
       f: number;
+      s?: undefined;
+      ms?: undefined;
     }
   | {
-      unit: 's';
+      f?: undefined;
       s: number;
+      ms?: undefined;
     }
   | {
-      unit: 'ms';
+      f?: undefined;
+      s?: undefined;
       ms: number;
     };
 
@@ -31,10 +31,10 @@ export const Duration = styled(
   (props: DurationProps & { className?: string }) => {
     const { showDurationsInFrames } = useConfig();
 
-    if (props.unit === 'ms') {
+    if (props.ms) {
       return <>{`≈${FNSP}${props.ms}${FNSP}${SUFFIX_MILLISECOND}`}</>;
     }
-    if (props.unit === 'f') {
+    if (props.f) {
       if (showDurationsInFrames) {
         return <>{`${props.f}${FNSP}${SUFFIX_FRAME}`}</>;
       }
@@ -42,12 +42,12 @@ export const Duration = styled(
         <>{`≈${FNSP}${round(toSeconds(props.f), 2)}${FNSP}${SUFFIX_SECOND}`}</>
       );
     }
-    if (props.unit === 's') {
+    if (props.s) {
       if (showDurationsInFrames) {
         return <>{`≈${FNSP}${toFrames(props.s)}${FNSP}${SUFFIX_FRAME}`}</>;
       }
       return <>{`${round(props.s, 2)}${FNSP}${SUFFIX_SECOND}`}</>;
     }
-    return assertNever();
+    return <>{`?`}</>;
   },
 )``;

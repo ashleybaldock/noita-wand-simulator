@@ -91,7 +91,8 @@ const resetState = (
     parentShot: undefined,
   },
   result: {
-    simulationRequestId: simulationRequestId,
+    simulationRequestId,
+    salvos: [],
     shots: [],
     reloadTime: undefined,
     endConditions: [],
@@ -112,8 +113,12 @@ const startTimer =
 const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
   observer.subscribe(({ name, payload }: WandEvent) => {
     switch (name) {
+      /**
+       * Projectiles can be added by excuting a spell's action (which
+       * calls add_projectilezx..)
+       */
       case 'BeginProjectile': {
-        const { entity_filename } = payload;
+        const { projectileId } = payload;
 
         let sourceAction =
           state.validSourceCalledActions[
@@ -125,67 +130,66 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
           // fallback to most likely entity source if no action
           // if (!entityToActions(entity)) {
           if (
-            !isValidEntityPath(entity_filename) ||
-            entityToActions(entity_filename) === undefined
+            !isValidEntityPath(projectileId) ||
+            entityToActions(projectileId) === undefined
           ) {
-            throw Error(`missing entity: ${entity_filename}`);
+            throw Error(`missing entity: ${projectileId}`);
           }
-          sourceAction = getSpellByActionId(
-            entityToActions(entity_filename)?.[0],
-          );
+          sourceAction = getSpellByActionId(entityToActions(projectileId)?.[0]);
         }
 
         if (
-          entity_filename !==
+          projectileId !==
           getSpellByActionId(sourceAction.id).related_projectiles?.[0]
         ) {
-          if (!entityToActions(entity_filename)) {
-            throw Error(`missing entity: ${entity_filename}`);
+          if (!entityToActions(projectileId)) {
+            throw Error(`missing entity: ${projectileId}`);
           }
 
           // check for bugged actions (missing the correct related_projectile)
-          if (entityToActions(entity_filename)[0] !== sourceAction.id) {
+          if (entityToActions(projectileId)[0] !== sourceAction.id) {
             // this probably means another action caused this projectile (like ADD_TRIGGER)
             proxy = sourceAction;
             sourceAction = getSpellByActionId(
-              entityToActions(entity_filename)?.[0],
+              entityToActions(projectileId)?.[0],
             );
           }
         }
 
         state.currentShot.projectiles.push({
           _typeName: 'Projectile',
-          entity: entity_filename,
+          entity: projectileId,
           spell: sourceAction,
           proxy: proxy,
-          deckIndex: proxy?.deck_index || sourceAction?.deck_index,
         });
         break;
       }
       case 'BeginTriggerTimer':
       case 'BeginTriggerHitWorld':
       case 'BeginTriggerDeath': {
-        // TODO type for entity_filename
-        const { entity_filename, action_draw_count } = payload;
+        const { projectileId, action_draw_count } = payload;
         const delay_frames =
           name === 'BeginTriggerTimer' ? payload.delay_frames : undefined;
         state.parentShot = state.currentShot;
         state.currentShotStack.push(state.currentShot);
         state.currentShot = {
           id: nextWandShotId(),
+          stats: {
+            projectiles: {},
+          },
           projectiles: [],
           actionCalls: [],
           actionCallTrees: [],
           castState: { ...defaultGunActionState },
           triggerType: triggerConditionFor(name),
-          triggerEntity: entity_filename,
+          triggerEntity: projectileId,
           triggerActionDrawCount: action_draw_count,
           triggerDelayFrames: delay_frames,
           wraps: [],
         };
-        state.parentShot.projectiles[
-          state.parentShot.projectiles.length - 1
-        ].trigger = state.currentShot.id;
+        // state.parentShot.projectles[
+        //   state.parentShot.projectiles.length - 1
+        // ].trigger = state.currentShot.id;
         if (state.lastDrawnAndCalledAction) {
           state.lastDrawnAndCalledAction.wasLastToBeDrawnBeforeBeginTrigger =
             state.currentShot.id;
@@ -240,7 +244,7 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
         break;
       }
       case 'OnWrap': {
-        const { deck, hand, discarded } = payload;
+        const { /* deck, hand,*/ discarded } = payload;
         result.wraps += 1;
         state.currentShot.wraps.push(result.wraps);
         if (state.lastDrawnAndCalledAction) {
@@ -258,7 +262,7 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
         break;
       }
       case 'OnMoveDiscardedToDeck': {
-        const { discarded } = payload;
+        // const { discarded } = payload;
 
         break;
       }
@@ -284,7 +288,6 @@ const beginObservation = (result: ClickWandResult, state: ClickWandState) =>
           source,
           manaPre: gunMana,
           currentMana: gunMana,
-          deckIndex: deck_index,
           recursion: getSpellByActionId(id).recursive
             ? recursion ?? 0
             : undefined,

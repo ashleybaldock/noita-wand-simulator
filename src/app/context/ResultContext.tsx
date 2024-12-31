@@ -17,6 +17,7 @@ const defaultResultState: ResultContextState = {
   result: {
     simulationRequestId: 0,
     shots: [],
+    salvos: [],
     reloadTime: undefined,
     endConditions: [],
     elapsedTime: 0,

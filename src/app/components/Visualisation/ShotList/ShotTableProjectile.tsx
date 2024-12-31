@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import type { ShotProjectile } from '../../../calc/eval/ShotProjectile';
+import type { WandShotProjectile } from '../../../calc/eval/WandShotProjectile';
 import { getSpellByActionId } from '../../../calc/spells';
 import {
   ActionProxyAnnotation,
@@ -63,7 +63,7 @@ const ShotTableProjectileBorder = styled(StyledWandActionBorder)`
 export const ShotTableProjectile = ({
   projectile,
 }: {
-  projectile: ShotProjectile;
+  projectile: WandShotProjectile;
 }) => {
   return (
     <MainDiv>
@@ -86,7 +86,7 @@ export const ShotTableProjectile = ({
           proxy={projectile.proxy}
         />
         <DeckIndexAnnotation
-          deckIndex={projectile.deckIndex}
+          deckIndex={projectile.spell?.deck_index}
           wandIndex={projectile.spell?.always_cast_index}
         />
         <FriendlyFireAnnotation />
