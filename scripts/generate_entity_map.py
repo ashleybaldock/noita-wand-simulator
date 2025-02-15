@@ -109,6 +109,12 @@ export const entityToActionIds = {
     outFile.write(autoHeader() + """
 
 export const projectileIds = [
+  "data/entities/items/pickup/egg_slime.xml",
+  "data/entities/items/pickup/egg_red.xml",
+  "data/entities/items/pickup/egg_fire.xml",
+  "data/entities/projectiles/deck/fireworks/firework_green.xml",
+  "data/entities/projectiles/deck/fireworks/firework_blue.xml",
+  "data/entities/projectiles/deck/fireworks/firework_orange.xml",
 """ + ",\n".join(f'  \'{uniqueEntity}\'' for uniqueEntity in iter(entity_set)) + """,
 ] as const;
 

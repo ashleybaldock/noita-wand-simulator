@@ -25,6 +25,7 @@ export type WandEventBase = {
     /* Unused ?? */ name: string;
   };
   ActionUsed: {
+    actionId: ActionId | WandId;
     /* Not sure this is useful */ itemId: InventoryItemID | undefined;
   };
   SetProjectileConfigs: /* Unused ?? */ Record<string, never>;
@@ -82,11 +83,15 @@ export type WandEventBase = {
     always_cast_index?: AlwaysCastWandIndex;
   };
   /* OnHandleManaAddition - add mana hack for always casts */
+  OnHandleManaAddition: {
+    actionId: ActionId | WandId;
+  };
   /* End Sequence: Always Cast */
 
-  OnSetDontDraw: Record<string, never>;
-  OnUnsetDontDraw: Record<string, never>;
+  OnSetDontDraw: { actionId: ActionId | WandId };
+  OnUnsetDontDraw: { actionId: ActionId | WandId };
 
+  OnSetMana: { actionId: ActionId | WandId; mana: number };
   /* Begin Sequence: Draw */
   OnDraw: {
     state_cards_drawn: number;
@@ -99,7 +104,7 @@ export type WandEventBase = {
   OnMoveDiscardedToDeck: {
     discarded: readonly SpellDeckInfo[];
   };
-  OnCantWrap: Record<string, never>;
+  OnCantWrap: { actionId: ActionId | WandId };
   OnNotEnoughManaForAction: {
     mana_required: number;
     mana_available: number;
@@ -112,6 +117,7 @@ export type WandEventBase = {
 
   /* Begin Sequence: Action */
   OnActionPlayed: {
+    actionId: ActionId | WandId;
     /* From Sequence: Draw OR Always Cast */ playing_permanent_card: boolean;
     spell: Readonly<SpellDeckInfo>;
     c: GunActionState;
@@ -133,7 +139,7 @@ export type WandEventBase = {
     playing_permanent_card: boolean;
   };
   OnActionFinished: {
-    source: string;
+    source: ActionSource /* __WAND__ (draw) or a previous action */;
     spell: Readonly<SpellDeckInfo>;
     c: GunActionState;
     recursion?: number;

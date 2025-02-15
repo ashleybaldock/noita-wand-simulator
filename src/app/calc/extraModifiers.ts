@@ -124,7 +124,7 @@ export const extraModifiers = {
     // SetRandomSeed( GameGetFrameNum(), GameGetFrameNum() - 523 )
 
     if (data !== null && Random(1, 2) === 1) {
-      call_action('perk', data, c);
+      call_action('__WAND__', 'perk', data, c);
     }
   },
   high_spread: (c: GunActionState) => {
@@ -138,7 +138,7 @@ export const extraModifiers = {
   },
   slow_firing: (c: GunActionState) => {
     c.fire_rate_wait = c.fire_rate_wait + 5;
-    setCurrentReloadTime(current_reload_time + 5);
+    setCurrentReloadTime('__WAND__', current_reload_time + 5);
   },
 } as const;
 

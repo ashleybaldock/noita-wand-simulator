@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { Duration } from '../Duration';
-import { isNotNullOrUndefined, round } from '../../../util';
+import { isNotNullOrUndefined } from '../../../util';
 import {
   useConfig,
   useLatestResult,
   useSimulationStatus,
 } from '../../../redux';
-import type { WandSalvo } from '../../../calc/eval/ClickWandResult';
+import type { WandSalvo } from '../../../calc/eval/WandSalvo';
 
 const SummaryItem = styled.div`
   line-height: 1.7em;

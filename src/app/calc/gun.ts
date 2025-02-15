@@ -45,6 +45,7 @@ import {
   OnNoUsesRemaining,
   OnExtraModifier,
   OnCreateShot,
+  OnSetMana,
 } from './eval/dispatch';
 import type { AlwaysCastWandIndex } from '../redux/WandIndex';
 import type { EntityId } from '@reduxjs/toolkit';
@@ -111,17 +112,17 @@ export let discarded: Spell[] = [];
 export let deck: Spell[] = [];
 export let hand: Spell[] = [];
 
-export function clearDiscarded() {
+export function clearDiscarded(actionId: ActionId | WandId) {
   /* This MUST be a new array assignment! */
   discarded = [];
 }
 
-export function clearDeck() {
+export function clearDeck(actionId: ActionId | WandId) {
   /* This MUST be a new array assignment! */
   deck = [];
 }
 
-export function clearHand() {
+export function clearHand(actionId: ActionId | WandId) {
   /* This MUST be a new array assignment! */
   hand = [];
 }
@@ -130,7 +131,7 @@ export let c: GunActionState;
 // let current_projectile = null;
 export let current_reload_time = 0;
 
-export function setCurrentReloadTime(crt: number) {
+export function setCurrentReloadTime(actionId: ActionId | WandId, crt: number) {
   current_reload_time = crt;
 }
 
@@ -142,7 +143,8 @@ const active_extra_modifiers: ExtraModifier[] = [];
 
 export let mana = 0.0;
 
-export function setMana(m: number) {
+export function setMana(actionId: ActionId | WandId, m: number) {
+  OnSetMana(actionId, m);
   mana = m;
 }
 
@@ -162,14 +164,14 @@ current_reload_time = gun.reload_time;
 // setup additional card-related variables
 export let dont_draw_actions = false;
 
-export function setDontDrawActions(dda: boolean) {
-  dda ? OnSetDontDraw() : OnUnsetDontDraw();
+export function setDontDrawActions(actionId: ActionId | WandId, dda: boolean) {
+  dda ? OnSetDontDraw(actionId) : OnUnsetDontDraw(actionId);
   dont_draw_actions = dda;
 }
 
 export let force_stop_draws = false;
 
-export function setForceStopDraws(fsd: boolean) {
+export function setForceStopDraws(actionId: ActionId | WandId, fsd: boolean) {
   force_stop_draws = fsd;
 }
 
@@ -269,7 +271,7 @@ function draw_shot(
   c = shot.state;
 
   shot_structure = {};
-  draw_actions(shot.num_of_cards_to_draw, instant_reload_if_empty);
+  draw_actions(actionId, shot.num_of_cards_to_draw, instant_reload_if_empty);
   register_action(shot.state);
   SetProjectileConfigs();
 
@@ -278,9 +280,9 @@ function draw_shot(
 
 // helper functions. actions may call these
 
-export function order_deck() {
+export function order_deck(actionId: ActionId | WandId) {
   if (gun.shuffle_deck_when_empty) {
-    SetRandomSeed('__WAND__', GameGetFrameNum(), GameGetFrameNum());
+    SetRandomSeed(actionId, GameGetFrameNum(), GameGetFrameNum());
     // shuffle the deck
     // state_shuffled = true;
 
@@ -315,13 +317,13 @@ export function order_deck() {
   }
 }
 
-function play_action(spell: Readonly<Spell>) {
-  OnActionPlayed(spell, c, playing_permanent_card);
+function play_action(actionId: ActionId | WandId, spell: Readonly<Spell>) {
+  OnActionPlayed(actionId, spell, c, playing_permanent_card);
 
   hand.push(spell);
 
   set_current_action(spell);
-  call_action('draw', spell, c);
+  call_action(actionId, 'draw', spell, c);
 
   let is_projectile = false;
 
@@ -350,7 +352,10 @@ function play_action(spell: Readonly<Spell>) {
   current_reload_time = current_reload_time + ACTION_DRAW_RELOAD_TIME_INCREASE;
 }
 
-export function draw_action(instant_reload_if_empty: boolean) {
+export function draw_action(
+  actionId: ActionId | WandId,
+  instant_reload_if_empty: boolean,
+) {
   let action = null;
 
   state_cards_drawn = state_cards_drawn + 1;
@@ -362,12 +367,12 @@ export function draw_action(instant_reload_if_empty: boolean) {
 
   if (deck.length <= 0) {
     if (instant_reload_if_empty && !force_stop_draws) {
-      OnWrap(deck, hand, discarded);
-      move_discarded_to_deck();
-      order_deck();
+      OnWrap(actionId, deck, hand, discarded);
+      move_discarded_to_deck(actionId);
+      order_deck(actionId);
       start_reload = true;
     } else {
-      OnCantWrap();
+      OnCantWrap(actionId);
       reloading = true;
       return true;
     }
@@ -401,7 +406,7 @@ export function draw_action(instant_reload_if_empty: boolean) {
 
   //- add the action to hand and execute it //-
   if (action !== null) {
-    play_action(action);
+    play_action(actionId, action);
   }
 
   return true;
@@ -418,6 +423,7 @@ function handle_mana_addition(action: Spell) {
 }
 
 export function draw_actions(
+  actionId: ActionId | WandId,
   how_many: number,
   instant_reload_if_empty: boolean,
 ) {
@@ -433,11 +439,11 @@ export function draw_actions(
     }
 
     for (let i = 0; i < how_many; i++) {
-      const ok = draw_action(instant_reload_if_empty);
+      const ok = draw_action(actionId, instant_reload_if_empty);
       if (!ok) {
         // attempt to draw other actions
         while (deck.length > 0) {
-          if (draw_action(instant_reload_if_empty)) {
+          if (draw_action(actionId, instant_reload_if_empty)) {
             break;
           }
         }
@@ -495,15 +501,15 @@ export function add_projectile_trigger_death(
   EndProjectile(actionId);
 }
 
-export function move_discarded_to_deck() {
-  OnMoveDiscardedToDeck(discarded);
+export function move_discarded_to_deck(actionId: ActionId | WandId) {
+  OnMoveDiscardedToDeck(actionId, discarded);
   discarded.forEach((action) => {
     deck.push(action);
   });
   discarded.length = 0;
 }
 
-function move_hand_to_discarded() {
+function move_hand_to_discarded(actionId: ActionId | WandId) {
   hand.forEach((action) => {
     let identify = false;
 
@@ -520,7 +526,7 @@ function move_hand_to_discarded() {
           // consume consumable actions
           action.uses_remaining = action.uses_remaining - 1;
           const reduce_uses = ActionUsesRemainingChanged(
-            '__WAND__',
+            actionId,
             action.inventoryitem_id,
             action.uses_remaining,
           );
@@ -534,7 +540,7 @@ function move_hand_to_discarded() {
     }
 
     if (identify) {
-      ActionUsed(action.inventoryitem_id);
+      ActionUsed(actionId, action.inventoryitem_id);
       action.is_identified = true;
     }
 
@@ -552,10 +558,14 @@ function move_hand_to_discarded() {
       }
     }
   });
-  clearHand();
+  clearHand(actionId);
 }
 
-export function check_recursion(data: Readonly<Spell> | null, rec_: number) {
+export function check_recursion(
+  actionId: ActionId | WandId,
+  data: Readonly<Spell> | null,
+  rec_: number,
+) {
   const rec = rec_ || 0;
 
   if (data != null) {
@@ -601,7 +611,7 @@ export function _start_shot(current_mana: number) {
 
   // set the deck order if required
   if (first_shot) {
-    order_deck();
+    order_deck('__WAND__');
     current_reload_time = gun.reload_time;
     first_shot = false;
   }
@@ -626,12 +636,12 @@ export function _draw_actions_for_shot(can_reload_at_end: boolean) {
 }
 
 function _handle_reload() {
-  move_hand_to_discarded();
+  move_hand_to_discarded('__WAND__');
 
   // start a reload?
   if (!reloading && (deck.length <= 0 || start_reload)) {
-    move_discarded_to_deck();
-    order_deck();
+    move_discarded_to_deck('__WAND__');
+    order_deck('__WAND__');
 
     StartReload('__WAND__', current_reload_time);
     current_reload_time = gun.reload_time;
@@ -698,7 +708,7 @@ export function _play_permanent_card(
   action_clone.permanently_attached = true;
   action_clone.uses_remaining = -1;
   handle_mana_addition(action_clone);
-  play_action(action_clone);
+  play_action('__WAND__', action_clone);
 
   playing_permanent_card = false;
   // break;
@@ -747,15 +757,17 @@ export function _add_extra_modifier_to_shot(name: ExtraModifier) {
 
 // custom
 export function call_action(
+  actionId: ActionId | WandId,
   source: ActionSource,
   spell: Spell,
   c: GunActionState,
   recursion?: number,
   iteration?: number,
 ) {
-  OnCallActionPre(source, spell, c, recursion, iteration);
+  OnCallActionPre(actionId, source, spell, c, recursion, iteration);
   const returnValue = spell.action(c, recursion, iteration);
   OnActionFinished(
+    actionId,
     source,
     spell,
     c,
@@ -767,6 +779,9 @@ export function call_action(
 }
 
 // custom mock for find_the_wand_held() in gun_action_utils
-export function find_the_wand_held(caster_entity: EntityId) {
+export function find_the_wand_held(
+  actionId: ActionId | WandId,
+  caster_entity: EntityId,
+) {
   return 1;
 }

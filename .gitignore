@@ -17,6 +17,9 @@
 # production
 /build
 
+
+# python
+scripts/__pycache__
 # misc
 .DS_Store
 **/.DS_Store

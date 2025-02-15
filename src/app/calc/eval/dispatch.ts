@@ -136,8 +136,14 @@ export function ActionUsesRemainingChanged(
   });
 }
 
-export function ActionUsed(item_id: InventoryItemID | undefined) {
-  observer.onEvent({ name: 'ActionUsed', payload: { itemId: item_id } });
+export function ActionUsed(
+  actionId: ActionId | WandId,
+  item_id: InventoryItemID | undefined,
+) {
+  observer.onEvent({
+    name: 'ActionUsed',
+    payload: { actionId, itemId: item_id },
+  });
 }
 
 export function StartReload(
@@ -394,13 +400,19 @@ export function HasFlagPersistent(
 }
 
 export function OnActionPlayed(
+  actionId: ActionId | WandId,
   spell: Readonly<Spell>,
   c: GunActionState,
   playing_permanent_card: boolean,
 ): void {
   observer.onEvent({
     name: 'OnActionPlayed',
-    payload: { spell: serializeSpell(spell), c, playing_permanent_card },
+    payload: {
+      actionId,
+      spell: serializeSpell(spell),
+      c,
+      playing_permanent_card,
+    },
   });
 }
 
@@ -421,15 +433,24 @@ export const OnDraw = (state_cards_drawn: number): void => {
   observer.onEvent({ name: 'OnDraw', payload: { state_cards_drawn } });
 };
 
-export const OnUnsetDontDraw = (): void => {
-  observer.onEvent({ name: 'OnUnsetDontDraw', payload: {} });
+export const OnHandleManaAddition = (actionId: ActionId | WandId): void => {
+  observer.onEvent({ name: 'OnHandleManaAddition', payload: { actionId } });
 };
-export const OnSetDontDraw = (): void => {
-  observer.onEvent({ name: 'OnSetDontDraw', payload: {} });
+
+export const OnSetDontDraw = (actionId: ActionId | WandId): void => {
+  observer.onEvent({ name: 'OnSetDontDraw', payload: { actionId } });
+};
+export const OnUnsetDontDraw = (actionId: ActionId | WandId): void => {
+  observer.onEvent({ name: 'OnUnsetDontDraw', payload: { actionId } });
+};
+
+export const OnSetMana = (actionId: ActionId | WandId, mana: number): void => {
+  observer.onEvent({ name: 'OnSetMana', payload: { actionId, mana } });
 };
 
 /* Each time the wand 'wraps' naturally */
 export const OnWrap = (
+  actionId: ActionId | WandId,
   deck: readonly Spell[],
   hand: readonly Spell[],
   discard: readonly Spell[],
@@ -437,28 +458,34 @@ export const OnWrap = (
   observer.onEvent({
     name: 'OnWrap',
     payload: {
+      actionId,
       deck: deck.map<SpellDeckInfo>(serializeSpell),
       hand: hand.map<SpellDeckInfo>(serializeSpell),
       discarded: discard.map<SpellDeckInfo>(serializeSpell),
     },
   });
 };
-export const OnCantWrap = (): void => {
+export const OnCantWrap = (actionId: ActionId | WandId): void => {
   observer.onEvent({
     name: 'OnCantWrap',
-    payload: {},
+    payload: { actionId },
   });
 };
-export const OnMoveDiscardedToDeck = (discarded: readonly Spell[]): void => {
+export const OnMoveDiscardedToDeck = (
+  actionId: ActionId | WandId,
+  discarded: readonly Spell[],
+): void => {
   observer.onEvent({
     name: 'OnMoveDiscardedToDeck',
     payload: {
+      actionId,
       discarded: discarded.map<SpellDeckInfo>(serializeSpell),
     },
   });
 };
 
 export function OnCallActionPre(
+  actionId: ActionId | WandId,
   source: ActionSource,
   spell: Readonly<Spell>,
   c: GunActionState,
@@ -467,7 +494,14 @@ export function OnCallActionPre(
 ): void {
   observer.onEvent({
     name: 'OnCallActionPre',
-    payload: { source, spell: serializeSpell(spell), c, recursion, iteration },
+    payload: {
+      actionId,
+      source,
+      spell: serializeSpell(spell),
+      c,
+      recursion,
+      iteration,
+    },
   });
 }
 
@@ -487,6 +521,7 @@ export function OnExtraModifier(
 }
 
 export function OnActionFinished(
+  actionId: ActionId | WandId,
   source: ActionSource,
   spell: Readonly<Spell>,
   c: GunActionState,
@@ -497,6 +532,7 @@ export function OnActionFinished(
   observer.onEvent({
     name: 'OnActionFinished',
     payload: {
+      actionId,
       source,
       spell: serializeSpell(spell),
       c,

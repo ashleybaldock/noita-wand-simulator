@@ -560,7 +560,8 @@
   align-items: flex-end;
 }
 [data-name='ActionSource'],
-[data-name='Discarded'] {
+[data-name='Discarded'],
+[data-name='StoreAndResetAnnotation'] {
   pointer-events: none;
   position: absolute;
   width: calc(var(--bsize-spell) / 4);
@@ -611,7 +612,8 @@
   --rgb: #747;
   --hue: 290deg;
 }
-[data-name='Discarded'] {
+[data-name='Discarded'],
+[data-name='StoreAndResetAnnotation'] {
   top: 6px;
   right: unset;
   bottom: unset;
@@ -644,6 +646,10 @@
   --hue: 50deg;
 }
 [data-name='Discarded'][data-reason='action'] {
+  --hue: 50deg;
+}
+[data-name='StoreAndResetAnnotation'][data-stat='reload_time'] {
+  --icon: url('../data/wand/icon_gun_reload_time.png');
   --hue: 50deg;
 }
 

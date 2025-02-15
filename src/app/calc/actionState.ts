@@ -1,3 +1,4 @@
+import type { KeyOf, KeyOfType, ObjectKey, ValueOf } from '../util';
 import type { SpellType } from './spellTypes';
 
 export type GunActionState = {
@@ -70,3 +71,5 @@ export type GunActionState = {
   action_recursive?: boolean;
   damage_projectile_mul?: number;
 };
+
+export type ActionStateKey = KeyOf<GunActionState>;

@@ -1,4 +1,4 @@
-/* Auto-generated file - last built: 2024-12-26T16:38:01.626135 */
+/* Auto-generated file - last built: 2025-01-03T01:05:33.132094 */
 
 export const spellSprites = [
   ['icon.spell.BOMB', 'var(--sprite-action-bomb)'],

@@ -10,12 +10,20 @@ import {
   NoManaAnnotation,
   RecursionAnnotation,
 } from '../../Annotations';
+import { StoreAndResetAnnotation } from '../../Annotations/StoreAndResetAnnotation';
 import { KeyContainer, KeyGroup, KeyItem } from '../../Key/Key';
 import { TreeArrow } from './TreeArrow';
 
 export const ActionTreeKey = () => {
   return (
     <KeyContainer>
+      <KeyGroup title={'Action Calls'}>
+        {
+          'Salvos consist of one or more Shots. Shots consist of one or more spells, multicast together.'
+        }
+        {'Each Shot is followed by one or more frames of Cast Delay'}
+        {'Each Salvo is followed by one or more frames of Recharge Time'}
+      </KeyGroup>
       <KeyGroup title={'Action Calls'}>
         <KeyItem description={'Action drawn by the wand'}>
           <ActionSourceAnnotation source={'draw'} />
@@ -135,6 +143,13 @@ export const ActionTreeKey = () => {
             recursion={2}
             spell={getSpellByActionId('GAMMA')}
           />
+        </KeyItem>
+        <KeyItem
+          description={
+            'This spell stores the current value for Recharge Time before carrying out its effects, and then restores that value after it is done. Any increases or decreases to Recharge Time between then are ignored.'
+          }
+        >
+          <StoreAndResetAnnotation stat={'reload_time'} />
         </KeyItem>
       </KeyGroup>
       <KeyGroup title={'Triggers & Scope'}>

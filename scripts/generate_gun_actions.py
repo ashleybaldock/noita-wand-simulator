@@ -255,7 +255,11 @@ patterns = [
 
 
   # Hack to Replace problematic actions nobody will ever simulate
-  PatternReplace(r'let types = ["monster","slime","red","fire"]', r'let types = ["data/entities/items/pickup/egg_monster.xml", "data/entities/items/pickup/egg_slime.xml", "data/entities/items/pickup/egg_red.xml", "data/entities/items/pickup/egg_fire.xml" ];', flags=re.MULTILINE),
+  PatternReplace(r'add_projectile(this.id, "data/entities/items/pickup/" + egg_name)', 'add_projectile(this.id, (["data/entities/items/pickup/egg_monster.xml","data/entities/items/pickup/egg_slime.xml","data/entities/items/pickup/egg_red.xml","data/entities/items/pickup/egg_fire.xml"] as const)[Random(this.id, 1, 4) - 1] ?? "data/entities/items/pickup/egg_monster.xml")', flags=re.MULTILINE),
+
+  # Hack to Replace problematic actions nobody will ever simulate
+  PatternReplace(r'add_projectile(this.id, "data/entities/projectiles/deck/fireworks/" + firework_name)', r'(this.id, (["data/entities/projectiles/deck/fireworks/firework_pink.xml","data/entities/projectiles/deck/fireworks/firework_green.xml","data/entities/projectiles/deck/fireworks/firework_blue.xml","data/entities/projectiles/deck/fireworks/firework_orange.xml"] as const)[Random(this.id, 1, 4) - 1] ?? "data/entities/projectiles/deck/fireworks/firework_pink.xml")', flags=re.MULTILINE)
+
   # PatternReplace(r'let egg_name = "egg_" + String\(types[rnd - 1]) + ".xml"', r'/* \1 */', flags=re.MULTILINE),
   # PatternReplace(r'add_projectile\("data/entities/items/pickup/" + egg_name\)'. r'add_projectile(types[rnd - 1])' flags=re.MULTILINE),
 
@@ -324,7 +328,7 @@ patterns = [
   PatternReplace(r'\t', r'  ', flags=re.MULTILINE),
 
   # Double Quote strings -> Single Quote strings
-  PatternReplace(r'''"([^']*)"''', r"'\1'", flags=re.MULTILINE),
+  # PatternReplace(r'''"([^']*)"''', r"'\1'", flags=re.MULTILINE),
 ]
 
 

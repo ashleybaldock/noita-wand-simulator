@@ -1,4 +1,4 @@
-/* Auto-generated file - last built: 2024-12-26T16:38:01.626135 */
+/* Auto-generated file - last built: 2025-01-03T01:05:33.132094 */
 
 import type { GunActionState } from '../../actionState';
 import type { Spell } from '../../spell';
@@ -70,7 +70,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bomb)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/bomb.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3,4,5,6",
     spawn_probability: "1,1,1,1,0.5,0.5,0.1",
     price: 200,
@@ -78,7 +78,7 @@ const actions: Spell[] = [
     max_uses: 3,
     custom_xml_file: "data/entities/misc/custom_cards/bomb.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/bomb.xml")
+      add_projectile(this.id, "data/entities/projectiles/bomb.xml")
       c.fire_rate_wait = c.fire_rate_wait + 100
     },
   },
@@ -89,14 +89,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-light-bullet)",
     sprite_unidentified: "data/ui_gfx/gun_actions/light_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/light_bullet.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2",
     spawn_probability: "2,1,0.5",
     price: 100,
     mana: 5,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/light_bullet.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/light_bullet.xml")
       c.fire_rate_wait = c.fire_rate_wait + 3
       c.screenshake = c.screenshake + 0.5
       c.spread_degrees = c.spread_degrees - 1.0
@@ -110,7 +110,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-light-bullet-trigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/light_bullet_trigger_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/light_bullet.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3",
     spawn_probability: "1,0.5,0.5,0.5",
     price: 140,
@@ -120,7 +120,7 @@ const actions: Spell[] = [
       c.fire_rate_wait = c.fire_rate_wait + 3
       c.screenshake = c.screenshake + 0.5
       c.damage_critical_chance = c.damage_critical_chance + 5
-      add_projectile_trigger_hit_world("data/entities/projectiles/deck/light_bullet.xml", 1)
+      add_projectile_trigger_hit_world(this.id, "data/entities/projectiles/deck/light_bullet.xml", 1)
     },
   },
   {
@@ -129,7 +129,7 @@ const actions: Spell[] = [
     description: "$actiondesc_light_bullet_trigger_2",
     sprite: "var(--sprite-action-light-bullet-trigger-2)",
     related_projectiles: ["data/entities/projectiles/deck/light_bullet_blue.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,5,6,10",
     spawn_probability: "1,0.5,1,1,0.2",
     price: 250,
@@ -139,7 +139,7 @@ const actions: Spell[] = [
       c.fire_rate_wait = c.fire_rate_wait + 4
       c.screenshake = c.screenshake + 1
       c.damage_critical_chance = c.damage_critical_chance + 5
-      add_projectile_trigger_hit_world("data/entities/projectiles/deck/light_bullet_blue.xml", 2)
+      add_projectile_trigger_hit_world(this.id, "data/entities/projectiles/deck/light_bullet_blue.xml", 2)
     },
   },
   {
@@ -149,7 +149,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-light-bullet-timer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/light_bullet_timer_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/light_bullet.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3",
     spawn_probability: "0.5,0.5,0.75",
     price: 140,
@@ -159,7 +159,7 @@ const actions: Spell[] = [
       c.fire_rate_wait = c.fire_rate_wait + 3
       c.screenshake = c.screenshake + 0.5
       c.damage_critical_chance = c.damage_critical_chance + 5
-      add_projectile_trigger_timer("data/entities/projectiles/deck/light_bullet.xml", 10, 1)
+      add_projectile_trigger_timer(this.id, "data/entities/projectiles/deck/light_bullet.xml", 10, 1)
     },
   },
   {
@@ -169,14 +169,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bullet)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bullet.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "1,1,1,0.8,0.5",
     price: 150,
     mana: 20,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/bullet.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/bullet.xml")
       c.fire_rate_wait = c.fire_rate_wait + 4
       c.screenshake = c.screenshake + 2
       c.spread_degrees = c.spread_degrees + 2.0
@@ -191,7 +191,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bullet-trigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bullet_trigger_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bullet.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.5,0.5,0.5,0.6,0.5",
     price: 190,
@@ -202,7 +202,7 @@ const actions: Spell[] = [
       c.screenshake = c.screenshake + 2
       c.spread_degrees = c.spread_degrees + 2.0
       c.damage_critical_chance = c.damage_critical_chance + 5
-      add_projectile_trigger_hit_world("data/entities/projectiles/deck/bullet.xml", 1)
+      add_projectile_trigger_hit_world(this.id, "data/entities/projectiles/deck/bullet.xml", 1)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 23.0
     },
   },
@@ -213,7 +213,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bullet-timer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bullet_timer_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bullet.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.5,0.5,0.5,0.5,0.6",
     price: 190,
@@ -224,7 +224,7 @@ const actions: Spell[] = [
       c.screenshake = c.screenshake + 2
       c.spread_degrees = c.spread_degrees + 2.0
       c.damage_critical_chance = c.damage_critical_chance + 5
-      add_projectile_trigger_timer("data/entities/projectiles/deck/bullet.xml", 10, 1)
+      add_projectile_trigger_timer(this.id, "data/entities/projectiles/deck/bullet.xml", 10, 1)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 23.0
     },
   },
@@ -235,14 +235,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-heavy-bullet)",
     sprite_unidentified: "data/ui_gfx/gun_actions/heavy_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bullet_heavy.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.5,1,1,1,1,1",
     price: 200,
     mana: 30,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/bullet_heavy.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/bullet_heavy.xml")
       c.fire_rate_wait = c.fire_rate_wait + 7
       c.screenshake = c.screenshake + 2.5
       c.spread_degrees = c.spread_degrees + 5.0
@@ -258,7 +258,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-heavy-bullet-trigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/heavy_bullet_trigger_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bullet_heavy.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.5,0.5,0.5,0.7,0.5",
     price: 240,
@@ -270,7 +270,7 @@ const actions: Spell[] = [
       c.spread_degrees = c.spread_degrees + 5.0
       c.damage_critical_chance = c.damage_critical_chance + 5
       
-      add_projectile_trigger_hit_world("data/entities/projectiles/deck/bullet_heavy.xml", 1)
+      add_projectile_trigger_hit_world(this.id, "data/entities/projectiles/deck/bullet_heavy.xml", 1)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 50.0
     },
   },
@@ -281,7 +281,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-heavy-bullet-timer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/heavy_bullet_timer_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bullet_heavy.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.5,0.5,0.5,0.5,0.7",
     price: 240,
@@ -293,7 +293,7 @@ const actions: Spell[] = [
       c.spread_degrees = c.spread_degrees + 5.0
       c.damage_critical_chance = c.damage_critical_chance + 5
       
-      add_projectile_trigger_timer("data/entities/projectiles/deck/bullet_heavy.xml", 10, 1)
+      add_projectile_trigger_timer(this.id, "data/entities/projectiles/deck/bullet_heavy.xml", 10, 1)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 50.0
     },
   },
@@ -304,14 +304,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-air-bullet)",
     sprite_unidentified: "data/ui_gfx/gun_actions/air_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/light_bullet_air.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2",
     spawn_probability: "1,1",
     price: 80,
     mana: 5,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/light_bullet_air.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/light_bullet_air.xml")
       c.fire_rate_wait = c.fire_rate_wait + 3
       
       c.spread_degrees = c.spread_degrees - 2.0
@@ -325,7 +325,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-slow-bullet)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slow_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bullet_slow.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4",
     spawn_probability: "1,1,1,1",
     price: 160,
@@ -333,7 +333,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/bullet_slow.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/bullet_slow.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/bullet_slow.xml")
       c.fire_rate_wait = c.fire_rate_wait + 6
       c.screenshake = c.screenshake + 2
       c.spread_degrees = c.spread_degrees + 3.6
@@ -347,7 +347,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-slow-bullet-trigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slow_bullet_trigger_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bullet_slow.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.5,0.5,0.5,0.5,1",
     price: 200,
@@ -358,7 +358,7 @@ const actions: Spell[] = [
       c.fire_rate_wait = c.fire_rate_wait + 25
       c.screenshake = c.screenshake + 2
       c.spread_degrees = c.spread_degrees + 10
-      add_projectile_trigger_hit_world("data/entities/projectiles/deck/bullet_slow.xml", 1)
+      add_projectile_trigger_hit_world(this.id, "data/entities/projectiles/deck/bullet_slow.xml", 1)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 20.0
     },
   },
@@ -369,7 +369,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-slow-bullet-timer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slow_bullet_timer_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bullet_slow.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.5,0.5,0.5,0.5,1,1",
     price: 200,
@@ -380,7 +380,7 @@ const actions: Spell[] = [
       c.fire_rate_wait = c.fire_rate_wait + 6
       c.screenshake = c.screenshake + 2
       c.spread_degrees = c.spread_degrees + 3.6
-      add_projectile_trigger_timer("data/entities/projectiles/deck/bullet_slow.xml", 100, 1)
+      add_projectile_trigger_timer(this.id, "data/entities/projectiles/deck/bullet_slow.xml", 100, 1)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 20.0
     },
   },
@@ -391,14 +391,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-hook)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/hook.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.1,0.3,0.4,0.2,0.1",
     price: 120,
     mana: 30,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/hook.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/hook.xml")
       c.fire_rate_wait = c.fire_rate_wait + 12
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
     },
@@ -410,7 +410,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-black-hole)",
     sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/black_hole.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,2,4,5",
     spawn_probability: "0.8,0.8,0.8,0.8",
     price: 200,
@@ -419,7 +419,7 @@ const actions: Spell[] = [
     never_unlimited: true,
     custom_xml_file: "data/entities/misc/custom_cards/black_hole.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/black_hole.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/black_hole.xml")
       c.fire_rate_wait = c.fire_rate_wait + 80
       c.screenshake = c.screenshake + 20
     },
@@ -431,7 +431,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-black-hole-death-trigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/black_hole.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,4,5,6",
     spawn_probability: "0.5,0.5,0.5,0.5",
     price: 220,
@@ -440,7 +440,7 @@ const actions: Spell[] = [
     never_unlimited: true,
     custom_xml_file: "data/entities/misc/custom_cards/black_hole.xml",
     action: function(c: GunActionState) {
-      add_projectile_trigger_death("data/entities/projectiles/deck/black_hole.xml", 1)
+      add_projectile_trigger_death(this.id, "data/entities/projectiles/deck/black_hole.xml", 1)
       c.fire_rate_wait = c.fire_rate_wait + 90
       c.screenshake = c.screenshake + 20
     },
@@ -452,7 +452,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-white-hole)",
     sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/white_hole.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,2,4,6,10",
     spawn_probability: "0.05,0.05,0.1,0.2,0.5",
     price: 200,
@@ -461,7 +461,7 @@ const actions: Spell[] = [
     never_unlimited: true,
     custom_xml_file: "data/entities/misc/custom_cards/white_hole.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/white_hole.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/white_hole.xml")
       c.fire_rate_wait = c.fire_rate_wait + 80
       c.screenshake = c.screenshake + 20
     },
@@ -473,7 +473,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-black-hole-big)",
     sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_big_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/black_hole_big.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "1,3,5,6,10",
     spawn_probability: "0.8,0.8,0.8,0.8,0.5",
     price: 320,
@@ -481,7 +481,7 @@ const actions: Spell[] = [
     max_uses: 6,
     custom_xml_file: "data/entities/misc/custom_cards/black_hole_big.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/black_hole_big.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/black_hole_big.xml")
       c.fire_rate_wait = c.fire_rate_wait + 80
       c.screenshake = c.screenshake + 10
     },
@@ -493,7 +493,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-white-hole-big)",
     sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_big_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/white_hole_big.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "1,3,5,6,10",
     spawn_probability: "0.05,0.05,0.1,0.4,0.2",
     price: 320,
@@ -501,7 +501,7 @@ const actions: Spell[] = [
     max_uses: 6,
     custom_xml_file: "data/entities/misc/custom_cards/white_hole_big.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/white_hole_big.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/white_hole_big.xml")
       c.fire_rate_wait = c.fire_rate_wait + 80
       c.screenshake = c.screenshake + 10
     },
@@ -514,7 +514,7 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_big_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/black_hole_giga.xml"],
     spawn_requires_flag: "card_unlocked_black_hole",
-    type: "static",
+    type: 'static',
     spawn_level: "10",
     spawn_probability: "1",
     price: 600,
@@ -526,9 +526,9 @@ const actions: Spell[] = [
       let black_holes = EntityGetWithTag(this.id,  "black_hole_giga" )
       
       if ( black_holes.length < 3 )  {
-        add_projectile("data/entities/projectiles/deck/black_hole_giga.xml")
+        add_projectile(this.id, "data/entities/projectiles/deck/black_hole_giga.xml")
         c.fire_rate_wait = c.fire_rate_wait + 120
-        setCurrentReloadTime(current_reload_time + 100)
+        setCurrentReloadTime(this.id, current_reload_time + 100)
         c.screenshake = c.screenshake + 40
       }
     },
@@ -541,7 +541,7 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/black_hole_big_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/white_hole_giga.xml"],
     spawn_requires_flag: "card_unlocked_black_hole",
-    type: "static",
+    type: 'static',
     spawn_level: "10",
     spawn_probability: "1",
     price: 600,
@@ -553,9 +553,9 @@ const actions: Spell[] = [
       let black_holes = EntityGetWithTag(this.id,  "black_hole_giga" )
       
       if ( black_holes.length < 3 )  {
-        add_projectile("data/entities/projectiles/deck/white_hole_giga.xml")
+        add_projectile(this.id, "data/entities/projectiles/deck/white_hole_giga.xml")
         c.fire_rate_wait = c.fire_rate_wait + 120
-        setCurrentReloadTime(current_reload_time + 100)
+        setCurrentReloadTime(this.id, current_reload_time + 100)
         c.screenshake = c.screenshake + 40
       }
     },
@@ -567,14 +567,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-tentacle-portal)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/tentacle_portal.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,10",
     spawn_probability: "0.4,0.4,0.4,0.5,0.2",
     price: 220,
     mana: 140,
     max_uses: 5,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/tentacle_portal.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/tentacle_portal.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
     },
   },
@@ -586,14 +586,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-spitter)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spitter_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/spitter.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3",
     spawn_probability: "1,1,1,0.5",
     price: 110,
     mana: 5,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/spitter.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/spitter.xml")
       
       c.fire_rate_wait = c.fire_rate_wait - 1
       c.screenshake = c.screenshake + 0.1
@@ -608,7 +608,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-spitter-timer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spitter_timer_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/spitter.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3",
     spawn_probability: "0.5,0.5,0.5,1",
     price: 140,
@@ -620,7 +620,7 @@ const actions: Spell[] = [
       c.screenshake = c.screenshake + 0.1
       c.dampening = 0.1
       c.spread_degrees = c.spread_degrees + 6.0
-      add_projectile_trigger_timer("data/entities/projectiles/deck/spitter.xml", 40, 1)
+      add_projectile_trigger_timer(this.id, "data/entities/projectiles/deck/spitter.xml", 40, 1)
     },
   },
   {
@@ -630,14 +630,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-spitter-tier-2)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spitter_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/spitter_tier_2.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5",
     spawn_probability: "1,1,1,0.5",
     price: 190,
     mana: 25,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/spitter_tier_2.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/spitter_tier_2.xml")
       
       c.fire_rate_wait = c.fire_rate_wait - 2
       c.screenshake = c.screenshake + 1.1
@@ -652,14 +652,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-spitter-tier-2-timer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spitter_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/spitter_tier_2.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5",
     spawn_probability: "0.5,0.5,0.5,1",
     price: 220,
     mana: 30,
     
     action: function(c: GunActionState) {
-      add_projectile_trigger_timer("data/entities/projectiles/deck/spitter_tier_2.xml", 40, 1)
+      add_projectile_trigger_timer(this.id, "data/entities/projectiles/deck/spitter_tier_2.xml", 40, 1)
       
       c.fire_rate_wait = c.fire_rate_wait - 2
       c.screenshake = c.screenshake + 1.1
@@ -674,14 +674,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-spitter-tier-3)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spitter_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/spitter_tier_3.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "3,4,5,6",
     spawn_probability: "0.8,0.8,1,1",
     price: 240,
     mana: 40,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/spitter_tier_3.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/spitter_tier_3.xml")
       
       c.fire_rate_wait = c.fire_rate_wait - 4
       c.screenshake = c.screenshake + 3.1
@@ -696,14 +696,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-spitter-tier-3-timer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spitter_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/spitter_tier_3.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "4,5,6",
     spawn_probability: "0.5,0.65,0.5",
     price: 260,
     mana: 45,
     
     action: function(c: GunActionState) {
-      add_projectile_trigger_timer("data/entities/projectiles/deck/spitter_tier_3.xml", 40, 1)
+      add_projectile_trigger_timer(this.id, "data/entities/projectiles/deck/spitter_tier_3.xml", 40, 1)
       
       c.fire_rate_wait = c.fire_rate_wait - 4
       c.screenshake = c.screenshake + 3.1
@@ -718,14 +718,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bubbleshot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bubbleshot_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bubbleshot.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3",
     spawn_probability: "1,0.6,1,0.5",
     price: 100,
     mana: 5,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/bubbleshot.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/bubbleshot.xml")
       
       c.fire_rate_wait = c.fire_rate_wait - 5
       c.dampening = 0.1
@@ -738,7 +738,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bubbleshot-trigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bubbleshot_trigger_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bubbleshot.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3",
     spawn_probability: "0.5,0.5,1",
     price: 120,
@@ -748,7 +748,7 @@ const actions: Spell[] = [
       
       c.fire_rate_wait = c.fire_rate_wait - 5
       c.dampening = 0.1
-      add_projectile_trigger_hit_world("data/entities/projectiles/deck/bubbleshot.xml", 1)
+      add_projectile_trigger_hit_world(this.id, "data/entities/projectiles/deck/bubbleshot.xml", 1)
     },
   },
   {
@@ -758,14 +758,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-disc-bullet)",
     sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/disc_bullet.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,2,4",
     spawn_probability: "1,1,0.6",
     price: 120,
     mana: 20,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/disc_bullet.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/disc_bullet.xml")
       
       c.fire_rate_wait = c.fire_rate_wait + 10
       c.spread_degrees = c.spread_degrees + 2.0
@@ -779,14 +779,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-disc-bullet-big)",
     sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/disc_bullet_big.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,2,4",
     spawn_probability: "0.6,0.7,0.8",
     price: 180,
     mana: 38,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/disc_bullet_big.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/disc_bullet_big.xml")
       
       c.fire_rate_wait = c.fire_rate_wait + 20
       c.spread_degrees = c.spread_degrees + 3.4
@@ -801,14 +801,14 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
     spawn_requires_flag: "card_unlocked_everything",
     related_projectiles: ["data/entities/projectiles/deck/disc_bullet_bigger.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,5,10",
     spawn_probability: "0.1,0.6,1,0.4",
     price: 270,
     mana: 70,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/disc_bullet_bigger.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/disc_bullet_bigger.xml")
       
       c.fire_rate_wait = c.fire_rate_wait + 40
       c.spread_degrees = c.spread_degrees + 6.4
@@ -823,14 +823,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bouncy-orb)",
     sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bouncy_orb.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,2,4",
     spawn_probability: "1,1,1",
     price: 120,
     mana: 20,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/bouncy_orb.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/bouncy_orb.xml")
       
       c.fire_rate_wait = c.fire_rate_wait + 10
       shot_effects.recoil_knockback = 20.0
@@ -843,14 +843,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bouncy-orb-timer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bouncy_orb.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,2,4",
     spawn_probability: "0.5,0.5,0.5",
     price: 150,
     mana: 50,
     
     action: function(c: GunActionState) {
-      add_projectile_trigger_timer("data/entities/projectiles/deck/bouncy_orb.xml",200,1)
+      add_projectile_trigger_timer(this.id, "data/entities/projectiles/deck/bouncy_orb.xml",200,1)
       
       c.fire_rate_wait = c.fire_rate_wait + 10
       shot_effects.recoil_knockback = 20.0
@@ -863,14 +863,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-rubber-ball)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rubber_ball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/rubber_ball.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,6",
     spawn_probability: "1,1,0.2",
     price: 60,
     mana: 5,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/rubber_ball.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/rubber_ball.xml")
       
       c.fire_rate_wait = c.fire_rate_wait - 2
       c.spread_degrees = c.spread_degrees - 1.0
@@ -883,14 +883,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-arrow)",
     sprite_unidentified: "data/ui_gfx/gun_actions/arrow_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/arrow.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,4,5",
     spawn_probability: "1,1,0.6,0.3",
     price: 140,
     mana: 15,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/arrow.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/arrow.xml")
       
       c.fire_rate_wait = c.fire_rate_wait + 10
       c.spread_degrees = c.spread_degrees - 20
@@ -904,14 +904,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-pollen)",
     sprite_unidentified: "data/ui_gfx/gun_actions/arrow_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/pollen.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,3,4",
     spawn_probability: "0.6,1,1,0.6",
     price: 110,
     mana: 10,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/pollen.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/pollen.xml")
       
       c.fire_rate_wait = c.fire_rate_wait + 2
       c.spread_degrees = c.spread_degrees + 20
@@ -924,7 +924,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-lance)",
     sprite_unidentified: "data/ui_gfx/gun_actions/lance_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/lance.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,5,6",
     spawn_probability: "0.9,1,0.8,1",
     price: 180,
@@ -932,7 +932,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/lance.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/lance.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/lance.xml")
       
       c.fire_rate_wait = c.fire_rate_wait + 20
       c.spread_degrees = c.spread_degrees - 20
@@ -946,7 +946,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-lance-holy)",
     sprite_unidentified: "data/ui_gfx/gun_actions/lance_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/lance_holy.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "3,5,6",
     spawn_probability: "0.5,0.8,1",
     price: 250,
@@ -954,7 +954,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/lance_holy.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/lance_holy.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/lance_holy.xml")
       
       c.fire_rate_wait = c.fire_rate_wait + 30
       c.spread_degrees = c.spread_degrees - 10
@@ -968,7 +968,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-rocket)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/rocket.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "1,1,1,0.5,0.3",
     price: 220,
@@ -976,7 +976,7 @@ const actions: Spell[] = [
     max_uses: 10,
     custom_xml_file: "data/entities/misc/custom_cards/rocket.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/rocket.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/rocket.xml")
       c.fire_rate_wait = c.fire_rate_wait + 60
       
       c.ragdoll_fx = 2
@@ -990,7 +990,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-rocket-tier-2)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/rocket_tier_2.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.5,1,1,0.8,0.5",
     price: 240,
@@ -998,7 +998,7 @@ const actions: Spell[] = [
     max_uses: 8,
     custom_xml_file: "data/entities/misc/custom_cards/rocket_tier_2.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/rocket_tier_2.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/rocket_tier_2.xml")
       c.fire_rate_wait = c.fire_rate_wait + 90
       
       c.ragdoll_fx = 2
@@ -1012,7 +1012,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-rocket-tier-3)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/rocket_tier_3.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.25,0.5,1,1,1",
     price: 250,
@@ -1020,7 +1020,7 @@ const actions: Spell[] = [
     max_uses: 6,
     custom_xml_file: "data/entities/misc/custom_cards/rocket_tier_3.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/rocket_tier_3.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/rocket_tier_3.xml")
       c.fire_rate_wait = c.fire_rate_wait + 120
       
       c.ragdoll_fx = 2
@@ -1034,7 +1034,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-grenade)",
     sprite_unidentified: "data/ui_gfx/gun_actions/grenade_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/grenade.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3,4",
     spawn_probability: "1,1,0.5,0.25,0.2",
     price: 170,
@@ -1042,7 +1042,7 @@ const actions: Spell[] = [
     max_uses: 25,
     custom_xml_file: "data/entities/misc/custom_cards/grenade.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/grenade.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/grenade.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
       c.screenshake = c.screenshake + 4.0
       c.child_speed_multiplier = c.child_speed_multiplier * 0.75
@@ -1057,7 +1057,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-grenade-trigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/grenade_trigger_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/grenade.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3,4,5",
     spawn_probability: "0.5,0.5,0.2,0.5,0.5,1",
     price: 210,
@@ -1069,7 +1069,7 @@ const actions: Spell[] = [
       c.screenshake = c.screenshake + 4.0
       
       c.child_speed_multiplier = c.child_speed_multiplier * 0.75
-      add_projectile_trigger_hit_world("data/entities/projectiles/deck/grenade.xml", 1)
+      add_projectile_trigger_hit_world(this.id, "data/entities/projectiles/deck/grenade.xml", 1)
       shot_effects.recoil_knockback = 80.0
     },
   },
@@ -1080,7 +1080,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-grenade-tier-2)",
     sprite_unidentified: "data/ui_gfx/gun_actions/grenade_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/grenade_tier_2.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.5,1,1,1,0.5",
     price: 220,
@@ -1088,7 +1088,7 @@ const actions: Spell[] = [
     max_uses: 20,
     custom_xml_file: "data/entities/misc/custom_cards/grenade_tier_2.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/grenade_tier_2.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/grenade_tier_2.xml")
       c.fire_rate_wait = c.fire_rate_wait + 50
       c.screenshake = c.screenshake + 8.0
       c.child_speed_multiplier = c.child_speed_multiplier * 0.75
@@ -1103,7 +1103,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-grenade-tier-3)",
     sprite_unidentified: "data/ui_gfx/gun_actions/grenade_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/grenade_tier_3.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.25,0.5,0.75,1,1",
     price: 220,
@@ -1111,7 +1111,7 @@ const actions: Spell[] = [
     max_uses: 20,
     custom_xml_file: "data/entities/misc/custom_cards/grenade_tier_3.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/grenade_tier_3.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/grenade_tier_3.xml")
       c.fire_rate_wait = c.fire_rate_wait + 80
       c.screenshake = c.screenshake + 15.0
       c.child_speed_multiplier = c.child_speed_multiplier * 0.9
@@ -1126,7 +1126,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-grenade-anti)",
     sprite_unidentified: "data/ui_gfx/gun_actions/grenade_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/grenade_anti.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3,4,5",
     spawn_probability: "0.4,0.4,0.7,0.4,0.4,0.4",
     price: 170,
@@ -1134,7 +1134,7 @@ const actions: Spell[] = [
     max_uses: 25,
     custom_xml_file: "data/entities/misc/custom_cards/grenade.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/grenade_anti.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/grenade_anti.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
       c.screenshake = c.screenshake + 4.0
       c.child_speed_multiplier = c.child_speed_multiplier * 0.75
@@ -1149,7 +1149,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-grenade-large)",
     sprite_unidentified: "data/ui_gfx/gun_actions/grenade_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/grenade_large.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3,4,5",
     spawn_probability: "0.4,0.4,0.4,0.4,0.4,0.4",
     price: 150,
@@ -1157,7 +1157,7 @@ const actions: Spell[] = [
     max_uses: 35,
     custom_xml_file: "data/entities/misc/custom_cards/grenade.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/grenade_large.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/grenade_large.xml")
       c.fire_rate_wait = c.fire_rate_wait + 40
       c.screenshake = c.screenshake + 5.0
       c.child_speed_multiplier = c.child_speed_multiplier * 0.75
@@ -1172,14 +1172,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-mine)",
     sprite_unidentified: "data/ui_gfx/gun_actions/mine_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/mine.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,3,4,6",
     spawn_probability: "1,0.75,1,0.5",
     price: 200,
     mana: 20,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/mine.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/mine.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
       c.child_speed_multiplier = c.child_speed_multiplier * 0.75
       c.speed_multiplier = c.speed_multiplier * 0.75
@@ -1199,14 +1199,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-mine-death-trigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/mine_death_trigger_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/mine.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,6",
     spawn_probability: "1,1",
     price: 240,
     mana: 20,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile_trigger_death("data/entities/projectiles/deck/mine.xml", 1)
+      add_projectile_trigger_death(this.id, "data/entities/projectiles/deck/mine.xml", 1)
       c.fire_rate_wait = c.fire_rate_wait + 30
       c.child_speed_multiplier = c.child_speed_multiplier * 0.75
       c.speed_multiplier = c.speed_multiplier * 0.75
@@ -1226,14 +1226,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-pipe-bomb)",
     sprite_unidentified: "data/ui_gfx/gun_actions/pipe_bomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/pipe_bomb.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4",
     spawn_probability: "1,1,0.6",
     price: 200,
     mana: 20,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/pipe_bomb.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/pipe_bomb.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
       c.child_speed_multiplier = c.child_speed_multiplier * 0.75
       c.speed_multiplier = c.speed_multiplier * 0.75
@@ -1252,7 +1252,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-pipe-bomb-death-trigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/pipe_bomb_death_trigger_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/pipe_bomb.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5",
     spawn_probability: "0.6,0.8,1,0.8",
     price: 230,
@@ -1262,7 +1262,7 @@ const actions: Spell[] = [
       c.fire_rate_wait = c.fire_rate_wait + 30
       c.child_speed_multiplier = c.child_speed_multiplier * 0.75
       c.speed_multiplier = c.speed_multiplier * 0.75
-      add_projectile_trigger_death("data/entities/projectiles/deck/pipe_bomb.xml", 1)
+      add_projectile_trigger_death(this.id, "data/entities/projectiles/deck/pipe_bomb.xml", 1)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 60.0
       
       if ( c.speed_multiplier >= 20 )  {
@@ -1280,14 +1280,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-fish)",
     sprite_unidentified: "data/ui_gfx/gun_actions/fish_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/fish.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "3,4,5",
     spawn_probability: "0.01,0.01,0.01",
     price: 250,
     mana: 90,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/fish.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/fish.xml")
       c.fire_rate_wait = c.fire_rate_wait + 80
     },
   },
@@ -1299,14 +1299,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-exploding-deer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/exploding_deer_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/exploding_deer.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "3,4,5",
     spawn_probability: "0.6,0.6,0.6",
     price: 170,
     mana: 120,
     max_uses: 10,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/exploding_deer.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/exploding_deer.xml")
       c.fire_rate_wait = c.fire_rate_wait + 80
     },
   },
@@ -1318,18 +1318,18 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-exploding-ducks)",
     sprite_unidentified: "data/ui_gfx/gun_actions/exploding_deer_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/duck.xml", 3],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "3,4,5",
     spawn_probability: "0.8,0.5,0.6",
     price: 200,
     mana: 100,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/duck.xml")
-      add_projectile("data/entities/projectiles/deck/duck.xml")
-      add_projectile("data/entities/projectiles/deck/duck.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/duck.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/duck.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/duck.xml")
       c.fire_rate_wait = c.fire_rate_wait + 60
-      setCurrentReloadTime(current_reload_time + 20)
+      setCurrentReloadTime(this.id, current_reload_time + 20)
     },
   },
   {
@@ -1340,7 +1340,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-worm-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/exploding_deer_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/worm_shot.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "3,4,5,6,10",
     spawn_probability: "0.6,0.8,0.6,0.4,0.6",
     price: 200,
@@ -1348,9 +1348,9 @@ const actions: Spell[] = [
     max_uses: 10,
     never_unlimited: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/worm_shot.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/worm_shot.xml")
       c.fire_rate_wait = c.fire_rate_wait + 80
-      setCurrentReloadTime(current_reload_time + 40)
+      setCurrentReloadTime(this.id, current_reload_time + 40)
       c.spread_degrees = c.spread_degrees + 20
     },
   },
@@ -1362,13 +1362,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bomb-detonator)",
     sprite_unidentified: "data/ui_gfx/gun_actions/meteor_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/bomb_detonator.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.5,1,0.4,0.5,1",
     price: 120,
     mana: 50,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/bomb_detonator.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/bomb_detonator.xml")
     },
   },
   {
@@ -1378,7 +1378,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-laser)",
     sprite_unidentified: "data/ui_gfx/gun_actions/laser_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/laser.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,4",
     spawn_probability: "1,1,1",
     price: 180,
@@ -1386,7 +1386,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/laser.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/laser.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/laser.xml")
       c.fire_rate_wait = c.fire_rate_wait - 22
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_disintegrated.xml,"
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 20.0
@@ -1399,20 +1399,20 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-megalaser)",
     sprite_unidentified: "data/ui_gfx/gun_actions/megalaser_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/megalaser.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "3,4,5,6,10",
     spawn_probability: "0.6,0.6,0.8,0.6,0.3",
     price: 300,
     mana: 110,
     action: function(c: GunActionState) {
       
-      add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
-      add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
-      add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
-      add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
-      add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/megalaser_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/megalaser_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/megalaser_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/megalaser_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/megalaser_beam.xml")
       
-      add_projectile("data/entities/projectiles/deck/megalaser.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/megalaser.xml")
       c.fire_rate_wait = c.fire_rate_wait + 90
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 20.0
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_disintegrated.xml,"
@@ -1425,7 +1425,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-lightning)",
     sprite_unidentified: "data/ui_gfx/gun_actions/lightning_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/lightning.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,5,6",
     spawn_probability: "1,0.9,0.7,1",
     price: 250,
@@ -1433,7 +1433,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/electric_charge.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/lightning.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/lightning.xml")
       c.fire_rate_wait = c.fire_rate_wait + 50
       shot_effects.recoil_knockback = 180.0
     },
@@ -1445,16 +1445,16 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-ball-lightning)",
     sprite_unidentified: "data/ui_gfx/gun_actions/lightning_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/ball_lightning.xml",3],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,4,5",
     spawn_probability: "0.2,0.4,1,1",
     price: 250,
     mana: 70,
     custom_xml_file: "data/entities/misc/custom_cards/electric_charge.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/ball_lightning.xml")
-      add_projectile("data/entities/projectiles/deck/ball_lightning.xml")
-      add_projectile("data/entities/projectiles/deck/ball_lightning.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/ball_lightning.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/ball_lightning.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/ball_lightning.xml")
       c.fire_rate_wait = c.fire_rate_wait + 50
       shot_effects.recoil_knockback = 120.0
     },
@@ -1466,13 +1466,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-laser-emitter)",
     sprite_unidentified: "data/ui_gfx/gun_actions/laser_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/orb_laseremitter.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.2,0.8,1,0.5",
     price: 180,
     mana: 60,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/orb_laseremitter.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/orb_laseremitter.xml")
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 20.0
       c.fire_rate_wait = c.fire_rate_wait + 6
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_disintegrated.xml,"
@@ -1485,13 +1485,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-laser-emitter-four)",
     sprite_unidentified: "data/ui_gfx/gun_actions/laser_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/orb_laseremitter.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.2,0.9,0.3,0.5,1",
     price: 200,
     mana: 80,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/orb_laseremitter_four.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/orb_laseremitter_four.xml")
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 30.0
       c.fire_rate_wait = c.fire_rate_wait + 15
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_disintegrated.xml,"
@@ -1504,14 +1504,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-laser-emitter-cutter)",
     sprite_unidentified: "data/ui_gfx/gun_actions/laser_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/orb_laseremitter_cutter.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3,4",
     spawn_probability: "0.2,0.3,1,0.5,0.1",
     price: 120,
     mana: 40,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/orb_laseremitter_cutter.xml")
-      setCurrentReloadTime(current_reload_time + 10)
+      add_projectile(this.id, "data/entities/projectiles/deck/orb_laseremitter_cutter.xml")
+      setCurrentReloadTime(this.id, current_reload_time + 10)
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_disintegrated.xml,"
     },
   },
@@ -1522,16 +1522,16 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-digger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/digger_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/digger.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2",
     spawn_probability: "1,0.5",
     price: 70,
     mana: 0,
     sound_loop_tag: "sound_digger",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/digger.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/digger.xml")
       c.fire_rate_wait = c.fire_rate_wait + 1
-      setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
+      setCurrentReloadTime(this.id, current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
     },
   },
   {
@@ -1541,16 +1541,16 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-powerdigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/powerdigger_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/powerdigger.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4",
     spawn_probability: "0.5,1,0.8",
     price: 110,
     mana: 0,
     sound_loop_tag: "sound_digger",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/powerdigger.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/powerdigger.xml")
       c.fire_rate_wait = c.fire_rate_wait + 1
-      setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
+      setCurrentReloadTime(this.id, current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
     },
   },
   {
@@ -1560,7 +1560,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-chainsaw)",
     sprite_unidentified: "data/ui_gfx/gun_actions/chainsaw_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/chainsaw.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,2",
     spawn_probability: "1,1",
     price: 80,
@@ -1568,10 +1568,10 @@ const actions: Spell[] = [
     
     sound_loop_tag: "sound_chainsaw",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/chainsaw.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/chainsaw.xml")
       c.fire_rate_wait = 0
       c.spread_degrees = c.spread_degrees + 6.0
-      setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
+      setCurrentReloadTime(this.id, current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
     },
   },
   {
@@ -1581,7 +1581,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-luminous-drill)",
     sprite_unidentified: "data/ui_gfx/gun_actions/chainsaw_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/luminous_drill.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,2,10",
     spawn_probability: "1,1,0.1",
     price: 150,
@@ -1589,9 +1589,9 @@ const actions: Spell[] = [
     
     sound_loop_tag: "sound_digger",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/luminous_drill.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/luminous_drill.xml")
       c.fire_rate_wait = c.fire_rate_wait - 35
-      setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
+      setCurrentReloadTime(this.id, current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
     },
   },
   {
@@ -1601,7 +1601,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-laser-luminous-drill)",
     sprite_unidentified: "data/ui_gfx/gun_actions/chainsaw_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/luminous_drill.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,2,6,10",
     spawn_probability: "1,1,0.2,0.1",
     price: 220,
@@ -1609,9 +1609,9 @@ const actions: Spell[] = [
     
     sound_loop_tag: "sound_digger",
     action: function(c: GunActionState) {
-      add_projectile_trigger_timer("data/entities/projectiles/deck/luminous_drill.xml",4,1)
+      add_projectile_trigger_timer(this.id, "data/entities/projectiles/deck/luminous_drill.xml",4,1)
       c.fire_rate_wait = c.fire_rate_wait - 35
-      setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
+      setCurrentReloadTime(this.id, current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
     },
   },
   {
@@ -1622,7 +1622,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-tentacle)",
     sprite_unidentified: "data/ui_gfx/gun_actions/tentacle_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/tentacle.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "3,4,5,6",
     spawn_probability: "1,0.5,1,0.8",
     price: 200,
@@ -1630,7 +1630,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/tentacle.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/tentacle.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/tentacle.xml")
       c.fire_rate_wait = c.fire_rate_wait + 40
     },
   },
@@ -1642,7 +1642,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-tentacle-timer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/tentacle_timer_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/tentacle.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "3,4,5,6",
     spawn_probability: "0.6,0.8,0.6,0.7",
     price: 250,
@@ -1650,7 +1650,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/tentacle_timer.xml",
     action: function(c: GunActionState) {
-      add_projectile_trigger_timer("data/entities/projectiles/deck/tentacle.xml",20,1)
+      add_projectile_trigger_timer(this.id, "data/entities/projectiles/deck/tentacle.xml",20,1)
       c.fire_rate_wait = c.fire_rate_wait + 40
     },
   },
@@ -1662,7 +1662,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-heal-bullet)",
     sprite_unidentified: "data/ui_gfx/gun_actions/heal_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/heal_bullet.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4",
     spawn_probability: "1,1,0.6",
     price: 60,
@@ -1671,7 +1671,7 @@ const actions: Spell[] = [
     never_unlimited: true,
     custom_xml_file: "data/entities/misc/custom_cards/heal_bullet.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/heal_bullet.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/heal_bullet.xml")
       c.fire_rate_wait = c.fire_rate_wait + 4
       c.spread_degrees = c.spread_degrees + 2.0
     },
@@ -1683,7 +1683,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-antiheal)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/healhurt.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5",
     spawn_probability: "0.4,0.3,0.3,0.3",
     price: 200,
@@ -1691,7 +1691,7 @@ const actions: Spell[] = [
     max_uses: 20,
     never_unlimited: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/healhurt.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/healhurt.xml")
       c.fire_rate_wait = c.fire_rate_wait + 8
       c.screenshake = c.screenshake + 2
       c.spread_degrees = c.spread_degrees + 3.0
@@ -1706,7 +1706,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-spiral-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/spiral_shot.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "4,5,6",
     spawn_probability: "0.7,0.8,0.7",
     price: 190,
@@ -1714,7 +1714,7 @@ const actions: Spell[] = [
     max_uses: 15,
     custom_xml_file: "data/entities/misc/custom_cards/spiral_shot.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/spiral_shot.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/spiral_shot.xml")
       c.fire_rate_wait = c.fire_rate_wait + 20
     },
   },
@@ -1725,13 +1725,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-magic-shield)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/magic_shield_start.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,4,5,6",
     spawn_probability: "0.5,0.6,0.7,1",
     price: 100,
     mana: 40,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/magic_shield_start.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/magic_shield_start.xml")
       c.fire_rate_wait = c.fire_rate_wait + 20
     },
   },
@@ -1742,13 +1742,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-big-magic-shield)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/big_magic_shield_start.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,4,5,6,10",
     spawn_probability: "0.2,0.4,0.5,0.6,0.2",
     price: 120,
     mana: 60,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/big_magic_shield_start.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/big_magic_shield_start.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
     },
   },
@@ -1758,13 +1758,13 @@ const actions: Spell[] = [
     description: "$actiondesc_chain_bolt",
     sprite: "var(--sprite-action-chain-bolt)",
     related_projectiles: ["data/entities/projectiles/deck/chain_bolt.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,4,5,6",
     spawn_probability: "0.75,1,0.8,0.6",
     price: 240,
     mana: 80,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/chain_bolt.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/chain_bolt.xml")
       c.spread_degrees = c.spread_degrees + 14.0
       c.fire_rate_wait = c.fire_rate_wait + 45
     },
@@ -1776,7 +1776,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-fireball)",
     sprite_unidentified: "data/ui_gfx/gun_actions/fireball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/fireball.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,3,4,6",
     spawn_probability: "1,0.7,1,0.5",
     price: 220,
@@ -1784,7 +1784,7 @@ const actions: Spell[] = [
     max_uses: 15,
     custom_xml_file: "data/entities/misc/custom_cards/fireball.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/fireball.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/fireball.xml")
       c.spread_degrees = c.spread_degrees + 4.0
       c.fire_rate_wait = c.fire_rate_wait + 50
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 20.0
@@ -1797,14 +1797,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-meteor)",
     sprite_unidentified: "data/ui_gfx/gun_actions/meteor_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/meteor.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "4,5,6,10",
     spawn_probability: "0.6,0.6,0.7,0.5",
     price: 280,
     mana: 150,
     max_uses: 10,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/meteor.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/meteor.xml")
     },
   },
   {
@@ -1814,7 +1814,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-flamethrower)",
     sprite_unidentified: "data/ui_gfx/gun_actions/flamethrower_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/flamethrower.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,6",
     spawn_probability: "0.8,0.9,0.9,0.6",
     price: 220,
@@ -1822,7 +1822,7 @@ const actions: Spell[] = [
     max_uses: 60,
     custom_xml_file: "data/entities/misc/custom_cards/flamethrower.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/flamethrower.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/flamethrower.xml")
       c.spread_degrees = c.spread_degrees + 4.0
     },
   },
@@ -1833,7 +1833,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-iceball)",
     sprite_unidentified: "data/ui_gfx/gun_actions/fireball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/iceball.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,6",
     spawn_probability: "0.8,0.9,0.9,0.6",
     price: 260,
@@ -1841,7 +1841,7 @@ const actions: Spell[] = [
     max_uses: 15,
     custom_xml_file: "data/entities/misc/custom_cards/iceball.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/iceball.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/iceball.xml")
       c.spread_degrees = c.spread_degrees + 8.0
       c.fire_rate_wait = c.fire_rate_wait + 80
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 20.0
@@ -1855,7 +1855,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-slimeball)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/slime.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,3,4",
     spawn_probability: "1,1,0.7",
     price: 130,
@@ -1863,7 +1863,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/slimeball.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/slime.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/slime.xml")
       c.spread_degrees = c.spread_degrees + 4.0
       c.fire_rate_wait = c.fire_rate_wait + 10
       c.speed_multiplier = c.speed_multiplier * 1.1
@@ -1882,7 +1882,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-darkflame)",
     sprite_unidentified: "data/ui_gfx/gun_actions/darkflame_unidentified.png",
     related_projectiles: ["data/entities/projectiles/darkflame.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "3,5,6",
     spawn_probability: "1,0.9,0.8",
     price: 180,
@@ -1890,7 +1890,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/darkflame.xml",
     max_uses: 60,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/darkflame.xml")
+      add_projectile(this.id, "data/entities/projectiles/darkflame.xml")
       c.fire_rate_wait = c.fire_rate_wait + 20
     },
   },
@@ -1900,15 +1900,15 @@ const actions: Spell[] = [
     description: "$actiondesc_missile",
     sprite: "var(--sprite-action-missile)",
     related_projectiles: ["data/entities/projectiles/deck/rocket_player.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,5",
     spawn_probability: "0.5,0.5,1,1",
     price: 200,
     mana: 60,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/rocket_player.xml")
-      setCurrentReloadTime(current_reload_time + 30)
+      add_projectile(this.id, "data/entities/projectiles/deck/rocket_player.xml")
+      setCurrentReloadTime(this.id, current_reload_time + 30)
       c.spread_degrees = c.spread_degrees + 3.0
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 60.0
     },
@@ -1920,7 +1920,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-funky-spell)",
     sprite_unidentified: "data/ui_gfx/gun_actions/light_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/machinegun_bullet.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_requires_flag: "card_unlocked_funky",
     spawn_level: "6,10",
     spawn_probability: "0.1,0.1",
@@ -1928,7 +1928,7 @@ const actions: Spell[] = [
     mana: 5,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/machinegun_bullet.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/machinegun_bullet.xml")
       c.fire_rate_wait = c.fire_rate_wait - 3
       c.screenshake = c.screenshake + 0.2
       c.spread_degrees = c.spread_degrees + 2.0
@@ -1942,14 +1942,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-pebble)",
     sprite_unidentified: "data/ui_gfx/gun_actions/pebble_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/pebble_player.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,4,6",
     spawn_probability: "0.9,1,0.9,0.6",
     price: 200,
     mana: 120,
     max_uses: 10,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/pebble_player.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/pebble_player.xml")
       c.fire_rate_wait = c.fire_rate_wait + 80
     },
   },
@@ -1960,7 +1960,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-dynamite)",
     sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/tnt.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3,4",
     spawn_probability: "1,0.9,0.8,0.7,0.6",
     price: 160,
@@ -1968,7 +1968,7 @@ const actions: Spell[] = [
     max_uses: 16,
     custom_xml_file: "data/entities/misc/custom_cards/tnt.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/tnt.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/tnt.xml")
       c.fire_rate_wait = c.fire_rate_wait + 50
       c.spread_degrees = c.spread_degrees + 6.0
     },
@@ -1980,7 +1980,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-glitter-bomb)",
     sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/glitter_bomb.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3,4",
     spawn_probability: "0.8,0.9,0.8,0.7,0.6",
     price: 200,
@@ -1988,7 +1988,7 @@ const actions: Spell[] = [
     max_uses: 16,
     custom_xml_file: "data/entities/misc/custom_cards/glitter_bomb.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/glitter_bomb.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/glitter_bomb.xml")
       c.fire_rate_wait = c.fire_rate_wait + 50
       c.spread_degrees = c.spread_degrees + 12.0
     },
@@ -2000,15 +2000,15 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-buckshot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/buckshot_player.xml",3],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3,4",
     spawn_probability: "1,1,0.9,0.9,0.6",
     price: 160,
     mana: 25,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/buckshot_player.xml")
-      add_projectile("data/entities/projectiles/deck/buckshot_player.xml")
-      add_projectile("data/entities/projectiles/deck/buckshot_player.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/buckshot_player.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/buckshot_player.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/buckshot_player.xml")
       c.fire_rate_wait = c.fire_rate_wait + 8
       c.spread_degrees = c.spread_degrees + 14.0
     },
@@ -2020,25 +2020,25 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-freezing-gaze)",
     sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/freezing_gaze_beam.xml",12],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4",
     spawn_probability: "0.9,1,1",
     price: 180,
     mana: 45,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
-      add_projectile("data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freezing_gaze_beam.xml")
       c.pattern_degrees = 30
       c.fire_rate_wait = c.fire_rate_wait + 20
     },
@@ -2050,13 +2050,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-glowing-bolt)",
     sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/glowing_bolt.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "3,4,5,10",
     spawn_probability: "0.8,0.9,1,0.1",
     price: 220,
     mana: 65,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/glowing_bolt.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/glowing_bolt.xml")
       c.fire_rate_wait = c.fire_rate_wait + 40
       c.spread_degrees = c.spread_degrees + 6.0
     },
@@ -2069,13 +2069,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-spore-pod)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spore_pod_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/spore_pod.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.7,0.8,0.9,0.8,0.6",
     price: 200,
     mana: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/spore_pod.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/spore_pod.xml")
       c.fire_rate_wait = c.fire_rate_wait + 40
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 30.0
     },
@@ -2087,13 +2087,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-glue-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/dynamite_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/glue_shot.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5",
     spawn_probability: "0.7,0.4,0.2,0.5",
     price: 140,
     mana: 25,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/glue_shot.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/glue_shot.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
       c.spread_degrees = c.spread_degrees + 5.0
     },
@@ -2106,7 +2106,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bomb-holy)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/bomb_holy.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5,6,10",
     spawn_probability: "0.2,0.2,0.2,0.2,0.2,0.5",
     price: 400,
@@ -2114,8 +2114,8 @@ const actions: Spell[] = [
     max_uses: 2,
     custom_xml_file: "data/entities/misc/custom_cards/bomb_holy.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/bomb_holy.xml")
-      setCurrentReloadTime(current_reload_time + 80)
+      add_projectile(this.id, "data/entities/projectiles/bomb_holy.xml")
+      setCurrentReloadTime(this.id, current_reload_time + 80)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 100.0
       c.fire_rate_wait = c.fire_rate_wait + 40
     },
@@ -2128,7 +2128,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bomb-holy-giga)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/bomb_holy_giga.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "10",
     spawn_probability: "1",
     price: 600,
@@ -2137,8 +2137,8 @@ const actions: Spell[] = [
     never_unlimited: true,
     custom_xml_file: "data/entities/misc/custom_cards/bomb_holy_giga.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/bomb_holy_giga.xml")
-      setCurrentReloadTime(current_reload_time + 160)
+      add_projectile(this.id, "data/entities/projectiles/bomb_holy_giga.xml")
+      setCurrentReloadTime(this.id, current_reload_time + 160)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 100.0
       c.fire_rate_wait = c.fire_rate_wait + 120
     },
@@ -2150,7 +2150,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-propane-tank)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/propane_tank.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "1,1,0.8,0.8,0.7",
     price: 200,
@@ -2158,7 +2158,7 @@ const actions: Spell[] = [
     max_uses: 10,
     custom_xml_file: "data/entities/misc/custom_cards/propane_tank.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/propane_tank.xml")
+      add_projectile(this.id, "data/entities/projectiles/propane_tank.xml")
       c.fire_rate_wait = c.fire_rate_wait + 100
     },
   },
@@ -2169,14 +2169,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bomb-cart)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/bomb_cart.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.6,0.6,0.5,0.8,0.6",
     price: 200,
     mana: 75,
     max_uses: 6,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/bomb_cart.xml")
+      add_projectile(this.id, "data/entities/projectiles/bomb_cart.xml")
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 200.0
       c.fire_rate_wait = c.fire_rate_wait + 60
     },
@@ -2188,13 +2188,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-cursed-orb)",
     sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/orb_cursed.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3",
     spawn_probability: "0.3,0.2,0.1",
     price: 200,
     mana: 40,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/orb_cursed.xml")
+      add_projectile(this.id, "data/entities/projectiles/orb_cursed.xml")
       c.fire_rate_wait = c.fire_rate_wait + 20
       shot_effects.recoil_knockback = 40.0
     },
@@ -2206,13 +2206,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-expanding-orb)",
     sprite_unidentified: "data/ui_gfx/gun_actions/disc_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/orb_expanding.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.5,0.5,1,1,0.5",
     price: 200,
     mana: 70,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/orb_expanding.xml")
+      add_projectile(this.id, "data/entities/projectiles/orb_expanding.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
       shot_effects.recoil_knockback = 20.0
     },
@@ -2225,14 +2225,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-crumbling-earth)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/crumbling_earth.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.4,0.3,0.5,0.6,0.9",
     price: 300,
     mana: 240,
     max_uses: 3,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/crumbling_earth.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/crumbling_earth.xml")
     },
   },
   {
@@ -2242,7 +2242,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-summon-rock)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/rock.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3,4,5,6",
     spawn_probability: "0.8,0.8,0.6,0.6,0.3,0.7,0.7",
     price: 160,
@@ -2250,7 +2250,7 @@ const actions: Spell[] = [
     max_uses: 3,
     custom_xml_file: "data/entities/misc/custom_cards/summon_rock.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/rock.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/rock.xml")
     },
   },
   {
@@ -2260,7 +2260,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-summon-egg)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     related_projectiles: ["data/entities/items/pickup/egg_monster.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,3,4,5,6",
     spawn_probability: "0.7,0.8,0.8,0.7,0.6,0.6,0.5",
     price: 220,
@@ -2271,7 +2271,8 @@ const actions: Spell[] = [
       let types = ["monster","slime","red","fire"]
       let rnd = Random(this.id, 1, types.length)
       let egg_name = "egg_" + String(types[rnd - 1]) + ".xml"
-      add_projectile("data/entities/items/pickup/")
+      // add_projectile(this.id, "data/entities/items/pickup/" + egg_name)
+      add_projectile(this.id, (["data/entities/items/pickup/egg_monster.xml","data/entities/items/pickup/egg_slime.xml","data/entities/items/pickup/egg_red.xml","data/entities/items/pickup/egg_fire.xml"] as const)[Random(this.id, 1, 4) - 1] ?? "data/entities/items/pickup/egg_monster.xml")
     },
   },
   {
@@ -2281,13 +2282,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-summon-hollow-egg)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     related_projectiles: ["data/entities/items/pickup/egg_hollow.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,5,6",
     spawn_probability: "0.6,0.8,0.7,0.8,0.3",
     price: 140,
     mana: 30,
     action: function(c: GunActionState) {
-      add_projectile_trigger_death("data/entities/items/pickup/egg_hollow.xml", 1)
+      add_projectile_trigger_death(this.id, "data/entities/items/pickup/egg_hollow.xml", 1)
       c.fire_rate_wait = c.fire_rate_wait - 12
     },
   },
@@ -2298,14 +2299,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-tntbox)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/tntbox.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,5",
     spawn_probability: "0.8,0.9,0.5,0.4",
     price: 150,
     mana: 40,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/tntbox.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/tntbox.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
     },
   },
@@ -2316,14 +2317,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-tntbox-big)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/tntbox_big.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,4,5",
     spawn_probability: "0.8,1,0.7",
     price: 170,
     mana: 40,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/tntbox_big.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/tntbox_big.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
     },
   },
@@ -2334,19 +2335,19 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-swarm-fly)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/swarm_fly.xml",5],
-    type: "static",
+    type: 'static',
     spawn_level: "2,4,5",
     spawn_probability: "0.3,0.4,0.5",
     price: 90,
     mana: 60,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/swarm_fly.xml")
-      add_projectile("data/entities/projectiles/deck/swarm_fly.xml")
-      add_projectile("data/entities/projectiles/deck/swarm_fly.xml")
-      add_projectile("data/entities/projectiles/deck/swarm_fly.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_fly.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_fly.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_fly.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_fly.xml")
       c.spread_degrees = c.spread_degrees + 6.0
       c.fire_rate_wait = c.fire_rate_wait + 60
-      setCurrentReloadTime(current_reload_time + 20)
+      setCurrentReloadTime(this.id, current_reload_time + 20)
     },
   },
   {
@@ -2356,18 +2357,18 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-swarm-firebug)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/swarm_firebug.xml",4],
-    type: "static",
+    type: 'static',
     spawn_level: "2,5,6",
     spawn_probability: "0.2,0.4,0.5",
     price: 100,
     mana: 70,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/swarm_firebug.xml")
-      add_projectile("data/entities/projectiles/deck/swarm_firebug.xml")
-      add_projectile("data/entities/projectiles/deck/swarm_firebug.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_firebug.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_firebug.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_firebug.xml")
       c.spread_degrees = c.spread_degrees + 12.0
       c.fire_rate_wait = c.fire_rate_wait + 60
-      setCurrentReloadTime(current_reload_time + 20)
+      setCurrentReloadTime(this.id, current_reload_time + 20)
     },
   },
   {
@@ -2377,20 +2378,20 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-swarm-wasp)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/swarm_wasp.xml",6],
-    type: "static",
+    type: 'static',
     spawn_level: "4,5,6",
     spawn_probability: "0.2,0.5,0.6",
     price: 120,
     mana: 80,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
-      add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
-      add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
-      add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
-      add_projectile("data/entities/projectiles/deck/swarm_wasp.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_wasp.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_wasp.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_wasp.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_wasp.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swarm_wasp.xml")
       c.spread_degrees = c.spread_degrees + 24.0
       c.fire_rate_wait = c.fire_rate_wait + 60
-      setCurrentReloadTime(current_reload_time + 20)
+      setCurrentReloadTime(this.id, current_reload_time + 20)
     },
   },
   {
@@ -2400,16 +2401,16 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-friend-fly)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spiral_shot_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/friend_fly.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "4,5,6",
     spawn_probability: "0.2,0.6,0.5",
     price: 160,
     mana: 120,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/friend_fly.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/friend_fly.xml")
       c.spread_degrees = c.spread_degrees + 24.0
       c.fire_rate_wait = c.fire_rate_wait + 80
-      setCurrentReloadTime(current_reload_time + 40)
+      setCurrentReloadTime(this.id, current_reload_time + 40)
     },
   },
   
@@ -2420,7 +2421,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-acidshot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/acidshot_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/acidshot.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4",
     spawn_probability: "1,1,0.9,0.6",
     price: 180,
@@ -2428,7 +2429,7 @@ const actions: Spell[] = [
     max_uses: 20,
     custom_xml_file: "data/entities/misc/custom_cards/acidshot.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/acidshot.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/acidshot.xml")
       c.fire_rate_wait = c.fire_rate_wait + 10
     },
   },
@@ -2439,7 +2440,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-thunderball)",
     sprite_unidentified: "data/ui_gfx/gun_actions/thunderball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/thunderball.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,4,6,10",
     spawn_probability: "0.9,1,0.7,0.2",
     price: 300,
@@ -2447,7 +2448,7 @@ const actions: Spell[] = [
     max_uses: 3,
     custom_xml_file: "data/entities/misc/custom_cards/thunderball.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/thunderball.xml")
+      add_projectile(this.id, "data/entities/projectiles/thunderball.xml")
       c.fire_rate_wait = c.fire_rate_wait + 120
     },
   },
@@ -2459,7 +2460,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-firebomb)",
     sprite_unidentified: "data/ui_gfx/gun_actions/firebomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/firebomb.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3",
     spawn_probability: "1,0.9,0.7",
     price: 90,
@@ -2467,7 +2468,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/firebomb.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/firebomb.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/firebomb.xml")
     },
   },
   {
@@ -2477,13 +2478,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-soilball)",
     sprite_unidentified: "data/ui_gfx/gun_actions/firebomb_unidentified.png",
     related_projectiles: ["data/entities/projectiles/chunk_of_soil.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,5",
     spawn_probability: "0.8,0.8,1,0.75",
     price: 10,
     mana: 5,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/chunk_of_soil.xml")
+      add_projectile(this.id, "data/entities/projectiles/chunk_of_soil.xml")
     },
   },
   
@@ -2494,14 +2495,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-death-cross)",
     sprite_unidentified: "data/ui_gfx/gun_actions/death_cross_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/death_cross.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "1,0.8,0.6,0.5,0.5,0.3",
     price: 210,
     mana: 80,
     custom_xml_file: "data/entities/misc/custom_cards/death_cross.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/death_cross.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/death_cross.xml")
       c.fire_rate_wait = c.fire_rate_wait + 40
     },
   },
@@ -2512,7 +2513,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-death-cross-big)",
     sprite_unidentified: "data/ui_gfx/gun_actions/death_cross_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/death_cross_big.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4,5,6,10",
     spawn_probability: "0.4,0.5,0.55,0.3,0.4,0.2",
     price: 310,
@@ -2520,7 +2521,7 @@ const actions: Spell[] = [
     max_uses: 8,
     custom_xml_file: "data/entities/misc/custom_cards/death_cross.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/death_cross_big.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/death_cross_big.xml")
       c.fire_rate_wait = c.fire_rate_wait + 70
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 30.0
     },
@@ -2532,7 +2533,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-infestation)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rubber_ball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/infestation.xml",10],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "2,3,4",
     spawn_probability: "0.1,0.3,0.4",
     price: 160,
@@ -2540,7 +2541,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       for (const i of luaFor(1, 6)) {
-        add_projectile("data/entities/projectiles/deck/infestation.xml")
+        add_projectile(this.id, "data/entities/projectiles/deck/infestation.xml")
       }
       
       c.fire_rate_wait = c.fire_rate_wait - 2
@@ -2554,14 +2555,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-wall-horizontal)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/wall_horizontal.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,4,5",
     spawn_probability: "0.4,0.4,0.6,0.5,0.2",
     price: 160,
     mana: 70,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/wall_horizontal.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/wall_horizontal.xml")
       c.fire_rate_wait = c.fire_rate_wait + 5
     },
   },
@@ -2572,14 +2573,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-wall-vertical)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/wall_vertical.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,4,5",
     spawn_probability: "0.4,0.4,0.6,0.5,0.2",
     price: 160,
     mana: 70,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/wall_vertical.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/wall_vertical.xml")
       c.fire_rate_wait = c.fire_rate_wait + 5
     },
   },
@@ -2590,14 +2591,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-wall-square)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/wall_square.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,4,5,6",
     spawn_probability: "0.3,0.2,0.6,0.5,0.4,0.4",
     price: 160,
     mana: 70,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/wall_square.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/wall_square.xml")
       c.fire_rate_wait = c.fire_rate_wait + 20
     },
   },
@@ -2608,14 +2609,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-temporary-wall)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/temporary_wall.xml"],
-    type: "utility",
+    type: 'utility',
     spawn_level: "0,1,2,4,5",
     spawn_probability: "0.1,0.1,0.3,0.4,0.2",
     price: 100,
     mana: 40,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/temporary_wall.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/temporary_wall.xml")
       c.fire_rate_wait = c.fire_rate_wait + 40
     },
   },
@@ -2626,14 +2627,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-temporary-platform)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/temporary_platform.xml"],
-    type: "utility",
+    type: 'utility',
     spawn_level: "0,1,2,4,5",
     spawn_probability: "0.1,0.1,0.3,0.4,0.2",
     price: 90,
     mana: 30,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/temporary_platform.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/temporary_platform.xml")
       c.fire_rate_wait = c.fire_rate_wait + 40
     },
   },
@@ -2644,14 +2645,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-purple-explosion-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/purple_explosion_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,4,5,6",
     spawn_probability: "0.7,1,0.7,0.5,0.5,0.3",
     price: 160,
     mana: 90,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/purple_explosion_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/purple_explosion_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 10
       c.speed_multiplier = c.speed_multiplier - 2
       
@@ -2669,13 +2670,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-delayed-spell)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/delayed_spell.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,4,5,6",
     spawn_probability: "0.8,0.8,1,0.7,0.5,0.4",
     price: 240,
     mana: 20,
     action: function(c: GunActionState) {
-      add_projectile_trigger_death("data/entities/projectiles/deck/delayed_spell.xml", 3)
+      add_projectile_trigger_death(this.id, "data/entities/projectiles/deck/delayed_spell.xml", 3)
       c.fire_rate_wait = c.fire_rate_wait + 10
     },
   },
@@ -2686,13 +2687,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-long-distance-cast)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/long_distance_cast.xml"],
-    type: "utility",
+    type: 'utility',
     spawn_level: "0,1,2,4,5,6",
     spawn_probability: "0.6,0.7,0.8,0.6,0.3,0.4",
     price: 90,
     mana: 0,
     action: function(c: GunActionState) {
-      add_projectile_trigger_death("data/entities/projectiles/deck/long_distance_cast.xml", 1)
+      add_projectile_trigger_death(this.id, "data/entities/projectiles/deck/long_distance_cast.xml", 1)
       c.fire_rate_wait = c.fire_rate_wait - 5
     },
   },
@@ -2703,13 +2704,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-teleport-cast)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/teleport_cast.xml"],
-    type: "utility",
+    type: 'utility',
     spawn_level: "1,2,4,5,6",
     spawn_probability: "0.6,0.6,0.6,0.8,1",
     price: 190,
     mana: 100,
     action: function(c: GunActionState) {
-      add_projectile_trigger_death("data/entities/projectiles/deck/teleport_cast.xml", 1)
+      add_projectile_trigger_death(this.id, "data/entities/projectiles/deck/teleport_cast.xml", 1)
       c.fire_rate_wait = c.fire_rate_wait + 20
       c.spread_degrees = c.spread_degrees + 24
     },
@@ -2721,13 +2722,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-super-teleport-cast)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/super_teleport_cast.xml"],
-    type: "utility",
+    type: 'utility',
     spawn_level: "2,4,5,6",
     spawn_probability: "0.2,0.6,0.8,0.8",
     price: 160,
     mana: 20,
     action: function(c: GunActionState) {
-      add_projectile_trigger_death("data/entities/projectiles/deck/super_teleport_cast.xml", 1)
+      add_projectile_trigger_death(this.id, "data/entities/projectiles/deck/super_teleport_cast.xml", 1)
       c.fire_rate_wait = c.fire_rate_wait + 10
       c.spread_degrees = c.spread_degrees - 6
     },
@@ -2739,7 +2740,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-caster-cast)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/caster_cast.xml"],
-    type: "utility",
+    type: 'utility',
     spawn_level: "2,4,5,6,10",
     spawn_probability: "0.2,0.2,0.4,0.4,0.2",
     price: 70,
@@ -2747,7 +2748,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.spread_degrees = c.spread_degrees - 24
       c.extra_entities = c.extra_entities + "data/entities/misc/caster_cast.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -2758,14 +2759,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-mist-radioactive)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/mist_radioactive.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.4,0.4,0.4,0.4",
     price: 80,
     mana: 40,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/mist_radioactive.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/mist_radioactive.xml")
       c.fire_rate_wait = c.fire_rate_wait + 10
     },
   },
@@ -2776,14 +2777,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-mist-alcohol)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/mist_alcohol.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.4,0.4,0.4,0.4",
     price: 80,
     mana: 40,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/mist_alcohol.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/mist_alcohol.xml")
       c.fire_rate_wait = c.fire_rate_wait + 10
     },
   },
@@ -2794,14 +2795,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-mist-slime)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/mist_slime.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.4,0.4,0.4,0.4",
     price: 80,
     mana: 40,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/mist_slime.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/mist_slime.xml")
       c.fire_rate_wait = c.fire_rate_wait + 10
     },
   },
@@ -2812,14 +2813,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-mist-blood)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/mist_blood.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.4,0.4,0.4,0.4",
     price: 120,
     mana: 40,
     max_uses: 10,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/mist_blood.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/mist_blood.xml")
       c.fire_rate_wait = c.fire_rate_wait + 10
     },
   },
@@ -2830,14 +2831,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-circle-fire)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/circle_fire.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.4,0.4,0.4,0.4",
     price: 170,
     mana: 20,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/circle_fire.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/circle_fire.xml")
       c.fire_rate_wait = c.fire_rate_wait + 20
     },
   },
@@ -2848,14 +2849,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-circle-acid)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/circle_acid.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.4,0.4,0.4,0.4",
     price: 180,
     mana: 40,
     max_uses: 4,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/circle_acid.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/circle_acid.xml")
       c.fire_rate_wait = c.fire_rate_wait + 20
     },
   },
@@ -2866,14 +2867,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-circle-oil)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/circle_oil.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.4,0.4,0.4,0.4",
     price: 160,
     mana: 20,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/circle_oil.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/circle_oil.xml")
       c.fire_rate_wait = c.fire_rate_wait + 20
     },
   },
@@ -2884,14 +2885,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-circle-water)",
     sprite_unidentified: "data/ui_gfx/gun_actions/slimeball_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/circle_water.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.4,0.4,0.4,0.4",
     price: 160,
     mana: 20,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/circle_water.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/circle_water.xml")
       c.fire_rate_wait = c.fire_rate_wait + 20
     },
   },
@@ -2903,17 +2904,17 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-material-water)",
     sprite_unidentified: "data/ui_gfx/gun_actions/material_water_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/material_water.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.4,0.4,0.4,0.4,0.4",
     price: 110,
     mana: 0,
     sound_loop_tag: "sound_spray",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/material_water.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/material_water.xml")
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_wet.xml,"
       c.fire_rate_wait = c.fire_rate_wait - 15
-      setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
+      setCurrentReloadTime(this.id, current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
     },
   },
   {
@@ -2923,17 +2924,17 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-material-oil)",
     sprite_unidentified: "data/ui_gfx/gun_actions/material_oil_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/material_oil.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.4,0.4,0.4,0.4,0.4",
     price: 140,
     mana: 0,
     sound_loop_tag: "sound_spray",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/material_oil.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/material_oil.xml")
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_oiled.xml,"
       c.fire_rate_wait = c.fire_rate_wait - 15
-      setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
+      setCurrentReloadTime(this.id, current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
     },
   },
   
@@ -2944,7 +2945,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-material-blood)",
     sprite_unidentified: "data/ui_gfx/gun_actions/material_blood_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/material_blood.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.4,0.4,0.4,0.4,0.4",
     price: 130,
@@ -2952,10 +2953,10 @@ const actions: Spell[] = [
     mana: 0,
     sound_loop_tag: "sound_spray",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/material_blood.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/material_blood.xml")
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_bloody.xml,"
       c.fire_rate_wait = c.fire_rate_wait - 15
-      setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
+      setCurrentReloadTime(this.id, current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
     },
   },
   {
@@ -2965,7 +2966,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-material-acid)",
     sprite_unidentified: "data/ui_gfx/gun_actions/material_acid_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/material_acid.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.4,0.4,0.4,0.4,0.4",
     price: 150,
@@ -2974,9 +2975,9 @@ const actions: Spell[] = [
     mana: 0,
     sound_loop_tag: "sound_spray",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/material_acid.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/material_acid.xml")
       c.fire_rate_wait = c.fire_rate_wait - 15
-      setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
+      setCurrentReloadTime(this.id, current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
     },
   },
   {
@@ -2987,7 +2988,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-material-cement)",
     sprite_unidentified: "data/ui_gfx/gun_actions/material_cement_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/material_cement.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.4,0.4,0.4,0.4,0.4",
     price: 100,
@@ -2996,9 +2997,9 @@ const actions: Spell[] = [
     mana: 0,
     sound_loop_tag: "sound_spray",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/material_cement.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/material_cement.xml")
       c.fire_rate_wait = c.fire_rate_wait - 15
-      setCurrentReloadTime(current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
+      setCurrentReloadTime(this.id, current_reload_time - ACTION_DRAW_RELOAD_TIME_INCREASE - 10 )
     },
   },
   
@@ -3010,7 +3011,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-teleport-projectile)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/teleport_projectile.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,4,5,6",
     spawn_probability: "0.6,0.6,0.6,0.4,0.4,0.4",
     price: 130,
@@ -3018,7 +3019,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/teleport_projectile.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/teleport_projectile.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/teleport_projectile.xml")
       c.fire_rate_wait = c.fire_rate_wait + 3
       c.spread_degrees = c.spread_degrees - 2.0
     },
@@ -3030,7 +3031,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-teleport-projectile-short)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/teleport_projectile_short.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,4,5,6",
     spawn_probability: "0.6,0.6,0.6,0.4,0.4,0.4",
     price: 130,
@@ -3038,7 +3039,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/teleport_projectile_short.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/teleport_projectile_short.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/teleport_projectile_short.xml")
       c.spread_degrees = c.spread_degrees - 2.0
     },
   },
@@ -3049,7 +3050,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-teleport-projectile-static)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/teleport_projectile_static.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,4,5,6",
     spawn_probability: "0.6,0.6,0.6,0.4,0.4,0.4",
     price: 90,
@@ -3057,7 +3058,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/teleport_projectile_static.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/teleport_projectile_static.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/teleport_projectile_static.xml")
       c.fire_rate_wait = c.fire_rate_wait + 3
       c.spread_degrees = c.spread_degrees - 2.0
     },
@@ -3069,14 +3070,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-swapper-projectile)",
     sprite_unidentified: "data/ui_gfx/gun_actions/light_bullet_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/swapper.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,4,5,6",
     spawn_probability: "0.05,0.05,0.1,0.4,0.4,0.1",
     price: 100,
     mana: 5,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/swapper.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/swapper.xml")
       c.fire_rate_wait = c.fire_rate_wait + 3
       c.screenshake = c.screenshake + 0.5
       c.spread_degrees = c.spread_degrees - 2.0
@@ -3090,13 +3091,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-teleport-projectile-closer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/teleport_projectile_closer.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "0,1,2,4,5,6",
     spawn_probability: "0.4,0.6,0.6,0.7,0.4,0.4",
     price: 130,
     mana: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/teleport_projectile_closer.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/teleport_projectile_closer.xml")
       c.spread_degrees = c.spread_degrees - 2.0
     },
   },
@@ -3110,7 +3111,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-nuke)",
     sprite_unidentified: "data/ui_gfx/gun_actions/nuke_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/nuke.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,5,6,10",
     spawn_probability: "0.3,1,1,0.2",
     price: 400,
@@ -3118,7 +3119,7 @@ const actions: Spell[] = [
     max_uses: 1,
     custom_xml_file: "data/entities/misc/custom_cards/nuke.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/nuke.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/nuke.xml")
       c.fire_rate_wait = 20
       c.speed_multiplier = c.speed_multiplier * 0.75
       c.material = "fire"
@@ -3126,7 +3127,7 @@ const actions: Spell[] = [
       c.ragdoll_fx = 2
       c.gore_particles = c.gore_particles + 10
       c.screenshake = c.screenshake + 10.5
-      setCurrentReloadTime(current_reload_time + 600)
+      setCurrentReloadTime(this.id, current_reload_time + 600)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 300.0
       
       if ( c.speed_multiplier >= 20 )  {
@@ -3148,7 +3149,7 @@ const actions: Spell[] = [
     never_unlimited: true,
     recursive: true,
     ai_never_uses: true,
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "10",
     spawn_probability: "1",
     price: 800,
@@ -3156,7 +3157,7 @@ const actions: Spell[] = [
     max_uses: 1,
     custom_xml_file: "data/entities/misc/custom_cards/nuke_giga.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/nuke_giga.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/nuke_giga.xml")
       c.fire_rate_wait = 50
       c.speed_multiplier = c.speed_multiplier * 0.5
       c.material = "fire"
@@ -3164,7 +3165,7 @@ const actions: Spell[] = [
       c.ragdoll_fx = 2
       c.gore_particles = c.gore_particles + 30
       c.screenshake = c.screenshake + 30.5
-      setCurrentReloadTime(current_reload_time + 800)
+      setCurrentReloadTime(this.id, current_reload_time + 800)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 300.0
       
       if ( c.speed_multiplier >= 20 )  {
@@ -3185,19 +3186,19 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-firework)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/fireworks/firework_pink.xml"],
-    type: "projectile",
+    type: 'projectile',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "1,0.8,1,1,0.5,0.3",
     price: 220,
     mana: 70,
     max_uses: 25,
     action: function(c: GunActionState) {
-      // SetRandomSeed(this.id,  GameGetFrameNum(), GameGetFrameNum() )
-      // let types = ["pink","green","blue","orange"]
-      // let rnd = Random(this.id, 1, types.length)
-      // let firework_name = "firework_" + String(types[rnd - 1]) + ".xml"
-      // add_projectile("data/entities/projectiles/deck/fireworks/" + firework_name)
-      add_projectile("data/entities/projectiles/deck/fireworks/firework_pink.xml")
+      SetRandomSeed(this.id,  GameGetFrameNum(), GameGetFrameNum() )
+      let types = ["pink","green","blue","orange"]
+      let rnd = Random(this.id, 1, types.length)
+      let firework_name = "firework_" + String(types[rnd - 1]) + ".xml"
+      // add_projectile(this.id, "data/entities/projectiles/deck/fireworks/" + firework_name)
+      add_projectile(this.id, (["data/entities/projectiles/deck/fireworks/firework_pink.xml","data/entities/projectiles/deck/fireworks/firework_green.xml","data/entities/projectiles/deck/fireworks/firework_blue.xml","data/entities/projectiles/deck/fireworks/firework_orange.xml"] as const)[Random(this.id, 1, 4) - 1] ?? "data/entities/projectiles/deck/fireworks/firework_pink.xml")
       c.fire_rate_wait = c.fire_rate_wait + 60
       
       c.ragdoll_fx = 2
@@ -3211,7 +3212,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-summon-wandghost)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/wand_ghost_player.xml"],
-    type: "utility",
+    type: 'utility',
     spawn_level: "2,4,5,6,10",
     spawn_probability: "0.08,0.1,0.3,0.3,0.1",
     price: 420,
@@ -3219,8 +3220,8 @@ const actions: Spell[] = [
     max_uses: 1,
     never_unlimited: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/wand_ghost_player.xml")
-      add_projectile("data/entities/particles/image_emitters/wand_effect.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/wand_ghost_player.xml")
+      add_projectile(this.id, "data/entities/particles/image_emitters/wand_effect.xml")
     },
   },
   {
@@ -3230,7 +3231,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-touch-gold)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/touch_gold.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4,5,6,7,10",
     spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.5",
     price: 480,
@@ -3238,7 +3239,7 @@ const actions: Spell[] = [
     max_uses: 1,
     never_unlimited: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/touch_gold.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/touch_gold.xml")
     },
   },
   {
@@ -3248,14 +3249,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-touch-water)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/touch_water.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4,5,6,7,10",
     spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.4",
     price: 420,
     mana: 280,
     max_uses: 5,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/touch_water.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/touch_water.xml")
     },
   },
   {
@@ -3265,14 +3266,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-touch-oil)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/touch_oil.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4,5,6,7,10",
     spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.4",
     price: 380,
     mana: 260,
     max_uses: 5,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/touch_oil.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/touch_oil.xml")
     },
   },
   {
@@ -3282,14 +3283,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-touch-alcohol)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/touch_alcohol.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4,5,6,7,10",
     spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.4",
     price: 360,
     mana: 240,
     max_uses: 5,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/touch_alcohol.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/touch_alcohol.xml")
     },
   },
   {
@@ -3300,14 +3301,14 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/touch_piss.xml"],
     spawn_requires_flag: "card_unlocked_piss",
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4,5,6,7,10",
     spawn_probability: "0,0,0,0,0.035,0.035,0.035,0.1",
     price: 360,
     mana: 190,
     max_uses: 4,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/touch_piss.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/touch_piss.xml")
     },
   },
   {
@@ -3318,7 +3319,7 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/touch_grass.xml"],
     spawn_requires_flag: "card_unlocked_touch_grass",
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4,5,6,7,10",
     spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.2",
     price: 360,
@@ -3327,7 +3328,7 @@ const actions: Spell[] = [
     never_unlimited: true,
     custom_xml_file: "data/entities/misc/custom_cards/touch_grass.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/touch_grass.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/touch_grass.xml")
     },
   },
   {
@@ -3337,14 +3338,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-touch-blood)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/touch_blood.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4,5,6,7,10",
     spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.5",
     price: 390,
     mana: 270,
     max_uses: 3,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/touch_blood.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/touch_blood.xml")
     },
   },
   {
@@ -3354,14 +3355,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-touch-smoke)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/touch_smoke.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "1,2,3,4,5,6,7,10",
     spawn_probability: "0,0,0,0,0.1,0.1,0.1,0.4",
     price: 350,
     mana: 230,
     max_uses: 5,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/touch_smoke.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/touch_smoke.xml")
     },
   },
   {
@@ -3372,7 +3373,7 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/destruction.xml"],
     spawn_requires_flag: "card_unlocked_destruction",
-    type: "static",
+    type: 'static',
     spawn_level: "10",
     spawn_probability: "1",
     price: 600,
@@ -3380,9 +3381,9 @@ const actions: Spell[] = [
     max_uses: 5,
     ai_never_uses: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/destruction.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/destruction.xml")
       c.fire_rate_wait = c.fire_rate_wait + 150
-      setCurrentReloadTime(current_reload_time + 240)
+      setCurrentReloadTime(this.id, current_reload_time + 240)
     },
   },
   {
@@ -3393,7 +3394,7 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/mass_polymorph.xml"],
     spawn_requires_flag: "card_unlocked_polymorph",
-    type: "static",
+    type: 'static',
     spawn_level: "10",
     spawn_probability: "1",
     price: 600,
@@ -3401,9 +3402,9 @@ const actions: Spell[] = [
     max_uses: 3,
     ai_never_uses: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/mass_polymorph.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/mass_polymorph.xml")
       c.fire_rate_wait = c.fire_rate_wait + 140
-      setCurrentReloadTime(current_reload_time + 240)
+      setCurrentReloadTime(this.id, current_reload_time + 240)
     },
   },
   
@@ -3413,14 +3414,14 @@ const actions: Spell[] = [
     description: "$actiondesc_burst_2",
     sprite: "var(--sprite-action-burst-2)",
     sprite_unidentified: "data/ui_gfx/gun_actions/burst_2_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "0,1,2,3,4,5,6",
     spawn_probability: "0.8,0.8,0.8,0.8,0.8,0.8,0.8",
     price: 140,
     mana: 0,
     
     action: function(c: GunActionState) {
-      draw_actions( 2, true )
+      draw_actions(this.id,  2, true )
     },
   },
   {
@@ -3429,14 +3430,14 @@ const actions: Spell[] = [
     description: "$actiondesc_burst_3",
     sprite: "var(--sprite-action-burst-3)",
     sprite_unidentified: "data/ui_gfx/gun_actions/burst_3_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.7,0.7,0.7,0.7,0.7,0.7",
     price: 160,
     mana: 2,
     
     action: function(c: GunActionState) {
-      draw_actions( 3, true )
+      draw_actions(this.id,  3, true )
     },
   },
   {
@@ -3445,14 +3446,14 @@ const actions: Spell[] = [
     description: "$actiondesc_burst_4",
     sprite: "var(--sprite-action-burst-4)",
     sprite_unidentified: "data/ui_gfx/gun_actions/burst_4_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.4,0.5,0.6,0.6,0.6",
     price: 180,
     mana: 5,
     
     action: function(c: GunActionState) {
-      draw_actions( 4, true )
+      draw_actions(this.id,  4, true )
     },
   },
   {
@@ -3462,14 +3463,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-burst-8)",
     sprite_unidentified: "data/ui_gfx/gun_actions/burst_4_unidentified.png",
     spawn_requires_flag: "card_unlocked_musicbox",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "5,6,10",
     spawn_probability: "0.1,0.1,0.5",
     price: 300,
     mana: 30,
     
     action: function(c: GunActionState) {
-      draw_actions( 8, true )
+      draw_actions(this.id,  8, true )
     },
   },
   {
@@ -3479,7 +3480,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-burst-x)",
     sprite_unidentified: "data/ui_gfx/gun_actions/burst_4_unidentified.png",
     spawn_requires_flag: "card_unlocked_musicbox",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "5,6,10",
     spawn_probability: "0.1,0.1,0.5",
     price: 500,
@@ -3487,7 +3488,7 @@ const actions: Spell[] = [
     max_uses: 30,
     action: function(c: GunActionState) {
       if ( deck.length > 0 )  {
-        draw_actions( deck.length, true )
+        draw_actions(this.id,  deck.length, true )
       }
     },
   },
@@ -3498,14 +3499,14 @@ const actions: Spell[] = [
     description: "$actiondesc_scatter_2",
     sprite: "var(--sprite-action-scatter-2)",
     sprite_unidentified: "data/ui_gfx/gun_actions/scatter_2_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "0,1,2",
     spawn_probability: "0.8,0.8,0.7",
     price: 100,
     mana: 0,
     
     action: function(c: GunActionState) {
-      draw_actions( 2, true )
+      draw_actions(this.id,  2, true )
       c.spread_degrees = c.spread_degrees + 10.0
     },
   },
@@ -3515,14 +3516,14 @@ const actions: Spell[] = [
     description: "$actiondesc_scatter_3",
     sprite: "var(--sprite-action-scatter-3)",
     sprite_unidentified: "data/ui_gfx/gun_actions/scatter_3_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "0,1,2,3",
     spawn_probability: "0.6,0.7,0.7,0.8",
     price: 120,
     mana: 1,
     
     action: function(c: GunActionState) {
-      draw_actions( 3, true )
+      draw_actions(this.id,  3, true )
       c.spread_degrees = c.spread_degrees + 20.0
     },
   },
@@ -3532,14 +3533,14 @@ const actions: Spell[] = [
     description: "$actiondesc_scatter_4",
     sprite: "var(--sprite-action-scatter-4)",
     sprite_unidentified: "data/ui_gfx/gun_actions/scatter_4_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.5,0.6,0.7,0.8,0.8,0.6",
     price: 140,
     mana: 2,
     
     action: function(c: GunActionState) {
-      draw_actions( 4, true )
+      draw_actions(this.id,  4, true )
       c.spread_degrees = c.spread_degrees + 40.0
     },
   },
@@ -3549,14 +3550,14 @@ const actions: Spell[] = [
     description: "$actiondesc_i_shape",
     sprite: "var(--sprite-action-i-shape)",
     sprite_unidentified: "data/ui_gfx/gun_actions/i_shape_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "1,2,3",
     spawn_probability: "0.4,0.5,0.3",
     price: 30,
     mana: 0,
     
     action: function(c: GunActionState) {
-      draw_actions(2, true)
+      draw_actions(this.id, 2, true)
       c.pattern_degrees = 180
       c.spread_degrees = c.spread_degrees - 5.0
     },
@@ -3567,14 +3568,14 @@ const actions: Spell[] = [
     description: "$actiondesc_y_shape",
     sprite: "var(--sprite-action-y-shape)",
     sprite_unidentified: "data/ui_gfx/gun_actions/y_shape_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "0,1,2,3",
     spawn_probability: "0.8,0.5,0.4,0.3",
     price: 30,
     mana: 2,
     
     action: function(c: GunActionState) {
-      draw_actions(2, true)
+      draw_actions(this.id, 2, true)
       c.pattern_degrees = 45
       c.spread_degrees = c.spread_degrees - 8.0
     },
@@ -3585,14 +3586,14 @@ const actions: Spell[] = [
     description: "$actiondesc_t_shape",
     sprite: "var(--sprite-action-t-shape)",
     sprite_unidentified: "data/ui_gfx/gun_actions/t_shape_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.4,0.5,0.4,0.3",
     price: 30,
     mana: 3,
     
     action: function(c: GunActionState) {
-      draw_actions(3, true)
+      draw_actions(this.id, 3, true)
       c.pattern_degrees = 90
       c.spread_degrees = c.spread_degrees - 8.0
     },
@@ -3603,14 +3604,14 @@ const actions: Spell[] = [
     description: "$actiondesc_w_shape",
     sprite: "var(--sprite-action-w-shape)",
     sprite_unidentified: "data/ui_gfx/gun_actions/w_shape_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.4,0.3,0.5,0.3,0.3",
     price: 50,
     mana: 3,
     
     action: function(c: GunActionState) {
-      draw_actions(3, true)
+      draw_actions(this.id, 3, true)
       c.pattern_degrees = 20
       c.spread_degrees = c.spread_degrees - 5.0
     },
@@ -3621,14 +3622,14 @@ const actions: Spell[] = [
     description: "$actiondesc_circle_shape",
     sprite: "var(--sprite-action-circle-shape)",
     sprite_unidentified: "data/ui_gfx/gun_actions/circle_shape_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.1,0.2,0.3,0.3,0.3,0.3",
     price: 50,
     mana: 6,
     
     action: function(c: GunActionState) {
-      draw_actions(6, true)
+      draw_actions(this.id, 6, true)
       c.pattern_degrees = 180
       c.spread_degrees = c.spread_degrees - 15.0
     },
@@ -3639,14 +3640,14 @@ const actions: Spell[] = [
     description: "$actiondesc_pentagram_shape",
     sprite: "var(--sprite-action-pentagram-shape)",
     sprite_unidentified: "data/ui_gfx/gun_actions/pentagram_shape_unidentified.png",
-    type: "multicast",
+    type: 'multicast',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.4,0.4,0.3,0.2,0.1",
     price: 50,
     mana: 5,
     
     action: function(c: GunActionState) {
-      draw_actions(5, true)
+      draw_actions(this.id, 5, true)
       c.pattern_degrees = 180
       c.spread_degrees = c.spread_degrees - 12.0
       
@@ -3659,7 +3660,7 @@ const actions: Spell[] = [
     description: "$actiondesc_i_shot",
     sprite: "var(--sprite-action-i-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/i_shape_unidentified.png",
-    type: "utility",
+    type: 'utility',
     spawn_level: "1,2,3",
     spawn_probability: "0.1,0.2,0.5",
     price: 130,
@@ -3672,7 +3673,7 @@ const actions: Spell[] = [
         data = deck[1 - 1]
       }
       
-      if (( data != null ) && ( ( data.type === "projectile" ) || ( data.type === "static" ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
+      if (( data != null ) && ( ( data.type === 'projectile' ) || ( data.type === 'static' ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         let count = 2
         for (const i of luaFor(1, count-1)) {
           if ( mana >= (data.mana ?? 0) )  {
@@ -3680,10 +3681,10 @@ const actions: Spell[] = [
             let proj_count = data.related_projectiles[1] || 1
             
             for (const a of luaFor(1, proj_count)) {
-              add_projectile(proj)
+              add_projectile(this.id, proj)
             }
             
-            setMana(mana - (data.mana ?? 0))
+            setMana(this.id, mana - (data.mana ?? 0))
           } else {
             OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
@@ -3693,7 +3694,7 @@ const actions: Spell[] = [
       
       c.pattern_degrees = 180
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -3702,7 +3703,7 @@ const actions: Spell[] = [
     description: "$actiondesc_y_shot",
     sprite: "var(--sprite-action-y-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/i_shape_unidentified.png",
-    type: "utility",
+    type: 'utility',
     spawn_level: "1,2,3",
     spawn_probability: "0.1,0.2,0.5",
     price: 135,
@@ -3715,7 +3716,7 @@ const actions: Spell[] = [
         data = deck[1 - 1]
       }
       
-      if (( data != null ) && ( ( data.type === "projectile" ) || ( data.type === "static" ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
+      if (( data != null ) && ( ( data.type === 'projectile' ) || ( data.type === 'static' ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         let count = 2
         for (const i of luaFor(1, count-1)) {
           if ( mana >= (data.mana ?? 0) )  {
@@ -3723,10 +3724,10 @@ const actions: Spell[] = [
             let proj_count = data.related_projectiles[1] || 1
             
             for (const a of luaFor(1, proj_count)) {
-              add_projectile(proj)
+              add_projectile(this.id, proj)
             }
             
-            setMana(mana - (data.mana ?? 0))
+            setMana(this.id, mana - (data.mana ?? 0))
           } else {
             OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
@@ -3736,7 +3737,7 @@ const actions: Spell[] = [
       
       c.pattern_degrees = 45
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -3745,7 +3746,7 @@ const actions: Spell[] = [
     description: "$actiondesc_t_shot",
     sprite: "var(--sprite-action-t-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/i_shape_unidentified.png",
-    type: "utility",
+    type: 'utility',
     spawn_level: "2,3,5",
     spawn_probability: "0.1,0.2,0.5",
     price: 160,
@@ -3758,7 +3759,7 @@ const actions: Spell[] = [
         data = deck[1 - 1]
       }
       
-      if (( data != null ) && ( ( data.type === "projectile" ) || ( data.type === "static" ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
+      if (( data != null ) && ( ( data.type === 'projectile' ) || ( data.type === 'static' ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         let count = 3
         for (const i of luaFor(1, count-1)) {
           if ( mana >= (data.mana ?? 0) )  {
@@ -3766,10 +3767,10 @@ const actions: Spell[] = [
             let proj_count = data.related_projectiles[1] || 1
             
             for (const a of luaFor(1, proj_count)) {
-              add_projectile(proj)
+              add_projectile(this.id, proj)
             }
             
-            setMana(mana - (data.mana ?? 0))
+            setMana(this.id, mana - (data.mana ?? 0))
           } else {
             OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
@@ -3779,7 +3780,7 @@ const actions: Spell[] = [
       
       c.pattern_degrees = 90
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -3788,7 +3789,7 @@ const actions: Spell[] = [
     description: "$actiondesc_w_shot",
     sprite: "var(--sprite-action-w-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/i_shape_unidentified.png",
-    type: "utility",
+    type: 'utility',
     spawn_level: "2,3,5,6",
     spawn_probability: "0.1,0.2,0.5,0.4",
     price: 180,
@@ -3801,7 +3802,7 @@ const actions: Spell[] = [
         data = deck[1 - 1]
       }
       
-      if (( data != null ) && ( ( data.type === "projectile" ) || ( data.type === "static" ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
+      if (( data != null ) && ( ( data.type === 'projectile' ) || ( data.type === 'static' ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         let count = 3
         for (const i of luaFor(1, count-1)) {
           if ( mana >= (data.mana ?? 0) )  {
@@ -3809,10 +3810,10 @@ const actions: Spell[] = [
             let proj_count = data.related_projectiles[1] || 1
             
             for (const a of luaFor(1, proj_count)) {
-              add_projectile(proj)
+              add_projectile(this.id, proj)
             }
             
-            setMana(mana - (data.mana ?? 0))
+            setMana(this.id, mana - (data.mana ?? 0))
           } else {
             OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
@@ -3822,7 +3823,7 @@ const actions: Spell[] = [
       
       c.pattern_degrees = 20
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -3831,7 +3832,7 @@ const actions: Spell[] = [
     description: "$actiondesc_quad_shot",
     sprite: "var(--sprite-action-quad-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/i_shape_unidentified.png",
-    type: "utility",
+    type: 'utility',
     spawn_level: "1,2,4",
     spawn_probability: "0.1,0.2,0.5",
     price: 200,
@@ -3844,7 +3845,7 @@ const actions: Spell[] = [
         data = deck[1 - 1]
       }
       
-      if (( data != null ) && ( ( data.type === "projectile" ) || ( data.type === "static" ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
+      if (( data != null ) && ( ( data.type === 'projectile' ) || ( data.type === 'static' ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         let count = 4
         for (const i of luaFor(1, count-1)) {
           if ( mana >= (data.mana ?? 0) )  {
@@ -3852,10 +3853,10 @@ const actions: Spell[] = [
             let proj_count = data.related_projectiles[1] || 1
             
             for (const a of luaFor(1, proj_count)) {
-              add_projectile(proj)
+              add_projectile(this.id, proj)
             }
             
-            setMana(mana - (data.mana ?? 0))
+            setMana(this.id, mana - (data.mana ?? 0))
           } else {
             OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
@@ -3865,7 +3866,7 @@ const actions: Spell[] = [
       
       c.pattern_degrees = 180
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -3874,7 +3875,7 @@ const actions: Spell[] = [
     description: "$actiondesc_penta_shot",
     sprite: "var(--sprite-action-penta-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/i_shape_unidentified.png",
-    type: "utility",
+    type: 'utility',
     spawn_level: "3,4,5,6,10",
     spawn_probability: "0.1,0.2,0.5,0.5,0.2",
     price: 250,
@@ -3887,7 +3888,7 @@ const actions: Spell[] = [
         data = deck[1 - 1]
       }
       
-      if (( data != null ) && ( ( data.type === "projectile" ) || ( data.type === "static" ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
+      if (( data != null ) && ( ( data.type === 'projectile' ) || ( data.type === 'static' ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         let count = 5
         for (const i of luaFor(1, count-1)) {
           if ( mana >= (data.mana ?? 0) )  {
@@ -3895,10 +3896,10 @@ const actions: Spell[] = [
             let proj_count = data.related_projectiles[1] || 1
             
             for (const a of luaFor(1, proj_count)) {
-              add_projectile(proj)
+              add_projectile(this.id, proj)
             }
             
-            setMana(mana - (data.mana ?? 0))
+            setMana(this.id, mana - (data.mana ?? 0))
           } else {
             OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
@@ -3908,7 +3909,7 @@ const actions: Spell[] = [
       
       c.pattern_degrees = 180
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -3917,7 +3918,7 @@ const actions: Spell[] = [
     description: "$actiondesc_hexa_shot",
     sprite: "var(--sprite-action-hexa-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/i_shape_unidentified.png",
-    type: "utility",
+    type: 'utility',
     spawn_level: "3,4,5,6,10",
     spawn_probability: "0.1,0.2,0.5,0.5,0.2",
     price: 280,
@@ -3930,7 +3931,7 @@ const actions: Spell[] = [
         data = deck[1 - 1]
       }
       
-      if (( data != null ) && ( ( data.type === "projectile" ) || ( data.type === "static" ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
+      if (( data != null ) && ( ( data.type === 'projectile' ) || ( data.type === 'static' ) ) && ( data.related_projectiles != null ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         let count = 6
         for (const i of luaFor(1, count-1)) {
           if ( mana >= (data.mana ?? 0) )  {
@@ -3938,10 +3939,10 @@ const actions: Spell[] = [
             let proj_count = data.related_projectiles[1] || 1
             
             for (const a of luaFor(1, proj_count)) {
-              add_projectile(proj)
+              add_projectile(this.id, proj)
             }
             
-            setMana(mana - (data.mana ?? 0))
+            setMana(this.id, mana - (data.mana ?? 0))
           } else {
             OnNotEnoughManaForAction(data.mana ?? 0, mana, data)
             break
@@ -3951,7 +3952,7 @@ const actions: Spell[] = [
       
       c.pattern_degrees = 180
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -3960,7 +3961,7 @@ const actions: Spell[] = [
     description: "$actiondesc_spread_reduce",
     sprite: "var(--sprite-action-spread-reduce)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.8,0.8,0.8,0.8,0.7,0.6",
     price: 100,
@@ -3968,7 +3969,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.spread_degrees = c.spread_degrees - 60.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -3977,16 +3978,16 @@ const actions: Spell[] = [
     description: "$actiondesc_heavy_spread",
     sprite: "var(--sprite-action-heavy-spread)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleport_projectile_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "0,1,2,4,5,6",
     spawn_probability: "0.6,0.7,0.8,0.8,0.8,0.6",
     price: 100,
     mana: 2,
     action: function(c: GunActionState) {
       c.fire_rate_wait = c.fire_rate_wait - 7
-      setCurrentReloadTime(current_reload_time - 15)
+      setCurrentReloadTime(this.id, current_reload_time - 15)
       c.spread_degrees = c.spread_degrees + 720
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -3995,7 +3996,7 @@ const actions: Spell[] = [
     description: "$actiondesc_recharge",
     sprite: "var(--sprite-action-recharge)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.8,0.9,1,0.8,0.9,1",
     price: 200,
@@ -4003,8 +4004,8 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.fire_rate_wait    = c.fire_rate_wait - 10
-      setCurrentReloadTime(current_reload_time - 20)
-      draw_actions( 1, true )
+      setCurrentReloadTime(this.id, current_reload_time - 20)
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4013,7 +4014,7 @@ const actions: Spell[] = [
     description: "$actiondesc_lifetime",
     sprite: "var(--sprite-action-lifetime)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,4,5,6,10",
     spawn_probability: "0.5,0.5,0.5,0.75,0.1",
     price: 250,
@@ -4023,7 +4024,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.lifetime_add     = c.lifetime_add + 75
       c.fire_rate_wait = c.fire_rate_wait + 13
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4032,7 +4033,7 @@ const actions: Spell[] = [
     description: "$actiondesc_lifetime_down",
     sprite: "var(--sprite-action-lifetime-down)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,4,5,6,10",
     spawn_probability: "0.5,0.5,0.75,0.5,0.1",
     price: 90,
@@ -4042,7 +4043,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.lifetime_add     = c.lifetime_add - 42
       c.fire_rate_wait = c.fire_rate_wait - 15
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4053,7 +4054,7 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_pyramid",
     related_extra_entities: [ "data/entities/misc/nolla.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,4,5,6,10",
     spawn_probability: "0.2,0.2,0.5,0.5,1",
     price: 50,
@@ -4062,7 +4063,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/nolla.xml,"
       c.fire_rate_wait = c.fire_rate_wait - 15
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4072,15 +4073,15 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-slow-but-steady)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_maths",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,4,5,6,10",
     spawn_probability: "0.1,0.2,0.6,0.6,0.4",
     price: 50,
     mana: 0,
     action: function(c: GunActionState) {
-      setCurrentReloadTime(90)
+      setCurrentReloadTime(this.id, 90)
       shot_effects.recoil_knockback = shot_effects.recoil_knockback - 80.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4090,7 +4091,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-explosion-remove)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     related_extra_entities: [ "data/entities/misc/explosion_remove.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,4,5,6",
     spawn_probability: "0.2,0.6,0.7,0.2",
     price: 50,
@@ -4101,7 +4102,7 @@ const actions: Spell[] = [
       c.fire_rate_wait = c.fire_rate_wait - 15
       c.explosion_radius = c.explosion_radius - 30.0
       c.damage_explosion_add = c.damage_explosion_add - 0.8
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4111,7 +4112,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-explosion-tiny)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     related_extra_entities: [ "data/entities/misc/explosion_tiny.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,4,5,6",
     spawn_probability: "0.2,0.6,0.7,0.2",
     price: 160,
@@ -4122,7 +4123,7 @@ const actions: Spell[] = [
       c.fire_rate_wait = c.fire_rate_wait + 15
       c.explosion_radius = c.explosion_radius - 30.0
       c.damage_explosion_add = c.damage_explosion_add + 0.8
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4132,7 +4133,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-laser-emitter-wider)",
     sprite_unidentified: "data/ui_gfx/gun_actions/burn_trail_unidentified.png",
     related_extra_entities: [ "data/entities/misc/laser_emitter_wider.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.3,0.4",
     price: 40,
@@ -4140,7 +4141,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/laser_emitter_wider.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -4150,7 +4151,7 @@ const actions: Spell[] = [
     description: "$actiondesc_mana_reduce",
     sprite: "var(--sprite-action-mana-reduce)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.7,0.9,1,1,1,1",
     price: 250,
@@ -4159,7 +4160,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/mana_reduce.xml",
     action: function(c: GunActionState) {
       c.fire_rate_wait = c.fire_rate_wait + 10
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4169,7 +4170,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-blood-magic)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     related_extra_entities: [ "data/entities/particles/blood_sparks.xml" ],
-    type: "utility",
+    type: 'utility',
     spawn_level: "5,6,10",
     spawn_probability: "0.3,0.7,0.5",
     price: 150,
@@ -4178,8 +4179,8 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/particles/blood_sparks.xml,"
       c.fire_rate_wait = c.fire_rate_wait - 20
-      setCurrentReloadTime(current_reload_time - 20)
-      draw_actions( 1, true )
+      setCurrentReloadTime(this.id, current_reload_time - 20)
+      draw_actions(this.id,  1, true )
       
       let entity_id = GetUpdatedEntityID(this.id, )
       
@@ -4201,7 +4202,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-money-magic)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     related_extra_entities: [ "data/entities/particles/gold_sparks.xml" ],
-    type: "utility",
+    type: 'utility',
     spawn_level: "3,5,6,10",
     spawn_probability: "0.2,0.8,0.3,0.5",
     price: 200,
@@ -4241,7 +4242,7 @@ const actions: Spell[] = [
         }
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4251,7 +4252,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-blood-to-power)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     related_extra_entities: [ "data/entities/particles/blood_sparks.xml" ],
-    type: "utility",
+    type: 'utility',
     spawn_level: "2,5,6,10",
     spawn_probability: "0.2,0.8,0.2,0.5",
     price: 150,
@@ -4278,7 +4279,7 @@ const actions: Spell[] = [
         }
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4288,7 +4289,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-duplicate)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_mestari",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "5,6,10",
     spawn_probability: "0.1,0.2,1",
@@ -4298,16 +4299,16 @@ const actions: Spell[] = [
       let hand_count = hand.length
       
       for (const [i, v] of ipairs(hand, 'hand')) {
-        let rec = check_recursion( v, recursion_level )
+        let rec = check_recursion(this.id,  v, recursion_level )
         if (( v.id !== "DUPLICATE" ) && ( i < hand_count ) && ( rec > -1 ))  {
-          call_action("action", v, c,  rec )
+          call_action(this.id, "action", v, c,  rec )
         }
       }
       
       c.fire_rate_wait = c.fire_rate_wait + 20
-      setCurrentReloadTime(current_reload_time + 20)
+      setCurrentReloadTime(this.id, current_reload_time + 20)
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4317,7 +4318,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-quantum-split)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     related_extra_entities: [ "data/entities/misc/quantum_split.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.5,0.6,0.5,0.5,1",
     price: 200,
@@ -4325,7 +4326,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/quantum_split.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 5
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4334,7 +4335,7 @@ const actions: Spell[] = [
     description: "$actiondesc_gravity",
     sprite: "var(--sprite-action-gravity)",
     sprite_unidentified: "data/ui_gfx/gun_actions/w_shape_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.5,0.4,0.4,0.3,0.3",
     price: 50,
@@ -4342,7 +4343,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.gravity = c.gravity + 600.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4351,7 +4352,7 @@ const actions: Spell[] = [
     description: "$actiondesc_gravity_anti",
     sprite: "var(--sprite-action-gravity-anti)",
     sprite_unidentified: "data/ui_gfx/gun_actions/w_shape_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.5,0.4,0.4,0.3,0.3",
     price: 50,
@@ -4359,7 +4360,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.gravity = c.gravity - 600.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -4370,7 +4371,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-sinewave)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/sinewave.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,4,6",
     spawn_probability: "0.4,0.55,0.4",
     price: 10,
@@ -4386,7 +4387,7 @@ const actions: Spell[] = [
         c.speed_multiplier = 0
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4396,7 +4397,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-chaotic-arc)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/chaotic_arc.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,5",
     spawn_probability: "0.4,0.55,0.4",
     price: 10,
@@ -4412,7 +4413,7 @@ const actions: Spell[] = [
         c.speed_multiplier = 0
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4422,7 +4423,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-pingpong-path)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/pingpong_path.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,5",
     spawn_probability: "0.4,0.5,0.4",
     price: 20,
@@ -4431,7 +4432,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/pingpong_path.xml,"
       c.lifetime_add = c.lifetime_add + 25
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4441,7 +4442,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-avoiding-arc)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/avoiding_arc.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,4,6",
     spawn_probability: "0.5,0.4,0.4",
     price: 30,
@@ -4450,7 +4451,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/avoiding_arc.xml,"
       c.fire_rate_wait    = c.fire_rate_wait + 10
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4460,7 +4461,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-floating-arc)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/floating_arc.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,5",
     spawn_probability: "0.4,0.4,0.5",
     price: 30,
@@ -4469,7 +4470,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/floating_arc.xml,"
       c.fire_rate_wait    = c.fire_rate_wait + 10
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4479,7 +4480,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-fly-downwards)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/fly_downwards.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,5",
     spawn_probability: "0.3,0.45,0.3",
     price: 30,
@@ -4487,7 +4488,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/fly_downwards.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
       c.fire_rate_wait    = c.fire_rate_wait - 8
       c.speed_multiplier  = c.speed_multiplier * 1.2
     },
@@ -4499,7 +4500,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-fly-upwards)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/fly_upwards.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,4,6",
     spawn_probability: "0.3,0.45,0.3",
     price: 20,
@@ -4507,7 +4508,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/fly_upwards.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
       c.fire_rate_wait    = c.fire_rate_wait - 8
       c.speed_multiplier  = c.speed_multiplier * 1.2
     },
@@ -4519,7 +4520,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-horizontal-arc)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/horizontal_arc.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,5",
     spawn_probability: "0.4,0.4,0.4",
     price: 20,
@@ -4527,7 +4528,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/horizontal_arc.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
       c.damage_projectile_add = c.damage_projectile_add + 0.3
       c.fire_rate_wait    = c.fire_rate_wait - 6
     },
@@ -4539,7 +4540,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-line-arc)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/line_arc.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,5",
     spawn_probability: "0.3,0.4,0.5",
     price: 30,
@@ -4547,7 +4548,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/line_arc.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
       c.damage_projectile_add = c.damage_projectile_add + 0.2
       c.fire_rate_wait    = c.fire_rate_wait - 4
     },
@@ -4559,7 +4560,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-orbit-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/spiraling_shot.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.2,0.4,0.4,0.3",
     price: 30,
@@ -4567,7 +4568,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/spiraling_shot.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
       c.damage_projectile_add = c.damage_projectile_add + 0.1
       c.fire_rate_wait    = c.fire_rate_wait - 6
       c.lifetime_add     = c.lifetime_add + 25
@@ -4580,7 +4581,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-spiraling-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/orbit_shot.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.2,0.3,0.4,0.5",
     price: 30,
@@ -4588,7 +4589,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/orbit_shot.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
       c.damage_projectile_add = c.damage_projectile_add + 0.1
       c.fire_rate_wait    = c.fire_rate_wait - 6
       c.lifetime_add     = c.lifetime_add + 50
@@ -4601,7 +4602,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-phasing-arc)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/phasing_arc.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5",
     spawn_probability: "0.2,0.3,0.6,0.1",
     price: 170,
@@ -4609,7 +4610,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/phasing_arc.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
       c.fire_rate_wait    = c.fire_rate_wait - 12
       c.lifetime_add     = c.lifetime_add + 80
       c.speed_multiplier  = c.speed_multiplier * 0.33
@@ -4629,7 +4630,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-true-orbit)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/true_orbit.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.2,0.3,0.4",
     price: 40,
@@ -4637,7 +4638,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/true_orbit.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
       c.damage_projectile_add = c.damage_projectile_add + 0.1
       c.fire_rate_wait    = c.fire_rate_wait - 20
       c.lifetime_add     = c.lifetime_add + 80
@@ -4649,7 +4650,7 @@ const actions: Spell[] = [
     description: "$actiondesc_bounce",
     sprite: "var(--sprite-action-bounce)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bounce_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,6",
     spawn_probability: "1,1,0.4,0.2",
     price: 50,
@@ -4657,7 +4658,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.bounces = c.bounces + 10
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4666,7 +4667,7 @@ const actions: Spell[] = [
     description: "$actiondesc_remove_bounce",
     sprite: "var(--sprite-action-remove-bounce)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bounce_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5",
     spawn_probability: "0.2,0.2,1,1",
     price: 50,
@@ -4675,7 +4676,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/remove_bounce.xml,"
       c.bounces = 0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4685,7 +4686,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-homing)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/homing.xml", "data/entities/particles/tinyspark_white.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.1,0.4,0.4,0.4,0.4,0.4",
     price: 220,
@@ -4693,7 +4694,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/homing.xml,data/entities/particles/tinyspark_white.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4703,7 +4704,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-anti-homing)",
     sprite_unidentified: "data/ui_gfx/gun_actions/anti_homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/anti_homing.xml", "data/entities/particles/tinyspark_white.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.05,0.3,0.3,0.1,0.1,0.01",
     price: 110,
@@ -4712,7 +4713,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/anti_homing.xml,data/entities/particles/tinyspark_white.xml,"
       c.fire_rate_wait    = c.fire_rate_wait - 20
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4723,7 +4724,7 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     spawn_requires_flag: "card_unlocked_homing_wand",
     related_extra_entities: [ "data/entities/misc/homing_wand.xml", "data/entities/particles/tinyspark_white.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,4,5,6,10",
     spawn_probability: "0.00001,0.08,0.08,0.25,0.25,0.2",
     price: 500,
@@ -4731,7 +4732,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/homing_wand.xml,data/entities/particles/tinyspark_white.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4741,7 +4742,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-homing-short)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/homing_short.xml", "data/entities/particles/tinyspark_white_weak.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.4,0.8,1,0.4,0.3,0.1",
     price: 160,
@@ -4749,7 +4750,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/homing_short.xml,data/entities/particles/tinyspark_white_weak.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4759,7 +4760,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-homing-rotate)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/homing_rotate.xml", "data/entities/particles/tinyspark_white.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.2,0.4,0.6,0.4,0.4",
     price: 175,
@@ -4767,7 +4768,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/homing_rotate.xml,data/entities/particles/tinyspark_white.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4777,7 +4778,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-homing-shooter)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/homing_shooter.xml", "data/entities/particles/tinyspark_white.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,6",
     spawn_probability: "0.2,0.3,0.2,0.2",
     price: 100,
@@ -4785,7 +4786,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/homing_shooter.xml,data/entities/particles/tinyspark_white.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4795,14 +4796,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-autoaim)",
     sprite_unidentified: "data/ui_gfx/gun_actions/autoaim_unidentified.png",
     related_extra_entities: [ "data/entities/misc/autoaim.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.4,0.4,0.4,0.4,0.4",
     price: 150,
     mana: 25,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/autoaim.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4812,7 +4813,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-homing-accelerating)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/homing_accelerating.xml", "data/entities/particles/tinyspark_white_small.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.1,0.3,0.3,0.5",
     price: 180,
@@ -4820,7 +4821,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/homing_accelerating.xml,data/entities/particles/tinyspark_white_small.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4830,7 +4831,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-homing-cursor)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/homing_cursor.xml", "data/entities/particles/tinyspark_white.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.7,0.7,0.4,0.4,1",
     price: 175,
@@ -4838,7 +4839,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/homing_cursor.xml,data/entities/particles/tinyspark_white.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4848,7 +4849,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-homing-area)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/homing_area.xml", "data/entities/particles/tinyspark_white.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.2,0.4,0.6,0.7,0.4",
     price: 175,
@@ -4866,7 +4867,7 @@ const actions: Spell[] = [
         c.speed_multiplier = 0
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -4877,7 +4878,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-piercing-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/piercing_shot.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.4,0.5,0.6,0.6,0.4",
     price: 190,
@@ -4887,7 +4888,7 @@ const actions: Spell[] = [
       c.damage_projectile_add = c.damage_projectile_add - 0.6
       c.extra_entities = c.extra_entities + "data/entities/misc/piercing_shot.xml,"
       c.friendly_fire    = true
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4897,7 +4898,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-clipping-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/clipping_shot.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.2,0.3,0.6,0.4,0.6",
     price: 200,
@@ -4906,8 +4907,8 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/clipping_shot.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 50
-      setCurrentReloadTime(current_reload_time + 40)
-      draw_actions( 1, true )
+      setCurrentReloadTime(this.id, current_reload_time + 40)
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4917,7 +4918,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-damage)",
     sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
     related_extra_entities: [ "data/entities/particles/tinyspark_yellow.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.6,0.6,0.8,0.6,0.6",
     price: 140,
@@ -4930,7 +4931,7 @@ const actions: Spell[] = [
       c.fire_rate_wait    = c.fire_rate_wait + 5
       c.extra_entities    = c.extra_entities + "data/entities/particles/tinyspark_yellow.xml,"
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4941,7 +4942,7 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
     spawn_requires_flag: "card_unlocked_pyramid",
     related_extra_entities: [ "data/entities/particles/tinyspark_yellow.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,4,5",
     spawn_probability: "0.7,0.6,0.6",
     price: 200,
@@ -4959,7 +4960,7 @@ const actions: Spell[] = [
       c.fire_rate_wait    = c.fire_rate_wait + 5
       c.extra_entities    = c.extra_entities + "data/entities/particles/tinyspark_yellow.xml,"
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0 * multiplier
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4969,7 +4970,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bloodlust)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/particles/tinyspark_red.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,4,5,6",
     spawn_probability: "0.2,0.3,0.6,0.7,0.3",
     price: 160,
@@ -4983,7 +4984,7 @@ const actions: Spell[] = [
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 30.0
       c.spread_degrees = c.spread_degrees + 6
       c.extra_entities    = c.extra_entities + "data/entities/particles/tinyspark_red.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -4993,7 +4994,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-damage-forever)",
     sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
     related_extra_entities: [ "data/entities/particles/tinyspark_red.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6,10",
     spawn_probability: "0.2,0.3,0.6,0.5,0.2,0.2",
     price: 240,
@@ -5005,15 +5006,15 @@ const actions: Spell[] = [
       if ( mana > 50 )  {
         let manaforspell = mana - 50
         c.damage_projectile_add = c.damage_projectile_add + 0.025 * manaforspell
-        setMana(50)
+        setMana(this.id, 50)
       }
       
       c.gore_particles    = c.gore_particles + 15
       c.fire_rate_wait    = c.fire_rate_wait + 15
-      setCurrentReloadTime(current_reload_time + 10)
+      setCurrentReloadTime(this.id, current_reload_time + 10)
       c.extra_entities    = c.extra_entities + "data/entities/particles/tinyspark_red.xml,"
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5022,7 +5023,7 @@ const actions: Spell[] = [
     description: "$actiondesc_critical_hit",
     sprite: "var(--sprite-action-critical-hit)",
     sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.5,0.6,0.6,0.7,0.6",
     price: 140,
@@ -5031,7 +5032,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/critical_hit.xml",
     action: function(c: GunActionState) {
       c.damage_critical_chance = c.damage_critical_chance + 15
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5041,7 +5042,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-area-damage)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/area_damage.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.4,0.5,0.5,0.5,0.6",
     price: 140,
@@ -5049,7 +5050,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/area_damage.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5059,7 +5060,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-spells-to-power)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/spells_to_power.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6,10",
     spawn_probability: "0.3,0.3,0.5,0.5,0.5,0.1",
     price: 140,
@@ -5068,7 +5069,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/spells_to_power.xml,"
       c.fire_rate_wait    = c.fire_rate_wait + 40
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5078,7 +5079,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-essence-to-power)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/essence_to_power.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,6,10",
     spawn_probability: "0.2,0.5,0.5,0.5,0.1",
     price: 120,
@@ -5087,7 +5088,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/essence_to_power.xml,"
       c.fire_rate_wait    = c.fire_rate_wait + 20
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5097,7 +5098,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-zero-damage)",
     sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
     related_extra_entities: [ "data/entities/particles/tinyspark_white_small.xml", "data/entities/misc/zero_damage.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,4,5,10",
     spawn_probability: "0.3,0.3,0.6,0.3",
     price: 50,
@@ -5116,7 +5117,7 @@ const actions: Spell[] = [
       c.extra_entities    = c.extra_entities + "data/entities/particles/tinyspark_white_small.xml,data/entities/misc/zero_damage.xml,"
       shot_effects.recoil_knockback = shot_effects.recoil_knockback - 10.0
       c.lifetime_add     = c.lifetime_add + 280
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -5127,7 +5128,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-heavy-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/heavy_shot_unidentified.png",
     related_extra_entities: [ "data/entities/particles/heavy_shot.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.4,0.4,0.5",
     price: 150,
@@ -5148,7 +5149,7 @@ const actions: Spell[] = [
         c.speed_multiplier = 0
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5158,7 +5159,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-light-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/heavy_shot_unidentified.png",
     related_extra_entities: [ "data/entities/particles/light_shot.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.5,0.4",
     price: 60,
@@ -5183,7 +5184,7 @@ const actions: Spell[] = [
         c.speed_multiplier = 0
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -5193,7 +5194,7 @@ const actions: Spell[] = [
     description: "$actiondesc_knockback",
     sprite: "var(--sprite-action-knockback)",
     sprite_unidentified: "data/ui_gfx/gun_actions/knockback_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,5",
     spawn_probability: "0.7,0.6",
     price: 100,
@@ -5201,7 +5202,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.knockback_force = c.knockback_force + 5
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5210,7 +5211,7 @@ const actions: Spell[] = [
     description: "$actiondesc_recoil",
     sprite: "var(--sprite-action-recoil)",
     sprite_unidentified: "data/ui_gfx/gun_actions/recoil_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,4",
     spawn_probability: "0.6,0.7",
     price: 100,
@@ -5218,7 +5219,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 200.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5227,7 +5228,7 @@ const actions: Spell[] = [
     description: "$actiondesc_recoil_damper",
     sprite: "var(--sprite-action-recoil-damper)",
     sprite_unidentified: "data/ui_gfx/gun_actions/recoil_damper_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,6",
     spawn_probability: "0.6,0.7",
     price: 100,
@@ -5235,7 +5236,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       shot_effects.recoil_knockback = shot_effects.recoil_knockback - 200
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5244,7 +5245,7 @@ const actions: Spell[] = [
     description: "$actiondesc_speed",
     sprite: "var(--sprite-action-speed)",
     sprite_unidentified: "data/ui_gfx/gun_actions/speed_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3",
     spawn_probability: "1,0.5,0.5",
     price: 100,
@@ -5260,7 +5261,7 @@ const actions: Spell[] = [
         c.speed_multiplier = 0
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5270,7 +5271,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-accelerating-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/heavy_shot_unidentified.png",
     related_extra_entities: [ "data/entities/misc/accelerating_shot.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.5,0.4,1",
     price: 190,
@@ -5289,7 +5290,7 @@ const actions: Spell[] = [
         c.speed_multiplier = 0
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5299,7 +5300,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-decelerating-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/heavy_shot_unidentified.png",
     related_extra_entities: [ "data/entities/misc/decelerating_shot.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.4,0.1,0.7",
     price: 80,
@@ -5318,7 +5319,7 @@ const actions: Spell[] = [
         c.speed_multiplier = 0
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -5328,7 +5329,7 @@ const actions: Spell[] = [
     description: "$actiondesc_explosive_projectile",
     sprite: "var(--sprite-action-explosive-projectile)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "1,1,0.8",
     price: 120,
@@ -5348,7 +5349,7 @@ const actions: Spell[] = [
         c.speed_multiplier = 0
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5357,7 +5358,7 @@ const actions: Spell[] = [
     description: "$actiondesc_clustermod",
     sprite: "var(--sprite-action-clustermod)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3",
     spawn_probability: "0.5,1,0.6",
     price: 160,
@@ -5372,7 +5373,7 @@ const actions: Spell[] = [
       
       c.extra_entities = c.extra_entities + "data/entities/misc/clusterbomb.xml,"
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5382,7 +5383,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-water-to-poison)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
     related_extra_entities: [ "data/entities/misc/water_to_poison.xml", "data/entities/particles/tinyspark_purple.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.3,0.3",
     price: 80,
@@ -5391,7 +5392,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/water_to_poison.xml,data/entities/particles/tinyspark_purple.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 10
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5401,7 +5402,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-blood-to-acid)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
     related_extra_entities: [ "data/entities/misc/blood_to_acid.xml", "data/entities/particles/tinyspark_red.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.3,0.3",
     price: 80,
@@ -5410,7 +5411,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/blood_to_acid.xml,data/entities/particles/tinyspark_red.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 10
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5420,7 +5421,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-lava-to-blood)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
     related_extra_entities: [ "data/entities/misc/lava_to_blood.xml", "data/entities/particles/tinyspark_orange.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.3,0.3",
     price: 80,
@@ -5429,7 +5430,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/lava_to_blood.xml,data/entities/particles/tinyspark_orange.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 10
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5439,7 +5440,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-liquid-to-explosion)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
     related_extra_entities: [ "data/entities/misc/liquid_to_explosion.xml", "data/entities/particles/tinyspark_red.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.3,0.3",
     price: 120,
@@ -5448,7 +5449,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/liquid_to_explosion.xml,data/entities/particles/tinyspark_red.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 20
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5458,7 +5459,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-toxic-to-acid)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
     related_extra_entities: [ "data/entities/misc/toxic_to_acid.xml", "data/entities/particles/tinyspark_green.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.3,0.3",
     price: 120,
@@ -5467,7 +5468,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/toxic_to_acid.xml,data/entities/particles/tinyspark_green.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 10
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5477,7 +5478,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-static-to-sand)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
     related_extra_entities: [ "data/entities/misc/static_to_sand.xml", "data/entities/particles/tinyspark_yellow.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,10",
     spawn_probability: "0.3,0.3,0.3,0.2",
     price: 140,
@@ -5486,7 +5487,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/static_to_sand.xml,data/entities/particles/tinyspark_yellow.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 60
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5496,7 +5497,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-transmutation)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
     related_extra_entities: [ "data/entities/misc/transmutation.xml", "data/entities/particles/tinyspark_purple_bright.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6,10",
     spawn_probability: "0.3,0.3,0.3,0.3,0.3,0.2",
     price: 180,
@@ -5505,7 +5506,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/transmutation.xml,data/entities/particles/tinyspark_purple_bright.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 20
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5515,7 +5516,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-random-explosion)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
     related_extra_entities: [ "data/entities/misc/random_explosion.xml", "data/entities/particles/tinyspark_purple_bright.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,5,6",
     spawn_probability: "0.3,0.6,1",
     price: 240,
@@ -5524,7 +5525,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/random_explosion.xml,data/entities/particles/tinyspark_purple_bright.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 40
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5534,7 +5535,7 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_necromancy",
     sprite: "var(--sprite-action-necromancy)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5",
     spawn_probability: "0.4,0.6,0.6,0.3",
     price: 80,
@@ -5543,7 +5544,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_necromancy.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 10
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5552,14 +5553,14 @@ const actions: Spell[] = [
     description: "$actiondesc_light",
     sprite: "var(--sprite-action-light)",
     related_extra_entities: [ "data/entities/misc/light.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "0,1,2,3,4",
     spawn_probability: "1,0.8,0.6,0.4,0.2",
     price: 20,
     mana: 1,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/light.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -5569,7 +5570,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-explosion)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosion_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/explosion.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,2,4,5",
     spawn_probability: "0.5,1,1,0.7",
     price: 160,
@@ -5578,7 +5579,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/explosion.xml",
     is_dangerous_blast: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/explosion.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/explosion.xml")
       c.fire_rate_wait = c.fire_rate_wait + 3
       c.screenshake = c.screenshake + 2.5
     },
@@ -5590,7 +5591,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-explosion-light)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosion_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/explosion_light.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "2,3,5,6",
     spawn_probability: "0.5,1,0.7,0.5",
     price: 160,
@@ -5599,7 +5600,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/explosion_light.xml",
     is_dangerous_blast: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/explosion_light.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/explosion_light.xml")
       c.fire_rate_wait = c.fire_rate_wait + 3
       c.screenshake = c.screenshake + 2.5
     },
@@ -5611,7 +5612,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-fire-blast)",
     sprite_unidentified: "data/ui_gfx/gun_actions/fire_blast_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/fireblast.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,3,5",
     spawn_probability: "0.5,0.7,0.6,0.4",
     price: 120,
@@ -5620,7 +5621,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/fire_blast.xml",
     is_dangerous_blast: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/fireblast.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/fireblast.xml")
       c.fire_rate_wait = c.fire_rate_wait + 3
       c.screenshake = c.screenshake + 0.5
     },
@@ -5632,7 +5633,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-poison-blast)",
     sprite_unidentified: "data/ui_gfx/gun_actions/poison_blast_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/poison_blast.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "1,2,4,6",
     spawn_probability: "0.5,0.8,0.4,0.3",
     price: 140,
@@ -5641,7 +5642,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/poison_blast.xml",
     is_dangerous_blast: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/poison_blast.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/poison_blast.xml")
       c.fire_rate_wait = c.fire_rate_wait + 3
       c.screenshake = c.screenshake + 0.5
     },
@@ -5653,7 +5654,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-alcohol-blast)",
     sprite_unidentified: "data/ui_gfx/gun_actions/poison_blast_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/alcohol_blast.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "1,2,4,6",
     spawn_probability: "0.5,0.6,0.65,0.3",
     price: 140,
@@ -5662,7 +5663,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/alcohol_blast.xml",
     is_dangerous_blast: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/alcohol_blast.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/alcohol_blast.xml")
       c.fire_rate_wait = c.fire_rate_wait + 3
       c.screenshake = c.screenshake + 0.5
     },
@@ -5674,7 +5675,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-thunder-blast)",
     sprite_unidentified: "data/ui_gfx/gun_actions/thunder_blast_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/thunder_blast.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "1,3,5,6,10",
     spawn_probability: "0.5,0.6,0.7,0.5,0.1",
     price: 180,
@@ -5683,7 +5684,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/thunder_blast.xml",
     is_dangerous_blast: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/thunder_blast.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/thunder_blast.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
       c.screenshake = c.screenshake + 3.0
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 30.0
@@ -5697,14 +5698,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-berserk-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/berserk_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/berserk_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.6,0.3",
     price: 200,
     mana: 30,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/berserk_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/berserk_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5715,14 +5716,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-polymorph-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/polymorph_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/polymorph_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,3,4,5,6",
     spawn_probability: "0.3,0.3,0.3,0.8,0.8,0.3,0.3",
     price: 200,
     mana: 50,
     max_uses: 5,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/polymorph_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/polymorph_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5733,14 +5734,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-chaos-polymorph-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/chaos_polymorph_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.3,0.3,0.5,0.6,0.3,0.3",
     price: 200,
     mana: 20,
     max_uses: 10,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/chaos_polymorph_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/chaos_polymorph_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5751,14 +5752,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-electrocution-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electrocution_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/electrocution_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "1,3,5,6",
     spawn_probability: "0.3,0.6,0.8,0.3",
     price: 200,
     mana: 60,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/electrocution_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/electrocution_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5769,14 +5770,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-freeze-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/freeze_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/freeze_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,2,4,5",
     spawn_probability: "0.3,0.6,0.7,0.3",
     price: 200,
     mana: 50,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/freeze_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/freeze_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5787,7 +5788,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-regeneration-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/regeneration_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/regeneration_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.3,0.3,0.4,0.3",
     price: 250,
@@ -5795,7 +5796,7 @@ const actions: Spell[] = [
     max_uses: 2,
     never_unlimited: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/regeneration_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/regeneration_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5806,14 +5807,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-teleportation-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/teleportation_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/teleportation_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,3,4,5",
     spawn_probability: "0.3,0.6,0.3,0.3,0.6,0.3",
     price: 150,
     mana: 30,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/teleportation_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/teleportation_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5824,14 +5825,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-levitation-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/levitation_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/levitation_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.3,0.6,0.6,0.3",
     price: 120,
     mana: 10,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/levitation_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/levitation_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5843,14 +5844,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-shield-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/shield_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/shield_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.3,0.3,0.4,0.5,0.3",
     price: 160,
     mana: 20,
     max_uses: 10,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/shield_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/shield_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5861,14 +5862,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-projectile-transmutation-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/projectile_transmutation_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.3,0.4,0.4,0.3,0.3",
     price: 250,
     mana: 120,
     max_uses: 6,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/projectile_transmutation_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/projectile_transmutation_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5879,14 +5880,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-projectile-thunder-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/projectile_thunder_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "3,4,5,6",
     spawn_probability: "0.3,0.3,0.5,0.3",
     price: 300,
     mana: 140,
     max_uses: 6,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/projectile_thunder_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/projectile_thunder_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5897,14 +5898,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-projectile-gravity-field)",
     sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/projectile_gravity_field.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "2,5,6",
     spawn_probability: "0.6,0.3,0.3",
     price: 250,
     mana: 120,
     max_uses: 6,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/projectile_gravity_field.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/projectile_gravity_field.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5915,14 +5916,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-vacuum-powder)",
     sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/vacuum_powder.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "2,3,5,6",
     spawn_probability: "0.3,0.7,0.3,0.4",
     price: 150,
     mana: 40,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/vacuum_powder.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/vacuum_powder.xml")
       c.fire_rate_wait = c.fire_rate_wait + 10
     },
   },
@@ -5933,14 +5934,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-vacuum-liquid)",
     sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/vacuum_liquid.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "2,4,5,6",
     spawn_probability: "0.3,0.7,0.4,0.3",
     price: 150,
     mana: 40,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/vacuum_liquid.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/vacuum_liquid.xml")
       c.fire_rate_wait = c.fire_rate_wait + 10
     },
   },
@@ -5951,14 +5952,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-vacuum-entities)",
     sprite_unidentified: "data/ui_gfx/gun_actions/chaos_polymorph_field_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/vacuum_entities.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "2,3,5,6",
     spawn_probability: "0.3,0.7,0.3,0.4",
     price: 200,
     mana: 50,
     max_uses: 20,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/vacuum_entities.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/vacuum_entities.xml")
       c.fire_rate_wait = c.fire_rate_wait + 10
     },
   },
@@ -5970,14 +5971,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-sea-lava)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sea_lava_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/sea_lava.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "0,4,5,6",
     spawn_probability: "0.2,0.2,0.5,0.6",
     price: 350,
     mana: 140,
     max_uses: 3,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/sea_lava.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/sea_lava.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -5988,14 +5989,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-sea-alcohol)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sea_lava_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/sea_alcohol.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "0,4,5,6",
     spawn_probability: "0.3,0.5,0.6,0.3",
     price: 350,
     mana: 140,
     max_uses: 3,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/sea_alcohol.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/sea_alcohol.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -6006,14 +6007,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-sea-oil)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sea_oil_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/sea_oil.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "0,4,5,6",
     spawn_probability: "0.3,0.5,0.6,0.3",
     price: 350,
     mana: 140,
     max_uses: 3,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/sea_oil.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/sea_oil.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -6024,14 +6025,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-sea-water)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sea_water_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/sea_water.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "0,4,5,6",
     spawn_probability: "0.5,0.4,0.3,0.2",
     price: 350,
     mana: 140,
     max_uses: 3,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/sea_water.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/sea_water.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -6042,14 +6043,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-sea-swamp)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sea_swamp_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/sea_swamp.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "0",
     spawn_probability: "0",
     price: 350,
     mana: 140,
     max_uses: 3,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/sea_swamp.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/sea_swamp.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -6060,14 +6061,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-sea-acid)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sea_acid_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/sea_acid.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "0,4,5,6",
     spawn_probability: "0.2,0.2,0.4,0.5",
     price: 350,
     mana: 140,
     max_uses: 3,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/sea_acid.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/sea_acid.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -6078,14 +6079,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-sea-acid-gas)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sea_acid_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/sea_acid_gas.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "0,4,5,6",
     spawn_probability: "0.3,0.4,0.4,0.3",
     price: 200,
     mana: 140,
     max_uses: 3,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/sea_acid_gas.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/sea_acid_gas.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -6096,7 +6097,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-sea-mimic)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sea_acid_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/sea_mimic.xml"],
-    type: "material",
+    type: 'material',
     spawn_level: "0,4,5,6,10",
     spawn_probability: "0.05,0.05,0.1,0.1,0.2",
     spawn_requires_flag: "card_unlocked_sea_mimic",
@@ -6105,7 +6106,7 @@ const actions: Spell[] = [
     max_uses: 2,
     never_unlimited: true,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/sea_mimic.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/sea_mimic.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -6116,14 +6117,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-cloud-water)",
     sprite_unidentified: "data/ui_gfx/gun_actions/cloud_water_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/cloud_water.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,3,4,5",
     spawn_probability: "0.2,0.3,0.4,0.4,0.3,0.2",
     price: 140,
     mana: 30,
     max_uses: 10,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/cloud_water.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/cloud_water.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -6134,14 +6135,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-cloud-oil)",
     sprite_unidentified: "data/ui_gfx/gun_actions/cloud_water_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/cloud_oil.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,3,4,5",
     spawn_probability: "0.2,0.3,0.4,0.4,0.3,0.2",
     price: 100,
     mana: 20,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/cloud_oil.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/cloud_oil.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -6152,14 +6153,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-cloud-blood)",
     sprite_unidentified: "data/ui_gfx/gun_actions/cloud_water_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/cloud_blood.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,3,4,5",
     spawn_probability: "0.2,0.3,0.3,0.4,0.3,0.2",
     price: 200,
     mana: 60,
     max_uses: 3,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/cloud_blood.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/cloud_blood.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
     },
   },
@@ -6170,14 +6171,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-cloud-acid)",
     sprite_unidentified: "data/ui_gfx/gun_actions/cloud_water_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/cloud_acid.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,3,4,5",
     spawn_probability: "0.2,0.2,0.4,0.2,0.2,0.5",
     price: 180,
     mana: 90,
     max_uses: 8,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/cloud_acid.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/cloud_acid.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -6189,14 +6190,14 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_cloud_thunder",
     sprite_unidentified: "data/ui_gfx/gun_actions/cloud_water_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/cloud_thunder.xml"],
-    type: "static",
+    type: 'static',
     spawn_level: "0,1,2,3,4,5",
     spawn_probability: "0.3,0.3,0.2,0.3,0.4,0.5",
     price: 190,
     mana: 90,
     max_uses: 5,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/cloud_thunder.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/cloud_thunder.xml")
       c.fire_rate_wait = c.fire_rate_wait + 30
     },
   },
@@ -6207,7 +6208,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-electric-charge)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/particles/electricity.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,4,5",
     spawn_probability: "1,1,0.8,0.7",
     price: 150,
@@ -6218,7 +6219,7 @@ const actions: Spell[] = [
       c.lightning_count = c.lightning_count + 1
       c.damage_electricity_add = c.damage_electricity_add + 0.1
       c.extra_entities = c.extra_entities + "data/entities/particles/electricity.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6228,7 +6229,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-matter-eater)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/matter_eater.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,4,5,10",
     spawn_probability: "0.1,0.9,0.1,0.2,0.2",
     price: 280,
@@ -6237,7 +6238,7 @@ const actions: Spell[] = [
     never_unlimited: true,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/matter_eater.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6247,7 +6248,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-freeze)",
     sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
     related_extra_entities: [ "data/entities/particles/freeze_charge.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,4,5",
     spawn_probability: "1,1,0.9,0.8",
     price: 140,
@@ -6258,7 +6259,7 @@ const actions: Spell[] = [
       c.damage_ice_add = c.damage_ice_add + 0.2
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_frozen.xml,"
       c.extra_entities = c.extra_entities + "data/entities/particles/freeze_charge.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6268,7 +6269,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-hitfx-burning-critical-hit)",
     sprite_unidentified: "data/entities/misc/hitfx_burning_critical_hit.xml",
     related_extra_entities: [ "data/entities/particles/freeze_charge.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,4,5",
     spawn_probability: "0.2,0.4,0.2,0.2",
     price: 70,
@@ -6276,7 +6277,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_burning_critical_hit.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6286,7 +6287,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-hitfx-critical-water)",
     sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_critical_water.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,4,5",
     spawn_probability: "0.2,0.2,0.4,0.2",
     price: 70,
@@ -6294,7 +6295,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_critical_water.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6304,7 +6305,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-hitfx-critical-oil)",
     sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_critical_oil.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,4,5",
     spawn_probability: "0.2,0.4,0.2,0.2",
     price: 70,
@@ -6312,7 +6313,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_critical_oil.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6322,7 +6323,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-hitfx-critical-blood)",
     sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_critical_blood.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,4,5",
     spawn_probability: "0.2,0.2,0.2,0.4",
     price: 70,
@@ -6330,7 +6331,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_critical_blood.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6340,7 +6341,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-hitfx-toxic-charm)",
     sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_toxic_charm.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,4,5",
     spawn_probability: "0.2,0.2,0.3,0.2",
     price: 150,
@@ -6348,7 +6349,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_toxic_charm.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6358,7 +6359,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-hitfx-explosion-slime)",
     sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_explode_slime.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,4,5",
     spawn_probability: "0.2,0.3,0.2,0.2",
     price: 140,
@@ -6366,7 +6367,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_explode_slime.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6376,7 +6377,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-hitfx-explosion-slime-giga)",
     sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_explode_slime_giga.xml", "data/entities/particles/tinyspark_purple.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,4,5",
     spawn_probability: "0.1,0.1,0.3,0.1",
     price: 300,
@@ -6384,7 +6385,7 @@ const actions: Spell[] = [
     max_uses: 20,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_explode_slime_giga.xml,data/entities/particles/tinyspark_purple.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6394,7 +6395,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-hitfx-explosion-alcohol)",
     sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_explode_alcohol.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,4,5",
     spawn_probability: "0.3,0.2,0.2,0.2",
     price: 140,
@@ -6402,7 +6403,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_explode_alcohol.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6412,7 +6413,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-hitfx-explosion-alcohol-giga)",
     sprite_unidentified: "data/ui_gfx/gun_actions/freeze_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_explode_alcohol_giga.xml", "data/entities/particles/tinyspark_orange.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,4,5",
     spawn_probability: "0.1,0.1,0.1,0.3",
     price: 300,
@@ -6420,7 +6421,7 @@ const actions: Spell[] = [
     max_uses: 20,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_explode_alcohol_giga.xml,data/entities/particles/tinyspark_orange.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6429,14 +6430,14 @@ const actions: Spell[] = [
     description: "$actiondesc_petrify_a",
     sprite: "var(--sprite-action-hitfx-petrify)",
     sprite_unidentified: "data/ui_gfx/gun_actions/explosive_projectile_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,5,6",
     spawn_probability: "0.2,0.3,0.2,0.3",
     price: 140,
     mana: 10,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_petrify.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -6447,7 +6448,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-rocket-downwards)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/rocket_downwards.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.2,0.5,0.7,0.7",
     price: 200,
@@ -6455,7 +6456,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/rocket_downwards.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 25
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6465,7 +6466,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-rocket-octagon)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/rocket_octagon.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.5,0.6,0.3",
     price: 200,
@@ -6473,7 +6474,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/rocket_octagon.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 20
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6483,7 +6484,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-fizzle)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/fizzle.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,4,5",
     spawn_probability: "0.4,0.3,0.1",
     price: 0,
@@ -6500,7 +6501,7 @@ const actions: Spell[] = [
         c.speed_multiplier = 0
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6510,7 +6511,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bounce-explosion)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/bounce_explosion.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5",
     spawn_probability: "0.2,0.6,0.8,0.8",
     price: 180,
@@ -6521,7 +6522,7 @@ const actions: Spell[] = [
       c.bounces = c.bounces + 1
       c.fire_rate_wait = c.fire_rate_wait + 25
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 20.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6531,7 +6532,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bounce-spark)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/bounce_spark.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.2,0.6,0.6,0.6",
     price: 120,
@@ -6542,7 +6543,7 @@ const actions: Spell[] = [
       c.bounces = c.bounces + 1
       c.fire_rate_wait = c.fire_rate_wait + 8
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 5.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6552,7 +6553,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bounce-laser)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/bounce_laser.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,4,5",
     spawn_probability: "0.4,0.8,0.4",
     price: 180,
@@ -6563,7 +6564,7 @@ const actions: Spell[] = [
       c.bounces = c.bounces + 1
       c.fire_rate_wait = c.fire_rate_wait + 12
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 5.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6573,7 +6574,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bounce-laser-emitter)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/bounce_laser_emitter.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,4,5",
     spawn_probability: "0.4,0.8,0.4",
     price: 180,
@@ -6584,7 +6585,7 @@ const actions: Spell[] = [
       c.bounces = c.bounces + 1
       c.fire_rate_wait = c.fire_rate_wait + 12
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 5.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6594,7 +6595,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bounce-larpa)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/bounce_larpa.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "4,5,6",
     spawn_probability: "0.4,0.6,0.4",
     price: 250,
@@ -6605,7 +6606,7 @@ const actions: Spell[] = [
       c.bounces = c.bounces + 1
       c.fire_rate_wait = c.fire_rate_wait + 32
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6615,7 +6616,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bounce-small-explosion)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/bounce_small_explosion.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "0,1,2",
     spawn_probability: "0.5,0.3,0.3",
     price: 100,
@@ -6626,7 +6627,7 @@ const actions: Spell[] = [
       c.bounces = c.bounces + 1
       c.fire_rate_wait = c.fire_rate_wait + 9
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6636,7 +6637,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bounce-lightning)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/bounce_lightning.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,3,5",
     spawn_probability: "0.1,0.3,0.6",
     price: 180,
@@ -6647,7 +6648,7 @@ const actions: Spell[] = [
       c.bounces = c.bounces + 1
       c.fire_rate_wait = c.fire_rate_wait + 25
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6657,7 +6658,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-bounce-hole)",
     sprite_unidentified: "data/ui_gfx/gun_actions/sinewave_unidentified.png",
     related_extra_entities: [ "data/entities/misc/bounce_hole.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,4,6,10",
     spawn_probability: "0.1,0.4,0.4,0.1",
     price: 220,
@@ -6669,7 +6670,7 @@ const actions: Spell[] = [
       c.bounces = c.bounces + 1
       c.fire_rate_wait = c.fire_rate_wait + 40
       shot_effects.recoil_knockback = shot_effects.recoil_knockback + 10.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6679,7 +6680,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-fireball-ray)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/fireball_ray.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,4,5",
     spawn_probability: "0.6,0.6,0.4,0.4",
     price: 150,
@@ -6687,7 +6688,7 @@ const actions: Spell[] = [
     max_uses: 16,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/fireball_ray.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6697,7 +6698,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-lightning-ray)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/lightning_ray.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0,0.2,0.4,0.4,0.4",
     price: 180,
@@ -6706,7 +6707,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/electric_charge.xml",
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/lightning_ray.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6716,7 +6717,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-tentacle-ray)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/tentacle_ray.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.1,0,0.4,0.4,0.4",
     price: 150,
@@ -6724,7 +6725,7 @@ const actions: Spell[] = [
     max_uses: 16,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/tentacle_ray.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6734,7 +6735,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-laser-emitter-ray)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/laser_emitter_ray.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0,0.1,0.4,0.4,0.4",
     price: 150,
@@ -6742,7 +6743,7 @@ const actions: Spell[] = [
     max_uses: 16,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/laser_emitter_ray.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6752,7 +6753,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-fireball-ray-line)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/fireball_ray_line.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.6,0.4,0.4,0.4,1",
     price: 120,
@@ -6760,7 +6761,7 @@ const actions: Spell[] = [
     max_uses: 20,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/fireball_ray_line.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6770,7 +6771,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-fireball-ray-enemy)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_fireball_ray_enemy.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,4,5",
     spawn_probability: "0.5,0.6,0.4,0.3",
     price: 100,
@@ -6778,7 +6779,7 @@ const actions: Spell[] = [
     max_uses: 20,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_fireball_ray_enemy.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6788,7 +6789,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-lightning-ray-enemy)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_lightning_ray_enemy.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0,0.2,0.4,0.4,0.5",
     price: 150,
@@ -6797,7 +6798,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/electric_charge.xml",
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_lightning_ray_enemy.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6807,7 +6808,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-tentacle-ray-enemy)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_tentacle_ray_enemy.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0,0.1,0.4,0.5,0.4",
     price: 150,
@@ -6815,7 +6816,7 @@ const actions: Spell[] = [
     max_uses: 20,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_tentacle_ray_enemy.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6825,7 +6826,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-gravity-field-enemy)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_gravity_field_enemy.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,4,5",
     spawn_probability: "0.5,0.6,0.4,0.4",
     price: 250,
@@ -6833,7 +6834,7 @@ const actions: Spell[] = [
     max_uses: 20,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_gravity_field_enemy.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6843,14 +6844,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-curse)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_curse.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,5,10",
     spawn_probability: "0.6,0.7,0.4,0.1",
     price: 140,
     mana: 30,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_curse.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6860,14 +6861,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-curse-wither-projectile)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_projectile.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,4,5,6,10",
     spawn_probability: "0.2,0.4,0.7,0.7,0.1",
     price: 100,
     mana: 50,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_curse_wither_projectile.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6877,14 +6878,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-curse-wither-explosion)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_explosion.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,10",
     spawn_probability: "0.2,0.4,0.7,0.7,0.1",
     price: 100,
     mana: 50,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_curse_wither_explosion.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6894,14 +6895,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-curse-wither-melee)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_melee.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,4,5,6,10",
     spawn_probability: "0.2,0.4,0.7,0.7,0.1",
     price: 100,
     mana: 50,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_curse_wither_melee.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6911,14 +6912,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-curse-wither-electricity)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/hitfx_curse_wither_electricity.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,4,5,6,10",
     spawn_probability: "0.2,0.4,0.7,0.7,0.1",
     price: 100,
     mana: 50,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/hitfx_curse_wither_electricity.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6929,14 +6930,14 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/orbit_discs.xml" ],
     spawn_requires_flag: "card_unlocked_dragon",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,4,5",
     spawn_probability: "0.3,0.65,0.4,0.3",
     price: 200,
     mana: 70,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/orbit_discs.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6947,14 +6948,14 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/orbit_fireballs.xml" ],
     spawn_requires_flag: "card_unlocked_dragon",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "0,1,2,4,5",
     spawn_probability: "0.2,0.3,0.7,0.4,0.2",
     price: 140,
     mana: 40,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/orbit_fireballs.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6965,7 +6966,7 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/orbit_nukes.xml" ],
     spawn_requires_flag: "card_unlocked_dragon",
-    type: "modifier",
+    type: 'modifier',
     ai_never_uses: true,
     spawn_level: "2,4,5,6,10",
     spawn_probability: "0.1,0.2,0.1,0.2,1",
@@ -6974,7 +6975,7 @@ const actions: Spell[] = [
     max_uses: 3,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/orbit_nukes.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -6985,14 +6986,14 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/orbit_lasers.xml" ],
     spawn_requires_flag: "card_unlocked_dragon",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,4,5,10",
     spawn_probability: "0.2,0.7,0.4,0.3,0.2",
     price: 200,
     mana: 100,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/orbit_lasers.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7003,14 +7004,14 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/orbit_larpa.xml" ],
     spawn_requires_flag: "card_unlocked_dragon",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,4,6,10",
     spawn_probability: "0.2,0.2,0.8,0.2",
     price: 240,
     mana: 90,
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/orbit_larpa.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7020,7 +7021,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-chain-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/chain_shot.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,4,5",
     spawn_probability: "0.4,0.6,0.8",
     price: 240,
@@ -7035,7 +7036,7 @@ const actions: Spell[] = [
         c.explosion_radius = 0
       }
       c.spread_degrees = c.spread_degrees + 10.0
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -7048,7 +7049,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-arc-electric)",
     sprite_unidentified: "data/ui_gfx/gun_actions/arc_electric_unidentified.png",
     related_extra_entities: [ "data/entities/misc/arc_electric.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.4,0.4,0.4,0.4,0.8",
     price: 170,
@@ -7057,7 +7058,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/arc_electric.xml",
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/arc_electric.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7067,7 +7068,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-arc-fire)",
     sprite_unidentified: "data/ui_gfx/gun_actions/arc_fire_unidentified.png",
     related_extra_entities: [ "data/entities/misc/arc_fire.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.4,0.2,0.2,0.5,0.2",
     price: 160,
@@ -7076,7 +7077,7 @@ const actions: Spell[] = [
     custom_xml_file: "data/entities/misc/custom_cards/arc_fire.xml",
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/arc_fire.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7086,7 +7087,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-arc-gunpowder)",
     sprite_unidentified: "data/ui_gfx/gun_actions/arc_fire_unidentified.png",
     related_extra_entities: [ "data/entities/misc/arc_gunpowder.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.4,0.4,0.2,0.4,0.2",
     price: 160,
@@ -7095,7 +7096,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/arc_gunpowder.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7105,7 +7106,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-arc-poison)",
     sprite_unidentified: "data/ui_gfx/gun_actions/arc_fire_unidentified.png",
     related_extra_entities: [ "data/entities/misc/arc_poison.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.4,0.2,0.4,0.2,0.4",
     price: 160,
@@ -7114,7 +7115,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/arc_poison.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7124,7 +7125,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-crumbling-earth-projectile)",
     sprite_unidentified: "data/ui_gfx/gun_actions/arc_fire_unidentified.png",
     related_extra_entities: [ "data/entities/misc/crumbling_earth_projectile.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.2,0.3,0.4,0.4,0.3",
     price: 200,
@@ -7133,7 +7134,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.extra_entities = c.extra_entities + "data/entities/misc/crumbling_earth_projectile.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -7144,7 +7145,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-x-ray)",
     sprite_unidentified: "data/ui_gfx/gun_actions/x_ray_unidentified.png",
     related_projectiles: ["data/entities/projectiles/deck/xray.xml"],
-    type: "utility",
+    type: 'utility',
     spawn_level: "0,1,2,3,4,5,6",
     spawn_probability: "0.8,1,1,0.7,0.5,0.3,0.2",
     price: 230,
@@ -7152,7 +7153,7 @@ const actions: Spell[] = [
     mana: 100,
     custom_xml_file: "data/entities/misc/custom_cards/xray.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/xray.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/xray.xml")
     },
   },
   
@@ -7162,7 +7163,7 @@ const actions: Spell[] = [
     description: "$actiondesc_unstable_gunpowder",
     sprite: "var(--sprite-action-unstable-gunpowder)",
     sprite_unidentified: "data/ui_gfx/gun_actions/unstable_gunpowder_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.4,0.4",
     price: 140,
@@ -7173,7 +7174,7 @@ const actions: Spell[] = [
       c.material = "gunpowder_unstable"
       c.material_amount = c.material_amount + 10
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7182,7 +7183,7 @@ const actions: Spell[] = [
     description: "$actiondesc_acid_trail",
     sprite: "var(--sprite-action-acid-trail)",
     sprite_unidentified: "data/ui_gfx/gun_actions/acid_trail_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5",
     spawn_probability: "0.3,0.2,0.3,0.3,0.4",
     price: 160,
@@ -7192,7 +7193,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.trail_material = c.trail_material + "acid,"
       c.trail_material_amount = c.trail_material_amount + 5
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7201,7 +7202,7 @@ const actions: Spell[] = [
     description: "$actiondesc_poison_trail",
     sprite: "var(--sprite-action-poison-trail)",
     sprite_unidentified: "data/ui_gfx/gun_actions/poison_trail_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.3,0.3",
     price: 160,
@@ -7212,7 +7213,7 @@ const actions: Spell[] = [
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_poison.xml,"
       c.trail_material = c.trail_material + "poison,"
       c.trail_material_amount = c.trail_material_amount + 9
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7221,7 +7222,7 @@ const actions: Spell[] = [
     description: "$actiondesc_oil_trail",
     sprite: "var(--sprite-action-oil-trail)",
     sprite_unidentified: "data/ui_gfx/gun_actions/oil_trail_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.3,0.3",
     price: 160,
@@ -7232,7 +7233,7 @@ const actions: Spell[] = [
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_oiled.xml,"
       c.trail_material = c.trail_material + "oil,"
       c.trail_material_amount = c.trail_material_amount + 20
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7241,7 +7242,7 @@ const actions: Spell[] = [
     description: "$actiondesc_water_trail",
     sprite: "var(--sprite-action-water-trail)",
     sprite_unidentified: "data/ui_gfx/gun_actions/oil_trail_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4",
     spawn_probability: "0.3,0.3,0.3,0.3",
     price: 160,
@@ -7252,7 +7253,7 @@ const actions: Spell[] = [
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_wet.xml,"
       c.trail_material = c.trail_material + "water,"
       c.trail_material_amount = c.trail_material_amount + 20
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -7267,7 +7268,7 @@ const actions: Spell[] = [
     description: "$actiondesc_gunpowder_trail",
     sprite: "var(--sprite-action-gunpowder-trail)",
     sprite_unidentified: "data/ui_gfx/gun_actions/oil_trail_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.3,0.3,0.3",
     price: 160,
@@ -7277,7 +7278,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.trail_material = c.trail_material + "gunpowder,"
       c.trail_material_amount = c.trail_material_amount + 20
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7286,7 +7287,7 @@ const actions: Spell[] = [
     description: "$actiondesc_fire_trail",
     sprite: "var(--sprite-action-fire-trail)",
     sprite_unidentified: "data/ui_gfx/gun_actions/fire_trail_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "0,1,2,3,4",
     spawn_probability: "0.4,0.5,0.3,0.3,0.2",
     price: 130,
@@ -7297,7 +7298,7 @@ const actions: Spell[] = [
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_on_fire.xml,"
       c.trail_material = c.trail_material + "fire,"
       c.trail_material_amount = c.trail_material_amount + 10
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7307,7 +7308,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-burn-trail)",
     sprite_unidentified: "data/ui_gfx/gun_actions/burn_trail_unidentified.png",
     related_extra_entities: [ "data/entities/misc/burn.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "0,1,2",
     spawn_probability: "0.4,0.3,0.3",
     price: 100,
@@ -7317,7 +7318,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_apply_on_fire.xml,"
       c.extra_entities = c.extra_entities + "data/entities/misc/burn.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7326,7 +7327,7 @@ const actions: Spell[] = [
     description: "$actiondesc_torch",
     sprite: "var(--sprite-action-torch)",
     sprite_unidentified: "data/ui_gfx/gun_actions/torch_unidentified.png",
-    type: "passive",
+    type: 'passive',
     spawn_level: "0,1,2",
     spawn_probability: "1,0.6,0.5",
     price: 100,
@@ -7334,7 +7335,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/torch.xml",
     action: function(c: GunActionState) {
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7343,7 +7344,7 @@ const actions: Spell[] = [
     description: "$actiondesc_torch_electric",
     sprite: "var(--sprite-action-torch-electric)",
     sprite_unidentified: "data/ui_gfx/gun_actions/torch_unidentified.png",
-    type: "passive",
+    type: 'passive',
     spawn_level: "0,1,2",
     spawn_probability: "0.8,0.6,0.4",
     price: 150,
@@ -7351,7 +7352,7 @@ const actions: Spell[] = [
     
     custom_xml_file: "data/entities/misc/custom_cards/torch_electric.xml",
     action: function(c: GunActionState) {
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7360,14 +7361,14 @@ const actions: Spell[] = [
     description: "$actiondesc_energy_shield",
     sprite: "var(--sprite-action-energy-shield)",
     sprite_unidentified: "data/ui_gfx/gun_actions/energy_shield_unidentified.png",
-    type: "passive",
+    type: 'passive',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.05,0.4,0.8,0.4,0.4,0.6",
     price: 220,
     custom_xml_file: "data/entities/misc/custom_cards/energy_shield.xml",
     action: function(c: GunActionState) {
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7376,14 +7377,14 @@ const actions: Spell[] = [
     description: "$actiondesc_energy_shield_sector",
     sprite: "var(--sprite-action-energy-shield-sector)",
     sprite_unidentified: "data/ui_gfx/gun_actions/energy_shield_sector_unidentified.png",
-    type: "passive",
+    type: 'passive',
     spawn_level: "0,1,2,3,4,5",
     spawn_probability: "0.1,0.5,0.6,0.8,0.5,0.4",
     price: 160,
     custom_xml_file: "data/entities/misc/custom_cards/energy_shield_sector.xml",
     action: function(c: GunActionState) {
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7393,7 +7394,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-energy-shield-shot)",
     sprite_unidentified: "data/ui_gfx/gun_actions/energy_shield_shot_unidentified.png",
     related_extra_entities: [ "data/entities/misc/energy_shield_shot.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,6",
     spawn_probability: "0.3,0.3,0.5,0.4,0.3",
     price: 180,
@@ -7408,7 +7409,7 @@ const actions: Spell[] = [
         c.speed_multiplier = 0
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -7417,14 +7418,14 @@ const actions: Spell[] = [
     description: "$actiondesc_tiny_ghost",
     sprite: "var(--sprite-action-tiny-ghost)",
     sprite_unidentified: "data/ui_gfx/gun_actions/torch_unidentified.png",
-    type: "passive",
+    type: 'passive',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.1,0.5,1,0.8,0.7,0.5",
     price: 160,
     mana: 0,
     custom_xml_file: "data/entities/misc/custom_cards/tiny_ghost.xml",
     action: function(c: GunActionState) {
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   
@@ -7440,13 +7441,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_ocarina",
     sprite: "var(--sprite-action-ocarina-a)",
     related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_a.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/ocarina/ocarina_a.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/ocarina/ocarina_a.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7457,13 +7458,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_ocarina",
     sprite: "var(--sprite-action-ocarina-b)",
     related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_b.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/ocarina/ocarina_b.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/ocarina/ocarina_b.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7474,13 +7475,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_ocarina",
     sprite: "var(--sprite-action-ocarina-c)",
     related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_c.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/ocarina/ocarina_c.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/ocarina/ocarina_c.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7491,13 +7492,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_ocarina",
     sprite: "var(--sprite-action-ocarina-d)",
     related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_d.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/ocarina/ocarina_d.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/ocarina/ocarina_d.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7508,13 +7509,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_ocarina",
     sprite: "var(--sprite-action-ocarina-e)",
     related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_e.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/ocarina/ocarina_e.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/ocarina/ocarina_e.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7525,13 +7526,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_ocarina",
     sprite: "var(--sprite-action-ocarina-f)",
     related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_f.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/ocarina/ocarina_f.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/ocarina/ocarina_f.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7542,13 +7543,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_ocarina",
     sprite: "var(--sprite-action-ocarina-gsharp)",
     related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_gsharp.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/ocarina/ocarina_gsharp.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/ocarina/ocarina_gsharp.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7559,13 +7560,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_ocarina",
     sprite: "var(--sprite-action-ocarina-a2)",
     related_projectiles: ["data/entities/projectiles/deck/ocarina/ocarina_a2.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/ocarina/ocarina_a2.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/ocarina/ocarina_a2.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7576,13 +7577,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_kantele",
     sprite: "var(--sprite-action-kantele-a)",
     related_projectiles: ["data/entities/projectiles/deck/kantele/kantele_a.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/kantele/kantele_a.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/kantele/kantele_a.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7593,13 +7594,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_kantele",
     sprite: "var(--sprite-action-kantele-d)",
     related_projectiles: ["data/entities/projectiles/deck/kantele/kantele_d.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/kantele/kantele_d.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/kantele/kantele_d.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7610,13 +7611,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_kantele",
     sprite: "var(--sprite-action-kantele-dis)",
     related_projectiles: ["data/entities/projectiles/deck/kantele/kantele_dis.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/kantele/kantele_dis.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/kantele/kantele_dis.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7627,13 +7628,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_kantele",
     sprite: "var(--sprite-action-kantele-e)",
     related_projectiles: ["data/entities/projectiles/deck/kantele/kantele_e.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/kantele/kantele_e.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/kantele/kantele_e.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7644,13 +7645,13 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_kantele",
     sprite: "var(--sprite-action-kantele-g)",
     related_projectiles: ["data/entities/projectiles/deck/kantele/kantele_g.xml"],
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 10,
     mana: 1,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/kantele/kantele_g.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/kantele/kantele_g.xml")
       c.fire_rate_wait = c.fire_rate_wait + 15
     },
   },
@@ -7661,7 +7662,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-random-spell)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_pyramid",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "3,4,5,6,10",
     spawn_probability: "0.2,0.3,0.2,0.1,0.5",
@@ -7673,7 +7674,7 @@ const actions: Spell[] = [
       let data = actions[rnd - 1]
       
       let safety = 0
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       let flag = data.spawn_requires_flag
       let usable = true
       if (( flag != null ) && ( HasFlagPersistent(this.id,  flag ) === false ))  {
@@ -7683,7 +7684,7 @@ const actions: Spell[] = [
       while (( safety < 100 ) && ( ( rec === -1 ) || ( usable === false ) )) {
         rnd = Random(this.id,  1, actions.length )
         data = actions[rnd - 1]
-        rec = check_recursion( data, recursion_level )
+        rec = check_recursion(this.id,  data, recursion_level )
         flag = data.spawn_requires_flag
         usable = true
         if (( flag != null ) && ( HasFlagPersistent(this.id,  flag ) === false ))  {
@@ -7693,7 +7694,7 @@ const actions: Spell[] = [
         safety = safety + 1
       }
       
-      call_action("action", data, c,  rec )
+      call_action(this.id, "action", data, c,  rec )
     },
   },
   {
@@ -7703,7 +7704,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-random-projectile)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_pyramid",
-    type: "projectile",
+    type: 'projectile',
     recursive: true,
     spawn_level: "2,4,5,6,10",
     spawn_probability: "0.2,0.4,0.1,0.2,0.5",
@@ -7715,17 +7716,17 @@ const actions: Spell[] = [
       let data = actions[rnd - 1]
       
       let safety = 0
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       let flag = data.spawn_requires_flag
       let usable = true
       if (( flag != null ) && ( HasFlagPersistent(this.id,  flag ) === false ))  {
         usable = false
       }
       
-      while (( safety < 100 ) && ( ( data.type !== "projectile" ) || ( rec === -1 ) || ( usable === false ) )) {
+      while (( safety < 100 ) && ( ( data.type !== 'projectile' ) || ( rec === -1 ) || ( usable === false ) )) {
         rnd = Random(this.id,  1, actions.length )
         data = actions[rnd - 1]
-        rec = check_recursion( data, recursion_level )
+        rec = check_recursion(this.id,  data, recursion_level )
         flag = data.spawn_requires_flag
         usable = true
         if (( flag != null ) && ( HasFlagPersistent(this.id,  flag ) === false ))  {
@@ -7735,7 +7736,7 @@ const actions: Spell[] = [
         safety = safety + 1
       }
       
-      call_action("action", data, c,  rec )
+      call_action(this.id, "action", data, c,  rec )
     },
   },
   {
@@ -7745,7 +7746,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-random-modifier)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_pyramid",
-    type: "modifier",
+    type: 'modifier',
     recursive: true,
     spawn_level: "4,5,6,10",
     spawn_probability: "0.3,0.2,0.1,0.5",
@@ -7757,17 +7758,17 @@ const actions: Spell[] = [
       let data = actions[rnd - 1]
       
       let safety = 0
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       let flag = data.spawn_requires_flag
       let usable = true
       if (( flag != null ) && ( HasFlagPersistent(this.id,  flag ) === false ))  {
         usable = false
       }
       
-      while (( safety < 100 ) && ( ( data.type !== "modifier" ) || ( rec === -1 ) || ( usable === false ) )) {
+      while (( safety < 100 ) && ( ( data.type !== 'modifier' ) || ( rec === -1 ) || ( usable === false ) )) {
         rnd = Random(this.id,  1, actions.length )
         data = actions[rnd - 1]
-        rec = check_recursion( data, recursion_level )
+        rec = check_recursion(this.id,  data, recursion_level )
         flag = data.spawn_requires_flag
         usable = true
         if (( flag != null ) && ( HasFlagPersistent(this.id,  flag ) === false ))  {
@@ -7777,7 +7778,7 @@ const actions: Spell[] = [
         safety = safety + 1
       }
       
-      call_action("action", data, c,  rec )
+      call_action(this.id, "action", data, c,  rec )
     },
   },
   {
@@ -7787,7 +7788,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-random-static-projectile)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_pyramid",
-    type: "static",
+    type: 'static',
     recursive: true,
     spawn_level: "3,5,6,10",
     spawn_probability: "0.2,0.1,0.2,0.5",
@@ -7799,17 +7800,17 @@ const actions: Spell[] = [
       let data = actions[rnd - 1]
       
       let safety = 0
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       let flag = data.spawn_requires_flag
       let usable = true
       if (( flag != null ) && ( HasFlagPersistent(this.id,  flag ) === false ))  {
         usable = false
       }
       
-      while (( safety < 100 ) && ( ( data.type !== "static" ) || ( rec === -1 ) || ( usable === false ) )) {
+      while (( safety < 100 ) && ( ( data.type !== 'static' ) || ( rec === -1 ) || ( usable === false ) )) {
         rnd = Random(this.id,  1, actions.length )
         data = actions[rnd - 1]
-        rec = check_recursion( data, recursion_level )
+        rec = check_recursion(this.id,  data, recursion_level )
         flag = data.spawn_requires_flag
         usable = true
         if (( flag != null ) && ( HasFlagPersistent(this.id,  flag ) === false ))  {
@@ -7819,7 +7820,7 @@ const actions: Spell[] = [
         safety = safety + 1
       }
       
-      call_action("action", data, c,  rec )
+      call_action(this.id, "action", data, c,  rec )
     },
   },
   {
@@ -7829,7 +7830,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-draw-random)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_pyramid",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "2,3,4,5,6,10",
     spawn_probability: "0.3,0.2,0.2,0.1,0.1,1",
@@ -7849,7 +7850,7 @@ const actions: Spell[] = [
       }
       
       let checks = 0
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       
       while (( data != null ) && ( ( rec === -1 ) || ( ( data.uses_remaining != null ) && ( data.uses_remaining === 0 ) ) ) && ( checks < datasize )) {
         rnd = ( rnd % datasize ) + 1
@@ -7861,11 +7862,11 @@ const actions: Spell[] = [
           data = discarded[rnd - deck.length - 1]
         }
         
-        rec = check_recursion( data, recursion_level )
+        rec = check_recursion(this.id,  data, recursion_level )
       }
       
       if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
-        call_action("action", data, c,  rec )
+        call_action(this.id, "action", data, c,  rec )
         
         if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
           data.uses_remaining = data.uses_remaining - 1
@@ -7885,7 +7886,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-draw-random-x3)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_pyramid",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "3,4,5,6,10",
     spawn_probability: "0.1,0.3,0.1,0.1,1",
@@ -7905,7 +7906,7 @@ const actions: Spell[] = [
       }
       
       let checks = 0
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       
       while (( data != null ) && ( ( rec === -1 ) || ( ( data.uses_remaining != null ) && ( data.uses_remaining === 0 ) ) ) && ( checks < datasize )) {
         rnd = ( rnd % datasize ) + 1
@@ -7917,12 +7918,12 @@ const actions: Spell[] = [
           data = discarded[rnd - deck.length - 1]
         }
         
-        rec = check_recursion( data, recursion_level )
+        rec = check_recursion(this.id,  data, recursion_level )
       }
       
       if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         for (const i of luaFor(1, 3)) {
-          call_action("action", data, c,  rec )
+          call_action(this.id, "action", data, c,  rec )
         }
         
         if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
@@ -7943,7 +7944,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-draw-3-random)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_pyramid",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "2,3,5,6,10",
     spawn_probability: "0.1,0.2,0.1,0.1,1",
@@ -7965,7 +7966,7 @@ const actions: Spell[] = [
         }
         
         let checks = 0
-        let rec = check_recursion( data, recursion_level )
+        let rec = check_recursion(this.id,  data, recursion_level )
         
         while (( data != null ) && ( ( rec === -1 ) || ( ( data.uses_remaining != null ) && ( data.uses_remaining === 0 ) ) ) && ( checks < datasize )) {
           rnd = ( rnd % datasize ) + 1
@@ -7977,11 +7978,11 @@ const actions: Spell[] = [
             data = discarded[rnd - deck.length - 1]
           }
           
-          rec = check_recursion( data, recursion_level )
+          rec = check_recursion(this.id,  data, recursion_level )
         }
         
         if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
-          call_action("action", data, c,  rec )
+          call_action(this.id, "action", data, c,  rec )
           
           if (( data.uses_remaining != null ) && ( data.uses_remaining > 0 ))  {
             data.uses_remaining = data.uses_remaining - 1
@@ -8003,7 +8004,7 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     spawn_requires_flag: "card_unlocked_alchemy",
     never_unlimited: true,
-    type: "utility",
+    type: 'utility',
     spawn_level: "6,10",
     spawn_probability: "0.1,1",
     price: 600,
@@ -8011,9 +8012,9 @@ const actions: Spell[] = [
     ai_never_uses: true,
     max_uses: 2,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/all_nukes.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/all_nukes.xml")
       c.fire_rate_wait = c.fire_rate_wait + 100
-      setCurrentReloadTime(current_reload_time + 100)
+      setCurrentReloadTime(this.id, current_reload_time + 100)
     },
   },
   {
@@ -8023,16 +8024,16 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-all-discs)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     spawn_requires_flag: "card_unlocked_alchemy",
-    type: "utility",
+    type: 'utility',
     spawn_level: "0,6,10",
     spawn_probability: "0.1,0.05,1",
     price: 400,
     mana: 100,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/all_discs.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/all_discs.xml")
       c.fire_rate_wait = c.fire_rate_wait + 50
-      setCurrentReloadTime(current_reload_time + 50)
+      setCurrentReloadTime(this.id, current_reload_time + 50)
     },
   },
   {
@@ -8043,16 +8044,16 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     spawn_requires_flag: "card_unlocked_alchemy",
     never_unlimited: true,
-    type: "utility",
+    type: 'utility',
     spawn_level: "1,6,10",
     spawn_probability: "0.1,0.05,1",
     price: 400,
     mana: 100,
     max_uses: 10,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/all_rockets.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/all_rockets.xml")
       c.fire_rate_wait = c.fire_rate_wait + 50
-      setCurrentReloadTime(current_reload_time + 50)
+      setCurrentReloadTime(this.id, current_reload_time + 50)
     },
   },
   {
@@ -8063,16 +8064,16 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     spawn_requires_flag: "card_unlocked_alchemy",
     never_unlimited: true,
-    type: "utility",
+    type: 'utility',
     spawn_level: "2,6,10",
     spawn_probability: "0.1,0.05,1",
     price: 350,
     mana: 80,
     max_uses: 15,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/all_deathcrosses.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/all_deathcrosses.xml")
       c.fire_rate_wait = c.fire_rate_wait + 40
-      setCurrentReloadTime(current_reload_time + 40)
+      setCurrentReloadTime(this.id, current_reload_time + 40)
     },
   },
   {
@@ -8083,16 +8084,16 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     spawn_requires_flag: "card_unlocked_alchemy",
     never_unlimited: true,
-    type: "utility",
+    type: 'utility',
     spawn_level: "3,6,10",
     spawn_probability: "0.1,0.05,1",
     price: 500,
     mana: 200,
     max_uses: 10,
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/all_blackholes.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/all_blackholes.xml")
       c.fire_rate_wait = c.fire_rate_wait + 100
-      setCurrentReloadTime(current_reload_time + 100)
+      setCurrentReloadTime(this.id, current_reload_time + 100)
     },
   },
   {
@@ -8102,16 +8103,16 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-all-acid)",
     sprite_unidentified: "data/ui_gfx/gun_actions/rocket_unidentified.png",
     spawn_requires_flag: "card_unlocked_alchemy",
-    type: "utility",
+    type: 'utility',
     spawn_level: "4,6,10",
     spawn_probability: "0.1,0.05,1",
     price: 600,
     mana: 200,
     
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/all_acid.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/all_acid.xml")
       c.fire_rate_wait = c.fire_rate_wait + 100
-      setCurrentReloadTime(current_reload_time + 100)
+      setCurrentReloadTime(this.id, current_reload_time + 100)
     },
   },
   {
@@ -8123,7 +8124,7 @@ const actions: Spell[] = [
     spawn_requires_flag: "card_unlocked_everything",
     spawn_manual_unlock: true,
     never_unlimited: true,
-    type: "other",
+    type: 'other',
     recursive: true,
     ai_never_uses: true,
     spawn_level: "10",
@@ -8138,7 +8139,7 @@ const actions: Spell[] = [
         let eid = EntityLoad(this.id, "data/entities/projectiles/deck/all_spells_loader.xml", x, y)
       }
       c.fire_rate_wait = c.fire_rate_wait + 100
-      setCurrentReloadTime(current_reload_time + 100)
+      setCurrentReloadTime(this.id, current_reload_time + 100)
     },
   },
   {
@@ -8147,7 +8148,7 @@ const actions: Spell[] = [
     description: "$actiondesc_summon_portal",
     sprite: "var(--sprite-action-summon-portal)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "0",
     price: 100,
@@ -8155,7 +8156,7 @@ const actions: Spell[] = [
     max_uses: 7,
     custom_xml_file: "data/entities/misc/custom_cards/summon_portal.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/summon_portal.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/summon_portal.xml")
       c.fire_rate_wait = c.fire_rate_wait + 80
     },
   },
@@ -8166,7 +8167,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-add-trigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
     spawn_requires_flag: "card_unlocked_mestari",
-    type: "other",
+    type: 'other',
     spawn_level: "3,4,5,10",
     spawn_probability: "0.3,0.6,0.6,1",
     price: 100,
@@ -8184,12 +8185,12 @@ const actions: Spell[] = [
       }
       
       if ( data != null )  {
-        while (( deck.length >= how_many ) && ( ( data.type === "modifier" ) || ( data.type === "passive" ) || ( data.type === "other" ) || ( data.type === "multicast" ) )) {
+        while (( deck.length >= how_many ) && ( ( data.type === 'modifier' ) || ( data.type === 'passive' ) || ( data.type === 'other' ) || ( data.type === 'multicast' ) )) {
           if (( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ) && ( data.id !== "ADD_TRIGGER" ) && ( data.id !== "ADD_TIMER" ) && ( data.id !== "ADD_DEATH_TRIGGER" ))  {
-            if ( data.type === "modifier" )  {
-              setDontDrawActions(true)
-              call_action("action", data, c, )
-              setDontDrawActions(false)
+            if ( data.type === 'modifier' )  {
+              setDontDrawActions(this.id, true)
+              call_action(this.id, "action", data, c, )
+              setDontDrawActions(this.id, false)
             }
           }
           how_many = how_many + 1
@@ -8211,7 +8212,7 @@ const actions: Spell[] = [
           for (const i of luaFor(1, deck.length)) {
             let check = deck[i - 1]
             
-            if (( check != null ) && ( ( check.type === "projectile" ) || ( check.type === "static" ) || ( check.type === "material" ) || ( check.type === "utility" ) ))  {
+            if (( check != null ) && ( ( check.type === 'projectile' ) || ( check.type === 'static' ) || ( check.type === 'material' ) || ( check.type === 'utility' ) ))  {
               valid = true
               break
             }
@@ -8228,12 +8229,12 @@ const actions: Spell[] = [
           
           if (valid ) {
             for (const i of luaFor(1, count)) {
-              add_projectile_trigger_hit_world(target, 1)
+              add_projectile_trigger_hit_world(this.id, target, 1)
             }
           } else {
-            setDontDrawActions(true)
-            call_action("action", data, c, )
-            setDontDrawActions(false)
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c, )
+            setDontDrawActions(this.id, false)
           }
         }
       }
@@ -8246,7 +8247,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-add-timer)",
     sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
     spawn_requires_flag: "card_unlocked_mestari",
-    type: "other",
+    type: 'other',
     spawn_level: "3,4,5,10",
     spawn_probability: "0.3,0.6,0.6,1",
     price: 150,
@@ -8264,12 +8265,12 @@ const actions: Spell[] = [
       }
       
       if ( data != null )  {
-        while (( deck.length >= how_many ) && ( ( data.type === "modifier" ) || ( data.type === "passive" ) || ( data.type === "other" ) || ( data.type === "multicast" ) )) {
+        while (( deck.length >= how_many ) && ( ( data.type === 'modifier' ) || ( data.type === 'passive' ) || ( data.type === 'other' ) || ( data.type === 'multicast' ) )) {
           if (( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ) && ( data.id !== "ADD_TRIGGER" ) && ( data.id !== "ADD_TIMER" ) && ( data.id !== "ADD_DEATH_TRIGGER" ))  {
-            if ( data.type === "modifier" )  {
-              setDontDrawActions(true)
-              call_action("action", data, c, )
-              setDontDrawActions(false)
+            if ( data.type === 'modifier' )  {
+              setDontDrawActions(this.id, true)
+              call_action(this.id, "action", data, c, )
+              setDontDrawActions(this.id, false)
             }
           }
           how_many = how_many + 1
@@ -8291,7 +8292,7 @@ const actions: Spell[] = [
           for (const i of luaFor(1, deck.length)) {
             let check = deck[i - 1]
             
-            if (( check != null ) && ( ( check.type === "projectile" ) || ( check.type === "static" ) || ( check.type === "material" ) || ( check.type === "utility" ) ))  {
+            if (( check != null ) && ( ( check.type === 'projectile' ) || ( check.type === 'static' ) || ( check.type === 'material' ) || ( check.type === 'utility' ) ))  {
               valid = true
               break
             }
@@ -8308,12 +8309,12 @@ const actions: Spell[] = [
           
           if (valid ) {
             for (const i of luaFor(1, count)) {
-              add_projectile_trigger_timer(target, 20, 1)
+              add_projectile_trigger_timer(this.id, target, 20, 1)
             }
           } else {
-            setDontDrawActions(true)
-            call_action("action", data, c, )
-            setDontDrawActions(false)
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c, )
+            setDontDrawActions(this.id, false)
           }
         }
       }
@@ -8326,7 +8327,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-add-death-trigger)",
     sprite_unidentified: "data/ui_gfx/gun_actions/damage_unidentified.png",
     spawn_requires_flag: "card_unlocked_mestari",
-    type: "other",
+    type: 'other',
     spawn_level: "3,4,5,10",
     spawn_probability: "0.3,0.6,0.6,1",
     price: 150,
@@ -8344,12 +8345,12 @@ const actions: Spell[] = [
       }
       
       if ( data != null )  {
-        while (( deck.length >= how_many ) && ( ( data.type === "modifier" ) || ( data.type === "passive" ) || ( data.type === "other" ) || ( data.type === "multicast" ) )) {
+        while (( deck.length >= how_many ) && ( ( data.type === 'modifier' ) || ( data.type === 'passive' ) || ( data.type === 'other' ) || ( data.type === 'multicast' ) )) {
           if (( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ) && ( data.id !== "ADD_TRIGGER" ) && ( data.id !== "ADD_TIMER" ) && ( data.id !== "ADD_DEATH_TRIGGER" ))  {
-            if ( data.type === "modifier" )  {
-              setDontDrawActions(true)
-              call_action("action", data, c, )
-              setDontDrawActions(false)
+            if ( data.type === 'modifier' )  {
+              setDontDrawActions(this.id, true)
+              call_action(this.id, "action", data, c, )
+              setDontDrawActions(this.id, false)
             }
           }
           how_many = how_many + 1
@@ -8371,7 +8372,7 @@ const actions: Spell[] = [
           for (const i of luaFor(1, deck.length)) {
             let check = deck[i - 1]
             
-            if (( check != null ) && ( ( check.type === "projectile" ) || ( check.type === "static" ) || ( check.type === "material" ) || ( check.type === "utility" ) ))  {
+            if (( check != null ) && ( ( check.type === 'projectile' ) || ( check.type === 'static' ) || ( check.type === 'material' ) || ( check.type === 'utility' ) ))  {
               valid = true
               break
             }
@@ -8388,12 +8389,12 @@ const actions: Spell[] = [
           
           if (valid ) {
             for (const i of luaFor(1, count)) {
-              add_projectile_trigger_death(target, 1)
+              add_projectile_trigger_death(this.id, target, 1)
             }
           } else {
-            setDontDrawActions(true)
-            call_action("action", data, c, )
-            setDontDrawActions(false)
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c, )
+            setDontDrawActions(this.id, false)
           }
         }
       }
@@ -8406,7 +8407,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-larpa-chaos)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/larpa_chaos.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,10",
     spawn_probability: "0.1,0.2,0.3,0.4,0.2",
     price: 260,
@@ -8415,7 +8416,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.fire_rate_wait = c.fire_rate_wait + 15
       c.extra_entities = c.extra_entities + "data/entities/misc/larpa_chaos.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -8425,7 +8426,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-larpa-downwards)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/larpa_downwards.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,10",
     spawn_probability: "0.1,0.3,0.4,0.2,0.2",
     price: 290,
@@ -8434,7 +8435,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.fire_rate_wait = c.fire_rate_wait + 15
       c.extra_entities = c.extra_entities + "data/entities/misc/larpa_downwards.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -8444,7 +8445,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-larpa-upwards)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/larpa_upwards.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,10",
     spawn_probability: "0.1,0.1,0.2,0.4,0.2",
     price: 290,
@@ -8453,7 +8454,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.fire_rate_wait = c.fire_rate_wait + 15
       c.extra_entities = c.extra_entities + "data/entities/misc/larpa_upwards.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -8464,7 +8465,7 @@ const actions: Spell[] = [
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     spawn_requires_flag: "card_unlocked_alchemy",
     related_extra_entities: [ "data/entities/misc/larpa_chaos_2.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "3,5,10",
     spawn_probability: "0.1,0.4,0.1",
     price: 300,
@@ -8473,7 +8474,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.fire_rate_wait = c.fire_rate_wait + 20
       c.extra_entities = c.extra_entities + "data/entities/misc/larpa_chaos_2.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -8483,7 +8484,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-larpa-death)",
     sprite_unidentified: "data/ui_gfx/gun_actions/electric_charge_unidentified.png",
     related_extra_entities: [ "data/entities/misc/larpa_death.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,5,10",
     spawn_probability: "0.1,0.1,0.3,0.4,0.2",
     price: 150,
@@ -8492,7 +8493,7 @@ const actions: Spell[] = [
     action: function(c: GunActionState) {
       c.fire_rate_wait = c.fire_rate_wait + 15
       c.extra_entities = c.extra_entities + "data/entities/misc/larpa_death.xml,"
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -8502,7 +8503,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-alpha)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_duplicate",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "5,6,10",
     spawn_probability: "0.1,0.2,1",
@@ -8523,10 +8524,10 @@ const actions: Spell[] = [
         data = null
       }
       
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       
       if (( data != null ) && ( rec > -1 ))  {
-        call_action("action", data, c,  rec )
+        call_action(this.id, "action", data, c,  rec )
       }
       
       
@@ -8539,7 +8540,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-gamma)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_duplicate",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "5,6,10",
     spawn_probability: "0.1,0.2,1",
@@ -8558,10 +8559,10 @@ const actions: Spell[] = [
         data = null
       }
       
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       
       if (( data != null ) && ( rec > -1 ))  {
-        call_action("action", data, c,  rec )
+        call_action(this.id, "action", data, c,  rec )
       }
       
       
@@ -8574,7 +8575,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-tau)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_duplicate",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "5,6,10",
     spawn_probability: "0.1,0.2,1",
@@ -8603,17 +8604,17 @@ const actions: Spell[] = [
         data2 = null
       }
       
-      let rec1 = check_recursion( data1, recursion_level )
-      let rec2 = check_recursion( data2, recursion_level )
+      let rec1 = check_recursion(this.id,  data1, recursion_level )
+      let rec2 = check_recursion(this.id,  data2, recursion_level )
       
       if (( data1 != null ) && ( rec1 > -1 ))  {
         
-        call_action("action", data1, c,  rec1 )
+        call_action(this.id, "action", data1, c,  rec1 )
       }
       
       if (( data2 != null ) && ( rec2 > -1 ))  {
         
-        call_action("action", data2, c,  rec2 )
+        call_action(this.id, "action", data2, c,  rec2 )
       }
       
       
@@ -8626,7 +8627,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-omega)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_duplicate",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "5,6,10",
     spawn_probability: "0.1,0.1,1",
@@ -8637,33 +8638,33 @@ const actions: Spell[] = [
       
       if ( discarded != null )  {
         for (const [i, data] of ipairs(discarded, 'discarded')) {
-          let rec = check_recursion( data, recursion_level )
+          let rec = check_recursion(this.id,  data, recursion_level )
           if (( data != null ) && ( rec > -1 ) && ( data.id !== "RESET" ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
       
       if ( hand != null )  {
         for (const [i, data] of ipairs(hand, 'hand')) {
-          let rec = check_recursion( data, recursion_level )
+          let rec = check_recursion(this.id,  data, recursion_level )
           if (( data != null ) && ( ( data.recursive == null ) || ( data.recursive === false ) ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
       
       if ( deck != null )  {
         for (const [i, data] of ipairs(deck, 'deck')) {
-          let rec = check_recursion( data, recursion_level )
+          let rec = check_recursion(this.id,  data, recursion_level )
           if (( data != null ) && ( rec > -1 ) && ( data.id !== "RESET" ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
@@ -8676,7 +8677,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-mu)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_duplicate",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "5,6,10",
     spawn_probability: "0.1,0.2,1",
@@ -8691,42 +8692,42 @@ const actions: Spell[] = [
       
       if ( discarded != null )  {
         for (const [i, data] of ipairs(discarded, 'discarded')) {
-          let rec = check_recursion( data, recursion_level )
-          if (( data != null ) && ( data.type === "modifier" ) && ( rec > -1 ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+          let rec = check_recursion(this.id,  data, recursion_level )
+          if (( data != null ) && ( data.type === 'modifier' ) && ( rec > -1 ))  {
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
       
       if ( hand != null )  {
         for (const [i, data] of ipairs(hand, 'hand')) {
-          let rec = check_recursion( data, recursion_level )
-          if (( data != null ) && ( data.type === "modifier" ) && ( rec > -1 ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+          let rec = check_recursion(this.id,  data, recursion_level )
+          if (( data != null ) && ( data.type === 'modifier' ) && ( rec > -1 ))  {
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
       
       if ( deck != null )  {
         for (const [i, data] of ipairs(deck, 'deck')) {
-          let rec = check_recursion( data, recursion_level )
-          if (( data != null ) && ( data.type === "modifier" ) && ( rec > -1 ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+          let rec = check_recursion(this.id,  data, recursion_level )
+          if (( data != null ) && ( data.type === 'modifier' ) && ( rec > -1 ))  {
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
       
       c.fire_rate_wait = firerate
-      setCurrentReloadTime(reload)
-      setMana(mana_)
+      setCurrentReloadTime(this.id, reload)
+      setMana(this.id, mana_)
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -8736,7 +8737,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-phi)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_duplicate",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "5,6,10",
     spawn_probability: "0.1,0.2,1",
@@ -8751,40 +8752,40 @@ const actions: Spell[] = [
       
       if ( discarded != null )  {
         for (const [i, data] of ipairs(discarded, 'discarded')) {
-          let rec = check_recursion( data, recursion_level )
-          if (( data != null ) && ( data.type === "projectile" ) && ( rec > -1 ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+          let rec = check_recursion(this.id,  data, recursion_level )
+          if (( data != null ) && ( data.type === 'projectile' ) && ( rec > -1 ))  {
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
       
       if ( hand != null )  {
         for (const [i, data] of ipairs(hand, 'hand')) {
-          let rec = check_recursion( data, recursion_level )
-          if (( data != null ) && ( data.type === "projectile" ) && ( rec > -1 ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+          let rec = check_recursion(this.id,  data, recursion_level )
+          if (( data != null ) && ( data.type === 'projectile' ) && ( rec > -1 ))  {
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
       
       if ( deck != null )  {
         for (const [i, data] of ipairs(deck, 'deck')) {
-          let rec = check_recursion( data, recursion_level )
-          if (( data != null ) && ( data.type === "projectile" ) && ( rec > -1 ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+          let rec = check_recursion(this.id,  data, recursion_level )
+          if (( data != null ) && ( data.type === 'projectile' ) && ( rec > -1 ))  {
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
       
       c.fire_rate_wait = firerate
-      setCurrentReloadTime(reload)
-      setMana(mana_)
+      setCurrentReloadTime(this.id, reload)
+      setMana(this.id, mana_)
     },
   },
   {
@@ -8794,7 +8795,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-sigma)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_duplicate",
-    type: "other",
+    type: 'other',
     recursive: true,
     spawn_level: "4,5,10",
     spawn_probability: "0.1,0.2,1",
@@ -8809,42 +8810,42 @@ const actions: Spell[] = [
       
       if ( discarded != null )  {
         for (const [i, data] of ipairs(discarded, 'discarded')) {
-          let rec = check_recursion( data, recursion_level )
-          if (( data != null ) && ( data.type === "static" ) && ( rec > -1 ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+          let rec = check_recursion(this.id,  data, recursion_level )
+          if (( data != null ) && ( data.type === 'static' ) && ( rec > -1 ))  {
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
       
       if ( hand != null )  {
         for (const [i, data] of ipairs(hand, 'hand')) {
-          let rec = check_recursion( data, recursion_level )
-          if (( data != null ) && ( data.type === "static" ) && ( rec > -1 ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+          let rec = check_recursion(this.id,  data, recursion_level )
+          if (( data != null ) && ( data.type === 'static' ) && ( rec > -1 ))  {
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
       
       if ( deck != null )  {
         for (const [i, data] of ipairs(deck, 'deck')) {
-          let rec = check_recursion( data, recursion_level )
-          if (( data != null ) && ( data.type === "static" ) && ( rec > -1 ))  {
-            setDontDrawActions(true)
-            call_action("action", data, c,  rec )
-            setDontDrawActions(false)
+          let rec = check_recursion(this.id,  data, recursion_level )
+          if (( data != null ) && ( data.type === 'static' ) && ( rec > -1 ))  {
+            setDontDrawActions(this.id, true)
+            call_action(this.id, "action", data, c,  rec )
+            setDontDrawActions(this.id, false)
           }
         }
       }
       
       c.fire_rate_wait = firerate
-      setCurrentReloadTime(reload)
-      setMana(mana_)
+      setCurrentReloadTime(this.id, reload)
+      setMana(this.id, mana_)
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -8854,7 +8855,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-zeta)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_duplicate",
-    type: "other",
+    type: 'other',
     spawn_manual_unlock: true,
     recursive: true,
     spawn_level: "2,5,10",
@@ -8907,18 +8908,18 @@ const actions: Spell[] = [
         
         for (const [i, data] of ipairs(actions, 'actions')) {
           if ( data.id === action_id )  {
-            let rec = check_recursion( data, recursion_level )
+            let rec = check_recursion(this.id,  data, recursion_level )
             if ( rec > -1 )  {
-              setDontDrawActions(true)
-              call_action("action", data, c,  rec )
-              setDontDrawActions(false)
+              setDontDrawActions(this.id, true)
+              call_action(this.id, "action", data, c,  rec )
+              setDontDrawActions(this.id, false)
             }
             break
           }
         }
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -8928,7 +8929,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-divide-2)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_musicbox",
-    type: "other",
+    type: 'other',
     spawn_level: "3,5,6,10",
     spawn_probability: "0.2,0.3,0.2,1",
     price: 200,
@@ -8952,7 +8953,7 @@ const actions: Spell[] = [
         count = 1
       }
       
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       
       if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         let firerate = c.fire_rate_wait
@@ -8960,10 +8961,10 @@ const actions: Spell[] = [
         
         for (const i of luaFor(1, count)) {
           if ( i === 1 )  {
-            setDontDrawActions(true)
+            setDontDrawActions(this.id, true)
           }
-          let imax = call_action("action", data, c,  rec, iter + 1 )
-          setDontDrawActions(false)
+          let imax = call_action(this.id, "action", data, c,  rec, iter + 1 )
+          setDontDrawActions(this.id, false)
           if (imax != null)  {
             iter_max = imax
           }
@@ -8980,7 +8981,7 @@ const actions: Spell[] = [
         
         if (iter === 1)  {
           c.fire_rate_wait = firerate
-          setCurrentReloadTime(reload)
+          setCurrentReloadTime(this.id, reload)
           
           for (const i of luaFor(1, iter_max)) {
             if (deck.length > 0)  {
@@ -9010,7 +9011,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-divide-3)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_musicbox",
-    type: "other",
+    type: 'other',
     spawn_level: "4,5,6,10",
     spawn_probability: "0.1,0.1,0.2,1",
     price: 250,
@@ -9034,7 +9035,7 @@ const actions: Spell[] = [
         count = 1
       }
       
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       
       if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         let firerate = c.fire_rate_wait
@@ -9042,10 +9043,10 @@ const actions: Spell[] = [
         
         for (const i of luaFor(1, count)) {
           if ( i === 1 )  {
-            setDontDrawActions(true)
+            setDontDrawActions(this.id, true)
           }
-          let imax = call_action("action", data, c,  rec, iter + 1 )
-          setDontDrawActions(false)
+          let imax = call_action(this.id, "action", data, c,  rec, iter + 1 )
+          setDontDrawActions(this.id, false)
           if (imax != null)  {
             iter_max = imax
           }
@@ -9062,7 +9063,7 @@ const actions: Spell[] = [
         
         if (iter === 1)  {
           c.fire_rate_wait = firerate
-          setCurrentReloadTime(reload)
+          setCurrentReloadTime(this.id, reload)
           
           for (const i of luaFor(1, iter_max)) {
             if (deck.length > 0)  {
@@ -9092,7 +9093,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-divide-4)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_musicbox",
-    type: "other",
+    type: 'other',
     spawn_level: "5,6,10",
     spawn_probability: "0.1,0.1,1",
     price: 300,
@@ -9116,7 +9117,7 @@ const actions: Spell[] = [
         count = 1
       }
       
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       
       if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         let firerate = c.fire_rate_wait
@@ -9124,10 +9125,10 @@ const actions: Spell[] = [
         
         for (const i of luaFor(1, count)) {
           if ( i === 1 )  {
-            setDontDrawActions(true)
+            setDontDrawActions(this.id, true)
           }
-          let imax = call_action("action", data, c,  rec, iter + 1 )
-          setDontDrawActions(false)
+          let imax = call_action(this.id, "action", data, c,  rec, iter + 1 )
+          setDontDrawActions(this.id, false)
           if (imax != null)  {
             iter_max = imax
           }
@@ -9144,7 +9145,7 @@ const actions: Spell[] = [
         
         if (iter === 1)  {
           c.fire_rate_wait = firerate
-          setCurrentReloadTime(reload)
+          setCurrentReloadTime(this.id, reload)
           
           for (const i of luaFor(1, iter_max)) {
             if (deck.length > 0)  {
@@ -9174,7 +9175,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-divide-10)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_divide",
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "1",
     price: 400,
@@ -9182,7 +9183,7 @@ const actions: Spell[] = [
     max_uses: 5,
     action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {
       c.fire_rate_wait = c.fire_rate_wait + 80
-      setCurrentReloadTime(current_reload_time + 20)
+      setCurrentReloadTime(this.id, current_reload_time + 20)
       
       let data: Spell | null = null
       
@@ -9200,7 +9201,7 @@ const actions: Spell[] = [
         count = 1
       }
       
-      let rec = check_recursion( data, recursion_level )
+      let rec = check_recursion(this.id,  data, recursion_level )
       
       if (( data != null ) && ( rec > -1 ) && ( ( data.uses_remaining == null ) || ( data.uses_remaining !== 0 ) ))  {
         let firerate = c.fire_rate_wait
@@ -9208,10 +9209,10 @@ const actions: Spell[] = [
         
         for (const i of luaFor(1, count)) {
           if ( i === 1 )  {
-            setDontDrawActions(true)
+            setDontDrawActions(this.id, true)
           }
-          let imax = call_action("action", data, c,  rec, iter + 1 )
-          setDontDrawActions(false)
+          let imax = call_action(this.id, "action", data, c,  rec, iter + 1 )
+          setDontDrawActions(this.id, false)
           if (imax != null)  {
             iter_max = imax
           }
@@ -9228,7 +9229,7 @@ const actions: Spell[] = [
         
         if (iter === 1)  {
           c.fire_rate_wait = firerate
-          setCurrentReloadTime(reload)
+          setCurrentReloadTime(this.id, reload)
           
           for (const i of luaFor(1, iter_max)) {
             if (deck.length > 0)  {
@@ -9261,7 +9262,7 @@ const actions: Spell[] = [
     related_extra_entities: [ "data/entities/misc/effect_meteor_rain.xml" ],
     spawn_requires_flag: "card_unlocked_rain",
     never_unlimited: true,
-    type: "static",
+    type: 'static',
     spawn_level: "6,10",
     spawn_probability: "0.1,1",
     price: 300,
@@ -9269,10 +9270,10 @@ const actions: Spell[] = [
     max_uses: 2,
     custom_xml_file: "data/entities/misc/custom_cards/meteor_rain.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/meteor_rain.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/meteor_rain.xml")
       c.extra_entities = c.extra_entities + "data/entities/misc/effect_meteor_rain.xml,"
       c.fire_rate_wait = c.fire_rate_wait + 100
-      setCurrentReloadTime(current_reload_time + 60)
+      setCurrentReloadTime(this.id, current_reload_time + 60)
     },
   },
   {
@@ -9284,7 +9285,7 @@ const actions: Spell[] = [
     related_projectiles: ["data/entities/animals/worm_big.xml"],
     spawn_requires_flag: "card_unlocked_rain",
     never_unlimited: true,
-    type: "static",
+    type: 'static',
     spawn_level: "6,10",
     spawn_probability: "0.1,1",
     price: 300,
@@ -9292,9 +9293,9 @@ const actions: Spell[] = [
     max_uses: 2,
     custom_xml_file: "data/entities/misc/custom_cards/worm_rain.xml",
     action: function(c: GunActionState) {
-      add_projectile("data/entities/projectiles/deck/worm_rain.xml")
+      add_projectile(this.id, "data/entities/projectiles/deck/worm_rain.xml")
       c.fire_rate_wait = c.fire_rate_wait + 100
-      setCurrentReloadTime(current_reload_time + 60)
+      setCurrentReloadTime(this.id, current_reload_time + 60)
     },
   },
   {
@@ -9304,14 +9305,14 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-reset)",
     sprite_unidentified: "data/ui_gfx/gun_actions/bomb_unidentified.png",
     spawn_requires_flag: "card_unlocked_mestari",
-    type: "utility",
+    type: 'utility',
     recursive: true,
     spawn_level: "10",
     spawn_probability: "1",
     price: 120,
     mana: 20,
     action: function(c: GunActionState) {
-      setCurrentReloadTime(current_reload_time - 25)
+      setCurrentReloadTime(this.id, current_reload_time - 25)
       
       for (const [i, v] of ipairs(hand, 'hand')) {
         
@@ -9323,13 +9324,13 @@ const actions: Spell[] = [
         discarded.push(v)
       }
       
-      clearHand()
-      clearDeck()
+      clearHand(this.id, )
+      clearDeck(this.id, )
       
       if ( force_stop_draws === false )  {
-        setForceStopDraws(true)
-        move_discarded_to_deck()
-        order_deck()
+        setForceStopDraws(this.id, true)
+        move_discarded_to_deck(this.id, )
+        order_deck(this.id, )
       }
     },
   },
@@ -9340,7 +9341,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-if-enemy)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_maths",
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "1",
     price: 100,
@@ -9416,7 +9417,7 @@ const actions: Spell[] = [
         }
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9426,7 +9427,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-if-projectile)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_maths",
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "1",
     price: 100,
@@ -9502,7 +9503,7 @@ const actions: Spell[] = [
         }
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9512,7 +9513,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-if-hp)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_maths",
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "1",
     price: 100,
@@ -9596,7 +9597,7 @@ const actions: Spell[] = [
         }
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9606,7 +9607,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-if-half)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_maths",
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "1",
     price: 100,
@@ -9687,7 +9688,7 @@ const actions: Spell[] = [
         }
       }
       
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9697,13 +9698,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-if-end)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_maths",
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "1",
     price: 10,
     mana: 0,
     action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {      
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9713,13 +9714,13 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-if-else)",
     sprite_unidentified: "data/ui_gfx/gun_actions/spread_reduce_unidentified.png",
     spawn_requires_flag: "card_unlocked_maths",
-    type: "other",
+    type: 'other',
     spawn_level: "10",
     spawn_probability: "1",
     price: 10,
     mana: 0,
     action: function(c: GunActionState, recursion_level: number = 0, iteration: number = 1) {      
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9729,7 +9730,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-colour-red)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_red.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "1,2,3,4,5,6",
     spawn_probability: "0.2,0.2,0.4,0.2,0.2,0.2",
     spawn_requires_flag: "card_unlocked_paint",
@@ -9743,7 +9744,7 @@ const actions: Spell[] = [
       if ( c.screenshake < 0 )  {
         c.screenshake = 0
       }
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9753,7 +9754,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-colour-orange)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_orange.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.1,0.1,0.4",
     spawn_requires_flag: "card_unlocked_paint",
@@ -9767,7 +9768,7 @@ const actions: Spell[] = [
       if ( c.screenshake < 0 )  {
         c.screenshake = 0
       }
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9777,7 +9778,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-colour-green)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_green.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.4,0.1,0.1",
     spawn_requires_flag: "card_unlocked_paint",
@@ -9791,7 +9792,7 @@ const actions: Spell[] = [
       if ( c.screenshake < 0 )  {
         c.screenshake = 0
       }
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9801,7 +9802,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-colour-yellow)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_yellow.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.1,0.4,0.1",
     spawn_requires_flag: "card_unlocked_paint",
@@ -9815,7 +9816,7 @@ const actions: Spell[] = [
       if ( c.screenshake < 0 )  {
         c.screenshake = 0
       }
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9825,7 +9826,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-colour-purple)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_purple.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.1,0.1,0.4",
     spawn_requires_flag: "card_unlocked_paint",
@@ -9839,7 +9840,7 @@ const actions: Spell[] = [
       if ( c.screenshake < 0 )  {
         c.screenshake = 0
       }
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9849,7 +9850,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-colour-blue)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_blue.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4",
     spawn_probability: "0.4,0.1,0.1",
     spawn_requires_flag: "card_unlocked_paint",
@@ -9863,7 +9864,7 @@ const actions: Spell[] = [
       if ( c.screenshake < 0 )  {
         c.screenshake = 0
       }
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9873,7 +9874,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-colour-rainbow)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/particles/tinyspark_red.xml", "data/entities/misc/colour_rainbow.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,10",
     spawn_probability: "0.1,0.1,0.1,0.2",
     spawn_requires_flag: "card_unlocked_paint",
@@ -9887,7 +9888,7 @@ const actions: Spell[] = [
       if ( c.screenshake < 0 )  {
         c.screenshake = 0
       }
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9897,7 +9898,7 @@ const actions: Spell[] = [
     sprite: "var(--sprite-action-colour-invis)",
     sprite_unidentified: "data/ui_gfx/gun_actions/homing_unidentified.png",
     related_extra_entities: [ "data/entities/misc/colour_invis.xml" ],
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "2,3,4,10",
     spawn_probability: "0.1,0.1,0.1,0.1",
     spawn_requires_flag: "card_unlocked_paint",
@@ -9911,7 +9912,7 @@ const actions: Spell[] = [
       if ( c.screenshake < 0 )  {
         c.screenshake = 0
       }
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
   },
   {
@@ -9920,7 +9921,7 @@ const actions: Spell[] = [
     description: "$actiondesc_rainbow_trail",
     sprite: "var(--sprite-action-rainbow-trail)",
     sprite_unidentified: "data/ui_gfx/gun_actions/oil_trail_unidentified.png",
-    type: "modifier",
+    type: 'modifier',
     spawn_level: "10",
     spawn_probability: "0",
     spawn_requires_flag: "card_unlocked_rainbow_trail",
@@ -9932,7 +9933,7 @@ const actions: Spell[] = [
       c.game_effect_entities = c.game_effect_entities + "data/entities/misc/effect_rainbow_farts.xml,"
       c.trail_material = c.trail_material + "material_rainbow,"
       c.trail_material_amount = c.trail_material_amount + 20
-      draw_actions( 1, true )
+      draw_actions(this.id,  1, true )
     },
 
   },
@@ -9942,7 +9943,7 @@ const actions: Spell[] = [
     description: "$actiondesc_cessation",
     sprite: "var(--sprite-action-cessation)",
     sprite_unidentified: "data/ui_gfx/gun_actions/cessation_unidentified.png",
-    type: "other",
+    type: 'other',
     spawn_level: "5,6,10",
     spawn_probability: "0.1,0.2,1",
     spawn_requires_flag: "card_unlocked_cessation",
@@ -9952,7 +9953,7 @@ const actions: Spell[] = [
     
     action: function(c: GunActionState) {
       c.fire_rate_wait = c.fire_rate_wait + 600
-      setCurrentReloadTime(current_reload_time + 600)
+      setCurrentReloadTime(this.id, current_reload_time + 600)
 
       if (reflecting ) { return }
 
@@ -9961,7 +9962,7 @@ const actions: Spell[] = [
       let lifetime = 20 + c.lifetime_add
 
       let caster_entity = GetUpdatedEntityID(this.id, )
-      let wand_entity = find_the_wand_held( caster_entity )
+      let wand_entity = find_the_wand_held(this.id,  caster_entity )
 
       if (wand_entity ) {
         let ability = EntityGetFirstComponentIncludingDisabled(this.id,  wand_entity, "AbilityComponent" )

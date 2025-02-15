@@ -79,13 +79,30 @@ export const range = (n: number) => [...Array(n).keys()];
 
 // const x = (a: Promise<string> | string | (() => string)): number => 0;
 
-export type ValueOf<T> = T[keyof T];
+/**
+ * Create a Union of the values of T
+ */
+export type ValueOf<T extends object> = T[keyof T];
 
+export type ObjectKey = string | number | symbol;
+
+/**
+ * Create a Union of the keys of Obj that
+ * are of type KeyType
+ *
+ * e.g.
+ *  type A { b: string; c: boolean;  d: boolean; }
+ *  type ABools = KeyOfType<A, boolean>
+ *  type ABools = 'c' | 'd'
+ */
 export type KeyOfType<Obj extends object, KeyType> = {
   [k in keyof Obj]: Obj[k] extends KeyType ? k : never;
 }[keyof Obj];
 
-export type ObjectKey = string | number | symbol;
+/**
+ * Create a union of all valid keys of object T
+ */
+export type KeyOf<T extends object> = KeyOfType<Required<T>, ObjectKey>;
 
 export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
   Object.keys(obj) as (keyof T)[];

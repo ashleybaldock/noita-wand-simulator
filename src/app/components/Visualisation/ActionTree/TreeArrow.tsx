@@ -64,7 +64,7 @@ const StyledDiv = styled.div<{ $source: ActionSource; $arrow: Arrow }>`
 
   &&::after {
     background-image: var(--icon-arrowhead-right);
-    background-size: var(--arrowhead-h);
+    background-size: var(--arrowhead-h, 16px);
     background-repeat: no-repeat;
     background-position: right center;
     content: '';
@@ -76,7 +76,7 @@ const StyledDiv = styled.div<{ $source: ActionSource; $arrow: Arrow }>`
     line-height: 1;
 
     height: var(--arrowhead-h, 16px);
-    width: var(--arrowhead-h, 16px);
+    width: var(--arrowhead-w, 16px);
     transform: translate(0px, 0);
     border: none;
     image-rendering: pixelated;

@@ -96,7 +96,9 @@ import { isObject } from './util';
  *  ├╴find( source, predicate: Predicate<T>        ): T;                │ ✅
  *  │                                                                   │
  *  ├╴every( source, predicate: Predicate<T>        ): boolean;         │ ✅
- *  └╴some( source, predicate: Predicate<T>        ): boolean;          │ ✅
+ *  ├╴some( source, predicate: Predicate<T>        ): boolean;          │ ✅
+ *  │
+ *  └╴walk( tree, predicate: Predicate<T>        ): boolean;          │ ✅
  *                                                                      │
  * ╔═════════╤═══════════════════╗                                      │
  * ║ Mapping │ (S[i] -> S[f(i)]) ║                                      │

@@ -1,6 +1,12 @@
 /* Auto-generated file - last built: 2024-12-26T16:38:04.954490 */
 
 export const projectileIds = [
+  "data/entities/items/pickup/egg_slime.xml",
+  "data/entities/items/pickup/egg_red.xml",
+  "data/entities/items/pickup/egg_fire.xml",
+  "data/entities/projectiles/deck/fireworks/firework_green.xml",
+  "data/entities/projectiles/deck/fireworks/firework_blue.xml",
+  "data/entities/projectiles/deck/fireworks/firework_orange.xml",
   'data/entities/projectiles/deck/grenade_large.xml',
   'data/entities/items/pickup/egg_monster.xml',
   'data/entities/projectiles/deck/acidshot.xml',
