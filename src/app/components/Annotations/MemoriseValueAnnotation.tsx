@@ -24,7 +24,7 @@ const StyledDiv = styled.div<{ $stat: ActionStateKey }>`
   }
 `;
 
-export const StoreAndResetAnnotation = ({
+export const MemoriseValueAnnotation = ({
   stat,
   children,
   style,
@@ -39,7 +39,7 @@ export const StoreAndResetAnnotation = ({
       $stat={stat}
       style={style}
       className={className}
-      data-name={'StoreAndResetAnnotation'}
+      data-name={'MemoriseValue'}
       data-stat={stat}
     >
       {children}

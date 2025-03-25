@@ -5,12 +5,11 @@ import {
   DontDrawAnnotation,
   DrawAnnotationConsumed,
   DrawAnnotationDraws,
-  FriendlyFireAnnotation,
   IterationAnnotation,
-  NoManaAnnotation,
+  MemoriseValueAnnotation,
+  RecallValueAnnotation,
   RecursionAnnotation,
 } from '../../Annotations';
-import { StoreAndResetAnnotation } from '../../Annotations/StoreAndResetAnnotation';
 import { KeyContainer, KeyGroup, KeyItem } from '../../Key/Key';
 import { TreeArrow } from './TreeArrow';
 
@@ -144,12 +143,13 @@ export const ActionTreeKey = () => {
             spell={getSpellByActionId('GAMMA')}
           />
         </KeyItem>
+        <KeyItem description={`Current value of 'Recharge Time' memorised.`}>
+          <MemoriseValueAnnotation stat={'reload_time'} />
+        </KeyItem>
         <KeyItem
-          description={
-            'This spell stores the current value for Recharge Time before carrying out its effects, and then restores that value after it is done. Any increases or decreases to Recharge Time between then are ignored.'
-          }
+          description={`Value of 'Recharge Time' set to previously memorised value.`}
         >
-          <StoreAndResetAnnotation stat={'reload_time'} />
+          <RecallValueAnnotation stat={'reload_time'} />
         </KeyItem>
       </KeyGroup>
       <KeyGroup title={'Triggers & Scope'}>
