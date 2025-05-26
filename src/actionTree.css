@@ -249,89 +249,15 @@
 [data-name='Arrows']::after {
   content: none;
   display: none;
-  /* content: ''; */
-  /* height: var(--height); */
-  /* width: var(--width); */
-  /* display: flex; */
-  /* position: absolute; */
-  /* top: unset; */
-  /* right: unset; */
-  /* bottom: unset; */
-  /* left: unset; */
-  /* border-style: solid; */
-  /* border-width: var(--arrow-line-w); */
-  /* border-color: var(--arrow-color); */
-  /* box-sizing: content-box; */
-  /* filter: drop-shadow(-1px 2px 2px #000); */
-  /* opacity: 0.4; */
-}
-/* [data-name='Arrows']::before /1* ⤵ ↆ *1/ { */
-/*   width: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2)); */
-/*   border-width: var(--arrow-line-⤵); */
-/*   border-radius: var(--arrow-radius-⤵); */
-/*   right: unset; */
-/*   bottom: 0; */
-/*   left: 0; */
-/*   top: calc((var(--spell-size) / 2) + (var(--arrow-line-w) / 2) * -1); */
-/* } */
-[data-name='AcTreeNode']:nth-of-type(n + 2) > [data-name='Arrows']::before /* ↆ */ {
-  /* border-width: var(--arrow-line-ↆ); */
-  /* border-radius: var(--arrow-radius-ↆ); */
-  /* top: calc(((var(--col-spacing) / 2) - var(--arrow-line-w)) * -1); */
-  /* --height: calc((var(--col-spacing) / 2) + 100%); */
-}
-[data-name='AcTreeNode']:last-of-type > [data-name='Arrows']::before {
-  /* border-radius: 0; */
-  /* border-width: 0; */
 }
 
 [data-name='TreeArrow'][data-arrow='⤵︎'] {
   --height: 100%;
-  height: 100%;
+  height: var(--height);
 }
-[data-name='AcTreeNode']:last-child
-  > [data-name='Arrows']
-  > [data-name='TreeArrow'][data-arrow='⤵︎'] {
-  display: none;
-}
-[data-name='AcTreeNode']:first-child
-  > [data-name='Arrows']
-  > [data-name='TreeArrow'][data-arrow='⤷ '] {
-  display: none;
-}
-
 [data-name='TreeArrow'][data-arrow='⤷ '] {
   --height: 100%;
-  height: 100%;
-}
-
-[data-name='Arrows']::after /* → ⤷  */ {
-  /* --height: calc( */
-  /*   (var(--spell-size) / 2) + var(--row-spacing) - (var(--arrow-line-w) / 2) */
-  /* ); */
-  /* --width: calc(var(--arrow-right-w) - (var(--arrow-line-w) / 2)); */
-  /* top: calc(((var(--spell-size) / 2) + (var(--arrow-line-w) / 2)) * -1); */
-  /* right: unset; */
-  /* bottom: unset; */
-  /* left: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2)); */
-  /* border-radius: var(--arrow-radius-⤷); */
-  /* border-width: var(--arrow-line-⤷); */
-}
-[data-name='AcTreeNode']:first-of-type > [data-name='Arrows']::after /* ➜ */ {
-  /* --width: calc(var(--arrow-right-w) + var(--arrow-left-w)); */
-  /* top: calc((var(--spell-size) / 2) + (var(--arrow-line-w) / 2) * -1); */
-  /* left: 0; */
-  /* border-radius: var(--arrow-radius-➜); */
-  /* border-width: var(--arrow-line-➜); */
-}
-
-[data-name='TreeArrow'][data-arrow='⤵︎'] {
-  --height: 100%;
-  height: 100%;
-}
-
-[data-name='TreeArrow'][data-arrow='⤷ '] {
-  --height: 100%;
+  height: var(--height);
   left: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2));
   top: unset;
 }
@@ -342,6 +268,14 @@
   outline: 1px solid red;
 }
 
+[data-name='AcTreeNode']:last-child
+  > [data-name='Arrows']
+  > [data-name='TreeArrow'][data-arrow='⤵︎'],
+[data-name='AcTreeNode']:first-child
+  > [data-name='Arrows']
+  > [data-name='TreeArrow'][data-arrow='⤷ '] {
+  display: none;
+}
 [data-name='ActionSourceGroup']
   > [data-name='AcTreeNode']
   > [data-name='Arrows']
@@ -388,12 +322,12 @@
   top: 0;
 }
 
-/*{{{3 Arrows Debug */
+/*{{{3 Arrows Debug 
 [data-arrow='⤵︎']
 [data-arrow='⤵︎']
 [data-arrow='ↆ']
 [data-arrow='⤷ ']
-[data-arrow='⭢ ']
+[data-arrow='⭢ ']*/
 
 .debug :is([data-name='Arrows'], ::after, ::before) /* → */ {
   outline: 1px dotted green;

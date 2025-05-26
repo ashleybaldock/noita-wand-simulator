@@ -9,22 +9,25 @@ import type { ActionId } from '../../calc/actionId';
 const MainDiv = styled.div`
   font-size: 14px;
   padding: 0.3em;
+
+  margin-top: -8px;
 `;
 
 const TabTitlesDiv = styled.div`
+  --bsize-spell: 34px;
   display: flex;
   flex-wrap: wrap-reverse;
   justify-content: start;
   margin-right: 0.7em;
   padding: 0 0.7em;
-  align-items: end;
+  align-items: start;
   overflow: hidden;
 `;
 
 /* TODO
  * * Side-by-side for spell selector on wide screen
  */
-const TitleDiv = styled.div<{
+const Tab = styled.div<{
   selected: boolean;
 }>`
   position: relative;
@@ -59,7 +62,6 @@ const TitleDiv = styled.div<{
     border-bottom-color: var(--bg-color-tab);
 
     padding: 0.5em 0.7em 0.5em 0.7em;
-    margin: 0 0 0 -0.16em;
 
     cursor: default;
     z-index: var(--zindex-tabs-selected);
@@ -68,6 +70,10 @@ const TitleDiv = styled.div<{
 
     &:hover {
     }
+
+    border-radius: 0 0 0.5em 0.5em;
+    margin: -0.16em 0 0 0;
+    border-top: 0 hidden transparent;
   `
       : `
     color: var(--color-tab-inactive);
@@ -75,10 +81,13 @@ const TitleDiv = styled.div<{
     border-bottom-color: transparent;
 
     padding: 0.36em 0.7em 0.32em 0.7em;
-    margin: 0 0 0 -0.16em;
     cursor: pointer;
     transition: var(--transition-hover-out);
     transition-property: border-color, color;
+
+    margin: -0.16em 0 0 0;
+    border-top: 0.16em solid var(--bg-color-tab);
+    border-radius: 0 0 0.5em 0.5em;
 
     &:hover {
       transition: var(--transition-hover-in);
@@ -93,9 +102,6 @@ const TabsWandAction = styled(WandAction)`
   --transition-props: opacity;
   --sizes-spell: 2em;
 
-  transform: none;
-  opacity: 0.94;
-  cursor: default;
   transform: none;
   opacity: 1;
   cursor: default;
@@ -112,11 +118,43 @@ const ContentDiv = styled.div`
   background-color: var(--bg-color-tab);
   border: 0.16em solid var(--color-tab-border-active);
   border-radius: 0.26em 0.46em;
-  padding: 0.26em;
-  top: -0.16em;
   position: relative;
-  max-height: 50vh;
+  background-size: 4px;
+  gap: var(--bsize-gap);
+  height: calc(
+    round(down, min(30vh, var(--spellandgap) * 6), var(--spellandgap)) +
+      var(--bsize-padh)
+  );
+  --bsize-gap: 4px;
+  box-sizing: content-box;
+  --spellandgap: calc(var(--bsize-spell) + var(--bsize-gap));
+  --bsize-padh: 6px;
   overflow-y: scroll;
+  overscroll-behavior: none;
+
+  gap: var(--bsize-gap);
+  height: calc(
+    round(
+        up,
+        min(40vh, ((var(--spellandgap) * 4) - var(--bsize-gap))),
+        var(--spellandgap)
+      ) + calc(var(--bsize-padh) * 2)
+  );
+  --bsize-gap: 4px;
+  --spellandgap: calc(var(--bsize-spell) + var(--bsize-gap));
+  --bsize-padh: 6px;
+  overflow-y: scroll;
+  width: auto;
+  border: 0.16rem solid var(--color-tab-border-active);
+  border-radius: 0.26rem 0.46rem;
+  --bg-color: #3e1a1a;
+  --bg-texture: url('/data/spelltypes/svg/item_bg_projectile.svg');
+  background-image: radial-gradient(circle at 50% 50%, #500 0%, #0008 100%),
+    var(--bg-texture);
+  box-shadow: inset 0 3px 3px 3px #000, inset 0 0 2px 4px var(--bg-color);
+  background-attachment: fixed, local;
+  background-size: 90% 100%, 6px;
+  background-position: center, center;
 `;
 
 const HiddenContentDiv = styled.div`
@@ -170,11 +208,14 @@ export function Tabs({
   }
 
   return (
-    <MainDiv>
-      <TabTitlesDiv data-name="TabsTitles">
+    <MainDiv data-name="Tabs">
+      <ContentDiv data-name="ActiveTabContent">
+        {tabs[displayIndex].content}
+      </ContentDiv>
+      <TabTitlesDiv data-name="TabTitles">
         {tabs.map(({ titleParts }, index) => (
-          <TitleDiv
-            data-name="TabTitle"
+          <Tab
+            data-name={`Tab${selectedTabIndex === index ? ':Selected' : ''}`}
             selected={selectedTabIndex === index}
             onClick={() => setSelectedTabIndex(index)}
             key={titleParts.reduce((acc, { text }) => `${acc}-${text}`, 'tab-')}
@@ -190,12 +231,9 @@ export function Tabs({
               />
             ))}
             <HotkeyHint hotkeys={`${index + 2}`} position={'ne-corner'} />
-          </TitleDiv>
+          </Tab>
         ))}
       </TabTitlesDiv>
-      <ContentDiv data-name="ActiveTabContent">
-        {tabs[displayIndex].content}
-      </ContentDiv>
     </MainDiv>
   );
 }

@@ -10,6 +10,7 @@ import { YesNoToggle } from '../Input';
 import { FNSP, SUFFIX_DEGREE, SUFFIX_FRAME, SUFFIX_SECOND } from '../../util';
 import type { Wand } from '../../redux/Wand/wand';
 import { useId } from 'react';
+import { NumericInput } from '../Input/NumericInput/NumericInput';
 
 type NumberFieldProps = {
   field: keyof TypedProperties<Wand, number>;
@@ -76,7 +77,7 @@ const EditableInterval = ({
   );
 };
 
-const StyledListItem = styled.div<{
+const StyledListItem = styled.label<{
   imgUrl: string;
 }>`
   display: flex;
@@ -95,7 +96,7 @@ const StyledListItem = styled.div<{
   color: var(--color-button);
   padding: 0.3em 0.6em 0.2em 2.2em;
 `;
-const StyledName = styled.label`
+const StyledName = styled.div`
   text-align: left;
   flex: 0 1 auto;
   width: 7.4em;
@@ -115,19 +116,11 @@ const StyledName = styled.label`
 `;
 const StyledValue = styled.span`
   text-align: right;
+  display: flex;
   flex: 1 1 auto;
   white-space: nowrap;
   min-width: 5em;
   width: 10em;
-`;
-const StyledUtilisationPlaceholder = styled.span`
-  width: 0;
-`;
-const StyledUtilisation = styled.span`
-  text-align: left;
-  flex 1 1 auto;
-  white-space: nowrap;
-  width: 0;
 `;
 
 export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
@@ -141,122 +134,112 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         imgUrl={'data/wand/icon_gun_shuffle.png'}
         className={className}
-        key={`${id}-shuffle_deck_when_empty`}
       >
-        <StyledName htmlFor={`${id}-shuffle_deck_when_empty`}>
-          {'Shuffle'}
-        </StyledName>
-        <StyledValue id={`${id}-shuffle_deck_when_empty`}>
+        <StyledName>{'Shuffle'}</StyledName>
+        <StyledValue>
           <YesNoToggle
             checked={wand.shuffle_deck_when_empty}
             onChange={(e) =>
               dispatch(
                 setWand({
-                  wand: { ...wand, shuffle_deck_when_empty: e.target.checked },
+                  wand: {
+                    ...wand,
+                    shuffle_deck_when_empty: e.target.checked,
+                  },
                 }),
               )
             }
           />
         </StyledValue>
-        <StyledUtilisationPlaceholder />
       </StyledListItem>
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_gun_capacity.png'}
-        key={`${id}-deck_capacity`}
       >
-        <StyledName htmlFor={`${id}-deck_capacity`}>{'Capacity'}</StyledName>
-        <StyledValue id={`${id}-deck_capacity`}>
-          {renderNumberField({ field: 'deck_capacity' })(wand, dispatch)}
+        <StyledName>{'Capacity'}</StyledName>
+        <StyledValue>
+          <NumericInput
+            value={wand.deck_capacity}
+            setValue={(value) =>
+              dispatch(setWand({ wand: { ...wand, deck_capacity: value } }))
+            }
+            onChange={() => {}}
+            min={1}
+            max={512}
+            large={26}
+            showSetToMax={false}
+            showSetToLarge={true}
+          ></NumericInput>
         </StyledValue>
-        <StyledUtilisationPlaceholder />
       </StyledListItem>
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_gun_actions_per_round.png'}
-        key={`${id}-actions_per_round`}
       >
-        <StyledName htmlFor={`${id}-actions_per_round`}>
-          {'Spells/Cast'}
-        </StyledName>
-        <StyledValue id={`${id}-actions_per_round`}>
+        <StyledName>{'Spells/Cast'}</StyledName>
+        <StyledValue>
           {renderNumberField({ field: 'actions_per_round' })(wand, dispatch)}
         </StyledValue>
-        <StyledUtilisationPlaceholder />
       </StyledListItem>
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_fire_rate_wait.png'}
-        key={`${id}-cast_delay`}
       >
-        <StyledName htmlFor={`${id}-cast_delay`}>{'Cast delay'}</StyledName>
-        <StyledValue id={`${id}-cast_delay`}>
+        <StyledName>{'Cast delay'}</StyledName>
+        <StyledValue>
           <EditableInterval field="cast_delay" />
         </StyledValue>
-        <StyledUtilisationPlaceholder />
       </StyledListItem>
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_gun_reload_time.png'}
-        key={`${id}-reload_time`}
       >
-        <StyledName htmlFor={`${id}-reload_time`}>{'Recharge'}</StyledName>
-        <StyledValue id={`${id}-reload_time`}>
+        <StyledName>{'Recharge'}</StyledName>
+        <StyledValue>
           <EditableInterval field="reload_time" />
         </StyledValue>
-        <StyledUtilisationPlaceholder />
       </StyledListItem>
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_mana_max.png'}
-        key={`${id}-mana_max`}
       >
-        <StyledName htmlFor={`${id}-mana_max`}>{'Mana Max'}</StyledName>
-        <StyledValue id={`${id}-mana_max`}>
+        <StyledName>{'Mana Max'}</StyledName>
+        <StyledValue>
           {renderNumberField({ field: 'mana_max' })(wand, dispatch)}
         </StyledValue>
-        <StyledUtilisationPlaceholder />
       </StyledListItem>
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_mana_charge_speed.png'}
-        key={`${id}-mana_charge_speed`}
       >
-        <StyledName htmlFor={`${id}-mana_charge_speed`}>
-          {'Mana Regen'}
-        </StyledName>
-        <StyledValue id={`${id}-mana_charge_speed`}>
+        <StyledName>{'Mana Regen'}</StyledName>
+        <StyledValue>
           {renderNumberField({ field: 'mana_charge_speed' })(wand, dispatch)}
         </StyledValue>
-        <StyledUtilisationPlaceholder />
       </StyledListItem>
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_spread_degrees.png'}
-        key={`${id}-spread`}
       >
-        <StyledName htmlFor={`${id}-spread`}>{'Spread'}</StyledName>
-        <StyledValue id={`${id}-spread`}>
+        <StyledName>{'Spread'}</StyledName>
+        <StyledValue>
           {renderNumberField({
             field: 'spread',
             formatValue: (v) => `${round(Number(v), 1)}${FNSP}${SUFFIX_DEGREE}`,
           })(wand, dispatch)}
         </StyledValue>
-        <StyledUtilisationPlaceholder />
       </StyledListItem>
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_speed_multiplier.png'}
-        key={`${id}-speed`}
       >
-        <StyledName htmlFor={`${id}-speed`}>{'Speed'}</StyledName>
-        <StyledValue id={`${id}-speed`}>
+        <StyledName>{'Speed'}</StyledName>
+        <StyledValue>
           {renderNumberField({
             field: 'speed',
             formatValue: (v) => `${round(Number(v), 1)}`,
           })(wand, dispatch)}
         </StyledValue>
-        <StyledUtilisationPlaceholder />
       </StyledListItem>
     </>
   );

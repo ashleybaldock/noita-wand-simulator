@@ -95,7 +95,7 @@ const ActionComponent = ({
           </WandActionDragSource>
           <ChargesRemainingAnnotation
             charges={spellAction.uses_remaining}
-            nounlimited={spellAction.never_unlimited}
+            neverUnlimited={spellAction.never_unlimited}
           />
           <DeckIndexAnnotation
             deckIndex={deckIndex}

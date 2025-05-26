@@ -8,6 +8,7 @@ const DeleteDiv = styled(BaseAnnotation)`
   --transition-out: var(--transition-hover-out);
   --transition-props: transform;
 
+  position: absolute;
   top: 2px;
   right: 4px;
   left: unset;

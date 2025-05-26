@@ -86,7 +86,11 @@ export const SectionToolbar = ({
   className?: string;
 }>) => {
   return (
-    <SectionHeaderContainer data-name="SectionToolbar" className={className}>
+    <SectionHeaderContainer
+      data-name="SectionToolbar"
+      data-title={title}
+      className={className}
+    >
       <StickyHeaderTopBar />
       <GridSectionHeader title={title} />
       {children}

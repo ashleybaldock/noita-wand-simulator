@@ -1,4 +1,5 @@
-import type { KeyOf, KeyOfType, ObjectKey, ValueOf } from '../util';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { KeyOf } from '../util';
 import type { SpellType } from './spellTypes';
 
 export type GunActionState = {

@@ -62,7 +62,9 @@ export const SlottedSpell = ({
               {!alwaysCast && (
                 <ChargesRemainingAnnotation
                   charges={spell.uses_remaining}
-                  nounlimited={spell.never_unlimited}
+                  shouldBeZero={true}
+                  shouldNotDeplete={false}
+                  neverUnlimited={spell.never_unlimited}
                 />
               )}
               <DeckIndexAnnotation

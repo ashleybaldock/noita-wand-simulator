@@ -21,6 +21,10 @@ const StyledDiv = styled.div<{
 
   background-image: url('/data/inventory/full_inventory_box.png');
 
+  &:hover {
+    background-image: url('/data/inventory/full_inventory_box.png');
+  }
+
   ${({ $highlight, $disabled }) =>
     $disabled
       ? `background-image: url('/data/inventory/inventory_box_inactive_overlay.png'), url('/data/inventory/full_inventory_box.png');`

@@ -30,38 +30,76 @@ const MainDiv = styled.div`
   flex: 1 1;
   background-color: #100e0e;
   --gap-multiplier: 0.12;
-  min-height: calc(6 * var(--bsize-spell) * (1 + var(--gap-multiplier)));
+
+  position: sticky;
+  top: -100px;
+
+  &::before {
+    content: '';
+    width: auto;
+    height: 6px;
+    background-color: transparent;
+    display: flex;
+    position: sticky;
+    top: 30px;
+    z-index: 10;
+    box-shadow: inset 0 3px 3px 0px #000,
+      0 -4px 0 0 var(--color-base-background);
+    border: 0.16rem solid var(--color-tab-border-active);
+    border-radius: 0.26rem 0.46rem 0 0;
+    border-bottom: 0 hidden transparent;
+  }
 `;
 
 const SpellCategorySpellsDiv = styled.div`
-  padding: 0.26em 0.16em;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--bsize-spell), 1fr));
-  gap: calc(var(--bsize-spell) * var(--gap-multiplier));
   align-content: start;
+
+  grid-template-columns: repeat(auto-fill, minmax(var(--bsize-spell), 1fr));
+  align-content: start;
+  justify-content: stretch;
+  display: grid;
+  transform: scaleY(-1);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 6px 8px;
+  gap: 2px;
+
+  padding: var(--bsize-padh);
+  gap: var(--bsize-gap);
+  overscroll-behavior: none;
+  box-sizing: content-box;
+  height: fit-content;
+  background: none;
+  box-shadow: none;
+
+  & > div {
+    transform: scaleY(-1);
+  }
 `;
 
 const SpellSelectorWandActionBorder = styled(StyledWandActionBorder)`
   position: relative;
   background-image: url('/data/inventory/grid_box_unknown.png');
-  padding-left: 0px;
-  padding-top: 0px;
+  padding-left: 0;
+  padding-top: 0;
 
-  &::before {
-    content: '';
-    height: 100%;
+  --size-spell: var(--bsize-spell, 1em);
+  --size-spell-border-width: var(
+    --bsize-spell-border-width,
+    calc(var(--size-spell) + (2 * var(--xsize-spell-border)))
+  );
+  width: var(--size-spell);
+  height: var(--size-spell);
+  background-size: contain;
+  image-rendering: pixelated;
+  background-clip: padding-box;
+
+  box-shadow: 0 0 2px #000;
+
+  &:hover {
     background-image: url('/data/inventory/grid_box.png');
-    position: absolute;
-    width: 100%;
-    background-size: cover;
-    image-rendering: pixelated;
-    opacity: 1;
-    transition: opacity var(--transition-hover-out);
-  }
-
-  &:hover::before {
-    opacity: 0.6;
-    transition: opacity var(--transition-hover-in);
   }
 `;
 const SpellSelectorWandActionDragSource = styled(WandActionDragSource)`
@@ -69,25 +107,15 @@ const SpellSelectorWandActionDragSource = styled(WandActionDragSource)`
 `;
 
 const SpellSelectorWandAction = styled(DraggableWandAction)`
-  --transition-props: opacity, background;
-
-  opacity: 0.84;
+  opacity: 1;
   padding: 0.04em;
 
   &:hover {
-    opacity: 0.9;
   }
 `;
 
 const isSpellUnlocked = (config: Config, spell: Spell) => {
   return !spell.spawn_requires_flag || config[spell.spawn_requires_flag];
-};
-
-const isBetaEnabled = (
-  configBetaEnabled: ConfigState['config']['showBeta'],
-  spell: Spell,
-) => {
-  return !spell.beta || configBetaEnabled;
 };
 
 const WandActionSelect = ({
@@ -107,7 +135,7 @@ const WandActionSelect = ({
     }
   };
   return (
-    <SpellSelectorWandActionBorder>
+    <SpellSelectorWandActionBorder data-name="SpellSelectorWandActionBorder ">
       <SpellSelectorWandActionDragSource
         actionId={id}
         key={id}
@@ -123,10 +151,7 @@ export const SpellSelector = () => {
   const config = useConfig();
 
   const unlockedActions = useMemo(
-    () =>
-      spells.filter(
-        (a) => isSpellUnlocked(config, a) && isBetaEnabled(config.showBeta, a),
-      ),
+    () => spells.filter((a) => isSpellUnlocked(config, a)),
     [config],
   );
 
@@ -156,7 +181,10 @@ export const SpellSelector = () => {
               <>
                 {contains.map((spellType) => {
                   return (
-                    <SpellCategorySpellsDiv key={spellType}>
+                    <SpellCategorySpellsDiv
+                      key={spellType}
+                      data-name="SpellCategorySpellsDiv"
+                    >
                       {spellsByType[spellType].map((spell) => (
                         <WandActionSelect spell={spell} key={spell.id} />
                       ))}
@@ -188,7 +216,7 @@ export const SpellSelector = () => {
           ],
           iconSrc: sprite,
           content: (
-            <SpellCategorySpellsDiv>
+            <SpellCategorySpellsDiv data-name="SpellCategorySpellsDiv">
               {actions.map((spell) => (
                 <WandActionSelect spell={spell} key={spell.id} />
               ))}
@@ -214,7 +242,10 @@ export const SpellSelector = () => {
           <>
             {objectEntries(spellsByType).map(([spellType]) => {
               return (
-                <SpellCategorySpellsDiv key={spellType}>
+                <SpellCategorySpellsDiv
+                  key={spellType}
+                  data-name="SpellCategorySpellsDiv"
+                >
                   {spellsByType[spellType].map((spell) => (
                     <WandActionSelect spell={spell} key={spell.id} />
                   ))}
@@ -237,7 +268,7 @@ export const SpellSelector = () => {
   }, [allInOneTab, config.showSpellsInCategories, tabPerGroupedType]);
 
   return (
-    <MainDiv>
+    <MainDiv data-name="SpellSelector">
       <Tabs tabs={tabs} />
     </MainDiv>
   );

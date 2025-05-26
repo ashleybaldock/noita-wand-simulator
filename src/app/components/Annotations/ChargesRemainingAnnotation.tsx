@@ -18,31 +18,81 @@ const Base = styled.div`
 `;
 
 const Zero = styled(Base)`
-  width: 9px;
-  height: 18px;
+  width: 7px;
+  height: 9px;
 
   background-image: url('/data/inventory/0charges.png');
 `;
 
 const Infinite = styled(Base)`
-  width: 18px;
-  height: 10px;
+  width: 9px;
+  height: 8px;
 
   background-image: url('/data/inventory/infcharges.png');
 `;
 
+const Unlimited = styled(Base)`
+  width: 16px;
+  height: 16px;
+
+  background-image: url('/data/inventory/unlimitedcharges.png');
+`;
+
+const ShouldNotDeplete = styled(Base)`
+  width: 11px;
+  height: 9px;
+
+  background-image: url('/data/inventory/shouldnotdeplete.png');
+`;
+
+const AtLeastOne = styled(Base)`
+  width: 7px;
+  height: 8px;
+  background-image: url('/data/inventory/atleastone.png');
+  background-size: cover;
+  background-position: top left;
+  filter: drop-shadow(2px 0px 0 #000) drop-shadow(-1px 0px 0 #000)
+    drop-shadow(0 2px 0 #000) drop-shadow(0 -1px 0 #000);
+`;
+
 export const ChargesRemainingAnnotation = ({
   charges,
-  nounlimited,
+  neverUnlimited = false,
+  depletedByFiring = true,
+  shouldBeZero = false,
+  shouldNotDeplete = false,
 }: {
   charges: number | undefined;
-  nounlimited: boolean | undefined;
+  shouldBeZero?: boolean;
+  neverUnlimited?: boolean;
+  depletedByFiring?: boolean;
+  shouldNotDeplete?: boolean;
 }) => {
-  const { infiniteSpells } = useConfig();
+  const { infiniteSpells, unlimitedSpells } = useConfig();
 
-  return charges === undefined && !nounlimited ? null : infiniteSpells ? (
-    <Infinite data-name="ChargesRemainingAnnotation" />
-  ) : (
-    <Zero data-name="ChargesRemainingAnnotation-Zero" />
-  );
+  const spellHasChargeLimit = charges !== undefined;
+
+  const spellHasUnlimitedCharges =
+    spellHasChargeLimit && !neverUnlimited && unlimitedSpells;
+
+  const spellHasInfiniteCharges = spellHasChargeLimit && infiniteSpells;
+
+  const spellShouldNotDepleteWarning =
+    !spellHasUnlimitedCharges && !spellHasInfiniteCharges && depletedByFiring;
+
+  const spellHasZeroCharges = spellHasChargeLimit && charges === 0;
+
+  const spellHasAtLeastOneCharge = spellHasChargeLimit && charges >= 0;
+
+  return spellHasInfiniteCharges ? (
+    <Infinite data-name="ChargesAnnotation.Inf" />
+  ) : spellHasUnlimitedCharges ? (
+    <Unlimited data-name="ChargesAnnotation.Unlim" />
+  ) : spellShouldNotDepleteWarning ? (
+    <ShouldNotDeplete data-name="ChargesAnnotation.ShouldNotDeplete" />
+  ) : spellHasZeroCharges ? (
+    <Zero data-name="ChargesAnnotation.Zero" />
+  ) : spellHasAtLeastOneCharge ? (
+    <AtLeastOne data-name="ChargesAnnotation.AtLeastOne" />
+  ) : null;
 };

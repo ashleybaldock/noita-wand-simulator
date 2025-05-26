@@ -212,8 +212,7 @@ export function takeArray<T>(source: IterableIterator<T>, n: number): Array<T> {
 
 /**
  * Like takeArray, but take until iterator exhausted
- * !Beware, this immediately reads the requested (n) items from the source into memory
- * !Beware, do not use with infinite source iterator
+ * (reads the requested (n) items from the source into memory)
  * @returns Array of all items from source
  */
 export function takeAll<T>(source: IterableIterator<T>): Array<T> {

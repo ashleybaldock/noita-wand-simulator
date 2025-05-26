@@ -7,6 +7,7 @@ import {
   DrawAnnotationDraws,
   IterationAnnotation,
   MemoriseValueAnnotation,
+  ProjectileAddedAnnotation,
   RecallValueAnnotation,
   RecursionAnnotation,
 } from '../../Annotations';
@@ -227,7 +228,7 @@ export const ActionTreeKey = () => {
             'One or more Projectiles were added to the current scope.'
           }
         >
-          {/* <ProjectileAddedAnnotation /> */}
+          <ProjectileAddedAnnotation />
         </KeyItem>
         <KeyItem
           description={

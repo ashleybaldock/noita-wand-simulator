@@ -64,12 +64,12 @@ export const WandSimulator = () => {
         <Column>
           <MainHeader></MainHeader>
           <StickyGroup>
-            <WandBuilderToolbar />
-            <WandBuilder />
+            <SpellSelector />
             <SpellShortcuts>
               <SpellHotbar></SpellHotbar>
             </SpellShortcuts>
-            <SpellSelector />
+            <WandBuilderToolbar />
+            <WandBuilder />
           </StickyGroup>
           <StickyGroup>
             <CastConfigEditor />

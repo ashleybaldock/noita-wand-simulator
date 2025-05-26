@@ -79,8 +79,8 @@ const Wrapper = styled.fieldset<{ $valid: boolean }>`
 `;
 
 const NumberInput = styled.input`
-  width: 100%;
-  flex: 1 1 100%;
+  width: 5em;
+  flex: 1 1 fit-content;
   background-color: #000;
 
   caret-color: white;
@@ -89,12 +89,21 @@ const NumberInput = styled.input`
   font: inherit;
   font-size: 1em;
   text-align: left;
-  padding: 0.28ch 0.5ch 0 0.5ch;
+  padding: 0.5ch 0.5ch 0.3ch 0.5ch;
   line-height: 1;
-  margin: 0 0.5ch;
+  margin: 0 0.1ch;
   display: flex;
   align-self: center;
   box-sizing: border-box;
+  border-radius: 0.3em;
+  box-shadow: inset 0 0px 2px 2px #595959;
+
+  &:valid {
+    box-shadow: inset 0 0px 2px 2px red;
+  }
+  &:invalid {
+    box-shadow: inset 0 0px 1px 1px green;
+  }
 
   &:focus-visible {
     outline: 1.6px inset #d18811;
@@ -120,12 +129,8 @@ const NumericInputButton = styled(Button)`
   border: 1px solid #444;
   border-radius: 0;
   box-sizing: border-box;
-  flex: 1 1;
+  flex: 0;
   display: flex;
-  align-self: center;
-  align-content: baseline;
-  align-items: center;
-  justify-content: center;
   padding-top: 0.6em;
   padding-left: var(--padding-sides);
   padding-right: var(--padding-sides);
@@ -157,6 +162,7 @@ const NumericInputButton = styled(Button)`
   `}
 `;
 const ButtonMin = styled(NumericInputButton)``;
+const ButtonSmall = styled(NumericInputButton)``;
 const ButtonStepDown = styled(NumericInputButton)`
   margin-left: -1px;
 `;
@@ -169,17 +175,22 @@ const ButtonBigStepUp = styled(NumericInputButton)`
 const ButtonStepUp = styled(NumericInputButton)`
   margin-right: -1px;
 `;
+const ButtonLarge = styled(NumericInputButton)``;
 const ButtonMax = styled(NumericInputButton)``;
 
 export const NumericInput = ({
   min = Number.NEGATIVE_INFINITY,
   max = Number.POSITIVE_INFINITY,
+  large = Number.POSITIVE_INFINITY,
+  small = 0,
   precision = 5,
   minStep = 1,
   step = 1,
   bigStep = 100,
   showStep = true,
-  showBigStep = true,
+  showBigStep = false,
+  showSetToLarge = false,
+  showSetToSmall = false,
   showSetToMax = true,
   showSetToMin = true,
   value,
@@ -202,6 +213,8 @@ export const NumericInput = ({
 }: React.PropsWithChildren<{
   min?: number;
   max?: number;
+  large?: number;
+  small?: number;
   precision?: number;
   minStep?: number;
   step?: number;
@@ -210,6 +223,8 @@ export const NumericInput = ({
   showBigStep?: boolean;
   showSetToMax?: boolean;
   showSetToMin?: boolean;
+  showSetToSmall?: boolean;
+  showSetToLarge?: boolean;
   formatForDisplay?: (n: number) => string;
   value: number;
   setValue: (to: number) => void;
@@ -219,8 +234,7 @@ export const NumericInput = ({
   onClick?: MouseEventHandler<HTMLInputElement>;
   className?: string;
 }>) => {
-  // const [displayed, setDisplayed] = useState(value);
-  const [lastInput, setLastInput] = useState(value);
+  const [lastInput, setLastInput] = useState(value?.toString() ?? '');
   const [valid, setValid] = useState(true);
   const [editing, setEditing] = useState(false);
 
@@ -230,7 +244,19 @@ export const NumericInput = ({
 
   const abortChanges = () => setEditing(false);
 
-  const onInputChange = useEffect(() => {
+  const onValidityChange = useEffect(() => {
+    if (inputRef && inputRef.current) {
+      inputRef.current.focus();
+
+      if (valid) {
+        inputRef.current.setCustomValidity('');
+      } else {
+        inputRef.current.setCustomValidity('Invalid');
+      }
+    }
+  }, [inputRef, valid]);
+
+  const handleOnInput = useCallback(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus();
     }
@@ -244,19 +270,23 @@ export const NumericInput = ({
     } else {
       setValid(true);
     }
+    setLastInput(parsed.toString());
   }, [inputRef, min, max]);
 
+  const handleOnChange = useCallback(() => {}, [inputRef, min, max]);
+
   const handleOnFocus = useCallback(() => {
-    setLastInput(value);
+    setLastInput(value?.toString() ?? '');
     setEditing(true);
   }, [value]);
 
   const handleOnBlur = useCallback(() => {
-    // setCurrentValue(value);
     setEditing(false);
   }, [value]);
 
   const changeBy = (by: number) => setValue(clamp(value + by, min, max));
+
+  const changeTo = (to: number) => setValue(clamp(to, min, max));
 
   const atMaximum = value >= max;
   const atMinimum = value <= min;
@@ -270,7 +300,20 @@ export const NumericInput = ({
           minimal={true}
           disabled={atMinimum}
           // hotkeys={''}
-        >{`${min}`}</ButtonMin>
+        >
+          {`${min === Number.NEGATIVE_INFINITY ? '−∞' : min}`}
+        </ButtonMin>
+      )}
+      {showSetToSmall && (
+        <ButtonSmall
+          data-name="SetSmall"
+          onClick={() => changeTo(small)}
+          minimal={true}
+          disabled={value === small}
+          // hotkeys={''}
+        >
+          {`${small}`}
+        </ButtonSmall>
       )}
       {showBigStep && (
         <ButtonBigStepDown
@@ -307,7 +350,8 @@ export const NumericInput = ({
           ((e.key === 'Enter' || e.key === 'Tab') && saveChanges()) ||
           (e.key === 'Esc' && abortChanges())
         }
-        onChange={onChange}
+        onInput={(e) => handleOnInput()}
+        onChange={(e) => handleOnChange()}
       />
       {showStep && (
         <ButtonStepUp
@@ -328,6 +372,17 @@ export const NumericInput = ({
           // hotkeys={'shift+up,ctrl+shift+a'}
           onClick={() => changeBy(bigStep)}
         />
+      )}
+      {showSetToLarge && (
+        <ButtonLarge
+          data-name="SetLarge"
+          onClick={() => changeTo(large)}
+          minimal={true}
+          disabled={value === large}
+          // hotkeys={''}
+        >
+          {`${large}`}
+        </ButtonLarge>
       )}
       {showSetToMax && (
         <ButtonMax
