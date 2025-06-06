@@ -1,0 +1,57 @@
+
+		id          = "LASER_EMITTER_FOUR",
+		related_projectiles	= {"data/entities/projectiles/deck/orb_laseremitter.xml"},
+			add_projectile("data/entities/projectiles/deck/orb_laseremitter_four.xml")
+
+		id          = "MEGALASER",
+		related_projectiles	= {"data/entities/projectiles/deck/megalaser.xml"},
+			add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
+			add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
+			add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
+			add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
+			add_projectile("data/entities/projectiles/deck/megalaser_beam.xml")
+			add_projectile("data/entities/projectiles/deck/megalaser.xml")
+
+		id          = "SUMMON_EGG",
+		related_projectiles	= {"data/entities/items/pickup/egg_monster.xml"},
+			local types = {"monster","slime","red","fire"}
+			local rnd = Random(1, #types)
+			local egg_name = "egg_" .. tostring(types[rnd]) .. ".xml"
+			add_projectile("data/entities/items/pickup/" .. egg_name)
+
+		id          = "SUMMON_WANDGHOST",
+		related_projectiles	= {"data/entities/projectiles/deck/wand_ghost_player.xml"},
+			add_projectile("data/entities/projectiles/deck/wand_ghost_player.xml")
+			add_projectile("data/entities/particles/image_emitters/wand_effect.xml")
+
+
+		id          = "ALL_NUKES",
+        no related
+			add_projectile("data/entities/projectiles/deck/all_nukes.xml")
+		id          = "ALL_DISCS",
+        no related
+			add_projectile("data/entities/projectiles/deck/all_discs.xml")
+		id          = "ALL_ROCKETS",
+        no related
+			add_projectile("data/entities/projectiles/deck/all_rockets.xml")
+		id          = "ALL_DEATHCROSSES",
+        no related
+			add_projectile("data/entities/projectiles/deck/all_deathcrosses.xml")
+		id          = "ALL_BLACKHOLES",
+        no related
+			add_projectile("data/entities/projectiles/deck/all_blackholes.xml")
+		id          = "ALL_ACID",
+        no related
+			add_projectile("data/entities/projectiles/deck/all_acid.xml")
+§
+		id          = "SUMMON_PORTAL",
+        no related
+			add_projectile("data/entities/projectiles/deck/summon_portal.xml")
+
+		id          = "METEOR_RAIN",
+		related_projectiles	= { "data/entities/projectiles/deck/meteor_rain_meteor.xml" },
+			add_projectile("data/entities/projectiles/deck/meteor_rain.xml")
+
+		id          = "WORM_RAIN",
+		related_projectiles	= {"data/entities/animals/worm_big.xml"},
+			add_projectile("data/entities/projectiles/deck/worm_rain.xml")
