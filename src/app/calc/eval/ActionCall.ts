@@ -11,7 +11,7 @@ export type ActionCallSequenceId = number;
 
 /**
  * Represents:
- * - a node in the action call tree (via TreeNode<ActionCall>)
+ * - a node in the action call tree (via MapTree<ActionCall>)
  * - an event in the list of called actions
  */
 export type ActionCall = {

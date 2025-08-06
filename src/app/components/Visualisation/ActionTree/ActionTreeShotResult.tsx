@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 import { WandActionCall } from '../WandActionCall';
 import type { ActionCall } from '../../../calc/eval/ActionCall';
-import type { TreeNode } from '../../../util/TreeNode';
 import { isNotNullOrUndefined, ordinalSuffix } from '../../../util';
-import { mappedTreeToTreeMap } from '../../../util/MapTree';
+import { deserialiseMapTree, type MapTree } from '../../../util/MapTree';
 import type { WandShotResult } from '../../../calc/eval/WandShot';
 import type { ActionSource } from '../../../calc/actionSources';
 import { useMemo } from 'react';
@@ -51,7 +50,7 @@ const ActionTreeComponent = ({
   level,
   triggerLevel: currentTriggerLevel,
 }: {
-  node: TreeNode<ActionCall>;
+  node: MapTree<ActionCall>;
   level: number;
   position: number;
   triggerLevel: number;
@@ -75,7 +74,7 @@ const ActionTreeComponent = ({
    */
   const runs = useMemo(
     () =>
-      node.children.reduce<TreeNode<ActionCall>[][]>((runs, cur) => {
+      node.children.reduce<MapTree<ActionCall>[][]>((runs, cur) => {
         if (
           runs.length > 0 &&
           runs[runs.length - 1][runs[runs.length - 1].length - 1]?.value
@@ -170,7 +169,7 @@ export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
   const triggerLevel = 0;
   return (
     <ActionTreeRoot data-name="ActionTreeRoot">
-      {shot.actionCallTrees.map((n, index) => (
+      {shot.actionCallTrees.map((actionCallTree, index) => (
         <ActionTreeCast
           data-name="AcTreeCast"
           data-cast={index + 1}
@@ -182,7 +181,7 @@ export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
           <StartingDraw data-name="AcTreeSpCast">Spells/cast: </StartingDraw>
           <ActionTreeComponent
             position={0}
-            node={mappedTreeToTreeMap(n)}
+            node={deserialiseMapTree(actionCallTree)}
             level={level + 1}
             triggerLevel={triggerLevel}
           />

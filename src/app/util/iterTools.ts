@@ -717,16 +717,16 @@ export function* rangeIter({
  *
  * The most recently pushed iterable yields the next() value
  *
- * push([r])                          r
- * next() -> r                       / \
- * push([a,b])                      a   b
- * next() -> a                     /|\
- * push([c,d,e])                  c d e
- * next() -> c                      |
- * next() -> d                      f
+ * push([r])             ¹r
+ * next() -> r          /️   \️
+ * push([a,b])        ²a    ⁷b
+ * next() -> a       /️️ |️ \️️
+ * push([c,d,e])   ³c ⁴d ⁶e
+ * next() -> c         |️
+ * next() -> d        ⁵f
  * push([f])
- * next() -> f                 r,a,c,d,f,e,b
- * next() -> e             (Pre-order traversal)
+ * next() -> f    r,a,c,d,f,e,b
+ * next() -> e     (Pre-order)
  * next() -> b
  *
  */

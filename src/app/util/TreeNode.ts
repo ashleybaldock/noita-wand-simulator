@@ -2,8 +2,13 @@
  * Tree data structure
  */
 
-export type TreeNode<T> = {
+export interface TreeRoot<T> {
   value: T;
+  children: IterableIterator<TreeNode<T>>;
+  appendChild: (child: T) => void;
+  [Symbol.iterator](): IterableIterator<TreeNode<T>>;
+}
+
+export interface TreeNode<T> extends TreeRoot<T> {
   parent?: TreeNode<T>;
-  children: TreeNode<T>[];
-};
+}

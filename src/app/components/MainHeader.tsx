@@ -18,30 +18,27 @@ const getRandomInteger = (max: number) => Math.floor(Math.random() * max);
 const HeaderDiv = styled.div<{
   imgUrl?: string;
 }>`
+  image-rendering: pixelated;
   display: flex;
   flex-direction: row;
-  color: #eee;
   justify-content: space-between;
+  color: #eee;
+  margin: 0;
+  padding: 0.6em 0.8em 0.2em 0.8em;
   background-image: url('${({ imgUrl = '/logo/logo.png' }) => imgUrl}');
   background-size: contain;
   background-repeat: no-repeat;
-  height: 60px;
-  image-rendering: pixelated;
-  margin: 14px 16px;
+  background-color: var(--color-base-background);
+  background-origin: content-box;
+  z-index: 100;
+  position: sticky;
+  top: -20px;
+  height: 36px;
+
   @media screen and (max-width: 500px) {
     margin: 6px 6px;
     background-position: center;
   }
-
-  position: sticky;
-  top: -20px;
-  z-index: 100;
-  background-color: var(--color-base-background);
-  margin: 0;
-  padding: 0.6em 0.8em 0.2em 0.8em;
-  flex-direction: column;
-  height: 36px;
-  background-origin: content-box;
 `;
 
 const HeaderLink = styled.a`
@@ -80,9 +77,8 @@ export function MainHeader({ children }: React.PropsWithChildren) {
     <HeaderDiv data-name="MainHeader" imgUrl={logoVariant}>
       <HeaderLink href="/"></HeaderLink>
       <SpacerDiv />
-      <ConfigButton />
-      <Search />
       <ExtraDiv>{children}</ExtraDiv>
+      <ConfigButton />
     </HeaderDiv>
   );
 }

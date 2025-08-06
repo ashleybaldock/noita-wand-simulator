@@ -29,8 +29,7 @@ const SectionHeaderContainer = styled.div`
   grid-template-rows:
     [top
     line-start] auto [line-end
-    title-start buttons-start] 1fr [buttons-end
-    search-start] auto [search-end title-end
+    title-start search-start buttons-start] 1fr [buttons-end search-end title-end
     bottom];
 
   @media screen and (max-width: 600px) {

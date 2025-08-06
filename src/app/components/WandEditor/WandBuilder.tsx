@@ -11,7 +11,7 @@ const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
   background-color: var(--color-base-background);
-  margin: 10px 6px;
+  margin: 4px 2px;
 
   @media screen and (max-width: 500px) {
     margin: 10px 0;

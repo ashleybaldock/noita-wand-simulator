@@ -99,10 +99,10 @@ const NumberInput = styled.input`
   box-shadow: inset 0 0px 2px 2px #595959;
 
   &:valid {
-    box-shadow: inset 0 0px 2px 2px red;
+    box-shadow: inset 0 0px 1px 1px green;
   }
   &:invalid {
-    box-shadow: inset 0 0px 1px 1px green;
+    box-shadow: inset 0 0px 2px 2px red;
   }
 
   &:focus-visible {
@@ -177,6 +177,19 @@ const ButtonStepUp = styled(NumericInputButton)`
 `;
 const ButtonLarge = styled(NumericInputButton)``;
 const ButtonMax = styled(NumericInputButton)``;
+
+const ButtonsBefore = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  left: 100%;
+`;
+const ButtonsAfter = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  right: 100%;
+`;
 
 export const NumericInput = ({
   min = Number.NEGATIVE_INFINITY,
@@ -256,7 +269,7 @@ export const NumericInput = ({
     }
   }, [inputRef, valid]);
 
-  const handleOnInput = useCallback(() => {
+  const onInput = useCallback(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus();
     }
@@ -265,22 +278,18 @@ export const NumericInput = ({
       min,
       max,
     );
-    if (Number.isNaN(parsed)) {
-      setValid(false);
-    } else {
-      setValid(true);
-    }
+    setValid(!Number.isNaN(parsed));
     setLastInput(parsed.toString());
   }, [inputRef, min, max]);
 
-  const handleOnChange = useCallback(() => {}, [inputRef, min, max]);
+  const onInputChange = useCallback(() => {}, [inputRef, min, max]);
 
-  const handleOnFocus = useCallback(() => {
+  const onFocus = useCallback(() => {
     setLastInput(value?.toString() ?? '');
     setEditing(true);
   }, [value]);
 
-  const handleOnBlur = useCallback(() => {
+  const onBlur = useCallback(() => {
     setEditing(false);
   }, [value]);
 
@@ -293,48 +302,50 @@ export const NumericInput = ({
 
   return (
     <Wrapper data-name="NumericInput" $valid={valid} className={className}>
-      {showSetToMin && (
-        <ButtonMin
-          data-name="SetMinimum"
-          onClick={() => changeBy(Number.NEGATIVE_INFINITY)}
-          minimal={true}
-          disabled={atMinimum}
-          // hotkeys={''}
-        >
-          {`${min === Number.NEGATIVE_INFINITY ? '−∞' : min}`}
-        </ButtonMin>
-      )}
-      {showSetToSmall && (
-        <ButtonSmall
-          data-name="SetSmall"
-          onClick={() => changeTo(small)}
-          minimal={true}
-          disabled={value === small}
-          // hotkeys={''}
-        >
-          {`${small}`}
-        </ButtonSmall>
-      )}
-      {showBigStep && (
-        <ButtonBigStepDown
-          data-name="BigStepDown"
-          minimal={true}
-          icon={'icon.chevron.d2x'}
-          disabled={atMinimum}
-          onClick={() => changeBy(bigStep * -1)}
-          // hotkeys={'shift+down,ctrl+shift+x'}
-        />
-      )}
-      {showStep && (
-        <ButtonStepDown
-          data-name="StepDown"
-          minimal={true}
-          icon={'icon.chevron.d'}
-          disabled={atMinimum}
-          hotkeys={'down,ctrl+x'}
-          onClick={() => changeBy(step * -1)}
-        />
-      )}
+      <ButtonsBefore data-name="ButtonsBefore">
+        {editing && showSetToMin && (
+          <ButtonMin
+            data-name="SetMinimum"
+            onClick={() => changeBy(Number.NEGATIVE_INFINITY)}
+            minimal={true}
+            disabled={atMinimum}
+            // hotkeys={''}
+          >
+            {`${min === Number.NEGATIVE_INFINITY ? '−∞' : min}`}
+          </ButtonMin>
+        )}
+        {editing && showSetToSmall && (
+          <ButtonSmall
+            data-name="SetSmall"
+            onClick={() => changeTo(small)}
+            minimal={true}
+            disabled={value === small}
+            // hotkeys={''}
+          >
+            {`${small}`}
+          </ButtonSmall>
+        )}
+        {editing && showBigStep && (
+          <ButtonBigStepDown
+            data-name="BigStepDown"
+            minimal={true}
+            icon={'icon.chevron.d2x'}
+            disabled={atMinimum}
+            onClick={() => changeBy(bigStep * -1)}
+            // hotkeys={'shift+down,ctrl+shift+x'}
+          />
+        )}
+        {editing && showStep && (
+          <ButtonStepDown
+            data-name="StepDown"
+            minimal={true}
+            icon={'icon.chevron.d'}
+            disabled={atMinimum}
+            hotkeys={'down,ctrl+x'}
+            onClick={() => changeBy(step * -1)}
+          />
+        )}
+      </ButtonsBefore>
       {children}
       <NumberInput
         data-name="NumberInput"
@@ -344,57 +355,59 @@ export const NumericInput = ({
         value={editing ? lastInput : value}
         ref={inputRef}
         hidden={true}
-        onFocus={() => handleOnFocus()}
-        onBlur={() => handleOnBlur()}
+        onFocus={() => onFocus()}
+        onBlur={() => onBlur()}
         onKeyDown={(e) =>
           ((e.key === 'Enter' || e.key === 'Tab') && saveChanges()) ||
           (e.key === 'Esc' && abortChanges())
         }
-        onInput={(e) => handleOnInput()}
-        onChange={(e) => handleOnChange()}
+        onInput={(e) => onInput()}
+        onChange={(e) => onInputChange()}
       />
-      {showStep && (
-        <ButtonStepUp
-          data-name="StepUp"
-          minimal={true}
-          disabled={atMaximum}
-          icon={'icon.chevron.u'}
-          hotkeys={'up,ctrl+a'}
-          onClick={() => changeBy(step)}
-        />
-      )}
-      {showBigStep && (
-        <ButtonBigStepUp
-          data-name="BigStepUp"
-          minimal={true}
-          disabled={atMaximum}
-          icon={'icon.chevron.u2x'}
-          // hotkeys={'shift+up,ctrl+shift+a'}
-          onClick={() => changeBy(bigStep)}
-        />
-      )}
-      {showSetToLarge && (
-        <ButtonLarge
-          data-name="SetLarge"
-          onClick={() => changeTo(large)}
-          minimal={true}
-          disabled={value === large}
-          // hotkeys={''}
-        >
-          {`${large}`}
-        </ButtonLarge>
-      )}
-      {showSetToMax && (
-        <ButtonMax
-          data-name="SetMaximum"
-          onClick={() => changeBy(Number.POSITIVE_INFINITY)}
-          minimal={true}
-          disabled={atMaximum}
-          // hotkeys={''}
-        >
-          {`${max === Number.POSITIVE_INFINITY ? '∞' : max}`}
-        </ButtonMax>
-      )}
+      <ButtonsAfter data-name="ButtonsAfter">
+        {editing && showStep && (
+          <ButtonStepUp
+            data-name="StepUp"
+            minimal={true}
+            disabled={atMaximum}
+            icon={'icon.chevron.u'}
+            hotkeys={'up,ctrl+a'}
+            onClick={() => changeBy(step)}
+          />
+        )}
+        {editing && showBigStep && (
+          <ButtonBigStepUp
+            data-name="BigStepUp"
+            minimal={true}
+            disabled={atMaximum}
+            icon={'icon.chevron.u2x'}
+            // hotkeys={'shift+up,ctrl+shift+a'}
+            onClick={() => changeBy(bigStep)}
+          />
+        )}
+        {editing && showSetToLarge && (
+          <ButtonLarge
+            data-name="SetLarge"
+            onClick={() => changeTo(large)}
+            minimal={true}
+            disabled={value === large}
+            // hotkeys={''}
+          >
+            {`${large}`}
+          </ButtonLarge>
+        )}
+        {editing && showSetToMax && (
+          <ButtonMax
+            data-name="SetMaximum"
+            onClick={() => changeBy(Number.POSITIVE_INFINITY)}
+            minimal={true}
+            disabled={atMaximum}
+            // hotkeys={''}
+          >
+            {`${max === Number.POSITIVE_INFINITY ? '∞' : max}`}
+          </ButtonMax>
+        )}
+      </ButtonsAfter>
     </Wrapper>
   );
 };

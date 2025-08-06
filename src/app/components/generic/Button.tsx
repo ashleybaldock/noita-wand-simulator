@@ -113,7 +113,7 @@ const StyledButton = styled.button<{
       : ''
   }
 
-  ${props.$background && `background-image: ${props.$background};`}
+  ${props.$background ? `background-image: ${props.$background};` : ''}
 
   & {
     transition: var(--transition-hover-out);
@@ -184,19 +184,21 @@ const StyledButton = styled.button<{
   `
   }
   ${
-    props.$imgOnly === 'always' &&
-    `
+    props.$imgOnly === 'always'
+      ? `
   background-position: center center;
   `
+      : ''
   }
 
   ${
-    isBreakpoint(props.$imgOnly) &&
-    `
+    isBreakpoint(props.$imgOnly)
+      ? `
   @media screen and (max-width: ${props.$imgOnly}) {
     background-position: center center;
   }
   `
+      : ''
   }
 `}
 `;

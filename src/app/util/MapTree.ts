@@ -2,7 +2,7 @@ import type { Stack } from './Stack';
 import { createStack } from './Stack';
 import { takeArray } from './iterTools';
 import { isNotNullOrUndefined, sequentialId, tee } from './util';
-import type { TreeNode } from './TreeNode';
+import type { TreeNode, TreeRoot } from './TreeNode';
 
 /**
  * Memoise a depth-first tree traversal
@@ -36,24 +36,52 @@ export type MapTreeId = number;
 /**
  * Record of a tree node with links replaced with IDs
  */
-export type MapTreeNode<T> = {
-  value: T;
-  id: MapTreeId;
-  parentId?: MapTreeId;
+export interface MapTreeNode<T> extends TreeNode<T> {
+  // id: MapTreeId;
   childIds: MapTreeId[];
+  parentId?: MapTreeId;
 };
 
-export type SerialisedMapTree<T> = Map<MapTreeId, MapTreeNode<T>>;
+
+class MapTree<T> extends  implements TreeRoot<T> {
+  #map: Map<MapTreeId, MapTreeNode<T>>;
+
+  id: MapTreeId;
+
+  constructor(init: readonly [MapTreeId, MapTreeNode<T>][] | null) {
+    this.#map = new Map(init);
+  }
+  
+  get value(): T {
+    return this.#map.get(this.id);
+  }
+  children: IterableIterator<MapTreeNode<T>> {
+  }
+}
 
 /**
  * Wrapper around MapTreeNode<T>
  * pretending to be a tree with links
  */
-export type MapTree<T> = {
+// export interface MapTree<T> extends Map<MapTreeId, MapTreeNode<T>>, TreeNode<T> {
+//   value: T;
+//   children: MapTree<T>[];
+//   parent?: MapTree<T>;
+// }
+export interface MapTreeIf<T> extends MapIterator<[MapTreeId, MapTreeNode<T>]>, TreeNode<T> {
   value: T;
-  children: MapTree<T>[];
+  // children: MapTree<T>[];
+  children: MapIterator<T>;
   parent?: MapTree<T>;
-};
+  [Symbol.iterator](): MapIterator<[MapTreeId, MapTreeNode<T>]>;
+  
+}
+/**
+ * For storage in Redux
+ */
+export type SerialisedMapTree<T> =
+  | [MapTreeId, MapTreeNode<T>][]
+  | MapIterator<[MapTreeId, MapTreeNode<T>]>;
 
 /**
  * Turn a tree with reference links into a tree using ID lookups
@@ -61,9 +89,9 @@ export type MapTree<T> = {
  *
  * TODO - this could expose a generator for doing ordered traversals
  */
-export const mapTreeToMap = <T extends object>(
+export const convertTreeToMapTree = <T extends object>(
   rootNode?: TreeNode<T>,
-): Map<MapTreeId, MapTreeNode<T>> => {
+): MapTree<T> => {
   // console.log(rootNode);
 
   const nextNodeId = sequentialId<MapTreeId>();
@@ -87,7 +115,7 @@ export const mapTreeToMap = <T extends object>(
         nodeIdMap.get(/* WC O️(log n) */ currentNode.parent.value)) ??
       undefined;
     mapTree.set(/* WC O️(log n) */ currentNodeId, {
-      id: currentNodeId,
+      // id: currentNodeId,
       value: currentNode.value,
       parentId: parentId,
       childIds: [],
@@ -112,16 +140,21 @@ export const mapTreeToMap = <T extends object>(
     });
   }
 
-  return tee.log(mapTree);
+  return tee.log(deserialiseMapTree(mapTree.entries()));
+};
+
+export const serialiseMapTree = <T>(mapTree: MapTree<T>): SerialisedMapTree<T> => {
+  return mapTree.
 };
 
 /*
  * Turn serialised tree traversal back into
  * something resembling a tree
  */
-export const mappedTreeToTreeMap = <T>(
-  mapTree: Map<MapTreeId, MapTreeNode<T>>,
+export const deserialiseMapTree = <T>(
+  serialisedMapTree: SerialisedMapTree<T>,
 ): MapTree<T> => {
+  const mapTree = new Map(serialisedMapTree);
   const makeSubTree = ({
     value,
     childIds,
@@ -130,7 +163,7 @@ export const mappedTreeToTreeMap = <T>(
     // console.log(value, childIds, parentId);
     return {
       value,
-      // TODO memoize this
+      //️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️ T️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️O️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️D️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️O️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️ m️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️e️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️m️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️o️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️i️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️z️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️️e this
       /* Lazy evaluation */
       get children(): MapTree<T>[] {
         return childIds

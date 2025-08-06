@@ -5,6 +5,7 @@ export const ConfigButton = ({ className = '' }: { className?: string }) => {
   const [, setModalVisible] = useUIToggle('showModalConfigEditor');
   return (
     <Button
+      data-name={'ConfigButton'}
       hotkeys={'m'}
       icon={'icon.config'}
       imgOnly={'600px'}

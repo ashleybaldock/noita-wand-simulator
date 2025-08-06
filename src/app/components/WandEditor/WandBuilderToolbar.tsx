@@ -1,3 +1,4 @@
+import { Search } from '../Search';
 import { SectionToolbar } from '../SectionToolbar';
 import { ResetButton, UndoButton, RedoButton } from '../buttons';
 
@@ -8,6 +9,7 @@ export const WandBuilderToolbar = () => {
       <RedoButton />
       <ResetButton />
       {/* <LoadButton /> */}
+      <Search />
     </SectionToolbar>
   );
 };

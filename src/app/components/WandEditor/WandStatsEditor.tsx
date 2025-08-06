@@ -17,7 +17,7 @@ type NumberFieldProps = {
   step?: number;
   formatValue?: (value: number) => string;
   convertRawValue?: (rawValue: number) => number;
-  convertDisplayValue?: (displayValue: number) => number;
+  // convertDisplayValue?: (displayValue: number) => number;
 };
 
 const renderNumberField =
@@ -26,8 +26,8 @@ const renderNumberField =
     step,
     formatValue,
     convertRawValue,
-    convertDisplayValue,
-  }: NumberFieldProps) =>
+  }: // convertDisplayValue,
+  NumberFieldProps) =>
   (wand: Wand, dispatch: AppDispatch) => {
     return (
       <EditableInteger
@@ -42,7 +42,7 @@ const renderNumberField =
         step={step}
         formatValue={formatValue}
         convertRawValue={convertRawValue}
-        convertDisplayValue={convertDisplayValue}
+        // convertDisplayValue={convertDisplayValue}
       />
     );
   };
@@ -56,24 +56,29 @@ const EditableInterval = ({
   const wand = useWand();
   const dispatch = useAppDispatch();
   return (
-    <EditableInteger
+    <NumericInput
       value={wand[field]}
-      onChange={(value) =>
-        dispatch(
-          setWand({
-            wand: { ...wand, [field]: value },
-          }),
-        )
+      setValue={(value) =>
+        dispatch(setWand({ wand: { ...wand, [field]: value } }))
       }
+      onChange={() => {}}
+      min={-60}
+      max={1000}
+      showSetToMax={false}
+      showSetToLarge={false}
       step={frames ? 1 : 0.01}
-      formatValue={
+      formatForDisplay={
         frames
           ? (v) => `${Math.round(v)}${FNSP}${SUFFIX_FRAME}`
           : (v) => `${toSeconds(v)}${FNSP}${SUFFIX_SECOND}`
       }
-      convertRawValue={frames ? (v) => Math.round(v) : toSeconds}
-      convertDisplayValue={frames ? (v) => Math.round(v) : toFrames}
-    />
+      parseInput={
+        frames
+          ? (v) => Math.round(parseInt(v, 10))
+          : (v) => toSeconds(parseInt(v, 10))
+      }
+      // convertDisplayValue={frames ? (v) => Math.round(v) : toFrames}
+    ></NumericInput>
   );
 };
 
@@ -178,7 +183,17 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       >
         <StyledName>{'Spells/Cast'}</StyledName>
         <StyledValue>
-          {renderNumberField({ field: 'actions_per_round' })(wand, dispatch)}
+          <NumericInput
+            value={wand.actions_per_round}
+            setValue={(value) =>
+              dispatch(setWand({ wand: { ...wand, actions_per_round: value } }))
+            }
+            onChange={() => {}}
+            min={1}
+            max={26}
+            showSetToMax={false}
+            showSetToLarge={false}
+          ></NumericInput>
         </StyledValue>
       </StyledListItem>
       <StyledListItem

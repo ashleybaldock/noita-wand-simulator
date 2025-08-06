@@ -1,6 +1,5 @@
 import { isNotNullOrUndefined } from '../../util';
 import type { SerialisedMapTree } from '../../util/MapTree';
-import { mapTreeToMap } from '../../util/MapTree';
 import type { SpellDeckInfo } from '../spell';
 import type { ActionCall } from './ActionCall';
 import type { ClickWandResult } from './ClickWandResult';
@@ -41,6 +40,6 @@ export const serializeClickWandResult = (
         serializeSpell(wrapInto),
       ),
     })),
-    actionCallTrees: shot.actionCallTrees.map(mapTreeToMap),
+    actionCallTrees: shot.actionCallTrees.map((tree) => tree.serialise()),
   })),
 });

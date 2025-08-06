@@ -1,13 +1,13 @@
 import type { GunActionState } from '../actionState';
 import type { TriggerCondition } from '../trigger';
 import type { ActionCall } from './ActionCall';
-import type { TreeNode } from '../../util/TreeNode';
 import type { ChangeFields } from '../../util';
 import { sequentialId } from '../../util';
 import { defaultGunActionState } from '../defaultActionState';
 import type { EvalTree } from './serialize';
 import type { ProjectileId } from '../projectile';
 import type { WandShotProjectile } from './WandShotProjectile';
+import type { MapTree } from '../../util/MapTree';
 
 export type WandShotId = number;
 
@@ -45,7 +45,7 @@ export type WandShot = {
    * actionCallTrees[actionCallTrees.length] is the action tree
    * currently being evaluated
    */
-  actionCallTrees: TreeNode<ActionCall>[];
+  actionCallTrees: MapTree<ActionCall>[];
   castState?: GunActionState;
   manaDrain?: number;
   triggerType?: TriggerCondition;

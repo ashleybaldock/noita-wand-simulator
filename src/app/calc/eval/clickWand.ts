@@ -22,13 +22,13 @@ import { nextActionCallSequenceId } from './ActionCall';
 import type { ActionCall } from './ActionCall';
 import { getShot, nextWandShotId } from './WandShot';
 import type { WandShot, WandShotResult } from './WandShot';
-import type { TreeNode } from '../../util/TreeNode';
 import { AlwaysCastIndicies } from '../../redux/WandIndex';
 import type { SimulationRequestId } from '../../redux/SimulationRequest';
 import { serializeClickWandResult } from './serialize';
 import type { ChangeFields } from '../../util';
 import type { ClickWandResult } from './ClickWandResult';
 import type { ClickWandSetup } from './ClickWandSetup';
+import type { MapTree } from '../../util/MapTree';
 
 type StartingState = {
   mana?: number;
@@ -62,8 +62,8 @@ type ClickWandState = {
   alwaysCastsPlayed: SpellDeckInfo[];
   calledActions: ActionCall[];
   validSourceCalledActions: ActionCall[];
-  currentNode: TreeNode<ActionCall> | undefined;
-  rootNodes: TreeNode<ActionCall>[];
+  currentNode: MapTree<ActionCall> | undefined;
+  rootNodes: MapTree<ActionCall>[];
   startingState: Readonly<Required<StartingState>>;
 } & Required<StartingState>;
 
