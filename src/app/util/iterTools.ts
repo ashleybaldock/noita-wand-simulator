@@ -626,13 +626,13 @@ export function* sequentialIter<T extends number>(
  *      ╰───────────────────────────────────────────╸╵
  */
 export type RangeGeneratorConfig = {
-  start: number;
+  start?: number;
   step?: number;
   end?: number;
   count?: number;
 };
 export function* rangeIter({
-  start,
+  start = 1,
   step = 1,
   count = Number.POSITIVE_INFINITY,
   end = start + step * count,
