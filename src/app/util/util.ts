@@ -36,6 +36,11 @@ export const assertNever = (_?: never): never => {
   throw new Error('This should never happen.');
 };
 
+export const startTimer =
+  (start = performance.now()) =>
+  () =>
+    performance.now() - start;
+
 export const parseBooleanFromString = (
   str: string,
   defaultTo: boolean = false,

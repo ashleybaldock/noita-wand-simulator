@@ -2,7 +2,7 @@ import { isNotNullOrUndefined } from '../../util';
 import type { SerialisedMapTree } from '../../util/MapTree';
 import type { SpellDeckInfo } from '../spell';
 import type { ActionCall } from './ActionCall';
-import type { ClickWandResult } from './ClickWandResult';
+import type { SimulationResult } from './SimulationResult';
 import type { SerializedClickWandResult } from './clickWand';
 
 export type EvalTree = SerialisedMapTree<ActionCall>;
@@ -23,7 +23,7 @@ const maybeSerializeSpell = (spell?: SpellDeckInfo) =>
  */
 
 export const serializeClickWandResult = (
-  result: ClickWandResult,
+  result: SimulationResult,
 ): SerializedClickWandResult => ({
   ...result,
   shots: result.shots.map((shot) => ({
