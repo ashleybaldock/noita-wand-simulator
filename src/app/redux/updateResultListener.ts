@@ -6,7 +6,7 @@ import { wandsMatchForSimulation } from './Wand/wand';
 import type { AppStartListening } from './listenerMiddleware';
 import { newResult, newSimulation } from './resultSlice';
 import type { RootState } from './store';
-import { nextSimulationRequestId } from './SimulationRequest';
+import { nextSimulationRequestId } from './SimulationRequestId';
 
 type ListenerPredicate<T> = (
   action: Action,

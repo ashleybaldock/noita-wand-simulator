@@ -4,16 +4,17 @@ import { useSliceWrapper } from './useSlice';
 import type { SpellId } from './Wand/spellId';
 import type { Wand } from './Wand/wand';
 import { defaultWand } from './Wand/presets';
-import type { SimulationRequestId, SimulationStats } from './SimulationRequest';
-import { getEmptySimulationStats } from './SimulationRequest';
+import type { SimulationRequestId } from './SimulationRequestId';
+import type { SimulationStats } from './SimulationStats';
+import { getEmptySimulationStats } from './SimulationStats';
 import { isNotNullOrUndefined } from '../util';
-import type { SerializedClickWandResult } from '../calc/eval/clickWand';
+import type { SerializedSimulationResult } from '../calc/eval/clickWand';
 
 export type ResultState = {
   stats: SimulationStats;
   lastSimulationRequested: SimulationRequestId | null;
   lastSimulationCompleted: SimulationRequestId | null;
-  last: SerializedClickWandResult;
+  last: SerializedSimulationResult;
   lastWand: Wand;
   lastSpellIds: SpellId[];
   lastAlwaysIds: SpellId[];
@@ -84,7 +85,7 @@ export const resultSlice = createSlice({
       {
         payload: { result },
       }: PayloadAction<{
-        result: SerializedClickWandResult;
+        result: SerializedSimulationResult;
       }>,
     ) => {
       // console.log('serialized result:', result);

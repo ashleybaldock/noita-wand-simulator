@@ -1,11 +1,9 @@
-import type { SimulationRequestId } from '../../redux/SimulationRequest';
+import type { SimulationRequestId } from '../../redux/SimulationRequestId';
 import type { MapTree } from '../../util/MapTree';
 import type { SpellDeckInfo } from '../spell';
 import type { ActionCall } from './ActionCall';
-import {
-  mergeSimulationConfigDefaults,
-  type SimulationConfig,
-} from './InitialStateConfig';
+import { mergeSimulationConfigDefaults } from './SimulationConfig';
+import type { SimulationConfig } from './SimulationConfig';
 import { type SimulationResult, createResult } from './SimulationResult';
 import { getShot, type WandShot } from './WandShot';
 

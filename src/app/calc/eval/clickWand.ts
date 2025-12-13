@@ -12,14 +12,14 @@ import {
 import { isValidActionId } from '../actionId';
 import type { WandShotResult } from './WandShot';
 import { AlwaysCastIndicies } from '../../redux/WandIndex';
-import { serializeClickWandResult } from './serialize';
+import { serializeSimulationResult } from './serialize';
 import { startTimer, type ChangeFields } from '../../util';
 import type { SimulationResult } from './SimulationResult';
 import { beginObservation } from './beginObservation';
-import type { SimulationConfig } from './ClickWandSetup';
 import { resetSimulationState } from './SimulationState';
+import type { SimulationRequest } from './SimulationRequest';
 
-export type SerializedClickWandResult = ChangeFields<
+export type SerializedSimulationResult = ChangeFields<
   SimulationResult,
   {
     shots: WandShotResult[];
@@ -45,7 +45,7 @@ export const clickWand = ({
   endSimulationOnRefreshCount = 2,
   limitSimulationIterations = 200,
   limitSimulationDuration = 5000,
-}: SimulationConfig): SerializedClickWandResult => {
+}: SimulationRequest): SerializedSimulationResult => {
   const getElapsedTime = startTimer();
 
   const spells = spellIds.map((id) =>
@@ -163,5 +163,5 @@ export const clickWand = ({
     endObservation();
   }
 
-  return serializeClickWandResult(result);
+  return serializeSimulationResult(result);
 };

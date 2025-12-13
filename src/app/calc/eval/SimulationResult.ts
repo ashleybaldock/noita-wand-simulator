@@ -1,24 +1,24 @@
-import type { SimulationRequestId } from '../../redux/SimulationRequest';
+import type { SimulationRequestId } from '../../redux/SimulationRequestId';
 import type { StopReason } from '../../types';
-import type { SimulationConfig } from './InitialStateConfig';
+import type { SimulationConfig } from './SimulationConfig';
 import type { WandSalvo } from './WandSalvo';
 import type { WandShot } from './WandShot';
 
+/**
+ * Evaluation result
+ *
+ * Shot - result of one click, followed by cast delay
+ * Salvo - one or more shots, followed by the longer of
+ *         recharge delay or the last shot's cast delay
+ *
+ * Each of which has:
+ *
+ * - a list of projectiles
+ * - a tree representing the action call sequence
+ * - a set containing action call counts
+ *
+ */
 export type SimulationResult = {
-  /**
-   * Evaluation result
-   *
-   * Shot - result of one click, followed by cast delay
-   * Salvo - one or more shots, followed by the longer of
-   *         recharge delay or the last shot's cast delay
-   *
-   * Each of which has:
-   *
-   * - a list of projectiles
-   * - a tree representing the action call sequence
-   * - a set containing action call counts
-   *
-   */
   simulationRequestId: SimulationRequestId;
   salvos: WandSalvo[];
   reloadTime: number | undefined;
