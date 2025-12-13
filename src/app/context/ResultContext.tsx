@@ -3,7 +3,7 @@ import type { SimulationResult } from '../calc/eval/SimulationResult';
 import type { SpellId } from '../redux/Wand/spellId';
 import type { Wand } from '../redux/Wand/wand';
 import { defaultWand } from '../redux/Wand/presets';
-import { defaultSimulationStateConfig } from '../calc/eval/InitialStateConfig';
+import { defaultSimulationConfig } from '../calc/eval/InitialStateConfig';
 
 export type ResultContextState = {
   result: SimulationResult;
@@ -27,7 +27,7 @@ const defaultResultState: ResultContextState = {
     reloadCount: 0,
     refreshCount: 0,
     repeatCount: 0,
-    initialState: defaultSimulationStateConfig,
+    initialState: defaultSimulationConfig,
   },
   wandState: {
     wand: defaultWand,

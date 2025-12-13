@@ -1,6 +1,6 @@
 import type { SimulationRequestId } from '../../redux/SimulationRequest';
 import type { StopReason } from '../../types';
-import type { InitialSimulationStateConfig } from './InitialStateConfig';
+import type { SimulationConfig } from './InitialStateConfig';
 import type { WandSalvo } from './WandSalvo';
 import type { WandShot } from './WandShot';
 
@@ -32,12 +32,12 @@ export type SimulationResult = {
   refreshCount: number;
   repeatCount: number;
 
-  initialState: Readonly<InitialSimulationStateConfig>;
+  initialState: Readonly<SimulationConfig>;
 };
 
 export const createResult = (
   simulationRequestId: SimulationRequestId,
-  initialState: Readonly<InitialSimulationStateConfig>,
+  initialState: Readonly<SimulationConfig>,
 ) => ({
   simulationRequestId,
   salvos: [],

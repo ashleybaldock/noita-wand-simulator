@@ -7,7 +7,7 @@ import { getSpellByActionId } from '../spells';
 import { isValidActionCallSource } from '../spellTypes';
 import { triggerConditionFor } from '../trigger';
 import { nextActionCallSequenceId } from './ActionCall';
-import type { SimulationState } from './ClickWandState';
+import type { SimulationState } from './SimulationState';
 import type { SimulationResult } from './SimulationResult';
 import type { WandEvent } from './wandEvent';
 import { observer } from './wandObserver';

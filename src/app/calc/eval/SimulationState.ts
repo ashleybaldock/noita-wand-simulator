@@ -2,12 +2,11 @@ import type { SimulationRequestId } from '../../redux/SimulationRequest';
 import type { MapTree } from '../../util/MapTree';
 import type { SpellDeckInfo } from '../spell';
 import type { ActionCall } from './ActionCall';
-import { createResult } from './SimulationResult';
-import type { SimulationResult } from './SimulationResult';
 import {
-  mergeInitialStateConfigDefaults,
-  type InitialSimulationStateConfig,
+  mergeSimulationConfigDefaults,
+  type SimulationConfig,
 } from './InitialStateConfig';
+import { type SimulationResult, createResult } from './SimulationResult';
 import { getShot, type WandShot } from './WandShot';
 
 export type SimulationState = {
@@ -24,16 +23,16 @@ export type SimulationState = {
   validSourceCalledActions: ActionCall[];
   currentNode: MapTree<ActionCall> | undefined;
   rootNodes: MapTree<ActionCall>[];
-} & InitialSimulationStateConfig;
+} & SimulationConfig;
 
 export const resetSimulationState = (
-  initialState: Partial<InitialSimulationStateConfig>,
+  initialState: Partial<SimulationConfig>,
   simulationRequestId: SimulationRequestId,
 ): {
   state: SimulationState;
   result: SimulationResult;
 } => {
-  const configuredInitialState = mergeInitialStateConfigDefaults(initialState);
+  const configuredInitialState = mergeSimulationConfigDefaults(initialState);
   return {
     state: {
       ...configuredInitialState,

@@ -17,7 +17,7 @@ import { startTimer, type ChangeFields } from '../../util';
 import type { SimulationResult } from './SimulationResult';
 import { beginObservation } from './beginObservation';
 import type { SimulationConfig } from './ClickWandSetup';
-import { resetSimulationState } from './ClickWandState';
+import { resetSimulationState } from './SimulationState';
 
 export type SerializedClickWandResult = ChangeFields<
   SimulationResult,

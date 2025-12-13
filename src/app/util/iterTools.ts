@@ -516,8 +516,9 @@ export function* transpose<T extends IterableIterator<unknown>[]>(
 /**
  * Does predicate hold true for some item in source
  *
- * @returns true if predicate true for all items, false if not
- * (Short-circuit evaluation: returns early on first failed predicate check)
+ * @returns {true} if predicate true for any item
+ * @returns {false} if predicate false for all items
+ * (Short-circuit evaluation: returns early on first successful predicate check)
  *
  * !Beware, in the worst-case this reads all items in source
  */
