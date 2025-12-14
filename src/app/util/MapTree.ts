@@ -33,29 +33,38 @@ import type { TreeNode, TreeRoot } from './TreeNode';
  */
 export type MapTreeId = number;
 
+const nextMapTreeId = sequentialId<MapTreeId>();
+
 /**
  * Record of a tree node with links replaced with IDs
  */
-export interface MapTreeNode<T> extends TreeNode<T> {
-  // id: MapTreeId;
-  childIds: MapTreeId[];
-  parentId?: MapTreeId;
+export interface MapTreeRoot<T> extends TreeRoot<T> {
+  value: T;
+  // childIds: MapTreeId[];
+  children: IterableIterator<TreeNode<T>>;
 };
+export interface MapTreeNode<T> extends TreeNode<T> {
+  // parentId?: MapTreeId;
+  parent?: MapTreeNode<T>;
+}
 
 
-class MapTree<T> extends  implements TreeRoot<T> {
+class MapTree<T> implements MapTreeRoot<T> {
   #map: Map<MapTreeId, MapTreeNode<T>>;
 
-  id: MapTreeId;
+  #id: MapTreeId;
 
   constructor(init: readonly [MapTreeId, MapTreeNode<T>][] | null) {
+    this.#id = nextMapTreeId();
     this.#map = new Map(init);
+
   }
   
   get value(): T {
-    return this.#map.get(this.id);
+    return this.#map.get(#id);
   }
-  children: IterableIterator<MapTreeNode<T>> {
+  * children(): IterableIterator<MapTreeNode<T>> {
+    * for (const child in 
   }
 }
 
