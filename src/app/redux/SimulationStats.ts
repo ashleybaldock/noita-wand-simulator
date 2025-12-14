@@ -1,5 +1,3 @@
-import type { SimulationStats } from './SimulationStats';
-
 export type SimulationStats = {
   requested: number;
   completed: number;

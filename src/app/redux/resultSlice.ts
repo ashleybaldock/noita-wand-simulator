@@ -9,6 +9,7 @@ import type { SimulationStats } from './SimulationStats';
 import { getEmptySimulationStats } from './SimulationStats';
 import { isNotNullOrUndefined } from '../util';
 import type { SerializedSimulationResult } from '../calc/eval/clickWand';
+import { defaultSimulationConfig } from '../calc/eval/SimulationConfig';
 
 export type ResultState = {
   stats: SimulationStats;
@@ -26,6 +27,7 @@ const initialState: ResultState = {
   lastSimulationRequested: null,
   lastSimulationCompleted: null,
   last: {
+    initialState: defaultSimulationConfig,
     simulationRequestId: 0,
     salvos: [],
     shots: [],
