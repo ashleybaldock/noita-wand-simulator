@@ -1,6 +1,6 @@
 import type { Stack } from './Stack';
 import { createStack } from './Stack';
-import { takeArray } from './iterTools';
+import { filterIter, mapIter, takeArray } from './iterTools';
 import { isNotNullOrUndefined, sequentialId, tee } from './util';
 import type { TreeNode, TreeRoot } from './TreeNode';
 
@@ -49,13 +49,15 @@ export interface MapTreeNode<T> extends TreeNode<T> {
 }
 
 
-class MapTree<T> implements MapTreeRoot<T> {
+class MapSubTree<T> implements MapTreeNode<T> {
   #map: Map<MapTreeId, MapTreeNode<T>>;
 
   #id: MapTreeId;
+  #childIds: MapTreeId[];
 
   constructor(init: readonly [MapTreeId, MapTreeNode<T>][] | null) {
     this.#id = nextMapTreeId();
+    this.#childIds = [];
     this.#map = new Map(init);
 
   }
@@ -63,8 +65,18 @@ class MapTree<T> implements MapTreeRoot<T> {
   get value(): T {
     return this.#map.get(#id);
   }
-  * children(): IterableIterator<MapTreeNode<T>> {
-    * for (const child in 
+  get children(): IterableIterator<TreeNode<T>> {
+    return filterIter(mapIter(this.#childIds.values(), (childId) => this.#map.get(childId)),);
+  }
+}
+
+class MapTree<T> implements MapTreeRoot<T> {
+  #map: Map<MapTreeId, MapTreeNode<T>>;
+
+  constructor(init: readonly [MapTreeId, MapTreeNode<T>][] | null) {
+    this.#id = nextMapTreeId();
+    this.#map = new Map(init);
+
   }
 }
 

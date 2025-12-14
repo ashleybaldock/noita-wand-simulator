@@ -1,5 +1,6 @@
 import { FPS } from './constants';
 import { mapIter, sequentialIter } from './iterTools';
+import type { Predicate } from './iterTools';
 export { tee } from './teebug';
 export type { TeeBug } from './teebug';
 
@@ -7,7 +8,8 @@ export const noop = () => {};
 
 export const echo = <T>(a: T) => a;
 
-export const isNotNull = <T>(x: T | null): x is T => x !== null;
+export const isNotNull: Predicate<null> = <T>(x: T | unknown): x is T =>
+  x !== null;
 
 export const isNotNullOrUndefined = <T>(x: T | null | undefined): x is T =>
   x !== null && x !== undefined;
