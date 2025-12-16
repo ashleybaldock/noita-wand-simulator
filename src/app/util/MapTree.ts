@@ -2,7 +2,7 @@ import type { Stack } from './Stack';
 import { createStack } from './Stack';
 import { filterIter, mapIter, takeArray } from './iterTools';
 import { sequentialId, tee } from './util';
-import {isNotNullOrUndefined} from './Predicate';
+import {isNonNullable, isNotNullOrUndefined, isNullOrUndefined} from './Predicate';
 import type { TreeNode, TreeRoot } from './TreeNode';
 
 /**
@@ -39,46 +39,61 @@ const nextMapTreeId = sequentialId<MapTreeId>();
 /**
  * Record of a tree node with links replaced with IDs
  */
-export interface MapTreeRoot<T> extends TreeRoot<T> {
+export interface MapTreeNode<T> {
   value: T;
-  // childIds: MapTreeId[];
-  children: IterableIterator<TreeNode<T>>;
+  childIds: MapTreeId[];
+  parentId: MapTreeId;
 };
-export interface MapTreeNode<T> extends TreeNode<T> {
-  // parentId?: MapTreeId;
-  parent?: MapTreeNode<T>;
+export interface MapTreeRoot<T> extends TreeRoot<T> {
 }
 
 
-class MapSubTree<T> implements MapTreeNode<T> {
-  #map: Map<MapTreeId, MapTreeNode<T>>;
+class MapSubTree<T> implements TreeNode<T> {
+  private map: Map<MapTreeId, MapTreeNode<T>>;
 
-  #id: MapTreeId;
-  #childIds: MapTreeId[];
+  private id: MapTreeId;
+
+  constructor(map: Map<MapTreeId, MapTreeNode<T>>, parentId: MapTreeId, value: T) {
+    this.map = map;
+    this.id = nextMapTreeId();
+    this.map.set(this.id, {
+      value, parentId, childIds: []
+    });
+  }
+
+  get parent(): TreeNode<T> | undefined {
+    return new MapSubTree<T>()
+  }
+
+  appendChild = (child: T) => new MapSubTree(this.map, this.id, child);
+  
+  get value(): T | undefined {
+    return this.map.get(this.id)?.value;
+  }
+  get children(): IterableIterator<TreeNode<T>> {
+    return filterIter(mapIter((this.map.get(this.id)?.childIds ?? []).values(), (childId: MapTreeId) => this.map.get(childId)), isNonNullable);
+  }
+}
+
+class MapTree<T> implements TreeRoot<T> extends Map<MapTreeId, MapTreeNode<T>> {
+  private map: Map<MapTreeId, MapTreeNode<T>>;
+  private id: MapTreeId;
 
   constructor(init: readonly [MapTreeId, MapTreeNode<T>][] | null) {
-    this.#id = nextMapTreeId();
-    this.#childIds = [];
-    this.#map = new Map(init);
+    super(init);
+    this.map = new Map(init);
+    this.id = nextMapTreeId();
+  }
 
+  get value(): T | undefined {
+    return this.map.get(this.id);
   }
-  
-  get value(): T {
-    return this.#map.get(#id);
-  }
+
   get children(): IterableIterator<TreeNode<T>> {
     return filterIter(mapIter(this.#childIds.values(), (childId) => this.#map.get(childId)),);
   }
-}
 
-class MapTree<T> implements MapTreeRoot<T> {
-  #map: Map<MapTreeId, MapTreeNode<T>>;
-
-  constructor(init: readonly [MapTreeId, MapTreeNode<T>][] | null) {
-    this.#id = nextMapTreeId();
-    this.#map = new Map(init);
-
-  }
+  appendChild: (child: T) => void;
 }
 
 /**

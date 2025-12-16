@@ -150,11 +150,12 @@ import { isObject } from './Predicate';
  */
 
 export type ValuePredicate<T> = (x: T, i?: number) => boolean;
+export type TypePredicate = <T>(x: T | null | undefined, i?: number) => x is T;
 export type Mapper<T, O> = (t: T, i: number) => O;
 export type Callback<T> = (t: T, i: number) => void;
 
 export type SequenceComparisonOptions<T> = {
-  filterPredicate?: ValuePredicate<T>;
+  filterPredicate?: TypePredicate & ValuePredicate<T>;
 };
 
 export const isIterable = (x: unknown): x is Iterable<unknown> =>
@@ -356,7 +357,7 @@ export function* mapIter<T, Tout>(
  */
 export function* filterIter<T>(
   source: IterableIterator<T>,
-  predicate: ValuePredicate<T>,
+  predicate: TypePredicate & ValuePredicate<T>,
 ): IterableIterator<T> {
   let i = 0;
   for (const s of source) {
@@ -568,7 +569,9 @@ export function every<T>(
  * @returns {false} if any of them differ
  */
 export const compareSequencesIter = <T>(
-  { filterPredicate = always }: SequenceComparisonOptions<T>,
+  {
+    filterPredicate = <T>(x: T | unknown): x is T => true,
+  }: SequenceComparisonOptions<T>,
   ...sequences: [
     IterableIterator<T>,
     IterableIterator<T>,

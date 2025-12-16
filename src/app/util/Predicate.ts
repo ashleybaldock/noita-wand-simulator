@@ -24,8 +24,13 @@ export const isNotUndefined = (x: unknown): x is NonNullable<unknown> | null =>
   x !== undefined;
 export const isNullOrUndefined = (x: unknown): x is null | undefined =>
   x === null || x === undefined;
-export const isNotNullOrUndefined = (x: unknown): x is NonNullable<unknown> =>
+export const isNotNullOrUndefined = <T>(
+  x: T | unknown,
+): x is NonNullable<unknown> => x !== null && x !== undefined;
+
+export const isNonNullable = <T>(x: T | null | undefined): x is T =>
   x !== null && x !== undefined;
+
 export const isSymbol = (x: unknown): x is symbol => 'symbol' === typeof x;
 export const isString = (x: unknown): x is string => 'string' === typeof x;
 export const isNumber = (x: unknown): x is number => 'number' === typeof x;
@@ -37,19 +42,19 @@ export const isObject = (x: unknown): x is object => 'object' === typeof x;
 export const isFunction = (x: unknown): x is () => unknown =>
   'function' === typeof x;
 
-// const a = (y?: object) => {
-//   if (never(y)) {
-//     typeof y;
-//   }
-//   if (always(y)) {
-//     typeof y;
-//   }
-//   if (isUndefined(y)) {
-//     typeof y;
-//     y.toString();
-//   }
-//   if (isNotUndefined(y)) {
-//     y.toString();
-//     typeof y;
-//   }
-// };
+const a = (y?: object) => {
+  if (never(y)) {
+    typeof y;
+  }
+  if (always(y)) {
+    typeof y;
+  }
+  if (isNonNullable(y)) {
+    typeof y;
+    y.toString();
+  }
+  if (isNotUndefined(y)) {
+    y.toString();
+    typeof y;
+  }
+};
