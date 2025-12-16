@@ -10,7 +10,8 @@ import {
 import { mergeRefs } from '../../../util/mergeRefs';
 import type { Spell } from '../../../calc/spell';
 import { SearchResultList } from '../FindSpell/SearchResultList';
-import { isNotNullOrUndefined, noop } from '../../../util/util';
+import { noop } from '../../../util/util';
+import { isNotNullOrUndefined } from '../../../util/Predicate';
 import { HotkeyHint, HotkeyMultiHint } from '../../Tooltips/HotkeyHint';
 import { useFocus } from '../../../hooks/useFocus';
 import { useAppDispatch } from '../../../redux/hooks';

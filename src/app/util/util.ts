@@ -1,37 +1,12 @@
 import { FPS } from './constants';
 import { mapIter, sequentialIter } from './iterTools';
-import type { Predicate } from './iterTools';
+import { isFunction, isNotNullOrUndefined, isUndefined } from './Predicate';
 export { tee } from './teebug';
 export type { TeeBug } from './teebug';
 
 export const noop = () => {};
 
 export const echo = <T>(a: T) => a;
-
-export const isNotNull: Predicate<null> = <T>(x: T | unknown): x is T =>
-  x !== null;
-
-export const isNotNullOrUndefined = <T>(x: T | null | undefined): x is T =>
-  x !== null && x !== undefined;
-
-export const isUndefined = (x: unknown): x is undefined => x === undefined;
-
-export const isNull = (x: unknown): x is null => null === x;
-
-export const isSymbol = (x: unknown): x is symbol => 'symbol' === typeof x;
-
-export const isString = (x: unknown): x is string => 'string' === typeof x;
-
-export const isNumber = (x: unknown): x is number => 'number' === typeof x;
-
-export const isBigint = (x: unknown): x is bigint => 'bigint' === typeof x;
-
-export const isBoolean = (x: unknown): x is boolean => 'boolean' === typeof x;
-
-export const isObject = (x: unknown): x is object => 'object' === typeof x;
-
-export const isFunction = (x: unknown): x is () => unknown =>
-  'function' === typeof x;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const assertNever = (_?: never): never => {
@@ -173,6 +148,23 @@ export const invertRecord = <
   });
   return result;
 };
+
+/**
+ * A Map with a default value
+ *  get() returns a default value if the key isn't present
+ *  has() tells you if there really is a value
+ */
+export class DefaultedMap<K, V> extends Map<K, V> {
+  private defaultValue: V;
+  constructor(defaultValue: V, entries?: readonly (readonly [K, V])[] | null) {
+    super(entries);
+    this.defaultValue = defaultValue;
+  }
+  get(key: K): V {
+    const valueOrUndefined = super.get(key);
+    return isUndefined(valueOrUndefined) ? this.defaultValue : valueOrUndefined;
+  }
+}
 
 /**
  * Typed inverse of a Map

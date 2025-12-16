@@ -1,5 +1,5 @@
 import type { MutableRefObject, LegacyRef, RefCallback } from 'react';
-import { isNotNullOrUndefined } from './util';
+import { isNotNullOrUndefined } from './Predicate';
 
 const setMutableRef = <T, M extends MutableRefObject<T>>(ref: M, value: T) =>
   (ref.current = value);

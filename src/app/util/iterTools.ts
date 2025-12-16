@@ -1,4 +1,5 @@
-import { isObject } from './util';
+import { always } from './Predicate';
+import { isObject } from './Predicate';
 
 /**
  * Iterator utility functions
@@ -147,15 +148,13 @@ import { isObject } from './util';
  *  ├╴throttle                                                          │
  *  └╴                                                                  │
  */
-export type Predicate<T> = (t: T, i: number) => boolean;
-export const anythingPredicate: Predicate<unknown> = () => true;
-export const nothingPredicate: Predicate<unknown> = () => false;
 
+export type ValuePredicate<T> = (x: T, i?: number) => boolean;
 export type Mapper<T, O> = (t: T, i: number) => O;
 export type Callback<T> = (t: T, i: number) => void;
 
 export type SequenceComparisonOptions<T> = {
-  filterPredicate?: Predicate<T>;
+  filterPredicate?: ValuePredicate<T>;
 };
 
 export const isIterable = (x: unknown): x is Iterable<unknown> =>
@@ -357,7 +356,7 @@ export function* mapIter<T, Tout>(
  */
 export function* filterIter<T>(
   source: IterableIterator<T>,
-  predicate: Predicate<T>,
+  predicate: ValuePredicate<T>,
 ): IterableIterator<T> {
   let i = 0;
   for (const s of source) {
@@ -524,7 +523,7 @@ export function* transpose<T extends IterableIterator<unknown>[]>(
  */
 export function some<T>(
   source: IterableIterator<T>,
-  predicate: Predicate<T>,
+  predicate: ValuePredicate<T>,
 ): boolean {
   let i = 0;
   for (const s of source) {
@@ -546,7 +545,7 @@ export function some<T>(
  */
 export function every<T>(
   source: IterableIterator<T>,
-  predicate: Predicate<T>,
+  predicate: ValuePredicate<T>,
 ): boolean {
   let i = 0;
   for (const s of source) {
@@ -569,7 +568,7 @@ export function every<T>(
  * @returns {false} if any of them differ
  */
 export const compareSequencesIter = <T>(
-  { filterPredicate = anythingPredicate }: SequenceComparisonOptions<T>,
+  { filterPredicate = always }: SequenceComparisonOptions<T>,
   ...sequences: [
     IterableIterator<T>,
     IterableIterator<T>,

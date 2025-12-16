@@ -1,7 +1,8 @@
 import type { Stack } from './Stack';
 import { createStack } from './Stack';
 import { filterIter, mapIter, takeArray } from './iterTools';
-import { isNotNullOrUndefined, sequentialId, tee } from './util';
+import { sequentialId, tee } from './util';
+import {isNotNullOrUndefined} from './Predicate';
 import type { TreeNode, TreeRoot } from './TreeNode';
 
 /**
