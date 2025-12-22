@@ -83,7 +83,7 @@ export class MapTreeNode<T> implements TreeNode<T> {
     return this.map.get(this.id)?.[0];
   }
   get children(): IterableIterator<TreeNode<T>> {
-    return filterIter(mapIter((this.map.get(this.id)?.childIds ?? []).values(), (childId: MapTreeId) => this.map.get(childId)), isNonNullable);
+    return filterIter(mapIter((this.map.get(this.id)?.[1] ?? []).values(), (childId: MapTreeId) => this.map.get(childId)), isNotNullOrUndefined);
   }
 }
 
