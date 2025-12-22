@@ -24,11 +24,9 @@ export const isNotUndefined = (x: unknown): x is NonNullable<unknown> | null =>
   x !== undefined;
 export const isNullOrUndefined = (x: unknown): x is null | undefined =>
   x === null || x === undefined;
-export const isNotNullOrUndefined = <T>(
-  x: T | unknown,
-): x is NonNullable<unknown> => x !== null && x !== undefined;
-
-export const isNonNullable = <T>(x: T | null | undefined): x is T =>
+export const isNotNullOrUndefined = <T>(x: T | null | undefined): x is T =>
+  x !== null && x !== undefined;
+export const isNonNullable = <T>(x: T | unknown): x is NonNullable<unknown> =>
   x !== null && x !== undefined;
 
 export const isSymbol = (x: unknown): x is symbol => 'symbol' === typeof x;

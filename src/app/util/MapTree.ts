@@ -39,36 +39,48 @@ const nextMapTreeId = sequentialId<MapTreeId>();
 /**
  * Record of a tree node with links replaced with IDs
  */
-export interface MapTreeNode<T> {
-  value: T;
-  childIds: MapTreeId[];
-  parentId: MapTreeId;
+export interface SerialisableTree<T> {
+  serialize: () => Array<[]>
 };
 export interface MapTreeRoot<T> extends TreeRoot<T> {
 }
 
+export type SerialisedMapTree<T> = Array<[MapTreeId, T, MapTreeId[]?]>;
 
-class MapSubTree<T> implements TreeNode<T> {
-  private map: Map<MapTreeId, MapTreeNode<T>>;
+export type MapTreeEntry<T> = [data: T, children: MapTreeId[]?];
+
+export class MapTreeNode<T> implements TreeNode<T> {
+  private map: Map<MapTreeId, MapTreeEntry<T>>;
 
   private id: MapTreeId;
+  private parentId?: MapTreeId;
 
-  constructor(map: Map<MapTreeId, MapTreeNode<T>>, parentId: MapTreeId, value: T) {
+  constructor(map: Map<MapTreeId, MapTreeEntry<T>>, value: T, parentId?: MapTreeId, childIds?: MapTreeId[] = []) {
     this.map = map;
     this.id = nextMapTreeId();
-    this.map.set(this.id, {
-      value, parentId, childIds: []
-    });
+    this.parentId = parentId;
+    this.map.set(this.id, [value, childIds]);
+  }
+  [Symbol.iterator](): IterableIterator<TreeNode<T>> {
+    this.map.entries
+    throw new Error('Method not implemented.');
   }
 
   get parent(): TreeNode<T> | undefined {
-    return new MapSubTree<T>()
+    return (this.parentId && this.map.get(this.parentId)) ?? undefined;
   }
 
-  appendChild = (child: T) => new MapSubTree(this.map, this.id, child);
+  appendChild = (value: T) => {
+    const baby = new MapTreeNode(this.map, value);
+    const parentEntry = this.map.get(this.id);
+    if (isNonNullable(parentEntry)) {
+      parentEntry[1]?.push(baby.id) ?? parentEntry.push([baby.id]);
+      // parentEntry[1]?.push(baby.id) ?? this.map.set(this.id, [parentEntry[0], [baby.id]]);
+    }
+  }
   
   get value(): T | undefined {
-    return this.map.get(this.id)?.value;
+    return this.map.get(this.id)?.[0];
   }
   get children(): IterableIterator<TreeNode<T>> {
     return filterIter(mapIter((this.map.get(this.id)?.childIds ?? []).values(), (childId: MapTreeId) => this.map.get(childId)), isNonNullable);
@@ -116,9 +128,9 @@ export interface MapTreeIf<T> extends MapIterator<[MapTreeId, MapTreeNode<T>]>, 
 /**
  * For storage in Redux
  */
-export type SerialisedMapTree<T> =
-  | [MapTreeId, MapTreeNode<T>][]
-  | MapIterator<[MapTreeId, MapTreeNode<T>]>;
+// export type SerialisedMapTree<T> =
+//   | [MapTreeId, MapTreeNode<T>][]
+//   | MapIterator<[MapTreeId, MapTreeNode<T>]>;
 
 /**
  * Turn a tree with reference links into a tree using ID lookups
