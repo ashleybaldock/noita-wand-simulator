@@ -2,7 +2,7 @@ import type { Stack } from './Stack';
 import { createStack } from './Stack';
 import { filterIter, mapIter, takeArray } from './iterTools';
 import { sequentialId, tee } from './util';
-import {isNonNullable, isNotNullOrUndefined, isNullOrUndefined} from './Predicate';
+import {isNonNullable, isNotNullOrUndefined, isNotUndefined, isNullOrUndefined, isUndefined} from './Predicate';
 import type { TreeNode, TreeRoot } from './TreeNode';
 
 /**
@@ -14,9 +14,9 @@ import type { TreeNode, TreeRoot } from './TreeNode';
  * ║ ╹ Parent ╻◁╌╮   ║ TreeNode≪️T≫️ ║
  * ║ ┗━ ━ ━ ╥ ┛  ┆   ╚═════════════╣
  * ║        ⍒    ┆                 ║
- * ║       ╭─────────┬╭───╮        ║
- * ║   ╭╌╌▷│  Node1  ╎╎ T │        ║
- * ║   ┆   ╰────┬────┴╰───╯        ║
+ * ║       ╭─────────────────────╮ ║
+ * ║   ╭╌╌▷│  Node1  ╎  value: T │ ║
+ * ║   ┆   ╰────┬────────────────╯ ║
  * ║(parent)    │                  ║
  * ║   ┆    ╭───┴───┬──╴╴╴╴──╮     ║
  * ║   ┆    ⍒       ⍒        ⍒     ║
@@ -49,25 +49,38 @@ export type SerialisedMapTree<T> = Array<[MapTreeId, T, MapTreeId[]?]>;
 
 export type MapTreeEntry<T> = [data: T, children: MapTreeId[]?];
 
+type MapTreeMap<T> = Map<MapTreeId, MapTreeEntry<T>>;
+
 export class MapTreeNode<T> implements TreeNode<T> {
-  private map: Map<MapTreeId, MapTreeEntry<T>>;
+  private map: MapTreeMap<T>;
 
   private id: MapTreeId;
   private parentId?: MapTreeId;
 
-  constructor(map: Map<MapTreeId, MapTreeEntry<T>>, value: T, parentId?: MapTreeId, childIds?: MapTreeId[] = []) {
+  private wrap = (entry?: MapTreeEntry<T>): TreeNode<T> | undefined => isUndefined(entry) ? undefined : new MapTreeNode(this.map, entry);
+
+  constructor(map: MapTreeMap<T>, value: T, parentId?: MapTreeId, childIds?: MapTreeId[] = []) {
     this.map = map;
     this.id = nextMapTreeId();
     this.parentId = parentId;
     this.map.set(this.id, [value, childIds]);
   }
+
+  get children(): IterableIterator<TreeNode<T>> {
+    return filterIter(mapIter((this.map.get(this.id)?.[1] ?? []).values(), (childId: MapTreeId) => this.wrap(this.map.get(childId))), isNotNullOrUndefined);
+  }
+
+  *iter(): IterableIterator<TreeNode<T>> {
+    yield this;
+    yield* this.children;
+  };
+  
   [Symbol.iterator](): IterableIterator<TreeNode<T>> {
-    this.map.entries
-    throw new Error('Method not implemented.');
+    return this.iter();
   }
 
   get parent(): TreeNode<T> | undefined {
-    return (this.parentId && this.map.get(this.parentId)) ?? undefined;
+    return isUndefined(this.parentId) ? undefined : this.wrap(this.map.get(this.parentId));
   }
 
   appendChild = (value: T) => {
@@ -78,14 +91,13 @@ export class MapTreeNode<T> implements TreeNode<T> {
       // parentEntry[1]?.push(baby.id) ?? this.map.set(this.id, [parentEntry[0], [baby.id]]);
     }
   }
-  
+
   get value(): T | undefined {
     return this.map.get(this.id)?.[0];
   }
-  get children(): IterableIterator<TreeNode<T>> {
-    return filterIter(mapIter((this.map.get(this.id)?.[1] ?? []).values(), (childId: MapTreeId) => this.map.get(childId)), isNotNullOrUndefined);
-  }
 }
+
+
 
 class MapTree<T> implements TreeRoot<T> extends Map<MapTreeId, MapTreeNode<T>> {
   private map: Map<MapTreeId, MapTreeNode<T>>;
