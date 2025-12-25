@@ -1,5 +1,4 @@
-import { always } from './Predicate';
-import { isObject } from './Predicate';
+import { always, isObject } from './Predicate';
 
 /**
  * Iterator utility functions
@@ -149,13 +148,16 @@ import { isObject } from './Predicate';
  *  └╴                                                                  │
  */
 
-export type ValuePredicate<T> = (x: T, i?: number) => boolean;
-export type TypePredicate = <T>(x: T | null | undefined, i?: number) => x is T;
+export type ValueFilterPredicate<T> = (x: T, i?: number) => boolean;
+
+export type TypeFilterPredicate<T, S extends T> = (x: T, i?: number) => x is S;
+
 export type Mapper<T, O> = (t: T, i: number) => O;
+
 export type Callback<T> = (t: T, i: number) => void;
 
 export type SequenceComparisonOptions<T> = {
-  filterPredicate?: TypePredicate & ValuePredicate<T>;
+  filterPredicate?: ValueFilterPredicate<T>;
 };
 
 export const isIterable = (x: unknown): x is Iterable<unknown> =>
@@ -352,12 +354,35 @@ export function* mapIter<T, Tout>(
   }
 }
 
+// filter<S extends T>(
+//   predicate: (value: T, index: number, array: T[]) => value is S,
+//   thisArg?: any
+// ): S[];
+
+// filter(
+//   predicate: (value: T, index: number, array: T[]) => unknown,
+//   thisArg?: any
+// ): T[];
+
 /**
- * Filter source iterable based on predicate
+ * Filter source iterable based on type predicate
+ */
+export function* narrowIter<T, S extends T>(
+  source: IterableIterator<T>,
+  predicate: (x: T, i?: number) => x is S,
+): IterableIterator<S> {
+  for (const s of source) {
+    if (predicate(s)) {
+      yield s;
+    }
+  }
+}
+/**
+ * Filter source iterable based on value predicate
  */
 export function* filterIter<T>(
   source: IterableIterator<T>,
-  predicate: TypePredicate & ValuePredicate<T>,
+  predicate: ValueFilterPredicate<T>,
 ): IterableIterator<T> {
   let i = 0;
   for (const s of source) {
@@ -524,7 +549,7 @@ export function* transpose<T extends IterableIterator<unknown>[]>(
  */
 export function some<T>(
   source: IterableIterator<T>,
-  predicate: ValuePredicate<T>,
+  predicate: ValueFilterPredicate<T>,
 ): boolean {
   let i = 0;
   for (const s of source) {
@@ -546,7 +571,7 @@ export function some<T>(
  */
 export function every<T>(
   source: IterableIterator<T>,
-  predicate: ValuePredicate<T>,
+  predicate: ValueFilterPredicate<T>,
 ): boolean {
   let i = 0;
   for (const s of source) {
@@ -569,9 +594,7 @@ export function every<T>(
  * @returns {false} if any of them differ
  */
 export const compareSequencesIter = <T>(
-  {
-    filterPredicate = <T>(x: T | unknown): x is T => true,
-  }: SequenceComparisonOptions<T>,
+  { filterPredicate = always }: SequenceComparisonOptions<T>,
   ...sequences: [
     IterableIterator<T>,
     IterableIterator<T>,

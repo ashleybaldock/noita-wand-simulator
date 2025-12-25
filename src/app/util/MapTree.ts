@@ -1,6 +1,6 @@
 import type { Stack } from './Stack';
 import { createStack } from './Stack';
-import { filterIter, mapIter, takeArray } from './iterTools';
+import { filterIter, mapIter, narrowIter, takeArray } from './iterTools';
 import { sequentialId, tee } from './util';
 import {isNonNullable, isNotNullOrUndefined, isNotUndefined, isNullOrUndefined, isUndefined} from './Predicate';
 import type { TreeNode, TreeRoot } from './TreeNode';
@@ -67,7 +67,7 @@ export class MapTreeNode<T> implements TreeNode<T> {
   }
 
   get children(): IterableIterator<TreeNode<T>> {
-    return filterIter(mapIter((this.map.get(this.id)?.[1] ?? []).values(), (childId: MapTreeId) => this.wrap(this.map.get(childId))), isNotNullOrUndefined);
+    return narrowIter(mapIter((this.map.get(this.id)?.[1] ?? []).values(), (childId: MapTreeId) => this.wrap(this.map.get(childId))), isNotNullOrUndefined);
   }
 
   *iter(): IterableIterator<TreeNode<T>> {

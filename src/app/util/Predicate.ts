@@ -14,18 +14,24 @@ export type Predicate = <T>(x: T, i?: number) => boolean;
 
 export const never = (x: unknown): x is never => false;
 
-export const always = (x: unknown): x is unknown => true;
+export const always = <T>(x: T): x is T => true;
 
 export const isNull = (x: unknown): x is null => null === x;
+
 export const isNotNull = (x: unknown): x is NonNullable<unknown> | undefined =>
   x !== null;
+
 export const isUndefined = (x: unknown): x is undefined => x === undefined;
+
 export const isNotUndefined = (x: unknown): x is NonNullable<unknown> | null =>
   x !== undefined;
+
 export const isNullOrUndefined = (x: unknown): x is null | undefined =>
   x === null || x === undefined;
+
 export const isNotNullOrUndefined = <T>(x: T | null | undefined): x is T =>
   x !== null && x !== undefined;
+
 export const isNonNullable = <T>(x: T | unknown): x is NonNullable<unknown> =>
   x !== null && x !== undefined;
 
