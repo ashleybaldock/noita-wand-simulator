@@ -47,27 +47,31 @@ export interface MapTreeRoot<T> extends TreeRoot<T> {
 
 export type SerialisedMapTree<T> = Array<[MapTreeId, T, MapTreeId[]?]>;
 
-export type MapTreeEntry<T> = [data: T, children: MapTreeId[]?];
+export type MapTreeEntry<T> = {
+  value?: T;
+  parentId?: MapTreeId;
+  childIds?: MapTreeId[];
+}
 
 type MapTreeMap<T> = Map<MapTreeId, MapTreeEntry<T>>;
 
 export class MapTreeNode<T> implements TreeNode<T> {
   private map: MapTreeMap<T>;
 
-  private id: MapTreeId;
+  private readonly id: MapTreeId = nextMapTreeId();
+
   private parentId?: MapTreeId;
 
-  private wrap = (entry?: MapTreeEntry<T>): TreeNode<T> | undefined => isUndefined(entry) ? undefined : new MapTreeNode(this.map, entry);
+  private wrap = (entry?: MapTreeEntry<T>): TreeNode<T> | undefined => isUndefined(entry) ? undefined : new MapTreeNode(this.map, ...entry );
 
   constructor(map: MapTreeMap<T>, value: T, parentId?: MapTreeId, childIds?: MapTreeId[] = []) {
     this.map = map;
-    this.id = nextMapTreeId();
     this.parentId = parentId;
-    this.map.set(this.id, [value, childIds]);
+    this.map.set(this.id, {value, childIds});
   }
 
   get children(): IterableIterator<TreeNode<T>> {
-    return narrowIter(mapIter((this.map.get(this.id)?.[1] ?? []).values(), (childId: MapTreeId) => this.wrap(this.map.get(childId))), isNotNullOrUndefined);
+    return narrowIter(mapIter((this.map.get(this.id)?.childIds ?? []).values(), (childId: MapTreeId) => this.wrap(this.map.get(childId))), isNotNullOrUndefined);
   }
 
   *iter(): IterableIterator<TreeNode<T>> {
