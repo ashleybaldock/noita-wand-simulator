@@ -81,6 +81,11 @@ const StyledButton = styled.button<{
   --pad-img-side: 2.2em;
   --pad-other-side: 0.6em;
 
+  --bdr-tr: 0.2em 15.1em 0 0/0 64.4em 0 0;
+  --bdr-br: 0 0.2em 15.1em 0/0 0 64.4em 0;
+  --bdr-bl: 0 0 0.2em 15.1em/0 0 0 64.4em;
+  --bdr-tl: 15.1em 0 0 0.2em/64.4em 0 0 0;
+
   margin: 0;
   padding-top: 0.2em;
   padding-bottom: 0;

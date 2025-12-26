@@ -1,5 +1,6 @@
 import type { SimulationRequestId } from '../../redux/SimulationRequestId';
 import type { MapTree } from '../../util/MapTree';
+import type { TreeNode } from '../../util/Tree';
 import type { SpellDeckInfo } from '../spell';
 import type { ActionCall } from './ActionCall';
 import { mergeSimulationConfigDefaults } from './SimulationConfig';
@@ -19,7 +20,7 @@ export type SimulationState = {
   alwaysCastsPlayed: SpellDeckInfo[];
   calledActions: ActionCall[];
   validSourceCalledActions: ActionCall[];
-  currentNode: MapTree<ActionCall> | undefined;
+  currentNode: TreeNode<ActionCall> | undefined;
   rootNodes: MapTree<ActionCall>[];
 } & SimulationConfig;
 

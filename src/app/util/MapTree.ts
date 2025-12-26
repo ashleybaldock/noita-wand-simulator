@@ -1,14 +1,12 @@
-import type { Stack } from './Stack';
-import { createStack } from './Stack';
-import { mapIter, narrowIter, takeArray } from './iterTools';
-import { sequentialId, tee } from './util';
+import { mapIter, narrowIter } from './iterTools';
+import { sequentialId } from './util';
 import {
   isNonNullable,
   isNotNullOrUndefined,
   isNullOrUndefined,
   isUndefined,
 } from './Predicate';
-import type { TreeNode, TreeRoot } from './TreeNode';
+import type { TreeNode, TreeRoot } from './Tree';
 
 /**
  * Memoise a depth-first tree traversal
@@ -44,7 +42,7 @@ const nextMapTreeId = sequentialId<MapTreeId>();
 /**
  * Record of a tree node with links replaced with IDs
  */
-export interface SerialisableTree<T> {
+export interface SerialisableTree {
   serialize: () => Array<[]>;
 }
 export interface MapTreeRoot<T> extends TreeRoot<T> {}
@@ -116,6 +114,10 @@ export class MapTree<T> implements TreeRoot<T>, SerializableMapTree<T> {
     );
   }
 
+  get childCount(): number {
+    return this.map.get(this.id)?.childIds?.length ?? 0;
+  }
+
   appendChild = (value: T) => {
     const baby = new MapTreeNode(value);
     const parentEntry = this.map.get(this.id);
@@ -125,6 +127,7 @@ export class MapTree<T> implements TreeRoot<T>, SerializableMapTree<T> {
       }
       parentEntry.childIds.push(baby.id);
     }
+    return this.wrap(baby.id);
   };
 
   serialize = (): [MapTreeId, MapTreeEntry<T>][] => {
@@ -133,7 +136,7 @@ export class MapTree<T> implements TreeRoot<T>, SerializableMapTree<T> {
 }
 
 export class MapTreeNode<T> extends MapTree<T> implements TreeNode<T> {
-  constructor(value?: T, parentId?: MapTreeId, childIds?: MapTreeId[] = []) {
+  constructor(value?: T, parentId?: MapTreeId, childIds?: MapTreeId[]) {
     super();
     this.map.set(this.id, { value, parentId, childIds });
     this.nodeMap.set(this.id, new WeakRef(this));

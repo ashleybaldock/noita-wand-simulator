@@ -6,12 +6,14 @@ import type { SpellDeckInfo } from '../spell';
 import { getSpellByActionId } from '../spells';
 import { isValidActionCallSource } from '../spellTypes';
 import { triggerConditionFor } from '../trigger';
-import { nextActionCallSequenceId } from './ActionCall';
+import { nextActionCallSequenceId, type ActionCall } from './ActionCall';
 import type { SimulationState } from './SimulationState';
 import type { SimulationResult } from './SimulationResult';
 import type { WandEvent } from './wandEvent';
 import { observer } from './wandObserver';
 import { nextWandShotId } from './WandShot';
+import { isNotUndefined, isUndefined } from '../../util';
+import { MapTree } from '../../util/MapTree';
 
 export const beginObservation = (
   result: SimulationResult,
@@ -130,11 +132,21 @@ export const beginObservation = (
       }
       case 'OnNotEnoughManaForAction': {
         const { /*mana_required, mana_available,*/ spell } = payload;
+        state.lastPlayed = spell;
+        if (isNotUndefined(state.lastCalledAction)) {
+          state.lastCalledAction.direct_discard = true;
+          state.lastCalledAction.direct_discard_reason =
+            'NotEnoughManaForAction';
+        }
         break;
       }
       case 'OnNoUsesRemaining': {
         const { spell /*, c: castState, playing_permanent_card*/ } = payload;
         state.lastPlayed = spell;
+        if (isNotUndefined(state.lastCalledAction)) {
+          state.lastCalledAction.direct_discard = true;
+          state.lastCalledAction.direct_discard_reason = 'NoUsesRemaining';
+        }
         break;
       }
       case 'OnActionPlayed': {
@@ -153,12 +165,12 @@ export const beginObservation = (
         const { /* deck, hand,*/ discarded } = payload;
         result.wraps += 1;
         state.currentShot.wraps.push(result.wraps);
-        if (state.lastDrawnAndCalledAction) {
+        if (isNotUndefined(state.lastDrawnAndCalledAction)) {
           state.lastDrawnAndCalledAction.wasLastToBeDrawnBeforeWrapNr =
             result.wraps;
           state.lastDrawnAndCalledAction.wrappingInto = [...discarded];
         }
-        if (state.lastCalledAction) {
+        if (isNotUndefined(state.lastCalledAction)) {
           state.lastCalledAction.wasLastToBeCalledBeforeWrapNr = result.wraps;
           state.lastCalledAction.wrappingInto = [...discarded];
         }
@@ -181,7 +193,8 @@ export const beginObservation = (
           always_cast_index,
         } = spell;
         console.debug(`OnCallActionPre, gunMana: ${gunMana}, id: ${id}`);
-        state.lastCalledAction = {
+
+        const actionCall: ActionCall = {
           _typeName: 'ActionCall',
           sequenceId: nextActionCallSequenceId(),
           spell: {
@@ -197,30 +210,27 @@ export const beginObservation = (
             ? recursion ?? 0
             : undefined,
           iteration: isIterativeActionId(id) ? iteration ?? 1 : undefined,
-          dont_draw_actions: dont_draw_actions,
+          dont_draw_actions,
         };
+
+        state.lastCalledAction = actionCall;
+
         if (source === 'draw') {
-          state.lastDrawnAndCalledAction = state.lastCalledAction;
+          state.lastDrawnAndCalledAction = actionCall;
         }
 
-        if (!state.currentNode) {
-          state.currentNode = {
-            value: state.lastCalledAction,
-            children: [],
-          };
-          state.rootNodes.push(state.currentNode);
+        if (isUndefined(state.currentNode)) {
+          const newTree = new MapTree<ActionCall>();
+          state.rootNodes.push(newTree);
+          state.currentNode = newTree.appendChild(actionCall);
         } else {
-          const newNode = {
-            value: state.lastCalledAction,
-            children: [],
-            parent: state.currentNode,
-          };
-          state.currentNode?.children.push(newNode);
-          state.currentNode = newNode;
+          state.currentNode = state.currentNode.appendChild(actionCall);
         }
-        state.calledActions.push(state.lastCalledAction);
+
+        state.calledActions.push(actionCall);
+
         if (isValidActionCallSource(getSpellByActionId(spell.id).type)) {
-          state.validSourceCalledActions.push(state.lastCalledAction);
+          state.validSourceCalledActions.push(actionCall);
         }
         break;
       }

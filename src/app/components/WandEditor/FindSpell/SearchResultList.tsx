@@ -22,6 +22,15 @@ const ListWrapper = styled.ol`
   position: absolute;
   top: 100%;
   z-index: var(--zindex-findspell-results);
+  @media screen and (max-width: 500px) {
+    width: 100vw;
+    position: fixed;
+    inset: calc(var(--top-banner-height) + var(--ou) * 3) 0 auto 0;
+    margin: 0;
+    border: 0;
+    padding: calc(var(--ou) * 3);
+    box-sizing: border-box;
+  }
 `;
 
 export const SearchResultList = ({

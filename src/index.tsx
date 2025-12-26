@@ -6,6 +6,7 @@ import './app/calc/extraSpells/extraSpellSprites.css';
 import './app/sprites.css';
 import './index.css';
 import './actionTree.css';
+import './tweaks.css';
 import './fonts/NoitaPixel.ttf';
 import './fonts/NoitaGlyphScaled.ttf';
 import { App } from './app/App';

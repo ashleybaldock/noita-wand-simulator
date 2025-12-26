@@ -12,7 +12,7 @@ import type { Spell } from '../../../calc/spell';
 import { SearchResultList } from '../FindSpell/SearchResultList';
 import { noop } from '../../../util/util';
 import { isNotNullOrUndefined } from '../../../util/Predicate';
-import { HotkeyHint, HotkeyMultiHint } from '../../Tooltips/HotkeyHint';
+import { HotkeyMultiHint } from '../../Tooltips/HotkeyHint';
 import { useFocus } from '../../../hooks/useFocus';
 import { useAppDispatch } from '../../../redux/hooks';
 import { spells } from '../../../calc/spells';
@@ -56,6 +56,18 @@ const NoQuery = styled.div`
   &::before {
     content: '... ';
   }
+
+  @media screen and (max-width: 500px) {
+    position: absolute;
+    inset: 100% auto auto 50%;
+    background-color: #0c0c0cf2;
+    text-align: center;
+    width: max-content;
+    border-radius: 0 0 2px 2px;
+    transform: translateX(-50%);
+    border: 1px solid var(--color-tab-border-active);
+    border-style: inset groove;
+  }
 `;
 
 const Container = styled.div`
@@ -64,19 +76,12 @@ const Container = styled.div`
   grid-area: search;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   position: relative;
   margin: 0;
   margin-left: auto;
   width: auto;
-  min-width: 18em;
-  max-width: 28vw;
-  
-  @media screen and (max-width: 500px) {
-    min-width: 12em;
-    width: 100%;
-    max-width: 88vw;
-  }
+  flex: 1 1 auto;
 }
 `;
 
@@ -87,8 +92,8 @@ const SearchInput = styled.input.attrs({ type: 'text' })`
   padding: 0.3em 0.5em 0.2em 0.5em;
   box-sizing: border-box;
 
-  width: auto;
-  min-width: 100%;
+  width: 10ch;
+  min-width: 10ch;
   caret-color: var(--color-wand-edit-cursor);
   color: #fff;
   background-color: #222;
@@ -295,7 +300,7 @@ export const FindSpell = ({
   return (
     <>
       <Container
-        data-name="SearchWrapper"
+        data-name="FindSpell"
         className={className}
         onMouseDown={(e) => !hidden && preventLossOfFocus(e)}
       >

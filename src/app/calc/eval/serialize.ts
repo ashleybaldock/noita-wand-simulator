@@ -40,6 +40,6 @@ export const serializeSimulationResult = (
         serializeSpell(wrapInto),
       ),
     })),
-    actionCallTrees: shot.actionCallTrees.map((tree) => tree.serialise()),
+    actionCallTrees: shot.actionCallTrees.map((tree) => tree.serialize()),
   })),
 });

@@ -1,12 +1,18 @@
 import styled from 'styled-components';
 import { WandActionCall } from '../WandActionCall';
 import type { ActionCall } from '../../../calc/eval/ActionCall';
-import { isNotNullOrUndefined, ordinalSuffix } from '../../../util';
-import { deserialiseMapTree, type MapTree } from '../../../util/MapTree';
+import {
+  everyIter,
+  isNotNullOrUndefined,
+  isUndefined,
+  ordinalSuffix,
+} from '../../../util';
+import { MapTree } from '../../../util/MapTree';
 import type { WandShotResult } from '../../../calc/eval/WandShot';
 import type { ActionSource } from '../../../calc/actionSources';
 import { useMemo } from 'react';
 import { TreeArrow } from './TreeArrow';
+import type { TreeNode, TreeRoot } from '../../../util/Tree';
 
 export const ActionTreeRoot = styled.div`
   --row-h: 68px;
@@ -50,22 +56,21 @@ const ActionTreeComponent = ({
   level,
   triggerLevel: currentTriggerLevel,
 }: {
-  node: MapTree<ActionCall>;
+  node: TreeRoot<ActionCall>;
   level: number;
   position: number;
   triggerLevel: number;
 }) => {
-  const childCount = node.children.length;
+  const childCount = node.childCount;
   const hasChildren = childCount > 0;
-  const childHasSiblings = childCount > 1;
   const isLeaf = childCount === 0;
-  const isTwig = node.children.every((child) => child.children.length === 0);
+  const isTwig = everyIter(node.children, (child) => child.childCount === 0);
   const isTriggerParent = isNotNullOrUndefined(
-    node.value.wasLastToBeCalledBeforeBeginTrigger,
+    node.value?.wasLastToBeCalledBeforeBeginTrigger,
   );
   const triggerLevel = currentTriggerLevel + (isTriggerParent ? 1 : 0);
   const causedWrap = isNotNullOrUndefined(
-    node.value.wasLastToBeDrawnBeforeWrapNr,
+    node.value?.wasLastToBeDrawnBeforeWrapNr,
   );
   /**
    * Find 'runs' of single draw actions,
@@ -74,27 +79,28 @@ const ActionTreeComponent = ({
    */
   const runs = useMemo(
     () =>
-      node.children.reduce<MapTree<ActionCall>[][]>((runs, cur) => {
+      [...node.children].reduce<TreeNode<ActionCall>[][]>((runs, cur) => {
         if (
           runs.length > 0 &&
           runs[runs.length - 1][runs[runs.length - 1].length - 1]?.value
-            ?.source === cur.value.source
+            ?.source === cur.value?.source
         ) {
           runs[runs.length - 1].push(cur);
-          return runs;
         } else {
           runs.push([cur]);
-          return runs;
         }
+        return runs;
       }, []),
     [node],
   );
   const branches = runs.length > 1;
 
-  return (
+  return isUndefined(node.value) ? (
+    <></>
+  ) : (
     <ActionTreeShotResultNodeDiv
       data-name="AcTreeNode"
-      data-spell={node?.value.spell.id}
+      data-spell={node.value.spell.id}
       data-leaf={isLeaf}
       data-twig={isTwig}
       data-branches={branches}
@@ -103,12 +109,12 @@ const ActionTreeComponent = ({
       data-trigger={isTriggerParent}
       data-triggerlevel={triggerLevel}
       data-wrap={causedWrap}
-      data-deckindex={node?.value.spell.deck_index}
-      data-seqid={node?.value.sequenceId}
-      data-recursion={node?.value.recursion}
-      data-iteration={node?.value.iteration}
-      data-source={node?.value.source ?? 'draw'}
-      data-dontdraw={node?.value.dont_draw_actions ?? false}
+      data-deckindex={node.value.spell.deck_index}
+      data-seqid={node.value.sequenceId}
+      data-recursion={node.value.recursion}
+      data-iteration={node.value.iteration}
+      data-source={node.value.source ?? 'draw'}
+      data-dontdraw={node.value.dont_draw_actions ?? false}
       style={{
         '--data-triggerlevel': triggerLevel,
         '--data-level': level,
@@ -116,12 +122,14 @@ const ActionTreeComponent = ({
       }}
     >
       <ArrowColumn data-name="Arrows">
-        <TreeArrow arrow={'⭢ '} source={node.value?.source} />
-        {isLeaf && <TreeArrow arrow={'⤵︎'} source={node.value?.source} />}
+        <TreeArrow arrow={'⭢ '} source={node.value.source ?? 'draw'} />
+        {isLeaf && (
+          <TreeArrow arrow={'⤵︎'} source={node.value.source ?? 'draw'} />
+        )}
         {position > 0 && (
           <>
-            <TreeArrow arrow={'⤷ '} source={node.value?.source} />
-            <TreeArrow arrow={'ↆ'} source={node.value?.source} />
+            <TreeArrow arrow={'⤷ '} source={node.value.source ?? 'draw'} />
+            <TreeArrow arrow={'ↆ'} source={node.value.source ?? 'draw'} />
           </>
         )}
       </ArrowColumn>
@@ -139,7 +147,7 @@ const ActionTreeComponent = ({
               data-run={runIdx}
               data-has-siblings={runs.length > 1}
               key={runIdx}
-              $source={run[0]?.value?.source}
+              $source={run[0]?.value?.source ?? 'draw'}
             >
               {run.map((childNode, index, run) => (
                 <ActionTreeComponent
@@ -181,7 +189,7 @@ export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
           <StartingDraw data-name="AcTreeSpCast">Spells/cast: </StartingDraw>
           <ActionTreeComponent
             position={0}
-            node={deserialiseMapTree(actionCallTree)}
+            node={new MapTree(actionCallTree)}
             level={level + 1}
             triggerLevel={triggerLevel}
           />

@@ -14,7 +14,7 @@ export const StyledSearchButton = styled(SearchButton)`
 
 const Wrapper = styled.div`
   display: flex;
-  grid-area: search;
+  flex: 1 1 auto;
 `;
 
 const _Search = () => {

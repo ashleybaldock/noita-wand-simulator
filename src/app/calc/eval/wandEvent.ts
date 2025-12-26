@@ -8,9 +8,9 @@ import type { SpellDeckInfo } from '../spell';
 import type { UnlockCondition } from '../unlocks';
 import type { WandId } from './dispatch';
 
-export type ComponentID = string;
-export type EntityID = number;
-export type InventoryItemID = number | undefined;
+export type ComponentId = string;
+export type EntityId = number;
+export type InventoryItemId = number | undefined;
 export type EntityTransform = [x: number, y: number];
 
 export type WandEventBase = {
@@ -26,7 +26,7 @@ export type WandEventBase = {
   };
   ActionUsed: {
     actionId: ActionId | WandId;
-    /* Not sure this is useful */ itemId: InventoryItemID | undefined;
+    /* Not sure this is useful */ itemId: InventoryItemId | undefined;
   };
   SetProjectileConfigs: /* Unused ?? */ Record<string, never>;
   RegisterGunShotEffects: {
@@ -66,7 +66,7 @@ export type WandEventBase = {
 
   /* Begin Sequence: Reload */
   ActionUsesRemainingChanged: {
-    item_id: InventoryItemID;
+    item_id: InventoryItemId;
     uses_remaining: number;
     _returns: boolean /* return false to cancel use reduction */;
   };
@@ -157,69 +157,69 @@ export type WandEventBase = {
     _returns: number;
   };
   ComponentSetValue2: {
-    component: ComponentID;
+    component: ComponentId;
     key: string;
     value: number | boolean;
   };
   /* Entity */
   GetUpdatedEntityID: {
     actionId: ActionId | WandId;
-    _returns: EntityID;
+    _returns: EntityId;
   };
   EntityGetWithTag: {
     tag: string;
-    _returns: EntityID[];
+    _returns: EntityId[];
   };
   EntityGetComponent: {
-    entity_id: EntityID;
+    entity_id: EntityId;
     component: string;
-    _returns: ComponentID[];
+    _returns: ComponentId[];
   };
   EntityGetFirstComponent: {
     actionId: ActionId | WandId;
-    entity_id: EntityID;
+    entity_id: EntityId;
     component: string;
-    _returns: ComponentID;
+    _returns: ComponentId;
   };
   EntityGetFirstComponentIncludingDisabled: {
     actionId: ActionId | WandId;
-    entity_id: EntityID;
+    entity_id: EntityId;
     component: string;
-    _returns: ComponentID;
+    _returns: ComponentId;
   };
   EntityInflictDamage: {
-    entityId: EntityID;
+    entityId: EntityId;
     selfDamage: number;
     damageType: string;
     actionString: string;
     arg1: string;
     arg2: number;
     arg3: number;
-    entityId2: EntityID;
+    entityId2: EntityId;
   };
   EntityGetTransform: {
     actionId: ActionId | WandId;
-    entity: EntityID;
+    entity: EntityId;
     _returns: EntityTransform;
   };
   EntityLoad: {
     entityXml: string;
     x: number;
     y: number;
-    _returns: EntityID;
+    _returns: EntityId;
   };
   EntityGetAllChildren: {
     actionId: ActionId | WandId;
-    entityId: EntityID;
-    _returns: EntityID[];
+    entityId: EntityId;
+    _returns: EntityId[];
   };
   EntityGetName: {
     actionId: ActionId | WandId;
-    childId: EntityID;
+    childId: EntityId;
     _returns: string;
   };
   EntityHasTag: {
-    entityId: EntityID;
+    entityId: EntityId;
     tag: string;
     _returns: boolean;
   };

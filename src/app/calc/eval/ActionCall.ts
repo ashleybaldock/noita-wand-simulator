@@ -2,6 +2,7 @@ import { sequentialId } from '../../util';
 import type { SpellPileSnapshot } from '../SpellPileSnapshot';
 import type { ActionSource } from '../actionSources';
 import type { SpellDeckInfo } from '../spell';
+import type { DirectDiscardReason } from './DirectDiscardReason';
 import type { WandShotId } from './WandShot';
 
 /**
@@ -49,6 +50,14 @@ export type ActionCall = {
    * Was draw disabled when this action was called
    */
   dont_draw_actions?: boolean;
+  /**
+   * Action discarded directly instead of moving to the hand
+   */
+  direct_discard?: boolean;
+  /**
+   * Reason for action to be discarded directly
+   */
+  direct_discard_reason?: DirectDiscardReason;
   /**
    * State of the three lists that spells move between
    * [Pre, Post]

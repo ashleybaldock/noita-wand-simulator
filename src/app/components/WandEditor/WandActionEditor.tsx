@@ -13,7 +13,7 @@ import {
   removeSpellAfterCursor,
   removeSpellBeforeCursor,
 } from '../../redux/editorThunks';
-import { moveSelection, clearSelection } from '../../redux/editorSlice';
+import { /* moveSelection, */ clearSelection } from '../../redux/editorSlice';
 import type { Spell } from '../../calc/spell';
 import { getSpellByActionId } from '../../calc/spells';
 import {
@@ -244,10 +244,10 @@ export const WandActionEditor = () => {
   /* isSelecting ? end selection,shift selection : new single selection,shift
    *   visual change to indicate selection commmited, and shift of spells */
   useHotkeys('ctrl+shift+a', () => {
-    dispatch(moveSelection({ by: -1 }));
+    // dispatch(moveSelection({ by: -1 })); TODO
   });
   useHotkeys('ctrl+shift+d', () => {
-    dispatch(moveSelection({ by: 1 }));
+    // dispatch(moveSelection({ by: 1 })); TODO
   });
 
   /* Add spaces to front/end w/ + button or drag */

@@ -3,10 +3,10 @@ import type { Spell, SpellDeckInfo } from '../spell';
 import type { ActionId } from '../actionId';
 import type { ActionSource } from '../actionSources';
 import type {
-  ComponentID,
-  EntityID,
+  ComponentId,
+  EntityId,
   EntityTransform,
-  InventoryItemID,
+  InventoryItemId,
 } from './wandEvent';
 import {
   Random as RandomExt,
@@ -122,7 +122,7 @@ export function BaabInstruction(name: string) {
 
 export function ActionUsesRemainingChanged(
   actionId: ActionId | WandId,
-  item_id: InventoryItemID,
+  item_id: InventoryItemId,
   uses_remaining: number,
 ): boolean {
   return observer.onEvent({
@@ -138,7 +138,7 @@ export function ActionUsesRemainingChanged(
 
 export function ActionUsed(
   actionId: ActionId | WandId,
-  item_id: InventoryItemID | undefined,
+  item_id: InventoryItemId | undefined,
 ) {
   observer.onEvent({
     name: 'ActionUsed',
@@ -160,7 +160,7 @@ export function RegisterGunAction(s: GunActionState): void {
 export function EntityGetWithTag(
   actionId: ActionId | WandId,
   tag: string,
-): EntityID[] {
+): EntityId[] {
   return observer.onEvent({
     name: 'EntityGetWithTag',
     default: [0],
@@ -168,7 +168,7 @@ export function EntityGetWithTag(
   });
 }
 
-export function GetUpdatedEntityID(actionId: ActionId | WandId): EntityID {
+export function GetUpdatedEntityID(actionId: ActionId | WandId): EntityId {
   return observer.onEvent({
     name: 'GetUpdatedEntityID',
     default: 0,
@@ -178,9 +178,9 @@ export function GetUpdatedEntityID(actionId: ActionId | WandId): EntityID {
 
 export const EntityGetComponent = (
   actionId: ActionId | WandId,
-  entity_id: EntityID,
+  entity_id: EntityId,
   component: string,
-): ComponentID[] => {
+): ComponentId[] => {
   return observer.onEvent({
     name: 'EntityGetComponent',
     default: [component],
@@ -194,9 +194,9 @@ export const EntityGetComponent = (
 
 export function EntityGetFirstComponent(
   actionId: ActionId | WandId,
-  entity_id: EntityID,
+  entity_id: EntityId,
   component: string,
-): ComponentID {
+): ComponentId {
   return observer.onEvent({
     name: 'EntityGetFirstComponent',
     default: '',
@@ -210,9 +210,9 @@ export function EntityGetFirstComponent(
 
 export function EntityGetFirstComponentIncludingDisabled(
   actionId: ActionId | WandId,
-  entity_id: EntityID,
+  entity_id: EntityId,
   component: string,
-): ComponentID {
+): ComponentId {
   return observer.onEvent({
     name: 'EntityGetFirstComponentIncludingDisabled',
     default: '',
@@ -246,7 +246,7 @@ export function ComponentGetValue2(
 
 export function ComponentSetValue2(
   actionId: ActionId | WandId,
-  component: ComponentID,
+  component: ComponentId,
   key: string,
   value: number | boolean,
 ): void {
@@ -258,14 +258,14 @@ export function ComponentSetValue2(
 
 export function EntityInflictDamage(
   actionId: ActionId | WandId,
-  entityId: EntityID,
+  entityId: EntityId,
   selfDamage: number,
   damageType: string,
   actionString: string,
   arg1: string,
   arg2: number,
   arg3: number,
-  entityId2: EntityID,
+  entityId2: EntityId,
 ): void {
   observer.onEvent({
     name: 'EntityInflictDamage',
@@ -285,7 +285,7 @@ export function EntityInflictDamage(
 
 export const EntityGetTransform = (
   actionId: ActionId | WandId,
-  entity: EntityID,
+  entity: EntityId,
 ): EntityTransform => {
   return observer.onEvent({
     name: 'EntityGetTransform',
@@ -300,7 +300,7 @@ export function EntityLoad(
   entityXml: string,
   x: number,
   y: number,
-): EntityID {
+): EntityId {
   return observer.onEvent({
     name: 'EntityLoad',
     default: 0,
@@ -310,8 +310,8 @@ export function EntityLoad(
 
 export function EntityGetAllChildren(
   actionId: ActionId | WandId,
-  entityId: EntityID,
-): EntityID[] {
+  entityId: EntityId,
+): EntityId[] {
   return observer.onEvent({
     name: 'EntityGetAllChildren',
     default: [],
@@ -321,7 +321,7 @@ export function EntityGetAllChildren(
 
 export function EntityGetName(
   actionId: ActionId | WandId,
-  childId: EntityID,
+  childId: EntityId,
 ): string {
   return observer.onEvent({
     name: 'EntityGetName',
@@ -332,7 +332,7 @@ export function EntityGetName(
 
 export function EntityHasTag(
   actionId: ActionId | WandId,
-  entityId: EntityID,
+  entityId: EntityId,
   tag: string,
 ): boolean {
   return observer.onEvent({

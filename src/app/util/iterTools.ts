@@ -1,4 +1,4 @@
-import { always, isObject } from './Predicate';
+import { always, isObject, isUndefined } from './Predicate';
 
 /**
  * Iterator utility functions
@@ -403,18 +403,42 @@ export function* filterIter<T>(
  * Perform a function on each item in iterable
  * and return the running result
  */
-// export function* reduceIter<T, Tout>(
-//   iterable: IterableIterator<T>,
-//   accumulate: (acc: Tout, t: T) => Tout,
-//   initial?: Tout,
-//   // accumulator: Mapper<T, Tout>,
-// ): IterableIterator<Tout> {
-//   let acc = initial ?? iterable.next();
-//   for (let x of iterable) {
-//     acc = accumulate(acc, x);
-//     yield acc;
-//   }
-// }
+export function reduceIter<T>(
+  iterable: IterableIterator<T>,
+  accumulator: (previousValue: T, currentValue: T, currentIndex?: number) => T,
+): IterableIterator<T>;
+export function reduceIter<T>(
+  iterable: IterableIterator<T>,
+  accumulator: (previousValue: T, currentValue: T, currentIndex?: number) => T,
+  initialValue?: T,
+): IterableIterator<T>;
+export function reduceIter<T, U>(
+  iterable: IterableIterator<T>,
+  accumulator: (previousValue: U, currentValue: T, currentIndex?: number) => U,
+  initialValue?: U,
+): IterableIterator<U>;
+export function* reduceIter<T>(
+  iterable: IterableIterator<T>,
+  accumulator: (previousValue: T, currentValue: T, currentIndex?: number) => T,
+  initialValue?: T,
+): IterableIterator<T> {
+  const { value: firstValue, done } = iterable.next();
+  if (done) {
+    return initialValue;
+  }
+  let acc;
+  if (isUndefined(initialValue)) {
+    const { value: secondValue, done } = iterable.next();
+    if (done) {
+      return firstValue;
+    }
+    acc = accumulator(firstValue, secondValue);
+    for (let x of iterable) {
+      acc = accumulator(acc, x);
+      yield acc;
+    }
+  }
+}
 
 /**
  * Keeps a running count of unique items
@@ -569,7 +593,7 @@ export function some<T>(
  *
  * !Beware, in the worst-case this reads all items in source
  */
-export function every<T>(
+export function everyIter<T>(
   source: IterableIterator<T>,
   predicate: ValueFilterPredicate<T>,
 ): boolean {
@@ -601,7 +625,7 @@ export const compareSequencesIter = <T>(
     ...IterableIterator<T>[],
   ]
 ): boolean =>
-  every(
+  everyIter(
     transpose(
       ...sequences.map((sequence) => filterIter(sequence, filterPredicate)),
     ),

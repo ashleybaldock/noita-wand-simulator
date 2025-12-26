@@ -25,34 +25,43 @@ const HeaderDiv = styled.div<{
   color: #eee;
   margin: 0;
   padding: 0.6em 0.8em 0.2em 0.8em;
+  background-color: var(--color-base-background);
+  z-index: 100;
+  position: sticky;
+  top: -20px;
+  height: 36px;
+  padding: 0.3em 0.5ch 0.3em 0.5ch;
+  inset: 0 auto auto auto;
+  column-gap: 0.3ch;
+  margin: 0;
+
+  @media screen and (max-width: 500px) {
+    padding: 0 0 0.2em 0.2ch;
+  }
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+`;
+const HeaderLink = styled.a<{
+  imgUrl?: string;
+}>`
+  display: flex;
+  height: auto;
+  background-position: left bottom;
   background-image: url('${({ imgUrl = '/logo/logo.png' }) => imgUrl}');
   background-size: contain;
   background-repeat: no-repeat;
   background-color: var(--color-base-background);
   background-origin: content-box;
-  z-index: 100;
-  position: sticky;
-  top: -20px;
-  height: 36px;
+  background-position: left bottom;
 
-  @media screen and (max-width: 500px) {
-    margin: 6px 6px;
-    background-position: center;
-  }
-`;
-
-const HeaderLink = styled.a`
   text-decoration: none;
-  width: max(30vw, 300px);
-  height: 60px;
-  @media screen and (max-width: 500px) {
-    width: 100%;
-  }
-`;
-
-const SpacerDiv = styled.div`
+  width: clamp(160px, 30vw, 300px);
+  height: auto;
+  margin: 0.1em 0.2ch 0 0.2ch;
+  flex: 1 0 auto;
   display: flex;
-  align-self: center;
 `;
 
 const ExtraDiv = styled.div`
@@ -76,9 +85,11 @@ export function MainHeader({ children }: React.PropsWithChildren) {
   return (
     <HeaderDiv data-name="MainHeader" imgUrl={logoVariant}>
       <HeaderLink href="/"></HeaderLink>
-      <SpacerDiv />
-      <ExtraDiv>{children}</ExtraDiv>
-      <ConfigButton />
+      {/* <ExtraDiv>{children}</ExtraDiv> */}
+      <Wrapper data-name="Wrapper">
+        <Search />
+        <ConfigButton />
+      </Wrapper>
     </HeaderDiv>
   );
 }
