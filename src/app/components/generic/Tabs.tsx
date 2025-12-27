@@ -104,13 +104,11 @@ const TabsWandAction = styled(WandAction)`
 
   transform: none;
   opacity: 1;
-  cursor: default;
-  margin-right: 0.2em;
+  cursor: inherit;
 
   &:hover {
     transform: none;
     opacity: 1;
-    cursor: pointer;
   }
 `;
 

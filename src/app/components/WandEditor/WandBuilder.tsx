@@ -6,6 +6,7 @@ import { WandBorder } from './WandBorder';
 import { WandAlwaysCastEditor } from './WandAlwaysCastEditor';
 import { ZetaEditor } from './ZetaEditor';
 import { ExportOptions } from '../Export';
+import { RedoButton, ResetButton, UndoButton } from '../buttons';
 
 const MainDiv = styled.div`
   display: flex;
@@ -38,6 +39,22 @@ const WandActionEditorWrapper = styled.div`
   }
 `;
 
+const ButtonsContainer = styled.div`
+  display: grid;
+  grid-template-columns:
+    [left] 1fr [
+    undo-start] auto [undo-end
+    redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end
+    reset-start] auto [reset-end] 1ch [
+    right];
+  grid-template-rows: [top] 1fr [bottom];
+  filter: none;
+
+  & > button {
+    padding-top: 0.4em;
+    padding-bottom: 0.3em;
+  }
+`;
 const ColumnsContainer = styled.div`
   --child-unit-height: 1.44em;
   padding: 0.8em 1em 0.6em 1em;
@@ -73,6 +90,11 @@ export const WandBuilder = () => {
 
   return (
     <MainDiv data-name="WandBuilder">
+      <ButtonsContainer>
+        <UndoButton />
+        <RedoButton />
+        <ResetButton />
+      </ButtonsContainer>
       <WandBorder data-name="WandBorder">
         <ContentDiv ref={wandRef} className={'saveImageRoot'}>
           <ColumnsContainer>

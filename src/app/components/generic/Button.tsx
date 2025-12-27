@@ -95,12 +95,12 @@ const StyledButton = styled.button<{
       ? `
   padding-right: var(--pad-img-side);
   padding-left: var(--pad-other-side);
-  background-position: 90% 50%;
+  background-position: right var(--pad-other-side) top 50%;
   `
       : `
   padding-right: var(--pad-other-side);
   padding-left: var(--pad-img-side);
-  background-position: 10% 50%;
+  background-position: left var(--pad-other-side) top 50%;
   `
   }
 

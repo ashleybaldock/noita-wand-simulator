@@ -1,12 +1,12 @@
 import { SectionToolbar } from '../SectionToolbar';
-import { ResetButton, UndoButton, RedoButton } from '../buttons';
 
 export const WandBuilderToolbar = () => {
   return (
-    <SectionToolbar data-name="WandBuilderToolbar" title={'Wand Editor'}>
-      <UndoButton />
-      <RedoButton />
-      <ResetButton />
+    <SectionToolbar
+      line={'above'}
+      data-name="WandBuilderToolbar"
+      title={'Wand Editor'}
+    >
       {/* <LoadButton /> */}
     </SectionToolbar>
   );

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import type { ReactNode } from 'react';
 import { SectionHeader } from './SectionHeader';
 
-const StickyHeaderTopBar = styled.div`
+const StickyHeaderSep = styled.div`
   grid-row: line;
   grid-column: left/right;
 
@@ -12,48 +12,46 @@ const StickyHeaderTopBar = styled.div`
   z-index: var(--zindex-stickyheader-overline, 210);
 
   background-color: transparent;
-  border-top: 0.16em solid var(--color-base-background);
-  border-bottom: 0.16em solid var(--color-tab-border-inactive);
+  border-bottom: var(--ou) solid var(--color-base-background);
+  border-top: var(--ou) solid var(--color-tab-border-inactive);
 `;
-const SectionHeaderContainer = styled.div`
+const SectionHeaderContainer = styled.div<{ $line: 'above' | 'below' }>`
   position: sticky;
-  top: -0.36em;
-  bottom: 0;
+  inset: var(--top-banner-height);
   z-index: var(--zindex-stickyheader-controls, 220);
   display: grid;
   grid-template-columns:
     [left
-    title-start] 3fr [title-end
-    search-start buttons-start] repeat(6, 1fr) [search-end buttons-end
+    title-start] auto [title-end
+    buttons-start] repeat(6, 1fr) [buttons-end
     right];
+
   grid-template-rows:
     [top
-    line-start] auto [line-end
-    title-start search-start buttons-start] 1fr [buttons-end search-end title-end
+    ${({ $line }) => ($line === 'above' ? `line-start] auto [line-end` : '')}
+    title-start buttons-start] 1fr [buttons-end title-end
+    ${({ $line }) => ($line === 'below' ? `line-start] auto [line-end` : '')}
     bottom];
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 500px) {
     grid-template-columns:
       [left
-      title-start search-start buttons-start] auto repeat(5, 1fr)
-      [title-end search-end buttons-end
+      title-start buttons-start] auto repeat(5, 1fr)
+      [title-end buttons-end
       right];
     grid-template-rows:
       [top
-      line-start] auto [line-end
+      ${({ $line }) => ($line === 'above' ? `line-start] auto [line-end` : '')}
       buttons-start] 3em [buttons-end
-      search-start] 2em [search-end
+      ${({ $line }) => ($line === 'below' ? `line-start] auto [line-end` : '')}
       bottom];
   }
 
   filter: var(--filter-floating-shadow);
 
   & > button {
-    border-radius: 0 0 0.2em 15.1em / 0 0 0 64.4em;
-    border-right-style: hidden;
     padding-top: 0.4em;
     padding-bottom: 0.3em;
-    margin-left: -0.5em;
   }
 `;
 
@@ -80,17 +78,20 @@ export const SectionToolbar = ({
   title,
   className = '',
   children,
+  line = 'above',
 }: React.PropsWithChildren<{
   title: string | ReactNode;
   className?: string;
+  line?: 'above' | 'below';
 }>) => {
   return (
     <SectionHeaderContainer
       data-name="SectionToolbar"
       data-title={title}
       className={className}
+      $line={line}
     >
-      <StickyHeaderTopBar />
+      <StickyHeaderSep />
       <GridSectionHeader title={title} />
       {children}
     </SectionHeaderContainer>

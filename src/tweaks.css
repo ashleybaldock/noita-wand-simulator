@@ -8,6 +8,22 @@ div[data-name='MainHeader'] {
   inset: 0 auto auto auto;
 }
 
+[data-name='SearchInput'] {
+  align-self: stretch;
+  justify-self: stretch;
+}
+@media screen and (max-width: 500px) {
+  [data-name='FindSpell'] ol {
+    width: 100vw;
+    position: fixed;
+    inset: calc(var(--top-banner-height) + var(--ou) * 3) 0 auto 0;
+    margin: 0;
+    border: 0;
+    padding: calc(var(--ou) * 3);
+    box-sizing: border-box;
+  }
+}
+
 div[data-name='TabTitles'] {
   overflow: visible;
 }
@@ -25,7 +41,7 @@ div[data-name='Tab:Selected'] {
   border-bottom-style: solid;
   margin: 0;
   border-width: 0 0 var(--ou) 0;
-  padding: calc(var(--ou) * 2) calc(var(--ou) * 4) calc(var(--ou) * 2)
+  padding: calc(var(--ou) * 1) calc(var(--ou) * 4) calc(var(--ou) * 1)
     calc(var(--ou) * 4);
   box-shadow: calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
       var(--color-tab-border-active),
@@ -34,11 +50,10 @@ div[data-name='Tab:Selected'] {
 }
 
 div[data-name='Tab:Selected'] {
-  border-top-color: var(--bg-color-tab);
-  border-top-style: solid;
   border-top-width: 0;
-  margin: -0.16rem 0 0 0;
-  padding: 0.6em 0.7em 0.5em 0.7em;
+  margin: calc(var(--ou) * -1) 0 0 0;
+  padding: calc(var(--ou) * 2) calc(var(--ou) * 4) calc(var(--ou) * 2)
+    calc(var(--ou) * 4);
   cursor: default;
   box-shadow: calc(var(--ou) * -2) 0 0 calc(var(--ou) * 0)
       var(--color-tab-border-active),
@@ -90,120 +105,60 @@ div[data-name='Tab']:first-of-type {
 }
 
 :not(#u#n#i) [data-title='Wand Editor'] {
-  grid-template-columns: [left title-start] 3fr [title-end buttons-start undo-start] 1fr [undo-end redo-start] 1fr [redo-end] 2em [clear-start] 1fr [clear-end reset-start] 1fr [reset-end buttons-end right];
-  grid-template-rows: [top title-start search-start buttons-start] 1fr [buttons-end search-end title-end line-start] auto [line-end bottom];
+  grid-template-columns:
+    [left
+    title-start] auto [title-end] 1fr[
+    buttons-start
+    undo-start] auto [undo-end
+    redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end
+    reset-start] auto [reset-end
+    buttons-end] 1ch [
+    right];
+  grid-template-rows:
+    [top
+    title-start
+    search-start
+    buttons-start] 1fr [buttons-end
+    search-end
+    title-end
+    line-start] auto [line-end
+    bottom];
   filter: none;
 }
-
-:not(#u#n#i) [data-title='Wand Editor'][data-name='Toolbar'] {
-  grid-template-columns: [buttons-start undo-start] 1fr [undo-end redo-start] 1fr [redo-end] 2em [clear-start] 1fr [clear-end reset-start] 1fr [reset-end buttons-end right];
-  filter: none;
-  align-self: end;
-  flex: 1 1 auto;
-  justify-content: inherit;
-  margin-left: 2ch;
-}
-
 :not(#u#n#i) button[data-tooltip-content='reset'] {
   grid-column: reset;
   border-radius: var(--bdr-tr);
+  margin-left: 0;
 }
 :not(#u#n#i) button[data-tooltip-content='clear'] {
   grid-column: clear;
   border-radius: var(--bdr-tl);
+  margin-left: 0;
 }
 :not(#u#n#i) button[data-tooltip-content='redo'] {
   grid-column: redo;
-  border-left-style: hidden;
-  padding-top: 0.4em;
-  padding-bottom: 0.3em;
-  margin-left: calc(var(--border-thickness) * 0);
-  border-left: var(--border-thickness) inset var(--color-button-border);
-  border-right: var(--border-thickness) solid var(--color-button-border);
+  margin-left: 0;
   border-radius: var(--bdr-tr);
 }
 :not(#u#n#i) button[data-tooltip-content='undo'] {
   grid-column: undo;
-  border-right: var(--border-thickness) outset var(--color-button-border);
   border-radius: var(--bdr-tl);
+  margin-left: 0;
 }
 
-@media screen and (max-width: 500px) {
-  [data-name='FindSpell'] ol {
-    width: 100vw;
-    position: fixed;
-    inset: calc(var(--top-banner-height) + var(--ou) * 3) 0 auto 0;
-    margin: 0;
-    border: 0;
-    padding: calc(var(--ou) * 3);
-    box-sizing: border-box;
-  }
-}
-[data-name='SearchInput'] {
-  align-self: stretch;
-  justify-self: stretch;
-}
-:is([data-name='Tab'], [data-name='Tab:Selected']) > [data-name='WandAction'] {
-  background-size: 60%, 60%, 60%;
-  background-repeat: round, space, no-repeat;
-  background-origin: content-box, border-box, border-box;
-  padding: 0.4em;
-  background-position: top left, bottom right, bottom right;
-  background-repeat: round, space, no-repeat;
-}
-:is([data-name='Tab'], [data-name='Tab:Selected']) > [data-name='WandAction'] {
-  background-size: 15.5%, 22%, 66%;
+:not(#u#n#i)
+  :is([data-name='Tab'], [data-name='Tab:Selected'])
+  > [data-name='WandAction'] {
+  background-size: 67%, 100%;
   background-clip: padding-box, border-box, border-box;
-  background-repeat: round, space, no-repeat;
-  background-repeat: space, space, space;
-  background-origin: content-box, border-box, border-box;
-  --v: 0.4em;
-  border: var(--v) solid #0000;
-  border-width: var(--v) 0 0 var(--v);
-  padding: 0 var(--v) var(--v) 0;
-  min-width: calc(var(--v) * 0.5);
-  min-height: calc(var(--v) * 0.5);
-  background-position: top left, bottom 11% right 11%, bottom -11% right -11%;
-  background-blend-mode: lighten;
-  backdrop-filter: hue-rotate(90deg);
-}
-
-:is([data-name='Tab'], [data-name='Tab:Selected']) > [data-name='WandAction'] {
-  background-size: 60%, 60%, 60%;
-  background-repeat: round, space, no-repeat;
-  background-origin: content-box, border-box, border-box;
-  padding: 0.4em;
-  background-position: top left, bottom right, bottom right;
-  background-repeat: space, space, no-repeat;
-  --bg-spell-border: url('/data/spelltypes/svg/item_bg_utility.svg');
-  --bg-spell-example: var(--sprite-action-teleport-cast);
-  background-image: var(--bg-spell-border) var(--bg-spell-border)
-    var(--bg-spell-example);
-}
-
-[data-name='SearchInput'] {
-  align-self: stretch;
-  justify-self: stretch;
-}
-:is([data-name='Tab'], [data-name='Tab:Selected']) > [data-name='WandAction'] {
-  background-size: 60%, 60%, 60%;
-  background-origin: content-box, border-box, border-box;
-  padding: 0.4em;
-  background-position: top left, bottom right, bottom right;
-  background-repeat: round, space, no-repeat;
-}
-:is([data-name='Tab'], [data-name='Tab:Selected']) > [data-name='WandAction'] {
-  background-size: 15.5%, 22%, 66%;
-  background-clip: padding-box, border-box, border-box;
-  background-repeat: space, space, space;
+  background-repeat: no-repeat, space, space;
   background-origin: content-box, border-box, border-box;
   --v: 0.3em;
   border: var(--v) solid #0000;
   border-width: var(--v) 0 0 var(--v);
   padding: 0 var(--v) var(--v) 0;
-  min-width: calc(var(--v) * 0.5);
-  min-height: calc(var(--v) * 0.5);
-  background-position: top left, bottom 11% right 11%, bottom -11% right -11%;
-  background-blend-mode: lighten;
-  backdrop-filter: hue-rotate(90deg);
+  margin: 0;
+  min-width: calc(var(--v) * 0.25);
+  min-height: calc(var(--v) * 0.25);
+  background-position: center, bottom -11% right -11%;
 }

@@ -22,6 +22,7 @@ const ListWrapper = styled.ol`
   position: absolute;
   top: 100%;
   z-index: var(--zindex-findspell-results);
+
   @media screen and (max-width: 500px) {
     width: 100vw;
     position: fixed;
