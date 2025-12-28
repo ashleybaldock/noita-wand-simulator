@@ -135,8 +135,7 @@ export const beginObservation = (
         state.lastPlayed = spell;
         if (isNotUndefined(state.lastCalledAction)) {
           state.lastCalledAction.direct_discard = true;
-          state.lastCalledAction.direct_discard_reason =
-            'NotEnoughManaForAction';
+          state.lastCalledAction.direct_discard_reason = 'mana';
         }
         break;
       }
@@ -145,7 +144,7 @@ export const beginObservation = (
         state.lastPlayed = spell;
         if (isNotUndefined(state.lastCalledAction)) {
           state.lastCalledAction.direct_discard = true;
-          state.lastCalledAction.direct_discard_reason = 'NoUsesRemaining';
+          state.lastCalledAction.direct_discard_reason = 'charges';
         }
         break;
       }

@@ -64,6 +64,11 @@
 
   --icon-infinite-lifetime: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAAAAAADr6+v/////tQenp6f/57uCVwDCggBdPgA+KgB6VwNxcXFQUFB6b1q4ewCoRdtyAAAAAnRSTlMAhetBupcAAAB9SURBVHheTYq7CcMwEEAvYIhLh9tAIAnS2IcXUBGHpBW5BQz2BP60aVSlTJctjOfwIp4iOld61ePxICH71IBVlPP3R4SS8ISFSL4+qRJp9npBii9ft+FSAARv7fiOy13ZuXey+HJidxTTGpHglWJ5Mtb6BULTde6Q/PaAhD/RyxRkOaYYYwAAAABJRU5ErkJggg==');
 
+  --icon-discarded-mana: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAALElEQVQImWNgQAL/////j8xnxCbByMjICJdE1wFTwIQuiAzwSuK1EwWg2w0AonYUALgX+aEAAAAASUVORK5CYII=');
+  --icon-discarded-charges: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAIAAABLMMCEAAAABnRSTlMAAAAAAABupgeRAAAAHElEQVR4nGNggIH///8zIANkProcToUkKsdnJwAxyxfpXRshNwAAAABJRU5ErkJggg==');
+  --icon-discarded-action: var(--icon-discarded-charges);
+  --icon-reload-time: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHAQMAAAD+nMWQAAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAB1JREFUeF4NwTERAAAEAMBPZBbAKJVRau6lMm+1OBG2AoWu+cpNAAAAAElFTkSuQmCC');
+
   --icon-download-png: url('data:image/svg+xml,%3Csvg\
     style=%22fill: %23ffffff;%22\
     xmlns=%22http://www.w3.org/2000/svg%22\

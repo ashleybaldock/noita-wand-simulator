@@ -1,8 +1,8 @@
 import { sequentialId } from '../../util';
 import type { SpellPileSnapshot } from '../SpellPileSnapshot';
 import type { ActionSource } from '../actionSources';
+import type { DiscardReason } from '../discardReasons';
 import type { SpellDeckInfo } from '../spell';
-import type { DirectDiscardReason } from './DirectDiscardReason';
 import type { WandShotId } from './WandShot';
 
 /**
@@ -57,7 +57,7 @@ export type ActionCall = {
   /**
    * Reason for action to be discarded directly
    */
-  direct_discard_reason?: DirectDiscardReason;
+  direct_discard_reason?: DiscardReason;
   /**
    * State of the three lists that spells move between
    * [Pre, Post]
