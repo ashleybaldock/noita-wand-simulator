@@ -3,17 +3,17 @@
   --top-banner-height: 36px;
 }
 
-div[data-name='MainHeader'] {
+:not(#u#n#i) div[data-name='MainHeader'] {
   padding: 0.2em 0.8em 0.2em 0.8em;
   inset: 0 auto auto auto;
 }
 
-[data-name='SearchInput'] {
+:not(#u#n#i) [data-name='SearchInput'] {
   align-self: stretch;
   justify-self: stretch;
 }
 @media screen and (max-width: 500px) {
-  [data-name='FindSpell'] ol {
+  :not(#u#n#i) [data-name='FindSpell'] ol {
     width: 100vw;
     position: fixed;
     inset: calc(var(--top-banner-height) + var(--ou) * 3) 0 auto 0;
@@ -24,17 +24,17 @@ div[data-name='MainHeader'] {
   }
 }
 
-div[data-name='TabTitles'] {
+:not(#u#n#i) div[data-name='TabTitles'] {
   overflow: visible;
 }
-div[data-name='Tabs'] {
+:not(#u#n#i) div[data-name='Tabs'] {
   padding: calc(var(--ou) * 1);
   margin-top: var(--top-offset);
   inset: var(--top-banner-height) auto auto auto;
   position: sticky;
 }
-div[data-name='Tab'],
-div[data-name='Tab:Selected'] {
+:not(#u#n#i) div[data-name='Tab'],
+:not(#u#n#i) div[data-name='Tab:Selected'] {
   border-top: var(--ou) solid var(--color-tab-border-inactive);
   border-bottom-width: var(--ou);
   border-bottom-color: var(--color-tab-border-inactive);
@@ -49,7 +49,7 @@ div[data-name='Tab:Selected'] {
   flex: 0 1;
 }
 
-div[data-name='Tab:Selected'] {
+:not(#u#n#i) div[data-name='Tab:Selected'] {
   border-top-width: 0;
   margin: calc(var(--ou) * -1) 0 0 0;
   padding: calc(var(--ou) * 2) calc(var(--ou) * 4) calc(var(--ou) * 2)
@@ -61,13 +61,13 @@ div[data-name='Tab:Selected'] {
   border-width: 0 0 var(--ou) 0;
 }
 
-div[data-name='Tab']:last-of-type {
+:not(#u#n#i) div[data-name='Tab']:last-of-type {
   box-shadow: calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
       var(--color-tab-border-active),
     calc(var(--ou) * 0.75) 0 0 calc(var(--ou) * 0)
       var(--color-tab-border-active);
 }
-div[data-name='Tab']:first-of-type {
+:not(#u#n#i) div[data-name='Tab']:first-of-type {
   border-right-width: 0;
 }
 
@@ -161,4 +161,46 @@ div[data-name='Tab']:first-of-type {
   min-width: calc(var(--v) * 0.25);
   min-height: calc(var(--v) * 0.25);
   background-position: center, bottom -11% right -11%;
+}
+
+:not(#u#n#i) [data-name='NumericInput'] {
+  position: relative;
+  align-content: center;
+  align-items: center;
+
+  width: 6em;
+  border: 0 hidden #0000;
+  border-radius: 0;
+  box-sizing: content-box;
+  text-align: end;
+  flex: 0 0 auto;
+  background-color: #0000;
+  line-height: normal;
+  margin: 0;
+}
+
+:not(#u#n#i) [data-name='NumericInput'],
+:not(#u#n#i) [data-name='NumericInput']:focus-within,
+:not(#u#n#i) [data-name='NumericInput']:focus-within:hover,
+:not(#u#n#i) [data-name='NumericInput']:hover {
+  box-shadow: none;
+  --bdr: 0px;
+}
+
+:not(#u#n#i) [data-name='NumericInput'] [data-name='ButtonsAfter'] {
+  position: absolute;
+  inset: auto auto auto 100%;
+}
+:not(#u#n#i) [data-name='NumericInput'] [data-name='ButtonsBefore'] {
+  inset: auto 100% auto auto;
+  position: absolute;
+}
+:not(#u#n#i) [data-name='NumericInput'] [data-name='ButtonsBefore'] > button,
+:not(#u#n#i) [data-name='NumericInput'] [data-name='ButtonsAfter'] > button {
+  opacity: 1;
+  --padding-sides: 0;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  align-items: center;
 }
