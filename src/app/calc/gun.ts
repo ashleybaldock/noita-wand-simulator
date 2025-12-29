@@ -196,28 +196,28 @@ function register_gunshoteffects(effects: ShotEffects) {
 
 function set_current_action(action: Readonly<Spell>) {
   // c.action_id = action.id;
-  c.action_name = action.name;
-  c.action_description = action.description;
-  c.action_sprite_filename = action.sprite;
-  c.action_type = action.type;
-  c.action_recursive = action.recursive;
-  c.action_spawn_level = action.spawn_level;
-  c.action_spawn_probability = action.spawn_probability;
-  c.action_spawn_requires_flag = action.spawn_requires_flag;
-  c.action_spawn_manual_unlock = action.spawn_manual_unlock || false;
-  c.action_max_uses = action.max_uses;
-  c.custom_xml_file = action.custom_xml_file;
-  c.action_ai_never_uses = action.ai_never_uses || false;
-  c.action_never_unlimited = action.never_unlimited || false;
+  c.action_name = action?.name;
+  c.action_description = action?.description;
+  c.action_sprite_filename = action?.sprite;
+  c.action_type = action?.type;
+  c.action_recursive = action?.recursive;
+  c.action_spawn_level = action?.spawn_level;
+  c.action_spawn_probability = action?.spawn_probability;
+  c.action_spawn_requires_flag = action?.spawn_requires_flag;
+  c.action_spawn_manual_unlock = action?.spawn_manual_unlock || false;
+  c.action_max_uses = action?.max_uses;
+  c.custom_xml_file = action?.custom_xml_file;
+  c.action_ai_never_uses = action?.ai_never_uses || false;
+  c.action_never_unlimited = action?.never_unlimited || false;
 
-  c.action_is_dangerous_blast = action.is_dangerous_blast;
+  c.action_is_dangerous_blast = action?.is_dangerous_blast;
 
-  c.sound_loop_tag = action.sound_loop_tag;
+  c.sound_loop_tag = action?.sound_loop_tag;
 
-  c.action_mana_drain = action.mana;
-  if (action.mana == null) {
-    c.action_mana_drain = ACTION_MANA_DRAIN_DEFAULT;
-  }
+  c.action_mana_drain = action?.mana ?? ACTION_MANA_DRAIN_DEFAULT;
+  // if (action.mana == null) {
+  //   c.action_mana_drain = ACTION_MANA_DRAIN_DEFAULT;
+  // }
 
   c.action_unidentified_sprite_filename = action.sprite_unidentified;
   if (action.sprite_unidentified == null) {
@@ -387,7 +387,7 @@ export function draw_action(
     // if (action.mana == null) {
     //   action_mana_required = ACTION_MANA_DRAIN_DEFAULT;
     // }
-    const action_mana_required = action.mana ?? ACTION_MANA_DRAIN_DEFAULT;
+    const action_mana_required = action?.mana ?? ACTION_MANA_DRAIN_DEFAULT;
 
     if (action_mana_required > mana) {
       OnNotEnoughManaForAction(action_mana_required, mana, action);
@@ -395,7 +395,7 @@ export function draw_action(
       return false;
     }
 
-    if (action.uses_remaining === 0) {
+    if (action?.uses_remaining === 0) {
       OnNoUsesRemaining(action);
       discarded.push(action);
       return false;

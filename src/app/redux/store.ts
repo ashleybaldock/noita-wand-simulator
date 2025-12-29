@@ -9,7 +9,7 @@ import { editorReducer } from './editorSlice';
 import { uiReducer } from './uiSlice';
 import { listenerMiddleware, startAppListening } from './listenerMiddleware';
 import type { WandState } from './Wand/wandState';
-import { resultReducer, newResult } from './resultSlice';
+import { resultReducer } from './resultSlice';
 import { startUpdateListener } from './updateResultListener';
 
 export const store = configureStore({
@@ -26,7 +26,7 @@ export const store = configureStore({
     startUpdateListener(startAppListening);
     return getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [newResult.type],
+        // ignoredActions: [newResult.type],
       },
       // immutableCheck: {
       //   ignoredPaths: ['result.last.shots'],
