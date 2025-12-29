@@ -219,10 +219,11 @@ function set_current_action(action: Readonly<Spell>) {
   //   c.action_mana_drain = ACTION_MANA_DRAIN_DEFAULT;
   // }
 
-  c.action_unidentified_sprite_filename = action.sprite_unidentified;
-  if (action.sprite_unidentified == null) {
-    c.action_unidentified_sprite_filename = ACTION_UNIDENTIFIED_SPRITE_DEFAULT;
-  }
+  c.action_unidentified_sprite_filename =
+    action?.sprite_unidentified ?? ACTION_UNIDENTIFIED_SPRITE_DEFAULT;
+  // if (action.sprite_unidentified == null) {
+  //   c.action_unidentified_sprite_filename = ACTION_UNIDENTIFIED_SPRITE_DEFAULT;
+  // }
 
   // current_action = action;
 }

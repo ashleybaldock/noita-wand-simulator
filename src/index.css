@@ -1,9 +1,16 @@
+/* @font-face { */
+/*   font-family: 'noita'; */
+/*   src: url('fonts/NoitaPixel.ttf') format('truetype'); */
+/*   font-display: swap; */
+/* } */
 @font-face {
   font-family: 'noita';
   src: url('fonts/NoitaPixel.ttf') format('truetype');
+  ascent-override: 101.6%;
+  descent-override: 23.7%;
+  size-adjust: 89.4%;
   font-display: swap;
 }
-
 @font-face {
   font-family: 'glyphs';
   src: url('fonts/NoitaGlyphScaled.ttf') format('truetype');

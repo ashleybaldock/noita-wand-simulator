@@ -1,4 +1,3 @@
-import { useKeyState } from '../../context/KeyStateContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { clearSpells, resetWand } from '../../redux/wandSlice';
 import { Button } from '../generic';
@@ -22,7 +21,7 @@ const Stack = ({ children }: React.PropsWithChildren) => {
 export const ResetButton = () => {
   const dispatch = useAppDispatch();
 
-  const { shift } = useKeyState();
+  // const { shift } = useKeyState();
 
   return (
     <>

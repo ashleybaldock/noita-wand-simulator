@@ -185,7 +185,6 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
           limitSimulationDuration,
         }));
 
-      console.debug('fork');
       console.group();
       const result = await task.result;
       console.groupEnd();

@@ -78,6 +78,12 @@ const uiHintDefinition = [
       desc: 'Configure the simulator and editor.',
     },
   ],
+  [
+    'shuffle',
+    {
+      desc: '(Currently broken!) Randomises the order of spells for each Salvo.',
+    },
+  ],
 ] as const;
 
 const tipKinds = ['spellinfo', 'uihint'] as const;

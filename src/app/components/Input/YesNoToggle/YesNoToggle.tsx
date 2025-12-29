@@ -5,6 +5,7 @@ import { YesNo } from '../../Presentation';
 import { EditableWithLabel } from '../../Presentation/Editable';
 import type { ConfigToggleField } from '../../../redux';
 import { useConfigToggle } from '../../../redux';
+import { tipToAttributes, type Tip } from '../../Tooltips/tooltipId';
 
 const InteractiveYesNo = styled(YesNo)``;
 
@@ -50,39 +51,50 @@ export const Checkbox = styled.input.attrs({ type: 'checkbox' })<CheckboxProps>`
   }
 `;
 
-const Wrapper = styled(EditableWithLabel)``;
+const EditableWrapper = styled(EditableWithLabel)``;
 
 export const YesNoToggle = ({
   checked,
+  $disabled = false,
   onChange,
   onClick = noop,
   customYes,
   customNo,
   children,
   className,
+  tip,
 }: React.PropsWithChildren<{
   checked: boolean;
+  $disabled?: boolean;
   onChange: ChangeEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
   customYes?: JSX.Element;
   customNo?: JSX.Element;
   className?: string;
+  tip?: Tip;
 }>) => {
   return (
-    <Wrapper data-name="YesNoToggle" className={className}>
+    <EditableWrapper
+      data-name="YesNoToggle"
+      {...(tip ? tipToAttributes(tip) : {})}
+      className={className}
+      $disabled={$disabled}
+    >
       {children}
       <Checkbox
+        disabled={$disabled}
         hidden={true}
         checked={checked}
         onChange={onChange}
         onClick={onClick}
       />
       <InteractiveYesNo
+        $disabled={$disabled}
         yes={checked}
         customYes={customYes}
         customNo={customNo}
       />
-    </Wrapper>
+    </EditableWrapper>
   );
 };
 
@@ -104,7 +116,7 @@ export const YesNoConfigToggle = ({
   // customYes, TODO get from configuration of toggle field
   // customNo,
   return (
-    <Wrapper data-name="YesNoConfigToggle" className={className}>
+    <EditableWrapper data-name="YesNoConfigToggle" className={className}>
       {children}
       <Checkbox
         hidden={true}
@@ -117,7 +129,7 @@ export const YesNoConfigToggle = ({
         customYes={customYes}
         customNo={customNo}
       />
-    </Wrapper>
+    </EditableWrapper>
   );
 };
 

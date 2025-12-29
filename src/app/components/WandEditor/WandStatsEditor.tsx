@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import type { AppDispatch } from '../../redux/store';
 import { EditableInteger } from '../generic';
 import type { TypedProperties } from '../../util/util';
-import { round, toFrames, toSeconds } from '../../util/util';
+import { round, toSeconds } from '../../util/util';
 import { useConfig } from '../../redux';
 import { YesNoToggle } from '../Input';
 import { FNSP, SUFFIX_DEGREE, SUFFIX_FRAME, SUFFIX_SECOND } from '../../util';
@@ -143,7 +143,9 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         <StyledName>{'Shuffle'}</StyledName>
         <StyledValue>
           <YesNoToggle
-            checked={wand.shuffle_deck_when_empty}
+            $disabled={true}
+            tip={{ kind: 'uihint', id: 'shuffle' }}
+            checked={false && wand.shuffle_deck_when_empty}
             onChange={(e) =>
               dispatch(
                 setWand({

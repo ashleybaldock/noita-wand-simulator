@@ -204,3 +204,61 @@
   align-content: center;
   align-items: center;
 }
+
+:not(#u#n#i)
+  :is(
+    [data-name='NumberInput']:valid,
+    [data-name='NumberInput']:hover,
+    [data-name='NumberInput']
+  ) {
+  box-shadow: none;
+  background: none;
+  border: none;
+  line-height: normal;
+  align-self: center;
+  text-align: start;
+}
+
+:has(> [data-name='ConfigEditor']) {
+  display: contents;
+}
+[data-name='ConfigEditor'] {
+  display: grid;
+  grid-template-rows: subgrid;
+}
+[data-name='ConfigEditor'] > div {
+  display: contents;
+}
+[data-name='ConfigToggleGroup'] {
+  display: grid;
+  grid-template-columns: auto;
+}
+[data-name='ConfigToggleGroup'] > div:first-of-type {
+  grid-column: 1 / span 2;
+}
+[data-name='ConfigToggleGroup'] [data-name='EditableWithLabel'] {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / span 2;
+}
+[data-name='NumberInput']:valid,
+[data-name='NumberInput']:hover,
+[data-name='NumberInput'] {
+  box-shadow: none;
+  background: none;
+  border: none;
+  line-height: normal;
+  align-self: center;
+  text-align: start;
+}
+[data-name='MainHeader'] > [data-name='Wrapper'] {
+  flex: 1 1 auto;
+  column-gap: 0.5ch;
+}
+:not(#u#n#i) div[data-name='MainHeader'] {
+  padding: 0.2em 0.5ch 0 0.5ch;
+}
+[data-name='SearchInput']::placeholder {
+  font-size: 0.9em;
+  text-align: end;
+}

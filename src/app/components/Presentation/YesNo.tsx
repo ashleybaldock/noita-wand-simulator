@@ -15,18 +15,25 @@ const Sizer = styled.div`
   }
 `;
 
-const Overlay = styled.div<{ $warning?: boolean }>`
+const Overlay = styled.div<{ $warning?: boolean; $disabled?: boolean }>`
   position: absolute;
   text-decoration: inherit;
   ${({ $warning }) =>
-    $warning &&
-    `
+    $warning
+      ? `
     color: var(--color-value-warning);
     background-color: red;
     &::before {
       content: '';
     }
-    `}
+    `
+      : ''}
+  ${({ $disabled }) =>
+    $disabled
+      ? `
+    color: var(--color-value-disabled);
+    `
+      : ''}
 `;
 
 const Combiner = styled.div`
@@ -34,29 +41,48 @@ const Combiner = styled.div`
   display: grid;
   place-items: center end;
 `;
-export const YesNo = styled(({ yes, className, warnIf, customYes = <>
-      {'Yes'}
-    </>, customNo = <>
-      {'No'}
-    </>, customMaybe = <Unchanged /> }: { yes?: boolean; className?: string; warnIf?: 'yes' | 'no'; customYes?: JSX.Element; customNo?: JSX.Element; customMaybe?: JSX.Element }) => {
-  return (
-    <Combiner className={className}>
-      <Sizer>
-        <Size>{customYes}</Size>
-        <Size>{customNo}</Size>
-        <Size>{customMaybe}</Size>
-      </Sizer>
-      <Overlay
-        $warning={
-          (warnIf === 'yes' && yes === true) ||
-          (warnIf === 'no' && yes === false)
-        }
-      >
-        {isNotNullOrUndefined(yes) ? (yes ? customYes : customNo) : customMaybe}
-      </Overlay>
-    </Combiner>
-  );
-})``;
+export const YesNo = styled(
+  ({
+    yes,
+    $disabled = false,
+    className,
+    warnIf,
+    customYes = <>{'Yes'}</>,
+    customNo = <>{'No'}</>,
+    customMaybe = <Unchanged />,
+  }: {
+    yes?: boolean;
+    $disabled?: boolean;
+    className?: string;
+    warnIf?: 'yes' | 'no';
+    customYes?: JSX.Element;
+    customNo?: JSX.Element;
+    customMaybe?: JSX.Element;
+  }) => {
+    return (
+      <Combiner data-name="YesNo" className={className}>
+        <Sizer>
+          <Size>{customYes}</Size>
+          <Size>{customNo}</Size>
+          <Size>{customMaybe}</Size>
+        </Sizer>
+        <Overlay
+          $disabled={$disabled}
+          $warning={
+            (warnIf === 'yes' && yes === true) ||
+            (warnIf === 'no' && yes === false)
+          }
+        >
+          {isNotNullOrUndefined(yes)
+            ? yes
+              ? customYes
+              : customNo
+            : customMaybe}
+        </Overlay>
+      </Combiner>
+    );
+  },
+)``;
 
 export const YesOr = styled(
   ({
