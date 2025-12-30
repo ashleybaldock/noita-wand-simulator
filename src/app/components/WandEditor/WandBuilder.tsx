@@ -53,6 +53,7 @@ const ButtonsContainer = styled.div`
   & > button {
     padding-top: 0.4em;
     padding-bottom: 0.3em;
+    border-bottom: none;
   }
 `;
 const ColumnsContainer = styled.div`
@@ -90,7 +91,7 @@ export const WandBuilder = () => {
 
   return (
     <MainDiv data-name="WandBuilder">
-      <ButtonsContainer>
+      <ButtonsContainer data-name="WandBuilderTopButtons">
         <UndoButton />
         <RedoButton />
         <ResetButton />

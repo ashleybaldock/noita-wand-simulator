@@ -5,7 +5,7 @@
 
 ## Tech
 
-Uses: pnpm (formerly yarn), rollup (formerly CRA/webpack), vite (formerly CRA), React, redux
+Uses: pnpm, rollup, vite, React, redux
 Host: Vercel
 
 ## Available Scripts

@@ -1,6 +1,8 @@
-const fsPromises = require('fs/promises');
-const Jimp = require('jimp');
-const path = require('path');
+#!/usr/bin/env node
+
+import { writeFile } from 'fs/promises';
+import { read, MIME_PNG } from 'jimp';
+import { join } from 'path';
 
 const prefix = 'sprite-cursor';
 const inputs = [
@@ -77,8 +79,8 @@ const inputs = [
 const outfileCSS = 'src/app/calc/__generated__/main/sprites.css';
 const outfileTS = 'src/app/calc/__generated__/main/sprites.ts';
 
-fsPromises.writeFile(
-  path.join(process.cwd(), outfileTS),
+writeFile(
+  join(process.cwd(), outfileTS),
   `/* Auto-generated file */
 
 export const sprites = [
@@ -93,7 +95,7 @@ export type Sprite = typeof sprites[number];`,
 
 Promise.all(
   inputs.flatMap(({ file, w, h, or, names }) =>
-    Jimp.read(path.join(process.cwd(), file)).then((image) =>
+    read(join(process.cwd(), file)).then((image) =>
       Promise.all(
         names.flatMap((name, i) => {
           const x = or === 'v' ? 0 : i * w;
@@ -101,15 +103,15 @@ Promise.all(
           const clone = image.clone();
           clone.crop(x, y, w, h);
           return clone
-            .getBase64Async(Jimp.MIME_PNG)
+            .getBase64Async(MIME_PNG)
             .then((b64img) => `--${prefix}-${name}: url('${b64img}');`);
         }),
       ),
     ),
   ),
 ).then((cssSprites) =>
-  fsPromises.writeFile(
-    path.join(process.cwd(), outfileCSS),
+  writeFile(
+    join(process.cwd(), outfileCSS),
     `:root {
   ${cssSprites.flat().join(`
 

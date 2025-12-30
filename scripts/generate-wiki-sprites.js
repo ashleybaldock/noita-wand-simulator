@@ -1,5 +1,7 @@
-const fsPromises = require('fs/promises');
-const path = require('path');
+#!/usr/bin/env node
+
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
 
 // TODO - get this from the server
 // https://noita.wiki.gg/index.php?title=Special:CargoExport&tables=Spells&&fields=_pageName%2Cid%2Cname%2Ctype&&order+by=&limit=500&format=json
@@ -2653,8 +2655,8 @@ const icons = spells
 
 const outfileCSS = 'src/app/calc/__generated__/main/wikiSprites.css';
 
-fsPromises.writeFile(
-  path.join(process.cwd(), outfileCSS),
+writeFile(
+  join(process.cwd(), outfileCSS),
   `/* Auto-generated file */
 
 ${befores}

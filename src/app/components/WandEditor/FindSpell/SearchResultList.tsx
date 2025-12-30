@@ -12,16 +12,16 @@ const ResultNoMatch = styled(SearchResultBase)`
 `;
 
 const ListWrapper = styled.ol`
-  width: 100%;
-  overflow-y: scroll;
-  margin: 0.4em 0;
-  padding: 0;
   background-color: #0c0c0cf2;
   border: 2px solid var(--color-tab-border-active);
   border-radius: 0 0.4em;
   position: absolute;
-  top: 100%;
+  inset: 100% -20% auto -20%;
   z-index: var(--zindex-findspell-results);
+  width: fit-content;
+  padding: 0.2em 0.5ch;
+  overflow-y: scroll;
+  margin: 0.4em 0;
 
   @media screen and (max-width: 500px) {
     width: 100vw;
