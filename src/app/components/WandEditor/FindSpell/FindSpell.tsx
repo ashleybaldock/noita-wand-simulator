@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useHotkeys } from 'react-hotkeys-hook';
 import type { MouseEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import type { Hotkey } from 'react-hotkeys-hook/dist/types';
 import {
   insertSpellAfterCursor,
   insertSpellBeforeCursor,
@@ -20,6 +19,7 @@ import { translate } from '../../../util/i18n';
 import useFuzzySearch from '../../../hooks/useFuzzySearch';
 import { spellTypeInfoMap } from '../../../calc/spellTypes';
 import { MAX_RESULTS_SHOWN } from '../../../util';
+import type { Hotkey } from 'react-hotkeys-hook/packages/react-hotkeys-hook/dist/types';
 
 const inKeys = [
   'escape',
@@ -113,7 +113,9 @@ const SearchInput = styled.input.attrs({ type: 'text' })`
   border-right-color: transparent;
 
   &:focus {
-    box-shadow: 0px 0 8px 0px #ff710ab8 inset, 0px 0px 10px 3px #680000;
+    box-shadow:
+      0px 0 8px 0px #ff710ab8 inset,
+      0px 0px 10px 3px #680000;
     background-color: #0a0a0a;
   }
 

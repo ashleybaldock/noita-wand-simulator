@@ -153,8 +153,8 @@ export const ExportOptions = ({
   className,
 }: {
   className?: string;
-  wandRef: RefObject<HTMLDivElement>;
-  spellsRef: RefObject<HTMLDivElement>;
+  wandRef: RefObject<HTMLElement | null>;
+  spellsRef: RefObject<HTMLElement | null>;
 }) => {
   const [expanded, setExpanded] = useState(false);
 

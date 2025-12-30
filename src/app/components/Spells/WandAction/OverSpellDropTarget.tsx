@@ -97,30 +97,32 @@ export const OverSpellDropTarget = ({
     [dispatch, wandIndex],
   );
 
-  const [{ isOver, isDraggingSpell, isDraggingSelect, canDrop }, dropRef] =
-    useDrop(
-      () => ({
-        accept: ['spell', 'select'],
-        drop: (item: DragItem, monitor) => {
-          !monitor.didDrop() &&
-            ((isDragItemSpell(item) && onDropSpell(item)) ||
-              (isDragItemSelect(item) && onEndSelect(item)));
-        },
-        hover: (item: DragItem) => {
-          isDragItemSelect(item) && onDragSelect(item);
-        },
-        canDrop: (item: DragItem) =>
-          (isDragItemSpell(item) && item.sourceWandIndex !== wandIndex) ||
-          (isDragItemSelect(item) && isMainWandIndex(wandIndex)),
-        collect: (monitor) => ({
-          isDraggingSpell: monitor.getItemType() === 'spell',
-          isDraggingSelect: monitor.getItemType() === 'select',
-          isOver: monitor.isOver(),
-          canDrop: monitor.canDrop(),
-        }),
+  const [
+    { isOver, isDraggingSpell, isDraggingSelect, canDrop },
+    connectDropTarget,
+  ] = useDrop(
+    () => ({
+      accept: ['spell', 'select'],
+      drop: (item: DragItem, monitor) => {
+        !monitor.didDrop() &&
+          ((isDragItemSpell(item) && onDropSpell(item)) ||
+            (isDragItemSelect(item) && onEndSelect(item)));
+      },
+      hover: (item: DragItem) => {
+        isDragItemSelect(item) && onDragSelect(item);
+      },
+      canDrop: (item: DragItem) =>
+        (isDragItemSpell(item) && item.sourceWandIndex !== wandIndex) ||
+        (isDragItemSelect(item) && isMainWandIndex(wandIndex)),
+      collect: (monitor) => ({
+        isDraggingSpell: monitor.getItemType() === 'spell',
+        isDraggingSelect: monitor.getItemType() === 'select',
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
       }),
-      [wandIndex, onDropSpell, onEndSelect, onDragSelect],
-    );
+    }),
+    [wandIndex, onDropSpell, onEndSelect, onDragSelect],
+  );
 
   const merged = useMergedBackgrounds(
     caretBackgrounds[cursor]['on'],
@@ -137,14 +139,13 @@ export const OverSpellDropTarget = ({
     selectionBackgrounds[selection]['on'],
   );
 
-  return (
+  return connectDropTarget(
     <DropTargetOver
       style={merged}
       onClick={() => dispatch(moveCursorTo({ to: wandIndex }))}
       className={className}
-      ref={dropRef}
     >
       {children}
-    </DropTargetOver>
+    </DropTargetOver>,
   );
 };

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import type { MutableRefObject } from 'react';
+import type { MutableRefObject, RefObject } from 'react';
 import { useCallback } from 'react';
 import { useState } from 'react';
 import { ProcessingModal } from './ProcessingModal';
@@ -14,7 +14,7 @@ function _SaveImageButton({
   hotkeys,
   className = '',
 }: {
-  targetRef: MutableRefObject<HTMLDivElement | null>;
+  targetRef: RefObject<HTMLElement | null>;
   name: string;
   fileName: string;
   enabled: boolean;

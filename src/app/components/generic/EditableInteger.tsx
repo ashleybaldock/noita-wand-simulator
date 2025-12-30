@@ -62,7 +62,7 @@ export const EditableInteger = (props: {
   const [currentValue, setCurrentValue] = useState(props.value);
   const [isInvalidValue, setIsInvalidValue] = useState(false);
   const [invalidValue, setInvalidValue] = useState('');
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const {
     value,
@@ -99,8 +99,8 @@ export const EditableInteger = (props: {
       ? invalidValue
       : convertRawValue(currentValue)
     : formatValue
-    ? formatValue(value)
-    : value;
+      ? formatValue(value)
+      : value;
 
   return (
     <Wrapper>

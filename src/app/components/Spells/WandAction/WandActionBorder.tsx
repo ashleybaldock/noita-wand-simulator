@@ -29,8 +29,8 @@ const StyledDiv = styled.div<{
     $disabled
       ? `background-image: url('/data/inventory/inventory_box_inactive_overlay.png'), url('/data/inventory/full_inventory_box.png');`
       : $highlight
-      ? `background-image: url('/data/inventory/full_inventory_box_highlight.png'), url('/data/inventory/full_inventory_box.png');`
-      : `background-image: url('/data/inventory/full_inventory_box.png');`}
+        ? `background-image: url('/data/inventory/full_inventory_box_highlight.png'), url('/data/inventory/full_inventory_box.png');`
+        : `background-image: url('/data/inventory/full_inventory_box.png');`}
 `;
 
 const WandActionBorder = ({
@@ -41,7 +41,7 @@ const WandActionBorder = ({
   className?: string;
   droppable?: boolean;
 }>) => {
-  const [{ canDrop }, dropRef] = useDrop(
+  const [{ canDrop }, connectDropTarget] = useDrop(
     () => ({
       accept: 'spell',
       canDrop: () => false,
@@ -51,16 +51,15 @@ const WandActionBorder = ({
     }),
     [],
   );
-  return (
+  return connectDropTarget(
     <StyledDiv
       data-name="WandActionBorder"
       $highlight={droppable && canDrop}
       $disabled={!droppable}
-      ref={dropRef}
       className={className}
     >
       {children}
-    </StyledDiv>
+    </StyledDiv>,
   );
 };
 

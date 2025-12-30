@@ -18,7 +18,7 @@ export const getComputedRows = <T extends HTMLElement>(
 };
 
 export const getComputedColumns = <T extends HTMLElement>(
-  ref: RefObject<T>,
+  ref: RefObject<T | null>,
 ): number => {
   if (!ref.current) return defaultColumnCount;
 

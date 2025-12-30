@@ -172,31 +172,37 @@ export const BetweenSpellsDropTarget = ({
     [dispatch, insertIndex],
   );
 
-  const [{ isOver, canDrop, isDraggingSpell, isDraggingSelect }, dropRef] =
-    useDrop(
-      () => ({
-        accept: ['spell', 'select'],
-        drop: (item: DragItem, monitor) => {
-          !monitor.didDrop() &&
-            ((isDragItemSpell(item) && handleDropSpell(item)) ||
-              (isDragItemSelect(item) && handleEndSelect(item)));
-        },
-        hover: (item: DragItem) => {
-          isDragItemSelect(item) && handleDragSelect(item);
-        },
-        canDrop: (item: DragItem) =>
-          (isDragItemSpell(item) && item.sourceWandIndex !== insertIndex) ||
-          (isDragItemSelect(item) && isMainWandIndex(insertIndex)),
-        collect: (monitor) => ({
-          isDraggingSpell: monitor.getItemType() === 'spell',
-          isDraggingSelect: monitor.getItemType() === 'select',
-          isOver: monitor.isOver(),
-          canDrop: monitor.canDrop(),
-        }),
+  const [
+    { isOver, canDrop, isDraggingSpell, isDraggingSelect },
+    connectDropTarget,
+  ] = useDrop(
+    () => ({
+      accept: ['spell', 'select'],
+      drop: (item: DragItem, monitor) => {
+        !monitor.didDrop() &&
+          ((isDragItemSpell(item) && handleDropSpell(item)) ||
+            (isDragItemSelect(item) && handleEndSelect(item)));
+      },
+      hover: (item: DragItem) => {
+        isDragItemSelect(item) && handleDragSelect(item);
+      },
+      canDrop: (item: DragItem) =>
+        (isDragItemSpell(item) && item.sourceWandIndex !== insertIndex) ||
+        (isDragItemSelect(item) && isMainWandIndex(insertIndex)),
+      collect: (monitor) => ({
+        isDraggingSpell: monitor.getItemType() === 'spell',
+        isDraggingSelect: monitor.getItemType() === 'select',
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
       }),
-      [insertIndex, handleDropSpell, handleEndSelect, handleEndSelect],
-    );
-  const [, dragRef] = useDrag<DragItemSelect, DragItemSelect, unknown>(
+    }),
+    [insertIndex, handleDropSpell, handleEndSelect, handleEndSelect],
+  );
+  const [, connectDragSource] = useDrag<
+    DragItemSelect,
+    DragItemSelect,
+    unknown
+  >(
     () => ({
       type: 'select',
       item: { disc: 'select', dragStartIndex: insertIndex },
@@ -236,24 +242,21 @@ export const BetweenSpellsDropTarget = ({
   );
   // const style = { ...merged, ...mergedHover };
 
-  return (
-    <DropTargetBackground
-      className={className}
-      style={merged}
-      onClick={() =>
-        dispatch(
-          moveCursorTo({
-            to: insertIndex,
-          }),
-        )
-      }
-      ref={
-        enableSelection
-          ? mergeRefs(ref, dropRef, dragRef)
-          : mergeRefs(ref, dropRef)
-      }
-    >
-      <HoverBackground style={mergedHover} />
-    </DropTargetBackground>
+  return connectDragSource(
+    connectDropTarget(
+      <DropTargetBackground
+        className={className}
+        style={merged}
+        onClick={() =>
+          dispatch(
+            moveCursorTo({
+              to: insertIndex,
+            }),
+          )
+        }
+      >
+        <HoverBackground style={mergedHover} />
+      </DropTargetBackground>,
+    ),
   );
 };
