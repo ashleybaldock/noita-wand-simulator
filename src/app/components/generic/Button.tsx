@@ -221,8 +221,6 @@ export const Button = ({
   hotkeys = '',
 
   tip,
-  // tooltipId,
-  // tooltipActionHintId,
 
   icon = 'none',
   imgUrl = '',
@@ -234,8 +232,10 @@ export const Button = ({
   shape = 'pill',
   children,
   className = '',
+  $dataName,
 }: React.PropsWithChildren<{
   className?: string;
+  $dataName?: string;
   onClick?: () => void;
   onMouseOver?: () => void;
   onMouseOut?: () => void;
@@ -262,6 +262,7 @@ export const Button = ({
   const iconPath = icon === 'none' ? '' : useIcon(icon);
   return (
     <StyledButton
+      data-name={$dataName}
       className={className}
       $disabled={disabled}
       $minimal={minimal}

@@ -62,10 +62,10 @@ const EditableInterval = ({
         dispatch(setWand({ wand: { ...wand, [field]: value } }))
       }
       onChange={() => {}}
-      min={-60}
-      max={1000}
-      showSetToMax={false}
-      showSetToLarge={false}
+      smallest={-60}
+      largest={1000}
+      setLargestButton={false}
+      setLargeButton={false}
       step={frames ? 1 : 0.01}
       formatForDisplay={
         frames
@@ -170,11 +170,11 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
               dispatch(setWand({ wand: { ...wand, deck_capacity: value } }))
             }
             onChange={() => {}}
-            min={1}
-            max={512}
+            smallest={1}
+            largest={512}
             large={26}
-            showSetToMax={false}
-            showSetToLarge={true}
+            setLargestButton={false}
+            setLargeButton={true}
           ></NumericInput>
         </StyledValue>
       </StyledListItem>
@@ -190,10 +190,10 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
               dispatch(setWand({ wand: { ...wand, actions_per_round: value } }))
             }
             onChange={() => {}}
-            min={1}
-            max={26}
-            showSetToMax={false}
-            showSetToLarge={false}
+            smallest={1}
+            largest={26}
+            setLargestButton={false}
+            setLargeButton={false}
           ></NumericInput>
         </StyledValue>
       </StyledListItem>

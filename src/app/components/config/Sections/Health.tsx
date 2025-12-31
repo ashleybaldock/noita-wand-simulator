@@ -18,8 +18,8 @@ export const HealthConfigSection = () => {
       </SubSectionTitle>
       <SubSectionContent>
         <NumericInput
-          min={0}
-          max={Number.POSITIVE_INFINITY}
+          smallest={0}
+          largest={Number.POSITIVE_INFINITY}
           value={value}
           setValue={setValue}
           onChange={changeHandler}

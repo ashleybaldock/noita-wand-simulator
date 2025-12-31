@@ -18,12 +18,12 @@ export const MoneyConfigSection = () => {
       </SubSectionTitle>
       <SubSectionContent>
         <NumericInput
-          min={0}
-          max={Number.POSITIVE_INFINITY}
+          smallest={0}
+          largest={Number.POSITIVE_INFINITY}
           small={100}
-          showSetToSmall={true}
+          setSmallButton={true}
           large={10000}
-          showSetToLarge={true}
+          setLargeButton={true}
           // type="text"
           // inputMode="numeric"
           // pattern="^[1-9][0-9]*$"
