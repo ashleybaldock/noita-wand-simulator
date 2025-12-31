@@ -78,22 +78,22 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
+  justify-content: end;
   margin: 0;
-  margin-left: auto;
-  width: auto;
-  flex: 1 1 auto;
+  width: fit-content;
+  flex: 1 1 content;
 }
 `;
 
 const SearchInput = styled.input.attrs({ type: 'text' })`
   flex: 1 1 auto;
-  width: 6em;
 
   padding: 0.3em 0.5em 0.2em 0.5em;
   box-sizing: border-box;
 
-  width: 10ch;
+  width: 33vw;
   min-width: 10ch;
+  max-width: 20ch;
   caret-color: var(--color-wand-edit-cursor);
   color: #fff;
   background-color: #222;
@@ -300,54 +300,52 @@ export const FindSpell = ({
   };
 
   return (
-    <>
-      <Container
-        data-name="FindSpell"
-        className={className}
-        onMouseDown={(e) => !hidden && preventLossOfFocus(e)}
-      >
-        <SearchInput
-          data-name="SearchInput"
-          ref={mergeRefs(useHotkeysRef, inputFocusRef)}
-          value={searchValue}
-          onChange={(e) => {
-            setSearchValue(e.target.value);
-            selectFirstResult();
-          }}
-          onFocus={() => setHidden(false)}
-          onBlur={() => setHidden(true)}
-          autoComplete="off"
-          autoFocus={true}
-          placeholder="spell name/id"
-        ></SearchInput>
-        {
-          <HotkeyMultiHint
-            anchor={'ℹ︎'}
-            position={'below'}
-            hotkeys={[
-              { hotkeys: 'enter', description: 'Insert match at cursor' },
-              {
-                hotkeys: 'shift+enter',
-                description: 'Insert match before cursor',
-              },
-              { hotkeys: 'ctrl+enter', description: 'Insert and clear match' },
-              {
-                hotkeys: 'ctrl+shift+enter',
-                description: 'Insert before and clear match',
-              },
-            ]}
-          />
-        }
-        {hidden ? null : noQuery ? (
-          <NoQuery>Start typing to see suggestions</NoQuery>
-        ) : (
-          <SearchResultList
-            results={filteredResults}
-            highlightIdx={selectedResult}
-            onSelectResult={selectResult}
-          />
-        )}
-      </Container>
-    </>
+    <Container
+      data-name="FindSpell"
+      className={className}
+      onMouseDown={(e) => !hidden && preventLossOfFocus(e)}
+    >
+      <SearchInput
+        data-name="SearchInput"
+        ref={mergeRefs(useHotkeysRef, inputFocusRef)}
+        value={searchValue}
+        onChange={(e) => {
+          setSearchValue(e.target.value);
+          selectFirstResult();
+        }}
+        onFocus={() => setHidden(false)}
+        onBlur={() => setHidden(true)}
+        autoComplete="off"
+        autoFocus={true}
+        placeholder="spell name"
+      ></SearchInput>
+      {
+        <HotkeyMultiHint
+          anchor={'ℹ︎'}
+          position={'below'}
+          hotkeys={[
+            { hotkeys: 'enter', description: 'Insert match at cursor' },
+            {
+              hotkeys: 'shift+enter',
+              description: 'Insert match before cursor',
+            },
+            { hotkeys: 'ctrl+enter', description: 'Insert and clear match' },
+            {
+              hotkeys: 'ctrl+shift+enter',
+              description: 'Insert before and clear match',
+            },
+          ]}
+        />
+      }
+      {hidden ? null : noQuery ? (
+        <NoQuery>Start typing to see suggestions</NoQuery>
+      ) : (
+        <SearchResultList
+          results={filteredResults}
+          highlightIdx={selectedResult}
+          onSelectResult={selectResult}
+        />
+      )}
+    </Container>
   );
 };

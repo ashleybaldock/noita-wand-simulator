@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { mergeRefs } from '../../../util/mergeRefs';
 import type { MergableRef } from '../../../util/mergeRefs';
 import { useDrag, useDrop } from 'react-dnd';
-import { isDragItemSelect, isDragItemSpell } from './DragItems';
-import type { DragItem, DragItemSelect, DragItemSpell } from './DragItems';
+import { isDraggedSelection, isDraggedSpell } from './DragItems';
+import type { Dragged, DraggedSelection, DraggedSpell } from './DragItems';
 import type { MainWandIndex, WandIndex } from '../../../redux/WandIndex';
 import { isMainWandIndex } from '../../../redux/WandIndex';
 import { WithDebugHints } from '../../Debug';
@@ -24,6 +24,8 @@ import {
   dropHintBackgrounds,
   selectHintBackgrounds,
 } from './Backgrounds/DropHint';
+import { useDragRef } from '../../../hooks/useDragRef';
+import { useDropRef } from '../../../hooks/useDropRef';
 
 // right: calc(var(--width) * -0.5);
 // z-index: var(--zindex-insert-after);
@@ -127,7 +129,7 @@ export const BetweenSpellsDropTarget = ({
     : 0;
 
   const handleDropSpell = useCallback(
-    (item: DragItemSpell) => {
+    (item: DraggedSpell) => {
       dispatch(
         moveSpell({
           fromIndex: item.sourceWandIndex,
@@ -140,7 +142,7 @@ export const BetweenSpellsDropTarget = ({
   );
 
   const handleEndSelect = useCallback(
-    (item: DragItemSelect) => {
+    (item: DraggedSelection) => {
       const from = item.dragStartIndex;
       if (isMainWandIndex(from) && isMainWandIndex(insertIndex)) {
         // const direction = from > insertIndex ? 'left' : 'right';
@@ -160,7 +162,7 @@ export const BetweenSpellsDropTarget = ({
   );
 
   const handleDragSelect = useCallback(
-    (item: DragItemSelect) => {
+    (item: DraggedSelection) => {
       dispatch(
         setSelection({
           from: item.dragStartIndex,
@@ -174,21 +176,29 @@ export const BetweenSpellsDropTarget = ({
 
   const [
     { isOver, canDrop, isDraggingSpell, isDraggingSelect },
-    connectDropTarget,
+    dropConnector,
   ] = useDrop(
     () => ({
       accept: ['spell', 'select'],
-      drop: (item: DragItem, monitor) => {
-        !monitor.didDrop() &&
-          ((isDragItemSpell(item) && handleDropSpell(item)) ||
-            (isDragItemSelect(item) && handleEndSelect(item)));
+      drop: (item: Dragged, monitor) => {
+        if (monitor.didDrop()) {
+          return;
+        }
+        if (isDraggedSpell(item)) {
+          handleDropSpell(item);
+        }
+        if (isDraggedSelection(item)) {
+          handleEndSelect(item);
+        }
       },
-      hover: (item: DragItem) => {
-        isDragItemSelect(item) && handleDragSelect(item);
+      hover: (item: Dragged) => {
+        if (isDraggedSelection(item)) {
+          handleDragSelect(item);
+        }
       },
-      canDrop: (item: DragItem) =>
-        (isDragItemSpell(item) && item.sourceWandIndex !== insertIndex) ||
-        (isDragItemSelect(item) && isMainWandIndex(insertIndex)),
+      canDrop: (item: Dragged) =>
+        (isDraggedSpell(item) && item.sourceWandIndex !== insertIndex) ||
+        (isDraggedSelection(item) && isMainWandIndex(insertIndex)),
       collect: (monitor) => ({
         isDraggingSpell: monitor.getItemType() === 'spell',
         isDraggingSelect: monitor.getItemType() === 'select',
@@ -198,9 +208,9 @@ export const BetweenSpellsDropTarget = ({
     }),
     [insertIndex, handleDropSpell, handleEndSelect, handleEndSelect],
   );
-  const [, connectDragSource] = useDrag<
-    DragItemSelect,
-    DragItemSelect,
+  const [, dragConnector] = useDrag<
+    DraggedSelection,
+    DraggedSelection,
     unknown
   >(
     () => ({
@@ -209,6 +219,9 @@ export const BetweenSpellsDropTarget = ({
     }),
     [insertIndex],
   );
+
+  const dragRef = useDragRef(dragConnector);
+  const dropRef = useDropRef(dropConnector);
 
   // const merged = useMergedBackgroundVars(
   //   getCssVarForProperty,
@@ -242,21 +255,20 @@ export const BetweenSpellsDropTarget = ({
   );
   // const style = { ...merged, ...mergedHover };
 
-  return connectDragSource(
-    connectDropTarget(
-      <DropTargetBackground
-        className={className}
-        style={merged}
-        onClick={() =>
-          dispatch(
-            moveCursorTo({
-              to: insertIndex,
-            }),
-          )
-        }
-      >
-        <HoverBackground style={mergedHover} />
-      </DropTargetBackground>,
-    ),
+  return (
+    <DropTargetBackground
+      className={className}
+      style={merged}
+      onClick={() =>
+        dispatch(
+          moveCursorTo({
+            to: insertIndex,
+          }),
+        )
+      }
+      ref={mergeRefs(ref, dropRef, dragRef)}
+    >
+      <HoverBackground style={mergedHover} />
+    </DropTargetBackground>
   );
 };

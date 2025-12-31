@@ -46,19 +46,19 @@ export const isObject = (x: unknown): x is object => 'object' === typeof x;
 export const isFunction = (x: unknown): x is () => unknown =>
   'function' === typeof x;
 
-const a = (y?: object) => {
-  if (never(y)) {
-    typeof y;
-  }
-  if (always(y)) {
-    typeof y;
-  }
-  if (isNonNullable(y)) {
-    typeof y;
-    y.toString();
-  }
-  if (isNotUndefined(y)) {
-    y.toString();
-    typeof y;
-  }
-};
+// const a = (y?: object) => {
+//   if (never(y)) {
+//     typeof y;
+//   }
+//   if (always(y)) {
+//     typeof y;
+//   }
+//   if (isNonNullable(y)) {
+//     typeof y;
+//     y.toString();
+//   }
+//   if (isNotUndefined(y)) {
+//     y.toString();
+//     typeof y;
+//   }
+// };

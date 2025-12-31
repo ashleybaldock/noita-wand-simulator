@@ -43,7 +43,8 @@
   border-width: 0 0 var(--ou) 0;
   padding: calc(var(--ou) * 1) calc(var(--ou) * 4) calc(var(--ou) * 1)
     calc(var(--ou) * 4);
-  box-shadow: calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
+  box-shadow:
+    calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
       var(--color-tab-border-active),
     calc(var(--ou) * 0.5) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
   flex: 0 1;
@@ -55,14 +56,15 @@
   padding: calc(var(--ou) * 2) calc(var(--ou) * 4) calc(var(--ou) * 2)
     calc(var(--ou) * 4);
   cursor: default;
-  box-shadow: calc(var(--ou) * -2) 0 0 calc(var(--ou) * 0)
-      var(--color-tab-border-active),
+  box-shadow:
+    calc(var(--ou) * -2) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active),
     calc(var(--ou) * 2) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
   border-width: 0 0 var(--ou) 0;
 }
 
 :not(#u#n#i) div[data-name='Tab']:last-of-type {
-  box-shadow: calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
+  box-shadow:
+    calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
       var(--color-tab-border-active),
     calc(var(--ou) * 0.75) 0 0 calc(var(--ou) * 0)
       var(--color-tab-border-active);
@@ -160,7 +162,9 @@
   margin: 0;
   min-width: calc(var(--v) * 0.25);
   min-height: calc(var(--v) * 0.25);
-  background-position: center, bottom -11% right -11%;
+  background-position:
+    center,
+    bottom -11% right -11%;
 }
 
 :not(#u#n#i) [data-name='NumericInput'] {
@@ -261,4 +265,41 @@
 [data-name='SearchInput']::placeholder {
   font-size: 0.9em;
   text-align: end;
+}
+
+:not(#u#n#i) div[data-name='MainHeader'] {
+  padding: clamp(2px, 0.5vmin, 14px) clamp(2px, 0.5vmin, 14px) 0
+    clamp(2px, 0.5vmin, 14px);
+}
+@media screen and (max-width: 500px) {
+  :not(#u#n#i) div[data-name='MainHeader'] {
+    display: grid;
+    justify-items: center;
+    grid-template-areas: 'config logo search';
+    grid-template-columns: [config-start] 1fr[config-end searchinput-start logo-start] 100fr [logo-end searchinput-end search-start] 1fr[search-end];
+  }
+  :not(#u#n#i) div[data-name='MainHeader'] > button {
+    grid-column: config;
+    grid-row: 1;
+  }
+  :not(#u#n#i) div[data-name='MainHeader'] > a {
+    grid-column: logo;
+    grid-row: 1;
+  }
+
+  :not(#u#n#i) div[data-name='MainHeader'] > [data-name='Search'] {
+    display: contents;
+  }
+  :not(#u#n#i) div[data-name='MainHeader'] > [data-name='Search'] > button {
+    grid-column: search;
+    grid-row: 1;
+  }
+  :not(#u#n#i)
+    div[data-name='MainHeader']
+    > [data-name='Search']
+    > [data-name='FindSpell'] {
+    grid-column: searchinput;
+    grid-row: 1;
+    visibility: hidden;
+  }
 }

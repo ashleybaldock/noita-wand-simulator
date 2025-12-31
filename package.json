@@ -38,7 +38,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "npx serve -s build",
-    "generate": "npm generate-actions && npm generate-entity-map && npm generate-translations",
     "generate-actions": "python scripts/generate_gun_actions.py",
     "generate-translations": "python scripts/generate_translations.py",
     "generate-entity-map": "python scripts/generate_entity_map.py",
@@ -49,10 +48,6 @@
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/recommended"
-    ],
-    "extends": [
-      "eslint.configs.recommended",
-      "tseslint.configs.recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -69,8 +64,7 @@
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/consistent-type-imports": "warn",
       "@typescript-eslint/consistent-type-assertions": "warn",
-      "@typescript-eslint/no-import-type-side-effects": "warn",
-      "@typescript-eslint/ban-types": "warn"
+      "@typescript-eslint/no-import-type-side-effects": "warn"
     },
     "plugins": [
       "@typescript-eslint"
@@ -107,7 +101,7 @@
     "@typescript-eslint/eslint-plugin": "^8.51.0",
     "@typescript-eslint/parser": "^8.51.0",
     "circular-dependency-plugin": "^5.2.2",
-    "eslint": "^9.39.2",
+    "eslint": "^8.57.1",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react": "^7.37.5",

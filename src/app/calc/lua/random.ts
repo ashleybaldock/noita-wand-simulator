@@ -19,24 +19,24 @@ export function Random(a: number, b: number) {
 }
 
 function SetRandomSeedHelper(r: number) {
-  let r_ = new Float64Array(1);
+  const r_ = new Float64Array(1);
   r_[0] = r;
-  let e_ = new BigUint64Array(r_.buffer);
-  let e = e_[0];
+  const e_ = new BigUint64Array(r_.buffer);
+  const e = e_[0];
 
   if (
     ((e >> BigInt(0x20)) & BigInt(0x7fffffff)) < BigInt(0x7ff00000) &&
     -9.223372036854776e18 <= r &&
     r < 9.223372036854776e18
   ) {
-    let s = Math.abs(r);
+    const s = Math.abs(r);
     let i = BigInt(0);
     if (s !== 0.0) {
-      let f = (e & BigInt(0xfffffffffffff)) | BigInt(0x0010000000000000);
-      let g = BigInt(0x433) - (e >> BigInt(0x34));
-      let h = f >> g;
+      const f = (e & BigInt(0xfffffffffffff)) | BigInt(0x0010000000000000);
+      const g = BigInt(0x433) - (e >> BigInt(0x34));
+      const h = f >> g;
 
-      let j = BigInt(
+      const j = BigInt(
         -(
           BigInt(0x433) <
           ((e >> BigInt(0x20)) & BigInt(0xffffffff)) >> BigInt(0x14)
@@ -62,12 +62,10 @@ function SetRandomSeedHelper2(
   param_2: number,
   param_3: number,
 ) {
-  let uVar1;
-  let uVar2;
-  let uVar3;
-  let param_1_big = BigInt.asIntN(32, BigInt(param_1));
-  let param_2_big = BigInt.asIntN(32, BigInt(param_2));
-  let param_3_big = BigInt.asUintN(32, BigInt(param_3));
+  let uVar1, uVar2, uVar3;
+  const param_1_big = BigInt.asIntN(32, BigInt(param_1)),
+    param_2_big = BigInt.asIntN(32, BigInt(param_2)),
+    param_3_big = BigInt.asUintN(32, BigInt(param_3));
 
   uVar2 =
     (param_1_big - param_2_big - param_3_big) ^ (param_3_big >> BigInt(0xd));
@@ -90,29 +88,29 @@ function SetRandomSeedHelper2(
 }
 
 export function SetRandomSeed(world_seed: number, x: number, y: number) {
-  let a = world_seed ^ 0x93262e6f;
-  let b = a & 0xfff;
-  let c = (a >> 0xc) & 0xfff;
+  const a = world_seed ^ 0x93262e6f;
+  const b = a & 0xfff;
+  const c = (a >> 0xc) & 0xfff;
 
-  let x_ = x + b;
+  const x_ = x + b;
   let y_ = y + c;
 
   let r = x_ * 134217727.0;
-  let e = SetRandomSeedHelper(r);
+  const e = SetRandomSeedHelper(r);
 
   if (102400.0 <= Math.abs(y_) || Math.abs(x_) <= 1.0) {
     r = y_ * 134217727.0;
   } else {
     let y__ = y_ * 3483.328;
-    let t = Number(e);
+    const t = Number(e);
     y__ += t;
     y_ *= y__;
     r = y_;
   }
 
-  let f = SetRandomSeedHelper(r);
+  const f = SetRandomSeedHelper(r);
 
-  let g = SetRandomSeedHelper2(Number(e), Number(f), world_seed);
+  const g = SetRandomSeedHelper2(Number(e), Number(f), world_seed);
   let s = Number(g);
   s /= 4294967295.0;
   s *= 2147483639.0;

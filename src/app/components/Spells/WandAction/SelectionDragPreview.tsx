@@ -1,5 +1,5 @@
 import { usePreview } from 'react-dnd-multi-backend';
-import type { DragItemSelect } from './DragItems';
+import type { DraggedSelection } from './DragItems';
 import { caretBackgrounds } from './Backgrounds/Caret';
 import styled from 'styled-components';
 import { useMergedBackgrounds } from './Backgrounds/useMergeBackgrounds';
@@ -15,7 +15,7 @@ const Cursor = styled(DynamicBackground)`
 `;
 
 export const SelectionDragPreview = () => {
-  const preview = usePreview<DragItemSelect>();
+  const preview = usePreview<DraggedSelection>();
   const background = useMergedBackgrounds(
     caretBackgrounds['caret-select']['before'],
   );

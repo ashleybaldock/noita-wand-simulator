@@ -5,14 +5,15 @@
 
 ## Tech
 
-Uses: pnpm, rollup, vite, React, redux
+pnpm, React, Redux
 Host: Vercel
+Todo: webpack→rollup, CRA→vite
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `pnpm start`
+#### `pnpm start`
 
 Runs the app in development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -20,13 +21,13 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `pnpm test`
+#### `pnpm test`
 
 Note: Test suite is currently not up to date.
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `pnpm build`
+#### `pnpm build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -49,48 +50,38 @@ From the modding data export (see [these instructions](https://noita.wiki.gg/wik
 data/scripts/gun/gun_actions.lua
 ```
 
-If versions of these files containing the 'beta' suffix are found, the additional spells are included behind a 'beta content' toggle in the sim. E.g.:
+With those files in place, you can run these commands to generate the Typescript files:
 
-```
-data_base/translations/common.beta.csv
-data/scripts/gun/gun_actions.beta.lua
-```
+#### `pnpm generate-actions`
 
-Get a diff of release and beta with:
+Converts spell definitions in lua to TypeScript
+- in: `./data/scripts/gun/gun_actions.lua`
+- script: `./scripts/generate_gun_actions.py`
+- out:
+ - `src/app/calc/__generated__/main/actionIds.ts`
+ - `src/app/calc/__generated__/main/spells.ts`
+ - `src/app/calc/__generated__/main/unlocks.ts`
+ - `src/app/calc/__generated__/main/spellSprites.ts`
+ - `src/app/calc/__generated__/main/extraEntities.ts`
 
-```
-diff --suppress-common-lines -trb gun_actions.ts gun_actions.beta.ts
-diff --suppress-common-lines -trb -I 'spawn_' gun_actions.ts gun_actions.beta.ts
-```
+#### `pnpm generate-entity-map`
 
-With those files in place, you can run this command to generate the Typescript files:
+Generates Types for various game entities
 
-```
-pnpm generate
-```
+- script: `./scripts/generate_entity_map.py`
+- in: `./data/scripts/gun/gun_actions.lua`
+- out:
+ - `./src/app/calc/__generated__/main/entityMap.ts`
+ - `./src/app/calc/__generated__/main/projectileIds.ts`
 
-That runs the following commands, which can also be run individually:
+#### `pnpm generate-translations`
 
-```
-pnpm generate-actions
-```
+Generates files containing translations for in-game strings
 
-(Spell definitions) - uses: 'data/scripts/gun/gun_actions.lua'; runs: `scripts/generate_gun_actions.py`
+- script: `scripts/generate_translations.py`
+- in: `data_base/translations/common.csv`
+- out: `./src/app/calc/__generated__/i18n/translation-XX.ts`
 
-```
-pnpm generate-entity-map
-```
+#### `pnpm fetch-wiki`
 
-(Spell definitions) - uses: 'data/scripts/gun/gun_actions.lua'; runs: `scripts/generate_entity_map.py`
-
-```
-pnpm generate-translations
-```
-
-(JSON translation for in-game strings) - uses: 'data_base/translations/common.csv'; runs: `scripts/generate_translations.py`
-
-```
-pnpm fetch-wiki
-```
-
-(JSON file containing exported data from the Noita wiki - used for spell tooltips etc.)
+Downloads a JSON file containing exported data from the Noita wiki - used for spell tooltips etc.

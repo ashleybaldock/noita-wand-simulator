@@ -429,6 +429,27 @@ export function OnPlayPermanentCard(
 
 // custom
 
+export const OnClearDeck = ({
+  actionId,
+}: {
+  actionId: ActionId | WandId;
+}): void => {
+  observer.onEvent({ name: 'OnClearDeck', payload: { actionId } });
+};
+export const OnClearDiscarded = ({
+  actionId,
+}: {
+  actionId: ActionId | WandId;
+}): void => {
+  observer.onEvent({ name: 'OnClearDiscarded', payload: { actionId } });
+};
+export const OnClearHand = ({
+  actionId,
+}: {
+  actionId: ActionId | WandId;
+}): void => {
+  observer.onEvent({ name: 'OnClearHand', payload: { actionId } });
+};
 export const OnDraw = (state_cards_drawn: number): void => {
   observer.onEvent({ name: 'OnDraw', payload: { state_cards_drawn } });
 };
@@ -437,13 +458,18 @@ export const OnHandleManaAddition = (actionId: ActionId | WandId): void => {
   observer.onEvent({ name: 'OnHandleManaAddition', payload: { actionId } });
 };
 
-export const OnSetDontDraw = (actionId: ActionId | WandId): void => {
-  observer.onEvent({ name: 'OnSetDontDraw', payload: { actionId } });
+export const OnSetDontDraw = ({
+  actionId,
+  dont_draw_actions,
+}: {
+  actionId: ActionId | WandId;
+  dont_draw_actions: boolean;
+}): void => {
+  observer.onEvent({
+    name: 'OnSetDontDraw',
+    payload: { actionId, dont_draw_actions },
+  });
 };
-export const OnUnsetDontDraw = (actionId: ActionId | WandId): void => {
-  observer.onEvent({ name: 'OnUnsetDontDraw', payload: { actionId } });
-};
-
 export const OnSetMana = (actionId: ActionId | WandId, mana: number): void => {
   observer.onEvent({ name: 'OnSetMana', payload: { actionId, mana } });
 };

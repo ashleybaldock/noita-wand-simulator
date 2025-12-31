@@ -14,12 +14,12 @@ export const StyledSearchButton = styled(SearchButton)`
 
 const Wrapper = styled.div`
   display: flex;
-  flex: 1 1 auto;
+  flex: 0 1 content;
 `;
 
 const _Search = () => {
   return (
-    <Wrapper data-name="SearchWrapper">
+    <Wrapper data-name="Search">
       <StyledSearchButton data-name="SearchButton" />
     </Wrapper>
   );

@@ -88,10 +88,16 @@ export type WandEventBase = {
   };
   /* End Sequence: Always Cast */
 
-  OnSetDontDraw: { actionId: ActionId | WandId };
-  OnUnsetDontDraw: { actionId: ActionId | WandId };
+  OnClearDeck: { actionId: ActionId | WandId };
+
+  OnClearDiscarded: { actionId: ActionId | WandId };
+
+  OnClearHand: { actionId: ActionId | WandId };
+
+  OnSetDontDraw: { actionId: ActionId | WandId; dont_draw_actions: boolean };
 
   OnSetMana: { actionId: ActionId | WandId; mana: number };
+
   /* Begin Sequence: Draw */
   OnDraw: {
     state_cards_drawn: number;

@@ -4,7 +4,7 @@ import { groupBy, objectEntries } from '../../util/util';
 import type { Spell } from '../../calc/spell';
 import { spells } from '../../calc/spells';
 import { useAppDispatch, useConfig } from '../../redux/hooks';
-import type { Config, ConfigState } from '../../redux/configSlice';
+import type { Config } from '../../redux/configSlice';
 import {
   getSpriteForSpellType,
   spellTypeGroupInfoMap,
@@ -43,7 +43,8 @@ const MainDiv = styled.div`
     position: sticky;
     top: 30px;
     z-index: 10;
-    box-shadow: inset 0 3px 3px 0px #000,
+    box-shadow:
+      inset 0 3px 3px 0px #000,
       0 -4px 0 0 var(--color-base-background);
     border: 0.16rem solid var(--color-tab-border-active);
     border-radius: 0.26rem 0.46rem 0 0;

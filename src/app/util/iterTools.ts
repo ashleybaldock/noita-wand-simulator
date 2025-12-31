@@ -275,7 +275,9 @@ export function* repeatIter<T>(
     for (let i = 0; i < repetitions; i++) {
       if (!repeatFromCache || i === 0) {
         for (const s of source) {
-          repeatFromCache && cache.push(s);
+          if (repeatFromCache) {
+            cache.push(s);
+          }
           yield s;
         }
       } else {
@@ -433,7 +435,7 @@ export function* reduceIter<T>(
       return firstValue;
     }
     acc = accumulator(firstValue, secondValue);
-    for (let x of iterable) {
+    for (const x of iterable) {
       acc = accumulator(acc, x);
       yield acc;
     }

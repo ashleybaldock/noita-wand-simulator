@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useDrop } from 'react-dnd';
+import { useDropRef } from '../../../hooks/useDropRef';
 
 const StyledDiv = styled.div<{
   $highlight: boolean;
@@ -41,7 +42,7 @@ const WandActionBorder = ({
   className?: string;
   droppable?: boolean;
 }>) => {
-  const [{ canDrop }, connectDropTarget] = useDrop(
+  const [{ canDrop }, dropConnector] = useDrop(
     () => ({
       accept: 'spell',
       canDrop: () => false,
@@ -51,15 +52,17 @@ const WandActionBorder = ({
     }),
     [],
   );
-  return connectDropTarget(
+  const dropRef = useDropRef(dropConnector);
+  return (
     <StyledDiv
+      ref={dropRef}
       data-name="WandActionBorder"
       $highlight={droppable && canDrop}
       $disabled={!droppable}
       className={className}
     >
       {children}
-    </StyledDiv>,
+    </StyledDiv>
   );
 };
 

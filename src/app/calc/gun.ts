@@ -23,6 +23,9 @@ import {
   BeginTriggerDeath,
   BeginTriggerHitWorld,
   BeginTriggerTimer,
+  OnClearDeck,
+  OnClearDiscarded,
+  OnClearHand,
   EndProjectile,
   EndTrigger,
   /* LogAction,*/
@@ -38,7 +41,6 @@ import {
   SetRandomSeed,
   GameGetFrameNum,
   OnSetDontDraw,
-  OnUnsetDontDraw,
   OnPlayPermanentCard,
   OnWrap,
   OnCantWrap,
@@ -115,16 +117,19 @@ export let hand: Spell[] = [];
 export function clearDiscarded(actionId: ActionId | WandId) {
   /* This MUST be a new array assignment! */
   discarded = [];
+  OnClearDiscarded({ actionId });
 }
 
 export function clearDeck(actionId: ActionId | WandId) {
   /* This MUST be a new array assignment! */
   deck = [];
+  OnClearDeck({ actionId });
 }
 
 export function clearHand(actionId: ActionId | WandId) {
   /* This MUST be a new array assignment! */
   hand = [];
+  OnClearHand({ actionId });
 }
 
 export let c: GunActionState;
@@ -165,8 +170,8 @@ current_reload_time = gun.reload_time;
 export let dont_draw_actions = false;
 
 export function setDontDrawActions(actionId: ActionId | WandId, dda: boolean) {
-  dda ? OnSetDontDraw(actionId) : OnUnsetDontDraw(actionId);
   dont_draw_actions = dda;
+  OnSetDontDraw({ actionId, dont_draw_actions });
 }
 
 export let force_stop_draws = false;

@@ -45,8 +45,6 @@ const nextMapTreeId = sequentialId<MapTreeId>();
 export interface SerialisableTree {
   serialize: () => Array<[]>;
 }
-export interface MapTreeRoot<T> extends TreeRoot<T> {}
-
 export type MapTreeEntry<T> = {
   value?: T;
   parentId?: MapTreeId;

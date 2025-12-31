@@ -40,9 +40,6 @@ const HeaderDiv = styled.div<{
   }
 `;
 
-const Wrapper = styled.div`
-  display: flex;
-`;
 const HeaderLink = styled.a<{
   imgUrl?: string;
 }>`
@@ -62,6 +59,10 @@ const HeaderLink = styled.a<{
   margin: 0.1em 0.2ch 0 0.2ch;
   flex: 1 0 auto;
   display: flex;
+
+  @media screen and (max-width: 500px) {
+    width: clamp(160px, 30vw, 300px);
+  }
 `;
 
 const ExtraDiv = styled.div`
@@ -86,10 +87,8 @@ export function MainHeader({ children }: React.PropsWithChildren) {
     <HeaderDiv data-name="MainHeader" imgUrl={logoVariant}>
       <HeaderLink href="/"></HeaderLink>
       {/* <ExtraDiv>{children}</ExtraDiv> */}
-      <Wrapper data-name="Wrapper">
-        <Search />
-        <ConfigButton />
-      </Wrapper>
+      <Search />
+      <ConfigButton />
     </HeaderDiv>
   );
 }

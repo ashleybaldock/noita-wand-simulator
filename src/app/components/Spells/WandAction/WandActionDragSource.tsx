@@ -1,9 +1,9 @@
-import { useDrag, type ConnectDragSource } from 'react-dnd';
-
 import styled from 'styled-components';
 import type { ActionId } from '../../../calc/actionId';
 import type { WandIndex } from '../../../redux/WandIndex';
-import type { DragItemSpell } from './DragItems';
+import type { DraggedSpell } from './DragItems';
+import { useDrag } from 'react-dnd';
+import { useDragRef } from '../../../hooks/useDragRef';
 
 type ActionDragSourceMonitor = {
   isDragging: boolean;
@@ -43,9 +43,9 @@ export const WandActionDragSource = ({
   sourceWandIndex?: WandIndex;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }>) => {
-  const [{ isDragging }, connectDragSource] = useDrag<
-    DragItemSpell,
-    DragItemSpell,
+  const [{ isDragging }, dragConnector] = useDrag<
+    DraggedSpell,
+    DraggedSpell,
     ActionDragSourceMonitor
   >(() => ({
     type: 'spell',
@@ -55,9 +55,11 @@ export const WandActionDragSource = ({
     }),
   }));
 
-  return connectDragSource(
-    <ActionDragSource $isDragging={isDragging} onClick={onClick}>
+  const dragRef = useDragRef(dragConnector);
+
+  return (
+    <ActionDragSource ref={dragRef} $isDragging={isDragging} onClick={onClick}>
       {children}
-    </ActionDragSource>,
+    </ActionDragSource>
   );
 };

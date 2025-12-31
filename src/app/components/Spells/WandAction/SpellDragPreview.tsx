@@ -2,10 +2,10 @@ import { usePreview } from 'react-dnd-multi-backend';
 import { WandAction } from './';
 import { isKnownSpell } from '../../../redux/Wand/spellId';
 import { getSpellByActionId } from '../../../calc/spells';
-import type { DragItemSpell } from './DragItems';
+import type { DraggedSpell } from './DragItems';
 
 export const SpellDragPreview = () => {
-  const preview = usePreview<DragItemSpell>();
+  const preview = usePreview<DraggedSpell>();
   if (!preview.display) {
     return null;
   }

@@ -1,18 +1,17 @@
 import styled from 'styled-components';
 import type { WandSelection } from '../../../redux/Wand/wandSelection';
 import { useCallback } from 'react';
-import type { DragItem, DragItemSelect } from './DragItems';
+import type { Dragged, DraggedSelection } from './DragItems';
 import {
-  isDragItemSelect,
-  isDragItemSpell,
-  type DragItemSpell,
+  isDraggedSelection,
+  isDraggedSpell,
+  type DraggedSpell,
 } from './DragItems';
 import { moveSpell, useAppDispatch, useConfig } from '../../../redux';
 import { useDrop } from 'react-dnd';
 import { moveCursorTo, setSelection } from '../../../redux/editorSlice';
 import { isMainWandIndex, type WandIndex } from '../../../redux/WandIndex';
 import { caretBackgrounds, type CaretStyle } from './Backgrounds/Caret';
-import { noop } from '../../../util';
 import type { DropHint } from './Backgrounds/DropHint';
 import {
   dropHintBackgrounds,
@@ -20,6 +19,7 @@ import {
 } from './Backgrounds/DropHint';
 import { selectionBackgrounds } from './Backgrounds/WandSelection';
 import { useMergedBackgrounds } from './Backgrounds/useMergeBackgrounds';
+import { useDropRef } from '../../../hooks/useDropRef';
 
 const DropTargetOver = styled.div`
   --selection-bdcolor: #00dbff;
@@ -40,7 +40,6 @@ const DropTargetOver = styled.div`
 export const OverSpellDropTarget = ({
   wandIndex,
   className = '',
-  onClick = noop,
   children,
   cursor = 'none',
   overHint = 'none',
@@ -48,8 +47,6 @@ export const OverSpellDropTarget = ({
 }: React.PropsWithChildren<{
   wandIndex: WandIndex;
   className?: string;
-  onClick?: React.MouseEventHandler<HTMLElement>;
-
   cursor?: CaretStyle;
   overHint?: DropHint;
   selection?: WandSelection;
@@ -58,7 +55,7 @@ export const OverSpellDropTarget = ({
   const { swapOnMove } = useConfig();
 
   const onDropSpell = useCallback(
-    (item: DragItemSpell) => {
+    (item: DraggedSpell) => {
       dispatch(
         moveSpell({
           fromIndex: item.sourceWandIndex,
@@ -72,7 +69,7 @@ export const OverSpellDropTarget = ({
   );
 
   const onEndSelect = useCallback(
-    (item: DragItemSelect) => {
+    (item: DraggedSelection) => {
       dispatch(
         setSelection({
           from: item.dragStartIndex,
@@ -85,35 +82,43 @@ export const OverSpellDropTarget = ({
   );
 
   const onDragSelect = useCallback(
-    (item: DragItemSelect) => {
-      // dispatch(
-      //   setSelection({
-      //     from: item.dragStartIndex,
-      //     to: wandIndex,
-      //     selecting: true,
-      //   }),
-      // );
+    (item: DraggedSelection) => {
+      dispatch(
+        setSelection({
+          from: item.dragStartIndex,
+          to: wandIndex,
+          selecting: true,
+        }),
+      );
     },
     [dispatch, wandIndex],
   );
 
   const [
     { isOver, isDraggingSpell, isDraggingSelect, canDrop },
-    connectDropTarget,
+    dropConnector,
   ] = useDrop(
     () => ({
       accept: ['spell', 'select'],
-      drop: (item: DragItem, monitor) => {
-        !monitor.didDrop() &&
-          ((isDragItemSpell(item) && onDropSpell(item)) ||
-            (isDragItemSelect(item) && onEndSelect(item)));
+      drop: (item: Dragged, monitor) => {
+        if (monitor.didDrop()) {
+          return;
+        }
+        if (isDraggedSpell(item)) {
+          onDropSpell(item);
+        }
+        if (isDraggedSelection(item)) {
+          onEndSelect(item);
+        }
       },
-      hover: (item: DragItem) => {
-        isDragItemSelect(item) && onDragSelect(item);
+      hover: (item: Dragged) => {
+        if (isDraggedSelection(item)) {
+          onDragSelect(item);
+        }
       },
-      canDrop: (item: DragItem) =>
-        (isDragItemSpell(item) && item.sourceWandIndex !== wandIndex) ||
-        (isDragItemSelect(item) && isMainWandIndex(wandIndex)),
+      canDrop: (item: Dragged) =>
+        (isDraggedSpell(item) && item.sourceWandIndex !== wandIndex) ||
+        (isDraggedSelection(item) && isMainWandIndex(wandIndex)),
       collect: (monitor) => ({
         isDraggingSpell: monitor.getItemType() === 'spell',
         isDraggingSelect: monitor.getItemType() === 'select',
@@ -139,13 +144,16 @@ export const OverSpellDropTarget = ({
     selectionBackgrounds[selection]['on'],
   );
 
-  return connectDropTarget(
+  const dropRef = useDropRef(dropConnector);
+
+  return (
     <DropTargetOver
+      ref={dropRef}
       style={merged}
       onClick={() => dispatch(moveCursorTo({ to: wandIndex }))}
       className={className}
     >
       {children}
-    </DropTargetOver>,
+    </DropTargetOver>
   );
 };

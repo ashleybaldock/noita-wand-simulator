@@ -209,7 +209,7 @@ const StyledButton = styled.button<{
 `;
 
 const MobileHidden = styled.div<React.PropsWithChildren>`
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 500px) {
     display: none;
   }
 `;
