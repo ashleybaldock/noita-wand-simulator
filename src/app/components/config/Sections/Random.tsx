@@ -35,7 +35,7 @@ export const RandomConfigSection = () => {
           <NumericInput
             min={0}
             max={Number.POSITIVE_INFINITY}
-            showBigStep={false}
+            bigStepButtons={false}
             showSetToMax={false}
             // type="text"
             // inputMode="numeric"
@@ -50,7 +50,7 @@ export const RandomConfigSection = () => {
           <NumericInput
             min={0}
             max={Number.POSITIVE_INFINITY}
-            showBigStep={false}
+            bigStepButtons={false}
             showSetToMax={false}
             // type="text"
             // inputMode="numeric"

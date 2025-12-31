@@ -143,7 +143,6 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         <StyledName>{'Shuffle'}</StyledName>
         <StyledValue>
           <YesNoToggle
-            $disabled={true}
             tip={{ kind: 'uihint', id: 'shuffle' }}
             checked={false && wand.shuffle_deck_when_empty}
             onChange={(e) =>

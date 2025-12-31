@@ -15,6 +15,10 @@ const Wrapper = styled.fieldset<{ $valid: boolean }>`
   cursor: pointer;
   user-select: none;
   border: 0 solid transparent;
+  line-height: normal;
+  font-size: 1em;
+  align-content: baseline;
+  align-items: center;
 
   &:hover {
     box-shadow: 0 0 4px 2px var(--color-numeric-hover);
@@ -109,7 +113,10 @@ const NumberInput = styled.input`
     outline: 1.6px inset #d18811;
     border-radius: 7px;
     outline-offset: -1px;
-    box-shadow: 0 1px 0 1px #704d14, 1px 0 0 1px #7c4f05, -1px 0 0 1px #a7782c,
+    box-shadow:
+      0 1px 0 1px #704d14,
+      1px 0 0 1px #7c4f05,
+      -1px 0 0 1px #a7782c,
       0 -1px 0 1px #ffb53e;
   }
 `;
@@ -191,17 +198,18 @@ const ButtonsAfter = styled.div`
   right: 100%;
 `;
 
+const default_precision = 5;
+
 export const NumericInput = ({
   min = Number.NEGATIVE_INFINITY,
   max = Number.POSITIVE_INFINITY,
   large = Number.POSITIVE_INFINITY,
   small = 0,
-  precision = 5,
   minStep = 1,
   step = 1,
   bigStep = 100,
-  showStep = true,
-  showBigStep = false,
+  stepButtons = true,
+  bigStepButtons = false,
   showSetToLarge = false,
   showSetToSmall = false,
   showSetToMax = true,
@@ -215,25 +223,64 @@ export const NumericInput = ({
       Math.min(
         max,
         Math.trunc(
-          Math.round(n * Math.pow(10, precision)) / Math.pow(10, precision),
+          Math.round(n * Math.pow(10, default_precision)) /
+            Math.pow(10, default_precision),
         ),
       ),
     ),
-  formatForDisplay = (v) => v.toPrecision(precision),
+  formatForDisplay = (v) => v.toPrecision(default_precision),
   onChange,
   className = '',
   children,
 }: React.PropsWithChildren<{
+  /**
+   * Smallest valid value
+   * @see minButton
+   */
   min?: number;
+  /**
+   * Largest valid value
+   * @see maxButton
+   */
   max?: number;
+  /**
+   * Large, but reasonable, default
+   * @see largeButton
+   */
   large?: number;
+  /**
+   * Small, but reasonable, default
+   * @see smallButton
+   */
   small?: number;
-  precision?: number;
+  /**
+   * Smallest possible difference between values
+   * Determines the resolution of the field
+   * @default {undefined] - no limit imposed
+   */
   minStep?: number;
+  /**
+   * Reasonable, small step value
+   * Used for the step up and step down buttons (if enabled)
+   * and the corresponding keybinds
+   * @see stepButtons
+   */
   step?: number;
+  /**
+   * Reasonable, large step value
+   * Used for the big step up and big step down buttons
+   * @see bigStepButtons
+   */
   bigStep?: number;
-  showStep?: boolean;
-  showBigStep?: boolean;
+  /**
+   * Display buttons to add/subtract value of @see step
+   */
+  stepButtons?: boolean;
+  /**
+   * Display buttons to add/subtract value of @see bigStep
+   * Not shown if bigStep is undefined
+   */
+  bigStepButtons?: boolean;
   showSetToMax?: boolean;
   showSetToMin?: boolean;
   showSetToSmall?: boolean;
@@ -325,7 +372,7 @@ export const NumericInput = ({
             {`${small}`}
           </ButtonSmall>
         )}
-        {editing && showBigStep && (
+        {editing && bigStepButtons && (
           <ButtonBigStepDown
             data-name="BigStepDown"
             minimal={true}
@@ -335,7 +382,7 @@ export const NumericInput = ({
             // hotkeys={'shift+down,ctrl+shift+x'}
           />
         )}
-        {editing && showStep && (
+        {editing && stepButtons && (
           <ButtonStepDown
             data-name="StepDown"
             minimal={true}
@@ -365,7 +412,7 @@ export const NumericInput = ({
         onChange={(e) => onInputChange()}
       />
       <ButtonsAfter data-name="ButtonsAfter">
-        {editing && showStep && (
+        {editing && stepButtons && (
           <ButtonStepUp
             data-name="StepUp"
             minimal={true}
@@ -375,7 +422,7 @@ export const NumericInput = ({
             onClick={() => changeBy(step)}
           />
         )}
-        {editing && showBigStep && (
+        {editing && bigStepButtons && (
           <ButtonBigStepUp
             data-name="BigStepUp"
             minimal={true}
