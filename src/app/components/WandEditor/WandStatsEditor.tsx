@@ -7,10 +7,17 @@ import type { TypedProperties } from '../../util/util';
 import { round, toSeconds } from '../../util/util';
 import { useConfig } from '../../redux';
 import { YesNoToggle } from '../Input';
-import { FNSP, SUFFIX_DEGREE, SUFFIX_FRAME, SUFFIX_SECOND } from '../../util';
+import {
+  FNSP,
+  PREFIX_MULTI,
+  SUFFIX_DEGREE,
+  SUFFIX_FRAME,
+  SUFFIX_SECOND,
+} from '../../util';
 import type { Wand } from '../../redux/Wand/wand';
 import { useId } from 'react';
 import { NumericInput } from '../Input/NumericInput/NumericInput';
+import { EditableWithLabel } from '../Presentation/Editable';
 
 type NumberFieldProps = {
   field: keyof TypedProperties<Wand, number>;
@@ -77,12 +84,11 @@ const EditableInterval = ({
           ? (v) => Math.round(parseInt(v, 10))
           : (v) => toSeconds(parseInt(v, 10))
       }
-      // convertDisplayValue={frames ? (v) => Math.round(v) : toFrames}
     ></NumericInput>
   );
 };
 
-const StyledListItem = styled.label<{
+const StyledListItem = styled(EditableWithLabel)<{
   imgUrl: string;
 }>`
   display: flex;
@@ -139,11 +145,12 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         imgUrl={'data/wand/icon_gun_shuffle.png'}
         className={className}
+        $tip={{ kind: 'uihint', id: 'shuffle_deck_when_empty' }}
+        $dataName="EditStatShuffle"
       >
         <StyledName>{'Shuffle'}</StyledName>
         <StyledValue>
           <YesNoToggle
-            tip={{ kind: 'uihint', id: 'shuffle_deck_when_empty' }}
             checked={false && wand.shuffle_deck_when_empty}
             onChange={(e) =>
               dispatch(
@@ -161,12 +168,13 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_gun_capacity.png'}
+        $tip={{ kind: 'uihint', id: 'deck_capacity' }}
+        $dataName="EditStatCapacity"
       >
         <StyledName>{'Capacity'}</StyledName>
         <StyledValue>
           <NumericInput
             value={wand.deck_capacity}
-            tip={{ kind: 'uihint', id: 'deck_capacity' }}
             setValue={(value) =>
               dispatch(setWand({ wand: { ...wand, deck_capacity: value } }))
             }
@@ -182,12 +190,13 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_gun_actions_per_round.png'}
+        $tip={{ kind: 'uihint', id: 'actions_per_round' }}
+        $dataName="EditStatSpellsCast"
       >
         <StyledName>{'Spells/Cast'}</StyledName>
         <StyledValue>
           <NumericInput
             value={wand.actions_per_round}
-            tip={{ kind: 'uihint', id: 'actions_per_round' }}
             setValue={(value) =>
               dispatch(setWand({ wand: { ...wand, actions_per_round: value } }))
             }
@@ -204,6 +213,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_fire_rate_wait.png'}
+        $tip={{ kind: 'uihint', id: 'cast_delay' }}
       >
         <StyledName>{'Cast delay'}</StyledName>
         <StyledValue>
@@ -213,8 +223,9 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_gun_reload_time.png'}
+        $tip={{ kind: 'uihint', id: 'reload_time' }}
       >
-        <StyledName>{'Recharge'}</StyledName>
+        <StyledName>{'Recharge Time'}</StyledName>
         <StyledValue>
           <EditableInterval field="reload_time" />
         </StyledValue>
@@ -222,43 +233,100 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_mana_max.png'}
+        $tip={{ kind: 'uihint', id: 'mana_max' }}
       >
-        <StyledName>{'Mana Max'}</StyledName>
+        <StyledName>{'Mana max'}</StyledName>
         <StyledValue>
-          {renderNumberField({ field: 'mana_max' })(wand, dispatch)}
+          <NumericInput
+            value={wand.mana_max}
+            setValue={(value) =>
+              dispatch(setWand({ wand: { ...wand, mana_max: value } }))
+            }
+            onChange={() => {}}
+            smallest={0}
+            large={3000}
+            step={10}
+            bigStep={1000}
+            largest={60000}
+            setLargestButton={false}
+            setLargeButton={true}
+          ></NumericInput>
         </StyledValue>
       </StyledListItem>
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_mana_charge_speed.png'}
+        $tip={{ kind: 'uihint', id: 'mana_charge_speed' }}
       >
-        <StyledName>{'Mana Regen'}</StyledName>
+        <StyledName>{'Mana Charge Speed'}</StyledName>
         <StyledValue>
-          {renderNumberField({ field: 'mana_charge_speed' })(wand, dispatch)}
+          <NumericInput
+            value={wand.mana_charge_speed}
+            setValue={(value) =>
+              dispatch(setWand({ wand: { ...wand, mana_charge_speed: value } }))
+            }
+            onChange={() => {}}
+            smallest={0}
+            large={3000}
+            step={10}
+            bigStep={1000}
+            largest={60000}
+            setLargestButton={false}
+            setLargeButton={true}
+          ></NumericInput>
         </StyledValue>
       </StyledListItem>
       <StyledListItem
         className={className}
         imgUrl={'data/wand/icon_spread_degrees.png'}
+        $tip={{ kind: 'uihint', id: 'wand_spread' }}
       >
         <StyledName>{'Spread'}</StyledName>
         <StyledValue>
-          {renderNumberField({
-            field: 'spread',
-            formatValue: (v) => `${round(Number(v), 1)}${FNSP}${SUFFIX_DEGREE}`,
-          })(wand, dispatch)}
+          <NumericInput
+            value={wand.spread}
+            setValue={(value) =>
+              dispatch(setWand({ wand: { ...wand, spread: value } }))
+            }
+            formatForDisplay={(v) =>
+              `${round(Number(v), 1)}${FNSP}${SUFFIX_DEGREE}`
+            }
+            onChange={() => {}}
+            smallest={0}
+            large={3000}
+            step={10}
+            bigStep={1000}
+            largest={60000}
+            setLargestButton={false}
+            setLargeButton={true}
+          ></NumericInput>
         </StyledValue>
       </StyledListItem>
       <StyledListItem
         className={className}
+        data-name={'EditSpeed'}
         imgUrl={'data/wand/icon_speed_multiplier.png'}
+        $tip={{ kind: 'uihint', id: 'wand_speed' }}
       >
         <StyledName>{'Speed'}</StyledName>
         <StyledValue>
-          {renderNumberField({
-            field: 'speed',
-            formatValue: (v) => `${round(Number(v), 1)}`,
-          })(wand, dispatch)}
+          <NumericInput
+            value={wand.speed}
+            setValue={(value) =>
+              dispatch(setWand({ wand: { ...wand, speed: value } }))
+            }
+            formatForDisplay={(v) =>
+              `${PREFIX_MULTI}${FNSP}${round(Number(v), 1)}`
+            }
+            onChange={() => {}}
+            smallest={0}
+            large={2}
+            step={0.1}
+            bigStep={0.5}
+            largest={10}
+            setLargestButton={false}
+            setLargeButton={true}
+          ></NumericInput>
         </StyledValue>
       </StyledListItem>
     </>

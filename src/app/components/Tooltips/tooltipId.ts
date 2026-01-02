@@ -1,7 +1,7 @@
 import type { SpellId } from '../../redux/Wand/spellId';
 import { isString } from '../../util';
 
-const tooltipIds = ['tooltip-spellinfo', 'tooltip-actionhint'] as const;
+export const tooltipIds = ['tooltip-spellinfo', 'tooltip-actionhint'] as const;
 
 export type TooltipId = (typeof tooltipIds)[number];
 
@@ -135,7 +135,7 @@ const uiHintDefinition = [
     {
       title: 'Spread',
       unit: 'degrees',
-      desc: 'Angle of arc over which projectiles the wand spawns are distributed.',
+      desc: 'Angle of arc over which the projectiles the wand spawns are randomly distributed.',
     },
   ],
   [
@@ -154,7 +154,7 @@ const uiHintDefinition = [
   // ],
 ] as const;
 
-const tipKinds = ['spellinfo', 'uihint'] as const;
+export const tipKinds = ['spellinfo', 'uihint'] as const;
 
 export type TipKind = (typeof tipKinds)[number];
 

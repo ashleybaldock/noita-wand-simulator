@@ -7,6 +7,8 @@ export const FPS = 60;
 
 export const SIGN_MULTIPLY = '×';
 
+export const PREFIX_MULTI = SIGN_MULTIPLY;
+
 export const NESTING_OFFSET = 12;
 
 export const SUFFIX_THOUSAND = 'k';
