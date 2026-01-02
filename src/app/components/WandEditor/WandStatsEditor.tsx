@@ -143,7 +143,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         <StyledName>{'Shuffle'}</StyledName>
         <StyledValue>
           <YesNoToggle
-            tip={{ kind: 'uihint', id: 'shuffle' }}
+            tip={{ kind: 'uihint', id: 'shuffle_deck_when_empty' }}
             checked={false && wand.shuffle_deck_when_empty}
             onChange={(e) =>
               dispatch(
@@ -166,6 +166,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         <StyledValue>
           <NumericInput
             value={wand.deck_capacity}
+            tip={{ kind: 'uihint', id: 'deck_capacity' }}
             setValue={(value) =>
               dispatch(setWand({ wand: { ...wand, deck_capacity: value } }))
             }
@@ -186,14 +187,17 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         <StyledValue>
           <NumericInput
             value={wand.actions_per_round}
+            tip={{ kind: 'uihint', id: 'actions_per_round' }}
             setValue={(value) =>
               dispatch(setWand({ wand: { ...wand, actions_per_round: value } }))
             }
             onChange={() => {}}
             smallest={1}
-            largest={26}
+            large={26}
+            bigStep={}
+            largest={512}
             setLargestButton={false}
-            setLargeButton={false}
+            setLargeButton={true}
           ></NumericInput>
         </StyledValue>
       </StyledListItem>
