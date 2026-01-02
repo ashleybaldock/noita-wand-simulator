@@ -77,7 +77,7 @@
   --top-offset: -8px;
 }
 :not(#u#n#i) div[data-name='SpellSelector']::before {
-  inset: 44px auto auto auto;
+  inset: 42px auto auto auto;
   margin: 0 calc(var(--ou) * 1);
   font-size: 14px;
   padding: calc(var(--ou) * 1);
@@ -302,4 +302,26 @@
     grid-row: 1;
     visibility: hidden;
   }
+}
+
+:not(#u#n#i) [data-name='WandBuilderTopButtons'] {
+  grid-template-columns: [left title-start] auto [title-end] 1fr [ undo-start] auto [undo-end redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end reset-start] auto [reset-end] 1ch [ right];
+  margin: 0;
+}
+
+:not(#u#n#i) button[data-tooltip-content='redo'],
+:not(#u#n#i) button[data-tooltip-content='reset'] {
+  border-radius: var(--bdr-br);
+  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) calc(var(--ou) * 0.5);
+  border-color: var(--color-button-border) var(--color-button-border)
+    var(--color-button-border) var(--color-button-border);
+  border-style: solid solid solid solid;
+}
+:not(#u#n#i) button[data-tooltip-content='undo'],
+:not(#u#n#i) button[data-tooltip-content='clear'] {
+  border-radius: var(--bdr-bl);
+  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) var(--ou);
+  border-color: var(--color-button-border) var(--color-button-border)
+    var(--color-button-border) var(--color-button-border);
+  border-style: solid solid solid solid;
 }

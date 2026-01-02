@@ -55,7 +55,7 @@ const SectionHeaderContainer = styled.div<{ $line: 'above' | 'below' }>`
   }
 `;
 
-const GridSectionHeader = styled(SectionHeader)`
+export const GridSectionHeader = styled(SectionHeader)`
   grid-area: title;
   place-self: start;
 
