@@ -79,11 +79,77 @@ const uiHintDefinition = [
     },
   ],
   [
-    'shuffle',
+    'shuffle_deck_when_empty',
     {
       desc: '(Currently broken!) Randomises the order of spells for each Salvo.',
     },
   ],
+  [
+    'deck_capacity',
+    {
+      title: 'Capacity',
+      desc: 'Typically wands are limited to between 1 and 26 slots, though very rarely they can spawn with more.',
+    },
+  ],
+  [
+    'actions_per_round',
+    {
+      title: 'Spells/Cast',
+      desc: '',
+    },
+  ],
+  [
+    'cast_delay',
+    {
+      title: 'Cast Delay',
+      desc: '',
+    },
+  ],
+  [
+    'reload_time',
+    {
+      title: 'Recharge Time',
+      desc: '',
+    },
+  ],
+  [
+    'mana_max',
+    {
+      title: 'Mana Max',
+      unit: 'mana',
+      desc: '',
+    },
+  ],
+  [
+    'mana_charge_speed',
+    {
+      title: 'Mana Regen',
+      unit: 'mana/second',
+      desc: 'Rate at which the wand refills its mana reserve.',
+    },
+  ],
+  [
+    'wand_spread',
+    {
+      title: 'Spread',
+      unit; 'degrees',
+      desc: 'Angle of arc over which projectiles the wand spawns are distributed randomly.',
+    },
+  ],
+  [
+    'wand_speed',
+    {
+      title: 'Speed',
+      unit: 'multiplier',
+      desc: 'Wands have a hidden speed multiplier, used as the base multiplier that is adjusted by speed altering modifiers.',
+    },
+  ],
+  // [
+  //   '',
+  //   {
+  //     desc: '',
+  //   },
+  // ],
 ] as const;
 
 const tipKinds = ['spellinfo', 'uihint'] as const;
@@ -131,4 +197,4 @@ export const isUiHint = (s: unknown): s is UiHint =>
   isString(s) && (uiHintMap as Map<string, UiHintDef>).has(s);
 
 export const getUiHintDescription = (id?: UiHint) =>
-  isUiHint(id) ? uiHintMap.get(id)?.desc ?? '' : '...';
+  isUiHint(id) ? (uiHintMap.get(id)?.desc ?? '') : '...';

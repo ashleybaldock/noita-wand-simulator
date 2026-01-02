@@ -194,7 +194,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
             onChange={() => {}}
             smallest={1}
             large={26}
-            bigStep={}
+            bigStep={10}
             largest={512}
             setLargestButton={false}
             setLargeButton={true}

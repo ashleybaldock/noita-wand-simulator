@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import type { ChangeEventHandler, MouseEventHandler } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '../../generic';
+import { tipToAttributes } from '../../Tooltips/tooltipId';
+
+const EditableWrapper = styled(EditableWithLabel)``;
 
 const Wrapper = styled.fieldset<{ $valid: boolean }>`
   --bdr: 6px;
@@ -231,6 +234,7 @@ export const NumericInput = ({
   formatForDisplay = (v) => v.toPrecision(default_precision),
   onChange,
   className = '',
+  tip,
   children,
 }: React.PropsWithChildren<{
   /**
@@ -299,6 +303,7 @@ export const NumericInput = ({
   onChange: ChangeEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
   className?: string;
+  tip?: Tip;
 }>) => {
   const [lastInput, setLastInput] = useState(value?.toString() ?? '');
   const [valid, setValid] = useState(true);
@@ -355,7 +360,12 @@ export const NumericInput = ({
   const atMinimum = value <= smallest;
 
   return (
-    <Wrapper data-name="NumericInput" $valid={valid} className={className}>
+    <Wrapper
+      data-name="NumericInput"
+      $valid={valid}
+      {...(tip ? tipToAttributes(tip) : {})}
+      className={className}
+    >
       {editing && (
         <ButtonsBefore data-name="ButtonsBefore">
           {setSmallestButton && (
