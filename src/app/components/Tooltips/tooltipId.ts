@@ -95,21 +95,23 @@ const uiHintDefinition = [
     'actions_per_round',
     {
       title: 'Spells/Cast',
-      desc: '',
+      desc: 'When fired the wand gathers (draws) enough spells to satisfy its Spells/Cast.',
     },
   ],
   [
     'cast_delay',
     {
       title: 'Cast Delay',
-      desc: '',
+      unit: 'frames',
+      desc: 'Wands fire Salvos in a repeating pattern. Each Salvo is made up of one or more Casts. A Cast is the combined effect of the Spell(s multicast together) that it is formed from. Each Cast is followed by one or more frames of Cast Delay.',
     },
   ],
   [
     'reload_time',
     {
       title: 'Recharge Time',
-      desc: '',
+      unit: 'frames',
+      desc: 'Wands fire Salvos in a repeating pattern. Each Salvo is made up of one or more Casts, and is followed by one or more frames of Recharge Time.',
     },
   ],
   [
@@ -117,7 +119,7 @@ const uiHintDefinition = [
     {
       title: 'Mana Max',
       unit: 'mana',
-      desc: '',
+      desc: "The wand's mana storage capacity.",
     },
   ],
   [
@@ -132,8 +134,8 @@ const uiHintDefinition = [
     'wand_spread',
     {
       title: 'Spread',
-      unit; 'degrees',
-      desc: 'Angle of arc over which projectiles the wand spawns are distributed randomly.',
+      unit: 'degrees',
+      desc: 'Angle of arc over which projectiles the wand spawns are distributed.',
     },
   ],
   [
@@ -164,6 +166,8 @@ export type SpellTip = {
 export type UiHint = (typeof uiHintDefinition)[number][0];
 
 type UiHintDef = {
+  title?: string;
+  unit?: string;
   desc: string;
 };
 
