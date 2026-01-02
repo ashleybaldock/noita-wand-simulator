@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useHotkeys } from 'react-hotkeys-hook';
 import type { MouseEvent } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   insertSpellAfterCursor,
   insertSpellBeforeCursor,
@@ -318,6 +318,7 @@ export const FindSpell = ({
         autoComplete="off"
         autoFocus={true}
         placeholder="spell name"
+        enterKeyHint="search"
       ></SearchInput>
       {
         <HotkeyMultiHint

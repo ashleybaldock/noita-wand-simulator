@@ -1,8 +1,13 @@
 import styled from 'styled-components';
 import type { ChangeEventHandler, MouseEventHandler } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '../../generic';
 import type { Tip } from '../../Tooltips/tooltipId';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { useFocus } from '../../../hooks/useFocus';
+import { mergeRefs } from '../../../util/mergeRefs';
+import { useValidity } from '../../../hooks/useValidity';
+import { useInputValue } from '../../../hooks/useInputValue';
 
 const Wrapper = styled.fieldset<{ $valid: boolean }>`
   --bdr: 6px;
@@ -307,51 +312,56 @@ export const NumericInput = ({
   $tip?: Tip;
   $dataName?: string;
 }>) => {
+  const stepUp = step,
+    stepDown = step * -1,
+    bigStepUp = bigStep,
+    bigStepDown = bigStep * -1;
+
   const [lastInput, setLastInput] = useState(value?.toString() ?? '');
-  const [valid, setValid] = useState(true);
   const [editing, setEditing] = useState(false);
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [inputValidRef, valid, setValid] = useValidity<HTMLInputElement>();
+  const [inputFocusRef, focusInput, blurInput] = useFocus<HTMLInputElement>();
+  const [inputValueRef, inputValue] = useInputValue<HTMLInputElement>();
 
-  const saveChanges = () => valid && setEditing(false);
-
-  const abortChanges = () => setEditing(false);
-
-  const onValidityChange = useEffect(() => {
-    if (inputRef && inputRef.current) {
-      inputRef.current.focus();
-
-      if (valid) {
-        inputRef.current.setCustomValidity('');
-      } else {
-        inputRef.current.setCustomValidity('Invalid');
-      }
+  const saveChanges = () => {
+    if (valid) {
+      setEditing(false);
+      blurInput();
     }
-  }, [inputRef, valid]);
+  };
+
+  const abortChanges = () => {
+    setEditing(false);
+    blurInput();
+  };
+
+  // useEffect(() => {
+  //   focusInput();
+  // }, [focusInput, inputValue]);
+
+  const refocus = () => focusInput();
 
   const onInput = useCallback(() => {
-    if (inputRef && inputRef.current) {
-      inputRef.current.focus();
-    }
-    const parsed = clamp(
-      parseInput(inputRef.current?.value ?? 'NaN'),
-      smallest,
-      largest,
-    );
+    const parsed = clamp(parseInput(inputValue ?? 'NaN'), smallest, largest);
     setValid(!Number.isNaN(parsed));
     setLastInput(parsed.toString());
-  }, [inputRef, smallest, largest]);
+  }, [inputValue, parseInput, clamp, smallest, largest]);
 
-  const onInputChange = useCallback(() => {}, [inputRef, smallest, largest]);
+  const onInputChange = useCallback(() => {
+    const parsed = clamp(parseInput(inputValue ?? 'NaN'), smallest, largest);
+    setValid(!Number.isNaN(parsed));
+    setLastInput(parsed.toString());
+  }, [inputValue, smallest, largest]);
 
   const onFocus = useCallback(() => {
     setLastInput(value?.toString() ?? '');
     setEditing(true);
-  }, [value]);
+  }, [value, setLastInput, setEditing]);
 
   const onBlur = useCallback(() => {
     setEditing(false);
-  }, [value]);
+  }, [setEditing]);
 
   const changeBy = (by: number) =>
     setValue(clamp(value + by, smallest, largest));
@@ -361,6 +371,10 @@ export const NumericInput = ({
   const atMaximum = value >= largest;
   const atMinimum = value <= smallest;
 
+  useHotkeys('tab', saveChanges, { preventDefault: false });
+  useHotkeys('enter', saveChanges, { preventDefault: true });
+  useHotkeys('esc', abortChanges, { preventDefault: true });
+
   return (
     <Wrapper data-name={$dataName} $valid={valid} className={className}>
       {editing && (
@@ -368,10 +382,13 @@ export const NumericInput = ({
           {setSmallestButton && (
             <ButtonSmallest
               $dataName="SetMinimum"
-              onClick={() => changeBy(Number.NEGATIVE_INFINITY)}
+              onClick={() => {
+                changeBy(Number.NEGATIVE_INFINITY);
+                refocus();
+              }}
               minimal={true}
-              disabled={atMinimum}
-              // hotkeys={''}
+              disabled={value <= smallest}
+              hotkeys={'shift+alt+down'}
             >
               {`${smallest === Number.NEGATIVE_INFINITY ? '−∞' : smallest}`}
             </ButtonSmallest>
@@ -379,10 +396,13 @@ export const NumericInput = ({
           {setSmallButton && (
             <ButtonSmall
               $dataName="SetSmall"
-              onClick={() => changeTo(small)}
+              onClick={() => {
+                changeTo(small);
+                refocus();
+              }}
               minimal={true}
-              disabled={value === small}
-              // hotkeys={''}
+              disabled={value <= small}
+              hotkeys={'shift+alt+down'}
             >
               {`${small}`}
             </ButtonSmall>
@@ -393,8 +413,11 @@ export const NumericInput = ({
               minimal={true}
               icon={'icon.chevron.d2x'}
               disabled={atMinimum}
-              onClick={() => changeBy(bigStep * -1)}
-              // hotkeys={'shift+down,ctrl+shift+x'}
+              onClick={() => {
+                changeBy(bigStepDown);
+                refocus();
+              }}
+              hotkeys={'alt+down,ctrl+shift+x'}
             />
           )}
           {stepButtons && (
@@ -404,7 +427,10 @@ export const NumericInput = ({
               icon={'icon.chevron.d'}
               disabled={atMinimum}
               hotkeys={'down,ctrl+x'}
-              onClick={() => changeBy(step * -1)}
+              onClick={() => {
+                changeBy(stepDown);
+                refocus();
+              }}
             />
           )}
         </ButtonsBefore>
@@ -415,18 +441,19 @@ export const NumericInput = ({
         type="text"
         inputMode="numeric"
         pattern="-?\d*\.?\d*"
-        value={editing ? lastInput : value}
-        ref={inputRef}
+        value={editing ? lastInput : formatForDisplay(value)}
+        ref={mergeRefs(inputFocusRef, inputValidRef, inputValueRef)}
         hidden={true}
         onFocus={() => onFocus()}
         onBlur={() => onBlur()}
-        onKeyDown={(e) =>
-          ((e.key === 'Enter' || e.key === 'Tab') && saveChanges()) ||
-          (e.key === 'Esc' && abortChanges())
-        }
         onInput={(e) => onInput()}
         onChange={(e) => onInputChange()}
+        enterKeyHint="done"
       />
+      {/* onKeyDown={(e) => */}
+      {/*   ((e.key === 'Enter' || e.key === 'Tab') && saveChanges()) || */}
+      {/*   (e.key === 'Esc' && abortChanges()) */}
+      {/* } */}
       {editing && (
         <ButtonsAfter data-name="ButtonsAfter">
           {stepButtons && (
@@ -436,7 +463,10 @@ export const NumericInput = ({
               disabled={atMaximum}
               icon={'icon.chevron.u'}
               hotkeys={'up,ctrl+a'}
-              onClick={() => changeBy(step)}
+              onClick={() => {
+                changeBy(stepUp);
+                refocus();
+              }}
             />
           )}
           {bigStepButtons && (
@@ -445,17 +475,23 @@ export const NumericInput = ({
               minimal={true}
               disabled={atMaximum}
               icon={'icon.chevron.u2x'}
-              // hotkeys={'shift+up,ctrl+shift+a'}
-              onClick={() => changeBy(bigStep)}
+              hotkeys={'alt+up,ctrl+shift+a'}
+              onClick={() => {
+                changeBy(bigStepUp);
+                refocus();
+              }}
             />
           )}
           {setLargeButton && (
             <ButtonLarge
               $dataName="SetLarge"
-              onClick={() => changeTo(large)}
+              onClick={() => {
+                changeTo(large);
+                refocus();
+              }}
               minimal={true}
-              disabled={value === large}
-              // hotkeys={''}
+              disabled={value >= large}
+              hotkeys={'shift+alt+up'}
             >
               {`${large}`}
             </ButtonLarge>
@@ -463,10 +499,13 @@ export const NumericInput = ({
           {setLargestButton && (
             <ButtonLargest
               $dataName="SetMaximum"
-              onClick={() => changeBy(Number.POSITIVE_INFINITY)}
+              onClick={() => {
+                changeBy(Number.POSITIVE_INFINITY);
+                refocus();
+              }}
               minimal={true}
               disabled={atMaximum}
-              // hotkeys={''}
+              hotkeys={'shift+alt+up'}
             >
               {`${largest === Number.POSITIVE_INFINITY ? '∞' : largest}`}
             </ButtonLargest>
