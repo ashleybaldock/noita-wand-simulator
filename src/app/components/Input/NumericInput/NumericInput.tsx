@@ -1,13 +1,14 @@
 import styled from 'styled-components';
-import type { ChangeEventHandler, MouseEventHandler } from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import type { ChangeEvent, ChangeEventHandler, MouseEventHandler } from 'react';
+import { useCallback, useState } from 'react';
 import { Button } from '../../generic';
-import type { Tip } from '../../Tooltips/tooltipId';
+import { tipToAttributes, type Tip } from '../../Tooltips/tooltipId';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useFocus } from '../../../hooks/useFocus';
 import { mergeRefs } from '../../../util/mergeRefs';
 import { useValidity } from '../../../hooks/useValidity';
 import { useInputValue } from '../../../hooks/useInputValue';
+import { noop } from '../../../util';
 
 const Wrapper = styled.fieldset<{ $valid: boolean }>`
   --bdr: 6px;
@@ -235,7 +236,7 @@ export const NumericInput = ({
       ),
     ),
   formatForDisplay = (v) => v.toPrecision(default_precision),
-  onChange,
+  onChange = noop,
   className = '',
   $tip,
   children,
@@ -306,7 +307,7 @@ export const NumericInput = ({
   value: number;
   setValue: (to: number) => void;
   clamp?: (n: number, min: number, max: number) => number;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
   className?: string;
   $tip?: Tip;
@@ -348,11 +349,15 @@ export const NumericInput = ({
     setLastInput(parsed.toString());
   }, [inputValue, parseInput, clamp, smallest, largest]);
 
-  const onInputChange = useCallback(() => {
-    const parsed = clamp(parseInput(inputValue ?? 'NaN'), smallest, largest);
-    setValid(!Number.isNaN(parsed));
-    setLastInput(parsed.toString());
-  }, [inputValue, smallest, largest]);
+  const onInputChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const parsed = clamp(parseInput(inputValue ?? 'NaN'), smallest, largest);
+      setValid(!Number.isNaN(parsed));
+      setLastInput(parsed.toString());
+      onChange(e);
+    },
+    [onChange, inputValue, smallest, largest],
+  );
 
   const onFocus = useCallback(() => {
     setLastInput(value?.toString() ?? '');
@@ -376,7 +381,12 @@ export const NumericInput = ({
   useHotkeys('esc', abortChanges, { preventDefault: true });
 
   return (
-    <Wrapper data-name={$dataName} $valid={valid} className={className}>
+    <Wrapper
+      data-name={$dataName}
+      $valid={valid}
+      className={className}
+      {...($tip ? tipToAttributes($tip) : {})}
+    >
       {editing && (
         <ButtonsBefore data-name="ButtonsBefore">
           {setSmallestButton && (
@@ -447,7 +457,7 @@ export const NumericInput = ({
         onFocus={() => onFocus()}
         onBlur={() => onBlur()}
         onInput={(e) => onInput()}
-        onChange={(e) => onInputChange()}
+        onChange={(e) => onInputChange(e)}
         enterKeyHint="done"
       />
       {/* onKeyDown={(e) => */}

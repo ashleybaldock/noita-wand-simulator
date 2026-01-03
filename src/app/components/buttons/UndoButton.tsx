@@ -11,7 +11,7 @@ export const UndoButton = () => {
     <Button
       data-name="UndoButton"
       hotkeys={'u, ctrl+z, mod+z'}
-      tip={{ kind: 'uihint', id: 'undo' }}
+      $tip={{ kind: 'uihint', id: 'undo' }}
       icon={'icon.undo'}
       imgOnly={'600px'}
       onClick={() => undo()}

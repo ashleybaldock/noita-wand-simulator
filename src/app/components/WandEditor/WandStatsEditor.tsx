@@ -18,41 +18,7 @@ import type { Wand } from '../../redux/Wand/wand';
 import { useId } from 'react';
 import { NumericInput } from '../Input/NumericInput/NumericInput';
 import { EditableWithLabel } from '../Presentation/Editable';
-
-type NumberFieldProps = {
-  field: keyof TypedProperties<Wand, number>;
-  step?: number;
-  formatValue?: (value: number) => string;
-  convertRawValue?: (rawValue: number) => number;
-  // convertDisplayValue?: (displayValue: number) => number;
-};
-
-const renderNumberField =
-  ({
-    field,
-    step,
-    formatValue,
-    convertRawValue,
-  }: // convertDisplayValue,
-  NumberFieldProps) =>
-  (wand: Wand, dispatch: AppDispatch) => {
-    return (
-      <EditableInteger
-        value={wand[field]}
-        onChange={(value) =>
-          dispatch(
-            setWand({
-              wand: { ...wand, [field]: value },
-            }),
-          )
-        }
-        step={step}
-        formatValue={formatValue}
-        convertRawValue={convertRawValue}
-        // convertDisplayValue={convertDisplayValue}
-      />
-    );
-  };
+import type { SpriteName } from '../../calc/sprite';
 
 const EditableInterval = ({
   field,
@@ -89,7 +55,11 @@ const EditableInterval = ({
 };
 
 const StyledListItem = styled(EditableWithLabel)<{
+  /**
+   * @deprecated use @param {icon} instead
+   */
   imgUrl: string;
+  icon?: SpriteName;
 }>`
   display: flex;
   flex: 1 1 auto;

@@ -186,6 +186,13 @@ export function* iterIter<T>(
 }
 
 /**
+ * Wrap any single thing into a Generator
+ */
+export function* iterOne<T>(value: T): IterableIterator<T> {
+  yield value;
+}
+
+/**
  * Creates an iterator over the first n values of source
  *
  * !Note, this is a shallow operation and the underlying iterator is consumed

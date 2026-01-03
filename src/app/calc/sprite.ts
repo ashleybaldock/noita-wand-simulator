@@ -1,4 +1,4 @@
-import { concat, isNotNullOrUndefined } from '../util';
+import { concat, isNotNullOrUndefined, iterOne } from '../util';
 import type { Sprite as GenSprite } from './__generated__/main/sprites';
 import { perkSprites, type Perk, type PerkSprite } from './perks';
 import {
@@ -20,17 +20,22 @@ export type SpriteName =
   | SpellTypeSpriteName
   | UiSpriteName
   | Perk
-  | MissingSprite;
+  | MissingSprite
+  | 'none';
 export type SpritePath =
   | UiSpritePath
   | PerkSprite
   | SpellSpritePath
-  | MissingSpritePath;
+  | MissingSpritePath
+  | '';
 
 export type Sprite = {
   name: SpriteName;
   path: SpritePath;
 };
+
+/* Explicitly no sprite, rather than a missing one */
+const noSprite: Sprite = { name: 'none', path: '' } as const;
 
 export type IconUrl =
   | UiSpritePath
@@ -40,7 +45,12 @@ export type IconUrl =
   | MissingSprite;
 
 const spriteMap = new Map<SpriteName, Sprite>(
-  concat(uiSprites(), perkSprites(), spellSprites()),
+  concat(
+    uiSprites(),
+    perkSprites(),
+    spellSprites(),
+    iterOne([noSprite.name, noSprite]),
+  ),
 );
 export const useIcon = (spriteName: SpriteName | undefined) =>
   (isNotNullOrUndefined(spriteName) && spriteMap.get(spriteName)?.path) ||

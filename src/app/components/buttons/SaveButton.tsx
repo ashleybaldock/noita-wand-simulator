@@ -9,7 +9,7 @@ export const SaveButton = () => {
   return (
     <Button
       hotkeys={'s, mod+s'}
-      tip={{ kind: 'uihint', id: 'save' }}
+      $tip={{ kind: 'uihint', id: 'save' }}
       icon={'icon.save'}
       onClick={() => save()}
     >

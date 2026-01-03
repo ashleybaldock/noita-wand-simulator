@@ -220,7 +220,7 @@ export const Button = ({
   onMouseOut = noop,
   hotkeys = '',
 
-  tip,
+  $tip,
 
   icon = 'none',
   imgUrl = '',
@@ -246,7 +246,7 @@ export const Button = ({
   disabled?: boolean;
   minimal?: boolean;
   shape?: ButtonShape;
-  tip?: Tip;
+  $tip?: Tip;
   /**
    * @deprecated use @param {icon} instead
    */
@@ -259,7 +259,7 @@ export const Button = ({
   useHotkeys(isString(hotkeys) ? hotkeys : hotkeys.hotkeys, onClick, {
     enabled: hotkeys !== '',
   });
-  const iconPath = icon === 'none' ? '' : useIcon(icon);
+  const iconPath = useIcon(icon);
   return (
     <StyledButton
       data-name={$dataName}
@@ -275,7 +275,7 @@ export const Button = ({
       onClick={onClick}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-      {...(tip ? tipToAttributes(tip) : {})}
+      {...($tip ? tipToAttributes($tip) : {})}
     >
       {isBreakpoint(imgOnly) ? (
         <MobileHidden>{children}</MobileHidden>
