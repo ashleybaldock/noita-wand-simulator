@@ -15,6 +15,7 @@ const Wrapper = styled.fieldset<{ $valid: boolean }>`
   --chint: var(--hint-color, #fff);
 
   display: flex;
+  flex: 1 1 auto;
 
   border-radius: var(--bdr);
   padding: 0;
@@ -108,6 +109,12 @@ const NumberInput = styled.input`
   box-sizing: border-box;
   border-radius: 0.3em;
   box-shadow: inset 0 0px 2px 2px #595959;
+
+  @media screen and (max-width: 500px) {
+    text-align: end;
+    justify-content: end;
+    padding: 0;
+  }
 
   &:valid {
     box-shadow: inset 0 0px 1px 1px green;

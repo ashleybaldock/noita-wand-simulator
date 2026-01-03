@@ -58,6 +58,13 @@ const ColumnsContainer = styled.div`
   padding: 0.8em 1em 0.6em 1em;
   columns: 4 17em;
   column-fill: balance;
+
+  @media screen and (max-width: 500px) {
+    padding: 0;
+    columns: 2 50vw;
+    column-gap: 2ch;
+    column-fill: auto;
+  }
 `;
 
 const StyledWandStatsEditor = styled(WandStatsEditor)`
