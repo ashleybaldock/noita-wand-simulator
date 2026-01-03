@@ -18,7 +18,7 @@ import type { Wand } from '../../redux/Wand/wand';
 import { useId } from 'react';
 import { NumericInput } from '../Input/NumericInput/NumericInput';
 import { EditableWithLabel } from '../Presentation/Editable';
-import type { SpriteName } from '../../calc/sprite';
+import { useIcon, type SpriteName } from '../../calc/sprite';
 
 const EditableInterval = ({
   field,
@@ -58,8 +58,8 @@ const StyledListItem = styled(EditableWithLabel)<{
   /**
    * @deprecated use @param {icon} instead
    */
-  imgUrl: string;
-  icon?: SpriteName;
+  imgUrl?: string;
+  $backgroundImage: string;
 }>`
   display: flex;
   flex: 1 1 auto;
@@ -68,6 +68,7 @@ const StyledListItem = styled(EditableWithLabel)<{
   height: calc(var(--child-unit-height) * 1);
 
   background-image: url('/${({ imgUrl }) => imgUrl}');
+  background-image: ${({ $backgroundImage }) => $backgroundImage};
   background-position: 0.6em 50%;
   background-size: 1em;
   background-repeat: no-repeat;
@@ -108,12 +109,10 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
   const wand = useWand();
   const dispatch = useAppDispatch();
 
-  const id = useId();
-
   return (
     <>
       <StyledListItem
-        imgUrl={'data/wand/icon_gun_shuffle.png'}
+        $backgroundImage={useIcon('icon.wand.shuffle')}
         className={className}
         $tip={{ kind: 'uihint', id: 'shuffle_deck_when_empty' }}
         $dataName="EditStatShuffle"
@@ -137,7 +136,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        imgUrl={'data/wand/icon_gun_capacity.png'}
+        $backgroundImage={useIcon('icon.wand.capacity')}
         $tip={{ kind: 'uihint', id: 'deck_capacity' }}
         $dataName="EditStatCapacity"
       >
@@ -159,7 +158,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        imgUrl={'data/wand/icon_gun_actions_per_round.png'}
+        $backgroundImage={useIcon('icon.wand.spellscast')}
         $tip={{ kind: 'uihint', id: 'actions_per_round' }}
         $dataName="EditStatSpellsCast"
       >
@@ -182,7 +181,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        imgUrl={'data/wand/icon_fire_rate_wait.png'}
+        $backgroundImage={useIcon('icon.wand.castdelay')}
         $tip={{ kind: 'uihint', id: 'cast_delay' }}
       >
         <StyledName>{'Cast delay'}</StyledName>
@@ -192,7 +191,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        imgUrl={'data/wand/icon_gun_reload_time.png'}
+        $backgroundImage={useIcon('icon.wand.reloadtime')}
         $tip={{ kind: 'uihint', id: 'reload_time' }}
       >
         <StyledName>{'Recharge Time'}</StyledName>
@@ -202,7 +201,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        imgUrl={'data/wand/icon_mana_max.png'}
+        $backgroundImage={useIcon('icon.wand.manamax')}
         $tip={{ kind: 'uihint', id: 'mana_max' }}
       >
         <StyledName>{'Mana max'}</StyledName>
@@ -225,7 +224,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        imgUrl={'data/wand/icon_mana_charge_speed.png'}
+        $backgroundImage={useIcon('icon.wand.regen')}
         $tip={{ kind: 'uihint', id: 'mana_charge_speed' }}
       >
         <StyledName>{'Mana Charge Speed'}</StyledName>
@@ -248,7 +247,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        imgUrl={'data/wand/icon_spread_degrees.png'}
+        $backgroundImage={useIcon('icon.wand.spread')}
         $tip={{ kind: 'uihint', id: 'wand_spread' }}
       >
         <StyledName>{'Spread'}</StyledName>
@@ -275,7 +274,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         data-name={'EditSpeed'}
-        imgUrl={'data/wand/icon_speed_multiplier.png'}
+        $backgroundImage={useIcon('icon.wand.speed')}
         $tip={{ kind: 'uihint', id: 'wand_speed' }}
       >
         <StyledName>{'Speed'}</StyledName>
