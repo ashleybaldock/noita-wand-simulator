@@ -95,13 +95,13 @@ export const WandBuilder = () => {
 
   return (
     <MainDiv data-name="WandBuilder">
-      <ButtonsContainer data-name="WandBuilderTopButtons">
-        <GridSectionHeader title={'Wand Editor'} />
-        <UndoButton />
-        <RedoButton />
-        <ResetButton />
-      </ButtonsContainer>
       <WandBorder data-name="WandBorder">
+        <ButtonsContainer data-name="WandBuilderTopButtons">
+          <GridSectionHeader title={'Wand Editor'} />
+          <UndoButton />
+          <RedoButton />
+          <ResetButton />
+        </ButtonsContainer>
         <ContentDiv ref={wandRef} className={'saveImageRoot'}>
           <ColumnsContainer>
             <StyledWandStatsEditor />
