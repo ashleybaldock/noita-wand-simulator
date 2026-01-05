@@ -100,7 +100,7 @@ const NumberInput = styled.input`
   border: 1px solid #222;
   font: inherit;
   font-size: 1em;
-  text-align: left;
+  text-align: end;
   padding: 0.5ch 0.5ch 0.3ch 0.5ch;
   line-height: 1;
   margin: 0 0.1ch;
@@ -241,7 +241,8 @@ export const NumericInput = ({
         ),
       ),
     ),
-  formatForDisplay = (v) => v.toPrecision(default_precision),
+  formatForDisplay = (v) =>
+    v.toFixed(minStep.toString().split('.')?.[1]?.length ?? 0),
   onChange = noop,
   className = '',
   $tip,
@@ -279,6 +280,8 @@ export const NumericInput = ({
    * Used for the step up and step down buttons (if enabled)
    * and the corresponding keybinds
    * @see stepButtons
+   * Cannot be smaller than minStep (which defaults to 1)
+   * @see minStep
    */
   step?: number;
   /**
@@ -319,10 +322,10 @@ export const NumericInput = ({
   $tip?: Tip;
   $dataName?: string;
 }>) => {
-  const stepUp = step,
-    stepDown = step * -1,
-    bigStepUp = bigStep,
-    bigStepDown = bigStep * -1;
+  const stepUp = Math.max(minStep, step),
+    stepDown = stepUp * -1,
+    bigStepUp = Math.max(minStep, bigStep),
+    bigStepDown = bigStepUp * -1;
 
   const [lastInput, setLastInput] = useState(value?.toString() ?? '');
   const [editing, setEditing] = useState(false);
@@ -342,10 +345,6 @@ export const NumericInput = ({
     setEditing(false);
     blurInput();
   };
-
-  // useEffect(() => {
-  //   focusInput();
-  // }, [focusInput, inputValue]);
 
   const refocus = () => focusInput();
 
@@ -398,7 +397,7 @@ export const NumericInput = ({
           {setSmallestButton && (
             <ButtonSmallest
               $dataName="SetMinimum"
-              onClick={() => {
+              onClick={(e) => {
                 changeBy(Number.NEGATIVE_INFINITY);
                 refocus();
               }}
@@ -515,7 +514,9 @@ export const NumericInput = ({
           {setLargestButton && (
             <ButtonLargest
               $dataName="SetMaximum"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
                 changeBy(Number.POSITIVE_INFINITY);
                 refocus();
               }}

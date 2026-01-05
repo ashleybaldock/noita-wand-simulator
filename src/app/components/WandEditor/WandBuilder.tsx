@@ -40,12 +40,13 @@ const WandActionEditorWrapper = styled.div`
   }
 `;
 
-const ButtonsContainer = styled.div`
+const WandBuilderTopButtons = styled.div`
   display: grid;
   grid-template-columns: [left title-start] auto [title-end] 1fr [ undo-start] auto [undo-end redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end reset-start] auto [reset-end] 1ch [ right];
-  margin: 0;
   grid-template-rows: [top title-start] 1fr [ title-end bottom];
+  margin: 0;
   filter: none;
+  margin: 0;
 
   & > button {
     padding-top: 0.4em;
@@ -55,7 +56,8 @@ const ButtonsContainer = styled.div`
 
   @media screen and (max-width: 500px) {
     height: 1.8lh;
-    grid-template-columns: [left]1ch[ undo-start] auto [undo-end redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end reset-start] auto [reset-end] 1ch [ right];
+    grid-template-columns: [left] 1ch [undo-start] auto [undo-end redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end reset-start] auto [reset-end] 1ch [right];
+
     & > button {
       background-size: 1.6em;
     }
@@ -105,11 +107,11 @@ export const WandBuilder = () => {
   return (
     <MainDiv data-name="WandBuilder">
       <WandBorder data-name="WandBorder">
-        <ButtonsContainer data-name="WandBuilderTopButtons">
+        <WandBuilderTopButtons data-name="WandBuilderTopButtons">
           <UndoButton />
           <RedoButton />
           <ResetButton />
-        </ButtonsContainer>
+        </WandBuilderTopButtons>
         <ContentDiv ref={wandRef} className={'saveImageRoot'}>
           <ColumnsContainer>
             <StyledWandStatsEditor />

@@ -304,11 +304,6 @@
   }
 }
 
-:not(#u#n#i) [data-name='WandBuilderTopButtons'] {
-  grid-template-columns: [left title-start] auto [title-end] 1fr [ undo-start] auto [undo-end redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end reset-start] auto [reset-end] 1ch [ right];
-  margin: 0;
-}
-
 :not(#u#n#i) button[data-tooltip-content='redo'],
 :not(#u#n#i) button[data-tooltip-content='reset'] {
   border-radius: var(--bdr-br);

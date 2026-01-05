@@ -7,6 +7,7 @@ import type { HotkeyConfig } from '../Tooltips/HotkeyHint';
 import { HotkeyHint } from '../Tooltips/HotkeyHint';
 import type { SpriteName } from '../../calc/sprite';
 import { useIcon } from '../../calc/sprite';
+import type { MouseEventHandler } from 'react';
 
 const ButtonShapes = [
   'rectangle',
@@ -236,9 +237,9 @@ export const Button = ({
 }: React.PropsWithChildren<{
   className?: string;
   $dataName?: string;
-  onClick?: () => void;
-  onMouseOver?: () => void;
-  onMouseOut?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onMouseOver?: MouseEventHandler<HTMLButtonElement>;
+  onMouseOut?: MouseEventHandler<HTMLButtonElement>;
   hotkeys?: string | HotkeyConfig;
   icon?: SpriteName | 'none';
   imgAfter?: boolean;
@@ -256,7 +257,7 @@ export const Button = ({
    */
   imgDataUrl?: string;
 }>) => {
-  useHotkeys(isString(hotkeys) ? hotkeys : hotkeys.hotkeys, onClick, {
+  useHotkeys(isString(hotkeys) ? hotkeys : hotkeys.hotkeys, () => onClick, {
     enabled: hotkeys !== '',
   });
   const iconPath = useIcon(icon);

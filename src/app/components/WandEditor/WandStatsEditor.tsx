@@ -17,7 +17,7 @@ import {
 import type { Wand } from '../../redux/Wand/wand';
 import { useId } from 'react';
 import { NumericInput } from '../Input/NumericInput/NumericInput';
-import { EditableWithLabel } from '../Presentation/Editable';
+import { EditableWithLabel } from '../Presentation/EditableWithLabel';
 import { useIcon, type SpriteName } from '../../calc/sprite';
 
 const EditableInterval = ({
@@ -35,11 +35,12 @@ const EditableInterval = ({
         dispatch(setWand({ wand: { ...wand, [field]: value } }))
       }
       onChange={() => {}}
+      minStep={frames ? 1 : 0.01}
+      step={frames ? 1 : 0.01}
       smallest={-60}
       largest={1000}
       setLargestButton={false}
       setLargeButton={false}
-      step={frames ? 1 : 0.01}
       formatForDisplay={
         frames
           ? (v) => `${Math.round(v)}${FNSP}${SUFFIX_FRAME}`
@@ -55,10 +56,6 @@ const EditableInterval = ({
 };
 
 const StyledListItem = styled(EditableWithLabel)<{
-  /**
-   * @deprecated use @param {icon} instead
-   */
-  imgUrl?: string;
   $backgroundImage: string;
 }>`
   display: flex;
@@ -67,7 +64,6 @@ const StyledListItem = styled(EditableWithLabel)<{
 
   height: calc(var(--child-unit-height) * 1);
 
-  background-image: url('/${({ imgUrl }) => imgUrl}');
   background-image: ${({ $backgroundImage }) => $backgroundImage};
   background-position: 0.6em 50%;
   background-size: 1em;
@@ -148,6 +144,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
               dispatch(setWand({ wand: { ...wand, deck_capacity: value } }))
             }
             onChange={() => {}}
+            minStep={1}
             smallest={1}
             largest={512}
             large={26}
@@ -170,6 +167,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
               dispatch(setWand({ wand: { ...wand, actions_per_round: value } }))
             }
             onChange={() => {}}
+            minStep={1}
             smallest={1}
             large={26}
             bigStep={10}

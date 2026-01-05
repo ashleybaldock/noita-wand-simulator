@@ -2,7 +2,7 @@ import { noop } from '../../../util';
 import type { ChangeEventHandler, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import { YesNo } from '../../Presentation';
-import { EditableWithLabel } from '../../Presentation/Editable';
+import { EditableWithLabel } from '../../Presentation/EditableWithLabel';
 import type { ConfigToggleField } from '../../../redux';
 import { useConfigToggle } from '../../../redux';
 import { tipToAttributes, type Tip } from '../../Tooltips/tooltipId';
