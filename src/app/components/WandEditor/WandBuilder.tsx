@@ -52,6 +52,14 @@ const ButtonsContainer = styled.div`
     padding-bottom: 0.3em;
     border-bottom: none;
   }
+
+  @media screen and (max-width: 500px) {
+    height: 1.8lh;
+    grid-template-columns: [left]1ch[ undo-start] auto [undo-end redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end reset-start] auto [reset-end] 1ch [ right];
+    & > button {
+      background-size: 1.6em;
+    }
+  }
 `;
 const ColumnsContainer = styled.div`
   --child-unit-height: 1.44em;
@@ -93,11 +101,11 @@ export const WandBuilder = () => {
   const wandRef = useRef<HTMLDivElement>(null);
   const spellsRef = useRef<HTMLDivElement>(null);
 
+  // <GridSectionHeader title={'Wand Editor'} />
   return (
     <MainDiv data-name="WandBuilder">
       <WandBorder data-name="WandBorder">
         <ButtonsContainer data-name="WandBuilderTopButtons">
-          <GridSectionHeader title={'Wand Editor'} />
           <UndoButton />
           <RedoButton />
           <ResetButton />

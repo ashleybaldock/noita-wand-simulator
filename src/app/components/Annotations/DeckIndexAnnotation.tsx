@@ -13,7 +13,7 @@ const IndexDiv = styled.div`
   position: absolute;
   width: 1.4em;
   height: 1.4em;
-  padding: 2px 1px 2px 2px;
+  padding: 0;
   z-index: var(--zindex-note-deckidx);
   color: rgb(255, 255, 255);
   font-size: 14px;
@@ -21,11 +21,14 @@ const IndexDiv = styled.div`
   font-weight: normal;
   --shadow-bg: rgb(0, 0, 0);
   --shadow-w: 0px;
-  text-shadow: var(--shadow-bg) 1px 1px var(--shadow-w),
+  text-shadow:
+    var(--shadow-bg) 1px 1px var(--shadow-w),
     var(--shadow-bg) 1px -1px var(--shadow-w),
     var(--shadow-bg) -1px 1px var(--shadow-w),
-    var(--shadow-bg) -1px -1px var(--shadow-w), var(--shadow-bg) 1px 1px 1px,
-    var(--shadow-bg) 1px -1px 1px, var(--shadow-bg) -1px 1px 1px,
+    var(--shadow-bg) -1px -1px var(--shadow-w),
+    var(--shadow-bg) 1px 1px 1px,
+    var(--shadow-bg) 1px -1px 1px,
+    var(--shadow-bg) -1px 1px 1px,
     var(--shadow-bg) -1px -1px 1px;
   bottom: -6px;
   right: -6px;

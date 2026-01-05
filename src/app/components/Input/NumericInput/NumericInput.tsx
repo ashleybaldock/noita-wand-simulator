@@ -109,13 +109,6 @@ const NumberInput = styled.input`
   box-sizing: border-box;
   border-radius: 0.3em;
   box-shadow: inset 0 0px 2px 2px #595959;
-
-  @media screen and (max-width: 500px) {
-    text-align: end;
-    justify-content: end;
-    padding: 0;
-  }
-
   &:valid {
     box-shadow: inset 0 0px 1px 1px green;
   }
@@ -132,6 +125,12 @@ const NumberInput = styled.input`
       1px 0 0 1px #7c4f05,
       -1px 0 0 1px #a7782c,
       0 -1px 0 1px #ffb53e;
+  }
+
+  @media screen and (max-width: 500px) {
+    text-align: end;
+    justify-content: end;
+    padding: 0;
   }
 `;
 

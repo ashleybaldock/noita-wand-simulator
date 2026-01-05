@@ -60,6 +60,12 @@ const StyledEditableWithLabel = styled.label<{
   flex-direction: row;
   cursor: pointer;
 
+  @media screen and (max-width: 500px) {
+    background-position: 0.25ch 50%;
+    border-bottom: var(--ou) dotted #222;
+    padding: var(--ou) 0.5ch var(--ou) 2.5ch;
+  }
+
   & > :last-child {
     ${({ $accessHints = true }) =>
       $accessHints
@@ -67,6 +73,7 @@ const StyledEditableWithLabel = styled.label<{
         : ''}
     position: relative;
     width: 100%;
+    justify-content: end;
   }
   &:hover {
     color: var(--color-toggle-hover);
