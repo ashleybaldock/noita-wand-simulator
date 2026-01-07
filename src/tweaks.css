@@ -3,25 +3,27 @@
   --top-banner-height: 36px;
 }
 
-:not(#u#n#i) div[data-name='MainHeader'] {
-  padding: 0.2em 0.8em 0.2em 0.8em;
-  inset: 0 auto auto auto;
+:has(> [data-name='ConfigEditor']) {
+  display: contents;
 }
-
-:not(#u#n#i) [data-name='SearchInput'] {
-  align-self: stretch;
-  justify-self: stretch;
+[data-name='ConfigEditor'] {
+  display: grid;
+  grid-template-rows: subgrid;
 }
-@media screen and (max-width: 500px) {
-  :not(#u#n#i) [data-name='FindSpell'] ol {
-    width: 100vw;
-    position: fixed;
-    inset: calc(var(--top-banner-height) + var(--ou) * 3) 0 auto 0;
-    margin: 0;
-    border: 0;
-    padding: calc(var(--ou) * 3);
-    box-sizing: border-box;
-  }
+[data-name='ConfigEditor'] > div {
+  display: contents;
+}
+[data-name='ConfigToggleGroup'] {
+  display: grid;
+  grid-template-columns: auto;
+}
+[data-name='ConfigToggleGroup'] > div:first-of-type {
+  grid-column: 1 / span 2;
+}
+[data-name='ConfigToggleGroup'] [data-name='EditableWithLabel'] {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / span 2;
 }
 
 :not(#u#n#i) div[data-name='TabTitles'] {
@@ -147,6 +149,40 @@
   border-radius: var(--bdr-tl);
   margin-left: 0;
 }
+@media screen and (max-width: 500px) {
+  :not(#u#n#i) div[data-name='MainHeader'] > [data-name='Search'] {
+    display: contents;
+  }
+  :not(#u#n#i) div[data-name='MainHeader'] > [data-name='Search'] > button {
+    grid-column: search;
+    grid-row: 1;
+  }
+  :not(#u#n#i)
+    div[data-name='MainHeader']
+    > [data-name='Search']
+    > [data-name='FindSpell'] {
+    grid-column: searchinput;
+    grid-row: 1;
+    visibility: hidden;
+  }
+}
+
+:not(#u#n#i) button[data-tooltip-content='redo'],
+:not(#u#n#i) button[data-tooltip-content='reset'] {
+  border-radius: var(--bdr-br);
+  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) calc(var(--ou) * 0.5);
+  border-color: var(--color-button-border) var(--color-button-border)
+    var(--color-button-border) var(--color-button-border);
+  border-style: solid solid solid solid;
+}
+:not(#u#n#i) button[data-tooltip-content='undo'],
+:not(#u#n#i) button[data-tooltip-content='clear'] {
+  border-radius: var(--bdr-bl);
+  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) var(--ou);
+  border-color: var(--color-button-border) var(--color-button-border)
+    var(--color-button-border) var(--color-button-border);
+  border-style: solid solid solid solid;
+}
 
 :not(#u#n#i)
   :is([data-name='Tab'], [data-name='Tab:Selected'])
@@ -189,6 +225,10 @@
 :not(#u#n#i) [data-name='NumericInput']:hover {
   box-shadow: none;
   --bdr: 0px;
+  line-height: normal;
+  font-size: 1em;
+  align-content: baseline;
+  align-items: center;
 }
 
 :not(#u#n#i) [data-name='NumericInput'] [data-name='ButtonsAfter'] {
@@ -208,43 +248,6 @@
   align-content: center;
   align-items: center;
 }
-
-:not(#u#n#i)
-  :is(
-    [data-name='NumberInput']:valid,
-    [data-name='NumberInput']:hover,
-    [data-name='NumberInput']
-  ) {
-  box-shadow: none;
-  background: none;
-  border: none;
-  line-height: normal;
-  align-self: center;
-  text-align: start;
-}
-
-:has(> [data-name='ConfigEditor']) {
-  display: contents;
-}
-[data-name='ConfigEditor'] {
-  display: grid;
-  grid-template-rows: subgrid;
-}
-[data-name='ConfigEditor'] > div {
-  display: contents;
-}
-[data-name='ConfigToggleGroup'] {
-  display: grid;
-  grid-template-columns: auto;
-}
-[data-name='ConfigToggleGroup'] > div:first-of-type {
-  grid-column: 1 / span 2;
-}
-[data-name='ConfigToggleGroup'] [data-name='EditableWithLabel'] {
-  display: grid;
-  grid-template-columns: subgrid;
-  grid-column: 1 / span 2;
-}
 [data-name='NumberInput']:valid,
 [data-name='NumberInput']:hover,
 [data-name='NumberInput'] {
@@ -255,206 +258,58 @@
   align-self: center;
   text-align: start;
 }
-[data-name='MainHeader'] > [data-name='Wrapper'] {
-  flex: 1 1 auto;
-  column-gap: 0.5ch;
-}
-:not(#u#n#i) div[data-name='MainHeader'] {
-  padding: 0.2em 0.5ch 0 0.5ch;
-}
-[data-name='SearchInput']::placeholder {
-  font-size: 0.9em;
-  text-align: end;
-}
-
-:not(#u#n#i) div[data-name='MainHeader'] {
-  padding: clamp(2px, 0.5vmin, 14px) clamp(2px, 0.5vmin, 14px) 0
-    clamp(2px, 0.5vmin, 14px);
-}
-@media screen and (max-width: 500px) {
-  :not(#u#n#i) div[data-name='MainHeader'] {
-    display: grid;
-    justify-items: center;
-    grid-template-areas: 'config logo search';
-    grid-template-columns: [config-start] 1fr[config-end searchinput-start logo-start] 100fr [logo-end searchinput-end search-start] 1fr[search-end];
-  }
-  :not(#u#n#i) div[data-name='MainHeader'] > button {
-    grid-column: config;
-    grid-row: 1;
-  }
-  :not(#u#n#i) div[data-name='MainHeader'] > a {
-    grid-column: logo;
-    grid-row: 1;
-  }
-
-  :not(#u#n#i) div[data-name='MainHeader'] > [data-name='Search'] {
-    display: contents;
-  }
-  :not(#u#n#i) div[data-name='MainHeader'] > [data-name='Search'] > button {
-    grid-column: search;
-    grid-row: 1;
-  }
-  :not(#u#n#i)
-    div[data-name='MainHeader']
-    > [data-name='Search']
-    > [data-name='FindSpell'] {
-    grid-column: searchinput;
-    grid-row: 1;
-    visibility: hidden;
-  }
-}
-
-:not(#u#n#i) button[data-tooltip-content='redo'],
-:not(#u#n#i) button[data-tooltip-content='reset'] {
-  border-radius: var(--bdr-br);
-  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) calc(var(--ou) * 0.5);
-  border-color: var(--color-button-border) var(--color-button-border)
-    var(--color-button-border) var(--color-button-border);
-  border-style: solid solid solid solid;
-}
-:not(#u#n#i) button[data-tooltip-content='undo'],
-:not(#u#n#i) button[data-tooltip-content='clear'] {
-  border-radius: var(--bdr-bl);
-  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) var(--ou);
-  border-color: var(--color-button-border) var(--color-button-border)
-    var(--color-button-border) var(--color-button-border);
-  border-style: solid solid solid solid;
-}
-
-:not(#u#n#i) [data-name='NumericInput'],
-:not(#u#n#i) [data-name='NumericInput']:focus-within,
-:not(#u#n#i) [data-name='NumericInput']:focus-within:hover,
-:not(#u#n#i) [data-name='NumericInput']:hover {
+:is(
+  [data-name='NumberInput']:valid,
+  [data-name='NumberInput']:hover,
+  [data-name='NumberInput']
+) {
+  box-shadow: none;
+  background: none;
+  border: none;
+  align-self: center;
   line-height: normal;
   font-size: 1em;
   align-content: baseline;
   align-items: center;
+  text-align: end;
+  min-width: 5ch;
+  width: 100%;
+  justify-content: stretch;
+  max-width: unset;
+  margin: 0;
+  flex: 0 1 auto;
+  box-sizing: content-box;
+  padding: 0 3px;
 }
-
-:not(#u#n#i)
+.debug
   :is(
     [data-name='NumberInput']:valid,
     [data-name='NumberInput']:hover,
     [data-name='NumberInput']
   ) {
-  text-align: end;
-  width: fit-content;
-  flex: 1 1 fit-content;
-  min-width: unset;
   outline: 0.5px solid #b0b;
 }
 
-:not(#u#n#i) [data-name='NumericInput'] {
-  outline: 0.5px solid #0ff8;
-}
-
-@media screen and (max-width: 500px) {
-  .bwVTcw {
-    padding: var(--ou) 0.2ch var(--ou) 2.5ch;
-  }
-}
-
-.eKdQIA {
-  flex: 1 1 auto;
-}
-
-:not(#u#n#i)
-  :is(
-    [data-name='NumberInput']:valid,
-    [data-name='NumberInput']:hover,
-    [data-name='NumberInput'],
-    [data-name='NumericInput']:focus-within,
-    [data-name='NumericInput']:focus-within:hover,
-
-  ) {
-  line-height: normal;
-  font-size: 1em;
-  align-content: baseline;
-  align-items: center;
-  text-align: end;
-  flex: 0 1 content;
-  min-width: 4ch;
-  outline: 0.5px solid #b0b;
-  width: 100%;
-  justify-content: stretch;
-  width: fit-content;
-  max-width: unset;
-  margin: 0;
-  flex: 0 0 auto;
-  padding: 0 0.5ch;
-  box-sizing: content-box;
-  padding: 0 3px;
-}
-
-:not(#u#n#i) [data-name='NumericInput'] {
+[data-name='NumericInput'] {
   box-sizing: unset;
-  outline: 0.5px solid #0ff8;
-  flex: 0 1 auto;
-  width: 100%;
+  width: auto;
   justify-content: center;
-  margin-left: auto;
-  float:;
+  margin-left: 0;
   flex: 0 1 min-content;
+}
+.debug [data-name='NumericInput'] {
+  outline: 0.5px solid #0ff8;
 }
 
 [data-name='EditableWithLabel'] {
   border-bottom: 3px dotted #222;
 }
-@media screen and (max-width: 500px) {
-  :not(#u#n#i) [data-name='EditableWithLabel'] {
-    padding: var(--ou) 0.2ch var(--ou) 2.5ch;
-    margin-left: auto;
-    align-content: center;
-    align-items: center;
-  }
-}
 
-:not(#u#n#i) [data-name='EditableWithLabel'] > :first-child {
-  width: auto;
-  flex: 1 1 50%;
-  align-content: center;
-  justify-content: start;
+.debug [data-name='EditableWithLabel'] > * {
   outline: 0.5px dashed #0f0;
 }
 
-:not(#u#n#i) [data-name='EditableWithLabel'] > :last-child {
-  min-width: unset;
-  width: auto;
-  flex: 1 1 40%;
-  max-width: unset;
-  justify-content: end;
-  align-items: center;
-  outline: 0.5px dashed #0f0;
-  width: 0;
-  justify-content: end;
-}
-
-:not(#u#n#i) [data-name='EditableWithLabel'] > :last-child::before {
-  left: 0;
-  position: static;
-  --w: 30px;
-  width: var(--w);
-  transition-property: transform;
-  transform: translateX(calc(var(--w) * -1)) scale(0);
-}
-
-:not(#u#n#i) [data-name='EditableWithLabel']:hover > :last-child::before {
-  transition-property: transform;
-  transform: translate(0px) scale(1);
-}
-
-:not(#u#n#i) [data-name='YesNo'] {
-  display: grid;
-  grid-template: 1fr/1fr;
-}
-:not(#u#n#i) [data-name='YesNo']::before,
-:not(#u#n#i) [data-name='YesNo']::after,
-:not(#u#n#i) [data-name='YesNo'] > * {
-  grid-row: 1/1;
-  grid-column: 1/1;
-}
-
-[data-name='EditableWithLabel'] {
+.debug [data-name='EditableWithLabel'] {
   border-bottom: 3px dotted #f0f;
   --bgt: radial-gradient(
     var(--w) circle at 20% 50%,

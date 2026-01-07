@@ -40,7 +40,16 @@ const Combiner = styled.div`
   position: relative;
   display: grid;
   place-items: center end;
+  grid-template: 1fr/1fr;
+
+  & > *,
+  &::before,
+  &::after {
+    grid-row: 1/1;
+    grid-column: 1/1;
+  }
 `;
+
 export const YesNo = styled(
   ({
     yes,

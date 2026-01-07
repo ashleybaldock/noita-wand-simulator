@@ -24,19 +24,31 @@ const HeaderDiv = styled.div<{
   justify-content: space-between;
   color: #eee;
   margin: 0;
-  padding: 0.6em 0.8em 0.2em 0.8em;
   background-color: var(--color-base-background);
   z-index: 100;
   position: sticky;
   top: -20px;
   height: 36px;
-  padding: 0.3em 0.5ch 0.3em 0.5ch;
-  inset: 0 auto auto auto;
   column-gap: 0.3ch;
   margin: 0;
+  padding: clamp(2px, 0.5vmin, 14px) clamp(2px, 0.5vmin, 14px) 0
+    clamp(2px, 0.5vmin, 14px);
+  inset: 0 auto auto auto;
 
   @media screen and (max-width: 500px) {
-    padding: 0 0 0.2em 0.2ch;
+    & > button {
+      grid-column: config;
+      grid-row: 1;
+    }
+    & > a {
+      grid-column: logo;
+      grid-row: 1;
+    }
+
+    display: grid;
+    justify-items: center;
+    grid-template-areas: 'config logo search';
+    grid-template-columns: [config-start] 1fr[config-end searchinput-start logo-start] 100fr [logo-end searchinput-end search-start] 1fr[search-end];
   }
 `;
 
@@ -65,20 +77,7 @@ const HeaderLink = styled.a<{
   }
 `;
 
-const ExtraDiv = styled.div`
-  display: flex;
-  align-self: end;
-
-  & > button {
-    border-radius: 0 0 0.2em 15.1em / 0 0 0 64.4em;
-    border-right-style: hidden;
-    padding-top: 0.4em;
-    padding-bottom: 0.3em;
-    margin-left: -0.5em;
-  }
-`;
-
-export function MainHeader({ children }: React.PropsWithChildren) {
+export const MainHeader  = () => {
   const [logoVariant, setLogoVariant] = useState(
     logoVariants[getRandomInteger(logoVariants.length)],
   );
@@ -86,7 +85,6 @@ export function MainHeader({ children }: React.PropsWithChildren) {
   return (
     <HeaderDiv data-name="MainHeader" imgUrl={logoVariant}>
       <HeaderLink href="/"></HeaderLink>
-      {/* <ExtraDiv>{children}</ExtraDiv> */}
       <Search />
       <ConfigButton />
     </HeaderDiv>

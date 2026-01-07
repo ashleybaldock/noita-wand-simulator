@@ -6,6 +6,8 @@ const StyledEditableWithLabel = styled.label<{
   $accessHints?: boolean;
   $disabled?: boolean;
 }>`
+  --w: 30px;
+
   display: flex;
   flex-direction: row;
   cursor: pointer;
@@ -13,7 +15,17 @@ const StyledEditableWithLabel = styled.label<{
   @media screen and (max-width: 500px) {
     background-position: 0.25ch 50%;
     border-bottom: var(--ou) dotted #222;
-    padding: var(--ou) 0.5ch var(--ou) 2.5ch;
+    padding: var(--ou) 0.2ch var(--ou) 2.5ch;
+    margin-left: auto;
+    align-content: center;
+    align-items: center;
+  }
+
+  & > :first-child {
+    width: auto;
+    flex: 1 1 50%;
+    align-content: center;
+    justify-content: start;
   }
 
   & > :last-child {
@@ -22,7 +34,11 @@ const StyledEditableWithLabel = styled.label<{
         ? `text-decoration: underline dotted var(--color-toggle-hover) 1.4px;`
         : ''}
     position: relative;
-    width: 100%;
+    min-width: unset;
+    flex: 1 1 40%;
+    max-width: unset;
+    align-items: center;
+    width: 0;
     justify-content: end;
   }
   &:hover {
@@ -30,24 +46,29 @@ const StyledEditableWithLabel = styled.label<{
   }
 
   & > :last-child::before {
-    left: -30px;
     content: '>';
-    position: absolute;
     padding-left: 0px;
     scale: 0;
-    transition-property: scale, color, opacity, left;
+    color: yellow;
+    position: static;
+    width: var(--w);
+    flex: 1 0 var(--w);
+    text-align: end;
+    display: flex;
+    justify-content: end;
+    align-content: center;
+    align-items: center;
+
+    transition-property: transform;
     transition-duration: 200ms;
     transition-timing-function: ease-in-out;
-    color: black;
+    transform: translateX(calc(var(--w) * -1)) scaleY(0);
   }
   &&:hover > :last-child::before {
-    opacity: 1;
-    color: yellow;
-    scale: 1;
-    left: -12px;
-    transition-property: scale, color, opacity, left;
+    transition-property: transform;
     transition-duration: 200ms;
     transition-timing-function: ease-in-out;
+    transform: translateX(0) scaleY(1);
   }
 
   {StyledEditableWithLabel} > & {

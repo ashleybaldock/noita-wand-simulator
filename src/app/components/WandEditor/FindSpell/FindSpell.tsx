@@ -112,6 +112,9 @@ const SearchInput = styled.input.attrs({ type: 'text' })`
   border-radius: 0 0 0 15.1em/12em 0 0 54.4em;
   border-right-color: transparent;
 
+  align-self: stretch;
+  justify-self: stretch;
+
   &:focus {
     box-shadow:
       0px 0 8px 0px #ff710ab8 inset,
@@ -120,10 +123,10 @@ const SearchInput = styled.input.attrs({ type: 'text' })`
   }
 
   &::placeholder {
-    font-size: 0.66em;
     letter-spacing: 0;
-    text-align: left;
     color: #666666;
+    font-size: 0.9em;
+    text-align: end;
   }
   &:placeholder-shown {
     color: red;
