@@ -162,8 +162,18 @@ html {
 body {
   min-width: 300px;
   margin: 0;
-  font-family: 'noita', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family:
+    'noita',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
     sans-serif;
   /* -webkit-font-smoothing: antialiased; */
   /* -moz-osx-font-smoothing: grayscale; */
@@ -174,10 +184,16 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 :root {
   --sprite-missing: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOBAMAAADtZjDiAAAAD1BMVEUAAAAAAACFZgCofAIDAgAmXIGsAAAAAnRSTlMA+iv71joAAABGSURBVHheZcnRCcAgEAPQgF1A6ABFHUBOB7Dt7T9Tk8O/Jh8PEkzPyP5iQTloGj20UsPCSoQkXYiYWJr3vx30tze/cfrzAaPhBxxo96f6AAAAAElFTkSuQmCC);
+
+  --ts-outline-1px-black:
+    1px 1px 0 var(--shadow-bg), 1px 0 0 var(--shadow-bg),
+    1px -1px 0 var(--shadow-bg), 0 1px 0 var(--shadow-bg),
+    0 -1px 0 var(--shadow-bg), -1px 1px 0 var(--shadow-bg),
+    -1px 0 0 var(--shadow-bg), -1px -1px 0 var(--shadow-bg);
 }

@@ -412,8 +412,14 @@
   border: 1.2px ridge #ada27f;
   border-radius: 7px;
   height: 90%;
-  text-shadow: 0 1.5px 0 #000, 0 -1px 0 #000, 1.5px 0 0 #000, -1px 0 0 #000;
-  box-shadow: 1px 1px 0 #000 inset, 1px 1px 0 #000;
+  text-shadow:
+    0 1.5px 0 #000,
+    0 -1px 0 #000,
+    1.5px 0 0 #000,
+    -1px 0 0 #000;
+  box-shadow:
+    1px 1px 0 #000 inset,
+    1px 1px 0 #000;
   letter-spacing: 0.04em;
   line-height: 1;
   box-sizing: border-box;
@@ -460,10 +466,18 @@
   border-radius: 5px;
   border: 2px ridge #808;
   outline: 1px solid #666;
-  text-shadow: 0 1.5px 1px #000, 0 -1px 1px #000, 1.5px 0 1px #000,
-    -1px 0 1px #000, 0 1.5px 1px #000, 0 -1px 1px #000, 1.5px 0 1px #000,
+  text-shadow:
+    0 1.5px 1px #000,
+    0 -1px 1px #000,
+    1.5px 0 1px #000,
+    -1px 0 1px #000,
+    0 1.5px 1px #000,
+    0 -1px 1px #000,
+    1.5px 0 1px #000,
     -1px 0 1px #000;
-  box-shadow: -0.2px -0.2px 0.4px 0.1px #800 inset, 0 0 0 0.6px #000;
+  box-shadow:
+    -0.2px -0.2px 0.4px 0.1px #800 inset,
+    0 0 0 0.6px #000;
   background-image: linear-gradient(-45deg, #a0f4, #d0a, #f088);
   left: unset;
   top: unset;
@@ -479,10 +493,18 @@
   border-radius: 5px;
   border: 2px ridge #088;
   outline: 1px solid #666;
-  text-shadow: 0 1.5px 1px #000, 0 -1px 1px #000, 1.5px 0 1px #000,
-    -1px 0 1px #000, 0 1.5px 1px #000, 0 -1px 1px #000, 1.5px 0 1px #000,
+  text-shadow:
+    0 1.5px 1px #000,
+    0 -1px 1px #000,
+    1.5px 0 1px #000,
+    -1px 0 1px #000,
+    0 1.5px 1px #000,
+    0 -1px 1px #000,
+    1.5px 0 1px #000,
     -1px 0 1px #000;
-  box-shadow: -0.2px -0.2px 0.4px 0.1px #088 inset, 0 0 0 0.6px #000;
+  box-shadow:
+    -0.2px -0.2px 0.4px 0.1px #088 inset,
+    0 0 0 0.6px #000;
   background-image: linear-gradient(-45deg, #0af4, #0da, #0f88);
   left: unset;
   top: unset;
@@ -508,9 +530,14 @@
   line-height: calc(var(--bsize-spell) / 3 - 2px);
   text-align: center;
   font-size: 13px;
-  text-shadow: 0 1.5px 0 #000, 0 -1px 0 #000, 1.5px 0 0 #000, -1px 0 0 #000;
+  text-shadow:
+    0 1.5px 0 #000,
+    0 -1px 0 #000,
+    1.5px 0 0 #000,
+    -1px 0 0 #000;
   outline: 1px solid #666;
-  box-shadow: -0.2px -0.2px 0.4px 0.1px hsl(var(--hue) 100% 20%) inset,
+  box-shadow:
+    -0.2px -0.2px 0.4px 0.1px hsl(var(--hue) 100% 20%) inset,
     0 0 0 0.6px #000;
   border: 2px ridge hsl(var(--hue) 67% 40%);
   background-color: hsl(var(--hue) 67% 40% / 90%);
@@ -553,7 +580,8 @@
   right: unset;
   bottom: unset;
   left: -24px;
-  background-image: var(--icon),
+  background-image:
+    var(--icon),
     linear-gradient(
       -45deg,
       hsl(var(--hue) 54% 43% / 1),
@@ -590,27 +618,6 @@
   --hue: 50deg;
 }
 
-[data-name='DeckIndex'] {
-  display: flex;
-  align-items: start;
-  justify-content: center;
-  border: 2px inset #333;
-  border-radius: 50%;
-  box-sizing: border-box;
-  background-color: #444;
-  bottom: calc(var(--bdw) * -2);
-  right: calc(var(--bdw) * -2);
-  top: unset;
-  left: unset;
-  width: 1.6em;
-  height: 1.6em;
-  padding: 2px 1.5px 2px 2px;
-  font-size: 0.8em;
-  text-align: center;
-  bottom: -8px;
-  right: -6px;
-}
-
 [data-name='WandAction'] {
   --padding: var(--spell-pad, 3px);
   outline: none;
@@ -632,7 +639,8 @@
   position: absolute;
   border-bottom: var(--bdw) dotted #eee;
   display: flex;
-  background-image: url('data:image/svg+xml,%3Csvg style=%22fill: %23ff0000%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22%3E%3Cpath d=%22M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z%22%3E%3C/path%3E%3C/svg%3E'),
+  background-image:
+    url('data:image/svg+xml,%3Csvg style=%22fill: %23ff0000%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22%3E%3Cpath d=%22M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z%22%3E%3C/path%3E%3C/svg%3E'),
     var(--icon-arrowhead-right), var(--data-inventory-icon-draw-plus);
   left: calc(-1 * var(--bsize-spell) / 4 + 6px);
   width: calc(var(--bsize-spell) / 5);
@@ -810,8 +818,8 @@
 :is(
     :is([data-spell='DIVIDE_10']):is([data-iteration='3']),
     :is([data-spell='DIVIDE_4'], [data-spell='DIVIDE_3']):is(
-        [data-iteration='4']
-      ),
+      [data-iteration='4']
+    ),
     :is([data-spell='DIVIDE_2']):is([data-iteration='5']),
 
   )
@@ -821,20 +829,20 @@
 /* Below limit */
 :is(
     :is([data-spell='DIVIDE_10']):is(
-        [data-iteration='1'],
-        [data-iteration='2']
-      ),
+      [data-iteration='1'],
+      [data-iteration='2']
+    ),
     :is([data-spell='DIVIDE_4'], [data-spell='DIVIDE_3']):is(
-        [data-iteration='1'],
-        [data-iteration='2'],
-        [data-iteration='3']
-      ),
+      [data-iteration='1'],
+      [data-iteration='2'],
+      [data-iteration='3']
+    ),
     :is([data-spell='DIVIDE_2']):is(
-        [data-iteration='1'],
-        [data-iteration='2'],
-        [data-iteration='3'],
-        [data-iteration='4']
-      )
+      [data-iteration='1'],
+      [data-iteration='2'],
+      [data-iteration='3'],
+      [data-iteration='4']
+    )
   )
   > [data-name='WandActionBorder'] {
   outline: none;
@@ -895,13 +903,18 @@
 /*{{{1 Greek spell targeting - TAU */
 li:has([data-tooltip-content='TAU']):hover {
   position: relative;
-  box-shadow: -2px 0 0 #ff0, 0 2px 0 #ff0, 0 -2px 0 #ff0;
+  box-shadow:
+    -2px 0 0 #ff0,
+    0 2px 0 #ff0,
+    0 -2px 0 #ff0;
 }
 
 li:has([data-tooltip-content='TAU']):hover + li,
 li:has([data-tooltip-content='TAU']):hover + li + li {
   position: relative;
-  box-shadow: 0 2px 0 #ff0, 0 -2px 0 #ff0;
+  box-shadow:
+    0 2px 0 #ff0,
+    0 -2px 0 #ff0;
   border-radius: 8px;
 }
 li:has([data-tooltip-content='TAU']):hover + li::after,
@@ -934,8 +947,13 @@ li:not(:has([data-tooltip-content^='DIVIDE_']))
   + li:has([data-tooltip-content^='DIVIDE_']):hover,
 li:first-of-type:has([data-tooltip-content^='DIVIDE_']):hover,
 li:has([data-tooltip-content^='DIVIDE_']):has(+ li:hover) {
-  box-shadow: inset 1px 0 0 #fff9, inset 0 -1px 0 #fff9, inset 0 1px 0 #fff9,
-    -2px 0 0 #fff9, 0 -2px 0 #fff9, 0 2px 0 #fff9;
+  box-shadow:
+    inset 1px 0 0 #fff9,
+    inset 0 -1px 0 #fff9,
+    inset 0 1px 0 #fff9,
+    -2px 0 0 #fff9,
+    0 -2px 0 #fff9,
+    0 2px 0 #fff9;
   border-radius: 8px 0 0 8px;
 }
 li:has([data-tooltip-content^='DIVIDE_']):hover,
@@ -944,8 +962,13 @@ li:has([data-tooltip-content^='DIVIDE_']):hover
 li:has([data-tooltip-content^='DIVIDE_']):has(
     + li:hover [data-tooltip-content^='DIVIDE_']
   ) {
-  box-shadow: inset 0 1px 0 #fff9, inset 0 -1px 0 #fff9, 0 2px 0 #fff9,
-    0 -2px 0 #fff9, -2px 0 1px #fff9, inset 2px 0 1px #fff9;
+  box-shadow:
+    inset 0 1px 0 #fff9,
+    inset 0 -1px 0 #fff9,
+    0 2px 0 #fff9,
+    0 -2px 0 #fff9,
+    -2px 0 1px #fff9,
+    inset 2px 0 1px #fff9;
   border-radius: 8px 0 0 8px;
 }
 li:has([data-tooltip-content^='DIVIDE_']):hover
@@ -954,8 +977,14 @@ li:has([data-tooltip-content^='DIVIDE_']):hover
 li:has([data-tooltip-content^='DIVIDE_'])
   + li:has([data-tooltip-content^='DIVIDE_']):hover
   + li:not(:has([data-tooltip-content^='DIVIDE_'])) {
-  box-shadow: -1px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff,
-    inset -1px 0 0 #fff, inset 0 1px 0 #fff, inset 0 -1px 0 #fff,
+  box-shadow:
+    -1px 0 0 #fff,
+    0 1px 0 #fff,
+    0 -1px 0 #fff,
+    1px 0 0 #fff,
+    inset -1px 0 0 #fff,
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 #fff,
     inset 1px 0 0 #fff;
   border-radius: 8px;
 }

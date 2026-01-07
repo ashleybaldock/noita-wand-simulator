@@ -11,38 +11,36 @@ const IndexDiv = styled.div`
   pointer-events: none;
   user-select: none;
   position: absolute;
-  width: 1.4em;
-  height: 1.4em;
-  padding: 0;
+  inset: auto calc(var(--bsize-spell-border-width) * -2)
+    calc(var(--bsize-spell-border-width) * -2) auto;
+  width: 2ch;
+  height: 2ch;
   z-index: var(--zindex-note-deckidx);
   color: rgb(255, 255, 255);
   font-size: 14px;
   font-family: var(--font-family-noita-default);
   font-weight: normal;
-  --shadow-bg: rgb(0, 0, 0);
-  --shadow-w: 0px;
-  text-shadow:
-    var(--shadow-bg) 1px 1px var(--shadow-w),
-    var(--shadow-bg) 1px -1px var(--shadow-w),
-    var(--shadow-bg) -1px 1px var(--shadow-w),
-    var(--shadow-bg) -1px -1px var(--shadow-w),
-    var(--shadow-bg) 1px 1px 1px,
-    var(--shadow-bg) 1px -1px 1px,
-    var(--shadow-bg) -1px 1px 1px,
-    var(--shadow-bg) -1px -1px 1px;
-  bottom: -6px;
-  right: -6px;
+  text-shadow: var(--ts-outline-1px-black);
+  letter-spacing: 0;
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background-image: radial-gradient(#000d 20%, #0000 60%);
+  background-color: #0000;
 `;
 
 const SpecialIndexDiv = styled(IndexDiv)`
-  display: flex;
   font-size: 0.5em;
   line-height: 2;
   align-content: end;
 `;
-const AlwaysIndexDiv = styled(IndexDiv)`
-  display: flex;
-
+const AlwaysCastIndexDiv = styled(IndexDiv)`
   & > span {
     font-size: 0.5em;
     line-height: 2;
@@ -75,11 +73,11 @@ export const DeckIndexAnnotation = ({
     }
     if (isAlwaysCastIndex(wandIndex)) {
       return (
-        <AlwaysIndexDiv data-name="AlwaysCast">
+        <AlwaysCastIndexDiv data-name="AlwaysCastIndex">
           <span>{a}</span>
           <span>{c}</span>
           <span>{n}</span>
-        </AlwaysIndexDiv>
+        </AlwaysCastIndexDiv>
       );
     }
     if (isNotNullOrUndefined(deckIndex)) {
