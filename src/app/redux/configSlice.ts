@@ -1,6 +1,5 @@
-import type { PayloadAction } from '@reduxjs/toolkit';
+import type { PayloadAction, WritableDraft } from '@reduxjs/toolkit';
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
-import type { WritableDraft } from 'immer/dist/internal';
 import type { UnlockCondition } from '../calc/unlocks';
 import { unlockConditions } from '../calc/unlocks';
 import { loadState, saveState } from '../localStorage';

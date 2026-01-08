@@ -1,11 +1,10 @@
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { TouchBackend } from 'react-dnd-touch-backend';
-
 import {
-  TouchTransition,
   PointerTransition,
-  MultiBackendOptions,
-} from 'dnd-multi-backend';
+  TouchTransition,
+  type MultiBackendOptions,
+} from 'react-dnd-multi-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
 
 export const HTML5toTouchPreview: MultiBackendOptions = {
   backends: [

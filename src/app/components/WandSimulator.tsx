@@ -6,7 +6,7 @@ import { toggleConfigSetting } from '../redux/configSlice';
 import { MainHeader } from './MainHeader';
 import { DebugHints } from './Debug';
 import { DndProvider } from 'react-dnd-multi-backend';
-import { HTML5toTouch } from 'rdndmb-html5-to-touch';
+// import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 // import { forceDisableCanvasSmoothing } from '../util/util';
 import { CastConfigEditor } from './config/CastConfigEditor';
 import { ReleaseInfo } from './ReleaseInfo';
@@ -15,7 +15,6 @@ import { Tooltips } from './Tooltips';
 import { Modals } from './Modals/Modals';
 import { DragPreview } from './DragPreview';
 import { HTML5toTouchPreview } from './DragPipeline';
-import { WandBuilderToolbar } from './WandEditor/WandBuilderToolbar';
 
 const StickyGroup = styled.div`
   display: flex;

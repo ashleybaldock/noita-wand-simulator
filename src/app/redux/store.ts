@@ -1,5 +1,4 @@
-import type { ThunkAction } from '@reduxjs/toolkit';
-import type { AnyAction } from 'redux';
+import type { Action, ThunkAction } from '@reduxjs/toolkit';
 import { configureStore } from '@reduxjs/toolkit';
 import undoable from 'redux-undo';
 import { wandReducer } from './wandSlice';
@@ -14,7 +13,7 @@ import { startUpdateListener } from './updateResultListener';
 
 export const store = configureStore({
   reducer: {
-    wand: undoable<WandState, AnyAction>(wandReducer, { limit: 200 }),
+    wand: undoable<WandState, Action>(wandReducer, { limit: 200 }),
     presets: presetsReducer,
     config: configReducer,
     editor: editorReducer,
@@ -42,5 +41,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
-  AnyAction
+  Action
 >;
