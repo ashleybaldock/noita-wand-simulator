@@ -273,3 +273,82 @@ button[data-tooltip-content='clear'] {
     padding: 0;
   }
 }
+
+:is([data-name='Tab'], [data-name='Tab:Selected'])
+  > [data-name='WandAction']
+  ~ [data-name='WandAction'] {
+  margin: 0 0 0 calc(var(--ou) * -6);
+}
+:is([data-name='Tab'], [data-name='Tab:Selected']) > [data-name='WandAction'] {
+  border: 0;
+  background-size: 50%, 200%;
+  background-origin: content-box, border-box;
+  width: calc(100vw / 8);
+  height: auto;
+  aspect-ratio: 1;
+  background-position:
+    50% 20%,
+    105% 100%;
+  margin: 0;
+  background-clip: border-box;
+  background-repeat: no-repeat;
+  --v: 0.3em;
+  padding: 0 var(--v) var(--v) 0;
+  min-width: calc(var(--v) * 0.25);
+  min-height: calc(var(--v) * 0.25);
+}
+
+:not(#u#n#i) div[data-name='Tab'],
+:not(#u#n#i) div[data-name='Tab:Selected'] {
+  max-width: calc(100% / 8 * 3);
+  width: auto;
+  box-sizing: content-box;
+  padding: calc(var(--ou) * 0.5) calc(var(--ou) * 0) calc(var(--ou) * 0.5)
+    calc(var(--ou) * 0);
+  overflow: clip;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: end;
+  align-items: stretch;
+  z-index: -1;
+  position: relative;
+  min-width: unset;
+  flex: 1;
+  box-shadow:
+    calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
+      var(--color-tab-border-active),
+    calc(var(--ou) * 0.5) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
+  border-bottom-color: var(--color-tab-border-inactive);
+  border-bottom-style: solid;
+  margin: 0;
+  border-width: 0 0 var(--ou) 0;
+  border-top: var(--ou) solid var(--color-tab-border-inactive);
+}
+
+:not(#u#n#i) div[data-name='Tab:Selected'] {
+  padding: calc(var(--ou) * 1) calc(var(--ou) * 0) calc(var(--ou) * 1)
+    calc(var(--ou) * 0);
+  margin-top: calc(var(--ou) * -1);
+  z-index: 0;
+  position: relative;
+  border-top: var(--ou) solid var(--color-tab-border-inactive);
+  border-bottom-color: var(--color-tab-border-inactive);
+  border-bottom-style: solid;
+  cursor: default;
+  box-shadow:
+    calc(var(--ou) * -1.5) 0 0 calc(var(--ou) * 0)
+      var(--color-tab-border-active),
+    calc(var(--ou) * 1.5) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
+  border-width: 0 0 var(--ou) 0;
+  margin: calc(var(--ou) * -1) 0 0 0;
+  max-width: calc(100% / 8 * 3);
+  width: auto;
+  box-sizing: content-box;
+  overflow: clip;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: end;
+  align-items: stretch;
+  min-width: unset;
+  flex: 1;
+}
