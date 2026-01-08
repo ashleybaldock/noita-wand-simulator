@@ -229,3 +229,47 @@ button[data-tooltip-content='clear'] {
       #0000 calc(100% + 0.2px)
     );
 }
+
+[data-name='WandBuilderTopButtons'] {
+  grid-column: -2;
+  grid-row-end: span 2;
+  justify-self: end;
+  margin: 0 0 0.4em 0;
+}
+[data-name='WandBorder'] > .saveImageRoot {
+  padding: 0;
+}
+
+[data-name='WandBorder'] > .saveImageRoot > div:first-child {
+  padding: 0 clamp(0.1ch, 1vw, 2ch);
+  grid-auto-flow: row;
+  grid-template-columns: repeat(auto-fit, minmax(min(22ch, 100%), 1fr));
+  row-gap: 0.2em;
+  font-size: clamp(1em, calc(1.6em - 2vw), 1.2em);
+}
+@media screen and (max-width: 500px) {
+  [data-name='WandBorder'] > .saveImageRoot > div:first-child > * {
+    font-size: 1em;
+  }
+}
+[data-name='WandBorder']
+  > .saveImageRoot
+  > div:first-child
+  > [data-name='EditableWithLabel']
+  > :first-child {
+  flex: 10 1 auto;
+  width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+@media screen and (max-width: 800px) {
+  [data-name='WandActionEditor'] {
+    margin: 0;
+  }
+}
+@media screen and (max-width: 500px) {
+  [data-name='WandActionEditor'] {
+    padding: 0;
+  }
+}
