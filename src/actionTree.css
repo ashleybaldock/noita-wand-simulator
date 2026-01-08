@@ -329,7 +329,7 @@
 [data-arrow='⤷ ']
 [data-arrow='⭢ ']*/
 
-.debug :is([data-name='Arrows'], ::after, ::before) /* → */ {
+.debug :is([data-name='Arrows'], ::after, ::before) /* ⭢  */ {
   outline: 1px dotted green;
   white-space: pre;
   font-size: 1em;

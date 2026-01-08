@@ -16,7 +16,6 @@ const StyledEditableWithLabel = styled.label<{
     background-position: 0.25ch 50%;
     border-bottom: var(--ou) dotted #222;
     padding: var(--ou) 0.2ch var(--ou) 2.5ch;
-    margin-left: auto;
     align-content: center;
     align-items: center;
   }
@@ -36,7 +35,6 @@ const StyledEditableWithLabel = styled.label<{
     position: relative;
     flex: 1 1 40%;
     min-width: unset;
-    width: 0;
     max-width: unset;
     align-items: center;
     justify-content: end;

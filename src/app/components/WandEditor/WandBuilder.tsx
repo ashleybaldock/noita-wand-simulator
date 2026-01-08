@@ -7,7 +7,6 @@ import { WandAlwaysCastEditor } from './WandAlwaysCastEditor';
 import { ZetaEditor } from './ZetaEditor';
 import { ExportOptions } from '../Export';
 import { RedoButton, ResetButton, UndoButton } from '../buttons';
-import { GridSectionHeader } from '../SectionToolbar';
 
 const MainDiv = styled.div`
   display: flex;
@@ -80,22 +79,22 @@ const ColumnsContainer = styled.div`
 const StyledWandStatsEditor = styled(WandStatsEditor)`
   ${ColumnsContainer} > & {
     grid-row-end: span 1;
-    break-inside: avoid;
-    box-sizing: border-box;
   }
 `;
 const StyledAlwaysCastEditor = styled(WandAlwaysCastEditor)`
   ${ColumnsContainer} > & {
     grid-row-end: span 3;
-    break-inside: avoid;
-    box-sizing: border-box;
+    @media screen and (max-width: 500px) {
+      grid-row-end: span 2;
+    }
   }
 `;
 const StyledZetaEditor = styled(ZetaEditor)`
   ${ColumnsContainer} > & {
     grid-row-end: span 3;
-    break-inside: avoid;
-    box-sizing: border-box;
+    @media screen and (max-width: 500px) {
+      grid-row-end: span 1;
+    }
   }
 `;
 

@@ -57,7 +57,9 @@ const StyledListItem = styled(EditableWithLabel)<{
   flex: 1 1 auto;
   flex-direction: row;
 
-  height: calc(var(--child-unit-height) * 1);
+  align-content: center;
+  align-items: center;
+  height: auto;
 
   background-image: ${({ $backgroundImage }) => $backgroundImage};
   background-position: 0.6em 50%;
@@ -65,9 +67,13 @@ const StyledListItem = styled(EditableWithLabel)<{
   background-repeat: no-repeat;
   image-rendering: pixelated;
   font-family: var(--font-family-noita-default);
-  font-size: 16px;
+  font-size: 1em;
   color: var(--color-button);
-  padding: 0.3em 0.6em 0.2em 2.2em;
+  padding: 0 0.6em 0 2.2em;
+
+  @media screen and (max-width: 500px) {
+    font-size: 1.2em;
+  }
 `;
 const StyledName = styled.div`
   text-align: left;
@@ -92,8 +98,6 @@ const StyledValue = styled.span`
   display: flex;
   flex: 1 1 auto;
   white-space: nowrap;
-  min-width: 5em;
-  width: 10em;
 `;
 
 export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
