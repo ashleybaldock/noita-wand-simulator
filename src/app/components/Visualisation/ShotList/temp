@@ -183,7 +183,7 @@ const ReadableNumber = ({
   ifZero = <Unchanged />,
 }: {
   number: number;
-  ifZero?: JSX.Element;
+  ifZero?: React.JSX.Element;
 }) => {
   if (n === 0) {
     return ifZero;
@@ -276,7 +276,7 @@ type FieldDescription = {
   render: (
     actionState: ExtendedActionState,
     config: Config,
-  ) => JSX.Element | string;
+  ) => React.JSX.Element | string;
 };
 
 type FieldSection = {

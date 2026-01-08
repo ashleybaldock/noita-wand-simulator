@@ -34,8 +34,8 @@ export const _RequirementToggle = ({
   className?: string;
   checked: boolean;
   onChange: () => void;
-  customYes?: JSX.Element;
-  customNo?: JSX.Element;
+  customYes?: React.JSX.Element;
+  customNo?: React.JSX.Element;
   size?: number;
   icon?: SpriteName;
 }) => {

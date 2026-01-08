@@ -34,7 +34,7 @@ const SignZero = ({
   ifZero = <Unchanged />,
 }: {
   n: number;
-  ifZero?: JSX.Element;
+  ifZero?: React.JSX.Element;
 }) => (n === 0 ? ifZero : <Sign n={n} />);
 
 const RadiusThresholdBonus = ({
@@ -43,9 +43,9 @@ const RadiusThresholdBonus = ({
   ifNaN = <NotApplicable />,
 }: {
   radius: number;
-  ifZero?: JSX.Element;
-  ifNaN?: JSX.Element;
-}): JSX.Element => {
+  ifZero?: React.JSX.Element;
+  ifNaN?: React.JSX.Element;
+}): React.JSX.Element => {
   if (isNaN(radius)) return ifNaN;
   if (radius < 32) return <SignZero n={0} ifZero={ifZero} />;
   if (radius < 64) return <Sign n={325} />;
@@ -125,9 +125,15 @@ const Underflow = styled(_Underflow)`
   width: 1.4em;
   --a: -1px;
   --b: 1px;
-  text-shadow: var(--a) var(--a) 0 black, var(--b) var(--b) 0 black,
-    var(--a) var(--b) 0 black, var(--b) var(--a) 0 black, 0 var(--a) 0 black,
-    0 var(--b) 0 black, var(--a) 0 0 black, var(--b) 0 0 black;
+  text-shadow:
+    var(--a) var(--a) 0 black,
+    var(--b) var(--b) 0 black,
+    var(--a) var(--b) 0 black,
+    var(--b) var(--a) 0 black,
+    0 var(--a) 0 black,
+    0 var(--b) 0 black,
+    var(--a) 0 0 black,
+    var(--b) 0 0 black;
   filter: drop-shadow(0 0 1px #ff2c2c);
   border: 0.16em dashed #811e1e;
   box-sizing: border-box;
@@ -182,7 +188,7 @@ const ReadableNumber = ({
   ifZero = <Unchanged />,
 }: {
   number: number;
-  ifZero?: JSX.Element;
+  ifZero?: React.JSX.Element;
 }) => {
   if (n === 0) {
     return ifZero;
@@ -249,7 +255,7 @@ type FieldDescription = {
   render: (
     actionState: Partial<ExtendedActionState>,
     config: Config,
-  ) => JSX.Element | string;
+  ) => React.JSX.Element | string;
 };
 
 type FieldSection = {

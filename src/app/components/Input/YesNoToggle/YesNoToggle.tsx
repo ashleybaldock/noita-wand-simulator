@@ -6,6 +6,7 @@ import { EditableWithLabel } from '../../Presentation/EditableWithLabel';
 import type { ConfigToggleField } from '../../../redux';
 import { useConfigToggle } from '../../../redux';
 import { tipToAttributes, type Tip } from '../../Tooltips/tooltipId';
+import React from 'react';
 
 const InteractiveYesNo = styled(YesNo)``;
 
@@ -68,8 +69,8 @@ export const YesNoToggle = ({
   $disabled?: boolean;
   onChange: ChangeEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
-  customYes?: JSX.Element;
-  customNo?: JSX.Element;
+  customYes?: React.JSX.Element;
+  customNo?: React.JSX.Element;
   className?: string;
   tip?: Tip;
 }>) => {
@@ -108,8 +109,8 @@ export const YesNoConfigToggle = ({
 }: React.PropsWithChildren<{
   configToggle: ConfigToggleField;
   onClick?: MouseEventHandler<HTMLInputElement>;
-  customYes?: JSX.Element;
-  customNo?: JSX.Element;
+  customYes?: React.JSX.Element;
+  customNo?: React.JSX.Element;
   className?: string;
 }>) => {
   const [toggleState, , , handleToggle] = useConfigToggle(configToggle);

@@ -64,9 +64,9 @@ export const YesNo = styled(
     $disabled?: boolean;
     className?: string;
     warnIf?: 'yes' | 'no';
-    customYes?: JSX.Element;
-    customNo?: JSX.Element;
-    customMaybe?: JSX.Element;
+    customYes?: React.JSX.Element;
+    customNo?: React.JSX.Element;
+    customMaybe?: React.JSX.Element;
   }) => {
     return (
       <Combiner data-name="YesNo" className={className}>
