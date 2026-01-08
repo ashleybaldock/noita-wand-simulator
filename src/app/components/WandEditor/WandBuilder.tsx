@@ -65,35 +65,35 @@ const WandBuilderTopButtons = styled.div`
 `;
 const ColumnsContainer = styled.div`
   --child-unit-height: 1.44em;
-  padding: 0.8em 1em 0.6em 1em;
-  columns: 4 17em;
-  column-fill: balance;
+  padding: 0;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 1fr;
 
   @media screen and (max-width: 500px) {
+    grid-template-columns: 1fr;
     padding: 0;
-    columns: 2 50vw;
-    column-gap: 2ch;
-    column-fill: auto;
   }
 `;
 
 const StyledWandStatsEditor = styled(WandStatsEditor)`
   ${ColumnsContainer} > & {
-    height: calc(var(--child-unit-height) * 1);
+    grid-row-end: span 1;
     break-inside: avoid;
     box-sizing: border-box;
   }
 `;
 const StyledAlwaysCastEditor = styled(WandAlwaysCastEditor)`
   ${ColumnsContainer} > & {
-    height: calc(var(--child-unit-height) * 3);
+    grid-row-end: span 3;
     break-inside: avoid;
     box-sizing: border-box;
   }
 `;
 const StyledZetaEditor = styled(ZetaEditor)`
   ${ColumnsContainer} > & {
-    height: calc(var(--child-unit-height) * 3);
+    grid-row-end: span 3;
     break-inside: avoid;
     box-sizing: border-box;
   }

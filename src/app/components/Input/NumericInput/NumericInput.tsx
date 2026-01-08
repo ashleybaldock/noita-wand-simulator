@@ -10,142 +10,124 @@ import { useValidity } from '../../../hooks/useValidity';
 import { useInputValue } from '../../../hooks/useInputValue';
 import { noop } from '../../../util';
 
-const Wrapper = styled.fieldset<{ $valid: boolean }>`
-  --bdr: 6px;
+const Buttons = styled.div<{ $vertical: boolean }>`
+  display: flex;
+  flex-direction: ${({ $vertical = false }) => ($vertical ? 'column' : 'row')};
+  position: absolute;
+
+  border: 1px solid var(--color-bdshade-light);
+  border-radius: var(--outer-radius);
+  padding: var(--padding);
+  background-color: #000;
+  --bdr: calc(var(--outer-radius) - var(--padding));
+  --outer-radius: 0.5ch;
+  --padding: 0.2ch;
+  margin: 0 0.5ch;
+  box-shadow: 0 0 0 0.2ch #000;
+  z-index: 10;
+`;
+
+const ButtonsBefore = styled(Buttons)`
+  inset: auto 100% auto auto;
+`;
+const ButtonsAfter = styled(Buttons)`
+  inset: auto auto auto 100%;
+`;
+
+const NumericInputWrapper = styled.fieldset<{ $valid: boolean }>`
+  --bdr: 0px;
   --chint: var(--hint-color, #fff);
 
+  position: relative;
   display: flex;
   flex: 1 1 auto;
 
   border-radius: var(--bdr);
   padding: 0;
   margin: 0.1em 0.2em;
+  margin: 0;
   cursor: pointer;
   user-select: none;
   border: 0 solid transparent;
   line-height: normal;
   font-size: 1em;
-  align-content: baseline;
+  text-align: end;
+  align-content: center;
   align-items: center;
+  background-color: #0000;
+
+  box-sizing: unset;
+  width: auto;
+  justify-content: center;
+  margin-left: 0;
+  flex: 0 1 min-content;
 
   &:hover {
-    box-shadow: 0 0 4px 2px var(--color-numeric-hover);
   }
 
   &:focus-within,
   &:focus-within:hover {
-    box-shadow: 0 0 1px 0.4px var(--color-numeric-focus);
   }
 
-  & > button {
-    height: 2em;
-    background-size: 48%;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    align-self: center;
-    display: flex;
-    background-position: center;
-    aspect-ratio: calc(var(--𝚽) * 2 / 3);
-    text-align: center;
-    padding: 0;
-    width: auto;
-    font-size: 1em;
-    line-height: 1;
-    border-radius: 0;
-    border-left-width: 1px;
-    border-right-width: 1px;
-
-    transition-property: box-shadow, border-radius;
-    transition-duration: 60ms;
-    transition-timing-function: ease;
-  }
-
-  & > button:first-of-type {
-    border-radius: var(--bdr) 0 0 var(--bdr);
-    border-left-width: 2px;
-  }
-
-  & > button:last-of-type {
-    border-radius: 0 var(--bdr) var(--bdr) 0;
-    border-right-width: 2px;
-  }
-
-  & > button:hover {
-    transition-property: box-shadow, border-radius, scale;
-    transition-duration: 60ms;
-    transition-timing-function: ease;
-  }
-
-  & > button:active {
-    transition-property: box-shadow, border-radius, scale;
-    transition-duration: 20ms;
-    transition-timing-function: ease;
-  }
-
-  & input:focus-visible {
-    z-index: 100;
-
-    ${($valid) => ($valid ? '' : 'background-color: red;')}
+  &:invalid {
+    box-shadow:
+      0.2ch 0ch 0 0ch var(--color-invalid),
+      inset -0.4ch 0 0 -0.2ch var(--color-invalid);
   }
 `;
 
 const NumberInput = styled.input`
-  width: 5em;
-  flex: 1 1 fit-content;
+  background: none;
   background-color: #000;
-
-  caret-color: white;
+  caret-color: var(--color-emphasis);
   color: var(--chint);
-  border: 1px solid #222;
   font: inherit;
   font-size: 1em;
+  line-height: normal;
   text-align: end;
-  padding: 0.5ch 0.5ch 0.3ch 0.5ch;
-  line-height: 1;
-  margin: 0 0.1ch;
-  display: flex;
   align-self: center;
-  box-sizing: border-box;
-  border-radius: 0.3em;
-  box-shadow: inset 0 0px 2px 2px #595959;
-  &:valid {
-    box-shadow: inset 0 0px 1px 1px green;
-  }
-  &:invalid {
-    box-shadow: inset 0 0px 2px 2px red;
-  }
+  flex: 0 1 auto;
+  display: flex;
+  align-content: baseline;
+  align-items: center;
+  justify-content: stretch;
+  box-shadow: none;
+  border-radius: 0.5ch;
+  border: none;
+  box-sizing: content-box;
+  min-width: 5ch;
+  width: 100%;
+  max-width: unset;
+  margin: 0;
+  padding: 0 1ch 0 0.5ch;
 
   &:focus-visible {
-    outline: 1.6px inset #d18811;
-    border-radius: 7px;
-    outline-offset: -1px;
-    box-shadow:
-      0 1px 0 1px #704d14,
-      1px 0 0 1px #7c4f05,
-      -1px 0 0 1px #a7782c,
-      0 -1px 0 1px #ffb53e;
+    outline: max(0.2ch, 2px) inset var(--color-bdshade-light);
+    outline-offset: max(0.2ch, 2px);
+  }
+  &:focus-visible:valid {
+    box-shadow: inset -0.5ch 0 0 -0.1ch var(--color-valid);
+  }
+  &:focus-visible:invalid {
+    box-shadow: inset -0.5ch 0 0 -0.1ch var(--color-invalid);
   }
 
   @media screen and (max-width: 500px) {
-    text-align: end;
     justify-content: end;
     padding: 0;
   }
 `;
 
-const NumericInputButton = styled(Button)`
+const NumericInputButton = styled(Button)<{ $vertical: boolean }>`
   --padding-sides: 1em;
   --hover-radius: 4px;
   aspect-ratio: 1;
-  height: 2em;
   color: white;
   font: inherit;
   font-size: 1em;
   line-height: 1;
   background-color: black;
   background-position: center center;
-  background-size: 44%;
   border: 1px solid #444;
   border-radius: 0;
   box-sizing: border-box;
@@ -157,29 +139,91 @@ const NumericInputButton = styled(Button)`
   margin: 0;
   z-index: 8;
 
-  ${(props) =>
-    props.disabled
-      ? ''
-      : `
+  height: 2em;
+  background-size: 48%;
+  align-self: center;
+  display: flex;
+  background-position: center;
+  aspect-ratio: calc(var(--𝚽) * 2 / 3);
+  text-align: center;
+  padding: 0;
+  width: auto;
+  font-size: 0.8em;
+  line-height: normal;
+  border-radius: 0;
+  border-left-width: 1px;
+  border-right-width: 1px;
+
+  transition-property: box-shadow, border-radius;
+  transition-duration: 60ms;
+  transition-timing-function: ease;
+
+  opacity: 1;
+  --padding-sides: 0;
+  justify-content: center;
+  text-align: center;
+  align-content: center;
+  align-items: center;
+
+  ${({ disabled }) => (disabled ? 'pointer-events: none;' : ``)}
+
   &:hover {
     border-color: #444;
-    box-shadow: 0 0 1px 1px var(--color-numeric-hover);
+    box-shadow: 0 0 0 1px var(--color-numeric-border-hover);
+    border-radius: var(--bdr);
     z-index: 10;
-    border-radius: var(--hover-radius);
-    scale: 1.08;
+    transform: scale(1.08);
+
+    transition-property: box-shadow, border-radius, transform;
+    transition-duration: 60ms;
+    transition-timing-function: ease;
+  }
+
+  &:first-of-type {
+    ${({ $vertical }) =>
+      $vertical
+        ? `
+      border-top-left-radius: var(--bdr);
+      border-top-right-radius: var(--bdr);
+      border-top-width: 2px;
+    `
+        : `
+      border-top-left-radius: var(--bdr);
+      border-bottom-left-radius: var(--bdr);
+      border-left-width: 2px;
+    `}
   }
   &:first-of-type:hover {
-    border-radius: var(--bdr) var(--hover-radius) var(--hover-radius) var(--bdr);
+    border-radius: var(--bdr);
+  }
+  &:last-of-type {
+    ${({ $vertical }) =>
+      $vertical
+        ? `
+      border-bottom-left-radius: var(--bdr);
+      border-bottom-right-radius: var(--bdr);
+      border-bottom-width: 2px;
+    `
+        : `
+      border-top-right-radius: var(--bdr);
+      border-bottom-right-radius: var(--bdr);
+      border-right-width: 2px;
+    `}
   }
   &:last-of-type:hover {
-    border-radius: var(--hover-radius) var(--bdr) var(--bdr) var(--hover-radius);
+    border-radius: var(--bdr);
+  }
   &:active {
-    border-color: #666;
-    box-shadow: 0 0 1px 2px var(--color-numeric-hover);
+    border-color: var(--color-numeric-border-active);
+    box-shadow: 0 0 1px 1px var(--color-numeric-border-active);
     z-index: 10;
-    border-radius: var(--hover-radius);
-    scale: 1.04;
-  `}
+    border-radius: var(--bdr);
+    transform: scale(1.04);
+
+    transition-property: box-shadow, border-radius, transform;
+    transition-duration: 20ms;
+    transition-timing-function: ease;
+  }
 `;
 const ButtonSmallest = styled(NumericInputButton)``;
 const ButtonSmall = styled(NumericInputButton)``;
@@ -197,19 +241,6 @@ const ButtonStepUp = styled(NumericInputButton)`
 `;
 const ButtonLarge = styled(NumericInputButton)``;
 const ButtonLargest = styled(NumericInputButton)``;
-
-const ButtonsBefore = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  left: 100%;
-`;
-const ButtonsAfter = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  right: 100%;
-`;
 
 const default_precision = 5;
 
@@ -385,19 +416,22 @@ export const NumericInput = ({
   useHotkeys('enter', saveChanges, { preventDefault: true });
   useHotkeys('esc', abortChanges, { preventDefault: true });
 
+  const vertical = true;
+
   return (
-    <Wrapper
+    <NumericInputWrapper
       data-name={$dataName}
       $valid={valid}
       className={className}
       {...($tip ? tipToAttributes($tip) : {})}
     >
       {editing && (
-        <ButtonsBefore data-name="ButtonsBefore">
+        <ButtonsBefore $vertical={vertical} data-name="ButtonsBefore">
           {setSmallestButton && (
             <ButtonSmallest
+              $vertical={vertical}
               $dataName="SetMinimum"
-              onClick={(e) => {
+              onClick={() => {
                 changeBy(Number.NEGATIVE_INFINITY);
                 refocus();
               }}
@@ -410,6 +444,7 @@ export const NumericInput = ({
           )}
           {setSmallButton && (
             <ButtonSmall
+              $vertical={vertical}
               $dataName="SetSmall"
               onClick={() => {
                 changeTo(small);
@@ -424,6 +459,7 @@ export const NumericInput = ({
           )}
           {bigStepButtons && (
             <ButtonBigStepDown
+              $vertical={vertical}
               $dataName="BigStepDown"
               minimal={true}
               icon={'icon.chevron.d2x'}
@@ -437,6 +473,7 @@ export const NumericInput = ({
           )}
           {stepButtons && (
             <ButtonStepDown
+              $vertical={vertical}
               $dataName="StepDown"
               minimal={true}
               icon={'icon.chevron.d'}
@@ -461,7 +498,7 @@ export const NumericInput = ({
         hidden={true}
         onFocus={() => onFocus()}
         onBlur={() => onBlur()}
-        onInput={(e) => onInput()}
+        onInput={() => onInput()}
         onChange={(e) => onInputChange(e)}
         enterKeyHint="done"
       />
@@ -470,9 +507,10 @@ export const NumericInput = ({
       {/*   (e.key === 'Esc' && abortChanges()) */}
       {/* } */}
       {editing && (
-        <ButtonsAfter data-name="ButtonsAfter">
+        <ButtonsAfter $vertical={vertical} data-name="ButtonsAfter">
           {stepButtons && (
             <ButtonStepUp
+              $vertical={vertical}
               $dataName="StepUp"
               minimal={true}
               disabled={atMaximum}
@@ -486,6 +524,7 @@ export const NumericInput = ({
           )}
           {bigStepButtons && (
             <ButtonBigStepUp
+              $vertical={vertical}
               $dataName="BigStepUp"
               minimal={true}
               disabled={atMaximum}
@@ -499,6 +538,7 @@ export const NumericInput = ({
           )}
           {setLargeButton && (
             <ButtonLarge
+              $vertical={vertical}
               $dataName="SetLarge"
               onClick={() => {
                 changeTo(large);
@@ -513,6 +553,7 @@ export const NumericInput = ({
           )}
           {setLargestButton && (
             <ButtonLargest
+              $vertical={vertical}
               $dataName="SetMaximum"
               onClick={(e) => {
                 e.stopPropagation();
@@ -529,6 +570,6 @@ export const NumericInput = ({
           )}
         </ButtonsAfter>
       )}
-    </Wrapper>
+    </NumericInputWrapper>
   );
 };

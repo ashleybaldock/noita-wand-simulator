@@ -1,9 +1,6 @@
 import { useAppDispatch, useWand } from '../../redux/hooks';
 import { setWand } from '../../redux/wandSlice';
 import styled from 'styled-components';
-import type { AppDispatch } from '../../redux/store';
-import { EditableInteger } from '../generic';
-import type { TypedProperties } from '../../util/util';
 import { round, toSeconds } from '../../util/util';
 import { useConfig } from '../../redux';
 import { YesNoToggle } from '../Input';
@@ -14,11 +11,9 @@ import {
   SUFFIX_FRAME,
   SUFFIX_SECOND,
 } from '../../util';
-import type { Wand } from '../../redux/Wand/wand';
-import { useId } from 'react';
 import { NumericInput } from '../Input/NumericInput/NumericInput';
 import { EditableWithLabel } from '../Presentation/EditableWithLabel';
-import { useIcon, type SpriteName } from '../../calc/sprite';
+import { useIcon } from '../../calc/sprite';
 
 const EditableInterval = ({
   field,

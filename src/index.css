@@ -56,8 +56,11 @@
   --color-toggle-alternatives: var(--color-base);
   --color-toggle-hover: #ffe4a4;
 
-  --color-numeric-hover: rgb(200 200 178 / 0.3);
-  --color-numeric-focus: rgb(200 200 178 / 0.8);
+  --color-numeric-border: var(--color-button-border);
+  --color-numeric-border-hover: var(--color-button-border-hover);
+  --color-numeric-border-active: var(--color-button-border-hover);
+  --color-numeric-hover: rgba(200 200 178 / 0.3);
+  --color-numeric-focus: rgba(200 200 178 / 0.8);
 
   --color-vis-cs-inborder: #3a3a3a;
   --color-vis-cs-inborder-dark: #222222;
@@ -67,6 +70,14 @@
   --color-note-recursion-bg: #33bbbb;
 
   --color-scrollbar: #3b362d #bada55;
+
+  --color-valid: #0f0;
+  --color-invalid: #f00;
+  --color-bdshade-darker: #633d00;
+  --color-bdshade-dark: #7c4f05;
+  --color-bdshade-medium: #a7782c;
+  --color-bdshade-light: #d18811;
+  --color-bdshade-lighter: #ffb53e;
 
   --size-arrow-w: 3px;
   --radius-arrow: 0 0 0 20px/0 0 0 23px;

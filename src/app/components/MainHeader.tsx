@@ -77,7 +77,7 @@ const HeaderLink = styled.a<{
   }
 `;
 
-export const MainHeader  = () => {
+export const MainHeader = () => {
   const [logoVariant, setLogoVariant] = useState(
     logoVariants[getRandomInteger(logoVariants.length)],
   );
@@ -89,4 +89,4 @@ export const MainHeader  = () => {
       <ConfigButton />
     </HeaderDiv>
   );
-}
+};

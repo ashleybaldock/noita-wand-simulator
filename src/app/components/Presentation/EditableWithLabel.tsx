@@ -34,11 +34,11 @@ const StyledEditableWithLabel = styled.label<{
         ? `text-decoration: underline dotted var(--color-toggle-hover) 1.4px;`
         : ''}
     position: relative;
-    min-width: unset;
     flex: 1 1 40%;
+    min-width: unset;
+    width: 0;
     max-width: unset;
     align-items: center;
-    width: 0;
     justify-content: end;
   }
   &:hover {
@@ -48,7 +48,6 @@ const StyledEditableWithLabel = styled.label<{
   & > :last-child::before {
     content: '>';
     padding-left: 0px;
-    scale: 0;
     color: yellow;
     position: static;
     width: var(--w);
@@ -59,19 +58,25 @@ const StyledEditableWithLabel = styled.label<{
     align-content: center;
     align-items: center;
 
-    transition-property: transform;
-    transition-duration: 200ms;
-    transition-timing-function: ease-in-out;
     transform: translateX(calc(var(--w) * -1)) scaleY(0);
-  }
-  &&:hover > :last-child::before {
-    transition-property: transform;
-    transition-duration: 200ms;
+    opacity: 0;
+
+    transition-property: transform, opacity;
+    transition-duration: 10ms, 100ms;
     transition-timing-function: ease-in-out;
+    transition-delay: 100ms, 100ms;
+  }
+  &:hover > :last-child::before {
     transform: translateX(0) scaleY(1);
+    opacity: 1;
+
+    transition-property: transform, opacity;
+    transition-duration: 200ms, 120ms;
+    transition-timing-function: ease;
+    transition-delay: 0ms, 30ms;
   }
 
-  {StyledEditableWithLabel} > & {
+  & & {
     display: contents;
   }
 `;
