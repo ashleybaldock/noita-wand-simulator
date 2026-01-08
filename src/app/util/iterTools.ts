@@ -698,7 +698,7 @@ export function* rangeIter({
 }: RangeGeneratorConfig): IterableIterator<number> {
   for (
     let next = start, i = 0;
-    i < count && step > 0 ? next < end : step < 0 ? next > end : true;
+    (i < count && step > 0 && next < end) || (step < 0 && next > end);
     i++, next += step
   ) {
     yield next;
