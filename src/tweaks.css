@@ -273,18 +273,39 @@ button[data-tooltip-content='clear'] {
     padding: 0;
   }
 }
-
-:is([data-name='Tab'], [data-name='Tab:Selected'])
-  > [data-name='WandAction']
-  ~ [data-name='WandAction'] {
-  margin: 0 0 0 calc(var(--ou) * -6);
+:not(#u#n#i) div[data-name='Tab'],
+:not(#u#n#i) div[data-name='Tab:Selected'] {
+  max-width: calc(100% / 8 * 3);
+  width: 0;
+  box-sizing: content-box;
+  padding: calc(var(--ou) * 0.5) calc(var(--ou) * 0) calc(var(--ou) * 0.5)
+    calc(var(--ou) * 0);
+  overflow: clip;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: end;
+  align-items: stretch;
+  z-index: -1;
+  position: relative;
+  min-width: unset;
+  flex: 1 1 fit-content;
+  box-shadow:
+    calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
+      var(--color-tab-border-active),
+    calc(var(--ou) * 0.5) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
+  border-bottom-color: var(--color-tab-border-inactive);
+  border-bottom-style: solid;
+  margin: 0;
+  border-width: 0 0 var(--ou) 0;
+  border-top: var(--ou) solid var(--color-tab-border-inactive);
 }
 :is([data-name='Tab'], [data-name='Tab:Selected']) > [data-name='WandAction'] {
   border: 0;
   background-size: 50%, 200%;
   background-origin: content-box, border-box;
-  width: calc(100vw / 8);
+  /*   width: calc(100vw/8); */
   height: auto;
+  width: auto;
   aspect-ratio: 1;
   background-position:
     50% 20%,
@@ -297,34 +318,17 @@ button[data-tooltip-content='clear'] {
   min-width: calc(var(--v) * 0.25);
   min-height: calc(var(--v) * 0.25);
 }
-
-:not(#u#n#i) div[data-name='Tab'],
-:not(#u#n#i) div[data-name='Tab:Selected'] {
-  max-width: calc(100% / 8 * 3);
-  width: auto;
-  box-sizing: content-box;
-  padding: calc(var(--ou) * 0.5) calc(var(--ou) * 0) calc(var(--ou) * 0.5)
-    calc(var(--ou) * 0);
-  overflow: clip;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  justify-content: end;
-  align-items: stretch;
-  z-index: -1;
-  position: relative;
-  min-width: unset;
-  flex: 1;
-  box-shadow:
-    calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
-      var(--color-tab-border-active),
-    calc(var(--ou) * 0.5) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
-  border-bottom-color: var(--color-tab-border-inactive);
-  border-bottom-style: solid;
+:not(#u#n#i) div[data-name='TabTitles'] {
   margin: 0;
-  border-width: 0 0 var(--ou) 0;
-  border-top: var(--ou) solid var(--color-tab-border-inactive);
+  padding: 0 1ch 0 1ch;
+  justify-content: stretch;
 }
-
+:not(#u#n#i) div[data-name='ActiveTabContent'] {
+  box-shadow:
+    inset 0 3px 3px 3px #000,
+    inset 0 0 2px 4px var(--bg-color),
+    1px 2px 1px 0 #000;
+}
 :not(#u#n#i) div[data-name='Tab:Selected'] {
   padding: calc(var(--ou) * 1) calc(var(--ou) * 0) calc(var(--ou) * 1)
     calc(var(--ou) * 0);
@@ -351,4 +355,9 @@ button[data-tooltip-content='clear'] {
   align-items: stretch;
   min-width: unset;
   flex: 1;
+}
+:is([data-name='Tab'], [data-name='Tab:Selected'])
+  > [data-name='WandAction']
+  ~ [data-name='WandAction'] {
+  margin: 0 0 0 calc(var(--ou) * -6);
 }
