@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
 import type { AppDispatch, RootState } from './store';
-import { createSelector } from 'reselect';
 import {
   generateWikiExample,
   generateWikiSpellSequence,

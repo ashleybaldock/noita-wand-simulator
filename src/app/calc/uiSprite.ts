@@ -45,26 +45,31 @@ const uiSpriteDefinition = [
 
   ['icon.manadrain', 'var(--icon.manadrain)'],
   ['icon.reloadtime', 'var(--icon-reloadtime)'],
-  ['icon.castdelay', 'var(--icon-strength)'],
+  ['icon.castdelay', 'var(--icon-castdelay)'],
+
   ['icon.lifetime', 'var(--icon-lifetime)'],
   ['icon.lifetime.infinite', 'var(--icon-infinite-lifetime)'],
   ['icon.spread', 'var(--icon-spread)'],
   ['icon.tshape', 'var(--icon-tshape'],
   ['icon.bounces', 'var(--icon-bounces)'],
+
   ['icon.speed.base', 'var(--icon-speed-base)'],
   ['icon.speed.initial', 'var(--icon-speed-initial)'],
   ['icon.speed.multi', 'var(--icon-speed-multi)'],
   ['icon.speed.bonus', 'var(--icon-speed-bonus)'],
+
   ['icon.stain.wet', 'var(--icon-stain-wet)'],
   ['icon.stain.oiled', 'var(--icon-stain-oiled)'],
   ['icon.stain.bloody', 'var(--icon-stain-bloody)'],
   ['icon.stain.burning', 'var(--icon-stain-burning)'],
+
   ['icon.critchance', 'var(--icon-critchance)'],
   ['icon.danger', 'var(--icon-danger)'],
   ['icon.zerodamage', 'var(--icon-zerodamage)'],
   ['icon.explosionradius', 'var(--icon-explosionradius)'],
   ['icon.recoil', 'var(--icon-recoil)'],
   ['icon.knockback', 'var(--icon-knockback)'],
+
   ['icon.trail.oil', 'var(--icon-trail-oil)'],
   ['icon.trail.water', 'var(--icon-trail-water)'],
   ['icon.trail.acid', 'var(--icon-trail-acid)'],

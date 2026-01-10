@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useHotkeys } from 'react-hotkeys-hook';
 import type { MouseEvent } from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   insertSpellAfterCursor,
   insertSpellBeforeCursor,
@@ -10,7 +10,11 @@ import { mergeRefs } from '../../../util/mergeRefs';
 import type { Spell } from '../../../calc/spell';
 import { SearchResultList } from '../FindSpell/SearchResultList';
 import { noop } from '../../../util/util';
-import { isNotNullOrUndefined } from '../../../util/Predicate';
+import {
+  isNotNull,
+  isNotNullOrUndefined,
+  isNull,
+} from '../../../util/Predicate';
 import { HotkeyMultiHint } from '../../Tooltips/HotkeyHint';
 import { useFocus } from '../../../hooks/useFocus';
 import { useAppDispatch } from '../../../redux/hooks';
@@ -144,11 +148,8 @@ export type SearchSpell = {
   type: string;
 };
 
-const NO_RESULT = 0;
-const FIRST_RESULT = 1;
-type ResultNone = typeof NO_RESULT;
-type ResultFirst = typeof FIRST_RESULT;
-type ResultIndex = ResultNone | ResultFirst | number;
+export type ResultNone = null;
+export type ResultIndex = ResultNone | number;
 
 /**
  * Search box
@@ -194,25 +195,30 @@ export const FindSpell = ({
 
   const noQuery = resultCount === 0 && searchValue === '';
 
-  const firstResultIsSelected = () => selectedResult <= 0;
+  const firstResultIsSelected = () =>
+    isNotNull(selectedResult) && selectedResult === 1;
 
-  const lastResultIsSelected = () => selectedResult >= resultCount - 1;
+  const lastResultIsSelected = () =>
+    isNotNull(selectedResult) && selectedResult === resultCount;
 
-  const selectFirstResult = () => setSelectedResult(0);
+  const selectFirstResult = () => setSelectedResult(1);
 
-  const selectLastResult = () => setSelectedResult(resultCount - 1);
+  const selectLastResult = () => setSelectedResult(resultCount);
 
   const selectNextResult = () =>
-    lastResultIsSelected()
+    isNull(selectedResult) || lastResultIsSelected()
       ? selectFirstResult()
       : setSelectedResult(selectedResult + 1);
 
   const selectPreviousResult = () =>
-    firstResultIsSelected()
+    isNull(selectedResult) || firstResultIsSelected()
       ? selectLastResult()
       : setSelectedResult(selectedResult - 1);
 
   const insertSpell = (before = true) => {
+    if (isNull(selectedResult)) {
+      return;
+    }
     const spellId = filteredResults[selectedResult]?.item?.spell?.id;
     if (isNotNullOrUndefined(spellId)) {
       dispatch(
@@ -224,7 +230,7 @@ export const FindSpell = ({
   };
 
   const selectResult = (n: ResultIndex) => {
-    if (n <= resultCount) {
+    if (isNotNull(n) && n <= resultCount) {
       setSelectedResult(n);
       insertSpell();
     }
@@ -239,7 +245,7 @@ export const FindSpell = ({
         (keyEvent: KeyboardEvent, hotkey: Hotkey) => void
       > = {
         w: (e, { shift, ctrl }) => {
-          console.log(`shift: ${shift}, ctrl: ${ctrl}`);
+          // console.log(`shift: ${shift}, ctrl: ${ctrl}`);
           if (e.ctrlKey) {
             e.preventDefault();
             setSearchValue('');
@@ -251,9 +257,9 @@ export const FindSpell = ({
           setHidden(true);
         },
         enter: (e, { shift, ctrl }) => {
-          console.log(`shift: ${shift}, ctrl: ${ctrl}`);
-          console.log(e);
-          console.log(selectedResult, filteredResults);
+          // console.log(`shift: ${shift}, ctrl: ${ctrl}`);
+          // console.log(e);
+          // console.log(selectedResult, filteredResults);
           insertSpell(!e.shiftKey);
           if (e.ctrlKey) {
             setSearchValue('');

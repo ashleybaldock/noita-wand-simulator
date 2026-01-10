@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { noop } from '../../../util/util';
-import type { SearchSpell } from './FindSpell';
+import type { ResultIndex, SearchSpell } from './FindSpell';
 import { SearchResultBase, SearchResult } from './SearchResult';
 import type { FuzzySearchResult } from '../../../hooks/useFuzzySearch';
 
@@ -41,7 +41,7 @@ export const SearchResultList = ({
   onSelectResult = noop,
 }: {
   results: FuzzySearchResult<SearchSpell>[];
-  highlightIdx: number;
+  highlightIdx: ResultIndex;
   className?: string;
   onSelectResult?: (resultIdx: number) => void;
 }) => {

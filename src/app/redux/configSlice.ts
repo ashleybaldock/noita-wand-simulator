@@ -137,7 +137,7 @@ export const initialState: ConfigState = {
     hideAccessibilityHints: false,
     mirrorControls: false,
     'editor.swapOnMove': true,
-    'editor.enableSelection': false,
+    'editor.enableSelection': true,
   },
 };
 
