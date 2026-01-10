@@ -13,8 +13,8 @@ const uiSpriteDefinition = [
   ['icon.lock', 'var(--icon-lock)'],
   ['icon.unlock', 'var(--icon-unlock)'],
   ['icon.config', 'var(--icon-config)'],
-  ['icon.download.png', `var(--icon-download-png)`],
-  ['icon.hamburger.menu', `var(--icon-hamburger-menu)`],
+  ['icon.download.png', 'var(--icon-download-png)'],
+  ['icon.hamburger.menu', 'var(--icon-hamburger-menu)'],
 
   ['icon.config.heart2', `url('/data/config/heart2.png')`],
   ['icon.config.die2', `url('/data/config/die2.png')`],
@@ -34,7 +34,7 @@ const uiSpriteDefinition = [
   ['icon.chevron.l2x', 'var(--icon-arrow-l-chev2x)'],
   ['icon.chevron.r2x', 'var(--icon-arrow-r-chev2x)'],
 
-  ['icon.arrowhead.r', `var(--icon-arrowhead-right)`],
+  ['icon.arrowhead.r', 'var(--icon-arrowhead-right)'],
 
   ['icon.trigger', 'var(--icon-trigger)'],
   ['icon.trigger.disabled', 'var(--icon-trigger-disabled)'],
@@ -43,11 +43,11 @@ const uiSpriteDefinition = [
   ['icon.expiration', 'var(--icon-expiration)'],
   ['icon.expiration.disabled', 'var(--icon-expiration-disabled)'],
 
-  ['icon.manadrain', `url('/data/wand/icon_mana_drain.png')`],
-  ['icon.reloadtime', `url('/data/wand/icon_reload_time-s.png')`],
-  ['icon.castdelay', `url('/data/wand/icon_fire_rate_wait.png')`],
-  ['icon.lifetime', `url('/data/wand/icon_lifetime.png')`],
-  ['icon.lifetime.infinite', '--icon-infinite-lifetime'],
+  ['icon.manadrain', 'var(--icon.manadrain)'],
+  ['icon.reloadtime', 'var(--icon-reloadtime)'],
+  ['icon.castdelay', 'var(--icon-strength)'],
+  ['icon.lifetime', 'var(--icon-lifetime)'],
+  ['icon.lifetime.infinite', 'var(--icon-infinite-lifetime)'],
   ['icon.spread', `url('/data/wand/icon_spread_degrees.png')`],
   ['icon.tshape', `url('/data/icons/t_shape.png')`],
   ['icon.bounces', `url('/data/wand/icon_bounces.png')`],

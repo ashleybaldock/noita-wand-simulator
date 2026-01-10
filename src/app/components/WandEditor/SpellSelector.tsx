@@ -53,10 +53,6 @@ const MainDiv = styled.div`
 `;
 
 const SpellCategorySpellsDiv = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--bsize-spell), 1fr));
-  align-content: start;
-
   grid-template-columns: repeat(auto-fill, minmax(var(--bsize-spell), 1fr));
   align-content: start;
   justify-content: stretch;
@@ -82,7 +78,7 @@ const SpellCategorySpellsDiv = styled.div`
 
 const SpellSelectorWandActionBorder = styled(StyledWandActionBorder)`
   position: relative;
-  background-image: url('/data/inventory/grid_box_unknown.png');
+  background-image: var(--sprite-inventory-grid-box-unknown);
   padding-left: 0;
   padding-top: 0;
 
@@ -100,7 +96,7 @@ const SpellSelectorWandActionBorder = styled(StyledWandActionBorder)`
   box-shadow: 0 0 2px #000;
 
   &:hover {
-    background-image: url('/data/inventory/grid_box.png');
+    background-image: var(--sprite-inventory-grid-box);
   }
 `;
 const SpellSelectorWandActionDragSource = styled(WandActionDragSource)`

@@ -1,0 +1,39 @@
+:root {
+  --zindex-insert-after: 58;
+  --zindex-insert-before: 60;
+  --zindex-cursor-select-from: 65;
+  --zindex-cursor-select-to: 68;
+  --zindex-cursor-current: 70;
+
+  --zindex-note-deckidx: 80;
+  --zindex-note-charges: 81;
+  --zindex-note-delete: 82;
+
+  --zindex-tabs-hover: 90;
+  --zindex-tabs-selected: 100;
+
+  --zindex-stickyheader-shotgrid: 200;
+
+  --zindex-keyhint: 300;
+  --zindex-keyhint-hover: 310;
+
+  --zindex-stickyheader-behind: 500;
+  --zindex-stickyheader-title: 510;
+  --zindex-stickyheader-controls: 520;
+  --zindex-stickyheader-overline: 540;
+
+  --zindex-copy-png: 640;
+
+  --zindex-findspell: 850;
+  --zindex-findspell-results: 860;
+
+  --zindex-tooltips: 900;
+  --zindex-devinfo: 999;
+
+  --zindex-modal-window: 1000;
+  --zindex-modal-subtitle: 1030;
+  --zindex-modal-title: 1050;
+  --zindex-modal-closebutton: 1100;
+
+  --zindex-ceiling: 10000;
+}

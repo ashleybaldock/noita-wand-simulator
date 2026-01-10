@@ -29,7 +29,7 @@ const _WandAction = ({
   spellId,
   className,
   style,
-  tooltipId,
+  tooltipId = 'tooltip-spellinfo',
   tooltip = true,
   ref,
 }: {
@@ -56,7 +56,7 @@ const _WandAction = ({
       data-name="WandAction"
       {...(tooltip && isNotNullOrUndefined(spellId)
         ? {
-            'data-tooltip-id': 'tooltip-spellinfo',
+            'data-tooltip-id': `${tooltipId}`,
             'data-tooltip-content': `${spellId}`,
           }
         : {})}

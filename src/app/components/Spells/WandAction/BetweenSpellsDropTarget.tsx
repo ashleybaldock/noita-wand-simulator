@@ -15,6 +15,7 @@ import {
   useConfig,
   useCaret,
   useSelection,
+  useEditMode,
 } from '../../../redux';
 import { useCallback } from 'react';
 import { useMergedBackgrounds } from './Backgrounds/useMergeBackgrounds';
@@ -123,7 +124,7 @@ export const BetweenSpellsDropTarget = ({
   const selectionForSpellAfter = useSelection(indexOfSpellBefore, 'before');
   const cursorForSpellAfter = useCaret(indexOfSpellAfter);
 
-  // const editMode = useEditMode();
+  const editMode = useEditMode();
   const insertIndex: MainWandIndex = isMainWandIndex(indexOfSpellBefore)
     ? indexOfSpellBefore
     : 0;
@@ -253,7 +254,7 @@ export const BetweenSpellsDropTarget = ({
     selectionBackgrounds[selectionForSpellBefore]['after'],
     selectionBackgrounds[selectionForSpellAfter]['before'],
   );
-  // const style = { ...merged, ...mergedHover };
+  const style = { ...merged, ...mergedHover };
 
   return (
     <DropTargetBackground
@@ -268,7 +269,7 @@ export const BetweenSpellsDropTarget = ({
       }
       ref={mergeRefs(ref, dropRef, dragRef)}
     >
-      <HoverBackground style={mergedHover} />
+      <HoverBackground style={style} />
     </DropTargetBackground>
   );
 };

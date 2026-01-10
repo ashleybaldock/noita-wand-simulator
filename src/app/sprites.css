@@ -61,13 +61,16 @@
 
   --icon-expiration-disabled: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAE4AAABOBAMAAAB8hD0uAAAAJFBMVEUAAADLKSnJKSmcqsIsN0rkQ0P/TU2vR0c/Sl/Y3uqPLi7KKio3BcwdAAAAA3RSTlMARaZIzXlDAAAA8UlEQVR4XuXVQRHEIAwF0FqIBSxgYS3UAhawUAtYiIWaW5b/D+1ke0hy7D9kGHiXQGbY3pxxT9yJPDoRv5Ny6oPTs4jf6d50/Iu2Xf1u005oWdfN4Sy0LOIGoWUj5ggtCzpCw8KOsNY6zaxgCUcIR5ZzhNORpdxnZkHeif42co6QLO8IyfKOECzvCNvewNKODDDlMJ5gXTsgBjbhyCpg3pFVwIQjBTuOAxAo7MiWA0w5MjhCp7NNjInGWNW04nJkFwcYdGRXRxhzi5l/esGAIzMO0O+kL2bcgl38rqjy9e51Qi0uR4i1cTjyOsY6xOHely9U7fY3JHKF4gAAAABJRU5ErkJggg==');
   --icon-expiration: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAADY3uqcqsIsN0o/Sl9tSm6TAAAAAXRSTlMAQObYZgAAAFhJREFUeF610MENwCAIBVDrBAUdQBoXME5g9x+qcoEmRGNi/MDhvyPuXC7oucfAXcSAdpYx4EN9JxBqLXwb4CkU5EsWRDC/JF1BO8QWG4gorH/M+cRj4Vg+kswRzcxbXKsAAAAASUVORK5CYII=');
-
+  --icon-manadrain: url('/data/wand/icon_mana_drain.png');
+  --icon-lifetime: url('/data/wand/icon_lifetime.png');
   --icon-infinite-lifetime: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAAAAAADr6+v/////tQenp6f/57uCVwDCggBdPgA+KgB6VwNxcXFQUFB6b1q4ewCoRdtyAAAAAnRSTlMAhetBupcAAAB9SURBVHheTYq7CcMwEEAvYIhLh9tAIAnS2IcXUBGHpBW5BQz2BP60aVSlTJctjOfwIp4iOld61ePxICH71IBVlPP3R4SS8ISFSL4+qRJp9npBii9ft+FSAARv7fiOy13ZuXey+HJidxTTGpHglWJ5Mtb6BULTde6Q/PaAhD/RyxRkOaYYYwAAAABJRU5ErkJggg==');
 
   --icon-discarded-mana: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAALElEQVQImWNgQAL/////j8xnxCbByMjICJdE1wFTwIQuiAzwSuK1EwWg2w0AonYUALgX+aEAAAAASUVORK5CYII=');
   --icon-discarded-charges: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAIAAABLMMCEAAAABnRSTlMAAAAAAABupgeRAAAAHElEQVR4nGNggIH///8zIANkProcToUkKsdnJwAxyxfpXRshNwAAAABJRU5ErkJggg==');
   --icon-discarded-action: var(--icon-discarded-charges);
   --icon-reload-time: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHAQMAAAD+nMWQAAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAB1JREFUeF4NwTERAAAEAMBPZBbAKJVRau6lMm+1OBG2AoWu+cpNAAAAAElFTkSuQmCC');
+  --icon-reloadtime: url('/data/wand/icon_reload_time-s.png');
+  --icon-castdelay: url('/data/wand/icon_fire_rate_wait.png');
 
   --icon-download-png: url('data:image/svg+xml,%3Csvg\
     style=%22fill: %23ffffff;%22\
@@ -102,4 +105,8 @@
      %3C/path%3E\
     %3C!--! Font Awesome Free 6.4.2 by @fontawesome --%3E\
      %3C/svg%3E');
+
+  --sprite-inventory-grid-box: url('/data/inventory/grid_box.png');
+  --sprite-inventory-grid-box-unknown: url('/data/inventory/grid_box_unknown.png');
+
 }
