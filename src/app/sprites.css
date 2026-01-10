@@ -72,6 +72,29 @@
   --icon-reloadtime: url('/data/wand/icon_reload_time-s.png');
   --icon-castdelay: url('/data/wand/icon_fire_rate_wait.png');
 
+  --icon-spread: url('/data/wand/icon_spread_degrees.png');
+  --icon-tshape: url('/data/icons/t_shape.png');
+  --icon-bounces: url('/data/wand/icon_bounces.png');
+  --icon-speed-base: url('/data/wand/icon_speed_base.png');
+  --icon-speed-initial: url('/data/wand/icon_speed_initial.png');
+  --icon-speed-multi: url('/data/wand/icon_speed_multiplier.png');
+  --icon-speed-bonus: url('/data/wand/icon_speed_bonus.png');
+  --icon-stain-wet: url('/data/status/wet.png');
+  --icon-stain-oiled: url('/data/status/oiled.png');
+  --icon-stain-bloody: url('/data/status/bloody.png');
+  --icon-stain-burning: url('/data/status/burning.png');
+  --icon-critchance: url('/data/wand/icon_damage_critical_chance.png');
+  --icon-danger: url('/data/warnings/icon_danger.png');
+  --icon-zerodamage: url('/data/ui_gfx/gun_actions/zero_damage.png');
+  --icon-explosionradius: url('/data/wand/icon_explosion_radius.png');
+  --icon-recoil: url('/data/wand/icon_recoil.png');
+  --icon-knockback: url('/data/wand/icon_knockback.png');
+  --icon-trail-oil: url('/data/trail/trail_oil.png');
+  --icon-trail-water: url('/data/trail/trail_water.png');
+  --icon-trail-acid: url('/data/trail/trail_acid.png');
+  --icon-trail-poison: url('/data/trail/trail_poison.png');
+  --icon-trail-fire: url('/data/trail/trail_fire.png');
+
   --icon-download-png: url('data:image/svg+xml,%3Csvg\
     style=%22fill: %23ffffff;%22\
     xmlns=%22http://www.w3.org/2000/svg%22\
@@ -108,5 +131,4 @@
 
   --sprite-inventory-grid-box: url('/data/inventory/grid_box.png');
   --sprite-inventory-grid-box-unknown: url('/data/inventory/grid_box_unknown.png');
-
 }
