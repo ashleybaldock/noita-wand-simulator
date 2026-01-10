@@ -28,11 +28,13 @@ const spellSequenceHasChanged: ListenerPredicate<RootState> = (
       prev,
       cur,
     );
-  console.debug(
-    `spellSequenceChanged? '${changed}', present: '${currentState.wand.present.spellIds.join(
-      ',',
-    )}', previous: '${currentState.result.lastSpellIds.join(',')}`,
-  );
+  if (changed) {
+    console.debug(
+      `spellSequenceHasChanged, now: '${currentState.wand.present.spellIds.join(
+        ',',
+      )}', prev: '${currentState.result.lastSpellIds.join(',')}`,
+    );
+  }
   return changed;
 };
 
@@ -50,9 +52,11 @@ const alwaysCastSequenceHasChanged: ListenerPredicate<RootState> = (
       prev,
       cur,
     );
-  console.debug(
-    `alwaysCastSeqChanged? '${changed}', present: '${currentState.wand.present.alwaysIds}', previous: '${currentState.result.lastAlwaysIds} `,
-  );
+  if (changed) {
+    console.debug(
+      `alwaysCastSequenceHasChanged, now: '${currentState.wand.present.alwaysIds}', prev: '${currentState.result.lastAlwaysIds} `,
+    );
+  }
   return changed;
 };
 
@@ -67,9 +71,11 @@ const wandStatsHaveChanged: ListenerPredicate<RootState> = (
   const prev = currentState.result.lastWand,
     cur = currentState.wand.present.wand,
     changed = !wandsMatchForSimulation(cur, prev);
-  console.debug(
-    `wandStatsChanged? ${changed}, present: '${currentState.wand.present.wand}', previous: '${currentState.result.lastWand} `,
-  );
+  if (changed) {
+    console.debug(
+      `wandStatsHaveChanged, now: '${currentState.wand.present.wand}', prev: '${currentState.result.lastWand} `,
+    );
+  }
   return changed;
 };
 
@@ -83,9 +89,12 @@ const zetaIdHasChanged: ListenerPredicate<RootState> = (
   const prev = currentState.result.lastZetaId,
     cur = currentState.wand.present.zetaId,
     changed = prev !== cur;
-  console.debug(
-    `zetaIdChanged? ${changed}, present: '${currentState.wand.present.zetaId}', previous: '${currentState.result.lastZetaId}'`,
-  );
+
+  if (changed) {
+    console.debug(
+      `zetaIdHasChanged, now: '${currentState.wand.present.zetaId}', prev: '${currentState.result.lastZetaId}'`,
+    );
+  }
   return changed;
 };
 
@@ -183,7 +192,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
           endSimulationOnRefreshCount,
           limitSimulationIterations,
           limitSimulationDuration,
-        }));
+        }),);
 
       console.group();
       const result = await task.result;

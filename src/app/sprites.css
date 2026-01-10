@@ -131,4 +131,6 @@
 
   --sprite-inventory-grid-box: url('/data/inventory/grid_box.png');
   --sprite-inventory-grid-box-unknown: url('/data/inventory/grid_box_unknown.png');
+  --icon-redo: url('/data/redo.png');
+  --icon-undo: url('/data/undo.png');
 }

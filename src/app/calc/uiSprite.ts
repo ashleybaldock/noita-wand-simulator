@@ -2,8 +2,8 @@ import type { Sprite, SpriteName } from './sprite';
 
 const uiSpriteDefinition = [
   ['icon.copy', 'var(--icon-copy)'],
-  ['icon.redo', `url('/data/redo.png')`],
-  ['icon.undo', `url('/data/undo.png')`],
+  ['icon.redo', 'var(--icon-redo)'],
+  ['icon.undo', 'var(--icon-undo)'],
   ['icon.save', 'var(--icon-save)'],
   ['icon.reset', 'var(--icon-reset)'],
   ['icon.clear', 'var(--icon-clear)'],
