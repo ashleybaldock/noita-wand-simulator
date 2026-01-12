@@ -11,6 +11,7 @@ import { generateSearchFromWandState } from './Wand/toSearch';
 import type { KeyOfType } from '../util';
 import {
   isBoolean,
+  isNotUndefined,
   isNumber,
   sequencesMatch,
   sequencesMatchIgnoringHoles,
@@ -316,7 +317,9 @@ export const useSelection = (
 ): WandSelection => {
   const selections = useSelections();
   const { 'editor.enableSelection': enableSelection } = useConfig();
-  return enableSelection && isMainWandIndex(wandIndex)
+  return enableSelection &&
+    isMainWandIndex(wandIndex) &&
+    isNotUndefined(selections[wandIndex])
     ? selections[wandIndex][location]
     : defaultWandSelection;
 };

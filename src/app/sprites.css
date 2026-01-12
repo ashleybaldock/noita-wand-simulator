@@ -133,4 +133,9 @@
   --sprite-inventory-grid-box-unknown: url('/data/inventory/grid_box_unknown.png');
   --icon-redo: url('/data/redo.png');
   --icon-undo: url('/data/undo.png');
+  --icon-export: url('/data/export.png');
+  --icon-config-heart2: url('/data/config/heart2.png');
+  --icon-config-die2: url('/data/config/die2.png');
+  --icon-config-req: url('/data/config/req.png');
+  --icon-config-goldnugget2: url('/data/config/goldnugget2.png');
 }

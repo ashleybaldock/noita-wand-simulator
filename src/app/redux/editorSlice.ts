@@ -9,6 +9,7 @@ import {
   isMainWandIndex,
   isSelectionWandIndex,
 } from './WandIndex';
+import { isNotNull } from '../util';
 
 const initialState: WandEditorState = {
   cursorIndex: 0,
@@ -66,18 +67,19 @@ export const editorSlice = createSlice({
      * Change position of current selection
      * Operates based on the start index, and preserves selection length
      **/
-    // moveSelection: (
-    //   state,
-    //   { payload: { by, to } }: PayloadAction<{ by?: number; to?: number }>,
-    // ): void => {
-    //   if (isSelectionWandIndex(to) || isCursorWandIndex(to)) {
-    //     state.selectFrom = isCursorWandIndex(to) ? state.cursorIndex : to;
+    moveSelection: (
+      state,
+      { payload: { by, to } }: PayloadAction<{ by?: number; to?: number }>,
+    ): void => {
+      if (isSelectionWandIndex(to) || isCursorWandIndex(to)) {
+        state.selectFrom = isCursorWandIndex(to) ? state.cursorIndex : to;
 
-    //     if (isNotNull(state.selectFrom) && isNotNull(state.selectTo)) {
-    //       const selectionLength = Math.abs(state.selectFrom - state.selectTo)
-    //       state.selectTo = state.selectFrom + selectionLength;
-    //   }
-    // },
+        if (isNotNull(state.selectFrom) && isNotNull(state.selectTo)) {
+          const selectionLength = Math.abs(state.selectFrom - state.selectTo);
+          state.selectTo = state.selectFrom + selectionLength;
+        }
+      }
+    },
 
     /**
      * Set the next paste to insert the currently selected spells
@@ -212,7 +214,7 @@ export const {
   ungroupSelected,
   saveSelected,
 
-  // moveSelection,
+  moveSelection,
   clearSelection,
   setSelection,
 } = editorSlice.actions;
