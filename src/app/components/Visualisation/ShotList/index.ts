@@ -1,1 +1,0 @@
-export { ShotList } from './ShotList';

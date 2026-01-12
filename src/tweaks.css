@@ -361,3 +361,11 @@ button[data-tooltip-content='clear'] {
   ~ [data-name='WandAction'] {
   margin: 0 0 0 calc(var(--ou) * -6);
 }
+
+:not(#u#n#i) div[data-name='TabTitles'] {
+  pointer-events: none;
+}
+:not(#u#n#i) div[data-name='Tab'],
+:not(#u#n#i) div[data-name='Tab:Selected'] {
+  pointer-events: auto;
+}

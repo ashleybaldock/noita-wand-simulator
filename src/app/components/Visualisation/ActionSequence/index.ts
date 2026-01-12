@@ -1,1 +1,1 @@
-export * from './ActionCalledShotResult';
+export * from './ActionCallSequenceShotResult';

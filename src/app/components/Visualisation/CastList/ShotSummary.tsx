@@ -47,13 +47,13 @@ const StickyContainer = styled.div`
 `;
 
 const totalDelayForSalvo = ({ shots, reloadTime = 1 }: WandSalvo) => {
-  const totalCastDelayForShots = shots.reduce(
+  const totalCastDelayForSalvo = shots.reduce(
     (tsf, shot) => tsf + (shot.castState?.fire_rate_wait ?? 1),
     0,
   );
   const lastCastDelay = shots[shots.length - 1]?.castState?.fire_rate_wait ?? 1;
   const largerDelay = Math.max(reloadTime, lastCastDelay);
-  const totalDelay = totalCastDelayForShots - lastCastDelay + largerDelay;
+  const totalDelay = totalCastDelayForSalvo - lastCastDelay + largerDelay;
 
   return {
     framesDelay: totalDelay,
@@ -81,7 +81,7 @@ export const SimulationSummary = styled(
       0,
     );
 
-    const totalShotCount = salvos.reduce(
+    const totalCastCount = salvos.reduce(
       (tsf, { shots }) => tsf + shots.length,
       0,
     );
@@ -104,8 +104,8 @@ export const SimulationSummary = styled(
       <StickyContainer className={className}>
         <SummaryItem>
           {`Fired a total of `}
-          <Emphasis>{`${totalShotCount} shot${
-            totalShotCount === 1 ? '' : 's'
+          <Emphasis>{`${totalCastCount} cast${
+            totalCastCount === 1 ? '' : 's'
           }`}</Emphasis>
           {` in `}
           <Emphasis>{`${salvos?.length} salvo${

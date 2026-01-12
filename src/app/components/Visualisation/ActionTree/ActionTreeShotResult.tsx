@@ -5,14 +5,16 @@ import {
   everyIter,
   isNotNullOrUndefined,
   isUndefined,
+  mapIter,
   ordinalSuffix,
 } from '../../../util';
 import { MapTree } from '../../../util/MapTree';
 import type { WandShotResult } from '../../../calc/eval/WandShot';
 import type { ActionSource } from '../../../calc/actionSources';
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { TreeArrow } from './TreeArrow';
 import type { TreeNode, TreeRoot } from '../../../util/Tree';
+import type { EvalTree } from '../../../calc/eval/serialize';
 
 export const ActionTreeRoot = styled.div`
   --row-h: 68px;
@@ -56,7 +58,7 @@ const ActionTreeComponent = ({
   level,
   triggerLevel: currentTriggerLevel,
 }: {
-  node: TreeRoot<ActionCall>;
+  node: TreeNode<ActionCall>;
   level: number;
   position: number;
   triggerLevel: number;
@@ -177,24 +179,34 @@ export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
   const triggerLevel = 0;
   return (
     <ActionTreeRoot data-name="ActionTreeRoot">
-      {shot.actionCallTrees.map((actionCallTree, index) => (
-        <ActionTreeCast
-          data-name="AcTreeCast"
-          data-cast={index + 1}
-          key={index}
-        >
-          <ActionTreeCastSummary data-name="AcTreeSummary">
-            {`${index + 1}${ordinalSuffix(index + 1)} cast`}
-          </ActionTreeCastSummary>
-          <StartingDraw data-name="AcTreeSpCast">Spells/cast: </StartingDraw>
-          <ActionTreeComponent
-            position={0}
-            node={new MapTree(actionCallTree)}
-            level={level + 1}
-            triggerLevel={triggerLevel}
-          />
-        </ActionTreeCast>
-      ))}
+      {shot.actionCallTrees
+        .map((actionCallTree) => new MapTree(actionCallTree))
+        .map((actionCallTree, index) => (
+          <ActionTreeCast
+            data-name="AcTreeCast"
+            data-cast={index + 1}
+            key={index}
+          >
+            <ActionTreeCastSummary data-name="AcTreeSummary">
+              {`${index + 1}${ordinalSuffix(index + 1)} cast`}
+            </ActionTreeCastSummary>
+            <StartingDraw data-name="AcTreeSpCast">Spells/cast: </StartingDraw>
+            <>
+              {mapIter<TreeNode<ActionCall>, ReactNode>(
+                actionCallTree.children,
+                (root, i) => (
+                  <ActionTreeComponent
+                    position={0}
+                    node={root}
+                    level={level + 1}
+                    triggerLevel={triggerLevel}
+                    key={i}
+                  />
+                ),
+              )}
+            </>
+          </ActionTreeCast>
+        ))}
     </ActionTreeRoot>
   );
 };

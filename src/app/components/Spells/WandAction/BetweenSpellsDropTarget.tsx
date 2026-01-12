@@ -27,6 +27,7 @@ import {
 } from './Backgrounds/DropHint';
 import { useDragRef } from '../../../hooks/useDragRef';
 import { useDropRef } from '../../../hooks/useDropRef';
+import { emptyBackgroundPart } from './Backgrounds/BackgroundPart';
 
 // right: calc(var(--width) * -0.5);
 // z-index: var(--zindex-insert-after);
@@ -249,8 +250,12 @@ export const BetweenSpellsDropTarget = ({
   // const mergedHover = useMergedBackgroundVars(
   //   getCssHoverVarForProperty,
   const mergedHover = useMergedBackgrounds(
-     (isDraggingSelect ? caretBackgrounds.none : (caretBackgrounds['caret-hover']['before']),
-     (isDraggingSelect ? caretBackgrounds.none : (caretBackgrounds['caret-hover']['after']),
+    isDraggingSelect
+      ? emptyBackgroundPart()
+      : caretBackgrounds['caret-hover']['before'],
+    isDraggingSelect
+      ? emptyBackgroundPart()
+      : caretBackgrounds['caret-hover']['after'],
     selectionBackgrounds[selectionForSpellBefore]['after'],
     selectionBackgrounds[selectionForSpellAfter]['before'],
   );

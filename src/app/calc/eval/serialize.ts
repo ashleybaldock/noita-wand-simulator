@@ -1,11 +1,11 @@
 import { isNotNullOrUndefined } from '../../util';
-import type { SerialisedMapTree } from '../../util/MapTree';
+import type { SerializedTree } from '../../util/MapTree';
 import type { SpellDeckInfo } from '../spell';
 import type { ActionCall } from './ActionCall';
 import type { SimulationResult } from './SimulationResult';
 import type { SerializedSimulationResult } from './clickWand';
 
-export type EvalTree = SerialisedMapTree<ActionCall>;
+export type EvalTree = SerializedTree<ActionCall>;
 
 export const serializeSpell = (spell: SpellDeckInfo) => ({
   id: spell?.id,

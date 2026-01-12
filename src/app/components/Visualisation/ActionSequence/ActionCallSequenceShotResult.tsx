@@ -1,10 +1,10 @@
-import styled from 'styled-components';
-import { WandActionCall } from '../WandActionCall';
 import type { Key } from 'react';
 import type { ActionCall } from '../../../calc/eval/ActionCall';
 import type { WandShotResult } from '../../../calc/eval/WandShot';
+import { WandActionCall } from '../WandActionCall';
+import styled from 'styled-components';
 
-const StyledDiv = styled.div`
+export const StyledDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -13,9 +13,13 @@ const StyledDiv = styled.div`
 `;
 
 // list of all actions played, and sub-ShotResults for triggers
-export const ActionCalledShotResult = ({ shot }: { shot: WandShotResult }) => {
+export const ActionCallSequenceShotResult = ({
+  shot,
+}: {
+  shot: WandShotResult;
+}) => {
   return (
-    <StyledDiv>
+    <StyledDiv data-name="ActionCallSequenceShotResult">
       {shot.actionCalls.map(
         (actionCall: ActionCall, index: Key | null | undefined) => {
           return (

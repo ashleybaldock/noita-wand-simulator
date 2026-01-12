@@ -10,9 +10,9 @@ import {
   useSpellSequence,
 } from '../../redux';
 import { SaveImageButton, ScrollWrapper } from '../generic';
-import { ActionCalledShotResult } from './ActionSequence';
+import { ActionCallSequenceShotResult } from './ActionSequence';
 import { ActionTreeShotResult } from './ActionTree';
-import { ShotList } from './ShotList';
+import { CastList } from './CastList';
 import { SimulationStatus } from '../SimulationStatus';
 import { SectionToolbar } from '../SectionToolbar';
 import { ActionTreeKey } from './ActionTree/ActionTreeKey';
@@ -73,7 +73,7 @@ export const VisualisationList = () => {
   return (
     <ParentDiv>
       <SimulationStatus />
-      <ShotList />
+      <CastList />
       {showActionTree && (
         <>
           <SectionToolbar title={'Simulation: Action Call Tree'}>
@@ -106,7 +106,7 @@ export const VisualisationList = () => {
       <ScrollWrapper>
         <SectionDiv ref={actionsCalledRef} className={'saveImageRoot'}>
           {shots.map((shot, index) => (
-            <ActionCalledShotResult key={index} shot={shot} />
+            <ActionCallSequenceShotResult key={index} shot={shot} />
           ))}
         </SectionDiv>
       </ScrollWrapper>

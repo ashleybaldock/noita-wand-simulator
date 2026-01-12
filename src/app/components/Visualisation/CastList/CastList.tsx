@@ -28,7 +28,7 @@ const StyledSaveImageButton = styled(SaveImageButton)`
   grid-column: -3;
 `;
 
-export const ShotList = () => {
+export const CastList = () => {
   const { shots } = useLatestResult();
   const shotListRef = useRef<HTMLDivElement>(null);
 
