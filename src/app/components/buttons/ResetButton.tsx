@@ -26,7 +26,7 @@ export const ResetButton = () => {
   return (
     <>
       <Button
-        imgOnly="600px"
+        imgOnly="500px"
         hotkeys={'shift+t'}
         $tip={{ kind: 'uihint', id: 'clear' }}
         icon={'icon.clear'}
@@ -35,7 +35,7 @@ export const ResetButton = () => {
         Clear
       </Button>
       <Button
-        imgOnly="600px"
+        imgOnly="500px"
         hotkeys={'t'}
         $tip={{ kind: 'uihint', id: 'reset' }}
         icon={'icon.reset'}

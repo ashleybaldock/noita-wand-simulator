@@ -369,3 +369,41 @@ button[data-tooltip-content='clear'] {
 :not(#u#n#i) div[data-name='Tab:Selected'] {
   pointer-events: auto;
 }
+
+:not(#u#n#i) div[data-name='TabTitles'] {
+  flex-wrap: nowrap;
+}
+:not(#u#n#i) div[data-name='Tab']:last-of-type {
+  margin-right: auto;
+}
+:not(#u#n#i)
+  :is(div[data-name='Tab'], div[data-name='Tab:Selected']):has(
+    > [data-name='WandAction']
+  ) {
+  box-sizing: border-box;
+  --ar: 1;
+  flex: 0 auto;
+  --uw: calc(100vw / 9);
+  --pw: calc(var(--uw) * var(--ar));
+  max-width: var(--pw);
+  width: clamp(max(3em, 25%), var(--pw), 3em);
+  height: clamp(2.4em, var(--uw), 3em);
+}
+:not(#u#n#i)
+  :is(div[data-name='Tab'], div[data-name='Tab:Selected']):has(
+    > [data-name='WandAction'] + [data-name='WandAction']
+  ) {
+  --ar: 2;
+  max-width: var(--pw);
+  width: clamp(max(3em, 25%), var(--pw), 8em);
+}
+:not(#u#n#i)
+  :is(div[data-name='Tab'], div[data-name='Tab:Selected']):has(
+    > [data-name='WandAction']
+      + [data-name='WandAction']
+      + [data-name='WandAction']
+  ) {
+  --ar: 3;
+  max-width: var(--pw);
+  width: clamp(max(3em, 25%), var(--pw), 10em);
+}

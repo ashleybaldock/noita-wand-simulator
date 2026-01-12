@@ -12,7 +12,7 @@ export const RedoButton = () => {
       hotkeys={'r, ctrl+r, shift+mod+z'}
       $tip={{ kind: 'uihint', id: 'redo' }}
       icon={'icon.redo'}
-      imgOnly={'600px'}
+      imgOnly={'500px'}
       onClick={() => redo()}
     >
       Redo

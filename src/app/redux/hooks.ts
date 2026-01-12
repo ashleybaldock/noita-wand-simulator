@@ -349,17 +349,13 @@ export const useEditMode = (): EditMode => {
 //**            resultSlice             **/
 /****************************************/
 
-export const selectResultState = (state: RootState) => state.result.last;
+export const selectLastResultState = (state: RootState) => state.result.last;
 
-const selectResult = createSelector(
-  selectResultState,
-  (resultState) => resultState,
-);
 export const useLatestResult = () => {
-  return useAppSelector(selectResult);
+  return useAppSelector(selectLastResultState);
 };
 export const useShotLookup = () => {
-  const { shots } = useAppSelector(selectResult);
+  const { shots } = useAppSelector(selectLastResultState);
   return useMemo(() => new Map(shots.map((shot) => [shot.id, shot])), [shots]);
 };
 
