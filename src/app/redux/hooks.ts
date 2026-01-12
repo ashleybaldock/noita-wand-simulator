@@ -289,13 +289,10 @@ export const useCaret = (wandIndex: WandIndex): CaretStyle => {
   return defaultCaret['before'];
 };
 
-const selectSelectionExtents = (state: RootState) => ({
-  selectFrom: state.editor.selectFrom,
-  selectTo: state.editor.selectTo,
-});
+const selectEditorState = (state: RootState) => state.editor;
 
 const selectSelections = createSelector(
-  selectSelectionExtents,
+  selectEditorState,
   selectSpellSequence,
   ({ selectFrom, selectTo }, spellIds): WandSelectionSet[] =>
     spellIds.map((_, wandIndex) =>
@@ -325,7 +322,7 @@ export const useSelection = (
 };
 
 const selectSelecting = createSelector(
-  selectSelectionExtents,
+  selectEditorState,
   ({ selectFrom }): boolean => selectFrom !== null,
 );
 
