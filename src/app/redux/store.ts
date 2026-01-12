@@ -23,14 +23,7 @@ export const store = configureStore({
 
   middleware: (getDefaultMiddleware) => {
     startUpdateListener(startAppListening);
-    return getDefaultMiddleware({
-      serializableCheck: {
-        // ignoredActions: [newResult.type],
-      },
-      // immutableCheck: {
-      //   ignoredPaths: ['result.last.shots'],
-      // },
-    }).prepend(listenerMiddleware.middleware);
+    return getDefaultMiddleware().prepend(listenerMiddleware.middleware);
   },
 });
 

@@ -16,9 +16,11 @@ const ListWrapper = styled.ol`
   border: 2px solid var(--color-tab-border-active);
   border-radius: 0 0.4em;
   position: absolute;
-  inset: 100% -20% auto -20%;
+  inset: 100% 0% auto 0%;
   z-index: var(--zindex-findspell-results);
   width: fit-content;
+  min-width: 10ch;
+  max-width: 33vw;
   padding: 0.2em 0.5ch;
   overflow-y: scroll;
   margin: 0.4em 0;

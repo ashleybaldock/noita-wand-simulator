@@ -98,6 +98,17 @@ const zetaIdHasChanged: ListenerPredicate<RootState> = (
   return changed;
 };
 
+/**
+ * @returns true if simulation has not run since startup
+ */
+const hasNeverRun: ListenerPredicate<RootState> = (_unused, currentState) => {
+  if (currentState.result.lastSimulationRequested === null) {
+    console.debug(`hasNeverRun`);
+    return true;
+  }
+  return false;
+};
+
 // TODO also depends on config
 // TODO memoise previous sim results to avoid re-running
 /**
@@ -115,6 +126,7 @@ const simulationNeedsUpdate: ListenerPredicate<RootState> = (
   previousState,
 ) =>
   [
+    hasNeverRun,
     spellSequenceHasChanged,
     alwaysCastSequenceHasChanged,
     wandStatsHaveChanged,
@@ -158,7 +170,6 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
       const simulationRequestId = nextSimulationRequestId();
 
       console.group(`Simulation Request #${simulationRequestId}`);
-      console.debug('dispatch: newSimulation');
       listenerApi.dispatch(
         newSimulation({
           simulationRequestId,

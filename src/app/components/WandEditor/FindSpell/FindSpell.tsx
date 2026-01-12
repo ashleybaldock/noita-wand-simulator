@@ -48,15 +48,17 @@ export type FuzzySearchPlacement = 'page-middle' | 'header-right';
 
 const NoQuery = styled.div`
   position: absolute;
-  top: 2.4em;
-  right: 0;
+  inset: 100% 0% auto 0%;
   justify-content: start;
   flex: 0 0 auto;
   font-size: 0.8em;
-  background-color: #0000004f;
+  background-color: #0c0c0cf2;
   padding: 0.5em 1em;
+  margin: 0.4em 0;
   border-radius: 50%;
   pointer-events: none;
+  border: 2px solid var(--color-tab-border-active);
+  border-radius: 0 0.4em;
   &::before {
     content: '... ';
   }
@@ -130,7 +132,7 @@ const SearchInput = styled.input.attrs({ type: 'text' })`
     letter-spacing: 0;
     color: #666666;
     font-size: 0.9em;
-    text-align: end;
+    text-align: center;
   }
   &:placeholder-shown {
     color: red;

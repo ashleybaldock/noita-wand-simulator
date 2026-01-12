@@ -19,10 +19,10 @@ import {
   type WandIndex,
 } from './WandIndex';
 const {
-  wand,
-  spellIds = [],
-  alwaysIds = [],
-  messages = [],
+  wand: wandFromSearch,
+  spellIds: spellIdsFromSearch = [],
+  alwaysIds: alwaysIdsFromSearch = [],
+  messages: messagesFromSearch = [],
 } = generateWandStateFromSearch(window.location.search);
 
 // TODO these could be surfaced in the UI for debugging wand urls
@@ -31,14 +31,23 @@ const {
 const initialState: WandState = {
   wand: {
     ...defaultWand,
-    ...wand,
+  },
+  spellIds: fixedLengthCopy([], defaultWand.deck_capacity),
+  alwaysIds: fixedLengthCopy([], MAX_ALWAYS),
+  messages: [],
+} as const;
+
+const initialStateFromSearch: WandState = {
+  wand: {
+    ...defaultWand,
+    ...wandFromSearch,
   },
   spellIds: fixedLengthCopy(
-    spellIds,
-    wand.deck_capacity ?? defaultWand.deck_capacity,
+    spellIdsFromSearch,
+    wandFromSearch.deck_capacity ?? defaultWand.deck_capacity,
   ),
-  alwaysIds: fixedLengthCopy(alwaysIds, MAX_ALWAYS),
-  messages: messages || [],
+  alwaysIds: fixedLengthCopy(alwaysIdsFromSearch, MAX_ALWAYS),
+  messages: messagesFromSearch || [],
 } as const;
 
 const getSpellId = (state: WandState, wandIndex: WandIndex): SpellId | null => {
