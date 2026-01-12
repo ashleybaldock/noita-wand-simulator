@@ -73,24 +73,7 @@ export class MapTree<T> implements TreeRoot<T>, SerializableMapTree<T> {
   protected nodeMap: MapTreeNodeMap<T>;
   // protected map: MapTreeMap<T>;
 
-  protected _root: MapTreeNode<T>;
-
-  protected wrap = (entryId: MapTreeId) => {
-    // if (isUndefined(entryId)) {
-    //   return undefined;
-    // }
-    const entry = this.map.get(entryId);
-    if (isUndefined(entry)) {
-      return undefined;
-    } else {
-      const node = this.nodeMap.get(entryId)?.deref();
-      if (isUndefined(node)) {
-        return new MapTreeNode<T>(entry.value, entry.parentId, entry.childIds);
-      } else {
-        return node;
-      }
-    }
-  };
+  protected _children: MapTreeNode<T>[] = [];
 
   constructor(init?: Readonly<SerialisedMapTree<T>>) {
     this.nodeMap = new Map();
@@ -98,42 +81,25 @@ export class MapTree<T> implements TreeRoot<T>, SerializableMapTree<T> {
   }
 
   *iter(): IterableIterator<TreeNode<T>> {
-    yield* this._root;
+    yield* this._children;
   }
 
   [Symbol.iterator](): IterableIterator<TreeNode<T>> {
     return this.iter();
   }
 
-  get value(): T {
-    return this.map.get(this.id)?.value;
-  }
-
   get children(): IterableIterator<TreeNode<T>> {
-    return narrowIter(
-      mapIter(
-        (this.map.get(this.id)?.childIds ?? []).values(),
-        (childId: MapTreeId) => this.wrap(childId),
-      ),
-      isNotNullOrUndefined,
-    );
+    return this.iter();
   }
 
   get childCount(): number {
-    return this.map.get(this.id)?.childIds?.length ?? 0;
+    return this._children.length;
   }
 
   appendChild = (value: T): MapTreeNode<T> => {
-    this._root = new MapTreeNode(value);
-    return this._root;
-    // const parentEntry = this.map.get(this.id);
-    // if (isNonNullable(parentEntry)) {
-    //   if (isNullOrUndefined(parentEntry.childIds)) {
-    //     parentEntry.childIds = [];
-    //   } else {
-    //     parentEntry.childIds.push(baby.id);
-    //   }
-    // }
+    const baby = new MapTreeNode(value);
+    this._children.push(baby);
+    return baby;
   };
 
   serialize = (): [MapTreeId, MapTreeEntry<T>][] => {
@@ -163,6 +129,10 @@ export class MapTreeNode<T> extends MapTree<T> implements TreeNode<T> {
     // this._childIds = childIds;
     // this.map.set(this.id, { value, parentId, childIds });
     this.nodeMap.set(this.id, this);
+  }
+
+  get value(): T {
+    return this._value;
   }
 
   *iter(): IterableIterator<TreeNode<T>> {

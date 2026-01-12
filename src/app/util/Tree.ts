@@ -5,7 +5,7 @@
 /**
  * Tree root node, lacks parent
  */
-export type TreeRoot<T> = Omit<TreeNode<T>, 'parent'>;
+export type TreeRoot<T> = Omit<TreeNode<T>, 'parent' | 'value'>;
 
 /**
  * Tree node
