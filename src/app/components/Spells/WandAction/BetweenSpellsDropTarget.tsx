@@ -249,8 +249,8 @@ export const BetweenSpellsDropTarget = ({
   // const mergedHover = useMergedBackgroundVars(
   //   getCssHoverVarForProperty,
   const mergedHover = useMergedBackgrounds(
-    caretBackgrounds['caret-hover']['before'],
-    caretBackgrounds['caret-hover']['after'],
+     (isDraggingSelect ? caretBackgrounds.none : (caretBackgrounds['caret-hover']['before']),
+     (isDraggingSelect ? caretBackgrounds.none : (caretBackgrounds['caret-hover']['after']),
     selectionBackgrounds[selectionForSpellBefore]['after'],
     selectionBackgrounds[selectionForSpellAfter]['before'],
   );

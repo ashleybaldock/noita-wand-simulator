@@ -95,14 +95,17 @@ export const objectEntries = <T extends object>(obj: T): ObjectEntries<T>[] =>
   Object.entries(obj) as ObjectEntries<T>[];
 
 export const groupBy = <T, K extends string>(arr: T[], keyFn: (x: T) => K) =>
-  arr.reduce((acc, cur) => {
-    const k = keyFn(cur);
-    if (!acc[k]) {
-      acc[k] = [];
-    }
-    acc[k].push(cur);
-    return acc;
-  }, {} as Record<K, T[]>);
+  arr.reduce(
+    (acc, cur) => {
+      const k = keyFn(cur);
+      if (!acc[k]) {
+        acc[k] = [];
+      }
+      acc[k].push(cur);
+      return acc;
+    },
+    {} as Record<K, T[]>,
+  );
 
 /**
  * Like Object.fromEntries using only keys
@@ -369,9 +372,8 @@ export function hashString(s: string) {
 //   return Math.ceil((n - offset) / increment) * increment + offset;
 // };
 
-export const sequentialId = <T extends number>() => {
-  const isValidT = (n: number): n is T => n > 0;
-  const startFrom = 1;
+export const sequentialId = <T extends number>(startFrom: number = 1) => {
+  const isValidT = (n: number): n is T => n >= startFrom;
   if (isValidT(startFrom)) {
     const idGenerator = sequentialIter<T>(startFrom, isValidT);
     return () => {
