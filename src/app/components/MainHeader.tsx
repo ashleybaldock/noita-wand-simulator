@@ -25,7 +25,7 @@ const HeaderDiv = styled.div<{
   color: #eee;
   margin: 0;
   background-color: var(--color-base-background);
-  z-index: 100;
+  z-index: var(--zindex-mainheader);
   position: sticky;
   top: -20px;
   height: 36px;

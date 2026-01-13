@@ -407,3 +407,18 @@ button[data-tooltip-content='clear'] {
   max-width: var(--pw);
   width: clamp(max(3em, 25%), var(--pw), 10em);
 }
+
+:root {
+  --zindex-mainheader: 800;
+}
+[data-name='MainHeader'] {
+  z-index: var(--zindex-mainheader);
+}
+[data-name='MainHeader']::after {
+  content: '';
+  z-index: var(--zindex-mainheader);
+  box-shadow: inset 0 -5px 10px -4px #000;
+  position: absolute;
+  inset: 0 0 0 0;
+  pointer-events: none;
+}

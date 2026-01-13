@@ -12,12 +12,15 @@ const StickyHeaderSep = styled.div`
   z-index: var(--zindex-stickyheader-overline, 210);
 
   background-color: transparent;
-  border-bottom: var(--ou) solid var(--color-base-background);
-  border-top: var(--ou) solid var(--color-tab-border-inactive);
+  border-bottom: var(--ou) solid #222;
+  border-top: calc(var(--ou) * 0.65) groove var(--color-tab-border-active);
+  box-shadow:
+    0 4px 1px 0px #000,
+    0 -5px 0 0 #000;
 `;
 const SectionHeaderContainer = styled.div<{ $line: 'above' | 'below' }>`
   position: sticky;
-  inset: var(--top-banner-height);
+  inset: var(--top-banner-height) auto auto auto;
   z-index: var(--zindex-stickyheader-controls, 220);
   display: grid;
   grid-template-columns:
@@ -32,6 +35,7 @@ const SectionHeaderContainer = styled.div<{ $line: 'above' | 'below' }>`
     title-start buttons-start] 1fr [buttons-end title-end
     ${({ $line }) => ($line === 'below' ? `line-start] auto [line-end` : '')}
     bottom];
+  margin: 10px 0 10px 0;
 
   @media screen and (max-width: 500px) {
     grid-template-columns:
