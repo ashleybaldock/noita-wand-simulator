@@ -7,7 +7,7 @@ import {
 } from '../Annotations/';
 import { WandAction, StyledWandActionBorder } from '../Spells/WandAction';
 import { getSpellByActionId } from '../../calc/spells';
-import type { WandShotProjectile } from '../../calc/eval/WandShotProjectile';
+import type { WandCastProjectile } from '../../calc/eval/WandShotProjectile';
 
 /*
   background-image: url(/data/inventory/action_tree_box.png);
@@ -25,7 +25,7 @@ const WandActionProjectileBorder = styled(StyledWandActionBorder)`
 export const WandActionProjectile = ({
   projectile,
 }: {
-  projectile: WandShotProjectile;
+  projectile: WandCastProjectile;
 }) => {
   return (
     <WandActionProjectileBorder

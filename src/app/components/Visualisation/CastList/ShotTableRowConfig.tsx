@@ -264,15 +264,15 @@ type FieldSection = {
   fields: FieldDescription[];
 };
 
-export const shotTableGridRows = () =>
-  shotTableSections
+export const castTableGridRows = () =>
+  castTableSections
     .map(
       ({ title, fields }) =>
         `[${title.toLowerCase()}] repeat(${fields.length}, min-content)`,
     )
     .join(' ');
 
-export const shotTableSections: FieldSection[] = [
+export const castTableSections: FieldSection[] = [
   {
     title: 'Timing',
     fields: [

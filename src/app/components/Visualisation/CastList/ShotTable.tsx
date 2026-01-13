@@ -19,12 +19,12 @@ import {
 import { Fragment } from 'react';
 import type { WandShotId } from '../../../calc/eval/WandShot';
 import { useShot, useShotLookup } from '../../../redux';
-import type { WandShotProjectile } from '../../../calc/eval/WandShotProjectile';
-import { ShotTableProjectile } from './ShotTableProjectile';
+import type { WandCastProjectile } from '../../../calc/eval/WandShotProjectile';
+import { CastTableProjectile } from './ShotTableProjectile';
 import type { WandShotResult } from '../../../calc/eval/WandShot';
-import { shotTableGridRows } from './ShotTableRowConfig';
+import { castTableGridRows } from './ShotTableRowConfig';
 
-const StyledShotTable = styled.div<{ $rows?: string }>`
+const StyledCastTable = styled.div<{ $rows?: string }>`
   --nesting-offset: var(--sizes-nesting-offset, 16px);
 
   display: grid;
@@ -49,7 +49,7 @@ const Headings = styled.div`
   grid-column: left / right;
 `;
 
-// const shotSubStateSummary = useMemo(() => {
+// const castSubStateSummary = useMemo(() => {
 /*
  * S:[a b:[  3       4          ]
  *         i j:[   ] k:[       ]
@@ -107,7 +107,7 @@ const Headings = styled.div`
  *  [1,1,1] s
  */
 
-export const ShotTableHeadings = ({
+export const CastTableHeadings = ({
   shotIndex,
   shotId,
   nestingPrefix = [],
@@ -165,7 +165,7 @@ export const ShotTableHeadings = ({
           </SubTotalsColumnHeading>
         </>
       )}
-      {projectiles.map((projectile: WandShotProjectile, index, arr) => {
+      {projectiles.map((projectile: WandCastProjectile, index, arr) => {
         const isEndOfTrigger = index === arr.length - 1;
         const triggerShot = ((lookupResult) =>
           ((lookupResult?.projectiles?.length ?? 0) > 0 && lookupResult) ||
@@ -179,10 +179,10 @@ export const ShotTableHeadings = ({
               isEndOfTrigger={isEndOfTrigger}
               nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
             >
-              <ShotTableProjectile projectile={projectile} />
+              <CastTableProjectile projectile={projectile} />
             </ProjectileHeading>
             {isNotNullOrUndefined(triggerShot) && (
-              <ShotTableHeadings
+              <CastTableHeadings
                 shotId={triggerShot.id}
                 shotIndex={index}
                 nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
@@ -262,12 +262,12 @@ export const ShotTable = ({
   shot: WandShotResult;
 }) => {
   return (
-    <StyledShotTable $rows={shotTableGridRows()}>
-      <ShotTableHeadings
+    <StyledCastTable $rows={castTableGridRows()}>
+      <CastTableHeadings
         shotIndex={shotIndex}
         shotId={shot.id}
-      ></ShotTableHeadings>
+      ></CastTableHeadings>
       <ShotTableColumns shotId={shot.id}></ShotTableColumns>
-    </StyledShotTable>
+    </StyledCastTable>
   );
 };

@@ -6,7 +6,7 @@ import { Unchanged } from '../../Presentation';
 import { useConfig, useWand } from '../../../redux';
 import type { SpriteName } from '../../../calc/sprite';
 import { useIcon } from '../../../calc/sprite';
-import { shotTableSections } from './ShotTableRowConfig';
+import { castTableSections } from './ShotTableRowConfig';
 
 // TODO: handle extra_entities that affect damage/etc
 
@@ -130,7 +130,7 @@ export const FieldNamesColumn = styled(
     return (
       <>
         {castState &&
-          shotTableSections.map(({ fields }, i1) =>
+          castTableSections.map(({ fields }, i1) =>
             fields.map(({ key, displayName }, i2) => (
               <PropertyName
                 key={key ?? `${i1}-${i2}-${key}`}
@@ -155,7 +155,7 @@ export const IconsColumn = styled(
     return (
       <>
         {castState &&
-          shotTableSections.map(({ fields }, i1) =>
+          castTableSections.map(({ fields }, i1) =>
             fields.map(({ key, icon }, i2) => (
               <PropertyIcon
                 key={key ?? `${i1}-${i2}-${key}`}
@@ -193,7 +193,7 @@ export const TotalsColumn = styled(
     return (
       <>
         {castState &&
-          shotTableSections.map(({ fields }, i1) =>
+          castTableSections.map(({ fields }, i1) =>
             fields.map(
               (
                 { key, render, ignoredInTrigger = false, noTotal = false },
@@ -259,7 +259,7 @@ export const WandStatsColumn = styled(
     return (
       <>
         {castState &&
-          shotTableSections.map(({ fields }, i1) =>
+          castTableSections.map(({ fields }, i1) =>
             fields.map(({ key, render }, i2) => (
               <PropertyValue
                 key={key ? `wandStats-${key}` : `wandStats-${i1}-${i2}`}
@@ -308,7 +308,7 @@ export const ProjectileColumn = styled(
     return (
       <>
         {castState &&
-          shotTableSections.map(({ fields }, i1) =>
+          castTableSections.map(({ fields }, i1) =>
             fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
               <PropertyValue
                 key={key ?? `${i1}-${i2}`}

@@ -6,7 +6,7 @@ import { sequentialId } from '../../util';
 import { defaultGunActionState } from '../defaultActionState';
 import type { EvalTree } from './serialize';
 import type { ProjectileId } from '../projectile';
-import type { WandShotProjectile } from './WandShotProjectile';
+import type { WandCastProjectile } from './WandShotProjectile';
 import type { MapTree } from '../../util/MapTree';
 
 export type WandShotId = number;
@@ -31,7 +31,7 @@ type WandShotStats = {
 export type WandShot = {
   id: WandShotId;
   stats: WandShotStats;
-  projectiles: WandShotProjectile[];
+  projectiles: WandCastProjectile[];
   actionCalls: ActionCall[];
   /**
    * Ordered list of actionCallTree root nodes,

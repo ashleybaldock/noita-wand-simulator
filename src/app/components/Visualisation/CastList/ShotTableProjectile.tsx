@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import type { WandShotProjectile } from '../../../calc/eval/WandShotProjectile';
+import type { WandCastProjectile } from '../../../calc/eval/WandShotProjectile';
 import { getSpellByActionId } from '../../../calc/spells';
 import {
   ActionProxyAnnotation,
@@ -50,7 +50,7 @@ const MainDiv = styled.div`
 /*
   background-image: url(/data/inventory/action_tree_box.png);
  */
-const ShotTableProjectileBorder = styled(StyledWandActionBorder)`
+const CastTableProjectileBorder = styled(StyledWandActionBorder)`
   position: relative;
   padding: 3px;
   border: 3px dotted #656565;
@@ -60,14 +60,14 @@ const ShotTableProjectileBorder = styled(StyledWandActionBorder)`
   margin: 0;
 `;
 
-export const ShotTableProjectile = ({
+export const CastTableProjectile = ({
   projectile,
 }: {
-  projectile: WandShotProjectile;
+  projectile: WandCastProjectile;
 }) => {
   return (
     <MainDiv>
-      <ShotTableProjectileBorder
+      <CastTableProjectileBorder
         data-grouping="none"
         data-type=""
         data-name="ProjActionGroup"
@@ -90,7 +90,7 @@ export const ShotTableProjectile = ({
           wandIndex={projectile.spell?.always_cast_index}
         />
         <FriendlyFireAnnotation />
-      </ShotTableProjectileBorder>
+      </CastTableProjectileBorder>
     </MainDiv>
   );
 };

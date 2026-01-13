@@ -9,6 +9,7 @@ export const loadState = (defaultState: ConfigState): ConfigState => {
     }
     return JSON.parse(serializedState);
   } catch (err) {
+    console.warn('loadState - error loading from localstorage', err);
     return defaultState;
   }
 };
@@ -19,6 +20,6 @@ export const saveState = (state: ConfigState) => {
     const serializedState = JSON.stringify(state);
     localStorage.setItem('state', serializedState);
   } catch (err) {
-    console.warn('Write to LocalStorage failed', err);
+    console.warn('saveState - error writing to localstorage', err);
   }
 };

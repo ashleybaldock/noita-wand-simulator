@@ -12,11 +12,11 @@ const StickyHeaderSep = styled.div`
   z-index: var(--zindex-stickyheader-overline, 210);
 
   background-color: transparent;
-  border-bottom: var(--ou) solid #222;
   border-top: calc(var(--ou) * 0.65) groove var(--color-tab-border-active);
   box-shadow:
-    0 4px 1px 0px #000,
+    0 1px 4px 1px #000,
     0 -5px 0 0 #000;
+  border-bottom: calc(var(--ou) * 0.35) solid #222;
 `;
 const SectionHeaderContainer = styled.div<{ $line: 'above' | 'below' }>`
   position: sticky;

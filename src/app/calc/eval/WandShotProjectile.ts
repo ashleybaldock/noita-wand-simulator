@@ -2,7 +2,7 @@ import type { ProjectileId } from '../projectile';
 import type { SpellDeckInfo } from '../spell';
 import type { WandShotId } from './WandShot';
 
-export type WandShotProjectile = {
+export type WandCastProjectile = {
   _typeName: 'Projectile';
   entity: ProjectileId;
   /**
