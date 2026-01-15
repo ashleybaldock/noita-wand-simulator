@@ -60,7 +60,7 @@ export const isSpecialWandIndex = (id: unknown): id is SpecialWandIndex =>
   (specialIndexSet as Set<unknown>).has(id);
 
 export const isSelectionWandIndex = (id: unknown): id is SelectionWandIndex =>
-  isNumber(id);
+  isCursorWandIndex(id) || isNumber(id);
 
 export const isWandIndex = (id: unknown): id is WandIndex =>
   isNumber(id) || isAlwaysCastIndex(id) || isSpecialWandIndex(id);

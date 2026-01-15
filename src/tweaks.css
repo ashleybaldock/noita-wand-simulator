@@ -422,3 +422,21 @@ button[data-tooltip-content='clear'] {
   inset: 0 0 0 0;
   pointer-events: none;
 }
+
+:is([data-name='Tab'], [data-name='Tab:Selected']) > [data-name='WandAction'] {
+  image-rendering: pixelated;
+  transform: rotate(0deg) scale(1) translate(1px);
+  border-image: var(--data-spelltype-sprite);
+  border-image-slice: 2 2;
+  border-image-source: var(--data-spelltype-sprite);
+  border-image-outset: 0px;
+  border-image-width: 8px;
+  aspect-ratio: 1;
+  padding: 0;
+  margin: 0;
+  background-size: 60%, contain;
+  background-origin: content-box, border-box, border-box;
+  background-position:
+    80% 45%,
+    100% 100%;
+}

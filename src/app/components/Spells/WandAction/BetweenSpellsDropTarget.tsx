@@ -151,7 +151,7 @@ export const BetweenSpellsDropTarget = ({
         return dispatch(
           setSelection({
             from: Math.min(from, insertIndex),
-            to: Math.max(from, insertIndex + 1),
+            to: Math.max(from, insertIndex),
             // direction === 'left' || $location === 'after'
             // ? insertIndex
             // : Math.max(0, insertIndex - 1),

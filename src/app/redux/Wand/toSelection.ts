@@ -1,6 +1,6 @@
 import type { WandSelectionSet } from './wandSelection';
 
-export const getSelectionForId = (
+export const getSelectionForWandIndex = (
   idx: number,
   from: number | null,
   to: number | null,

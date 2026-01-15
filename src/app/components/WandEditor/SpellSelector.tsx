@@ -77,8 +77,9 @@ const SpellCategorySpellsDiv = styled.div`
 `;
 
 const SpellSelectorWandActionBorder = styled(StyledWandActionBorder)`
+  --spellbg: var(--sprite-inventory-grid-box-unknown);
+
   position: relative;
-  background-image: var(--sprite-inventory-grid-box-unknown);
   padding-left: 0;
   padding-top: 0;
 
@@ -89,9 +90,10 @@ const SpellSelectorWandActionBorder = styled(StyledWandActionBorder)`
   );
   width: var(--size-spell);
   height: var(--size-spell);
+  background-image: var(--spellbg);
   background-size: contain;
-  image-rendering: pixelated;
   background-clip: padding-box;
+  image-rendering: pixelated;
 
   box-shadow: 0 0 2px #000;
 

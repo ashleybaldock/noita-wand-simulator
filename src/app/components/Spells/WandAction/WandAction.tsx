@@ -63,9 +63,8 @@ const _WandAction = ({
       className={className}
       style={{
         ...style,
-        backgroundImage: `${spellSpritePath as string}, ${
-          spellTypeSpritePath as string
-        }`,
+        '--data-spell-sprite': spellSpritePath,
+        '--data-spelltype-sprite': spellTypeSpritePath,
       }}
     />
   );
@@ -81,6 +80,7 @@ export const WandAction = styled(_WandAction)`
 
   background-position: center, center;
   background-size: 100%, 100%;
+  background-image: var(--data-spell-sprite), var(--data-spelltype-sprite);
   font-family: monospace;
   font-weight: bold;
   user-select: none;

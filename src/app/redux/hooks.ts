@@ -22,7 +22,7 @@ import {
   defaultWandSelectionSet,
   type WandSelection,
 } from './Wand/wandSelection';
-import { getSelectionForId } from './Wand/toSelection';
+import { getSelectionForWandIndex } from './Wand/toSelection';
 import type { Config, ConfigToggleField } from './configSlice';
 import {
   setConfigSetting,
@@ -296,7 +296,7 @@ const selectSelections = createSelector(
   selectSpellSequence,
   ({ selectFrom, selectTo }, spellIds): WandSelectionSet[] =>
     spellIds.map((_, wandIndex) =>
-      getSelectionForId(wandIndex, selectFrom, selectTo),
+      getSelectionForWandIndex(wandIndex, selectFrom, selectTo),
     ),
 );
 export const useSelections = () => useSelector(selectSelections);
