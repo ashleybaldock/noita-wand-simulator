@@ -55,10 +55,10 @@ export const editorSlice = createSlice({
       }>,
     ): void => {
       state.selecting = selecting;
-      if (isSelectionWandIndex(from) || isCursorWandIndex(from)) {
+      if (isSelectionWandIndex(from)) {
         state.selectFrom = isCursorWandIndex(from) ? state.cursorIndex : from;
       }
-      if (isSelectionWandIndex(to) || isCursorWandIndex(to)) {
+      if (isSelectionWandIndex(to)) {
         state.selectTo = isCursorWandIndex(to) ? state.cursorIndex : to;
       }
     },
@@ -96,6 +96,7 @@ export const editorSlice = createSlice({
     /**
      * Remove all spells in selection from the wand, and clear the selection
      */
+    deleteSelected: (): void => {},
     /**
      * Insert a copy of the current selection just after itself
      */
@@ -210,6 +211,8 @@ export const {
   copySelected,
   cutSelected,
   pasteSelected,
+  deleteSelected,
+
   groupSelected,
   ungroupSelected,
   saveSelected,

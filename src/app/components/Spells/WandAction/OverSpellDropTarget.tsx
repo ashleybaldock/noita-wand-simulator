@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import type { WandSelection } from '../../../redux/Wand/wandSelection';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { Dragged, DraggedSelection } from './DragItems';
 import {
   isDraggedSelection,
@@ -41,14 +41,16 @@ export const OverSpellDropTarget = ({
   wandIndex,
   className = '',
   children,
-  cursor = 'none',
-  overHint = 'none',
+  cursorStyle = 'none',
+  overHint,
+  dropHint,
   selection = 'none',
 }: React.PropsWithChildren<{
   wandIndex: WandIndex;
   className?: string;
-  cursor?: CaretStyle;
+  cursorStyle?: CaretStyle;
   overHint?: DropHint;
+  dropHint?: DropHint;
   selection?: WandSelection;
 }>) => {
   const dispatch = useAppDispatch();
@@ -129,19 +131,32 @@ export const OverSpellDropTarget = ({
     [wandIndex, onDropSpell, onEndSelect, onDragSelect],
   );
 
+  const dropHintBackground = useMemo(() => {
+    if (isDraggingSpell) {
+      if (isOver) {
+        if (canDrop) {
+          return dropHintBackgrounds[dropHint ?? 'none'];
+        }
+        return dropHintBackgrounds[overHint ?? 'dragging'];
+      }
+      return dropHintBackgrounds['dragging'];
+    }
+    if (isDraggingSelect) {
+      if (isOver) {
+        if (canDrop) {
+          return selectHintBackgrounds['dragging'];
+        }
+        return selectHintBackgrounds['dragging'];
+      }
+      return selectHintBackgrounds['dragging'];
+    }
+    return dropHintBackgrounds['none'];
+  }, [isDraggingSpell, isDraggingSelect, isOver, canDrop, overHint]);
+
   const merged = useMergedBackgrounds(
-    caretBackgrounds[cursor]['on'],
-    ((isDraggingSpell && isOver && canDrop && dropHintBackgrounds[overHint]) ||
-      (isDraggingSpell && isOver && dropHintBackgrounds[overHint]) ||
-      (isDraggingSpell && dropHintBackgrounds.dragging) ||
-      (isDraggingSelect &&
-        isOver &&
-        canDrop &&
-        selectHintBackgrounds[overHint]) ||
-      (isDraggingSelect && isOver && selectHintBackgrounds[overHint]) ||
-      (isDraggingSelect && selectHintBackgrounds.dragging) ||
-      dropHintBackgrounds.none)['on'],
-    selectionBackgrounds[selection]['on'],
+    caretBackgrounds[cursorStyle].on,
+    dropHintBackground.on,
+    selectionBackgrounds[selection].on,
   );
 
   const dropRef = useDropRef(dropConnector);
