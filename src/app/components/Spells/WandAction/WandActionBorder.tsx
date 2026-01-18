@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useDrop } from 'react-dnd';
 import { useDropRef } from '../../../hooks/useDropRef';
+import { BetweenSpellsDropTarget } from './BetweenSpellsDropTarget';
 
 const StyledDiv = styled.div<{
   $highlight: boolean;
@@ -20,18 +21,18 @@ const StyledDiv = styled.div<{
   background-size: cover;
   image-rendering: pixelated;
 
-  background-image: url('/data/inventory/full_inventory_box.png');
+  background-image: var(--sprite-full-inventory-box);
 
   &:hover {
-    background-image: url('/data/inventory/full_inventory_box.png');
+    background-image: var(--sprite-full-inventory-box);
   }
 
   ${({ $highlight, $disabled }) =>
     $disabled
-      ? `background-image: url('/data/inventory/inventory_box_inactive_overlay.png'), url('/data/inventory/full_inventory_box.png');`
+      ? `background-image: var(--sprite-inventory-box-inactive), var(--sprite-full-inventory-box);`
       : $highlight
-        ? `background-image: url('/data/inventory/full_inventory_box_highlight.png'), url('/data/inventory/full_inventory_box.png');`
-        : `background-image: url('/data/inventory/full_inventory_box.png');`}
+        ? `background-image: var(--sprite-full-inventory-box-highlight), var(--sprite-full-inventory-box);`
+        : `background-image: var(--sprite-full-inventory-box);`}
 `;
 
 const WandActionBorder = ({

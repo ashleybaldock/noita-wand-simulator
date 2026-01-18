@@ -20,8 +20,9 @@ import {
 import { selectionBackgrounds } from './Backgrounds/WandSelection';
 import { useMergedBackgrounds } from './Backgrounds/useMergeBackgrounds';
 import { useDropRef } from '../../../hooks/useDropRef';
+import { mergeRefs, type MergableRef } from '../../../util/mergeRefs';
 
-const DropTargetOver = styled.div`
+export const DropTargetOver = styled.div`
   --selection-bdcolor: #00dbff;
   --selection-bgcolor: #0000ff78;
   --selection-bdradius: 3px;
@@ -40,18 +41,22 @@ const DropTargetOver = styled.div`
 export const OverSpellDropTarget = ({
   wandIndex,
   className = '',
+  ref,
   children,
   cursorStyle = 'none',
   overHint,
   dropHint,
   selection = 'none',
+  $dataName = 'OverSpellDropTarget',
 }: React.PropsWithChildren<{
   wandIndex: WandIndex;
   className?: string;
+  ref?: MergableRef<HTMLDivElement>;
   cursorStyle?: CaretStyle;
   overHint?: DropHint;
   dropHint?: DropHint;
   selection?: WandSelection;
+  $dataName?: string;
 }>) => {
   const dispatch = useAppDispatch();
   const { swapOnMove } = useConfig();
@@ -163,8 +168,9 @@ export const OverSpellDropTarget = ({
 
   return (
     <DropTargetOver
-      ref={dropRef}
+      ref={mergeRefs(ref, dropRef)}
       style={merged}
+      data-name={$dataName}
       onClick={() => dispatch(moveCursorTo({ to: wandIndex }))}
       className={className}
     >

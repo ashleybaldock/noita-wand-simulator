@@ -12,10 +12,7 @@ export const WandActionDropTargets = ({
   lastIndex?: WandIndex;
 }>) => {
   return (
-    <OverSpellDropTarget
-      data-name={'OverSpellDropTarget'}
-      wandIndex={wandIndex}
-    >
+    <OverSpellDropTarget wandIndex={wandIndex}>
       <StyledWandActionBorder>{children}</StyledWandActionBorder>
       {isMainWandIndex(wandIndex) && (
         <>

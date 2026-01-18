@@ -17,7 +17,7 @@ import {
   useSelection,
   useEditMode,
 } from '../../../redux';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useMergedBackgrounds } from './Backgrounds/useMergeBackgrounds';
 import { caretBackgrounds } from './Backgrounds/Caret';
 import { selectionBackgrounds } from './Backgrounds/WandSelection';
@@ -28,6 +28,7 @@ import {
 import { useDragRef } from '../../../hooks/useDragRef';
 import { useDropRef } from '../../../hooks/useDropRef';
 import { emptyBackgroundPart } from './Backgrounds/BackgroundPart';
+import { DropTargetOver } from './OverSpellDropTarget';
 
 // right: calc(var(--width) * -0.5);
 // z-index: var(--zindex-insert-after);
@@ -97,6 +98,11 @@ const HoverBackground = styled(DynamicBackground)`
   ${DropTargetBackground}:hover & {
     opacity: 1;
   }
+
+  ${DropTargetOver}:hover & {
+    opacity: 1;
+  }
+
   ${WithDebugHints} && {
     background-color: red;
   }
@@ -110,11 +116,13 @@ export const BetweenSpellsDropTarget = ({
   indexOfSpellAfter,
   className = '',
   ref,
+  $dataName = 'BetweenSpellsDropTarget',
 }: {
   indexOfSpellBefore: WandIndex;
   indexOfSpellAfter: WandIndex;
   className?: string;
   ref?: MergableRef<HTMLDivElement>;
+  $dataName?: string;
 }) => {
   const dispatch = useAppDispatch();
 
@@ -204,6 +212,7 @@ export const BetweenSpellsDropTarget = ({
       collect: (monitor) => ({
         isDraggingSpell: monitor.getItemType() === 'spell',
         isDraggingSelect: monitor.getItemType() === 'select',
+        isOverOver: monitor.isOver({ shallow: true }),
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
       }),
@@ -228,36 +237,47 @@ export const BetweenSpellsDropTarget = ({
   // const merged = useMergedBackgroundVars(
   //   getCssVarForProperty,
   // const overHint = `${editMode.insert.mode}${editMode.insert.direction}`;
+  const dropHintBackground = useMemo(() => {
+    if (isDraggingSpell) {
+      if (isOver) {
+        if (canDrop) {
+          return dropHintBackgrounds['shiftright'];
+        }
+        return dropHintBackgrounds['shiftright'];
+      }
+      return dropHintBackgrounds['dragging'];
+    }
+    if (isDraggingSelect) {
+      if (isOver) {
+        if (canDrop) {
+          return selectHintBackgrounds['shiftright'];
+        }
+        return selectHintBackgrounds['shiftright'];
+      }
+      return selectHintBackgrounds['dragging'];
+    }
+    return dropHintBackgrounds['none'];
+  }, [isDraggingSpell, isDraggingSelect, isOver, canDrop]);
+
   const merged = useMergedBackgrounds(
-    caretBackgrounds[cursorForSpellBefore]['before'],
-    caretBackgrounds[cursorForSpellAfter]['after'],
-    ((isDraggingSpell &&
-      isOver &&
-      canDrop &&
-      dropHintBackgrounds['shiftright']) ||
-      (isDraggingSpell && isOver && dropHintBackgrounds['shiftright']) ||
-      (isDraggingSpell && dropHintBackgrounds.dragging) ||
-      (isDraggingSelect &&
-        isOver &&
-        canDrop &&
-        selectHintBackgrounds['shiftright']) ||
-      (isDraggingSelect && isOver && selectHintBackgrounds['shiftright']) ||
-      (isDraggingSelect && selectHintBackgrounds['dragging']) ||
-      dropHintBackgrounds.none)['before'],
     selectionBackgrounds[selectionForSpellBefore]['after'],
     selectionBackgrounds[selectionForSpellAfter]['before'],
+    dropHintBackground.before,
+    caretBackgrounds[cursorForSpellBefore].before,
+    caretBackgrounds[cursorForSpellAfter].after,
   );
+
   // const mergedHover = useMergedBackgroundVars(
   //   getCssHoverVarForProperty,
   const mergedHover = useMergedBackgrounds(
+    selectionBackgrounds[selectionForSpellBefore]['after'],
+    selectionBackgrounds[selectionForSpellAfter]['before'],
     isDraggingSelect
       ? emptyBackgroundPart()
       : caretBackgrounds['caret-hover']['before'],
     isDraggingSelect
       ? emptyBackgroundPart()
       : caretBackgrounds['caret-hover']['after'],
-    selectionBackgrounds[selectionForSpellBefore]['after'],
-    selectionBackgrounds[selectionForSpellAfter]['before'],
   );
   const style = { ...merged, ...mergedHover };
 
@@ -265,6 +285,7 @@ export const BetweenSpellsDropTarget = ({
     <DropTargetBackground
       className={className}
       style={merged}
+      data-name={$dataName}
       onClick={() =>
         dispatch(
           moveCursorTo({

@@ -6,6 +6,8 @@ export const caretStyles = [
   'caret-hover',
   'caret',
   'caret-select',
+  'caret-select-hover',
+  'caret-select-dragging',
   'spell-over',
 ] as const;
 
@@ -90,6 +92,49 @@ export const caretBackgrounds: Record<CaretStyle, Background> = {
       ],
       backgroundPosition: [`center top`, `center bottom`, `center center`],
       cursor: ['text'],
+    },
+  },
+  'caret-select-hover': {
+    ...emptyBackground(),
+    before: {
+      backgroundImage: [
+        `var(--sprite-cursor-carat-select-top)`,
+        `var(--sprite-cursor-carat-select-bottom)`,
+        `var(--sprite-cursor-select-over-line)`,
+      ],
+      backgroundRepeat: [`no-repeat`, `no-repeat`, `repeat-y`],
+      backgroundSize: [
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+      ],
+      backgroundPosition: [`center top`, `center bottom`, `center center`],
+      cursor: ['text'],
+    },
+  },
+  'caret-select-dragging': {
+    ...emptyBackground(),
+    before: {
+      backgroundImage: [
+        `var(--sprite-cursor-carat-select-top)`,
+        `var(--sprite-cursor-carat-select-bottom)`,
+        `var(--sprite-cursor-select-over-line)`,
+        `var(--sprite-cursor-caret-select-mid-toleftandright)`,
+      ],
+      backgroundRepeat: [`no-repeat`, `no-repeat`, `repeat-y`, `no-repeat`],
+      backgroundSize: [
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+        `var(--cursor-container-width)`,
+      ],
+      backgroundPosition: [
+        `center top`,
+        `center bottom`,
+        `center center`,
+        `center center`,
+      ],
+      cursor: ['cross'],
     },
   },
 };

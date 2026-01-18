@@ -17,7 +17,7 @@ const Cursor = styled(DynamicBackground)`
 export const SelectionDragPreview = () => {
   const preview = usePreview<DraggedSelection>();
   const background = useMergedBackgrounds(
-    caretBackgrounds['caret-select']['before'],
+    caretBackgrounds['caret-select-dragging']['before'],
   );
 
   if (!preview.display) {

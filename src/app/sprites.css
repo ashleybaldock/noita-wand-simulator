@@ -131,6 +131,11 @@
 
   --sprite-inventory-grid-box: url('/data/inventory/grid_box.png');
   --sprite-inventory-grid-box-unknown: url('/data/inventory/grid_box_unknown.png');
+  --sprite-full-inventory-box: url('/data/inventory/full_inventory_box.png');
+  --sprite-inventory-box-inactive: url('/data/inventory/inventory_box_inactive_overlay.png');
+  --sprite-full-inventory-box-highlight: url('/data/inventory/full_inventory_box_highlight.png');
+  --sprite-inventory-hover-info-empty-slot: url('/data/inventory/hover_info_empty_slot.png');
+
   --icon-redo: url('/data/redo.png');
   --icon-undo: url('/data/undo.png');
   --icon-export: url('/data/export.png');

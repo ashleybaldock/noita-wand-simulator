@@ -48,8 +48,8 @@ export const dropHintBackgrounds: Record<DropHint, Background> = {
     ...emptyBackground(),
     before: {
       backgroundImage: [
-        `var(--sprite-cursor-caret-spell-top)`,
-        `var(--sprite-cursor-caret-spell-bottom)`,
+        `var(--sprite-cursor-caret-arrow-top-toleft)`,
+        `var(--sprite-cursor-caret-arrow-bottom-toleft)`,
         `var(--sprite-cursor-caret-spell-over-line)`,
         `var(--sprite-cursor-caret-spell-mid-toleft)`,
       ],
@@ -64,7 +64,7 @@ export const dropHintBackgrounds: Record<DropHint, Background> = {
         `center top`,
         `center bottom`,
         `center center`,
-        `center`,
+        `left center`,
       ],
       cursor: ['w-resize'],
     },
@@ -73,8 +73,8 @@ export const dropHintBackgrounds: Record<DropHint, Background> = {
     ...emptyBackground(),
     before: {
       backgroundImage: [
-        `var(--sprite-cursor-caret-spell-top)`,
-        `var(--sprite-cursor-caret-spell-bottom)`,
+        `var(--sprite-cursor-caret-arrow-top-toright)`,
+        `var(--sprite-cursor-caret-arrow-bottom-toright)`,
         `var(--sprite-cursor-caret-spell-over-line)`,
         `var(--sprite-cursor-caret-spell-mid-toright)`,
       ],
@@ -89,7 +89,7 @@ export const dropHintBackgrounds: Record<DropHint, Background> = {
         `center top`,
         `center bottom`,
         `center center`,
-        `center`,
+        `right center`,
       ],
       cursor: ['e-resize'],
     },
