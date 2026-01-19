@@ -264,11 +264,17 @@ type FieldSection = {
   fields: FieldDescription[];
 };
 
+// export const castTableGridRows = () =>
+//   castTableSections
+//     .map(
+//       ({ title, fields }) =>
+//         `[${title.toLowerCase()}] repeat(${fields.length}, min-content)`,
+//     )
+//     .join(' ');
 export const castTableGridRows = () =>
   castTableSections
-    .map(
-      ({ title, fields }) =>
-        `[${title.toLowerCase()}] repeat(${fields.length}, min-content)`,
+    .map(({ title, fields }) =>
+      fields.map(({ key }) => `[${key.toLowerCase()}] min-content`).join(' '),
     )
     .join(' ');
 

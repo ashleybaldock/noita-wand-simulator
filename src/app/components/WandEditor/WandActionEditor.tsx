@@ -6,7 +6,6 @@ import {
   useSelecting,
   useSpellLayout,
 } from '../../redux/hooks';
-import { setSpellAtIndex } from '../../redux/wandSlice';
 import {
   moveCursor,
   removeSelectedSpells,
@@ -14,24 +13,9 @@ import {
   removeSpellBeforeCursor,
 } from '../../redux/editorThunks';
 import { /* moveSelection, */ clearSelection } from '../../redux/editorSlice';
-import type { Spell } from '../../calc/spell';
 import { getSpellByActionId } from '../../calc/spells';
-import {
-  ChargesRemainingAnnotation,
-  DeckIndexAnnotation,
-  DeleteSpellAnnotation,
-  FriendlyFireAnnotation,
-  NoManaAnnotation,
-} from '../Annotations/';
-import {
-  DraggableWandAction,
-  WandActionDropTargets,
-  WandActionDragSource,
-  StyledWandActionBorder,
-} from '../Spells/WandAction';
-import { useDragLayer } from 'react-dnd';
+import { StyledWandActionBorder } from '../Spells/WandAction';
 import { getComputedColumns } from './hooks';
-import type { WandSelection } from '../../redux/Wand/wandSelection';
 import { isKnownSpell } from '../../redux/Wand/spellId';
 import { END } from '../../redux/WandIndex';
 import type { WandIndex } from '../../redux/WandIndex';
@@ -53,68 +37,6 @@ const EndOfWand = ({ wandIndex }: { wandIndex: WandIndex }) => {
       />
       <WandIndexAnnotation wandIndex={END} />
     </OverSpellDropTarget>
-  );
-};
-const ActionComponent = ({
-  spellAction,
-  wandIndex,
-  deckIndex,
-  lastIndex,
-}: {
-  spellAction?: Spell;
-  wandIndex: WandIndex;
-  deckIndex?: number;
-  lastIndex?: WandIndex;
-  selection?: WandSelection;
-}) => {
-  const dispatch = useAppDispatch();
-
-  const { isDraggingAction } = useDragLayer((monitor) => ({
-    isDragging: monitor.isDragging(),
-    isDraggingAction:
-      monitor.isDragging() && monitor.getItemType() === 'action',
-    isDraggingSelect:
-      monitor.isDragging() && monitor.getItemType() === 'select',
-  }));
-  const handleDeleteSpell = (wandIndex: WandIndex) => {
-    dispatch(setSpellAtIndex({ spellId: null, wandIndex }));
-  };
-
-  return (
-    <WandActionDropTargets wandIndex={wandIndex} lastIndex={lastIndex}>
-      {spellAction && (
-        <>
-          <WandActionDragSource
-            actionId={spellAction.id}
-            sourceWandIndex={wandIndex}
-          >
-            <DraggableWandAction
-              spellId={spellAction.id}
-              spellType={spellAction.type}
-              onDeleteSpell={() => handleDeleteSpell(wandIndex)}
-            />
-          </WandActionDragSource>
-          <ChargesRemainingAnnotation
-            charges={spellAction.uses_remaining}
-            neverUnlimited={spellAction.never_unlimited}
-          />
-          <DeckIndexAnnotation
-            deckIndex={deckIndex}
-            wandIndex={spellAction.always_cast_index}
-          />
-          {!isDraggingAction && (
-            <>
-              <DeleteSpellAnnotation
-                deleteSpell={() => handleDeleteSpell(wandIndex)}
-              />
-              <NoManaAnnotation />
-              <FriendlyFireAnnotation />
-            </>
-          )}
-        </>
-      )}
-      <WandIndexAnnotation wandIndex={wandIndex} />
-    </WandActionDropTargets>
   );
 };
 

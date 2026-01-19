@@ -10,7 +10,19 @@ import { castTableSections } from './ShotTableRowConfig';
 
 // TODO: handle extra_entities that affect damage/etc
 
-const GridRowItem = styled.div<{
+const ColSubGrid = styled.div.attrs<{ 'data-name'?: string }>(() => ({
+  'data-name': 'ColSubGrid',
+}))`
+  grid-column: auto/span 1;
+  grid-row: 2/-1;
+  grid-template-columns: 1fr;
+  grid-template-rows: subgrid;
+`;
+
+const GridRowItem = styled.div.attrs<{ 'data-name'?: string }>(() => ({
+  'data-name': 'GridRowItem',
+}))<{
+  $row?: string;
   $firstValue?: boolean;
   $firstInGroup?: boolean;
   $isTotal?: boolean;
@@ -18,6 +30,7 @@ const GridRowItem = styled.div<{
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;
+  ${({ $row }) => $row && `grid-row: ${$row};`}
 
   height: 1em;
   line-height: 1.2em;
@@ -47,7 +60,16 @@ const GridRowItem = styled.div<{
   `}
 `;
 
-const StyledPropertyIcon = styled(GridRowItem)<{ $background?: string }>`
+const PropertyIcon = styled(GridRowItem).attrs<{
+  $background?: string;
+  icon?: SpriteName;
+  $firstValue?: boolean;
+  $firstInGroup?: boolean;
+  $isTotal?: boolean;
+}>(({ icon }) => ({
+  $background: useIcon(icon),
+  'data-name': 'PropertyIcon',
+}))`
   position: sticky;
   left: -10px;
   z-index: var(--zindex-stickyheader-shotgrid);
@@ -55,33 +77,8 @@ const StyledPropertyIcon = styled(GridRowItem)<{ $background?: string }>`
   background-size: 1.1em;
   background-color: black;
   background-image: none;
-  ${(props) => props?.$background && `background-image: ${props.$background};`}
+  ${({ $background }) => $background && `background-image: ${$background};`}
 `;
-
-const PropertyIcon = ({
-  $firstValue,
-  $firstInGroup,
-  $isTotal,
-  icon,
-  className,
-}: {
-  $firstValue?: boolean;
-  $firstInGroup?: boolean;
-  $isTotal?: boolean;
-  icon?: SpriteName;
-  className?: string;
-}) => {
-  const iconPath = useIcon(icon);
-  return (
-    <StyledPropertyIcon
-      className={className}
-      $background={iconPath}
-      $firstValue={$firstValue}
-      $firstInGroup={$firstInGroup}
-      $isTotal={$isTotal}
-    ></StyledPropertyIcon>
-  );
-};
 
 const PropertyName = styled(GridRowItem)`
   justify-content: end;
@@ -103,37 +100,16 @@ const Ignored = styled.span`
   }
 `;
 
-type FileType = 'xml' | 'png' | 'text';
-const FileTypeIconMap: Record<FileType, string> = {
-  xml: `background-image: url('data:image/svg+xml,%3Csvg style=%22fill: %23ffffff;%22 xmlns=%22http://www.w3.org/2000/svg%22 height=%221em%22 viewBox=%220 0 384 512%22%3E%3C!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --%3E%3Cpath d=%22M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM64 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm152 32c5.3 0 10.2 2.6 13.2 6.9l88 128c3.4 4.9 3.7 11.3 1 16.5s-8.2 8.6-14.2 8.6H216 176 128 80c-5.8 0-11.1-3.1-13.9-8.1s-2.8-11.2 .2-16.1l48-80c2.9-4.8 8.1-7.8 13.7-7.8s10.8 2.9 13.7 7.8l12.8 21.4 48.3-70.2c3-4.3 7.9-6.9 13.2-6.9z%22%3E%3C/path%3E%3C/svg%3E');`,
-  png: `background-image: url('data:image/svg+xml,%3Csvg style=%22fill: %23ffffff;%22 xmlns=%22http://www.w3.org/2000/svg%22 height=%221em%22 viewBox=%220 0 384 512%22%3E%3C!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --%3E%3Cpath d=%22M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM64 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm152 32c5.3 0 10.2 2.6 13.2 6.9l88 128c3.4 4.9 3.7 11.3 1 16.5s-8.2 8.6-14.2 8.6H216 176 128 80c-5.8 0-11.1-3.1-13.9-8.1s-2.8-11.2 .2-16.1l48-80c2.9-4.8 8.1-7.8 13.7-7.8s10.8 2.9 13.7 7.8l12.8 21.4 48.3-70.2c3-4.3 7.9-6.9 13.2-6.9z%22%3E%3C/path%3E%3C/svg%3E');`,
-  text: `background-image: url('data:image/svg+xml,%3Csvg style=%22fill: %23ffffff;%22 xmlns=%22http://www.w3.org/2000/svg%22 height=%221em%22 viewBox=%220 0 384 512%22%3E%3C!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --%3E%3Cpath d=%22M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z%22%3E%3C/path%3E%3C/svg%3E');`,
-} as const;
-
-const FilePath = styled.span<{
-  type: FileType;
-}>`
-  display: block;
-  &::before {
-    content: '';
-    padding: 0 0.6em 0 0.7em;
-    ${({ type }) => FileTypeIconMap[type]}
-    background-position: 0 50%;
-    background-size: 0.7em;
-    background-repeat: no-repeat;
-    image-rendering: pixelated;
-  }
-`;
-
 export const FieldNamesColumn = styled(
   ({ castState }: { castState?: GunActionState }) => {
     return (
-      <>
+      <ColSubGrid>
         {castState &&
           castTableSections.map(({ fields }, i1) =>
             fields.map(({ key, displayName }, i2) => (
               <PropertyName
                 key={key ?? `${i1}-${i2}-${key}`}
+                $row={key}
                 $firstValue={i1 === 0}
                 $firstInGroup={i2 === 0}
               >
@@ -141,7 +117,7 @@ export const FieldNamesColumn = styled(
               </PropertyName>
             )),
           )}
-      </>
+      </ColSubGrid>
     );
   },
 )`
@@ -153,7 +129,7 @@ export const FieldNamesColumn = styled(
 export const IconsColumn = styled(
   ({ castState }: { castState?: GunActionState }) => {
     return (
-      <>
+      <ColSubGrid>
         {castState &&
           castTableSections.map(({ fields }, i1) =>
             fields.map(({ key, icon }, i2) => (
@@ -165,7 +141,7 @@ export const IconsColumn = styled(
               />
             )),
           )}
-      </>
+      </ColSubGrid>
     );
   },
 )`
@@ -191,7 +167,7 @@ export const TotalsColumn = styled(
     const { castShowChanged } = config;
 
     return (
-      <>
+      <ColSubGrid>
         {castState &&
           castTableSections.map(({ fields }, i1) =>
             fields.map(
@@ -224,7 +200,7 @@ export const TotalsColumn = styled(
               ),
             ),
           )}
-      </>
+      </ColSubGrid>
     );
   },
 )`
@@ -257,7 +233,7 @@ export const WandStatsColumn = styled(
     ]);
 
     return (
-      <>
+      <ColSubGrid>
         {castState &&
           castTableSections.map(({ fields }, i1) =>
             fields.map(({ key, render }, i2) => (
@@ -283,7 +259,7 @@ export const WandStatsColumn = styled(
               </PropertyValue>
             )),
           )}
-      </>
+      </ColSubGrid>
     );
   },
 )`
@@ -306,7 +282,7 @@ export const ProjectileColumn = styled(
     const { castShowChanged } = config;
 
     return (
-      <>
+      <ColSubGrid>
         {castState &&
           castTableSections.map(({ fields }, i1) =>
             fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
@@ -332,7 +308,7 @@ export const ProjectileColumn = styled(
               </PropertyValue>
             )),
           )}
-      </>
+      </ColSubGrid>
     );
   },
 )`
