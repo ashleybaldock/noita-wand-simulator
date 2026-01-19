@@ -15,7 +15,7 @@ export type SimulationConfig = {
   req_hp: boolean;
   req_projectiles: boolean;
   req_enemies: boolean;
-  endSimulationOnShotCount?: number;
+  endSimulationOnCastCount?: number;
   endSimulationOnReloadCount?: number;
   endSimulationOnRefreshCount?: number;
   limitSimulationIterations?: number;
@@ -35,7 +35,7 @@ export const defaultSimulationConfig: SimulationConfig = {
   req_hp: false,
   req_projectiles: false,
   req_enemies: false,
-  endSimulationOnShotCount: 30,
+  endSimulationOnCastCount: 30,
   endSimulationOnReloadCount: 1,
   endSimulationOnRefreshCount: 2,
   limitSimulationIterations: 200,

@@ -1,6 +1,6 @@
 import type { ProjectileId } from '../projectile';
 import type { SpellDeckInfo } from '../spell';
-import type { WandShotId } from './WandShot';
+import type { WandCastId } from './WandCast';
 
 export type WandCastProjectile = {
   _typeName: 'Projectile';
@@ -18,5 +18,5 @@ export type WandCastProjectile = {
   /**
    * Payload iff this is a Trigger projectile
    */
-  payload?: WandShotId;
+  payload?: WandCastId;
 };

@@ -42,7 +42,7 @@ import type { BackgoundPartLocation } from '../components/Spells/WandAction/Back
 import { useKeyState } from '../context/KeyStateContext';
 import type { EditMode } from './EditMode';
 import { setSpellAtIndex } from './wandSlice';
-import type { WandShotId } from '../calc/eval/WandShot';
+import type { WandCastId } from '../calc/eval/WandCast';
 
 // Typed versions of `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -351,9 +351,9 @@ export const selectLastResultState = (state: RootState) => state.result.last;
 export const useLatestResult = () => {
   return useAppSelector(selectLastResultState);
 };
-export const useShotLookup = () => {
-  const { shots } = useAppSelector(selectLastResultState);
-  return useMemo(() => new Map(shots.map((shot) => [shot.id, shot])), [shots]);
+export const useCastLookup = () => {
+  const { casts } = useAppSelector(selectLastResultState);
+  return useMemo(() => new Map(casts.map((shot) => [shot.id, shot])), [casts]);
 };
 
-export const useShot = (shotId: WandShotId) => useShotLookup().get(shotId);
+export const useCast = (shotId: WandCastId) => useCastLookup().get(shotId);

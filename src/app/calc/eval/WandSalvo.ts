@@ -1,7 +1,7 @@
-import type { WandShot } from './WandShot';
+import type { WandCast } from './WandCast';
 
 export type WandSalvo = {
-  shots: WandShot[];
+  casts: WandCast[];
   reloadTime: number | undefined;
   wraps: number;
 };

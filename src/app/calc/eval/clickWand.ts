@@ -10,7 +10,7 @@ import {
   state_from_game,
 } from '../gun';
 import { isValidActionId } from '../actionId';
-import type { WandShotResult } from './WandShot';
+import type { WandCastResult } from './WandCastResult';
 import { AlwaysCastIndicies } from '../../redux/WandIndex';
 import { serializeSimulationResult } from './serialize';
 import { startTimer, type ChangeFields } from '../../util';
@@ -22,7 +22,7 @@ import type { SimulationRequest } from './SimulationRequest';
 export type SerializedSimulationResult = ChangeFields<
   SimulationResult,
   {
-    shots: WandShotResult[];
+    casts: WandCastResult[];
   }
 >;
 
@@ -40,7 +40,7 @@ export const clickWand = ({
   rng_worldSeed,
   wand_available_mana,
   wand_cast_delay,
-  endSimulationOnShotCount = 30,
+  endSimulationOnCastCount = 30,
   endSimulationOnReloadCount = 1,
   endSimulationOnRefreshCount = 2,
   limitSimulationIterations = 200,
@@ -93,14 +93,14 @@ export const clickWand = ({
     let simIterations = 0;
 
     while (result.endConditions.length === 0) {
-      result.shotCount++;
+      result.castCount++;
       state_from_game.fire_rate_wait = wand_cast_delay;
 
       console.debug(
-        `shot#${result.shotCount}->_start_shot(): mana: ${state.wand_available_mana}, cast_delay: ${wand_cast_delay}`,
+        `cast#${result.castCount}->_start_shot(): mana: ${state.wand_available_mana}, cast_delay: ${wand_cast_delay}`,
       );
 
-      /* Simulate shot */
+      /* Simulate cast */
       _start_shot(state.wand_available_mana);
 
       alwaysCastSpells.forEach((spell, i) => {
@@ -108,23 +108,23 @@ export const clickWand = ({
       });
 
       _draw_actions_for_shot(true);
-      /* End Simulate shot */
+      /* End Simulate cast */
 
-      state.currentShot.actionCalls = state.calledActions!;
-      state.currentShot.actionCallTrees = state.rootNodes;
-      state.currentShot.manaDrain = state.wand_available_mana - gunMana;
+      state.currentCastScope.actionCalls = state.calledActions!;
+      state.currentCastScope.actionCallTrees = state.rootNodes;
+      state.currentCastScope.manaDrain = state.wand_available_mana - gunMana;
       console.debug(
-        `shot#${result.shotCount}, .manaDrain: ${state.currentShot.manaDrain} (${state.wand_available_mana} - ${gunMana})`,
+        `cast#${result.castCount}, .manaDrain: ${state.currentCastScope.manaDrain} (${state.wand_available_mana} - ${gunMana})`,
       );
-      result.shots.push(state.currentShot);
+      result.casts.push(state.currentCastScope);
       state.wand_available_mana = gunMana;
 
       result.elapsedTime = getElapsedTime();
 
       console.debug(result);
       /* Check for end conditions */
-      if (result.shotCount >= endSimulationOnShotCount) {
-        // result.endConditions.push('shotCount');
+      if (result.castCount >= endSimulationOnCastCount) {
+        // result.endConditions.push('castCount');
       }
       if (result.reloadCount >= endSimulationOnReloadCount) {
         result.endConditions.push('reloadCount');

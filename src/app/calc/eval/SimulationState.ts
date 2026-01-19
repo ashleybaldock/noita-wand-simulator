@@ -6,19 +6,19 @@ import type { ActionCall } from './ActionCall';
 import { mergeSimulationConfigDefaults } from './SimulationConfig';
 import type { SimulationConfig } from './SimulationConfig';
 import { type SimulationResult, createResult } from './SimulationResult';
-import { getShot, type WandShot } from './WandShot';
+import { getCast, type WandCast } from './WandCast';
 
 export type SimulationState = {
   simulationRequestId: SimulationRequestId;
   wand_available_mana: number;
-  currentShot: WandShot;
-  parentShot: WandShot | undefined;
-  currentShotStack: WandShot[];
+  currentCastScope: WandCast;
+  parentCastScope: WandCast | undefined;
+  currentCastStack: WandCast[];
+  calledActions: ActionCall[];
   lastCalledAction: ActionCall | undefined;
   lastDrawnAndCalledAction: ActionCall | undefined;
   lastPlayed: Readonly<SpellDeckInfo> | undefined;
   alwaysCastsPlayed: SpellDeckInfo[];
-  calledActions: ActionCall[];
   validSourceCalledActions: ActionCall[];
   currentNode: TreeNode<ActionCall> | undefined;
   rootNodes: MapTree<ActionCall>[];
@@ -35,18 +35,18 @@ export const resetSimulationState = (
   return {
     state: {
       ...configuredInitialState,
+      simulationRequestId: simulationRequestId,
+      currentCastScope: getCast(),
+      parentCastScope: undefined,
+      currentCastStack: [],
       calledActions: [],
-      validSourceCalledActions: [],
-      currentShotStack: [],
-      rootNodes: [],
-      currentNode: undefined,
-      currentShot: getShot(),
       lastCalledAction: undefined,
       lastDrawnAndCalledAction: undefined,
       lastPlayed: undefined,
       alwaysCastsPlayed: [],
-      parentShot: undefined,
-      simulationRequestId: simulationRequestId,
+      validSourceCalledActions: [],
+      currentNode: undefined,
+      rootNodes: [],
     },
     result: createResult(simulationRequestId, configuredInitialState),
   };

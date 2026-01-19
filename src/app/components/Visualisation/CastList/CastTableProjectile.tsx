@@ -1,13 +1,14 @@
-import styled from 'styled-components';
-import type { WandCastProjectile } from '../../../calc/eval/WandShotProjectile';
+import type { WandCastProjectile } from '../../../calc/eval/WandCastProjectile';
 import { getSpellByActionId } from '../../../calc/spells';
 import {
   ActionProxyAnnotation,
   DeckIndexAnnotation,
   FriendlyFireAnnotation,
 } from '../../Annotations';
+import { WandAction } from '../../Spells/WandAction';
+import styled from 'styled-components';
 import { WithDebugHints } from '../../Debug';
-import { StyledWandActionBorder, WandAction } from '../../Spells/WandAction';
+import { StyledWandActionBorder } from '../../Spells/WandAction';
 
 const ArrayGroupDiv = styled.div`
   display: flex;
@@ -20,7 +21,7 @@ const MultiGroupDiv = styled.div`
   align-self: end;
 `;
 
-const MainDiv = styled.div`
+export const MainDiv = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -46,7 +47,6 @@ const MainDiv = styled.div`
     }
   }
 `;
-
 /*
   background-image: url(/data/inventory/action_tree_box.png);
  */

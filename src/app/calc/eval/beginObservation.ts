@@ -11,7 +11,7 @@ import type { SimulationState } from './SimulationState';
 import type { SimulationResult } from './SimulationResult';
 import type { WandEvent } from './wandEvent';
 import { observer } from './wandObserver';
-import { nextWandShotId } from './WandShot';
+import { nextWandCastId } from './WandCast';
 import { isNotUndefined, isUndefined } from '../../util';
 import { MapTree } from '../../util/MapTree';
 
@@ -64,7 +64,7 @@ export const beginObservation = (
           }
         }
 
-        state.currentShot.projectiles.push({
+        state.currentCastScope.projectiles.push({
           _typeName: 'Projectile',
           entity: projectileId,
           spell: sourceAction,
@@ -78,10 +78,10 @@ export const beginObservation = (
         const { projectileId, action_draw_count } = payload;
         const delay_frames =
           name === 'BeginTriggerTimer' ? payload.delay_frames : undefined;
-        state.parentShot = state.currentShot;
-        state.currentShotStack.push(state.currentShot);
-        state.currentShot = {
-          id: nextWandShotId(),
+        state.parentCastScope = state.currentCastScope;
+        state.currentCastStack.push(state.currentCastScope);
+        state.currentCastScope = {
+          id: nextWandCastId(),
           stats: {
             projectiles: {},
           },
@@ -100,16 +100,16 @@ export const beginObservation = (
         // ].trigger = state.currentShot.id;
         if (state.lastDrawnAndCalledAction) {
           state.lastDrawnAndCalledAction.wasLastToBeDrawnBeforeBeginTrigger =
-            state.currentShot.id;
+            state.currentCastScope.id;
         }
         if (state.lastCalledAction) {
           state.lastCalledAction.wasLastToBeCalledBeforeBeginTrigger =
-            state.currentShot.id;
+            state.currentCastScope.id;
         }
         break;
       }
       case 'EndTrigger': {
-        state.currentShot = state.currentShotStack.pop()!;
+        state.currentCastScope = state.currentCastStack.pop()!;
         break;
       }
       case 'EndProjectile': {
@@ -117,15 +117,15 @@ export const beginObservation = (
       }
       case 'RegisterGunAction': {
         const { s: castState } = payload;
-        state.currentShot.castState = Object.assign({}, castState);
+        state.currentCastScope.castState = Object.assign({}, castState);
         break;
       }
       case 'OnDraw': {
         const { state_cards_drawn: totalDrawn } = payload;
-        if (state.currentShot.castState) {
-          state.currentShot.castState.state_cards_drawn =
+        if (state.currentCastScope.castState) {
+          state.currentCastScope.castState.state_cards_drawn =
             (totalDrawn ??
-              state.currentShot.castState?.state_cards_drawn ??
+              state.currentCastScope.castState?.state_cards_drawn ??
               0) + 1;
         }
         break;
@@ -163,7 +163,7 @@ export const beginObservation = (
       case 'OnWrap': {
         const { /* deck, hand,*/ discarded } = payload;
         result.wraps += 1;
-        state.currentShot.wraps.push(result.wraps);
+        state.currentCastScope.wraps.push(result.wraps);
         if (isNotUndefined(state.lastDrawnAndCalledAction)) {
           state.lastDrawnAndCalledAction.wasLastToBeDrawnBeforeWrapNr =
             result.wraps;
@@ -206,9 +206,9 @@ export const beginObservation = (
           manaPre: gunMana,
           currentMana: gunMana,
           recursion: getSpellByActionId(id).recursive
-            ? recursion ?? 0
+            ? (recursion ?? 0)
             : undefined,
-          iteration: isIterativeActionId(id) ? iteration ?? 1 : undefined,
+          iteration: isIterativeActionId(id) ? (iteration ?? 1) : undefined,
           dont_draw_actions,
         };
 
@@ -237,7 +237,7 @@ export const beginObservation = (
         const {
           /*source*/ /*spell*/ c: castState /*recursion, iteration, returnValue*/,
         } = payload;
-        state.currentShot.castState = Object.assign({}, castState);
+        state.currentCastScope.castState = Object.assign({}, castState);
         state.currentNode = state.currentNode?.parent;
         break;
       }

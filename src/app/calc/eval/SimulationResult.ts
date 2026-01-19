@@ -2,14 +2,14 @@ import type { SimulationRequestId } from '../../redux/SimulationRequestId';
 import type { StopReason } from '../../types';
 import type { SimulationConfig } from './SimulationConfig';
 import type { WandSalvo } from './WandSalvo';
-import type { WandShot } from './WandShot';
+import type { WandCast } from './WandCast';
 
 /**
  * Evaluation result
  *
- * Shot - result of one click, followed by cast delay
- * Salvo - one or more shots, followed by the longer of
- *         recharge delay or the last shot's cast delay
+ * Cast - result of one click, followed by cast delay
+ * Salvo - one or more Casts, followed by the longer of
+ *         recharge delay or the last Cast's cast delay
  *
  * Each of which has:
  *
@@ -24,10 +24,10 @@ export type SimulationResult = {
   reloadTime: number | undefined;
   elapsedTime: number;
 
-  shots: WandShot[];
+  casts: WandCast[];
   endConditions: StopReason[];
   wraps: number;
-  shotCount: number;
+  castCount: number;
   reloadCount: number;
   refreshCount: number;
   repeatCount: number;
@@ -38,15 +38,15 @@ export type SimulationResult = {
 export const createResult = (
   simulationRequestId: SimulationRequestId,
   initialState: Readonly<SimulationConfig>,
-) => ({
+): SimulationResult => ({
   simulationRequestId,
   salvos: [],
-  shots: [],
+  casts: [],
   reloadTime: undefined,
   endConditions: [],
   elapsedTime: 0,
   wraps: 0,
-  shotCount: 0,
+  castCount: 0,
   reloadCount: 0,
   refreshCount: 0,
   repeatCount: 0,

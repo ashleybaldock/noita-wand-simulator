@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 import { ConfigButton } from '../../buttons';
 import { SaveImageButton, ScrollWrapper } from '../../generic';
-import { ShotTable } from './ShotTable';
+import { CastTable } from './CastTable';
 import { SimulationSummary } from './ShotSummary';
 import { SectionToolbar } from '../../SectionToolbar';
 import { useLatestResult } from '../../../redux';
@@ -29,28 +29,28 @@ const StyledSaveImageButton = styled(SaveImageButton)`
 `;
 
 export const CastList = () => {
-  const { shots } = useLatestResult();
-  const shotListRef = useRef<HTMLDivElement>(null);
+  const { casts } = useLatestResult();
+  const castListRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
-      <SectionToolbar title={'Simulation: Shot List'}>
+      <SectionToolbar title={'Simulation: Cast List'}>
         <StyledSaveImageButton
-          name={'Shot List'}
-          targetRef={shotListRef}
-          fileName={'shot_list'}
-          enabled={shots.length > 0}
+          name={'Cast List'}
+          targetRef={castListRef}
+          fileName={'cast_list'}
+          enabled={casts.length > 0}
         />
         <StyledConfigButton />
       </SectionToolbar>
       <ScrollWrapper>
         <SectionDiv
-          ref={shotListRef as LegacyRef<HTMLDivElement>}
+          ref={castListRef as LegacyRef<HTMLDivElement>}
           className={'saveImageRoot'}
         >
           <SimulationSummary />
-          {shots.map((shot, index) => (
-            <ShotTable shot={shot} shotIndex={index + 1} key={index} />
+          {casts.map((cast, index) => (
+            <CastTable cast={cast} castIndex={index + 1} key={index} />
           ))}
         </SectionDiv>
       </ScrollWrapper>

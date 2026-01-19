@@ -3,7 +3,7 @@ import type { SpellPileSnapshot } from '../SpellPileSnapshot';
 import type { ActionSource } from '../actionSources';
 import type { DiscardReason } from '../discardReasons';
 import type { SpellDeckInfo } from '../spell';
-import type { WandShotId } from './WandShot';
+import type { WandCastId } from './WandCast';
 
 /**
  * Session-Unique ID to identify an action call
@@ -73,8 +73,8 @@ export type ActionCall = {
    * If true then this was likely the action call that caused the wrap
    */
   wasLastToBeCalledBeforeWrapNr?: number;
-  wasLastToBeDrawnBeforeBeginTrigger?: WandShotId;
-  wasLastToBeCalledBeforeBeginTrigger?: WandShotId;
+  wasLastToBeDrawnBeforeBeginTrigger?: WandCastId;
+  wasLastToBeCalledBeforeBeginTrigger?: WandCastId;
   /**
    * @deprecated Use manaPre instead
    */

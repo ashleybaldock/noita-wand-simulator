@@ -17,13 +17,13 @@ export type ResultContextState = {
 const defaultResultState: ResultContextState = {
   result: {
     simulationRequestId: 0,
-    shots: [],
+    casts: [],
     salvos: [],
     reloadTime: undefined,
     endConditions: [],
     elapsedTime: 0,
     wraps: 0,
-    shotCount: 0,
+    castCount: 0,
     reloadCount: 0,
     refreshCount: 0,
     repeatCount: 0,

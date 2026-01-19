@@ -26,20 +26,20 @@ export const serializeSimulationResult = (
   result: SimulationResult,
 ): SerializedSimulationResult => ({
   ...result,
-  shots: result.shots.map((shot) => ({
-    ...shot,
-    projectiles: shot.projectiles.map((projectile) => ({
+  casts: result.casts.map((cast) => ({
+    ...cast,
+    projectiles: cast.projectiles.map((projectile) => ({
       ...projectile,
       spell: maybeSerializeSpell(projectile.spell),
       proxy: maybeSerializeSpell(projectile.proxy),
     })),
-    actionCallGroups: shot.actionCalls.map((actionCallGroup) => ({
+    actionCallGroups: cast.actionCalls.map((actionCallGroup) => ({
       ...actionCallGroup,
       spell: serializeSpell(actionCallGroup.spell),
       wrappingInto: (actionCallGroup.wrappingInto ?? []).map((wrapInto) =>
         serializeSpell(wrapInto),
       ),
     })),
-    actionCallTrees: shot.actionCallTrees.map((tree) => tree.serialize()),
+    actionCallTrees: cast.actionCallTrees.map((tree) => tree.serialize()),
   })),
 });

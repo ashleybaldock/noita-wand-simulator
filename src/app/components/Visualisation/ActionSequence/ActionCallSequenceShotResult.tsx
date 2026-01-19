@@ -1,6 +1,6 @@
 import type { Key } from 'react';
 import type { ActionCall } from '../../../calc/eval/ActionCall';
-import type { WandShotResult } from '../../../calc/eval/WandShot';
+import type { WandCastResult } from '../../../calc/eval/WandCastResult';
 import { WandActionCall } from '../WandActionCall';
 import styled from 'styled-components';
 
@@ -16,7 +16,7 @@ export const StyledDiv = styled.div`
 export const ActionCallSequenceShotResult = ({
   shot,
 }: {
-  shot: WandShotResult;
+  shot: WandCastResult;
 }) => {
   return (
     <StyledDiv data-name="ActionCallSequenceShotResult">

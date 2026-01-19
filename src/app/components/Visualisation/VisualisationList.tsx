@@ -68,7 +68,7 @@ export const VisualisationList = () => {
     });
   }, [infiniteSpells, unlimitedSpells, spells]);
 
-  const { shots } = useLatestResult();
+  const { casts } = useLatestResult();
 
   return (
     <ParentDiv>
@@ -81,14 +81,14 @@ export const VisualisationList = () => {
               name={'Action Call Tree'}
               targetRef={actionCallTreeRef}
               fileName={'action_call_tree'}
-              enabled={shots.length > 0}
+              enabled={casts.length > 0}
             />
             {/* <ShowKeyButton/> */}
           </SectionToolbar>
           <ActionTreeKey />
           <ScrollWrapper>
             <SectionDiv ref={actionCallTreeRef} className={'saveImageRoot'}>
-              {shots.map((shot, index) => (
+              {casts.map((shot, index) => (
                 <ActionTreeShotResult key={index} shot={shot} />
               ))}
             </SectionDiv>
@@ -100,12 +100,12 @@ export const VisualisationList = () => {
           targetRef={actionsCalledRef}
           name={'Action Call Sequence'}
           fileName={'action_call_sequence'}
-          enabled={shots.length > 0}
+          enabled={casts.length > 0}
         />
       </SectionToolbar>
       <ScrollWrapper>
         <SectionDiv ref={actionsCalledRef} className={'saveImageRoot'}>
-          {shots.map((shot, index) => (
+          {casts.map((shot, index) => (
             <ActionCallSequenceShotResult key={index} shot={shot} />
           ))}
         </SectionDiv>

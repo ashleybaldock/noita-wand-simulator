@@ -198,7 +198,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
           rng_worldSeed,
           wand_available_mana: wand.mana_max,
           wand_cast_delay: wand.cast_delay,
-          endSimulationOnShotCount,
+          endSimulationOnCastCount,
           endSimulationOnReloadCount,
           endSimulationOnRefreshCount,
           limitSimulationIterations,

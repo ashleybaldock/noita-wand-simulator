@@ -9,7 +9,7 @@ import {
   ordinalSuffix,
 } from '../../../util';
 import { MapTree } from '../../../util/MapTree';
-import type { WandShotResult } from '../../../calc/eval/WandShot';
+import type { WandCastResult } from '../../../calc/eval/WandCastResult';
 import type { ActionSource } from '../../../calc/actionSources';
 import { useMemo, type ReactNode } from 'react';
 import { TreeArrow } from './TreeArrow';
@@ -174,7 +174,7 @@ const ActionTreeCast = styled.div``;
 const ActionTreeCastSummary = styled.div``;
 const StartingDraw = styled.div``;
 
-export const ActionTreeShotResult = ({ shot }: { shot: WandShotResult }) => {
+export const ActionTreeShotResult = ({ shot }: { shot: WandCastResult }) => {
   const level = 0;
   const triggerLevel = 0;
   return (

@@ -11,20 +11,18 @@ import { isNotNullOrUndefined, NBSP } from '../../../util';
 import {
   IconsColumnHeading,
   ProjectileHeading,
-  ShotIndexColumnHeading,
+  CastIndexColumnHeading,
   SubTotalsColumnHeading,
   TotalsColumnHeading,
   WandStatsColumnHeading,
 } from './ColumnHeading';
 import { Fragment } from 'react';
-import type { WandShotId } from '../../../calc/eval/WandShot';
-import { useShot, useShotLookup } from '../../../redux';
-import type { WandCastProjectile } from '../../../calc/eval/WandShotProjectile';
-import { CastTableProjectile } from './ShotTableProjectile';
-import type { WandShotResult } from '../../../calc/eval/WandShot';
-import { castTableGridRows } from './ShotTableRowConfig';
+import type { WandCastId } from '../../../calc/eval/WandCast';
+import { useCast, useCastLookup } from '../../../redux';
+import type { WandCastProjectile } from '../../../calc/eval/WandCastProjectile';
+import { CastTableProjectile } from './CastTableProjectile';
 
-const StyledCastTable = styled.div<{ $rows?: string }>`
+export const StyledCastTable = styled.div<{ $rows?: string }>`
   --nesting-offset: var(--sizes-nesting-offset, 16px);
 
   display: grid;
@@ -108,32 +106,32 @@ const Headings = styled.div`
  */
 
 export const CastTableHeadings = ({
-  shotIndex,
-  shotId,
+  castIndex,
+  castId,
   nestingPrefix = [],
 }: {
-  shotIndex: number;
-  shotId: WandShotId;
+  castIndex: number;
+  castId: WandCastId;
   nestingPrefix?: Array<number>;
 }) => {
-  const shot = useShot(shotId);
-  if (!shot) {
+  const cast = useCast(castId);
+  if (!cast) {
     return null;
   }
-  const { triggerType, projectiles } = shot;
-  const shotLookup = useShotLookup();
+  const { triggerType, projectiles } = cast;
+  const castLookup = useCastLookup();
 
   return (
     <Headings>
       {nestingPrefix.length === 0 ? (
         <>
-          <ShotIndexColumnHeading
+          <CastIndexColumnHeading
             data-name={'IndexHeading'}
-            index={shotIndex}
+            index={castIndex}
             nestingPrefix={nestingPrefix}
           >
-            {shotIndex}
-          </ShotIndexColumnHeading>
+            {castIndex}
+          </CastIndexColumnHeading>
           <IconsColumnHeading
             data-name={'IconHeading'}
             nestingPrefix={nestingPrefix}
@@ -145,7 +143,7 @@ export const CastTableHeadings = ({
             origin={true}
             nestingPrefix={nestingPrefix}
           >
-            {`Shot${NBSP}Totals`}
+            {`Cast${NBSP}Totals`}
           </TotalsColumnHeading>
           <WandStatsColumnHeading
             data-name={'WandHeading'}
@@ -167,10 +165,10 @@ export const CastTableHeadings = ({
       )}
       {projectiles.map((projectile: WandCastProjectile, index, arr) => {
         const isEndOfTrigger = index === arr.length - 1;
-        const triggerShot = ((lookupResult) =>
+        const triggerCast = ((lookupResult) =>
           ((lookupResult?.projectiles?.length ?? 0) > 0 && lookupResult) ||
-          undefined)(shotLookup.get(projectile?.payload ?? -1));
-        const isStartOfTrigger = isNotNullOrUndefined(triggerShot);
+          undefined)(castLookup.get(projectile?.payload ?? -1));
+        const isStartOfTrigger = isNotNullOrUndefined(triggerCast);
 
         return (
           <Fragment key={index}>
@@ -181,10 +179,10 @@ export const CastTableHeadings = ({
             >
               <CastTableProjectile projectile={projectile} />
             </ProjectileHeading>
-            {isNotNullOrUndefined(triggerShot) && (
+            {isNotNullOrUndefined(triggerCast) && (
               <CastTableHeadings
-                shotId={triggerShot.id}
-                shotIndex={index}
+                castId={triggerCast.id}
+                castIndex={index}
                 nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
               />
             )}
@@ -195,19 +193,19 @@ export const CastTableHeadings = ({
   );
 };
 
-export const ShotTableColumns = ({
-  shotId,
+export const CastTableColumns = ({
+  castId,
   nestingPrefix = [],
 }: {
-  shotId: WandShotId;
+  castId: WandCastId;
   nestingPrefix?: Array<number>;
 }) => {
-  const shot = useShot(shotId);
-  if (!shot) {
+  const cast = useCast(castId);
+  if (!cast) {
     return null;
   }
-  const { castState, manaDrain, triggerType, projectiles } = shot;
-  const shotLookup = useShotLookup();
+  const { castState, manaDrain, triggerType, projectiles } = cast;
+  const castLookup = useCastLookup();
 
   return (
     <>
@@ -229,10 +227,9 @@ export const ShotTableColumns = ({
       )}
       {projectiles.map((projectile, index, arr) => {
         const isEndOfTrigger = index === arr.length - 1;
-        const triggerShot = ((lookupResult) =>
+        const triggerCast = ((lookupResult) =>
           ((lookupResult?.projectiles?.length ?? 0) > 0 && lookupResult) ||
-          undefined)(shotLookup.get(projectile?.payload ?? -1));
-        // const isStartOfTrigger = isNotNullOrUndefined(triggerShot);
+          undefined)(castLookup.get(projectile?.payload ?? -1));
 
         return (
           <Fragment key={index}>
@@ -241,9 +238,9 @@ export const ShotTableColumns = ({
               manaDrain={manaDrain}
               insideTrigger={true}
             />
-            {isNotNullOrUndefined(triggerShot) && (
-              <ShotTableColumns
-                shotId={triggerShot.id}
+            {isNotNullOrUndefined(triggerCast) && (
+              <CastTableColumns
+                castId={triggerCast.id}
                 nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
               />
             )}
@@ -251,23 +248,5 @@ export const ShotTableColumns = ({
         );
       })}
     </>
-  );
-};
-
-export const ShotTable = ({
-  shotIndex,
-  shot,
-}: {
-  shotIndex: number;
-  shot: WandShotResult;
-}) => {
-  return (
-    <StyledCastTable $rows={castTableGridRows()}>
-      <CastTableHeadings
-        shotIndex={shotIndex}
-        shotId={shot.id}
-      ></CastTableHeadings>
-      <ShotTableColumns shotId={shot.id}></ShotTableColumns>
-    </StyledCastTable>
   );
 };

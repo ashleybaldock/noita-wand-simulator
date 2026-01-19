@@ -46,19 +46,19 @@ const StickyContainer = styled.div`
   }
 `;
 
-const totalDelayForSalvo = ({ shots, reloadTime = 1 }: WandSalvo) => {
-  const totalCastDelayForSalvo = shots.reduce(
+const totalDelayForSalvo = ({ casts, reloadTime = 1 }: WandSalvo) => {
+  const totalCastDelayForSalvo = casts.reduce(
     (tsf, shot) => tsf + (shot.castState?.fire_rate_wait ?? 1),
     0,
   );
-  const lastCastDelay = shots[shots.length - 1]?.castState?.fire_rate_wait ?? 1;
+  const lastCastDelay = casts[casts.length - 1]?.castState?.fire_rate_wait ?? 1;
   const largerDelay = Math.max(reloadTime, lastCastDelay);
   const totalDelay = totalCastDelayForSalvo - lastCastDelay + largerDelay;
 
   return {
     framesDelay: totalDelay,
-    framesFiring: shots.length,
-    framesTotal: totalDelay + shots.length,
+    framesFiring: casts.length,
+    framesTotal: totalDelay + casts.length,
   };
 };
 
@@ -82,12 +82,12 @@ export const SimulationSummary = styled(
     );
 
     const totalCastCount = salvos.reduce(
-      (tsf, { shots }) => tsf + shots.length,
+      (tsf, { casts }) => tsf + casts.length,
       0,
     );
     const totalManaDrain = salvos.reduce(
-      (tsf, { shots }) =>
-        tsf + shots.reduce((tsf, shot) => tsf + (shot.manaDrain ?? 0), 0),
+      (tsf, { casts }) =>
+        tsf + casts.reduce((tsf, shot) => tsf + (shot.manaDrain ?? 0), 0),
       0,
     );
 

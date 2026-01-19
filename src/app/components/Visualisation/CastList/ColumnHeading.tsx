@@ -189,7 +189,7 @@ export const IconsColumnHeading = styled(BaseColumnHeading)`
   width: 1.6em;
 `;
 
-export const ShotIndexColumnHeading = styled(BaseColumnHeading)<{
+export const CastIndexColumnHeading = styled(BaseColumnHeading)<{
   index: number;
 }>`
   position: sticky;
@@ -216,7 +216,7 @@ export const ShotIndexColumnHeading = styled(BaseColumnHeading)<{
   }
 
   & ${HeadingInner}::before {
-    content: 'shot';
+    content: 'cast';
     display: flex;
     justify-content: center;
     position: relative;

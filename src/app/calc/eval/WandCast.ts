@@ -1,36 +1,22 @@
+import { sequentialId } from '../../util';
+import type { MapTree } from '../../util/MapTree';
 import type { GunActionState } from '../actionState';
+import { defaultGunActionState } from '../defaultActionState';
+import type { ProjectileId } from '../projectile';
 import type { TriggerCondition } from '../trigger';
 import type { ActionCall } from './ActionCall';
-import type { ChangeFields } from '../../util';
-import { sequentialId } from '../../util';
-import { defaultGunActionState } from '../defaultActionState';
-import type { EvalTree } from './serialize';
-import type { ProjectileId } from '../projectile';
-import type { WandCastProjectile } from './WandShotProjectile';
-import type { MapTree } from '../../util/MapTree';
-
-export type WandShotId = number;
+import type { WandCastProjectile } from './WandCastProjectile';
 
 /**
- * Aggregate stats for this Shot
- *
- * projectiles - Record<ShotProjectile, Count> Count of the number of each type of projectile comprising this Shot
- * modifiers - Record<Spell, Count>
- *   Count of the number of copies of the spells comprising this Shot
- */
-type WandShotStats = {
-  projectiles: Partial<Record<ProjectileId, number>>;
-};
-/**
- * Represents the result of a single Shot
+ * Represents the result of a single Cast
  *
  * Contains:
- * projectiles - Record<Projectile, Count> Count of the number of each projectile comprising this shot
+ * projectiles - Record<Projectile, Count> Count of the number of each projectile comprising this Cast
  * modifiers
  */
-export type WandShot = {
-  id: WandShotId;
-  stats: WandShotStats;
+export type WandCast = {
+  id: WandCastId;
+  stats: WandCastStats;
   projectiles: WandCastProjectile[];
   actionCalls: ActionCall[];
   /**
@@ -54,9 +40,20 @@ export type WandShot = {
   triggerDelayFrames?: number;
   wraps: number[];
 };
+export type WandCastId = number;
+/**
+ * Aggregate stats for this Cast
+ *
+ * projectiles - Record<CastProjectile, Count> Count of the number of each type of projectile comprising this Cast
+ * modifiers - Record<Spell, Count>
+ *   Count of the number of copies of the spells comprising this Cast
+ */
 
-export const getShot = (): WandShot => ({
-  id: nextWandShotId(),
+export type WandCastStats = {
+  projectiles: Partial<Record<ProjectileId, number>>;
+};
+export const getCast = (): WandCast => ({
+  id: nextWandCastId(),
   projectiles: [],
   actionCalls: [],
   /**
@@ -78,14 +75,8 @@ export const getShot = (): WandShot => ({
     projectiles: {},
   },
 });
-
 /*
- * Serializable Form of WandShot
+ * Serializable Form of WandCast
  */
-export const nextWandShotId = sequentialId<WandShotId>();
-export type WandShotResult = ChangeFields<
-  WandShot,
-  {
-    actionCallTrees: EvalTree[];
-  }
->;
+
+export const nextWandCastId = sequentialId<WandCastId>();
