@@ -34,7 +34,7 @@ type ConfigBase = {
   var_hp: number;
   var_hp_max: number;
   pauseCalculations: boolean;
-  endSimulationOnShotCount: number;
+  endSimulationOnCastCount: number;
   endSimulationOnReloadCount: number;
   endSimulationOnRefreshCount: number;
   endSimulationOnRepeatCount: number;
@@ -113,7 +113,7 @@ export const initialState: ConfigState = {
     showWraps: true,
     showDraw: true,
     showSpellsInCategories: true,
-    endSimulationOnShotCount: 0,
+    endSimulationOnCastCount: 0,
     endSimulationOnReloadCount: 0,
     endSimulationOnRefreshCount: 1,
     endSimulationOnRepeatCount: 0,

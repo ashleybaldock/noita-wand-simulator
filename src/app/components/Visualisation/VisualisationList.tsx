@@ -10,8 +10,8 @@ import {
   useSpellSequence,
 } from '../../redux';
 import { SaveImageButton, ScrollWrapper } from '../generic';
-import { ActionCallSequenceShotResult } from './ActionSequence';
-import { ActionTreeShotResult } from './ActionTree';
+import { ActionCallSequenceCastResult } from './ActionSequence';
+import { ActionTreeCastResult } from './ActionTree';
 import { CastList } from './CastList';
 import { SimulationStatus } from '../SimulationStatus';
 import { SectionToolbar } from '../SectionToolbar';
@@ -31,10 +31,10 @@ const SectionDiv = styled.div`
   width: fit-content;
 `;
 
-// list of several ShotResults, generally from clicking/holding until reload, but also for one click
+// list of several CastResults, generally from clicking/holding until reload, but also for one click
 
 /**
- * Sequence of simulated wand shots
+ * Sequence of simulated wand Casts
  */
 export const VisualisationList = () => {
   const spellIds = useSpellSequence();
@@ -88,8 +88,8 @@ export const VisualisationList = () => {
           <ActionTreeKey />
           <ScrollWrapper>
             <SectionDiv ref={actionCallTreeRef} className={'saveImageRoot'}>
-              {casts.map((shot, index) => (
-                <ActionTreeShotResult key={index} shot={shot} />
+              {casts.map((cast, index) => (
+                <ActionTreeCastResult key={index} cast={cast} />
               ))}
             </SectionDiv>
           </ScrollWrapper>
@@ -106,7 +106,7 @@ export const VisualisationList = () => {
       <ScrollWrapper>
         <SectionDiv ref={actionsCalledRef} className={'saveImageRoot'}>
           {casts.map((shot, index) => (
-            <ActionCallSequenceShotResult key={index} shot={shot} />
+            <ActionCallSequenceCastResult key={index} cast={shot} />
           ))}
         </SectionDiv>
       </ScrollWrapper>

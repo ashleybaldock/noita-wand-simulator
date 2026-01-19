@@ -9,8 +9,8 @@ import {
 } from '../Components';
 
 export const EndingConfigSection = () => {
-  const [endSimulationOnShotCount, , handleEndOnShotCount] = useConfigSetting(
-    'endSimulationOnShotCount',
+  const [endSimulationOnCastCount, , handleEndOnShotCount] = useConfigSetting(
+    'endSimulationOnCastCount',
   );
   const [endSimulationOnReloadCount, , handleReloadCountConfig] =
     useConfigSetting('endSimulationOnReloadCount');
@@ -26,7 +26,7 @@ export const EndingConfigSection = () => {
       </SubSectionTitle>
       <SubSectionContent>
         <WrappedYesNoToggle
-          checked={endSimulationOnShotCount > 0}
+          checked={endSimulationOnCastCount > 0}
           onChange={handleEndOnShotCount}
         >
           <span>A single shot</span>

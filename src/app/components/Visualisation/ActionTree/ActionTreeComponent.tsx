@@ -1,58 +1,36 @@
-import styled from 'styled-components';
-import { WandActionCall } from '../WandActionCall';
+import { useMemo } from 'react';
 import type { ActionCall } from '../../../calc/eval/ActionCall';
-import {
-  everyIter,
-  isNotNullOrUndefined,
-  isUndefined,
-  mapIter,
-  ordinalSuffix,
-} from '../../../util';
-import { MapTree } from '../../../util/MapTree';
-import type { WandCastResult } from '../../../calc/eval/WandCastResult';
-import type { ActionSource } from '../../../calc/actionSources';
-import { useMemo, type ReactNode } from 'react';
+import { everyIter, isNotNullOrUndefined, isUndefined } from '../../../util';
+import type { TreeNode } from '../../../util/Tree';
+import { WandActionCall } from '../WandActionCall';
 import { TreeArrow } from './TreeArrow';
-import type { TreeNode, TreeRoot } from '../../../util/Tree';
-import type { EvalTree } from '../../../calc/eval/serialize';
+import styled from 'styled-components';
+import type { ActionSource } from '../../../calc/actionSources';
 
-export const ActionTreeRoot = styled.div`
-  --row-h: 68px;
-  --radius-arrow: 0 0 0 20px/0 0 0 23px;
-
-  --col-spacing: 48px;
-
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin: 1px;
-`;
-
-export const ActionTreeShotResultNodeDiv = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  border-left: 4px solid #777;
-  border-width: 0px;
-`;
-
-const ChildrenDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-top: 0;
-  border-bottom: 0;
-`;
-
-const ActionTreeSourceGroup = styled.div<{ $source: ActionSource }>`
+export const ActionTreeSourceGroup = styled.div<{ $source: ActionSource }>`
   display: flex;
   flex-direction: ${(props) => (props.$source === 'action' ? 'row' : 'column')};
   border-top: 0;
   border-bottom: 0;
 `;
 
-const ArrowColumn = styled.div``;
+export const ArrowColumn = styled.div``;
 
-const ActionTreeComponent = ({
+export const ActionTreeCastResultNodeDiv = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  border-left: 4px solid #777;
+  border-width: 0px;
+`;
+export const ChildrenDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-top: 0;
+  border-bottom: 0;
+`;
+
+export const ActionTreeComponent = ({
   node,
   position,
   level,
@@ -100,7 +78,7 @@ const ActionTreeComponent = ({
   return isUndefined(node.value) ? (
     <></>
   ) : (
-    <ActionTreeShotResultNodeDiv
+    <ActionTreeCastResultNodeDiv
       data-name="AcTreeNode"
       data-spell={node.value.spell.id}
       data-leaf={isLeaf}
@@ -166,47 +144,6 @@ const ActionTreeComponent = ({
           ))}
         </ChildrenDiv>
       )}
-    </ActionTreeShotResultNodeDiv>
-  );
-};
-
-const ActionTreeCast = styled.div``;
-const ActionTreeCastSummary = styled.div``;
-const StartingDraw = styled.div``;
-
-export const ActionTreeShotResult = ({ shot }: { shot: WandCastResult }) => {
-  const level = 0;
-  const triggerLevel = 0;
-  return (
-    <ActionTreeRoot data-name="ActionTreeRoot">
-      {shot.actionCallTrees
-        .map((actionCallTree) => new MapTree(actionCallTree))
-        .map((actionCallTree, index) => (
-          <ActionTreeCast
-            data-name="AcTreeCast"
-            data-cast={index + 1}
-            key={index}
-          >
-            <ActionTreeCastSummary data-name="AcTreeSummary">
-              {`${index + 1}${ordinalSuffix(index + 1)} cast`}
-            </ActionTreeCastSummary>
-            <StartingDraw data-name="AcTreeSpCast">Spells/cast: </StartingDraw>
-            <>
-              {mapIter<TreeNode<ActionCall>, ReactNode>(
-                actionCallTree.children,
-                (root, i) => (
-                  <ActionTreeComponent
-                    position={0}
-                    node={root}
-                    level={level + 1}
-                    triggerLevel={triggerLevel}
-                    key={i}
-                  />
-                ),
-              )}
-            </>
-          </ActionTreeCast>
-        ))}
-    </ActionTreeRoot>
+    </ActionTreeCastResultNodeDiv>
   );
 };

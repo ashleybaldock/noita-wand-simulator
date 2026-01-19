@@ -147,7 +147,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
       simulationEnabled(...args) && simulationNeedsUpdate(...args),
     effect: async (_action, listenerApi) => {
       const {
-        endSimulationOnShotCount,
+        endSimulationOnCastCount,
         endSimulationOnReloadCount,
         endSimulationOnRefreshCount,
         limitSimulationIterations,

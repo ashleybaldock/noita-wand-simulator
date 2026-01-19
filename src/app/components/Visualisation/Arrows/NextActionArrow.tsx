@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import type { Spell } from '../../../calc/spell';
 import { DEFAULT_SIZE } from '../../../util';
-import { ActionTreeShotResultNodeDiv } from '../ActionTree';
+import { ActionTreeCastResultNodeDiv } from '../ActionTree';
 
 const LineDiv = styled.div<{
   size: number;
@@ -40,11 +40,11 @@ const LineDiv = styled.div<{
   border-radius: var(--radius-arrow);
   `}
 
-  ${ActionTreeShotResultNodeDiv}:first-of-type > div > & {
+  ${ActionTreeCastResultNodeDiv}:first-of-type > div > & {
     border-left-style: hidden;
     border-radius: 0;
   }
-  ${ActionTreeShotResultNodeDiv}:first-of-type > div > &::before {
+  ${ActionTreeCastResultNodeDiv}:first-of-type > div > &::before {
     border-left-style: hidden;
     border-radius: 0;
   }
