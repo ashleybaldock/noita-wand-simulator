@@ -62,7 +62,7 @@ const Container = styled.div`
   justify-content: space-between;
   padding: 0.3em 0.6em 0.2em 2.2em;
 
-  background-image: url('/data/wand/icon_gun_permanent_actions.png');
+  background-image: var(--icon-alwayscast);
   background-position: 0.6em 50%;
   background-size: 1em;
   background-repeat: no-repeat;

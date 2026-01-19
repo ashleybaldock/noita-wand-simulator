@@ -38,6 +38,7 @@ import type { WandIndex } from '../../redux/WandIndex';
 import { WandIndexAnnotation } from '../Annotations/WandIndexAnnotation';
 import { OverSpellDropTarget } from '../Spells/WandAction/OverSpellDropTarget';
 import { BetweenSpellsDropTarget } from '../Spells/WandAction/BetweenSpellsDropTarget';
+import { SlottedSpell } from './SlottedSpell';
 
 const PlaceHolder = styled(StyledWandActionBorder)`
   background-image: none;
@@ -274,8 +275,8 @@ export const WandActionEditor = () => {
     <SpellSlots ref={gridRef} data-name="WandActionEditor">
       {spellActions.map((spellAction, wandIndex) => (
         <SpellSlot key={wandIndex}>
-          <ActionComponent
-            spellAction={spellAction}
+          <SlottedSpell
+            spell={spellAction}
             wandIndex={wandIndex}
             deckIndex={spellAction !== undefined ? deckIndex++ : undefined}
             lastIndex={lastSpellIndex}

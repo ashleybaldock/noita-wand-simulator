@@ -9,36 +9,38 @@ import {
   DeleteSpellAnnotation,
   FriendlyFireAnnotation,
   NoManaAnnotation,
+  WandIndexAnnotation,
 } from '../Annotations';
-import type { WandIndex } from '../../redux/WandIndex';
+import { isMainWandIndex, type WandIndex } from '../../redux/WandIndex';
 import {
   DraggableWandAction,
   StyledWandActionBorder,
   WandActionDragSource,
   WandActionDropTargets,
 } from '../Spells/WandAction';
+import { isDraggedSpell } from '../Spells/WandAction/DragItems';
 
 export const SlottedSpell = ({
   spell,
   wandIndex,
   deckIndex,
-  alwaysCast = false,
+  lastIndex,
   droppable = true,
 }: {
   spell?: Spell;
   wandIndex: WandIndex;
   deckIndex?: number | string;
+  lastIndex?: WandIndex;
   selection?: WandSelection;
-  alwaysCast?: boolean;
   droppable?: boolean;
 }) => {
   const dispatch = useAppDispatch();
 
   const { isDraggingSpell } = useDragLayer((monitor) => ({
     isDragging: monitor.isDragging(),
-    isDraggingSpell: monitor.getItemType() === 'spell',
-    isDraggingSelect: monitor.getItemType() === 'select',
+    isDraggingSpell: isDraggedSpell(monitor.getItem()),
   }));
+
   const handleDeleteSpell = (wandIndex: WandIndex) => {
     dispatch(setSpellAtIndex({ spellId: null, wandIndex }));
   };
@@ -46,7 +48,7 @@ export const SlottedSpell = ({
   return (
     <>
       {droppable ? (
-        <WandActionDropTargets wandIndex={wandIndex}>
+        <WandActionDropTargets wandIndex={wandIndex} lastIndex={lastIndex}>
           {spell && (
             <>
               <WandActionDragSource
@@ -59,7 +61,7 @@ export const SlottedSpell = ({
                   onDeleteSpell={() => handleDeleteSpell(wandIndex)}
                 />
               </WandActionDragSource>
-              {!alwaysCast && (
+              {isMainWandIndex(wandIndex) && (
                 <ChargesRemainingAnnotation
                   charges={spell.uses_remaining}
                   shouldBeZero={true}
@@ -76,12 +78,13 @@ export const SlottedSpell = ({
                   <DeleteSpellAnnotation
                     deleteSpell={() => handleDeleteSpell(wandIndex)}
                   />
-                  {!alwaysCast && <NoManaAnnotation />}
+                  {isMainWandIndex(wandIndex) && <NoManaAnnotation />}
                   <FriendlyFireAnnotation />
                 </>
               )}
             </>
           )}
+          <WandIndexAnnotation wandIndex={wandIndex} />
         </WandActionDropTargets>
       ) : (
         <StyledWandActionBorder droppable={droppable}></StyledWandActionBorder>

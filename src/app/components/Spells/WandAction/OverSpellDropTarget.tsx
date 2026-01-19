@@ -61,6 +61,8 @@ export const OverSpellDropTarget = ({
   const dispatch = useAppDispatch();
   const { swapOnMove } = useConfig();
 
+  const mainWandIndex = isMainWandIndex(wandIndex);
+
   const onDropSpell = useCallback(
     (item: DraggedSpell) => {
       dispatch(
@@ -106,7 +108,7 @@ export const OverSpellDropTarget = ({
     dropConnector,
   ] = useDrop(
     () => ({
-      accept: ['spell', 'select'],
+      accept: isMainWandIndex(wandIndex) ? ['spell', 'select'] : ['spell'],
       drop: (item: Dragged, monitor) => {
         if (monitor.didDrop()) {
           return;
@@ -127,8 +129,8 @@ export const OverSpellDropTarget = ({
         (isDraggedSpell(item) && item.sourceWandIndex !== wandIndex) ||
         (isDraggedSelection(item) && isMainWandIndex(wandIndex)),
       collect: (monitor) => ({
-        isDraggingSpell: monitor.getItemType() === 'spell',
-        isDraggingSelect: monitor.getItemType() === 'select',
+        isDraggingSpell: isDraggedSpell(monitor.getItem()),
+        isDraggingSelect: isDraggedSelection(monitor.getItem()),
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
       }),

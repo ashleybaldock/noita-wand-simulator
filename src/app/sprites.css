@@ -72,6 +72,7 @@
   --icon-reloadtime: url('/data/wand/icon_reload_time-s.png');
   --icon-castdelay: url('/data/wand/icon_fire_rate_wait.png');
 
+  --icon-alwayscast: url('/data/wand/icon_gun_permanent_actions.png');
   --icon-spread: url('/data/wand/icon_spread_degrees.png');
   --icon-tshape: url('/data/icons/t_shape.png');
   --icon-bounces: url('/data/wand/icon_bounces.png');
