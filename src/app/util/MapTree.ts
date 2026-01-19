@@ -46,6 +46,20 @@ export type SerializedTree<T> = [parentIdx: ParentIdx, value: T][];
  *  - the array index of its parent
  * This is enough information to reconstruct the tree, but can also
  * be used as a cached representation of the traversal
+ *
+ *            ╭──────────╴◁️╮️──────╴◁️╮️
+ * [(n0, 0), (n1, 0), (n2, 1), (n3, 1), (n4, 0)]
+ *   ╰──────────╴◁️╯️────────────────────────╴◁️╯️
+ *
+ *       n0     n0 n0 n0 n0 n0
+ *      ╱️ ╲️        n1 n1 n1 n4
+ *    n1   n4         n2 n3
+ *   ╱️ ╲️
+ *  n2  n3
+ *
+ * if parent id > top id, push current node
+ * if parent id = top id, pop + push
+ * if parent id < top id, pop + repeat
  */
 export interface SerializableTree<T> {
   serializer(): IterableIterator<[parentIdx: ParentIdx, value: T]>;

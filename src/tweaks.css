@@ -439,4 +439,11 @@ button[data-tooltip-content='clear'] {
   background-position:
     80% 45%,
     100% 100%;
+  border-image-slice: 3 3 3 3;
+  border-image-outset: 4px;
+  border-image-width: 6px;
+  background-origin: content-box;
+  background-position: center;
+  width: auto;
+  height: 100%;
 }

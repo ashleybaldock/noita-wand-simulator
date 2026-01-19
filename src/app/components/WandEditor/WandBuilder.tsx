@@ -45,8 +45,8 @@ const WandBuilderTopButtons = styled.div`
   grid-template-rows: [top title-start] 1fr [ title-end bottom];
   margin: 0;
   filter: none;
-  margin: 0;
   background-color: var(--color-base-background);
+  margin: 0 0 0.3em 0;
 
   & > button {
     padding-top: 0.4em;

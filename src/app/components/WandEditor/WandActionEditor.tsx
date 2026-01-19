@@ -69,7 +69,7 @@ const SpellSlots = styled.ul`
   );
   grid-gap: 2px 0;
   padding-left: 0;
-  padding: 0 4px;
+  padding: 0 4px 8px 4px;
 
   justify-content: center;
   align-items: center;

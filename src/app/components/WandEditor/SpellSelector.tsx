@@ -96,10 +96,6 @@ const SpellSelectorWandActionBorder = styled(StyledWandActionBorder)`
   image-rendering: pixelated;
 
   box-shadow: 0 0 2px #000;
-
-  &:hover {
-    background-image: var(--sprite-inventory-grid-box);
-  }
 `;
 const SpellSelectorWandActionDragSource = styled(WandActionDragSource)`
   padding: 0.04em 0 0 0.04em;
