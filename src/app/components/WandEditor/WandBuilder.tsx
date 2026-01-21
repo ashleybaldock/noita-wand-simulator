@@ -46,7 +46,7 @@ const WandBuilderTopButtons = styled.div`
   margin: 0;
   filter: none;
   background-color: var(--color-base-background);
-  margin: 0 0 0.3em 0;
+  padding: 0 0 0.3em 0;
 
   & > button {
     padding-top: 0.4em;
