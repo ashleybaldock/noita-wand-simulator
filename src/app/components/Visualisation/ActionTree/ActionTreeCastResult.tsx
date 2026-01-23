@@ -1,9 +1,8 @@
 import { useMemo, type ReactNode } from 'react';
 import type { ActionCall } from '../../../calc/eval/ActionCall';
 import type { WandCastResult } from '../../../calc/eval/WandCastResult';
-import { ordinalSuffix, mapIter } from '../../../util';
+import { ordinalSuffix } from '../../../util';
 import { MapTree } from '../../../util/MapTree';
-import type { TreeNode } from '../../../util/Tree';
 import { ActionTreeComponent } from './ActionTreeComponent';
 import styled from 'styled-components';
 

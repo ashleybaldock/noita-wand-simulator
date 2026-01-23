@@ -80,14 +80,36 @@ const PropertyIcon = styled(GridRowItem).attrs<{
   ${({ $background }) => $background && `background-image: ${$background};`}
 `;
 
-const PropertyName = styled(GridRowItem)`
+const PropertySection = styled(GridRowItem).attrs<{ $title: string }>(
+  ({ $title }) => ({
+    'data-name': 'PropertySection',
+    $title,
+  }),
+)`
+  justify-content: end;
+  padding-right: 0.3em;
+  flex: 0 0 150px;
+  background-color: black;
+
+  grid-column: 1/-1;
+`;
+
+const PropertyName = styled(GridRowItem).attrs<{ 'data-name'?: string }>(
+  () => ({
+    'data-name': 'PropertyName',
+  }),
+)`
   justify-content: end;
   padding-right: 0.3em;
   flex: 0 0 150px;
   background-color: black;
 `;
 
-const PropertyValue = styled(GridRowItem)`
+const PropertyValue = styled(GridRowItem).attrs<{ 'data-name'?: string }>(
+  () => ({
+    'data-name': 'PropertyValue',
+  }),
+)`
   justify-content: center;
   padding-right: 0.4em;
   padding-left: 0.4em;
@@ -105,18 +127,24 @@ export const FieldNamesColumn = styled(
     return (
       <ColSubGrid>
         {castState &&
-          castTableSections.map(({ fields }, i1) =>
-            fields.map(({ key, displayName }, i2) => (
-              <PropertyName
-                key={key ?? `${i1}-${i2}-${key}`}
-                $row={key}
-                $firstValue={i1 === 0}
-                $firstInGroup={i2 === 0}
-              >
-                {displayName}
-              </PropertyName>
-            )),
-          )}
+          castTableSections.map(({ title, fields }, i1) => (
+            <>
+              <PropertySection
+                key={`${i1}-${title}`}
+                $title={title}
+              ></PropertySection>
+              {fields.map(({ key, displayName }, i2) => (
+                <PropertyName
+                  key={key ?? `${i1}-${i2}-${key}`}
+                  $row={key}
+                  $firstValue={i1 === 0}
+                  $firstInGroup={i2 === 0}
+                >
+                  {displayName}
+                </PropertyName>
+              ))}
+            </>
+          ))}
       </ColSubGrid>
     );
   },
@@ -129,7 +157,7 @@ export const FieldNamesColumn = styled(
 export const IconsColumn = styled(
   ({ castState }: { castState?: GunActionState }) => {
     return (
-      <ColSubGrid>
+      <ColSubGrid data-name="ColIcons">
         {castState &&
           castTableSections.map(({ fields }, i1) =>
             fields.map(({ key, icon }, i2) => (
@@ -152,23 +180,24 @@ export const IconsColumn = styled(
 
 export const TotalsColumn = styled(
   ({
-    castState,
-    manaDrain,
-    insideTrigger = false,
-    triggerType,
+    $castState,
+    $manaDrain,
+    $insideTrigger = false,
+    $dataName = 'ColTotals',
   }: {
-    castState?: GunActionState;
-    manaDrain?: number;
-    insideTrigger?: boolean;
-    triggerType?: TriggerCondition;
+    $castState?: GunActionState;
+    $manaDrain?: number;
+    $insideTrigger?: boolean;
+    $triggerType?: TriggerCondition;
     showValues?: boolean;
+    $dataName?: string;
   }) => {
     const config = useConfig();
     const { castShowChanged } = config;
 
     return (
-      <ColSubGrid>
-        {castState &&
+      <ColSubGrid data-name={$dataName}>
+        {$castState &&
           castTableSections.map(({ fields }, i1) =>
             fields.map(
               (
@@ -181,17 +210,17 @@ export const TotalsColumn = styled(
                   $firstInGroup={i2 === 0}
                   $isTotal={true}
                 >
-                  {insideTrigger && ignoredInTrigger ? (
+                  {$insideTrigger && ignoredInTrigger ? (
                     <Ignored />
                   ) : noTotal ? (
                     <Unchanged />
                   ) : (
                     render(
                       {
-                        ...castState,
-                        insideTrigger,
+                        ...$castState,
+                        insideTrigger: $insideTrigger,
                         isTotal: true,
-                        manaDrain,
+                        manaDrain: $manaDrain,
                       },
                       config,
                     )
@@ -211,15 +240,15 @@ export const TotalsColumn = styled(
 
 export const WandStatsColumn = styled(
   ({
-    castState,
-    manaDrain,
-    insideTrigger = false,
-    triggerType,
+    $castState,
+    $manaDrain,
+    $insideTrigger = false,
+    $triggerType,
   }: {
-    castState?: GunActionState;
-    manaDrain?: number;
-    insideTrigger?: boolean;
-    triggerType?: TriggerCondition;
+    $castState?: GunActionState;
+    $manaDrain?: number;
+    $insideTrigger?: boolean;
+    $triggerType?: TriggerCondition;
     showValues?: boolean;
   }) => {
     const config = useConfig();
@@ -233,8 +262,8 @@ export const WandStatsColumn = styled(
     ]);
 
     return (
-      <ColSubGrid>
-        {castState &&
+      <ColSubGrid data-name="ColWandStats">
+        {$castState &&
           castTableSections.map(({ fields }, i1) =>
             fields.map(({ key, render }, i2) => (
               <PropertyValue
@@ -247,9 +276,9 @@ export const WandStatsColumn = styled(
                   render(
                     {
                       ...Object.fromEntries(wandStats),
-                      insideTrigger: false,
+                      insideTrigger: $insideTrigger,
                       isTotal: false,
-                      manaDrain,
+                      manaDrain: $manaDrain,
                     },
                     config,
                   )
@@ -270,20 +299,20 @@ export const WandStatsColumn = styled(
 
 export const ProjectileColumn = styled(
   ({
-    castState,
-    manaDrain,
-    insideTrigger = false,
+    $castState,
+    $manaDrain,
+    $insideTrigger = false,
   }: {
-    castState?: GunActionState;
-    manaDrain?: number;
-    insideTrigger?: boolean;
+    $castState?: GunActionState;
+    $manaDrain?: number;
+    $insideTrigger?: boolean;
   }) => {
     const config = useConfig();
     const { castShowChanged } = config;
 
     return (
-      <ColSubGrid>
-        {castState &&
+      <ColSubGrid data-name="ColProjectile">
+        {$castState &&
           castTableSections.map(({ fields }, i1) =>
             fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
               <PropertyValue
@@ -292,13 +321,13 @@ export const ProjectileColumn = styled(
                 $firstInGroup={i2 === 0}
                 $isTotal={false}
               >
-                {!insideTrigger || !ignoredInTrigger ? (
+                {!$insideTrigger || !ignoredInTrigger ? (
                   render(
                     {
-                      ...castState,
+                      ...$castState,
                       isTotal: false,
-                      insideTrigger,
-                      manaDrain,
+                      insideTrigger: $insideTrigger,
+                      manaDrain: $manaDrain,
                     },
                     config,
                   )
@@ -317,7 +346,9 @@ export const ProjectileColumn = styled(
   }
 `;
 
-export const SubTotalsColumn = styled(TotalsColumn)`
+export const SubTotalsColumn = styled(TotalsColumn).attrs(() => ({
+  $dataName: 'ColSubTotal',
+}))`
   ${WithDebugHints} && {
     background-color: #a00;
   }

@@ -1,51 +1,18 @@
-import styled from 'styled-components';
-import {
-  FieldNamesColumn,
-  IconsColumn,
-  ProjectileColumn,
-  SubTotalsColumn,
-  TotalsColumn,
-  WandStatsColumn,
-} from './CastStateColumn';
-import { isNotNullOrUndefined, NBSP } from '../../../util';
-import {
-  IconsColumnHeading,
-  ProjectileHeading,
-  CastIndexColumnHeading,
-  SubTotalsColumnHeading,
-  TotalsColumnHeading,
-  WandStatsColumnHeading,
-} from './ColumnHeading';
 import { Fragment } from 'react';
 import type { WandCastId } from '../../../calc/eval/WandCast';
-import { useCast, useCastLookup } from '../../../redux';
 import type { WandCastProjectile } from '../../../calc/eval/WandCastProjectile';
+import { useCast, useCastLookup } from '../../../redux';
+import { NBSP, isNotNullOrUndefined } from '../../../util';
 import { CastTableProjectile } from './CastTableProjectile';
-
-export const StyledCastTable = styled.div<{ $rows?: string }>`
-  --nesting-offset: var(--sizes-nesting-offset, 16px);
-
-  display: grid;
-  gap: 0;
-  grid-auto-flow: column dense;
-  grid-template-columns:
-    [left labels-start] 150px [labels-end icons-start] 20px [icons-end shots-start] repeat(
-      auto-fit,
-      minmax(80px, 1fr)
-    )
-    [shots-end right];
-  grid-template-rows:
-    [heading] min-content
-    ${(props) => props.$rows};
-
-  margin: 0.1em 0em 0.4em 0em;
-`;
-
-const Headings = styled.div`
-  display: contents;
-  grid-row: heading;
-  grid-column: left / right;
-`;
+import {
+  CastIndexColumnHeading,
+  IconsColumnHeading,
+  TotalsColumnHeading,
+  WandStatsColumnHeading,
+  SubTotalsColumnHeading,
+  ProjectileHeading,
+} from './ColumnHeading';
+import { Headings } from './CastTable';
 
 // const castSubStateSummary = useMemo(() => {
 /*
@@ -106,15 +73,15 @@ const Headings = styled.div`
  */
 
 export const CastTableHeadings = ({
-  castIndex,
-  castId,
-  nestingPrefix = [],
+  $castIndex,
+  $castId,
+  $nestingPrefix = [],
 }: {
-  castIndex: number;
-  castId: WandCastId;
-  nestingPrefix?: Array<number>;
+  $castIndex: number;
+  $castId: WandCastId;
+  $nestingPrefix?: Array<number>;
 }) => {
-  const cast = useCast(castId);
+  const cast = useCast($castId);
   if (!cast) {
     return null;
   }
@@ -123,31 +90,31 @@ export const CastTableHeadings = ({
 
   return (
     <Headings>
-      {nestingPrefix.length === 0 ? (
+      {$nestingPrefix.length === 0 ? (
         <>
           <CastIndexColumnHeading
             data-name={'IndexHeading'}
-            index={castIndex}
-            nestingPrefix={nestingPrefix}
+            index={$castIndex}
+            nestingPrefix={$nestingPrefix}
           >
-            {castIndex}
+            {$castIndex}
           </CastIndexColumnHeading>
           <IconsColumnHeading
             data-name={'IconHeading'}
-            nestingPrefix={nestingPrefix}
+            nestingPrefix={$nestingPrefix}
           >
             {''}
           </IconsColumnHeading>
           <TotalsColumnHeading
             data-name={'TotalHeading'}
             origin={true}
-            nestingPrefix={nestingPrefix}
+            nestingPrefix={$nestingPrefix}
           >
             {`Cast${NBSP}Totals`}
           </TotalsColumnHeading>
           <WandStatsColumnHeading
             data-name={'WandHeading'}
-            nestingPrefix={nestingPrefix}
+            nestingPrefix={$nestingPrefix}
           >
             {`Wand Stats`}
           </WandStatsColumnHeading>
@@ -156,7 +123,7 @@ export const CastTableHeadings = ({
         <>
           <SubTotalsColumnHeading
             data-name={'SubTotalHeading'}
-            nestingPrefix={[...nestingPrefix, 1]}
+            nestingPrefix={[...$nestingPrefix, 1]}
             triggerType={triggerType}
           >
             {`Payload${NBSP}Totals`}
@@ -175,78 +142,20 @@ export const CastTableHeadings = ({
             <ProjectileHeading
               isStartOfTrigger={isStartOfTrigger}
               isEndOfTrigger={isEndOfTrigger}
-              nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
+              nestingPrefix={[...$nestingPrefix, isEndOfTrigger ? 0 : 1]}
             >
               <CastTableProjectile projectile={projectile} />
             </ProjectileHeading>
             {isNotNullOrUndefined(triggerCast) && (
               <CastTableHeadings
-                castId={triggerCast.id}
-                castIndex={index}
-                nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
+                $castId={triggerCast.id}
+                $castIndex={index}
+                $nestingPrefix={[...$nestingPrefix, isEndOfTrigger ? 0 : 1]}
               />
             )}
           </Fragment>
         );
       })}
     </Headings>
-  );
-};
-
-export const CastTableColumns = ({
-  castId,
-  nestingPrefix = [],
-}: {
-  castId: WandCastId;
-  nestingPrefix?: Array<number>;
-}) => {
-  const cast = useCast(castId);
-  if (!cast) {
-    return null;
-  }
-  const { castState, manaDrain, triggerType, projectiles } = cast;
-  const castLookup = useCastLookup();
-
-  return (
-    <>
-      {nestingPrefix.length === 0 ? (
-        <>
-          <FieldNamesColumn castState={castState} />
-          <IconsColumn castState={castState} />
-          <TotalsColumn castState={castState} manaDrain={manaDrain} />
-          <WandStatsColumn castState={castState} />
-        </>
-      ) : (
-        <>
-          <SubTotalsColumn
-            triggerType={triggerType}
-            castState={castState}
-            manaDrain={manaDrain}
-          />
-        </>
-      )}
-      {projectiles.map((projectile, index, arr) => {
-        const isEndOfTrigger = index === arr.length - 1;
-        const triggerCast = ((lookupResult) =>
-          ((lookupResult?.projectiles?.length ?? 0) > 0 && lookupResult) ||
-          undefined)(castLookup.get(projectile?.payload ?? -1));
-
-        return (
-          <Fragment key={index}>
-            <ProjectileColumn
-              castState={castState}
-              manaDrain={manaDrain}
-              insideTrigger={true}
-            />
-            {isNotNullOrUndefined(triggerCast) && (
-              <CastTableColumns
-                castId={triggerCast.id}
-                nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
-              />
-            )}
-          </Fragment>
-        );
-      })}
-    </>
   );
 };

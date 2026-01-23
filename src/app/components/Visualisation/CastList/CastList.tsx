@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { ConfigButton } from '../../buttons';
 import { SaveImageButton, ScrollWrapper } from '../../generic';
 import { CastTable } from './CastTable';
-import { SimulationSummary } from './ShotSummary';
+import { SimulationSummary } from './SimulationSummary';
 import { SectionToolbar } from '../../SectionToolbar';
 import { useLatestResult } from '../../../redux';
 
@@ -50,7 +50,7 @@ export const CastList = () => {
         >
           <SimulationSummary />
           {casts.map((cast, index) => (
-            <CastTable cast={cast} castIndex={index + 1} key={index} />
+            <CastTable $cast={cast} $castIndex={index + 1} key={index} />
           ))}
         </SectionDiv>
       </ScrollWrapper>

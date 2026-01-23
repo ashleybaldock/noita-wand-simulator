@@ -272,11 +272,14 @@ type FieldSection = {
 //     )
 //     .join(' ');
 export const castTableGridRows = () =>
-  castTableSections
-    .map(({ title, fields }) =>
-      fields.map(({ key }) => `[${key.toLowerCase()}] min-content`).join(' '),
+  `[${castTableSections
+    .map(
+      ({ title, fields }) =>
+        `${title.toLowerCase()}-start] min-content ${fields
+          .map(({ key }) => `[${key.toLowerCase()}] min-content`)
+          .join(' ')} [${title.toLowerCase()}-end`,
     )
-    .join(' ');
+    .join(' ')}]`;
 
 export const castTableSections: FieldSection[] = [
   {
@@ -547,7 +550,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.zerodamage`,
         key: 'damage_null_all',
-        displayName: 'All Null',
+        displayName: 'Null All',
         render: ({ damage_null_all: v }) => (
           <YesNo yes={Boolean(v)} customNo={<Unchanged />} />
         ),
@@ -555,7 +558,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.damage.melee`,
         key: 'damage_melee_add',
-        displayName: 'Melee',
+        displayName: 'Melee Damage',
         render: ({ damage_melee_add: v }) => (
           <ReadableNumber
             number={round(Number(v) * 25, 1)}
@@ -566,7 +569,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.damage.projectile`,
         key: 'damage_projectile_add',
-        displayName: 'Projectile',
+        displayName: 'Projectile Damage',
         render: ({ damage_projectile_add: v }) => (
           <ReadableNumber
             number={round(Number(v) * 25, 1)}
@@ -577,7 +580,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.damage.electricity`,
         key: 'damage_electricity_add',
-        displayName: 'Electric',
+        displayName: 'Electric Damage',
         render: ({ damage_electricity_add: v }) => (
           <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
         ),
@@ -585,7 +588,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.damage.fire`,
         key: 'damage_fire_add',
-        displayName: 'Fire',
+        displayName: 'Fire Damage',
         render: ({ damage_fire_add: v }) => (
           <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
         ),
@@ -593,7 +596,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.damage.ice`,
         key: 'damage_ice_add',
-        displayName: 'Ice',
+        displayName: 'Ice Damage',
         render: ({ damage_ice_add: v }) => (
           <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
         ),
@@ -601,7 +604,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.damage.slice`,
         key: 'damage_slice_add',
-        displayName: 'Slice',
+        displayName: 'Slice Damage',
         render: ({ damage_slice_add: v }) => (
           <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
         ),
@@ -609,7 +612,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.damage.heal`,
         key: 'damage_healing_add',
-        displayName: 'Healing',
+        displayName: 'Healing Damage',
         render: ({ damage_healing_add: v }) => (
           <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
         ),
@@ -617,7 +620,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.damage.curse`,
         key: 'damage_curse_add',
-        displayName: 'Curse',
+        displayName: 'Curse Damage',
         render: ({ damage_curse_add: v }) => (
           <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
         ),
@@ -625,7 +628,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.damage.holy`,
         key: 'damage_holy_add',
-        displayName: 'Holy',
+        displayName: 'Holy Damage',
         render: ({ damage_holy_add: v }) => (
           <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
         ),
@@ -633,7 +636,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.damage.drill`,
         key: 'damage_drill_add',
-        displayName: 'Drill',
+        displayName: 'Drill Damage',
         render: ({ damage_drill_add: v }) => (
           <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
         ),
@@ -641,7 +644,7 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.damage.explosion`,
         key: 'damage_explosion_add',
-        displayName: 'Explosion',
+        displayName: 'Explosion Damage',
         render: ({ damage_explosion_add: v }) => (
           <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
         ),
@@ -649,14 +652,14 @@ export const castTableSections: FieldSection[] = [
       {
         icon: `icon.explosionradius`,
         key: 'explosion_radius',
-        displayName: 'Expl. Radius',
+        displayName: 'Explosion Radius',
         render: ({ explosion_radius: v }) => (
           <SignZero n={round(Number(v) * 25, 0)} ifZero={<Unchanged />} />
         ),
       },
       {
         key: 'explosion_radius_bonus',
-        displayName: 'Expl. Threshold',
+        displayName: 'Explosion Threshold',
         render: ({ explosion_radius: v }) => (
           <RadiusThresholdBonus radius={Number(v)} ifZero={<Unchanged />} />
         ),
