@@ -71,8 +71,6 @@ const Container = styled.div`
 
 export const WandAlwaysCastEditor = styled(
   ({ className = '' }: { className?: string }) => {
-    // const dispatch = useAppDispatch();
-
     const alwaysIds = useAlwaysCastLayout();
     const gridRef = useRef(null);
 
@@ -95,7 +93,6 @@ export const WandAlwaysCastEditor = styled(
                     ? AlwaysCastIndicies[deckIndex++]
                     : undefined
                 }
-                // droppable={isNotNullOrUndefined(alwaysAction)}
               />
             </SpellSlot>
           ))}

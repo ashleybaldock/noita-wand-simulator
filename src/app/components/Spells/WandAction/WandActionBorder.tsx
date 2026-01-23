@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { useDrop } from 'react-dnd';
 import { useDropRef } from '../../../hooks/useDropRef';
-import { BetweenSpellsDropTarget } from './BetweenSpellsDropTarget';
 
 const StyledDiv = styled.div<{
   $highlight: boolean;
@@ -43,12 +42,13 @@ const WandActionBorder = ({
   className?: string;
   droppable?: boolean;
 }>) => {
-  const [{ canDrop }, dropConnector] = useDrop(
+  const [{ isOver }, dropConnector] = useDrop(
     () => ({
       accept: 'spell',
       canDrop: () => false,
       collect: (monitor) => ({
-        canDrop: monitor.isOver(),
+        canDrop: monitor.canDrop(),
+        isOver: monitor.isOver(),
       }),
     }),
     [],
@@ -58,7 +58,7 @@ const WandActionBorder = ({
     <StyledDiv
       ref={dropRef}
       data-name="WandActionBorder"
-      $highlight={droppable && canDrop}
+      $highlight={droppable && isOver}
       $disabled={!droppable}
       className={className}
     >
