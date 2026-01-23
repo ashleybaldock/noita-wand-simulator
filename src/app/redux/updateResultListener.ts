@@ -19,20 +19,25 @@ type ListenerPredicate<T> = (
  */
 const spellSequenceHasChanged: ListenerPredicate<RootState> = (
   _unused,
-  currentState,
+  {
+    wand: {
+      present: { spellIds: currentSpellIds },
+    },
+  },
+  {
+    wand: {
+      present: { spellIds: previousSpellIds },
+    },
+  },
 ) => {
-  const prev = currentState.result.lastSpellIds.values(),
-    cur = currentState.wand.present.spellIds.values(),
-    changed = !compareSequencesIter<SpellId>(
-      { filterPredicate: isNotNullOrUndefined },
-      prev,
-      cur,
-    );
+  const changed = !compareSequencesIter<SpellId>(
+    { filterPredicate: isNotNullOrUndefined },
+    previousSpellIds.values(),
+    currentSpellIds.values(),
+  );
   if (changed) {
     console.debug(
-      `spellSequenceHasChanged, now: '${currentState.wand.present.spellIds.join(
-        ',',
-      )}', prev: '${currentState.result.lastSpellIds.join(',')}`,
+      `spellSequenceHasChanged, from: '[${previousSpellIds.join(', ')}]' to: ['${currentSpellIds.join(', ')}']`,
     );
   }
   return changed;
@@ -43,18 +48,25 @@ const spellSequenceHasChanged: ListenerPredicate<RootState> = (
  */
 const alwaysCastSequenceHasChanged: ListenerPredicate<RootState> = (
   _unused,
-  currentState,
+  {
+    wand: {
+      present: { alwaysIds: currentAlwaysIds },
+    },
+  },
+  {
+    wand: {
+      present: { alwaysIds: previousAlwaysIds },
+    },
+  },
 ) => {
-  const prev = currentState.result.lastAlwaysIds.values(),
-    cur = currentState.wand.present.alwaysIds.values(),
-    changed = !compareSequencesIter<SpellId>(
-      { filterPredicate: isNotNullOrUndefined },
-      prev,
-      cur,
-    );
+  const changed = !compareSequencesIter<SpellId>(
+    { filterPredicate: isNotNullOrUndefined },
+    previousAlwaysIds.values(),
+    currentAlwaysIds.values(),
+  );
   if (changed) {
     console.debug(
-      `alwaysCastSequenceHasChanged, now: '${currentState.wand.present.alwaysIds}', prev: '${currentState.result.lastAlwaysIds} `,
+      `alwaysCastSequenceHasChanged, from: '[${previousAlwaysIds.join(', ')}]' to: ['${currentAlwaysIds.join(', ')}']`,
     );
   }
   return changed;
@@ -66,14 +78,21 @@ const alwaysCastSequenceHasChanged: ListenerPredicate<RootState> = (
  */
 const wandStatsHaveChanged: ListenerPredicate<RootState> = (
   _unused,
-  currentState,
+  {
+    wand: {
+      present: { wand: currentWandStats },
+    },
+  },
+  {
+    wand: {
+      present: { wand: previousWandStats },
+    },
+  },
 ) => {
-  const prev = currentState.result.lastWand,
-    cur = currentState.wand.present.wand,
-    changed = !wandsMatchForSimulation(cur, prev);
+  const changed = !wandsMatchForSimulation(currentWandStats, previousWandStats);
   if (changed) {
     console.debug(
-      `wandStatsHaveChanged, now: '${currentState.wand.present.wand}', prev: '${currentState.result.lastWand} `,
+      `wandStatsHaveChanged, from: '${previousWandStats}' to: '${currentWandStats}'`,
     );
   }
   return changed;
@@ -84,15 +103,22 @@ const wandStatsHaveChanged: ListenerPredicate<RootState> = (
  */
 const zetaIdHasChanged: ListenerPredicate<RootState> = (
   _unused,
-  currentState,
+  {
+    wand: {
+      present: { zetaId: currentZetaId },
+    },
+  },
+  {
+    wand: {
+      present: { zetaId: previousZetaId },
+    },
+  },
 ) => {
-  const prev = currentState.result.lastZetaId,
-    cur = currentState.wand.present.zetaId,
-    changed = prev !== cur;
+  const changed = previousZetaId !== currentZetaId;
 
   if (changed) {
     console.debug(
-      `zetaIdHasChanged, now: '${currentState.wand.present.zetaId}', prev: '${currentState.result.lastZetaId}'`,
+      `zetaIdHasChanged, from: '${previousZetaId}' to: '${currentZetaId}'`,
     );
   }
   return changed;
@@ -101,15 +127,35 @@ const zetaIdHasChanged: ListenerPredicate<RootState> = (
 /**
  * @returns true if simulation has not run since startup
  */
-const hasNeverRun: ListenerPredicate<RootState> = (_unused, currentState) => {
-  if (currentState.result.lastSimulationRequested === null) {
+const hasNeverRun: ListenerPredicate<RootState> = (
+  _unused,
+  { result: { lastSimulationRequested } },
+) => {
+  const changed = lastSimulationRequested === null;
+  if (changed) {
     console.debug(`hasNeverRun`);
-    return true;
   }
-  return false;
+  return changed;
 };
 
-// TODO also depends on config
+/**
+ * @returns true if zetaId has changed
+ */
+const simulationConfigChanged: ListenerPredicate<RootState> = (
+  _unused,
+  { config: currentConfig },
+  { config: previousConfig },
+) => {
+  const changed = false; // TODO
+
+  if (changed) {
+    console.debug(
+      `simulationConfigChanged, from: '${previousConfig}' to: '${currentConfig}'`,
+    );
+  }
+  return changed;
+};
+
 // TODO memoise previous sim results to avoid re-running
 /**
  * Checks if simulation needs to be re-run
@@ -126,11 +172,12 @@ const simulationNeedsUpdate: ListenerPredicate<RootState> = (
   previousState,
 ) =>
   [
-    hasNeverRun,
     spellSequenceHasChanged,
     alwaysCastSequenceHasChanged,
     wandStatsHaveChanged,
     zetaIdHasChanged,
+    simulationConfigChanged,
+    hasNeverRun,
   ].some((predicate) => predicate(action, currentState, previousState));
 
 const simulationEnabled: ListenerPredicate<RootState> = (

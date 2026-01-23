@@ -1,25 +1,34 @@
 import type { ConfigState } from './redux/configSlice';
+import { isNull, tee } from './util';
 
-export const loadState = (defaultState: ConfigState): ConfigState => {
+export const saveState = ({ config }: ConfigState) => {
+  console.info('writing state to localstorage', config);
+  const serializedConfigState = JSON.stringify(config);
   try {
-    const serializedState = localStorage.getItem('state');
-    if (serializedState === null) {
-      console.info('Saved state not found in LocalStorage, using default');
-      return defaultState;
-    }
-    return JSON.parse(serializedState);
-  } catch (err) {
-    console.warn('loadState - error loading from localstorage', err);
-    return defaultState;
-  }
-};
-
-export const saveState = (state: ConfigState) => {
-  try {
-    console.warn('writing state to localstorage', state);
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem('state', serializedState);
+    localStorage.setItem('config', serializedConfigState);
   } catch (err) {
     console.warn('saveState - error writing to localstorage', err);
+  }
+  return serializedConfigState;
+};
+
+export const loadState = ({
+  config: defaultConfig,
+}: ConfigState): ConfigState => {
+  try {
+    const serializedConfigState =
+      localStorage.getItem('config') ??
+      saveState(
+        tee.info(
+          { config: defaultConfig },
+          'Saved config not found in localstorage, using default',
+        ),
+      );
+    return {
+      config: { ...defaultConfig, ...JSON.parse(serializedConfigState) },
+    };
+  } catch (err) {
+    console.warn('loadState - error loading config from localstorage', err);
+    return { config: { ...defaultConfig } };
   }
 };

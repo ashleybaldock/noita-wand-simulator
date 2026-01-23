@@ -47,9 +47,9 @@ export type SerializedTree<T> = [parentIdx: ParentIdx, value: T][];
  * This is enough information to reconstruct the tree, but can also
  * be used as a cached representation of the traversal
  *
- *            ╭──────────╴◁️╮️──────╴◁️╮️
- * [(n0, 0), (n1, 0), (n2, 1), (n3, 1), (n4, 0)]
- *   ╰──────────╴◁️╯️────────────────────────╴◁️╯️
+ *            ╭──────────╴◁️╮️╶︎─────╴◁️╮️╶︎╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴ ◁️╮️
+ * [(n0, 0), (n1, 0), (n2, 1), (n3, 1), (n4, 0), …️ (n-1, x)]
+ *   ╰──────────╴◁️╯️─︎───────────────────────╴◁️╯️
  *
  *       n0     n0 n0 n0 n0 n0
  *      ╱️ ╲️        n1 n1 n1 n4

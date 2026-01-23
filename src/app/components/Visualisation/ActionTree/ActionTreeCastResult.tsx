@@ -51,18 +51,15 @@ export const ActionTreeCastResult = ({
           </ActionTreeCastSummary>
           <StartingDraw data-name="AcTreeSpCast">Spells/cast: </StartingDraw>
           <>
-            {mapIter<TreeNode<ActionCall>, ReactNode>(
-              actionCallTree.children,
-              (childCast, i) => (
-                <ActionTreeComponent
-                  position={0}
-                  node={childCast}
-                  level={level + 1}
-                  triggerLevel={triggerLevel}
-                  key={i}
-                />
-              ),
-            )}
+            {[...actionCallTree].map((childCast, i) => (
+              <ActionTreeComponent
+                position={0}
+                node={childCast}
+                level={level + 1}
+                triggerLevel={triggerLevel}
+                key={i}
+              />
+            ))}
           </>
         </ActionTreeCast>
       ))}
