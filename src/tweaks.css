@@ -440,3 +440,55 @@ button[data-tooltip-content='clear'] {
   width: auto;
   height: 100%;
 }
+
+[data-name='CastTable'] {
+  --nesting-offset: var(--sizes-nesting-offset, 16px);
+  display: grid;
+  gap: 0;
+  grid-auto-flow: column dense;
+  grid-template-columns: [left labels-start] 150px [labels-end icons-start] 20px [icons-end shots-start] repeat(
+      auto-fit,
+      minmax(80px, 1fr)
+    ) [shots-end right];
+  grid-template-rows: [heading] min-content [section-start timing-start] min-content [action_mana_drain] min-content [reload_time] min-content [fire_rate_wait] min-content [lifetime_add] min-content [wisp_chance] min-content [timing-end section-end section-start motion-start] min-content [spread_degrees] min-content [pattern_degrees] min-content [bounces] min-content [gravity] min-content [speed_base] min-content [speed_multiplier] min-content [speed_initial] min-content [speed_damage_multiplier] min-content [motion-end section-end section-start crit-start] min-content [crit_on_wet] min-content [crit_on_oil] min-content [crit_on_blood] min-content [crit_on_fire] min-content [damage_critical_chance] min-content [damage_critical_multiplier] min-content [crit-end section-end section-start damage-start] min-content [friendly_fire] min-content [damage_null_all] min-content [damage_melee_add] min-content [damage_projectile_add] min-content [damage_electricity_add] min-content [damage_fire_add] min-content [damage_ice_add] min-content [damage_slice_add] min-content [damage_healing_add] min-content [damage_curse_add] min-content [damage_holy_add] min-content [damage_drill_add] min-content [damage_explosion_add] min-content [explosion_radius] min-content [explosion_radius_bonus] min-content [damage-end impact-start] min-content [recoil] min-content [knockback_force] min-content [screenshake] min-content [impact-end section-end section-start material-start] min-content [trail_material_oil] min-content [trail_material_water] min-content [trail_material_acid] min-content [trail_material_poison] min-content [trail_material_fire] min-content [trail_material_amount] min-content [material-end];
+  margin: 0.1em 0em 0.4em 0em;
+}
+[data-name='CastTable'] > * {
+  display: contents;
+}
+[data-name='CastTable'] > :first-child > * {
+  grid-column: span 1 / auto;
+}
+[data-title='Timing']::before {
+  grid-row: timing-start/timing-end;
+  grid-column: 1/-1;
+}
+[data-name='PropertyName'] {
+  grid-column: labels-start/labels-end;
+}
+[data-name='PropertyIcon'] {
+  grid-column: icons-start/icons-end;
+}
+
+[data-name='ColSubGrid'] {
+  /*   display: grid;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+  grid-column: 1; */
+  display: contents;
+}
+[data-name='PropertySection'] {
+  /*   display: grid;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+  grid-column: 1/-1;
+  grid-row: auto/span 8; */
+  display: contents;
+}
+[data-name='PropertySection']::before {
+  display: flex;
+  content: attr(data-title);
+  font-size: 0.6em;
+  background-color: #f00;
+  grid-column: 1/-1;
+}

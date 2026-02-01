@@ -133,7 +133,6 @@ const WandActionSelect = ({
     <SpellSelectorWandActionBorder data-name="SpellSelectorWandActionBorder ">
       <SpellSelectorWandActionDragSource
         actionId={id}
-        key={id}
         onClick={dragSourceOnClick}
       >
         <SpellSelectorWandAction spellId={id} spellType={type} />

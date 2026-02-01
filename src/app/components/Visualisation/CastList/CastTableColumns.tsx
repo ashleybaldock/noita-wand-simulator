@@ -31,14 +31,14 @@ export const CastTableColumns = ({
         <>
           <FieldNamesColumn castState={castState} />
           <IconsColumn castState={castState} />
-          <TotalsColumn $castState={castState} $manaDrain={manaDrain} />
-          <WandStatsColumn $castState={castState} />
+          <TotalsColumn castState={castState} $manaDrain={manaDrain} />
+          <WandStatsColumn castState={castState} />
         </>
       ) : (
         <>
           <SubTotalsColumn
             $triggerType={triggerType}
-            $castState={castState}
+            castState={castState}
             $manaDrain={manaDrain}
           />
         </>
@@ -52,7 +52,7 @@ export const CastTableColumns = ({
         return (
           <Fragment key={index}>
             <ProjectileColumn
-              $castState={castState}
+              castState={castState}
               $manaDrain={manaDrain}
               $insideTrigger={true}
             />

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { type DataAttributes } from 'styled-components';
 import type { GunActionState } from '../../../calc/actionState';
 import type { TriggerCondition } from '../../../calc/trigger';
 import { WithDebugHints } from '../../Debug';
@@ -7,12 +7,15 @@ import { useConfig, useWand } from '../../../redux';
 import type { SpriteName } from '../../../calc/sprite';
 import { useIcon } from '../../../calc/sprite';
 import { castTableSections } from './ShotTableRowConfig';
+import { Fragment } from 'react/jsx-runtime';
 
 // TODO: handle extra_entities that affect damage/etc
 
-const ColSubGrid = styled.div.attrs<{ 'data-name'?: string }>(() => ({
-  'data-name': 'ColSubGrid',
-}))`
+const ColSubGrid = styled.div.attrs<DataAttributes & { $dataName?: string }>(
+  ({ $dataName }) => ({
+    'data-name': $dataName,
+  }),
+)`
   grid-column: auto/span 1;
   grid-row: 2/-1;
   grid-template-columns: 1fr;
@@ -83,6 +86,7 @@ const PropertyIcon = styled(GridRowItem).attrs<{
 const PropertySection = styled(GridRowItem).attrs<{ $title: string }>(
   ({ $title }) => ({
     'data-name': 'PropertySection',
+    'data-title': `${$title}`,
     $title,
   }),
 )`
@@ -123,19 +127,22 @@ const Ignored = styled.span`
 `;
 
 export const FieldNamesColumn = styled(
-  ({ castState }: { castState?: GunActionState }) => {
+  ({
+    castState,
+    $dataName = 'ColNames',
+  }: {
+    castState?: GunActionState;
+    $dataName?: string;
+  }) => {
     return (
-      <ColSubGrid>
+      <ColSubGrid $dataName={$dataName}>
         {castState &&
           castTableSections.map(({ title, fields }, i1) => (
-            <>
-              <PropertySection
-                key={`${i1}-${title}`}
-                $title={title}
-              ></PropertySection>
+            <Fragment key={`${$dataName}-${title ? title : i1}`}>
+              <PropertySection $title={title}></PropertySection>
               {fields.map(({ key, displayName }, i2) => (
                 <PropertyName
-                  key={key ?? `${i1}-${i2}-${key}`}
+                  key={`${$dataName}-${title ? title : i1}-${key ? key : i2}`}
                   $row={key}
                   $firstValue={i1 === 0}
                   $firstInGroup={i2 === 0}
@@ -143,7 +150,7 @@ export const FieldNamesColumn = styled(
                   {displayName}
                 </PropertyName>
               ))}
-            </>
+            </Fragment>
           ))}
       </ColSubGrid>
     );
@@ -155,14 +162,20 @@ export const FieldNamesColumn = styled(
 `;
 
 export const IconsColumn = styled(
-  ({ castState }: { castState?: GunActionState }) => {
+  ({
+    castState,
+    $dataName = 'ColIcons',
+  }: {
+    castState?: GunActionState;
+    $dataName?: string;
+  }) => {
     return (
-      <ColSubGrid data-name="ColIcons">
+      <ColSubGrid data-name={$dataName}>
         {castState &&
-          castTableSections.map(({ fields }, i1) =>
+          castTableSections.map(({ title, fields }, i1) =>
             fields.map(({ key, icon }, i2) => (
               <PropertyIcon
-                key={key ?? `${i1}-${i2}-${key}`}
+                key={`${$dataName}-${title ? title : i1}-${key ? key : i2}`}
                 $firstValue={i1 === 0}
                 $firstInGroup={i2 === 0}
                 icon={icon}
@@ -180,12 +193,12 @@ export const IconsColumn = styled(
 
 export const TotalsColumn = styled(
   ({
-    $castState,
+    castState,
     $manaDrain,
     $insideTrigger = false,
     $dataName = 'ColTotals',
   }: {
-    $castState?: GunActionState;
+    castState?: GunActionState;
     $manaDrain?: number;
     $insideTrigger?: boolean;
     $triggerType?: TriggerCondition;
@@ -197,15 +210,15 @@ export const TotalsColumn = styled(
 
     return (
       <ColSubGrid data-name={$dataName}>
-        {$castState &&
-          castTableSections.map(({ fields }, i1) =>
+        {castState &&
+          castTableSections.map(({ title, fields }, i1) =>
             fields.map(
               (
                 { key, render, ignoredInTrigger = false, noTotal = false },
                 i2,
               ) => (
                 <PropertyValue
-                  key={key ?? `${i1}-${i2}`}
+                  key={`${$dataName}-${title ? title : i1}-${key ? key : i2}`}
                   $firstValue={i1 === 0}
                   $firstInGroup={i2 === 0}
                   $isTotal={true}
@@ -217,7 +230,7 @@ export const TotalsColumn = styled(
                   ) : (
                     render(
                       {
-                        ...$castState,
+                        ...castState,
                         insideTrigger: $insideTrigger,
                         isTotal: true,
                         manaDrain: $manaDrain,
@@ -240,16 +253,18 @@ export const TotalsColumn = styled(
 
 export const WandStatsColumn = styled(
   ({
-    $castState,
+    castState,
     $manaDrain,
     $insideTrigger = false,
     $triggerType,
+    $dataName = 'ColWandStats',
   }: {
-    $castState?: GunActionState;
+    castState?: GunActionState;
     $manaDrain?: number;
     $insideTrigger?: boolean;
     $triggerType?: TriggerCondition;
     showValues?: boolean;
+    $dataName?: string;
   }) => {
     const config = useConfig();
     const { castShowChanged } = config;
@@ -262,12 +277,12 @@ export const WandStatsColumn = styled(
     ]);
 
     return (
-      <ColSubGrid data-name="ColWandStats">
-        {$castState &&
-          castTableSections.map(({ fields }, i1) =>
+      <ColSubGrid data-name={$dataName}>
+        {castState &&
+          castTableSections.map(({ title, fields }, i1) =>
             fields.map(({ key, render }, i2) => (
               <PropertyValue
-                key={key ? `wandStats-${key}` : `wandStats-${i1}-${i2}`}
+                key={`${$dataName}-${title ? title : i1}-${key ? key : i2}`}
                 $firstValue={i1 === 0}
                 $firstInGroup={i2 === 0}
                 $isTotal={true}
@@ -299,24 +314,26 @@ export const WandStatsColumn = styled(
 
 export const ProjectileColumn = styled(
   ({
-    $castState,
+    castState,
     $manaDrain,
     $insideTrigger = false,
+    $dataName = 'ColProjectile',
   }: {
-    $castState?: GunActionState;
+    castState?: GunActionState;
     $manaDrain?: number;
     $insideTrigger?: boolean;
+    $dataName?: string;
   }) => {
     const config = useConfig();
     const { castShowChanged } = config;
 
     return (
-      <ColSubGrid data-name="ColProjectile">
-        {$castState &&
-          castTableSections.map(({ fields }, i1) =>
+      <ColSubGrid $dataName={$dataName}>
+        {castState &&
+          castTableSections.map(({ title, fields }, i1) =>
             fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
               <PropertyValue
-                key={key ?? `${i1}-${i2}`}
+                key={`${$dataName}-${title ? title : i1}-${key ? key : i2}`}
                 $firstValue={i1 === 0}
                 $firstInGroup={i2 === 0}
                 $isTotal={false}
@@ -324,7 +341,7 @@ export const ProjectileColumn = styled(
                 {!$insideTrigger || !ignoredInTrigger ? (
                   render(
                     {
-                      ...$castState,
+                      ...castState,
                       isTotal: false,
                       insideTrigger: $insideTrigger,
                       manaDrain: $manaDrain,

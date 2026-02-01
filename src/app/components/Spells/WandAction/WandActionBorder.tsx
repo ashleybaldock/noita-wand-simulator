@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import type { Key } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDropRef } from '../../../hooks/useDropRef';
 
@@ -38,9 +39,11 @@ const WandActionBorder = ({
   className = '',
   children,
   droppable = true,
+  key,
 }: React.PropsWithChildren<{
   className?: string;
   droppable?: boolean;
+  key?: Key | null;
 }>) => {
   const [{ isOver }, dropConnector] = useDrop(
     () => ({
@@ -56,6 +59,7 @@ const WandActionBorder = ({
   const dropRef = useDropRef(dropConnector);
   return (
     <StyledDiv
+      key={key}
       ref={dropRef}
       data-name="WandActionBorder"
       $highlight={droppable && isOver}
