@@ -1,4 +1,4 @@
-import { useConfigSetting } from '../../../redux';
+import { useConfigSetting, useIsGoldUsed } from '../../../redux';
 import { InputImageLabel } from '../../Input/ImageLabel/InputImageLabel';
 import { NumericInput } from '../../Input/NumericInput/NumericInput';
 import {
@@ -9,8 +9,9 @@ import {
 
 export const MoneyConfigSection = () => {
   const [value, setValue, changeHandler] = useConfigSetting('var_money');
+  const usesGold = useIsGoldUsed();
 
-  return (
+  return usesGold ? (
     <SubSectionDiv data-section="money">
       <SubSectionTitle>
         <InputImageLabel $size={20} icon={'icon.config.goldnugget2'} />
@@ -33,5 +34,5 @@ export const MoneyConfigSection = () => {
         ></NumericInput>
       </SubSectionContent>
     </SubSectionDiv>
-  );
+  ) : null;
 };

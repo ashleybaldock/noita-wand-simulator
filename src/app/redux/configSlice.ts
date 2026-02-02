@@ -25,6 +25,7 @@ type ConfigBase = {
   showWraps: boolean;
   showDraw: boolean;
   showSpellsInCategories: boolean;
+  showLockedSpellPlaceholders: boolean;
   showBeta: boolean;
   showExtra: boolean;
   showChargeUsage: boolean;
@@ -113,6 +114,7 @@ export const initialState: ConfigState = {
     showWraps: true,
     showDraw: true,
     showSpellsInCategories: true,
+    showLockedSpellPlaceholders: true,
     endSimulationOnCastCount: 0,
     endSimulationOnReloadCount: 0,
     endSimulationOnRefreshCount: 1,

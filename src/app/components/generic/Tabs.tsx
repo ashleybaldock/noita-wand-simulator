@@ -136,7 +136,8 @@ const ContentDiv = styled.div`
         up,
         min(40vh, ((var(--spellandgap) * 4) - var(--bsize-gap))),
         var(--spellandgap)
-      ) + calc(var(--bsize-padh) * 2)
+      ) +
+      calc(var(--bsize-padh) * 2)
   );
   --bsize-gap: 4px;
   --spellandgap: calc(var(--bsize-spell) + var(--bsize-gap));
@@ -147,11 +148,15 @@ const ContentDiv = styled.div`
   border-radius: 0.26rem 0.46rem;
   --bg-color: #3e1a1a;
   --bg-texture: url('/data/spelltypes/svg/item_bg_projectile.svg');
-  background-image: radial-gradient(circle at 50% 50%, #500 0%, #0008 100%),
-    var(--bg-texture);
-  box-shadow: inset 0 3px 3px 3px #000, inset 0 0 2px 4px var(--bg-color);
+  background-image:
+    radial-gradient(circle at 50% 50%, #500 0%, #0008 100%), var(--bg-texture);
+  box-shadow:
+    inset 0 3px 3px 3px #000,
+    inset 0 0 2px 4px var(--bg-color);
   background-attachment: fixed, local;
-  background-size: 90% 100%, 6px;
+  background-size:
+    90% 100%,
+    6px;
   background-position: center, center;
 `;
 
@@ -194,7 +199,7 @@ export function Tabs({
     }
   }, [displayIndex, selectedTabIndex]);
 
-  useHotkeys('2,3,4,5,6,7,8', (_, kEv) => {
+  useHotkeys('2,3,4,5,6,7,8,9', (_, kEv) => {
     const tabIdx = Number.parseInt(kEv.keys?.join('') ?? '', 10) - 1;
     if (!Number.isNaN(tabIdx) && tabIdx > 0 && tabIdx <= tabs.length) {
       setSelectedTabIndex(tabIdx - 1);

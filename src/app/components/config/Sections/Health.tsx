@@ -1,4 +1,4 @@
-import { useConfigSetting } from '../../../redux';
+import { useConfigSetting, useIsHealthUsed } from '../../../redux';
 import { InputImageLabel } from '../../Input/ImageLabel/InputImageLabel';
 import { NumericInput } from '../../Input/NumericInput/NumericInput';
 import {
@@ -10,7 +10,9 @@ import {
 export const HealthConfigSection = () => {
   const [value, setValue, changeHandler] = useConfigSetting('var_hp');
 
-  return (
+  const usesHealth = useIsHealthUsed();
+
+  return usesHealth ? (
     <SubSectionDiv data-section="health">
       <SubSectionTitle>
         <InputImageLabel $size={22} icon={'icon.config.heart2'} />
@@ -26,5 +28,5 @@ export const HealthConfigSection = () => {
         ></NumericInput>
       </SubSectionContent>
     </SubSectionDiv>
-  );
+  ) : null;
 };

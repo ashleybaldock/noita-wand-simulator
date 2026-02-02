@@ -14,6 +14,7 @@ import {
 import { Tabs } from '../generic';
 import {
   DraggableWandAction,
+  LockedWandAction,
   StyledWandActionBorder,
   WandActionDragSource,
 } from '../Spells/WandAction';
@@ -79,6 +80,10 @@ const SpellCategorySpellsDiv = styled.div`
 const SpellSelectorWandActionBorder = styled(StyledWandActionBorder)`
   --spellbg: var(--sprite-inventory-grid-box-unknown);
 
+  &:hover {
+    background-image: var(--spellbg);
+  }
+
   position: relative;
   padding-left: 0;
   padding-top: 0;
@@ -101,6 +106,14 @@ const SpellSelectorWandActionDragSource = styled(WandActionDragSource)`
   padding: 0.04em 0 0 0.04em;
 `;
 
+const SpellSelectorLockedSpell = styled(LockedWandAction)`
+  background-size: 100%, 100%, 50%;
+  background-image:
+    linear-gradient(145deg, #000a 20%, #0002 30% 50%, #000a 70%),
+    var(--data-spelltype-sprite), var(--sprite-unidentified-spell);
+  background-blend-mode: hue, saturation;
+  opacity: 0.5;
+`;
 const SpellSelectorWandAction = styled(DraggableWandAction)`
   opacity: 1;
   padding: 0.04em;
@@ -114,9 +127,11 @@ const isSpellUnlocked = (config: Config, spell: Spell) => {
 };
 
 const WandActionSelect = ({
-  spell: { id, type, sprite },
+  spell: { id, type },
+  locked = false,
 }: {
   spell: Spell;
+  locked?: boolean;
 }) => {
   const dispatch = useAppDispatch();
 
@@ -129,8 +144,12 @@ const WandActionSelect = ({
       dispatch(insertSpellBeforeCursor({ spellId: id }));
     }
   };
-  return (
-    <SpellSelectorWandActionBorder data-name="SpellSelectorWandActionBorder ">
+  return locked ? (
+    <SpellSelectorWandActionBorder data-name="SpellSelectorWandActionBorder">
+      <SpellSelectorLockedSpell spellType={type}></SpellSelectorLockedSpell>
+    </SpellSelectorWandActionBorder>
+  ) : (
+    <SpellSelectorWandActionBorder data-name="SpellSelectorWandActionBorder">
       <SpellSelectorWandActionDragSource
         actionId={id}
         onClick={dragSourceOnClick}
@@ -144,14 +163,18 @@ const WandActionSelect = ({
 export const SpellSelector = () => {
   const config = useConfig();
 
-  const unlockedActions = useMemo(
-    () => spells.filter((a) => isSpellUnlocked(config, a)),
+  const spellsWithUnlockInfo = useMemo(
+    () =>
+      spells.map((spell) => ({
+        locked: !isSpellUnlocked(config, spell),
+        spell,
+      })),
     [config],
   );
 
-  const spellsByType = useMemo(() => {
-    return groupBy(unlockedActions, ({ type }) => type);
-  }, [unlockedActions]);
+  const spellsWithUnlockInfoByType = useMemo(() => {
+    return groupBy(spellsWithUnlockInfo, ({ spell: { type } }) => type);
+  }, [spellsWithUnlockInfo]);
 
   const tabPerGroupedType = useMemo(
     () =>
@@ -179,9 +202,15 @@ export const SpellSelector = () => {
                       key={spellType}
                       data-name="SpellCategorySpellsDiv"
                     >
-                      {spellsByType[spellType].map((spell) => (
-                        <WandActionSelect spell={spell} key={spell.id} />
-                      ))}
+                      {spellsWithUnlockInfoByType[spellType].map(
+                        ({ locked, spell }) => (
+                          <WandActionSelect
+                            locked={locked}
+                            spell={spell}
+                            key={spell.id}
+                          />
+                        ),
+                      )}
                     </SpellCategorySpellsDiv>
                   );
                 })}
@@ -190,11 +219,11 @@ export const SpellSelector = () => {
           };
         })
         .reverse(),
-    [spellsByType],
+    [spellsWithUnlockInfoByType],
   );
 
   const tabPerType = useMemo(() => {
-    return objectEntries(spellsByType)
+    return objectEntries(spellsWithUnlockInfoByType)
       .map(([spellType, actions]) => {
         const { name, sprite } = spellTypeInfoMap[spellType];
 
@@ -211,15 +240,19 @@ export const SpellSelector = () => {
           iconSrc: sprite,
           content: (
             <SpellCategorySpellsDiv data-name="SpellCategorySpellsDiv">
-              {actions.map((spell) => (
-                <WandActionSelect spell={spell} key={spell.id} />
+              {actions.map(({ spell, locked }) => (
+                <WandActionSelect
+                  spell={spell}
+                  locked={locked}
+                  key={spell.id}
+                />
               ))}
             </SpellCategorySpellsDiv>
           ),
         };
       })
       .reverse();
-  }, [spellsByType]);
+  }, [spellsWithUnlockInfoByType]);
 
   const allInOneTab = useMemo(() => {
     return [
@@ -234,15 +267,21 @@ export const SpellSelector = () => {
         iconSrc: '',
         content: (
           <>
-            {objectEntries(spellsByType).map(([spellType]) => {
+            {objectEntries(spellsWithUnlockInfoByType).map(([spellType]) => {
               return (
                 <SpellCategorySpellsDiv
                   key={spellType}
                   data-name="SpellCategorySpellsDiv"
                 >
-                  {spellsByType[spellType].map((spell) => (
-                    <WandActionSelect spell={spell} key={spell.id} />
-                  ))}
+                  {spellsWithUnlockInfoByType[spellType].map(
+                    ({ spell, locked }) => (
+                      <WandActionSelect
+                        spell={spell}
+                        locked={locked}
+                        key={spell.id}
+                      />
+                    ),
+                  )}
                 </SpellCategorySpellsDiv>
               );
             })}
@@ -250,7 +289,7 @@ export const SpellSelector = () => {
         ),
       },
     ];
-  }, [spellsByType]);
+  }, [spellsWithUnlockInfoByType]);
 
   const tabs = useMemo(() => {
     if (config.showSpellsInCategories) {

@@ -43,6 +43,11 @@ import { useKeyState } from '../context/KeyStateContext';
 import type { EditMode } from './EditMode';
 import { setSpellAtIndex } from './wandSlice';
 import type { WandCastId } from '../calc/eval/WandCast';
+import {
+  isUsesGoldActionId,
+  isUsesHealthActionId,
+  isUsesRandomActionId,
+} from '../calc/actionId';
 
 // Typed versions of `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -218,11 +223,16 @@ const selectWikiExportExample = createSelector(
 );
 export const useWikiExampleExport = () => useSelector(selectWikiExportExample);
 
+const selectWandUndoIndex = (state: RootState) => state.wand.index;
+
 const selectURLSearch = createSelector(
   selectWandState,
   generateSearchFromWandState,
 );
-export const useURLSearch = () => useSelector(selectURLSearch);
+export const useURLSearch = (): [
+  wandUndoIndex: number | undefined,
+  urlSearch: string,
+] => [useSelector(selectWandUndoIndex), useSelector(selectURLSearch)];
 
 /**
  * Special case for Zeta's slot
@@ -247,6 +257,21 @@ export const useZeta = (): [
       dispatch(setSpellAtIndex({ wandIndex: ZTA, spellId })),
   ];
 };
+
+const selectIsHealthUsed = createSelector(selectWandState, (wandState) =>
+  wandState.spellIds.some((spellId) => isUsesHealthActionId(spellId)),
+);
+export const useIsHealthUsed = () => useSelector(selectIsHealthUsed) ?? false;
+
+const selectIsGoldUsed = createSelector(selectWandState, (wandState) =>
+  wandState.spellIds.some((spellId) => isUsesGoldActionId(spellId)),
+);
+export const useIsGoldUsed = () => useSelector(selectIsGoldUsed) ?? false;
+
+const selectIsRandomUsed = createSelector(selectWandState, (wandState) =>
+  wandState.spellIds.some((spellId) => isUsesRandomActionId(spellId)),
+);
+export const useIsRandomUsed = () => useSelector(selectIsRandomUsed) ?? false;
 
 /**
  * Always Cast Spell sequence

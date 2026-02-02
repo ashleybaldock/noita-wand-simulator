@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { SpellEditMode, SpellShiftDirection } from '../types';
 import { defaultWand } from './Wand/presets';
 import { useSliceWrapper } from './useSlice';
-import { generateWandStateFromSearch } from './Wand/fromSearch';
 import { MAX_ALWAYS, fixedLengthCopy, assertNever } from '../util';
 import type { WandState } from './Wand/wandState';
 import type { Wand } from './Wand/wand';
@@ -18,13 +17,6 @@ import {
   ZTA,
   type WandIndex,
 } from './WandIndex';
-const {
-  wand: wandFromSearch,
-  spellIds: spellIdsFromSearch = [],
-  alwaysIds: alwaysIdsFromSearch = [],
-  messages: messagesFromSearch = [],
-} = generateWandStateFromSearch(window.location.search);
-
 // TODO these could be surfaced in the UI for debugging wand urls
 // console.debug(messages);
 
@@ -35,19 +27,6 @@ const initialState: WandState = {
   spellIds: fixedLengthCopy([], defaultWand.deck_capacity),
   alwaysIds: fixedLengthCopy([], MAX_ALWAYS),
   messages: [],
-} as const;
-
-const initialStateFromSearch: WandState = {
-  wand: {
-    ...defaultWand,
-    ...wandFromSearch,
-  },
-  spellIds: fixedLengthCopy(
-    spellIdsFromSearch,
-    wandFromSearch.deck_capacity ?? defaultWand.deck_capacity,
-  ),
-  alwaysIds: fixedLengthCopy(alwaysIdsFromSearch, MAX_ALWAYS),
-  messages: messagesFromSearch || [],
 } as const;
 
 const getSpellId = (state: WandState, wandIndex: WandIndex): SpellId | null => {
@@ -96,17 +75,37 @@ export const wandSlice = createSlice({
     resetWand: () => {
       return initialState;
     },
+    revertWand: () => {},
     setWand: (
       state,
-      action: PayloadAction<{ wand: Wand; spells?: SpellId[] }>,
+      action: PayloadAction<{
+        wand: Wand;
+        spellIds?: SpellId[];
+        alwaysIds?: SpellId[];
+        zetaId?: SpellId;
+        checkpoint?: boolean;
+      }>,
     ): void => {
-      const { wand, spells } = action.payload;
+      const {
+        wand,
+        spellIds,
+        alwaysIds,
+        zetaId,
+        checkpoint = false,
+      } = action.payload;
       state.wand = wand;
 
-      if (spells) {
-        state.spellIds = spells;
+      if (spellIds) {
+        state.spellIds = spellIds;
+      }
+      if (alwaysIds) {
+        state.alwaysIds = alwaysIds;
+      }
+      if (zetaId) {
+        state.zetaId = zetaId;
       }
 
+      state.alwaysIds = fixedLengthCopy(state.alwaysIds, 4);
       state.spellIds = fixedLengthCopy(state.spellIds, wand.deck_capacity);
     },
     setSpellAtIndex: (

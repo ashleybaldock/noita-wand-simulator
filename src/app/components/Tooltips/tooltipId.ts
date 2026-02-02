@@ -146,6 +146,13 @@ const uiHintDefinition = [
       desc: 'Wands have a hidden speed multiplier, used as the base multiplier that is adjusted by speed altering modifiers.',
     },
   ],
+  [
+    'lockedspell',
+    {
+      title: '...',
+      desc: 'This spell has yet to be unlocked.',
+    },
+  ],
   // [
   //   '',
   //   {

@@ -225,10 +225,12 @@ export const ConfigEditor = () => {
           <ConfigToggle field={'swapOnMove'}>
             {'Swap Spell Position on move'}
           </ConfigToggle>
+          <ConfigToggle field={'showLockedSpellPlaceholders'}>
+            {'Display placeholder for locked spells'}
+          </ConfigToggle>
           <ConfigToggle field={'showSpellsInCategories'}>
             {'Show Spells in Categories'}
           </ConfigToggle>
-          <ConfigToggle field={'showBeta'}>{'Show Beta Spells'}</ConfigToggle>
           <ConfigToggle field={'showExtra'}>{'Show Debug Spells'}</ConfigToggle>
         </ConfigToggleGroup>
         <ConfigToggleGroup

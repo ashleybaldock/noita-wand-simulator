@@ -1,8 +1,18 @@
 import { useEffect } from 'react';
-import { useURLSearch } from '../redux';
+import { setWand, useAppDispatch, useURLSearch } from '../redux';
+import { generateWandStateFromSearch } from '../redux/Wand/fromSearch';
 
 export const URLSearchUpdater = () => {
-  const urlSearch = useURLSearch();
+  const dispatch = useAppDispatch();
+
+  const [undoIndex, urlSearch] = useURLSearch();
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const stateFromSearch = generateWandStateFromSearch(url.search);
+
+    dispatch(setWand(stateFromSearch));
+  }, []);
 
   useEffect(() => {
     if (window.location.search !== urlSearch) {
@@ -11,8 +21,9 @@ export const URLSearchUpdater = () => {
       // );
       const url = new URL(window.location.href);
       url.search = urlSearch;
-      window.history.pushState({}, '', url.toString());
+      window.history.replaceState({ undoIndex }, '', url.toString());
     }
   }, [urlSearch]);
+
   return null;
 };

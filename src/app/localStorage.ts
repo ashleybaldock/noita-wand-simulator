@@ -1,5 +1,5 @@
 import type { ConfigState } from './redux/configSlice';
-import { isNull, tee } from './util';
+import { tee } from './util';
 
 export const saveState = ({ config }: ConfigState) => {
   console.info('writing state to localstorage', config);

@@ -1,9 +1,10 @@
 // It would be ideal to be able to switch between the beta and release versions of actions at runtime, but that seems like excessive complexity given the current changes mostly add entirely new spells
 
 import * as main from './__generated__/main/actionIds';
-import { isNotNullOrUndefined, isString } from '../util';
+import { isNotNull, isNotNullOrUndefined, isString } from '../util';
 import type { CustomActionId } from './customActionIds';
 import { customActionIds } from './customActionIds';
+import type { SpellId } from '../redux/Wand/spellId';
 // import * as beta from './__generated__/beta/actionIds';
 
 export type ActionId = main.ActionId | CustomActionId;
@@ -141,6 +142,54 @@ const greekActionIdSet: Set<string> = new Set(
   greekActionIds.filter(isValidActionId),
 );
 
-export function isGreekActionId(actionId: ActionId): actionId is GreekActionId {
-  return greekActionIdSet.has(actionId);
-}
+export const isGreekActionId = (
+  actionId: ActionId,
+): actionId is GreekActionId => greekActionIdSet.has(actionId);
+
+export const usesGoldActionIds = ['MONEY_MAGIC'] as const;
+export type UsesGoldActionId = Extract<
+  (typeof usesGoldActionIds)[number],
+  ActionId
+>;
+const usesGoldActionIdSet: Set<string> = new Set(
+  usesGoldActionIds.filter(isValidActionId),
+);
+export const isUsesGoldActionId = (
+  actionId: SpellId | null,
+): actionId is UsesGoldActionId =>
+  isValidActionId(actionId) && usesGoldActionIdSet.has(actionId);
+
+export const usesHealthActionIds = ['BLOOD_TO_POWER', 'BLOOD_MAGIC'] as const;
+export type UsesHealthActionId = Extract<
+  (typeof usesHealthActionIds)[number],
+  ActionId
+>;
+const usesHealthActionIdSet: Set<string> = new Set(
+  usesHealthActionIds.filter(isValidActionId),
+);
+export const isUsesHealthActionId = (
+  actionId: SpellId | null,
+): actionId is UsesHealthActionId =>
+  isValidActionId(actionId) && usesHealthActionIdSet.has(actionId);
+
+export const usesRandomActionIds = [
+  'RANDOM_EXPLOSION',
+  'RANDOM_PROJECTILE',
+  'RANDOM_MODIFIER',
+  'RANDOM_STATIC_PROJECTILE',
+  'RANDOM_SPELL',
+  'DRAW_RANDOM',
+  'DRAW_RANDOM_X3',
+  'DRAW_3_RANDOM',
+] as const;
+export type UsesRandomActionId = Extract<
+  (typeof usesRandomActionIds)[number],
+  ActionId
+>;
+const usesRandomActionIdSet: Set<string> = new Set(
+  usesRandomActionIds.filter(isValidActionId),
+);
+export const isUsesRandomActionId = (
+  actionId: SpellId | null,
+): actionId is UsesRandomActionId =>
+  isValidActionId(actionId) && usesRandomActionIdSet.has(actionId);

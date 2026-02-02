@@ -94,7 +94,7 @@ const PresetButton = ({
 
   const handleSelect = useCallback(
     (preset: Preset) => {
-      dispatch(setWand({ wand: preset.wand, spells: preset.spells }));
+      dispatch(setWand({ wand: preset.wand, spellIds: preset.spells }));
       setModalVisible(false);
     },
     [dispatch],

@@ -32,6 +32,7 @@ const _WandAction = ({
   tooltipId = 'tooltip-spellinfo',
   tooltip = true,
   ref,
+  locked = false,
 }: {
   onDeleteSpell?: () => void;
   className?: string;
@@ -42,6 +43,7 @@ const _WandAction = ({
   tooltipId?: TooltipId;
   tooltip?: boolean;
   ref?: MergableRef<HTMLDivElement>;
+  locked?: boolean;
 }) => {
   const spellTypeSpriteName = getSpriteForSpellType(spellType);
   const spellTypeSpritePath = useIcon(spellTypeSpriteName);
@@ -57,7 +59,7 @@ const _WandAction = ({
       {...(tooltip && isNotNullOrUndefined(spellId)
         ? {
             'data-tooltip-id': `${tooltipId}`,
-            'data-tooltip-content': `${spellId}`,
+            'data-tooltip-content': `${locked ? 'lockedspell' : spellId}`,
           }
         : {})}
       className={className}
@@ -85,6 +87,38 @@ export const WandAction = styled(_WandAction)`
   font-weight: bold;
   user-select: none;
   image-rendering: pixelated;
+`;
+
+export const LockedWandAction = styled(_WandAction).attrs({
+  tooltip: true,
+  tooltipId: 'tooltip-actionhint',
+})`
+  --size-spell: var(--bsize-spell, 48px);
+
+  position: relative;
+  min-width: var(--size-spell);
+  width: var(--size-spell);
+  height: var(--size-spell);
+
+  background-position: center, center;
+  background-size: 80%, 100%;
+  background-repeat: no-repeat;
+  background-image:
+    var(--sprite-unidentified-spell), var(--data-spelltype-sprite);
+  font-family: monospace;
+  font-weight: bold;
+  user-select: none;
+  image-rendering: pixelated;
+  background-size: 100%, 100%, 50%;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(145deg, #000a 20%, #0002 30% 50%, #000a 70%),
+    var(--data-spelltype-sprite), var(--sprite-unidentified-spell);
+  font-family: monospace;
+  font-weight: bold;
+  user-select: none;
+  image-rendering: pixelated;
+  background-blend-mode: hue, saturation;
 `;
 
 export const DraggableWandAction = styled(WandAction).attrs({

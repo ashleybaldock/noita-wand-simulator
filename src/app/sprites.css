@@ -137,6 +137,8 @@
   --sprite-full-inventory-box-highlight: url('/data/inventory/full_inventory_box_highlight.png');
   --sprite-inventory-hover-info-empty-slot: url('/data/inventory/hover_info_empty_slot.png');
 
+  --sprite-unidentified-spell: url('/data/ui_gfx/gun_actions/_unidentified.png');
+
   --icon-redo: url('/data/redo.png');
   --icon-undo: url('/data/undo.png');
   --icon-export: url('/data/export.png');
