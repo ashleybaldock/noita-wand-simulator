@@ -7,6 +7,7 @@ import {
   SUFFIX_THOUSAND,
   isNotNullOrUndefined,
   isString,
+  keyToRow,
   round,
   sign,
   tally,
@@ -264,20 +265,15 @@ type FieldSection = {
   fields: FieldDescription[];
 };
 
-// export const castTableGridRows = () =>
-//   castTableSections
-//     .map(
-//       ({ title, fields }) =>
-//         `[${title.toLowerCase()}] repeat(${fields.length}, min-content)`,
-//     )
-//     .join(' ');
 export const castTableGridRows = () =>
   `[${castTableSections
     .map(
       ({ title, fields }) =>
-        `${title.toLowerCase()}-start] min-content ${fields
-          .map(({ key }) => `[${key.toLowerCase()}] min-content`)
-          .join(' ')} [${title.toLowerCase()}-end`,
+        `${keyToRow(title)}-start] auto [${fields
+          .map(
+            ({ key }) => `${keyToRow(key)}-start] auto [${keyToRow(key)}-end`,
+          )
+          .join(' ')} ${keyToRow(title)}-end`,
     )
     .join(' ')}]`;
 

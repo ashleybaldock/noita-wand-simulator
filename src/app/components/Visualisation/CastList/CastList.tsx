@@ -34,15 +34,7 @@ export const CastList = () => {
 
   return (
     <>
-      <SectionToolbar title={'Simulation: Cast List'}>
-        <StyledSaveImageButton
-          name={'Cast List'}
-          targetRef={castListRef}
-          fileName={'cast_list'}
-          enabled={casts.length > 0}
-        />
-        <StyledConfigButton />
-      </SectionToolbar>
+      <SectionToolbar title={'Simulation: Cast List'}></SectionToolbar>
       <ScrollWrapper>
         <SectionDiv
           ref={castListRef as LegacyRef<HTMLDivElement>}

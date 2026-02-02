@@ -71,13 +71,14 @@ const HeadingOuter = styled.div<{
 const BaseColumnHeading = ({
   nestingPrefix = [],
   nestingLevel = 0,
-  triggerType,
   origin = false,
   isEndOfTrigger = false,
   isStartOfTrigger = false,
   showLineSpacer = true,
+  triggerType,
   children,
   className,
+  'data-name': dataName = 'Heading',
 }: {
   nestingPrefix: Array<number>;
   nestingLevel?: number;
@@ -87,9 +88,11 @@ const BaseColumnHeading = ({
   isStartOfTrigger?: boolean;
   showLineSpacer?: boolean;
   className?: string;
+  'data-name'?: string;
 } & React.PropsWithChildren) => {
   return (
     <HeadingOuter
+      data-name={dataName}
       className={className}
       triggerType={triggerType}
       nestingLevel={nestingLevel}
@@ -115,17 +118,24 @@ export const ColumnHeadingWithLineSpacer = styled(BaseColumnHeading).attrs({
   showLineSpacer: true,
 })``;
 
-export const ProjectileHeading = styled(ColumnHeadingWithLineSpacer)`
+export const ProjectileHeading = styled(ColumnHeadingWithLineSpacer).attrs({
+  'data-name': 'ProjectileHeading',
+})`
   background-color: black;
 `;
 
-export const WandStatsColumnHeading = styled(ColumnHeadingWithLineSpacer)`
+export const WandStatsColumnHeading = styled(ColumnHeadingWithLineSpacer).attrs(
+  {
+    'data-name': 'WandStatsHeading',
+  },
+)`
   height: 100%;
 
   font-size: 1em;
 
   min-width: 5.6em;
   justify-content: start;
+  grid-column: wand-start/wand-end;
 
   border-left: 1px dotted var(--color-vis-cs-inborder);
   background-color: black;
@@ -146,7 +156,9 @@ export const WandStatsColumnHeading = styled(ColumnHeadingWithLineSpacer)`
   }
 `;
 
-export const TotalsColumnHeading = styled(ColumnHeadingWithLineSpacer)`
+export const TotalsColumnHeading = styled(ColumnHeadingWithLineSpacer).attrs({
+  'data-name': 'TotalsHeading',
+})`
   height: 100%;
 
   font-size: 1em;
@@ -179,17 +191,23 @@ export const TotalsColumnHeading = styled(ColumnHeadingWithLineSpacer)`
   }
 `;
 
-export const SubTotalsColumnHeading = styled(TotalsColumnHeading)`
+export const SubTotalsColumnHeading = styled(TotalsColumnHeading).attrs({
+  'data-name': 'SubTotalsHeading',
+})`
   & ${HeadingInner}::before {
     margin-top: -5px;
   }
 `;
 
-export const IconsColumnHeading = styled(BaseColumnHeading)`
+export const IconsColumnHeading = styled(BaseColumnHeading).attrs({
+  'data-name': 'IconsHeading',
+})`
   width: 1.6em;
 `;
 
-export const CastIndexColumnHeading = styled(BaseColumnHeading)<{
+export const CastIndexColumnHeading = styled(BaseColumnHeading).attrs({
+  'data-name': 'CastIndexHeading',
+})<{
   index: number;
 }>`
   position: sticky;

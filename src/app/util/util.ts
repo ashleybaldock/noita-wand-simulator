@@ -307,6 +307,8 @@ export const copyToClipboard = async (text: string) =>
 //   HTMLCanvasElement.prototype.getContext = getSmoothContext as any;
 // }
 
+export const keyToRow = (key: string) => key.toLowerCase();
+
 export const toUrl = (path: string) => {
   if (path.startsWith('data:image')) {
     return `url("${path}")`;

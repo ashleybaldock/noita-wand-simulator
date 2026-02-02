@@ -132,9 +132,11 @@ export const CastTableHeadings = ({
       )}
       {projectiles.map((projectile: WandCastProjectile, index, arr) => {
         const isEndOfTrigger = index === arr.length - 1;
+
         const triggerCast = ((lookupResult) =>
           ((lookupResult?.projectiles?.length ?? 0) > 0 && lookupResult) ||
           undefined)(castLookup.get(projectile?.payload ?? -1));
+
         const isStartOfTrigger = isNotNullOrUndefined(triggerCast);
 
         return (
