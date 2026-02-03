@@ -20,7 +20,7 @@ const _ExportWikiButton = () => {
       <Button
         hotkeys={{ hotkeys: 'ctrl+e', position: 'bottom' }}
         minimal
-        $tip={{ kind: 'uihint', id: 'copywiki' }}
+        tip={{ kind: 'uihint', id: 'copywiki' }}
         onClick={() =>
           copyToClipboard(wikiTemplateWand)
             .then(onCopySuccess)
@@ -33,7 +33,7 @@ const _ExportWikiButton = () => {
       <Button
         hotkeys={{ hotkeys: 'ctrl+shift+e', position: 'bottom' }}
         minimal
-        $tip={{ kind: 'uihint', id: 'copywikiseq' }}
+        tip={{ kind: 'uihint', id: 'copywikiseq' }}
         onClick={() =>
           copyToClipboard(wikiTemplateSeq)
             .then(onCopySuccess)
@@ -45,7 +45,7 @@ const _ExportWikiButton = () => {
       </Button>
       <Button // hotkeys={{ hotkeys: 'ctrl+e', position: 'bottom' }}
         minimal
-        $tip={{ kind: 'uihint', id: 'copywikiexample' }}
+        tip={{ kind: 'uihint', id: 'copywikiexample' }}
         onClick={() =>
           copyToClipboard(wikiTemplateExample)
             .then(onCopySuccess)

@@ -28,7 +28,7 @@ export const ResetButton = () => {
       <Button
         imgOnly="500px"
         hotkeys={'shift+t'}
-        $tip={{ kind: 'uihint', id: 'clear' }}
+        tip={{ kind: 'uihint', id: 'clear' }}
         icon={'icon.clear'}
         onClick={() => dispatch(clearSpells())}
       >
@@ -37,7 +37,7 @@ export const ResetButton = () => {
       <Button
         imgOnly="500px"
         hotkeys={'t'}
-        $tip={{ kind: 'uihint', id: 'reset' }}
+        tip={{ kind: 'uihint', id: 'reset' }}
         icon={'icon.reset'}
         onClick={() => dispatch(resetWand())}
       >

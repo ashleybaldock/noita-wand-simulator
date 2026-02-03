@@ -83,6 +83,58 @@ const DropTargetBackground = styled(DynamicBackground)<{
         drop-shadow(0.6px -0.6px 0.6px black);
     }
   }
+
+  display: grid;
+  grid-template: 1fr/1fr;
+  place-items: center;
+  place-content: center;
+
+  & > * {
+    grid-row: 1/-1;
+    grid-column: 1/-1;
+  }
+  & > [data-name='WandAction'] {
+    --size-spell: 33px;
+    inset: -15% auto auto auto;
+    place-self: end center;
+    background-color: #000c;
+    background-origin: content-box, content-box, padding-box;
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-image:
+      var(--data-spell-sprite), var(--data-spelltype-sprite),
+      linear-gradient(#000, #222);
+    border-radius: 0;
+    padding: 0;
+    box-shadow:
+      0 0 0 1px #222,
+      -17px -16px 0 -14px #ffdf69,
+      16px -16px 0 -14px #ffdf69,
+      -16px 16px 0 -14px #ffdf69,
+      16px 16px 0 -14px #ffdf68,
+      0 0 0 4px #222;
+    border: 3px solid #0000;
+  }
+  & > [data-name='WandAction'] {
+    --size-spell: 33px;
+    inset: -15% auto auto auto;
+    place-self: end center;
+    background-color: #000c;
+    background-origin: content-box, content-box, padding-box;
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-image:
+      var(--data-spell-sprite), var(--data-spelltype-sprite),
+      linear-gradient(#000, #222);
+    border-radius: 0;
+    padding: 0;
+    box-shadow:
+      0 0 0 1px #222,
+      -17px -16px 0 -14px #ffdf69,
+      16px -16px 0 -14px #ffdf69,
+      -16px 16px 0 -14px #ffdf69,
+      16px 16px 0 -14px #ffdf68,
+      0 0 0 4px #222;
+    border: 3px solid #0000;
+  }
 `;
 
 const HoverBackground = styled(DynamicBackground)`

@@ -79,7 +79,7 @@ export const YesNoToggle = ({
       data-name="YesNoToggle"
       {...(tip ? tipToAttributes(tip) : {})}
       className={className}
-      $disabled={$disabled}
+      disabled={$disabled}
     >
       {children}
       <Checkbox

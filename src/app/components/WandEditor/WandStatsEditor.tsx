@@ -109,7 +109,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         $backgroundImage={useIcon('icon.wand.shuffle')}
         className={className}
-        $tip={{ kind: 'uihint', id: 'shuffle_deck_when_empty' }}
+        tip={{ kind: 'uihint', id: 'shuffle_deck_when_empty' }}
         $dataName="EditStatShuffle"
       >
         <StyledName>{'Shuffle'}</StyledName>
@@ -132,7 +132,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         $backgroundImage={useIcon('icon.wand.capacity')}
-        $tip={{ kind: 'uihint', id: 'deck_capacity' }}
+        tip={{ kind: 'uihint', id: 'deck_capacity' }}
         $dataName="EditStatCapacity"
       >
         <StyledName>{'Capacity'}</StyledName>
@@ -155,7 +155,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         $backgroundImage={useIcon('icon.wand.spellscast')}
-        $tip={{ kind: 'uihint', id: 'actions_per_round' }}
+        tip={{ kind: 'uihint', id: 'actions_per_round' }}
         $dataName="EditStatSpellsCast"
       >
         <StyledName>{'Spells/Cast'}</StyledName>
@@ -179,7 +179,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         $backgroundImage={useIcon('icon.wand.castdelay')}
-        $tip={{ kind: 'uihint', id: 'cast_delay' }}
+        tip={{ kind: 'uihint', id: 'cast_delay' }}
       >
         <StyledName>{'Cast delay'}</StyledName>
         <StyledValue>
@@ -189,7 +189,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         $backgroundImage={useIcon('icon.wand.reloadtime')}
-        $tip={{ kind: 'uihint', id: 'reload_time' }}
+        tip={{ kind: 'uihint', id: 'reload_time' }}
       >
         <StyledName>{'Recharge Time'}</StyledName>
         <StyledValue>
@@ -199,7 +199,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         $backgroundImage={useIcon('icon.wand.manamax')}
-        $tip={{ kind: 'uihint', id: 'mana_max' }}
+        tip={{ kind: 'uihint', id: 'mana_max' }}
       >
         <StyledName>{'Mana max'}</StyledName>
         <StyledValue>
@@ -222,7 +222,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         $backgroundImage={useIcon('icon.wand.regen')}
-        $tip={{ kind: 'uihint', id: 'mana_charge_speed' }}
+        tip={{ kind: 'uihint', id: 'mana_charge_speed' }}
       >
         <StyledName>{'Mana Charge Speed'}</StyledName>
         <StyledValue>
@@ -245,7 +245,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         $backgroundImage={useIcon('icon.wand.spread')}
-        $tip={{ kind: 'uihint', id: 'wand_spread' }}
+        tip={{ kind: 'uihint', id: 'wand_spread' }}
       >
         <StyledName>{'Spread'}</StyledName>
         <StyledValue>
@@ -272,7 +272,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         className={className}
         data-name={'EditSpeed'}
         $backgroundImage={useIcon('icon.wand.speed')}
-        $tip={{ kind: 'uihint', id: 'wand_speed' }}
+        tip={{ kind: 'uihint', id: 'wand_speed' }}
       >
         <StyledName>{'Speed'}</StyledName>
         <StyledValue>

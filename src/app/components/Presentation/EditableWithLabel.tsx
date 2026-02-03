@@ -3,8 +3,8 @@ import { useConfigToggle } from '../../redux';
 import { type Tip, tipToAttributes } from '../Tooltips/tooltipId';
 
 const StyledEditableWithLabel = styled.label<{
-  $accessHints?: boolean;
-  $disabled?: boolean;
+  accessHints?: boolean;
+  disabled?: boolean;
 }>`
   --w: 30px;
 
@@ -28,8 +28,8 @@ const StyledEditableWithLabel = styled.label<{
   }
 
   & > :last-child {
-    ${({ $accessHints = true }) =>
-      $accessHints
+    ${({ accessHints = true }) =>
+      accessHints
         ? `text-decoration: underline dotted var(--color-toggle-hover) 1.4px;`
         : ''}
     position: relative;
@@ -77,19 +77,24 @@ const StyledEditableWithLabel = styled.label<{
   & & {
     display: contents;
   }
+  & & :last-child::before,
+  &:hover & :last-child::before,
+  & &:hover :last-child::before {
+    display: none;
+  }
 `;
 
 export const EditableWithLabel = ({
   className,
   children,
-  $disabled = false,
+  disabled = false,
   $dataName = 'EditableWithLabel',
-  $tip,
+  tip,
 }: React.PropsWithChildren<{
   className?: string;
-  $disabled?: boolean;
+  disabled?: boolean;
   $dataName?: string;
-  $tip?: Tip;
+  tip?: Tip;
 }>) => {
   const [hideAccessibilityHints] = useConfigToggle('hideAccessibilityHints');
   // const [mirrorControls] = useConfigToggle('mirrorControls');
@@ -97,9 +102,9 @@ export const EditableWithLabel = ({
     <StyledEditableWithLabel
       data-name={$dataName}
       className={className}
-      $disabled={$disabled}
-      $accessHints={!hideAccessibilityHints}
-      {...($tip ? tipToAttributes($tip) : {})}
+      disabled={disabled}
+      accessHints={!hideAccessibilityHints}
+      {...(tip ? tipToAttributes(tip) : {})}
     >
       {children}
     </StyledEditableWithLabel>
