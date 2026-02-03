@@ -193,3 +193,21 @@ export const isUsesRandomActionId = (
   actionId: SpellId | null,
 ): actionId is UsesRandomActionId =>
   isValidActionId(actionId) && usesRandomActionIdSet.has(actionId);
+
+export const isUsesRequirementHalf = (
+  actionId: SpellId | null,
+): actionId is 'IF_HALF' => isValidActionId(actionId) && actionId === 'IF_HALF';
+
+export const isUsesRequirementEnemy = (
+  actionId: SpellId | null,
+): actionId is 'IF_ENEMY' =>
+  isValidActionId(actionId) && actionId === 'IF_ENEMY';
+
+export const isUsesRequirementHp = (
+  actionId: SpellId | null,
+): actionId is 'IF_HP' => isValidActionId(actionId) && actionId === 'IF_HP';
+
+export const isUsesRequirementProjectile = (
+  actionId: SpellId | null,
+): actionId is 'IF_PROJECTILE' =>
+  isValidActionId(actionId) && actionId === 'IF_PROJECTILE';

@@ -11,23 +11,31 @@ const MainDiv = styled.div`
   padding: 0.3em;
 
   margin-top: -8px;
+  padding: calc(var(--ou) * 1);
+  margin-top: var(--top-offset);
+  inset: var(--top-banner-height) auto auto auto;
+  position: sticky;
 `;
 
 const TabTitlesDiv = styled.div`
   --bsize-spell: 34px;
   display: flex;
-  flex-wrap: wrap-reverse;
+  flex-wrap: nowrap;
   justify-content: start;
   margin-right: 0.7em;
   padding: 0 0.7em;
   align-items: start;
-  overflow: hidden;
+  pointer-events: none;
+  margin: 0;
+  padding: 0 1ch 0 1ch;
+  justify-content: stretch;
+  overflow: visible;
 `;
 
 /* TODO
  * * Side-by-side for spell selector on wide screen
  */
-const Tab = styled.div<{
+const TabButton = styled.button<{
   selected: boolean;
 }>`
   position: relative;
@@ -50,6 +58,56 @@ const Tab = styled.div<{
   border-width: 0.16em;
   border-bottom-width: 0;
 
+  border-top: var(--ou) solid var(--color-tab-border-inactive);
+  border-bottom-width: var(--ou);
+  border-bottom-color: var(--color-tab-border-inactive);
+  border-bottom-style: solid;
+  margin: 0;
+  border-width: 0 0 var(--ou) 0;
+  padding: calc(var(--ou) * 1) calc(var(--ou) * 4) calc(var(--ou) * 1)
+    calc(var(--ou) * 4);
+  box-shadow:
+    calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
+      var(--color-tab-border-active),
+    calc(var(--ou) * 0.5) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
+  max-width: calc(100% / 8 * 3);
+  width: 0;
+  box-sizing: content-box;
+  padding: calc(var(--ou) * 0.5) calc(var(--ou) * 0) calc(var(--ou) * 0.5)
+    calc(var(--ou) * 0);
+  overflow: clip;
+  display: grid;
+  justify-content: end;
+  align-items: stretch;
+  z-index: -1;
+  position: relative;
+  min-width: unset;
+  flex: 0 1;
+  box-shadow:
+    calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
+      var(--color-tab-border-active),
+    calc(var(--ou) * 0.5) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
+  border-bottom-color: var(--color-tab-border-inactive);
+  border-bottom-style: solid;
+  margin: 0;
+  border-width: 0 0 var(--ou) 0;
+  border-top: var(--ou) solid var(--color-tab-border-inactive);
+  box-shadow:
+    calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
+      var(--color-tab-border-inactive),
+    calc(var(--ou) * 0.25) 0 0 calc(var(--ou) * 0)
+      var(--color-tab-border-inactive);
+  border-width: calc(var(--ou) * 0.5) 0 calc(var(--ou) * 0.5) 0;
+  justify-items: center;
+  align-content: stretch;
+  width: clamp(2.4em, var(--pw), 3em);
+  margin: 0;
+  padding: 0;
+  grid-template-columns: auto auto auto;
+  display: grid;
+  grid-template: 1fr / auto auto auto;
+  min-height: 3em;
+
   @media screen and (max-width: 800px) {
     height: 3em;
   }
@@ -57,6 +115,17 @@ const Tab = styled.div<{
   ${({ selected }) =>
     selected
       ? `
+
+    border-top-width: 0;
+    margin: calc(var(--ou) * -1) 0 0 0;
+    padding: calc(var(--ou) * 2) calc(var(--ou) * 4) calc(var(--ou) * 2)
+      calc(var(--ou) * 4);
+    cursor: default;
+    box-shadow:
+      calc(var(--ou) * -2) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active),
+      calc(var(--ou) * 2) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
+    border-width: 0 0 var(--ou) 0;
+
     color: var(--color-tab-active);
     border-color: var(--color-tab-border-active);
     border-bottom-color: var(--bg-color-tab);
@@ -66,7 +135,6 @@ const Tab = styled.div<{
     cursor: default;
     z-index: var(--zindex-tabs-selected);
 
-    flex: 1 1;
 
     &:hover {
     }
@@ -74,8 +142,31 @@ const Tab = styled.div<{
     border-radius: 0 0 0.5em 0.5em;
     margin: -0.16em 0 0 0;
     border-top: 0 hidden transparent;
+
+    min-height: 3em;
+
+    pointer-events: none;
+
+    padding: calc(var(--ou) * 1) calc(var(--ou) * 0) calc(var(--ou) * 1)
+      calc(var(--ou) * 0);
+    margin-top: calc(var(--ou) * -1);
+    z-index: 0;
+    position: relative;
+    border-top: var(--ou) solid var(--color-tab-border-inactive);
+    border-bottom-color: var(--color-tab-border-inactive);
+    border-bottom-style: solid;
+    cursor: default;
+    box-shadow:
+      calc(var(--ou) * -1.5) 0 0 calc(var(--ou) * 0)
+        var(--color-tab-border-active),
+      calc(var(--ou) * 1.5) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
+    border-width: 0 0 var(--ou) 0;
+    margin: calc(var(--ou) * -1) 0 0 0;
+    box-sizing: content-box;
+    overflow: clip;
   `
       : `
+    pointer-events: auto;
     color: var(--color-tab-inactive);
     border-color: var(--color-tab-border-inactive);
     border-bottom-color: transparent;
@@ -95,6 +186,7 @@ const Tab = styled.div<{
       border-color: var(--tabs-hover-color);
       color: var(--color-tab-border-inactive-hover);
     }
+
   `}
 `;
 
@@ -106,13 +198,59 @@ const TabsWandAction = styled(WandAction)`
   opacity: 1;
   cursor: inherit;
 
+  border: 0;
+  background-size: 50%, 200%;
+  background-origin: content-box, border-box;
+  height: auto;
+  width: auto;
+  aspect-ratio: 1;
+  background-position:
+    50% 20%,
+    105% 100%;
+  margin: 0;
+  background-clip: border-box;
+  background-repeat: no-repeat;
+  --v: 0.3em;
+  padding: 0 var(--v) var(--v) 0;
+  min-width: calc(var(--v) * 0.25);
+  min-height: calc(var(--v) * 0.25);
+  border-image-width: 4px;
+  min-height: 2.4em;
+  background-image: var(--data-spelltype-sprite);
+  background-repeat: space;
+  background-size: 12%;
+
+  border-image-outset: 2px;
+  padding: 0px;
+  border-image-source: var(--data-spelltype-sprite);
+  height: 100%;
+  width: auto;
+  background-size: 10%;
+  background-repeat: round;
+
+  image-rendering: pixelated;
+  transform: rotate(0deg) scale(1) translate(1px);
+  border-image: var(--data-spelltype-sprite);
+  border-image-source: var(--data-spelltype-sprite);
+  aspect-ratio: 1;
+  padding: 0;
+  margin: 0;
+  background-size: 60%, contain;
+  border-image-slice: 3 3 3 3;
+  border-image-outset: 4px;
+  border-image-width: 6px;
+  background-origin: content-box;
+  background-position: center;
+  width: auto;
+  height: 100%;
+
   &:hover {
     transform: none;
     opacity: 1;
   }
 `;
 
-const ContentDiv = styled.div`
+const ActiveTabContent = styled.div`
   background-color: var(--bg-color-tab);
   border: 0.16em solid var(--color-tab-border-active);
   border-radius: 0.26em 0.46em;
@@ -150,14 +288,15 @@ const ContentDiv = styled.div`
   --bg-texture: url('/data/spelltypes/svg/item_bg_projectile.svg');
   background-image:
     radial-gradient(circle at 50% 50%, #500 0%, #0008 100%), var(--bg-texture);
-  box-shadow:
-    inset 0 3px 3px 3px #000,
-    inset 0 0 2px 4px var(--bg-color);
   background-attachment: fixed, local;
   background-size:
     90% 100%,
     6px;
   background-position: center, center;
+  box-shadow:
+    inset 0 3px 3px 3px #000,
+    inset 0 0 2px 4px var(--bg-color),
+    1px 2px 1px 0 #000;
 `;
 
 const HiddenContentDiv = styled.div`
@@ -212,13 +351,14 @@ export function Tabs({
 
   return (
     <MainDiv data-name="Tabs">
-      <ContentDiv data-name="ActiveTabContent">
+      <ActiveTabContent data-name="ActiveTabContent">
         {tabs[displayIndex].content}
-      </ContentDiv>
+      </ActiveTabContent>
       <TabTitlesDiv data-name="TabTitles">
         {tabs.map(({ titleParts }, index) => (
-          <Tab
+          <TabButton
             data-name={`Tab${selectedTabIndex === index ? ':Selected' : ''}`}
+            {...(selectedTabIndex === index ? { 'data-selected': '' } : {})}
             selected={selectedTabIndex === index}
             onClick={() => setSelectedTabIndex(index)}
             key={titleParts.reduce((acc, { text }) => `${acc}-${text}`, 'tab-')}
@@ -234,7 +374,7 @@ export function Tabs({
               />
             ))}
             <HotkeyHint hotkeys={`${index + 2}`} position={'ne-corner'} />
-          </Tab>
+          </TabButton>
         ))}
       </TabTitlesDiv>
     </MainDiv>

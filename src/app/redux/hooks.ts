@@ -47,6 +47,10 @@ import {
   isUsesGoldActionId,
   isUsesHealthActionId,
   isUsesRandomActionId,
+  isUsesRequirementEnemy,
+  isUsesRequirementHalf,
+  isUsesRequirementHp,
+  isUsesRequirementProjectile,
 } from '../calc/actionId';
 
 // Typed versions of `useDispatch` and `useSelector`
@@ -272,6 +276,29 @@ const selectIsRandomUsed = createSelector(selectWandState, (wandState) =>
   wandState.spellIds.some((spellId) => isUsesRandomActionId(spellId)),
 );
 export const useIsRandomUsed = () => useSelector(selectIsRandomUsed) ?? false;
+
+const selectIsRequirementUsed = createSelector(
+  selectWandState,
+  (wandState) => ({
+    halfUsed: wandState.spellIds.some((spellId) =>
+      isUsesRequirementHalf(spellId),
+    ),
+    hpUsed: wandState.spellIds.some((spellId) => isUsesRequirementHp(spellId)),
+    enemyUsed: wandState.spellIds.some((spellId) =>
+      isUsesRequirementEnemy(spellId),
+    ),
+    projectileUsed: wandState.spellIds.some((spellId) =>
+      isUsesRequirementProjectile(spellId),
+    ),
+  }),
+);
+export const useIsRequirementUsed = () =>
+  useSelector(selectIsRequirementUsed) ?? {
+    halfUsed: false,
+    hpUsed: false,
+    enemyUsed: false,
+    projectileUsed: false,
+  };
 
 /**
  * Always Cast Spell sequence

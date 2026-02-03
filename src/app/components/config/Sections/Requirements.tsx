@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import type { ConfigBooleanField, ConfigRequirements } from '../../../redux';
-import { toggleConfigSetting, useAppDispatch, useConfig } from '../../../redux';
+import {
+  toggleConfigSetting,
+  useAppDispatch,
+  useConfig,
+  useIsRequirementUsed,
+} from '../../../redux';
 import {
   SubSectionContent,
   SubSectionDiv,
@@ -39,6 +44,8 @@ const RequirementsSubSection = styled(SubSectionDiv).attrs(() => ({
 export const RequirementsConfigSection = () => {
   const config = useConfig();
   const dispatch = useAppDispatch();
+  const { halfUsed, hpUsed, enemyUsed, projectileUsed } =
+    useIsRequirementUsed();
 
   const {
     'requirements.half': half,
@@ -52,38 +59,46 @@ export const RequirementsConfigSection = () => {
       dispatch(toggleConfigSetting({ name: field }));
     };
 
-  return (
+  return halfUsed || hpUsed || enemyUsed || projectileUsed ? (
     <RequirementsSubSection>
       <SubSectionTitle minWidth={'fit-content'}>
         <InputImageLabel $size={22} icon={'icon.config.req'} />
         <span>Requirements</span>
       </SubSectionTitle>
       <SubSectionContent wrapq={true}>
-        <RequiremementEveryOther
-          checked={half}
-          onChange={requirementsChangeHandler('requirements.half')}
-          customYes={<>1st</>}
-          customNo={<>2nd</>}
-        />
-        <RequiremementIfEnemy
-          checked={enemies}
-          onChange={requirementsChangeHandler('requirements.enemies')}
-          customYes={<>Cast</>}
-          customNo={<>Skip</>}
-        />
-        <RequiremementIfProjectiles
-          checked={projectiles}
-          onChange={requirementsChangeHandler('requirements.projectiles')}
-          customYes={<>Cast</>}
-          customNo={<>Skip</>}
-        />
-        <RequiremementIfHp
-          checked={hp}
-          onChange={requirementsChangeHandler('requirements.hp')}
-          customYes={<>Cast</>}
-          customNo={<>Skip</>}
-        />
+        {halfUsed && (
+          <RequiremementEveryOther
+            checked={half}
+            onChange={requirementsChangeHandler('requirements.half')}
+            customYes={<>1st</>}
+            customNo={<>2nd</>}
+          />
+        )}
+        {enemyUsed && (
+          <RequiremementIfEnemy
+            checked={enemies}
+            onChange={requirementsChangeHandler('requirements.enemies')}
+            customYes={<>Cast</>}
+            customNo={<>Skip</>}
+          />
+        )}
+        {projectileUsed && (
+          <RequiremementIfProjectiles
+            checked={projectiles}
+            onChange={requirementsChangeHandler('requirements.projectiles')}
+            customYes={<>Cast</>}
+            customNo={<>Skip</>}
+          />
+        )}
+        {hpUsed && (
+          <RequiremementIfHp
+            checked={hp}
+            onChange={requirementsChangeHandler('requirements.hp')}
+            customYes={<>Cast</>}
+            customNo={<>Skip</>}
+          />
+        )}
       </SubSectionContent>
     </RequirementsSubSection>
-  );
+  ) : null;
 };
