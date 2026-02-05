@@ -1,4 +1,4 @@
-import { useHotkeys } from 'react-hotkeys-hook';
+import { useHotkeys, type HotkeyCallback } from 'react-hotkeys-hook';
 import styled from 'styled-components';
 import { isString, noop } from '../../util';
 import { tipToAttributes } from '../Tooltips/tooltipId';
@@ -9,6 +9,7 @@ import type { SpriteName } from '../../calc/sprite';
 import { useIcon } from '../../calc/sprite';
 import type { MouseEventHandler } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ButtonShapes = [
   'rectangle',
   'rectrounded',
@@ -220,6 +221,7 @@ export const Button = ({
   onMouseOver = noop,
   onMouseOut = noop,
   hotkeys = '',
+  onHotkey = noop,
 
   tip,
 
@@ -238,6 +240,7 @@ export const Button = ({
   className?: string;
   $dataName?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  onHotkey?: HotkeyCallback;
   onMouseOver?: MouseEventHandler<HTMLButtonElement>;
   onMouseOut?: MouseEventHandler<HTMLButtonElement>;
   hotkeys?: string | HotkeyConfig;
@@ -257,7 +260,7 @@ export const Button = ({
    */
   imgDataUrl?: string;
 }>) => {
-  useHotkeys(isString(hotkeys) ? hotkeys : hotkeys.hotkeys, () => onClick(), {
+  useHotkeys(isString(hotkeys) ? hotkeys : hotkeys.hotkeys, onHotkey, {
     enabled: hotkeys !== '',
   });
   const iconPath = useIcon(icon);
