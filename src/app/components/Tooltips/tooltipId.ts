@@ -147,6 +147,13 @@ const uiHintDefinition = [
     },
   ],
   [
+    'unlimited_spells',
+    {
+      title: 'Unlimited Spells',
+      desc: 'This perk removes the limit on charges for many spells.',
+    },
+  ],
+  [
     'lockedspell',
     {
       title: '...',

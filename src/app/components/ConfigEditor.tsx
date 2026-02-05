@@ -207,13 +207,16 @@ export const ConfigEditor = () => {
           <ConfigToggle field={'showDontDraw'}>
             {'Show Draw Inhibition'}
           </ConfigToggle>
+          <ConfigToggle field={'showChargeUsage'}>
+            {'Highlight spells that consume charges'}
+          </ConfigToggle>
         </ConfigToggleGroup>
         <ConfigToggleGroup title={'Cast Config'}>
           <ConfigToggle field={'unlimitedSpells'}>
             {'Unlimited Spells'}
           </ConfigToggle>
           <ConfigToggle field={'infiniteSpells'}>
-            {'Infinite Spells'}
+            {'Ignore spell charge limits'}
           </ConfigToggle>
         </ConfigToggleGroup>
         {/* <ConfigToggleGroup title={'End Simulation'}> */}

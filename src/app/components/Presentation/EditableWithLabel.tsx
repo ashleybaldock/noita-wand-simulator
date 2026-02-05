@@ -28,16 +28,18 @@ const StyledEditableWithLabel = styled.label<{
   }
 
   & > :last-child {
-    ${({ accessHints = true }) =>
-      accessHints
-        ? `text-decoration: underline dotted var(--color-toggle-hover) 1.4px;`
-        : ''}
     position: relative;
     flex: 1 1 40%;
     min-width: unset;
     max-width: unset;
     align-items: center;
     justify-content: end;
+  }
+  & > :last-child ? * {
+    ${({ accessHints = true }) =>
+      accessHints
+        ? `text-decoration: underline dotted var(--color-toggle-hover) 1.4px;`
+        : ''}
   }
   &:hover {
     color: var(--color-toggle-hover);
@@ -55,6 +57,7 @@ const StyledEditableWithLabel = styled.label<{
     justify-content: end;
     align-content: center;
     align-items: center;
+    text-decoration: none;
 
     transform: translateX(calc(var(--w) * -1)) scaleY(0);
     opacity: 0;

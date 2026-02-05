@@ -257,7 +257,7 @@ export const Button = ({
    */
   imgDataUrl?: string;
 }>) => {
-  useHotkeys(isString(hotkeys) ? hotkeys : hotkeys.hotkeys, () => onClick, {
+  useHotkeys(isString(hotkeys) ? hotkeys : hotkeys.hotkeys, () => onClick(), {
     enabled: hotkeys !== '',
   });
   const iconPath = useIcon(icon);

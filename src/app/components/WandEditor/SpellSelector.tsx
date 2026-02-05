@@ -34,6 +34,7 @@ const MainDiv = styled.div`
 
   position: sticky;
   top: -100px;
+  --top-offset: -8px;
 
   &::before {
     content: '';
@@ -42,14 +43,20 @@ const MainDiv = styled.div`
     background-color: transparent;
     display: flex;
     position: sticky;
-    top: 30px;
     z-index: 10;
     box-shadow:
       inset 0 3px 3px 0px #000,
       0 -4px 0 0 var(--color-base-background);
-    border: 0.16rem solid var(--color-tab-border-active);
+    border: var(--ou) solid var(--color-tab-border-active);
+    border-width: calc(var(--ou) * 1) calc(var(--ou) * 0.7) 0;
     border-radius: 0.26rem 0.46rem 0 0;
     border-bottom: 0 hidden transparent;
+
+    font-size: 14px;
+    padding: calc(var(--ou) * 1);
+    inset: var(--top-banner-height) auto auto auto;
+    margin: calc(var(--top-offset) * 0) calc(var(--ou) * 1)
+      calc(var(--top-offset) * 1);
   }
 `;
 
@@ -71,6 +78,10 @@ const SpellCategorySpellsDiv = styled.div`
   height: fit-content;
   background: none;
   box-shadow: none;
+
+  position: sticky;
+  scroll-snap-stop: normal;
+  scroll-snap-align: start end;
 
   & > div {
     transform: scaleY(-1);
@@ -101,6 +112,10 @@ const SpellSelectorWandActionBorder = styled(StyledWandActionBorder)`
   image-rendering: pixelated;
 
   box-shadow: 0 0 2px #000;
+
+  scroll-margin: 10px;
+  scroll-snap-stop: normal;
+  scroll-snap-align: center;
 `;
 const SpellSelectorWandActionDragSource = styled(WandActionDragSource)`
   padding: 0.04em 0 0 0.04em;
@@ -293,7 +308,6 @@ export const SpellSelector = () => {
 
   const tabs = useMemo(() => {
     if (config.showSpellsInCategories) {
-      // return tabPerType;
       return tabPerGroupedType;
     } else {
       return allInOneTab;

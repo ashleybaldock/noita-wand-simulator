@@ -1,6 +1,4 @@
 :root {
-  --ou: 0.16rem;
-  --top-banner-height: 36px;
 }
 @media screen and (max-width: 500px) {
   :not(#u#n#i) div[data-name='MainHeader'] > [data-name='Search'] {
@@ -43,39 +41,6 @@
   grid-column: 1 / span 2;
 }
 
-:not(#u#n#i) div[data-name='SpellSelector'] {
-  --top-offset: -8px;
-}
-:not(#u#n#i) div[data-name='SpellSelector']::before {
-  inset: 42px auto auto auto;
-  margin: 0 calc(var(--ou) * 1);
-  font-size: 14px;
-  padding: calc(var(--ou) * 1);
-  margin-top: var(--top-offset);
-  border: var(--ou) solid var(--color-tab-border-active);
-  border-radius: 0.26rem 0.46rem 0 0;
-  border-bottom: 0 hidden transparent;
-}
-:not(#u#n#i) div[data-name='SpellCategorySpellsDiv'] {
-  /* inset: var(--top-banner-height) auto auto auto; */
-  position: sticky;
-  scroll-snap-stop: normal;
-  scroll-snap-align: start end;
-}
-
-:not(#u#n#i)
-  div[data-name='SpellCategorySpellsDiv']
-  [data-name='WandActionBorder'] {
-  scroll-margin: 10px;
-  scroll-snap-stop: normal;
-  scroll-snap-align: center;
-}
-:not(#u#n#i) div[data-name='ActiveTabContent'] {
-  scroll-snap-type: y mandatory;
-  scroll-padding: 10px;
-  overflow: scroll;
-}
-
 button[data-tooltip-content='undo'] {
   grid-column: undo;
 }
@@ -105,23 +70,6 @@ button[data-tooltip-content='clear'] {
   border-color: var(--color-button-border) var(--color-button-border)
     var(--color-button-border) var(--color-button-border);
   border-style: solid solid solid solid;
-}
-
-:is([data-name='Tab'], [data-name='Tab:Selected']) > [data-name='WandAction'] {
-  background-size: 67%, 100%;
-  background-clip: padding-box, border-box, border-box;
-  background-repeat: no-repeat, space, space;
-  background-origin: content-box, border-box, border-box;
-  --v: 0.3em;
-  border: var(--v) solid #0000;
-  border-width: var(--v) 0 0 var(--v);
-  padding: 0 var(--v) var(--v) 0;
-  margin: 0;
-  min-width: calc(var(--v) * 0.25);
-  min-height: calc(var(--v) * 0.25);
-  background-position:
-    center,
-    bottom -11% right -11%;
 }
 
 .debug
@@ -225,25 +173,10 @@ button[data-tooltip-content='clear'] {
   }
 }
 
-:root {
-  --zindex-mainheader: 800;
-}
-[data-name='MainHeader'] {
-  z-index: var(--zindex-mainheader);
-}
-[data-name='MainHeader']::after {
-  content: '';
-  z-index: var(--zindex-mainheader);
-  box-shadow: inset 0 -5px 10px -4px #000;
-  position: absolute;
-  inset: 0 0 0 0;
-  pointer-events: none;
-}
-
 :not(#u#n#i) [data-name='SearchInput'] {
   padding: 0.1em 0.5em 0.1em 0.5em;
   --bwt: 1px;
-  --bwr: 0px;
+  --bwr: 0;
   --bwb: 1px;
   --bwl: 2px;
   border: 0 solid var(--color-button-border);
@@ -260,22 +193,21 @@ button[data-tooltip-content='clear'] {
 }
 
 :not(#u#n#i) [data-name='Search'] {
-  --brtl: 0px;
+  --brtl: 0;
   --brt: 10em;
-  --brtr: 0px;
-  --brr: 0px;
-  --brbr: 0px;
-  --brb: 0px;
+  --brtr: 0;
+  --brr: 0;
+  --brbr: 0;
+  --brb: 0;
   --brbl: 16em;
   --brl: 60em;
   border: 0 none #0000;
-  border-radius: var(--brtl) var(--brtr) var(--brbr) var(--brbl) / var(--brt)
-    var(--brr) var(--brb) var(--brl);
+  /* border-radius: var(--brtl) var(--brtr) var(--brbr) var(--brbl) / var(--brt) var(--brr) var(--brb) var(--brl); */
 
-  --bwt: 0px;
-  --bwr: 0px;
-  --bwb: 0px;
-  --bwl: 0px;
+  --bwt: 0;
+  --bwr: 0;
+  --bwb: 0;
+  --bwl: 0;
   border-radius: max(0px, var(--brtl) + var(--bwl))
     max(0px, var(--brtr) + var(--bwt)) max(0px, var(--brbr) + var(--bwr))
     max(0px, var(--brbl) + var(--bwb)) / max(0px, var(--brt) - var(--bwl))
@@ -290,14 +222,392 @@ button[data-tooltip-content='clear'] {
 :not(#u#n#i) [data-name='Search']:hover {
   box-shadow: -0.5px 0 0 0.5px #fff8;
 }
+
+:not(#u#n#i) [data-name='SectionToolbar'] {
+  margin: 0;
+  position: sticky;
+  inset: var(--top-banner-height) auto auto auto;
+}
 :not(#u#n#i) [data-name='MainHeader'] {
-  padding: clamp(2px, 0.4vmin, 14px) clamp(2px, 0.5vmin, 14px)
-    clamp(3px, 0.5vmin, 14px) clamp(2px, 0.5vmin, 14px);
+  position: fixed;
+  inset: 0 0 auto 0;
+}
+:not(#u#n#i) [data-name='StickyGroup'] {
+  position: sticky;
+  inset: var(--top-banner-height) auto auto auto;
+  background-color: var(--color-base-background);
+  padding-bottom: 10px;
+  margin-bottom: var(--top-banner-height);
+}
+:not(#u#n#i) [data-name='StickyGroup']:not(:has(~ [data-name='StickyGroup'])) {
+  margin-bottom: var(--top-banner-height);
 }
 
-:not(#u#n#i) div[data-name='SpellSelector']::before {
-  border-width: calc(var(--ou) * 1) calc(var(--ou) * 0.7) 0;
+:not(#u#n#i) [data-name='SpellSelector'] {
+  --bsize-spell: 40px;
+  --gap-multiplier: 0.12;
+  --fake-top-height: calc(var(--ou) * 2);
+  --border-radius: 0.26rem;
+}
+:not(#u#n#i) [data-name='SpellSelector']::before {
+  content: '';
+  width: auto;
+  height: var(--border-radius);
+  background-color: #0000;
+  display: flex;
+  position: sticky;
+  z-index: 10;
+  border: var(--ou) solid var(--color-tab-border-active);
+  border-width: calc(var(--ou) * 0.7) calc(var(--ou) * 0.7) 0
+    calc(var(--ou) * 0.7);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  border-bottom: 0 hidden transparent;
+  font-size: 14px;
+  inset: calc(var(--top-banner-height) - var(--border-radius)) auto auto auto;
+  margin: 0 calc(var(--ou) * 1) 0 calc(var(--ou) * 1);
+  padding: 0 var(--ou);
+  box-sizing: border-box;
+  box-shadow: 0 calc(var(--border-radius) * -1) 0 var(--border-radius)
+    var(--color-base-background);
+}
+:not(#u#n#i) [data-name='Tabs'] {
+  font-size: 14px;
+  padding: 0 var(--ou);
+  margin-top: calc(var(--border-radius) * -1);
+}
+
+:not(#u#n#i) :root,
+:not(#u#n#i) [data-name='ActiveTabContent'] {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-tab-border-active) #0000;
+  overscroll-behavior: contain;
+}
+
+:not(#u#n#i) [data-name='ActiveTabContent'] {
+  border-radius: var(--border-radius);
+}
+
+:not(#u#n#i) [data-name='SectionToolbar'] {
+  margin: 0;
+  position: sticky;
+  inset: var(--top-banner-height) auto auto auto;
+}
+:not(#u#n#i) [data-name='MainHeader'] {
+  position: fixed;
+  inset: 0 0 auto 0;
+}
+:not(#u#n#i) [data-name='StickyGroup'] {
+  position: sticky;
+  inset: var(--top-banner-height) auto auto auto;
+  background-color: var(--color-base-background);
+  padding-bottom: 10px;
+  margin-bottom: var(--top-banner-height);
+}
+:not(#u#n#i) [data-name='StickyGroup']:not(:has(~ [data-name='StickyGroup'])) {
+  margin-bottom: var(--top-banner-height);
+}
+/* [data-name='Tab:Selected']::before { */
+/*   content: ''; */
+/*   position: absolute; */
+/*   inset: 0 auto auto calc((var(--ou) + var(--border-radius)) * -1); */
+/*   width: var(--border-radius); */
+/*   height: var(--border-radius); */
+/*   background-color: #800; */
+/*   border: var(--ou) solid var(--color-tab-border-active); */
+/*   border-radius: 0 var(--border-radius) 0 0; */
+/*   border-width: calc(var(--ou) * 0.7) var(--ou) 0 0; */
+/*   background-color: red; */
+/* } */
+/* [data-name='Tab:Selected'] { */
+/*   position: relative; */
+/*   z-index: 1; */
+/*   overflow: visible; */
+/*   border-top: calc(var(--ou) * 0.7) solid var(--bg-color-tab); */
+/*   border-top: calc(var(--ou) * 0.7) solid #00f; */
+/*   flex: 0 0 3em; */
+/*   padding: 0; */
+/*   height: 3em; */
+/*   width: 3em; */
+/*   place-content: center; */
+/*   place-items: center; */
+/*   background-color: #080; */
+/*   margin: calc(var(--ou) * -0.7) 0 0 0; */
+/* } */
+
+:not(#u#n#i) [data-name='ExportOptions'] {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  grid-row: 1;
+  grid-column: 1;
+  inset: auto auto auto auto;
+  height: 1em;
+  overflow: visible;
+  padding: 0.2em 0.5ch;
+  margin: 0;
+}
+:not(#u#n#i) [data-name='ExportOptions']:hover {
+  inset: auto auto auto auto;
+  padding: 0.2em 0.5ch;
+  margin: 0;
+  border: none;
+}
+:not(#u#n#i) [data-name='ExportOptions'] > [data-name='DefaultExport'] {
+  position: relative;
+  inset: auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 1fr;
+  grid-column: 1 / span 2;
+  grid-row: 1;
+}
+:not(#u#n#i) [data-name='ExportOptions'] > [data-name='DefaultExport']::before {
+  position: relative;
+  inset: auto;
+}
+:not(#u#n#i) [data-name='ExportOptions'] > [data-name='RevealExports'] {
+  position: relative;
+  inset: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column: 1;
+  grid-row: auto;
+  grid-auto-rows: 1fr;
+}
+
+.debug [data-name='Tab:Selected'] {
+  outline: 0.5px solid #fff;
+}
+.debug [data-name='Tab:Selected'] > div {
+  outline: 0.5px solid #f0f;
+}
+.debug [data-name='Tab:Selected']::before,
+.debug [data-name='Tab:Selected']::after {
+  outline: 0.5px solid #f0f;
+}
+
+:not(#u#n#i) [data-name='TabTitles'] {
+  column-gap: 0;
+}
+
+:not(#u#n#i) [data-name='TabTitles']::before {
+  content: '';
+  display: flex;
+  flex: 0 1 10px;
+  border-top: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
+}
+:not(#u#n#i) [data-name='TabTitles']::after {
+  content: '';
+  display: flex;
+  flex: 1 0 auto;
+  border-top: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
+  border-left: calc(var(--ou) * 1) solid var(--color-tab-border-active);
+  border-radius: 0;
+  height: 0;
+  /*   outline: 0.5px solid #ff0; */
+}
+:not(#u#n#i) [data-name='Tab:Selected'] + [data-name='TabTitles']::after {
+  height: var(--border-radius);
+  border-radius: var(--border-radius) 0 0 0;
+}
+:not(#u#n#i) [data-name='Tab'] {
+  border-top: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
+  padding: 0;
+  margin: 0;
+  border-inline: 0;
+  border-inline-style: solid;
+  /*   border-top-color: red; */
+}
+:not(#u#n#i) [data-name='Tab']:has(+ [data-name='Tab:Selected']) {
+  border-radius: 0 var(--border-radius) 0 0;
+  margin: 0 calc(var(--border-radius) * 0.5) 0 0;
+}
+:not(#u#n#i) [data-name='Tab:Selected'] + [data-name='Tab'] {
+  border-radius: var(--border-radius) 0 0 0;
+  margin: 0 0 0 calc(var(--border-radius) * 0.5);
 }
 :not(#u#n#i) [data-name='ActiveTabContent'] {
-  border: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
+  box-shadow:
+    inset 0 3px 3px 3px #000,
+    inset 0 0 2px 4px var(--bg-color);
+  border-bottom: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
+  border-bottom: 0 solid #0000;
+}
+:not(#u#n#i) [data-name='Tab'],
+:not(#u#n#i) [data-name='Tab:Selected'] {
+  display: grid;
+  grid-template-columns:
+    [before-start] var(--border-radius)
+    [before-end a-start] 1fr [a-end b-start] 1fr [b-end c-start] 1fr [c-end after-start] var(
+      --border-radius
+    )
+    [after-end];
+  column-gap: 0;
+  padding: 0;
+  position: relative;
+  overflow: visible;
+  --padding-inline: calc(var(--border-radius) - var(--bdw-inline));
+  padding: 0 var(--padding-inline);
+  width: fit-content;
+  max-width: unset;
+  min-width: unset;
+  flex: 0 0 4em;
+}
+:not(#u#n#i) [data-name='Tab:Selected'] {
+  --bdw-inline: calc(var(--ou) * 1);
+  --bdw-above: calc(var(--ou) * 0.7);
+  --w: calc(var(--border-radius) * 0.1);
+  --x: calc(var(--border-radius) * 0.3);
+  border-inline: var(--bdw-inline) solid var(--color-tab-border-active);
+  margin: calc(var(--border-radius)) calc(var(--border-radius) * -1) 0
+    calc(var(--border-radius) * -1);
+  border-top: 0;
+  box-shadow: 0 calc(var(--border-radius) * -1) 0 var(--color-base-background);
+}
+
+:not(#u#n#i) [data-name='Tab'] > div,
+:not(#u#n#i) [data-name='Tab:Selected'] > div {
+  grid-column: a;
+}
+:not(#u#n#i) [data-name='Tab'] > [data-name='WandAction'],
+:not(#u#n#i) [data-name='Tab:Selected'] > [data-name='WandAction'] {
+  padding: 0;
+  margin: 0;
+  border-width: 0;
+  grid-column: a;
+  transform: none;
+}
+:not(#u#n#i)
+  [data-name='Tab']:has([data-name='WandAction'])
+  > [data-name='WandAction'],
+:not(#u#n#i)
+  [data-name='Tab:Selected']:has([data-name='WandAction'])
+  > [data-name='WandAction'] {
+  grid-column: a/c;
+}
+:not(#u#n#i)
+  [data-name='Tab']:has([data-name='WandAction'] + [data-name='WandAction'])
+  > [data-name='WandAction'],
+:not(#u#n#i)
+  [data-name='Tab:Selected']:has(
+    [data-name='WandAction'] + [data-name='WandAction']
+  )
+  > [data-name='WandAction'] {
+  grid-column: a;
+}
+:not(#u#n#i)
+  [data-name='Tab']:has([data-name='WandAction'] + [data-name='WandAction'])
+  > [data-name='WandAction']
+  + [data-name='WandAction'],
+:not(#u#n#i)
+  [data-name='Tab:Selected']:has(
+    [data-name='WandAction'] + [data-name='WandAction']
+  )
+  > [data-name='WandAction']
+  + [data-name='WandAction'] {
+  grid-column: b/c;
+}
+:not(#u#n#i)
+  [data-name='Tab']:has(
+    [data-name='WandAction']
+      + [data-name='WandAction']
+      + [data-name='WandAction']
+  )
+  > [data-name='WandAction'],
+:not(#u#n#i)
+  [data-name='Tab:Selected']:has(
+    [data-name='WandAction']
+      + [data-name='WandAction']
+      + [data-name='WandAction']
+  )
+  > [data-name='WandAction'] {
+  grid-column: a;
+}
+:not(#u#n#i)
+  [data-name='Tab']:has(
+    [data-name='WandAction']
+      + [data-name='WandAction']
+      + [data-name='WandAction']
+  )
+  > [data-name='WandAction']
+  + [data-name='WandAction'],
+:not(#u#n#i)
+  [data-name='Tab:Selected']:has(
+    [data-name='WandAction']
+      + [data-name='WandAction']
+      + [data-name='WandAction']
+  )
+  > [data-name='WandAction']
+  + [data-name='WandAction'] {
+  grid-column: b;
+}
+:not(#u#n#i)
+  [data-name='Tab']:has(
+    [data-name='WandAction']
+      + [data-name='WandAction']
+      + [data-name='WandAction']
+  )
+  > [data-name='WandAction']
+  + [data-name='WandAction']
+  + [data-name='WandAction'],
+:not(#u#n#i)
+  [data-name='Tab:Selected']:has(
+    [data-name='WandAction']
+      + [data-name='WandAction']
+      + [data-name='WandAction']
+  )
+  > [data-name='WandAction']
+  + [data-name='WandAction']
+  + [data-name='WandAction'] {
+  grid-column: c;
+}
+
+:not(#u#n#i) [data-name='Tab:Selected']::before,
+:not(#u#n#i) [data-name='Tab:Selected']::after {
+  content: '';
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  --w: calc(var(--border-radius));
+  --h: calc(var(--border-radius));
+  border: var(--ou) solid var(--color-tab-border-active);
+  box-sizing: border-box;
+  background-color: #0000;
+  overflow: visible;
+}
+:not(#u#n#i) [data-name='Tab:Selected']::before {
+  grid-column: before;
+  place-self: start;
+  border-radius: 0 var(--border-radius) 0 0;
+  border-width: calc(var(--ou) * 0.7) var(--ou) 0 0;
+  inset: calc(var(--border-radius) * -1) auto auto
+    calc(var(--border-radius) * -1);
+  padding: 0 var(--padding-inline) 0 0;
+  margin: 0 0 0 calc(var(--padding-inline) * -1);
+}
+
+:not(#u#n#i) [data-name='Tab:Selected']::after {
+  position: relative;
+  place-self: start end;
+  grid-column: after;
+  content: '';
+  width: var(--w);
+  height: var(--h);
+  --w: calc(var(--border-radius));
+  --h: calc(var(--border-radius));
+  border: var(--ou) solid var(--color-tab-border-active);
+  border-radius: var(--border-radius) 0 0 0;
+  border-width: var(--bdw-above) 0 0 var(--bdw-inline);
+  box-sizing: border-box;
+  inset: calc(var(--border-radius) * -1) calc(var(--border-radius) * -1) auto
+    auto;
+  background-color: #0000;
+  overflow: hidden;
+  padding: 0 0 0 var(--padding-inline);
+  margin: 0 calc(var(--padding-inline) * -1) 0 0;
+}
+
+:not(#u#n#i) [data-name='SpellSelector'] {
+  --border-radius: 5px;
 }

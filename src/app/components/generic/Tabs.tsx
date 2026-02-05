@@ -38,156 +38,87 @@ const TabTitlesDiv = styled.div`
 const TabButton = styled.button<{
   selected: boolean;
 }>`
-  position: relative;
-  font-size: 14px;
+  cursor: pointer;
+  pointer-events: auto;
 
-  display: flex;
-  flex: 1 1;
-  justify-content: center;
+  position: relative;
+  overflow: clip;
+  z-index: -1;
   user-select: none;
   background-color: var(--bg-color-tab);
-  align-items: center;
+  font-size: 14px;
   font-family: var(--font-family-noita-default);
-  max-width: 8em;
-  min-width: fit-content;
-
-  border-radius: 0.5em 0.5em 0 0;
-  border-style: solid;
-  border-block-end-style: hidden;
-  border-bottom-style: hidden;
-  border-width: 0.16em;
-  border-bottom-width: 0;
-
-  border-top: var(--ou) solid var(--color-tab-border-inactive);
-  border-bottom-width: var(--ou);
-  border-bottom-color: var(--color-tab-border-inactive);
-  border-bottom-style: solid;
-  margin: 0;
-  border-width: 0 0 var(--ou) 0;
-  padding: calc(var(--ou) * 1) calc(var(--ou) * 4) calc(var(--ou) * 1)
-    calc(var(--ou) * 4);
-  box-shadow:
-    calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
-      var(--color-tab-border-active),
-    calc(var(--ou) * 0.5) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
-  max-width: calc(100% / 8 * 3);
-  width: 0;
   box-sizing: content-box;
-  padding: calc(var(--ou) * 0.5) calc(var(--ou) * 0) calc(var(--ou) * 0.5)
-    calc(var(--ou) * 0);
-  overflow: clip;
-  display: grid;
-  justify-content: end;
-  align-items: stretch;
-  z-index: -1;
-  position: relative;
-  min-width: unset;
-  flex: 0 1;
-  box-shadow:
-    calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
-      var(--color-tab-border-active),
-    calc(var(--ou) * 0.5) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
-  border-bottom-color: var(--color-tab-border-inactive);
-  border-bottom-style: solid;
-  margin: 0;
-  border-width: 0 0 var(--ou) 0;
-  border-top: var(--ou) solid var(--color-tab-border-inactive);
+  color: var(--color-tab-inactive);
+
+  border-color: var(--color-tab-border-inactive);
+  border-top: calc(var(--ou) * 1) solid var(--bg-color-tab);
+  border-bottom: var(--ou) solid var(--color-tab-border-inactive);
+  border-radius: 0 0 0.5em 0.5em;
+  border-style: solid;
+  /* border-width: 0 0 var(--ou) 0; */
+  border-width: calc(var(--ou) * 0.5) 0 calc(var(--ou) * 0.5) 0;
+  border-block-end-style: hidden;
+
   box-shadow:
     calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
       var(--color-tab-border-inactive),
     calc(var(--ou) * 0.25) 0 0 calc(var(--ou) * 0)
       var(--color-tab-border-inactive);
-  border-width: calc(var(--ou) * 0.5) 0 calc(var(--ou) * 0.5) 0;
-  justify-items: center;
-  align-content: stretch;
+
+  max-width: calc(100% / 8 * 3);
   width: clamp(2.4em, var(--pw), 3em);
-  margin: 0;
-  padding: 0;
-  grid-template-columns: auto auto auto;
+  min-width: unset;
+  min-height: 3em;
+
+  flex: 0 0 100%;
+  margin: calc(var(--ou) * -1) 0 0 0;
+  padding: 0.36em 0.7em 0.32em 0.7em;
+
   display: grid;
   grid-template: 1fr / auto auto auto;
-  min-height: 3em;
+  justify-content: end;
+  justify-items: center;
+  align-content: stretch;
+  align-items: stretch;
+
+  transition: var(--transition-hover-out);
+  transition-property: border-color, color;
 
   @media screen and (max-width: 800px) {
     height: 3em;
   }
 
+  &:hover {
+    transition: var(--transition-hover-in);
+    transition-property: border-color, color;
+    border-color: var(--tabs-hover-color);
+    color: var(--color-tab-border-inactive-hover);
+  }
+
   ${({ selected }) =>
     selected
       ? `
-
-    border-top-width: 0;
-    margin: calc(var(--ou) * -1) 0 0 0;
-    padding: calc(var(--ou) * 2) calc(var(--ou) * 4) calc(var(--ou) * 2)
-      calc(var(--ou) * 4);
     cursor: default;
-    box-shadow:
-      calc(var(--ou) * -2) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active),
-      calc(var(--ou) * 2) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
-    border-width: 0 0 var(--ou) 0;
+    pointer-events: none;
+    z-index: 0;
 
     color: var(--color-tab-active);
+
     border-color: var(--color-tab-border-active);
-    border-bottom-color: var(--bg-color-tab);
-
-    padding: 0.5em 0.7em 0.5em 0.7em;
-
-    cursor: default;
-    z-index: var(--zindex-tabs-selected);
 
 
-    &:hover {
-    }
-
-    border-radius: 0 0 0.5em 0.5em;
-    margin: -0.16em 0 0 0;
-    border-top: 0 hidden transparent;
-
-    min-height: 3em;
-
-    pointer-events: none;
-
-    padding: calc(var(--ou) * 1) calc(var(--ou) * 0) calc(var(--ou) * 1)
-      calc(var(--ou) * 0);
-    margin-top: calc(var(--ou) * -1);
-    z-index: 0;
-    position: relative;
-    border-top: var(--ou) solid var(--color-tab-border-inactive);
-    border-bottom-color: var(--color-tab-border-inactive);
-    border-bottom-style: solid;
-    cursor: default;
-    box-shadow:
-      calc(var(--ou) * -1.5) 0 0 calc(var(--ou) * 0)
-        var(--color-tab-border-active),
-      calc(var(--ou) * 1.5) 0 0 calc(var(--ou) * 0) var(--color-tab-border-active);
-    border-width: 0 0 var(--ou) 0;
-    margin: calc(var(--ou) * -1) 0 0 0;
-    box-sizing: content-box;
-    overflow: clip;
+        box-shadow: calc(var(--ou) * -1.5) calc(var(--ou) * 0.5) 0 calc(var(--ou) * -0.5) var(--color-tab-border-active),calc(var(--ou) * 1.5) calc(var(--ou) * 0.5) 0 calc(var(--ou) * -0.5) var(--color-tab-border-active);
+  flex: 0 0 3em;
+  padding: 0;
+  height: 3em;
+  width: 3em;
+  display: grid;
+  place-content: center;
+  margin: calc(var(--ou) * -1) 0 0 0;
+  place-items: center;
   `
-      : `
-    pointer-events: auto;
-    color: var(--color-tab-inactive);
-    border-color: var(--color-tab-border-inactive);
-    border-bottom-color: transparent;
-
-    padding: 0.36em 0.7em 0.32em 0.7em;
-    cursor: pointer;
-    transition: var(--transition-hover-out);
-    transition-property: border-color, color;
-
-    margin: -0.16em 0 0 0;
-    border-top: 0.16em solid var(--bg-color-tab);
-    border-radius: 0 0 0.5em 0.5em;
-
-    &:hover {
-      transition: var(--transition-hover-in);
-      transition-property: border-color, color;
-      border-color: var(--tabs-hover-color);
-      color: var(--color-tab-border-inactive-hover);
-    }
-
-  `}
+      : ``}
 `;
 
 const TabsWandAction = styled(WandAction)`
@@ -214,8 +145,8 @@ const TabsWandAction = styled(WandAction)`
   padding: 0 var(--v) var(--v) 0;
   min-width: calc(var(--v) * 0.25);
   min-height: calc(var(--v) * 0.25);
-  border-image-width: 4px;
   min-height: 2.4em;
+  border-image-width: 4px;
   background-image: var(--data-spelltype-sprite);
   background-repeat: space;
   background-size: 12%;
@@ -223,8 +154,6 @@ const TabsWandAction = styled(WandAction)`
   border-image-outset: 2px;
   padding: 0px;
   border-image-source: var(--data-spelltype-sprite);
-  height: 100%;
-  width: auto;
   background-size: 10%;
   background-repeat: round;
 
@@ -244,6 +173,21 @@ const TabsWandAction = styled(WandAction)`
   width: auto;
   height: 100%;
 
+  background-size: 67%, 100%;
+  background-clip: padding-box, border-box, border-box;
+  background-repeat: no-repeat, space, space;
+  background-origin: content-box, border-box, border-box;
+  --v: 0.3em;
+  border: var(--v) solid #0000;
+  border-width: var(--v) 0 0 var(--v);
+  padding: 0 var(--v) var(--v) 0;
+  margin: 0;
+  min-width: calc(var(--v) * 0.25);
+  min-height: calc(var(--v) * 0.25);
+  background-position:
+    center,
+    bottom -11% right -11%;
+
   &:hover {
     transform: none;
     opacity: 1;
@@ -251,22 +195,17 @@ const TabsWandAction = styled(WandAction)`
 `;
 
 const ActiveTabContent = styled.div`
-  background-color: var(--bg-color-tab);
-  border: 0.16em solid var(--color-tab-border-active);
-  border-radius: 0.26em 0.46em;
   position: relative;
-  background-size: 4px;
-  gap: var(--bsize-gap);
+  box-sizing: content-box;
   height: calc(
     round(down, min(30vh, var(--spellandgap) * 6), var(--spellandgap)) +
       var(--bsize-padh)
   );
+  --bg-color: #3e1a1a;
+  --bg-texture: url('/data/spelltypes/svg/item_bg_projectile.svg');
   --bsize-gap: 4px;
-  box-sizing: content-box;
   --spellandgap: calc(var(--bsize-spell) + var(--bsize-gap));
   --bsize-padh: 6px;
-  overflow-y: scroll;
-  overscroll-behavior: none;
 
   gap: var(--bsize-gap);
   height: calc(
@@ -277,15 +216,9 @@ const ActiveTabContent = styled.div`
       ) +
       calc(var(--bsize-padh) * 2)
   );
-  --bsize-gap: 4px;
-  --spellandgap: calc(var(--bsize-spell) + var(--bsize-gap));
-  --bsize-padh: 6px;
-  overflow-y: scroll;
   width: auto;
-  border: 0.16rem solid var(--color-tab-border-active);
+  border: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
   border-radius: 0.26rem 0.46rem;
-  --bg-color: #3e1a1a;
-  --bg-texture: url('/data/spelltypes/svg/item_bg_projectile.svg');
   background-image:
     radial-gradient(circle at 50% 50%, #500 0%, #0008 100%), var(--bg-texture);
   background-attachment: fixed, local;
@@ -297,6 +230,11 @@ const ActiveTabContent = styled.div`
     inset 0 3px 3px 3px #000,
     inset 0 0 2px 4px var(--bg-color),
     1px 2px 1px 0 #000;
+
+  overscroll-behavior: none;
+  scroll-snap-type: y mandatory;
+  scroll-padding: 10px;
+  overflow: scroll;
 `;
 
 const HiddenContentDiv = styled.div`

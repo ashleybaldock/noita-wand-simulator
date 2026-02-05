@@ -204,12 +204,6 @@ export const WrappedYesNoConfigToggle = styled(YesNoConfigToggle)`
   padding: 0.6em 0.2em;
   flex: 1 1 100%;
 
-  & > :first-child {
-    flex: 1 0;
-  }
-  & > :last-child {
-    flex: 0 0;
-  }
   @media screen and (max-width: 600px) {
     align-self: stretch;
     padding: 0.6em 1.8em;

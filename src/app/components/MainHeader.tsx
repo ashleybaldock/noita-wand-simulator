@@ -18,6 +18,7 @@ const getRandomInteger = (max: number) => Math.floor(Math.random() * max);
 const HeaderDiv = styled.div<{
   imgUrl?: string;
 }>`
+  box-sizing: border-box;
   image-rendering: pixelated;
   display: flex;
   flex-direction: row;
@@ -27,13 +28,23 @@ const HeaderDiv = styled.div<{
   background-color: var(--color-base-background);
   z-index: var(--zindex-mainheader);
   position: sticky;
-  top: -20px;
-  height: 36px;
+  inset: -20px auto auto auto;
+  height: calc(var(--top-banner-height) - var(--pad-bottom));
   column-gap: 0.3ch;
   margin: 0;
-  padding: clamp(2px, 0.5vmin, 14px) clamp(2px, 0.5vmin, 14px) 0
+  --pad-bottom: clamp(3px, 0.5vmin, 14px);
+  padding: clamp(2px, 0.4vmin, 14px) clamp(2px, 0.5vmin, 14px) var(--pad-bottom)
     clamp(2px, 0.5vmin, 14px);
   inset: 0 auto auto auto;
+
+  &::after {
+    content: '';
+    z-index: var(--zindex-mainheader);
+    box-shadow: inset 0 -5px 10px -4px #000;
+    position: absolute;
+    inset: 0 0 0 0;
+    pointer-events: none;
+  }
 
   @media screen and (max-width: 500px) {
     & > button {

@@ -108,6 +108,7 @@ export const WandBuilder = () => {
     <MainDiv data-name="WandBuilder">
       <WandBorder data-name="WandBorder">
         <WandBuilderTopButtons data-name="WandBuilderTopButtons">
+          <ExportOptions wandRef={wandRef} spellsRef={spellsRef} />
           <UndoButton />
           <RedoButton />
           <ResetButton />
@@ -120,7 +121,6 @@ export const WandBuilder = () => {
           </ColumnsContainer>
           <WandActionEditorWrapper ref={spellsRef} className={'saveImageRoot'}>
             <WandActionEditor />
-            <ExportOptions wandRef={wandRef} spellsRef={spellsRef} />
           </WandActionEditorWrapper>
         </ContentDiv>
       </WandBorder>

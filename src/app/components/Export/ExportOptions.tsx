@@ -162,7 +162,7 @@ export const ExportOptions = ({
 
   return (
     <Container data-name="ExportOptions" className={className}>
-      <DefaultExport>
+      <DefaultExport data-name="DefaultExport">
         <SaveImageButton
           name={'Wand'}
           targetRef={spellsRef}
@@ -179,7 +179,7 @@ export const ExportOptions = ({
           hotkeys={'e'}
         />
       </DefaultExport>
-      <RevealExports $expanded={expanded}>
+      <RevealExports $expanded={expanded} data-name="RevealExports">
         <SaveImageButton
           name={'Spells'}
           targetRef={spellsRef}

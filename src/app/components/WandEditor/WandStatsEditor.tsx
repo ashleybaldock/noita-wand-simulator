@@ -14,6 +14,7 @@ import {
 import { NumericInput } from '../Input/NumericInput/NumericInput';
 import { EditableWithLabel } from '../Presentation/EditableWithLabel';
 import { useIcon } from '../../calc/sprite';
+import { WrappedYesNoConfigToggle } from '../config/Components';
 
 const EditableInterval = ({
   field,
@@ -68,7 +69,7 @@ const StyledListItem = styled(EditableWithLabel)<{
   image-rendering: pixelated;
   font-family: var(--font-family-noita-default);
   font-size: 1em;
-  color: var(--color-button);
+  color: var(--color-base);
   padding: 0 0.6em 0 2.2em;
 
   @media screen and (max-width: 500px) {
@@ -293,6 +294,20 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
             setLargestButton={false}
             setLargeButton={true}
           ></NumericInput>
+        </StyledValue>
+      </StyledListItem>
+      <StyledListItem
+        $backgroundImage={useIcon('unlimited_spells')}
+        className={className}
+        tip={{ kind: 'uihint', id: 'unlimited_spells' }}
+        $dataName="ToggleUnlimitedSpells"
+      >
+        <StyledName>{'Unlimited Spells'}</StyledName>
+        <StyledValue>
+          <WrappedYesNoConfigToggle
+            data-toggle="unlimitedSpells"
+            configToggle={'unlimitedSpells'}
+          ></WrappedYesNoConfigToggle>
         </StyledValue>
       </StyledListItem>
     </>
