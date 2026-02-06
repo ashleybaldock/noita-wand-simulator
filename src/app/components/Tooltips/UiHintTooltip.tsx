@@ -13,7 +13,7 @@ const UiHint = styled.div`
   padding: 1em;
   border: 2px solid #928167;
   border-radius: 0 7.5px;
-  background-color: rgba(5, 5, 5, 0.76);
+  background-color: rgba(5, 5, 5, 0.9);
   color: rgb(250, 250, 250);
 `;
 

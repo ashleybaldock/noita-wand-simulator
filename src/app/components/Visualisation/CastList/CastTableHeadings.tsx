@@ -1,8 +1,13 @@
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import type { WandCastId } from '../../../calc/eval/WandCast';
 import type { WandCastProjectile } from '../../../calc/eval/WandCastProjectile';
 import { useCast, useCastLookup } from '../../../redux';
-import { NBSP, isNotNullOrUndefined } from '../../../util';
+import {
+  NBSP,
+  groupBy,
+  isNotNullOrUndefined,
+  objectEntries,
+} from '../../../util';
 import { CastTableProjectile } from './CastTableProjectile';
 import {
   CastIndexColumnHeading,
@@ -13,6 +18,8 @@ import {
   ProjectileHeading,
 } from './ColumnHeading';
 import { Headings } from './CastTable';
+import type { ProjectileId } from '../../../calc/projectile';
+import { useGroupedProjectiles } from './useGroupedProjectiles';
 
 // const castSubStateSummary = useMemo(() => {
 /*
@@ -88,6 +95,8 @@ export const CastTableHeadings = ({
   const { triggerType, projectiles } = cast;
   const castLookup = useCastLookup();
 
+  const { triggerProjectiles, projectilesWithGroupedCounts } =
+    useGroupedProjectiles(projectiles);
   return (
     <Headings>
       {$nestingPrefix.length === 0 ? (
@@ -130,7 +139,20 @@ export const CastTableHeadings = ({
           </SubTotalsColumnHeading>
         </>
       )}
-      {projectiles.map((projectile: WandCastProjectile, index, arr) => {
+      {projectilesWithGroupedCounts.map(([projectile, count], index, arr) => {
+        const isEndOfTrigger = index === arr.length - 1;
+
+        return (
+          <ProjectileHeading
+            key={index}
+            isEndOfTrigger={isEndOfTrigger}
+            nestingPrefix={[...$nestingPrefix, isEndOfTrigger ? 0 : 1]}
+          >
+            <CastTableProjectile projectile={projectile} count={count} />
+          </ProjectileHeading>
+        );
+      })}
+      {triggerProjectiles.map((projectile, index, arr) => {
         const isEndOfTrigger = index === arr.length - 1;
 
         const triggerCast = ((lookupResult) =>
@@ -146,7 +168,7 @@ export const CastTableHeadings = ({
               isEndOfTrigger={isEndOfTrigger}
               nestingPrefix={[...$nestingPrefix, isEndOfTrigger ? 0 : 1]}
             >
-              <CastTableProjectile projectile={projectile} />
+              <CastTableProjectile projectile={projectile} count={1} />
             </ProjectileHeading>
             {isNotNullOrUndefined(triggerCast) && (
               <CastTableHeadings

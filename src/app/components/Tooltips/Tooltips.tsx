@@ -8,6 +8,7 @@ export const Tooltips = () => {
       <KeyHintIndicator />
       <SpellInfoTooltip />
       <UiHintTooltip />
+      <AnnotationTooltip />
     </>
   );
 };

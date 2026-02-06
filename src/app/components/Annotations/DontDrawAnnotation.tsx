@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useConfig } from '../../redux';
 import { BaseAnnotation } from './BaseAnnotation';
 import type { ActionCall } from '../../calc/eval/ActionCall';
+import { tipToAttributes } from '../Tooltips/tooltipId';
 
 const DontDrawDiv = styled(BaseAnnotation)`
   left: calc(-1 * var(--sizes-spell-base) / 4 + 12px);
@@ -26,5 +27,12 @@ export const DontDrawAnnotation = (
     return null;
   }
 
-  return <DontDrawDiv data-name="DrawDisabled">D⃠</DontDrawDiv>;
+  return (
+    <DontDrawDiv
+      {...tipToAttributes({ kind: 'uihint', id: 'DontDrawAnnotation' })}
+      data-name="DrawDisabled"
+    >
+      D⃠
+    </DontDrawDiv>
+  );
 };

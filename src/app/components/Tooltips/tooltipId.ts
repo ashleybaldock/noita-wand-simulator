@@ -160,6 +160,20 @@ const uiHintDefinition = [
       desc: 'This spell has yet to be unlocked.',
     },
   ],
+  [
+    'ProjectileCountAnnotation',
+    {
+      title: 'Projectile Count',
+      desc: 'Multiple projectiles of the same type are shown grouped together.',
+    },
+  ],
+  [
+    'DontDrawAnnotation',
+    {
+      title: 'Do Not Draw',
+      desc: 'When this flag is set, spell actions that would usually draw another spell are prevented from doing so.',
+    },
+  ],
   // [
   //   '',
   //   {

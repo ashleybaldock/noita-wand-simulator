@@ -4,7 +4,7 @@ import type { UnlockCondition } from '../calc/unlocks';
 import { unlockConditions } from '../calc/unlocks';
 import { loadState, saveState } from '../localStorage';
 import type { KeyOfType } from '../util';
-import { objectFromKeys } from '../util';
+import { objectFromKeys, objectKeys } from '../util';
 import { startAppListening } from './listenerMiddleware';
 
 type ConfigBase = {
@@ -79,6 +79,99 @@ export type ConfigSection = 'unlocks' | 'requirements' | 'debug' | 'random';
 
 const unlocksFalse = objectFromKeys(unlockConditions, false);
 const unlocksTrue = objectFromKeys(unlockConditions, true);
+
+export const configAffectsSimulation: Record<keyof Config, boolean> = {
+  card_unlocked_alchemy: false,
+  card_unlocked_black_hole: false,
+  card_unlocked_bomb_holy: false,
+  card_unlocked_bomb_holy_giga: false,
+  card_unlocked_cessation: false,
+  card_unlocked_cloud_thunder: false,
+  card_unlocked_crumbling_earth: false,
+  card_unlocked_destruction: false,
+  card_unlocked_divide: false,
+  card_unlocked_dragon: false,
+  card_unlocked_duplicate: false,
+  card_unlocked_everything: false,
+  card_unlocked_exploding_deer: false,
+  card_unlocked_firework: false,
+  card_unlocked_fish: false,
+  card_unlocked_funky: false,
+  card_unlocked_homing_wand: false,
+  card_unlocked_kantele: false,
+  card_unlocked_material_cement: false,
+  card_unlocked_maths: false,
+  card_unlocked_mestari: false,
+  card_unlocked_musicbox: false,
+  card_unlocked_necromancy: false,
+  card_unlocked_nuke: false,
+  card_unlocked_nukegiga: false,
+  card_unlocked_ocarina: false,
+  card_unlocked_paint: false,
+  card_unlocked_piss: false,
+  card_unlocked_polymorph: false,
+  card_unlocked_pyramid: false,
+  card_unlocked_rain: false,
+  card_unlocked_rainbow_trail: false,
+  card_unlocked_sea_lava: false,
+  card_unlocked_sea_mimic: false,
+  card_unlocked_spiral_shot: false,
+  card_unlocked_tentacle: false,
+  card_unlocked_touch_grass: false,
+  condenseShots: false,
+  unlimitedSpells: true,
+  infiniteSpells: true,
+  infiniteMoney: true,
+  infiniteHp: true,
+  showDivides: false,
+  showGreekSpells: false,
+  showDirectActionCalls: false,
+  showDeckIndexes: false,
+  showRecursion: false,
+  showProxies: false,
+  showSources: false,
+  showDontDraw: false,
+  showActionTree: false,
+  showWraps: false,
+  showDraw: false,
+  showSpellsInCategories: false,
+  showLockedSpellPlaceholders: false,
+  showBeta: false,
+  showExtra: false,
+  showChargeUsage: false,
+  castShowChanged: false,
+  showDurationsInFrames: false,
+  var_money: true,
+  var_hp: true,
+  var_hp_max: true,
+  pauseCalculations: true,
+  endSimulationOnCastCount: true,
+  endSimulationOnReloadCount: true,
+  endSimulationOnRefreshCount: true,
+  endSimulationOnRepeatCount: true,
+  limitSimulationIterations: true,
+  limitSimulationDuration: true,
+  hideAccessibilityHints: false,
+  mirrorControls: false,
+  swapOnMove: false,
+  'requirements.enemies': true,
+  'requirements.projectiles': true,
+  'requirements.hp': true,
+  'requirements.half': true,
+  'random.worldSeed': true,
+  'random.frameNumber': true,
+  'editor.swapOnMove': false,
+  'editor.enableSelection': false,
+  'debug.dragHint': false,
+  'debug.keyHints': false,
+} as const;
+
+const configKeysAffectingSimulation = objectKeys(
+  configAffectsSimulation,
+).filter((k) => configAffectsSimulation[k]);
+
+export const configsMatchForSimulation = (a: Config, b: Config): boolean =>
+  configKeysAffectingSimulation.every((key) => a[key] === b[key]);
 
 export type ConfigField = keyof Config;
 export type ConfigToggleField = KeyOfType<Config, boolean>;

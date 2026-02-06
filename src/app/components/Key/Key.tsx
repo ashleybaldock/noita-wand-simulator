@@ -20,6 +20,7 @@ export const KeyContainer = ({
     <StyledKeyContainer className={className}>{children}</StyledKeyContainer>
   );
 };
+export const KeyNote = styled.p``;
 
 export const KeyGroup = styled.ul`
   display: flex;

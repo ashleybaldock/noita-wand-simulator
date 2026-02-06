@@ -24,7 +24,6 @@ export const CastConfigEditor = () => {
         <MoneyConfigSection />
         <RandomConfigSection />
         <RequirementsConfigSection />
-        <LimitsConfigSection />
         <EndingConfigSection />
         <SimulationConfigSection />
       </MainDiv>

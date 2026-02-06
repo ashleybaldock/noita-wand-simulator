@@ -59,7 +59,7 @@ export const CastTable = ({
         $castIndex={$castIndex}
         $castId={$cast.id}
       ></CastTableHeadings>
-      <CastTableColumns $castId={$cast.id}></CastTableColumns>
+      <CastTableColumns castId={$cast.id}></CastTableColumns>
     </StyledCastTable>
   );
 };

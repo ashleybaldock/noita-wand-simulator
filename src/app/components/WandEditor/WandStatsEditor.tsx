@@ -297,7 +297,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         </StyledValue>
       </StyledListItem>
       <StyledListItem
-        $backgroundImage={useIcon('unlimited_spells')}
+        $backgroundImage={useIcon('icon.unlimitedspells')}
         className={className}
         tip={{ kind: 'uihint', id: 'unlimited_spells' }}
         $dataName="ToggleUnlimitedSpells"

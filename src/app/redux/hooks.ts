@@ -405,7 +405,7 @@ export const useLatestResult = () => {
 };
 export const useCastLookup = () => {
   const { casts } = useAppSelector(selectLastResultState);
-  return useMemo(() => new Map(casts.map((shot) => [shot.id, shot])), [casts]);
+  return useMemo(() => new Map(casts.map((cast) => [cast.id, cast])), [casts]);
 };
 
-export const useCast = (shotId: WandCastId) => useCastLookup().get(shotId);
+export const useCast = (castId: WandCastId) => useCastLookup().get(castId);

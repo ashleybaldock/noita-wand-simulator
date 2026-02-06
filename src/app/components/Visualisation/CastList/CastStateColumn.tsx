@@ -27,15 +27,15 @@ const ColSubGrid = styled.div.attrs<DataAttributes & { $dataName?: string }>(
 const GridRowItem = styled.div.attrs<{ 'data-name'?: string }>(() => ({
   'data-name': 'GridRowItem',
 }))<{
-  $row?: string;
-  $firstValue?: boolean;
-  $firstInGroup?: boolean;
-  $isTotal?: boolean;
+  row?: string;
+  firstValue?: boolean;
+  firstInGroup?: boolean;
+  isTotal?: boolean;
 }>`
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;
-  ${({ $row }) => $row && `grid-row: ${$row}-start/${$row}-end;`}
+  ${({ row }) => row && `grid-row: ${row}-start/${row}-end;`}
 
   height: 1em;
   line-height: 1.2em;
@@ -44,9 +44,9 @@ const GridRowItem = styled.div.attrs<{ 'data-name'?: string }>(() => ({
   white-space: nowrap;
   padding: 0.2em;
 
-  ${({ $firstInGroup, $firstValue }) =>
-    $firstInGroup
-      ? $firstValue
+  ${({ firstInGroup, firstValue }) =>
+    firstInGroup
+      ? firstValue
         ? `
   border-top: 1px dotted var(--color-vis-cs-inborder);
     `
@@ -54,8 +54,8 @@ const GridRowItem = styled.div.attrs<{ 'data-name'?: string }>(() => ({
   border-top: 1px dotted var(--color-vis-cs-inborder-dark);
     `
       : ``}
-  ${({ $isTotal }) =>
-    $isTotal
+  ${({ isTotal }) =>
+    isTotal
       ? `
   border-left: 1px dotted var(--color-vis-cs-inborder);
   background-color: black;
@@ -66,13 +66,13 @@ const GridRowItem = styled.div.attrs<{ 'data-name'?: string }>(() => ({
 `;
 
 const PropertyIcon = styled(GridRowItem).attrs<{
-  $background?: string;
+  background?: string;
   icon?: SpriteName;
-  $firstValue?: boolean;
-  $firstInGroup?: boolean;
-  $isTotal?: boolean;
+  firstValue?: boolean;
+  firstInGroup?: boolean;
+  isTotal?: boolean;
 }>(({ icon }) => ({
-  $background: useIcon(icon),
+  background: useIcon(icon),
   'data-name': 'PropertyIcon',
 }))`
   position: sticky;
@@ -83,7 +83,7 @@ const PropertyIcon = styled(GridRowItem).attrs<{
   background-color: black;
   background-image: none;
   grid-column: icons-start/icons-end;
-  ${({ $background }) => $background && `background-image: ${$background};`}
+  ${({ background }) => background && `background-image: ${background};`}
 `;
 
 const PropertySection = styled(GridRowItem).attrs<{ $title: string }>(
@@ -151,15 +151,15 @@ export const FieldNamesColumn = styled(
         {castState &&
           castTableSections.map(({ title, fields }, i1) => (
             <Fragment key={`${$dataName}-${title ? title : i1}`}>
-              <PropertySection $title={title} $row={keyToRow(title)}>
+              <PropertySection $title={title} row={keyToRow(title)}>
                 {title}
               </PropertySection>
               {fields.map(({ key, displayName }, i2) => (
                 <PropertyName
                   key={`${$dataName}-${title ? title : i1}-${key ? key : i2}`}
-                  $row={keyToRow(key)}
-                  $firstValue={i1 === 0}
-                  $firstInGroup={i2 === 0}
+                  row={keyToRow(key)}
+                  firstValue={i1 === 0}
+                  firstInGroup={i2 === 0}
                 >
                   {displayName}
                 </PropertyName>
@@ -194,9 +194,9 @@ export const IconsColumn = styled(
             fields.map(({ key, icon }, i2) => (
               <PropertyIcon
                 key={`${$dataName}-${title ? title : i1}-${key ? key : i2}`}
-                $row={keyToRow(key)}
-                $firstValue={i1 === 0}
-                $firstInGroup={i2 === 0}
+                row={keyToRow(key)}
+                firstValue={i1 === 0}
+                firstInGroup={i2 === 0}
                 icon={icon}
               />
             )),
@@ -218,13 +218,13 @@ export const TotalsColumn = styled(
   ({
     castState,
     manaDrain,
-    $insideTrigger = false,
+    insideTrigger = false,
     $dataName = 'Totals',
   }: {
     castState?: GunActionState;
     manaDrain?: number;
-    $insideTrigger?: boolean;
-    $triggerType?: TriggerCondition;
+    insideTrigger?: boolean;
+    triggerType?: TriggerCondition;
     showValues?: boolean;
     $dataName?: string;
   }) => {
@@ -242,12 +242,12 @@ export const TotalsColumn = styled(
               ) => (
                 <PropertyValue
                   key={`${$dataName}-${title ? title : i1}-${key ? key : i2}`}
-                  $row={keyToRow(key)}
-                  $firstValue={i1 === 0}
-                  $firstInGroup={i2 === 0}
-                  $isTotal={true}
+                  row={keyToRow(key)}
+                  firstValue={i1 === 0}
+                  firstInGroup={i2 === 0}
+                  isTotal={true}
                 >
-                  {$insideTrigger && ignoredInTrigger ? (
+                  {insideTrigger && ignoredInTrigger ? (
                     <Ignored />
                   ) : noTotal ? (
                     <Unchanged />
@@ -255,7 +255,7 @@ export const TotalsColumn = styled(
                     render(
                       {
                         ...castState,
-                        insideTrigger: $insideTrigger,
+                        insideTrigger: insideTrigger,
                         isTotal: true,
                         manaDrain: manaDrain,
                       },
@@ -282,15 +282,15 @@ export const TotalsColumn = styled(
 export const WandStatsColumn = styled(
   ({
     castState,
-    $manaDrain,
-    $insideTrigger = false,
-    $triggerType,
+    manaDrain,
+    insideTrigger = false,
+    triggerType,
     $dataName = 'WandStats',
   }: {
     castState?: GunActionState;
-    $manaDrain?: number;
-    $insideTrigger?: boolean;
-    $triggerType?: TriggerCondition;
+    manaDrain?: number;
+    insideTrigger?: boolean;
+    triggerType?: TriggerCondition;
     showValues?: boolean;
     $dataName?: string;
   }) => {
@@ -311,18 +311,18 @@ export const WandStatsColumn = styled(
             fields.map(({ key, render }, i2) => (
               <PropertyValue
                 key={`${$dataName}-${title ? title : i1}-${key ? key : i2}`}
-                $row={keyToRow(key)}
-                $firstValue={i1 === 0}
-                $firstInGroup={i2 === 0}
-                $isTotal={true}
+                row={keyToRow(key)}
+                firstValue={i1 === 0}
+                firstInGroup={i2 === 0}
+                isTotal={true}
               >
                 {wandStats.has(key) ? (
                   render(
                     {
                       ...Object.fromEntries(wandStats),
-                      insideTrigger: $insideTrigger,
+                      insideTrigger: insideTrigger,
                       isTotal: false,
-                      manaDrain: $manaDrain,
+                      manaDrain: manaDrain,
                     },
                     config,
                   )
@@ -347,14 +347,16 @@ export const WandStatsColumn = styled(
 
 export const ProjectileColumn = styled(
   ({
+    count = 1,
     castState,
-    $manaDrain,
-    $insideTrigger = false,
+    manaDrain,
+    insideTrigger = false,
     $dataName = 'Projectile',
   }: {
+    count?: number;
     castState?: GunActionState;
-    $manaDrain?: number;
-    $insideTrigger?: boolean;
+    manaDrain?: number;
+    insideTrigger?: boolean;
     $dataName?: string;
   }) => {
     const config = useConfig();
@@ -367,18 +369,18 @@ export const ProjectileColumn = styled(
             fields.map(({ key, render, ignoredInTrigger = false }, i2) => (
               <PropertyValue
                 key={`${$dataName}-${title ? title : i1}-${key ? key : i2}`}
-                $row={keyToRow(key)}
-                $firstValue={i1 === 0}
-                $firstInGroup={i2 === 0}
-                $isTotal={false}
+                row={keyToRow(key)}
+                firstValue={i1 === 0}
+                firstInGroup={i2 === 0}
+                isTotal={false}
               >
-                {!$insideTrigger || !ignoredInTrigger ? (
+                {!insideTrigger || !ignoredInTrigger ? (
                   render(
                     {
                       ...castState,
                       isTotal: false,
-                      insideTrigger: $insideTrigger,
-                      manaDrain: $manaDrain,
+                      insideTrigger: insideTrigger,
+                      manaDrain: manaDrain,
                     },
                     config,
                   )

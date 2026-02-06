@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-// import { TooltipId } from './tooltipId';
 import { TooltipBase } from './TooltipBase';
 import { getSpellByActionId } from '../../calc/spells';
 import { isValidActionId } from '../../calc/actionId';

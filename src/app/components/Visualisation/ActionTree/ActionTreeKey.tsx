@@ -11,50 +11,63 @@ import {
   RecallValueAnnotation,
   RecursionAnnotation,
 } from '../../Annotations';
-import { KeyContainer, KeyGroup, KeyItem } from '../../Key/Key';
+import { KeyContainer, KeyGroup, KeyItem, KeyNote } from '../../Key/Key';
 import { TreeArrow } from './TreeArrow';
 
 export const ActionTreeKey = () => {
   return (
     <KeyContainer>
       <KeyGroup title={'Action Calls'}>
-        {
-          'Wands contain Spells. Spells perform an Action. This Action can include adding Projectiles, applying Modifications, copying other Spells, running Scripted Effects and more.'
-        }
-        {
-          'Wands fire in a repeating pattern, each full cycle produces a Salvo consisting of one or more Casts. A Cast consists of one or more Spells, multicast together.'
-        }
-        {
-          'Each Cast is followed by one or more frames of Cast Delay. Each Salvo is followed by one or more frames of Recharge Time'
-        }
-
-        {
-          'When fired the wand gathers (draws) enough spells to satisfy its Spells/Cast. When drawn (assuming there is sufficient mana and the spell has not exhausted its charges) the spell performs its action - which may include drawing more spells.'
-        }
-
-        {
-          'Spells that do not draw (including all Projectile, Static Projectile and Material type spells) result in a net reduction to draw of -1.'
-        }
-
-        {
-          'Spells that draw 1 (including all Modifier and Passive type spells) have no net effect on draw, and can be chained.'
-        }
-
-        {
-          'Spells that draw more than 1 (including all Multicast type spells) provide a net increase in draw, allowing more spells that do not draw to be cast together.'
-        }
-
-        {
-          'Other and Utility type spells vary, and some draw 0, 1, or more spells.'
-        }
-
-        {
-          'Some spells copy other spells actions (e.g. Alpha) or projectiles (e.g. Iplicate). Whether a spell draws or not is independent of any copies it may make.'
-        }
-
-        {
-          'Copying the action of a spell that draws also draws, unless the copying action suppresses it from doing so.'
-        }
+        <KeyNote>
+          {
+            'Wands contain Spells. Spells perform an Action. This Action can include adding Projectiles, applying Modifications, copying other Spells, running Scripted Effects and more.'
+          }
+        </KeyNote>
+        <KeyNote>
+          {
+            'Wands fire in a repeating pattern, each full cycle produces a Salvo consisting of one or more Casts. A Cast consists of one or more Spells, multicast together.'
+          }
+        </KeyNote>
+        <KeyNote>
+          {
+            'Each Cast is followed by one or more frames of Cast Delay. Each Salvo is followed by one or more frames of Recharge Time'
+          }
+        </KeyNote>
+        <KeyNote>
+          {
+            'When fired the wand gathers (draws) enough spells to satisfy its Spells/Cast. When drawn (assuming there is sufficient mana and the spell has not exhausted its charges) the spell performs its action - which may include drawing more spells.'
+          }
+        </KeyNote>
+        <KeyNote>
+          {
+            'Spells that do not draw (including all Projectile, Static Projectile and Material type spells) result in a net reduction to draw of -1.'
+          }
+        </KeyNote>
+        <KeyNote>
+          {
+            'Spells that draw 1 (including all Modifier and Passive type spells) have no net effect on draw, and can be chained.'
+          }
+        </KeyNote>
+        <KeyNote>
+          {
+            'Spells that draw more than 1 (including all Multicast type spells) provide a net increase in draw, allowing more spells that do not draw to be cast together.'
+          }
+        </KeyNote>
+        <KeyNote>
+          {
+            'Other and Utility type spells vary, and some draw 0, 1, or more spells.'
+          }
+        </KeyNote>
+        <KeyNote>
+          {
+            'Some spells copy other spells actions (e.g. Alpha) or projectiles (e.g. Iplicate). Whether a spell draws or not is independent of any copies it may make.'
+          }
+        </KeyNote>
+        <KeyNote>
+          {
+            'Copying the action of a spell that draws also draws, unless the copying action suppresses it from doing so.'
+          }
+        </KeyNote>
       </KeyGroup>
       <KeyGroup title={'Action Calls'}>
         <KeyItem description={'Action drawn by the wand'}>

@@ -71,6 +71,7 @@
   --icon-reload-time: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHAQMAAAD+nMWQAAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAB1JREFUeF4NwTERAAAEAMBPZBbAKJVRau6lMm+1OBG2AoWu+cpNAAAAAElFTkSuQmCC');
   --icon-reloadtime: url('/data/wand/icon_reload_time-s.png');
   --icon-castdelay: url('/data/wand/icon_fire_rate_wait.png');
+  --icon-unlimited-spells: url('/data/wand/icon_perk_unlimited.png');
 
   --icon-alwayscast: url('/data/wand/icon_gun_permanent_actions.png');
   --icon-spread: url('/data/wand/icon_spread_degrees.png');

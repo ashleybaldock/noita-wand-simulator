@@ -9,6 +9,7 @@ import { WandAction } from '../../Spells/WandAction';
 import styled from 'styled-components';
 import { WithDebugHints } from '../../Debug';
 import { StyledWandActionBorder } from '../../Spells/WandAction';
+import { ProjectileCountAnnotation } from '../../Annotations/ProjectileCountAnnotation';
 
 const ArrayGroupDiv = styled.div`
   display: flex;
@@ -62,8 +63,10 @@ const CastTableProjectileBorder = styled(StyledWandActionBorder)`
 
 export const CastTableProjectile = ({
   projectile,
+  count,
 }: {
   projectile: WandCastProjectile;
+  count: number;
 }) => {
   return (
     <MainDiv>
@@ -80,6 +83,7 @@ export const CastTableProjectile = ({
           }
           spellId={projectile.spell?.id}
         />
+        <ProjectileCountAnnotation count={count}></ProjectileCountAnnotation>
 
         <ActionProxyAnnotation
           spell={projectile.spell}

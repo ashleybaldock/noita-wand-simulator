@@ -36,6 +36,8 @@ const uiSpriteDefinition = [
 
   ['icon.arrowhead.r', 'var(--icon-arrowhead-right)'],
 
+  ['icon.unlimitedspells', 'var(--icon-unlimited-spells)'],
+
   ['icon.trigger', 'var(--icon-trigger)'],
   ['icon.trigger.disabled', 'var(--icon-trigger-disabled)'],
   ['icon.timer', 'var(--icon-timer)'],

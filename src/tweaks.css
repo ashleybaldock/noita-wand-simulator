@@ -605,3 +605,14 @@ button[data-tooltip-content='clear'] {
 :not(#u#n#i) [data-name='SpellSelector'] {
   --border-radius: 5px;
 }
+:not(#u#n#i) [data-name='StickyGroup'] {
+  margin-bottom: 0;
+}
+:not(#u#n#i) [data-name='MainHeader'] + [data-name='StickyGroup'] {
+  margin-bottom: var(--top-banner-height);
+}
+
+:not(#u#n#i) :is(:root, body, #root, [data-name='MainHeader']) {
+  width: 100vw;
+  max-width: 100vw;
+}

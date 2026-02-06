@@ -1,18 +1,13 @@
-import type { Action } from '@reduxjs/toolkit';
 import { clickWand } from '../calc/eval/clickWand';
 import { isNotNullOrUndefined, compareSequencesIter } from '../util';
 import type { SpellId } from './Wand/spellId';
 import { wandsMatchForSimulation } from './Wand/wand';
 import type { AppStartListening } from './listenerMiddleware';
 import { newResult, newSimulation } from './resultSlice';
+import { configsMatchForSimulation } from './configSlice';
 import type { RootState } from './store';
 import { nextSimulationRequestId } from './SimulationRequestId';
-
-type ListenerPredicate<T> = (
-  action: Action,
-  currentState: T,
-  previousState: T,
-) => boolean;
+import type { ListenerPredicate } from './ListenerPredicate';
 
 /**
  * @returns true if main spell sequence has changed
@@ -139,14 +134,14 @@ const hasNeverRun: ListenerPredicate<RootState> = (
 };
 
 /**
- * @returns true if zetaId has changed
+ * @returns true if config settings that affect the simulation have changed
  */
 const simulationConfigChanged: ListenerPredicate<RootState> = (
   _unused,
-  { config: currentConfig },
-  { config: previousConfig },
+  { config: { config: currentConfig } },
+  { config: { config: previousConfig } },
 ) => {
-  const changed = false; // TODO
+  const changed = !configsMatchForSimulation(currentConfig, previousConfig);
 
   if (changed) {
     console.debug(
