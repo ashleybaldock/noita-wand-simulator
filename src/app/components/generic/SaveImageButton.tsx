@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import type { MutableRefObject, RefObject } from 'react';
+import type { RefObject } from 'react';
 import { useCallback } from 'react';
 import { useState } from 'react';
 import { ProcessingModal } from './ProcessingModal';
@@ -8,7 +8,6 @@ import { toPng } from 'html-to-image';
 import type { HotkeyConfig } from '../Tooltips/HotkeyHint';
 
 function _SaveImageButton({
-  name,
   fileName,
   targetRef,
   hotkeys,

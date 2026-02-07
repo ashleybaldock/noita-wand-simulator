@@ -69,8 +69,6 @@ const Container = styled.div`
   }
 `;
 
-const RevealExportsA = styled.div<{ expanded: boolean }>``;
-
 const OpenExportOptionsButton = styled(Button)``;
 
 const RevealExports = styled.div<{ $expanded: boolean }>`
@@ -148,7 +146,6 @@ const DefaultExport = styled.div`
   }
 `;
 export const ExportOptions = ({
-  wandRef,
   spellsRef,
   className,
 }: {

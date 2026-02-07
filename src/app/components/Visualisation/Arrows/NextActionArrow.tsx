@@ -50,23 +50,23 @@ const LineDiv = styled.div<{
   }
 `;
 
-const ArrowHeadDiv = styled.div`
-  position: absolute;
-  top: calc(50% - (var(--arrowhead-h) * 0.5));
-  height: var(--arrowhead-h);
-  left: calc(var(--arrowhead-w) * -1);
-  width: var(--arrowhead-w);
-  height: 16px;
-  transform: translate(0px, 0);
-  border: none;
-  background-image: var(--icon-arrowhead-right);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: right center;
-  image-rendering: pixelated;
-  filter: hue-rotate(calc(var(--arrowhead-hue-norm-angle) + var(--hue)))
-    drop-shadow(0 0 0 #000);
-`;
+// const ArrowHeadDiv = styled.div`
+//   position: absolute;
+//   top: calc(50% - (var(--arrowhead-h) * 0.5));
+//   height: var(--arrowhead-h);
+//   left: calc(var(--arrowhead-w) * -1);
+//   width: var(--arrowhead-w);
+//   height: 16px;
+//   transform: translate(0px, 0);
+//   border: none;
+//   background-image: var(--icon-arrowhead-right);
+//   background-size: contain;
+//   background-repeat: no-repeat;
+//   background-position: right center;
+//   image-rendering: pixelated;
+//   filter: hue-rotate(calc(var(--arrowhead-hue-norm-angle) + var(--hue)))
+//     drop-shadow(0 0 0 #000);
+// `;
 
 export const NextActionArrow = ({
   size = DEFAULT_SIZE,

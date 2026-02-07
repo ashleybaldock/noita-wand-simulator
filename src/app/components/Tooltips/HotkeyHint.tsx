@@ -199,7 +199,6 @@ const HotkeyDescription = styled.div`
  * a single control, e.g. search input
  */
 export const HotkeyMultiHint = ({
-  anchor,
   hotkeys = [],
   position = 'ne-corner',
 }: {

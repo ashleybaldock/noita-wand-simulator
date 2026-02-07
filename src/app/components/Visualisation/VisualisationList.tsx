@@ -1,14 +1,6 @@
-import { useMemo, useRef } from 'react';
+import { useRef } from 'react';
 import styled from 'styled-components';
-import { isNotNullOrUndefined } from '../../util';
-import { isValidActionId } from '../../calc/actionId';
-import { getSpellByActionId } from '../../calc/spells';
-import {
-  useConfig,
-  useLatestResult,
-  useSimulationStatus,
-  useSpellSequence,
-} from '../../redux';
+import { useConfig, useLatestResult } from '../../redux';
 import { SaveImageButton, ScrollWrapper } from '../generic';
 import { ActionCallSequenceCastResult } from './ActionSequence';
 import { ActionTreeCastResult } from './ActionTree';
@@ -37,36 +29,35 @@ const SectionDiv = styled.div`
  * Sequence of simulated wand Casts
  */
 export const VisualisationList = () => {
-  const spellIds = useSpellSequence();
-  const [simulationRunning] = useSimulationStatus();
   const actionsCalledRef = useRef<HTMLDivElement>(null);
   const actionCallTreeRef = useRef<HTMLDivElement>(null);
 
-  const { unlimitedSpells, infiniteSpells, showActionTree } = useConfig();
+  const { showActionTree } = useConfig();
 
+  // const spellIds = useSpellSequence();
   // TODO This can be a custom hook
-  const spells = useMemo(
-    () =>
-      spellIds.flatMap((id) =>
-        isNotNullOrUndefined(id) && isValidActionId(id)
-          ? getSpellByActionId(id)
-          : [],
-      ),
-    [spellIds],
-  );
+  // const spells = useMemo(
+  //   () =>
+  //     spellIds.flatMap((id) =>
+  //       isNotNullOrUndefined(id) && isValidActionId(id)
+  //         ? getSpellByActionId(id)
+  //         : [],
+  //     ),
+  //   [spellIds],
+  // );
 
-  const spellsWithUses = useMemo(() => {
-    if (infiniteSpells) {
-      return spells;
-    }
-    return spells.map((spell) => {
-      if (spell.max_uses && (spell.never_unlimited || !unlimitedSpells)) {
-        return { ...spell, uses_remaining: 0 };
-      } else {
-        return spell;
-      }
-    });
-  }, [infiniteSpells, unlimitedSpells, spells]);
+  // const spellsWithUses = useMemo(() => {
+  //   if (infiniteSpells) {
+  //     return spells;
+  //   }
+  //   return spells.map((spell) => {
+  //     if (spell.max_uses && (spell.never_unlimited || !unlimitedSpells)) {
+  //       return { ...spell, uses_remaining: 0 };
+  //     } else {
+  //       return spell;
+  //     }
+  //   });
+  // }, [infiniteSpells, unlimitedSpells, spells]);
 
   const { casts } = useLatestResult();
 

@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { SectionToolbar } from '../SectionToolbar';
 import { EndingConfigSection } from './Sections/Ending';
 import { SimulationConfigSection } from './Sections/Simulation';
-import { LimitsConfigSection } from './Sections/Limits';
 import { MoneyConfigSection } from './Sections/Money';
 import { HealthConfigSection } from './Sections/Health';
 import { RequirementsConfigSection } from './Sections/Requirements';

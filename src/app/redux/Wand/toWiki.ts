@@ -31,7 +31,7 @@ const formatBoolean = (bool: boolean): string => (bool ? 'Yes' : 'No');
 const formatSpellsPretty = (spellIds: SpellId[], indent: string = ''): string =>
   spellIds.reduce<string>(
     (acc, cur, idx) =>
-      cur?.length ?? false
+      (cur?.length ?? false)
         ? `${acc}${idx === 0 ? '' : `,\n${indent}`}${cur}`
         : `${acc},`,
     '',
@@ -60,7 +60,6 @@ export const generateWikiWandV2 = (
     alwaysIds,
   }: WandState,
   {
-    pretty,
     vertical,
     wandCard,
     hideLink,

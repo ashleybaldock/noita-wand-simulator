@@ -157,7 +157,6 @@ export type ResultIndex = ResultNone | number;
  * Search box
  */
 export const FindSpell = ({
-  hotkeys,
   hidden,
   setHidden = noop,
   className,
@@ -246,8 +245,7 @@ export const FindSpell = ({
         (typeof inKeys)[number],
         (keyEvent: KeyboardEvent, hotkey: Hotkey) => void
       > = {
-        w: (e, { shift, ctrl }) => {
-          // console.log(`shift: ${shift}, ctrl: ${ctrl}`);
+        w: (e) => {
           if (e.ctrlKey) {
             e.preventDefault();
             setSearchValue('');
@@ -258,10 +256,7 @@ export const FindSpell = ({
           e.preventDefault();
           setHidden(true);
         },
-        enter: (e, { shift, ctrl }) => {
-          // console.log(`shift: ${shift}, ctrl: ${ctrl}`);
-          // console.log(e);
-          // console.log(selectedResult, filteredResults);
+        enter: (e) => {
           insertSpell(!e.shiftKey);
           if (e.ctrlKey) {
             setSearchValue('');

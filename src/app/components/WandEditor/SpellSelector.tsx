@@ -5,12 +5,7 @@ import type { Spell } from '../../calc/spell';
 import { spells } from '../../calc/spells';
 import { useAppDispatch, useConfig } from '../../redux/hooks';
 import type { Config } from '../../redux/configSlice';
-import {
-  getSpriteForSpellType,
-  spellTypeGroupInfoMap,
-  spellTypeGroupsOrdered,
-  spellTypeInfoMap,
-} from '../../calc/spellTypes';
+import { getSpriteForSpellType, spellTypeInfoMap } from '../../calc/spellTypes';
 import { Tabs } from '../generic';
 import {
   DraggableWandAction,
@@ -191,51 +186,51 @@ export const SpellSelector = () => {
     return groupBy(spellsWithUnlockInfo, ({ spell: { type } }) => type);
   }, [spellsWithUnlockInfo]);
 
-  const tabPerGroupedType = useMemo(
-    () =>
-      spellTypeGroupsOrdered
-        .map((spellTypeGroup) => {
-          const { contains } = spellTypeGroupInfoMap[spellTypeGroup];
-          return {
-            titleParts: contains.map((spellType) => {
-              const { name, sprite, exampleId } = spellTypeInfoMap[spellType];
-              return {
-                text: name,
-                type: spellType,
-                bgSrc: sprite,
-                egSrc: exampleId,
-                key: `part-${name}`,
-              };
-            }),
-            key: `tab-${spellTypeGroup}`,
-            iconSrc: '',
-            content: (
-              <>
-                {contains.map((spellType) => {
-                  return (
-                    <SpellCategorySpellsDiv
-                      key={spellType}
-                      data-name="SpellCategorySpellsDiv"
-                    >
-                      {spellsWithUnlockInfoByType[spellType].map(
-                        ({ locked, spell }) => (
-                          <WandActionSelect
-                            locked={locked}
-                            spell={spell}
-                            key={spell.id}
-                          />
-                        ),
-                      )}
-                    </SpellCategorySpellsDiv>
-                  );
-                })}
-              </>
-            ),
-          };
-        })
-        .reverse(),
-    [spellsWithUnlockInfoByType],
-  );
+  // const tabPerGroupedType = useMemo(
+  //   () =>
+  //     spellTypeGroupsOrdered
+  //       .map((spellTypeGroup) => {
+  //         const { contains } = spellTypeGroupInfoMap[spellTypeGroup];
+  //         return {
+  //           titleParts: contains.map((spellType) => {
+  //             const { name, sprite, exampleId } = spellTypeInfoMap[spellType];
+  //             return {
+  //               text: name,
+  //               type: spellType,
+  //               bgSrc: sprite,
+  //               egSrc: exampleId,
+  //               key: `part-${name}`,
+  //             };
+  //           }),
+  //           key: `tab-${spellTypeGroup}`,
+  //           iconSrc: '',
+  //           content: (
+  //             <>
+  //               {contains.map((spellType) => {
+  //                 return (
+  //                   <SpellCategorySpellsDiv
+  //                     key={spellType}
+  //                     data-name="SpellCategorySpellsDiv"
+  //                   >
+  //                     {spellsWithUnlockInfoByType[spellType].map(
+  //                       ({ locked, spell }) => (
+  //                         <WandActionSelect
+  //                           locked={locked}
+  //                           spell={spell}
+  //                           key={spell.id}
+  //                         />
+  //                       ),
+  //                     )}
+  //                   </SpellCategorySpellsDiv>
+  //                 );
+  //               })}
+  //             </>
+  //           ),
+  //         };
+  //       })
+  //       .reverse(),
+  //   [spellsWithUnlockInfoByType],
+  // );
 
   const tabPerType = useMemo(() => {
     return objectEntries(spellsWithUnlockInfoByType)
@@ -308,11 +303,11 @@ export const SpellSelector = () => {
 
   const tabs = useMemo(() => {
     if (config.showSpellsInCategories) {
-      return tabPerGroupedType;
+      return tabPerType;
     } else {
       return allInOneTab;
     }
-  }, [allInOneTab, config.showSpellsInCategories, tabPerGroupedType]);
+  }, [allInOneTab, config.showSpellsInCategories, tabPerType]);
 
   return (
     <MainDiv data-name="SpellSelector">

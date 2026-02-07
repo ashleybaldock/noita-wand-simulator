@@ -88,13 +88,7 @@ export const wandSlice = createSlice({
         checkpoint?: boolean;
       }>,
     ): void => {
-      const {
-        wand,
-        spellIds,
-        alwaysIds,
-        zetaId,
-        checkpoint = false,
-      } = action.payload;
+      const { wand, spellIds, alwaysIds, zetaId } = action.payload;
       state.wand = wand;
 
       if (spellIds) {

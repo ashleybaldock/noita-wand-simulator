@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import type { CSSProperties, PropsWithChildren } from 'react';
 import type { ActionSource } from '../../../calc/actionSources';
 import { StyledKeyContainer } from '../../Key/Key';
-import { DebugHints, WithDebugHints } from '../../Debug';
+import { WithDebugHints } from '../../Debug';
 
 const StyledDiv = styled.div<{ $source: ActionSource; $arrow: Arrow }>`
   --hue: var(--hue-arrow-${(props) => props.$source});

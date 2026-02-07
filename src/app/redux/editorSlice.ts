@@ -69,7 +69,7 @@ export const editorSlice = createSlice({
      **/
     moveSelection: (
       state,
-      { payload: { by, to } }: PayloadAction<{ by?: number; to?: number }>,
+      { payload: { /*by,*/ to } }: PayloadAction<{ by?: number; to?: number }>,
     ): void => {
       if (isSelectionWandIndex(to) || isCursorWandIndex(to)) {
         state.selectFrom = isCursorWandIndex(to) ? state.cursorIndex : to;

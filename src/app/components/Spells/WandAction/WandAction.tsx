@@ -9,21 +9,6 @@ import { useIcon } from '../../../calc/sprite';
 import { getSpellByActionId } from '../../../calc/spells';
 import { isNotNullOrUndefined } from '../../../util';
 
-const SpellTypeBorder = styled.div`
-  --size-spell: var(--bsize-spell, 48px);
-
-  position: relative;
-  min-width: var(--size-spell);
-  width: var(--size-spell);
-  height: var(--size-spell);
-
-  background-size: cover;
-  font-family: monospace;
-  font-weight: bold;
-  user-select: none;
-  image-rendering: pixelated;
-`;
-
 const _WandAction = ({
   spellType,
   spellId,

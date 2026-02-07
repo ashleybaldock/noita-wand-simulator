@@ -12,10 +12,8 @@ import { moveCursorTo, setSelection } from '../../../redux/editorSlice';
 import {
   moveSpell,
   useAppDispatch,
-  useConfig,
   useCaret,
   useSelection,
-  useEditMode,
 } from '../../../redux';
 import { useCallback, useMemo } from 'react';
 import { useMergedBackgrounds } from './Backgrounds/useMergeBackgrounds';
@@ -178,14 +176,14 @@ export const BetweenSpellsDropTarget = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const { 'editor.enableSelection': enableSelection } = useConfig();
+  // const { 'editor.enableSelection': enableSelection } = useConfig();
   const selectionForSpellBefore = useSelection(indexOfSpellBefore, 'after');
   const cursorForSpellBefore = useCaret(indexOfSpellBefore);
 
   const selectionForSpellAfter = useSelection(indexOfSpellBefore, 'before');
   const cursorForSpellAfter = useCaret(indexOfSpellAfter);
 
-  const editMode = useEditMode();
+  // const editMode = useEditMode();
   const insertIndex: MainWandIndex = isMainWandIndex(indexOfSpellBefore)
     ? indexOfSpellBefore
     : 0;

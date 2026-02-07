@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { Preset, PresetGroup } from './Wand/preset';
+import type { PresetGroup } from './Wand/preset';
 import { defaultPresets } from './Wand/presets';
 
 // Define a type for the slice state

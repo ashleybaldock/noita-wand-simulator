@@ -5,7 +5,6 @@ import { BetweenSpellsDropTarget } from './BetweenSpellsDropTarget';
 
 export const WandActionDropTargets = ({
   wandIndex,
-  lastIndex,
   children,
 }: React.PropsWithChildren<{
   wandIndex: WandIndex;

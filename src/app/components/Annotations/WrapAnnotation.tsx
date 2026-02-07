@@ -14,18 +14,19 @@ const Wrapped = styled.div`
   font-weight: normal;
   --shadow-bg: rgb(0 0 0);
   --shadow-w: 0px;
-  text-shadow: var(--shadow-bg) 1px 1px var(--shadow-w),
+  text-shadow:
+    var(--shadow-bg) 1px 1px var(--shadow-w),
     var(--shadow-bg) 1px -1px var(--shadow-w),
     var(--shadow-bg) -1px 1px var(--shadow-w),
-    var(--shadow-bg) -1px -1px var(--shadow-w), var(--shadow-bg) 1px 1px 1px,
-    var(--shadow-bg) 1px -1px 1px, var(--shadow-bg) -1px 1px 1px,
+    var(--shadow-bg) -1px -1px var(--shadow-w),
+    var(--shadow-bg) 1px 1px 1px,
+    var(--shadow-bg) 1px -1px 1px,
+    var(--shadow-bg) -1px 1px 1px,
     var(--shadow-bg) -1px -1px 1px;
 `;
 
 export const WrapAnnotation = ({
-  wasLastToBeDrawnBeforeWrapNr,
   wasLastToBeCalledBeforeWrapNr,
-  wrappingInto,
 }: {
   wasLastToBeDrawnBeforeWrapNr?: number;
   wasLastToBeCalledBeforeWrapNr?: number;
