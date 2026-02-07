@@ -17,7 +17,7 @@ import { StyledKeyContainer } from '../Key/Key';
 //   }
 // `;
 const _BaseAnnotation = ({
-  dataName = 'BaseAnnotation',
+  dataName,
   className,
   tip,
   children,
@@ -32,7 +32,7 @@ const _BaseAnnotation = ({
     <div
       data-name={dataName}
       className={className}
-      {...((tip ?? isAnnotationTooltipId(dataName))
+      {...((tip ?? isAnnotationTooltipId(dataName ?? ''))
         ? tipToAttributes({ kind: 'annotation', id: dataName })
         : {})}
       {...rest}
