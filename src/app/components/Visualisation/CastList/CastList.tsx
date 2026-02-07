@@ -1,8 +1,7 @@
 import type { LegacyRef } from 'react';
 import { useRef } from 'react';
 import styled from 'styled-components';
-import { ConfigButton } from '../../buttons';
-import { SaveImageButton, ScrollWrapper } from '../../generic';
+import { ScrollWrapper } from '../../generic';
 import { CastTable } from './CastTable';
 import { SimulationSummary } from './SimulationSummary';
 import { SectionToolbar } from '../../SectionToolbar';
@@ -15,17 +14,6 @@ const SectionDiv = styled.div`
   align-items: flex-start;
   width: fit-content;
   padding: 0px 20px 0 10px;
-`;
-
-const StyledConfigButton = styled(ConfigButton)`
-  grid-row: buttons;
-  grid-column: -2;
-`;
-
-const StyledSaveImageButton = styled(SaveImageButton)`
-  justify-self: end;
-  grid-row: buttons;
-  grid-column: -3;
 `;
 
 export const CastList = () => {

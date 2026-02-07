@@ -156,24 +156,24 @@ const simulationConfigChanged: ListenerPredicate<RootState> = (
  * Checks if simulation needs to be re-run
  *
  * Composed of several match predicates, if any of those
- * returns false the simulation needs to be refreshed
+ * returns true the simulation needs to be refreshed
  *
  * @returns true if changes require a new simulation run
  * @returns false if previous simulation result is still valid
  */
-const simulationNeedsUpdate: ListenerPredicate<RootState> = (
-  action,
-  currentState,
-  previousState,
-) =>
-  [
-    spellSequenceHasChanged,
-    alwaysCastSequenceHasChanged,
-    wandStatsHaveChanged,
-    zetaIdHasChanged,
-    simulationConfigChanged,
-    hasNeverRun,
-  ].some((predicate) => predicate(action, currentState, previousState));
+// const simulationNeedsUpdate: ListenerPredicate<RootState> = (
+//   action,
+//   currentState,
+//   previousState,
+// ) =>
+//   [
+//     spellSequenceHasChanged,
+//     alwaysCastSequenceHasChanged,
+//     wandStatsHaveChanged,
+//     zetaIdHasChanged,
+//     simulationConfigChanged,
+//     hasNeverRun,
+//   ].some((predicate) => predicate(action, currentState, previousState));
 
 const simulationEnabled: ListenerPredicate<RootState> = (
   _action,
@@ -186,7 +186,13 @@ const simulationEnabled: ListenerPredicate<RootState> = (
 export const startUpdateListener = (startAppListening: AppStartListening) =>
   startAppListening({
     predicate: (...args) =>
-      simulationEnabled(...args) && simulationNeedsUpdate(...args),
+      simulationEnabled(...args) &&
+      (spellSequenceHasChanged(...args) ||
+        alwaysCastSequenceHasChanged(...args) ||
+        wandStatsHaveChanged(...args) ||
+        zetaIdHasChanged(...args) ||
+        simulationConfigChanged(...args) ||
+        hasNeverRun(...args)),
     effect: async (_action, listenerApi) => {
       const {
         endSimulationOnCastCount,

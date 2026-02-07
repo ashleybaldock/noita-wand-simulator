@@ -302,7 +302,7 @@ export function Tabs({
             key={titleParts.reduce((acc, { text }) => `${acc}-${text}`, 'tab-')}
           >
             <HiddenContentDiv>{tabs[index].content}</HiddenContentDiv>
-            {titleParts.map(({ text, type, bgSrc, egSrc }) => (
+            {titleParts.map(({ type, egSrc }) => (
               <TabsWandAction
                 key={type}
                 tooltip={false}

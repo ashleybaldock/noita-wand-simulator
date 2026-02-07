@@ -451,12 +451,8 @@
 }
 [data-name='ActionSourceGroup'].collapsed
   > [data-name='AcTreeNode'][data-leaf='true']:last-of-type
-  [data-name='DontDraw'] {
+  [data-name='DontDrawAnnotation'] {
   display: none;
-}
-[data-name='ActionSourceGroup'].collapsed
-  > [data-name='AcTreeNode'][data-leaf='true']:first-of-type
-  [data-name='DontDraw'] {
 }
 /*}}}1*/
 
@@ -629,7 +625,7 @@
   --nodraw-arrow-w: 26px;
 }
 
-[data-name='DrawDisabled'] {
+[data-name='DontDrawAnnotation'] {
   right: -28px;
   --bdw: inherit;
   color: #0000;
@@ -648,7 +644,7 @@
   line-height: calc(var(--bsize-spell) / 5 - -2px);
 }
 
-[data-name='DrawDisabled']::after {
+[data-name='DontDrawAnnotation']::after {
   /* filter: drop-shadow(0px 2px 0 #000) drop-shadow\(0px 2px 0 # !important; */
   top: -11px;
   image-rendering: pixelated;
@@ -772,13 +768,13 @@
 /* Row of spells copied by add trigger */
 
 /* Arrows */
-[data-spell='ADD_TRIGGER']
-  > [data-name='AcTreeChildren']
-  > [data-name='ActionSourceGroup'][data-source='action']
-  > div
-  > [data-name='Arrows'] {
-  /*   outline: 2px solid orange; */
-}
+/* [data-spell='ADD_TRIGGER'] */
+/*   > [data-name='AcTreeChildren'] */
+/*   > [data-name='ActionSourceGroup'][data-source='action'] */
+/*   > div */
+/*   > [data-name='Arrows'] { */
+/*     outline: 2px solid orange; */
+/* } */
 /* after */
 [data-spell='ADD_TRIGGER']
   > [data-name='AcTreeChildren']
@@ -798,8 +794,6 @@
   > div
   > [data-name='Arrows']::before {
   content: none;
-}
-[data-name='AcTreeNode']:first-of-type > [data-name='Arrows']::after {
 }
 
 /* Divide By targeting */

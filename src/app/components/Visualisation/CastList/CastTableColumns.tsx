@@ -1,7 +1,7 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
 import type { WandCastId } from '../../../calc/eval/WandCast';
 import { useCast, useCastLookup } from '../../../redux';
-import { groupBy, isNotNullOrUndefined, objectEntries } from '../../../util';
+import { isNotNullOrUndefined } from '../../../util';
 import {
   FieldNamesColumn,
   IconsColumn,
@@ -60,8 +60,41 @@ export const CastTableScope = ({
             )}
             <ProjectileColumn
               count={count}
+              projectile={projectile}
               castState={castState}
               manaDrain={manaDrain}
+              insideTrigger={true}
+            />
+            {isNotNullOrUndefined(triggerCast) && (
+              <CastTableScope
+                castId={triggerCast.id}
+                nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
+              />
+            )}
+          </Fragment>
+        );
+      })}
+      {triggerProjectiles.map((projectile, index, arr) => {
+        const isEndOfTrigger = index === arr.length - 1;
+
+        const triggerCast = ((lookupResult) =>
+          ((lookupResult?.projectiles?.length ?? 0) > 0 && lookupResult) ||
+          undefined)(castLookup.get(projectile?.payload ?? -1));
+
+        return (
+          <Fragment key={index}>
+            {nestingPrefix.length > 0 && (
+              <SubTotalsColumn
+                triggerType={triggerType}
+                castState={castState}
+                manaDrain={manaDrain}
+              />
+            )}
+            <ProjectileColumn
+              count={1}
+              castState={castState}
+              manaDrain={manaDrain}
+              projectile={projectile}
               insideTrigger={true}
             />
             {isNotNullOrUndefined(triggerCast) && (

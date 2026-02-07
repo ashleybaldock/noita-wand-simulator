@@ -71,14 +71,14 @@ export const ActionProxyAnnotation = ({
   if (showProxies && isNotNullOrUndefined(proxy)) {
     return (
       <ProxyDiv
-        $dataName="ActionProxyAnnotation-Proxy"
+        dataName="ActionProxyAnnotation-Proxy"
         background={getSpellByActionId(proxy.id).sprite}
       />
     );
   } else if (isNotNullOrUndefined(icon)) {
     return (
       <ProxyDiv
-        $dataName="ActionProxyAnnotation"
+        dataName="ActionProxyAnnotation"
         background={icon ? iconPath : 'none'}
       />
     );

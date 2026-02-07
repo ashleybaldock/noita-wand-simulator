@@ -49,10 +49,12 @@ const setSpellId = (
 ): void => {
   if (isMainWandIndex(wandIndex)) {
     state.spellIds[wandIndex] = spellId;
+    state.spellIds = fixedLengthCopy(state.spellIds, state.wand.deck_capacity);
     return;
   }
   if (isAlwaysCastIndex(wandIndex)) {
     state.alwaysIds[alwaysCastIndexMap[wandIndex]] = spellId;
+    state.alwaysIds = fixedLengthCopy(state.alwaysIds, MAX_ALWAYS);
     return;
   }
   if (typeof wandIndex === typeof ZTA) {
@@ -96,17 +98,14 @@ export const wandSlice = createSlice({
       state.wand = wand;
 
       if (spellIds) {
-        state.spellIds = spellIds;
+        state.spellIds = fixedLengthCopy(spellIds, wand.deck_capacity);
       }
       if (alwaysIds) {
-        state.alwaysIds = alwaysIds;
+        state.alwaysIds = fixedLengthCopy(alwaysIds, MAX_ALWAYS);
       }
       if (zetaId) {
         state.zetaId = zetaId;
       }
-
-      state.alwaysIds = fixedLengthCopy(state.alwaysIds, 4);
-      state.spellIds = fixedLengthCopy(state.spellIds, wand.deck_capacity);
     },
     setSpellAtIndex: (
       state,

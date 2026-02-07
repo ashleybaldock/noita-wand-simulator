@@ -4,8 +4,6 @@ import { CastTableColumns } from './CastTableColumns';
 import { castTableGridRows } from './ShotTableRowConfig';
 
 import styled from 'styled-components';
-import { useMemo } from 'react';
-import { useCast } from '../../../redux';
 
 export const StyledCastTable = styled.div.attrs<{ 'data-name'?: string }>(
   () => ({ 'data-name': 'CastTable' }),
@@ -46,12 +44,11 @@ export const CastTable = ({
   $castIndex: number;
   $cast: WandCastResult;
 }) => {
-  const cast = useCast($cast.id);
-
-  const castTableGridCols = useMemo(() => {
-    const colw = '--colw: minmax(min(80px, 100%), 1fr);';
-    const base = `[left labels-start] 150px [labels-end icons-start] 20px [icons-end totals-start] var(--colw) [totals-end wand-start] var(--colw) [wand-end scopes-start] auto [scopes-end right]`;
-  }, [cast, $castIndex]);
+  // const cast = useCast($cast.id);
+  // const castTableGridCols = useMemo(() => {
+  //   const colw = '--colw: minmax(min(80px, 100%), 1fr);';
+  //   const base = `[left labels-start] 150px [labels-end icons-start] 20px [icons-end totals-start] var(--colw) [totals-end wand-start] var(--colw) [wand-end scopes-start] auto [scopes-end right]`;
+  // }, [cast, $castIndex]);
 
   return (
     <StyledCastTable $rows={castTableGridRows()}>

@@ -61,8 +61,6 @@ export const OverSpellDropTarget = ({
   const dispatch = useAppDispatch();
   const { swapOnMove } = useConfig();
 
-  const mainWandIndex = isMainWandIndex(wandIndex);
-
   const onDropSpell = useCallback(
     (item: DraggedSpell) => {
       dispatch(

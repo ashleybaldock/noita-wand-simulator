@@ -1,7 +1,7 @@
 // It would be ideal to be able to switch between the beta and release versions of actions at runtime, but that seems like excessive complexity given the current changes mostly add entirely new spells
 
 import * as main from './__generated__/main/actionIds';
-import { isNotNull, isNotNullOrUndefined, isString } from '../util';
+import { isNotNullOrUndefined, isString } from '../util';
 import type { CustomActionId } from './customActionIds';
 import { customActionIds } from './customActionIds';
 import type { SpellId } from '../redux/Wand/spellId';

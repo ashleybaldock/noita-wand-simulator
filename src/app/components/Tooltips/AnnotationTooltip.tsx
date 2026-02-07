@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { TooltipBase } from './TooltipBase';
 import { isNotNull, isNotNullOrUndefined } from '../../util';
-import { translate } from '../../util/i18n';
 import { useHideTooltips } from './useHideTooltips';
 import type { Tip } from './tooltipId';
 

@@ -65,7 +65,7 @@ const totalDelayForSalvo = ({ casts, reloadTime = 1 }: WandSalvo) => {
 export const SimulationSummary = styled(
   ({ className }: { className?: string }) => {
     const [simulationRunning] = useSimulationStatus();
-    const { salvos, reloadTime = 0, endConditions } = useLatestResult();
+    const { salvos, reloadTime = 0 } = useLatestResult();
 
     const salvoDelayTotals = salvos.map(totalDelayForSalvo);
     const totalExtraDelay = salvoDelayTotals.reduce(
@@ -91,7 +91,6 @@ export const SimulationSummary = styled(
       0,
     );
 
-    const endReason = endConditions?.[0] ?? 'unknown';
     const { pauseCalculations } = useConfig();
     if (pauseCalculations) {
       return (

@@ -1,6 +1,6 @@
 import type { SpellId } from '../../redux/Wand/spellId';
 import { isNotNull, isNotUndefined, isString } from '../../util';
-import { isAnnotationTip, type AnnotationTip } from './AnnotationTooltip';
+import { isAnnotationTip } from './AnnotationTooltip';
 
 export const tooltipIds = ['tooltip-spellinfo', 'tooltip-actionhint'] as const;
 

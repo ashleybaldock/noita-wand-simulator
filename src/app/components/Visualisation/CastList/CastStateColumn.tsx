@@ -9,6 +9,7 @@ import { useIcon } from '../../../calc/sprite';
 import { castTableSections } from './ShotTableRowConfig';
 import { Fragment } from 'react/jsx-runtime';
 import { keyToRow } from '../../../util';
+import type { WandCastProjectile } from '../../../calc/eval/WandCastProjectile';
 
 // TODO: handle extra_entities that affect damage/etc
 
@@ -229,7 +230,7 @@ export const TotalsColumn = styled(
     $dataName?: string;
   }) => {
     const config = useConfig();
-    const { castShowChanged } = config;
+    // const { castShowChanged } = config;
 
     return (
       <ColSubGrid $dataName={$dataName}>
@@ -284,7 +285,6 @@ export const WandStatsColumn = styled(
     castState,
     manaDrain,
     insideTrigger = false,
-    triggerType,
     $dataName = 'WandStats',
   }: {
     castState?: GunActionState;
@@ -295,7 +295,7 @@ export const WandStatsColumn = styled(
     $dataName?: string;
   }) => {
     const config = useConfig();
-    const { castShowChanged } = config;
+    // const { castShowChanged } = config;
     const { cast_delay, spread, speed, reload_time } = useWand();
     const wandStats = new Map([
       ['reload_time', reload_time],
@@ -351,16 +351,18 @@ export const ProjectileColumn = styled(
     castState,
     manaDrain,
     insideTrigger = false,
+    projectile,
     $dataName = 'Projectile',
   }: {
     count?: number;
     castState?: GunActionState;
     manaDrain?: number;
     insideTrigger?: boolean;
+    projectile: WandCastProjectile;
     $dataName?: string;
   }) => {
     const config = useConfig();
-    const { castShowChanged } = config;
+    // const { castShowChanged } = config;
 
     return (
       <ColSubGrid $dataName={$dataName}>

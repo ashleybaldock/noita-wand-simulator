@@ -39,7 +39,6 @@ import { useMemo } from 'react';
 import type { MainWandIndex, WandIndex } from './WandIndex';
 import { ZTA, isMainWandIndex } from './WandIndex';
 import type { BackgoundPartLocation } from '../components/Spells/WandAction/Backgrounds/BackgroundPart';
-import { useKeyState } from '../context/KeyStateContext';
 import type { EditMode } from './EditMode';
 import { setSpellAtIndex } from './wandSlice';
 import type { WandCastId } from '../calc/eval/WandCast';
@@ -381,8 +380,8 @@ const selectSelecting = createSelector(
 export const useSelecting = () => useSelector(selectSelecting);
 
 export const useEditMode = (): EditMode => {
-  const { shift, alt, ctrl, meta } = useKeyState();
-  const { 'editor.swapOnMove': swapOnMove } = useConfig();
+  // const { shift, alt, ctrl, meta } = useKeyState();
+  // const { 'editor.swapOnMove': swapOnMove } = useConfig();
 
   return {
     insert: 'push',

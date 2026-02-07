@@ -97,10 +97,10 @@ const Mantissa = styled.span``;
 
 const Scientific = ({
   number,
-  precision = 2,
+  // precision = 2,
 }: {
   number: number;
-  precision?: number;
+  // precision?: number;
 }) => {
   const [mantissa, exponent] = number.toExponential(2).split('e');
   return (
@@ -378,7 +378,7 @@ export const castTableSections: FieldSection[] = [
         key: 'speed_base',
         displayName: 'Base Speed',
         toolTip: 'The configured initial speed of this projectile',
-        render: ({ speed_multiplier: v }) => {
+        render: () => {
           return <NotApplicable />;
         },
       },
@@ -429,7 +429,7 @@ export const castTableSections: FieldSection[] = [
         displayName: 'Initial Speed',
         toolTip:
           'The initial speed of this projectile given the speed multiplier',
-        render: ({ speed_multiplier: v }) => {
+        render: () => {
           return <NotApplicable />;
         },
       },
@@ -439,7 +439,7 @@ export const castTableSections: FieldSection[] = [
         key: 'speed_damage_multiplier',
         displayName: 'Speed Bonus',
         toolTip: 'Speed Scaled Damage Multiplier',
-        render: ({ speed_multiplier: v }) => {
+        render: () => {
           return <NotApplicable />;
           // const n = Number(v);
           // if (n === 1) {
@@ -535,7 +535,7 @@ export const castTableSections: FieldSection[] = [
         icon: `icon.danger`,
         key: 'friendly_fire',
         displayName: 'Friendly Fire',
-        render: ({ friendly_fire: v, isTotal }) => (
+        render: ({ friendly_fire: v }) => (
           <YesNo
             yes={Boolean(v)}
             warnIf={'yes'}

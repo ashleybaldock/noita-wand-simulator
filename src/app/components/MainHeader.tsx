@@ -89,7 +89,7 @@ const HeaderLink = styled.a<{
 `;
 
 export const MainHeader = () => {
-  const [logoVariant, setLogoVariant] = useState(
+  const [logoVariant] = useState(
     logoVariants[getRandomInteger(logoVariants.length)],
   );
 

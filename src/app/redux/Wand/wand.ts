@@ -34,14 +34,13 @@ const wandKeysAffectingSimulation: Array<keyof Wand> = [
 export const wandsMatchForSimulation = (a: Wand, b: Wand): boolean =>
   wandKeysAffectingSimulation.every((key) => a[key] === b[key]);
 
-const wandQueryVersions = [1, 2] as const;
-export type WandQueryVersion = (typeof wandQueryVersions)[number];
+export type WandQueryVersion = 1 | 2;
 
 type WandParamValue = string | number | boolean;
 export const isWandParamValue = (x: unknown): x is WandParamValue =>
   isString(x) || isNumber(x) || isBoolean(x);
 
-const v2ParamNames = [
+export const v2ParamNames = [
   'd',
   'm',
   'c',

@@ -58,9 +58,8 @@ export const DeleteSpellAnnotation = ({
   deleteSpell?: () => void;
 }) => {
   return (
-    <DeleteDiv
-      onClick={deleteSpell}
-      data-name="DeleteSpellAnnotation"
-    ></DeleteDiv>
+    <button onClick={deleteSpell}>
+      <DeleteDiv data-name="DeleteSpellAnnotation"></DeleteDiv>
+    </button>
   );
 };

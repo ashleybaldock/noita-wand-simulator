@@ -67,9 +67,6 @@ const SpellId = styled.div`
 // const WikiLink = styled.a`
 //   https: ; //noita.wiki.gg/wiki/${actionId}
 // `;
-const Sub = styled.div`
-  margin-top: 0.4em;
-`;
 
 const Label = styled.div.attrs<{ iconSrc?: string }>(({ iconSrc }) => ({
   style:
@@ -150,7 +147,6 @@ export const SpellInfoTooltip = ({
           mana,
           max_uses,
           never_unlimited,
-          beta,
           spawn_requires_flag,
         } = getSpellByActionId(content);
         return (
