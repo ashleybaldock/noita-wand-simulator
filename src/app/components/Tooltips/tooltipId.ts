@@ -1,5 +1,6 @@
 import type { SpellId } from '../../redux/Wand/spellId';
-import { isString } from '../../util';
+import { isNotNull, isNotUndefined, isString } from '../../util';
+import { isAnnotationTip, type AnnotationTip } from './AnnotationTooltip';
 
 export const tooltipIds = ['tooltip-spellinfo', 'tooltip-actionhint'] as const;
 
@@ -182,7 +183,7 @@ const uiHintDefinition = [
   // ],
 ] as const;
 
-export const tipKinds = ['spellinfo', 'uihint'] as const;
+export const tipKinds = ['spellinfo', 'uihint', 'annotation'] as const;
 
 export type TipKind = (typeof tipKinds)[number];
 
@@ -201,12 +202,16 @@ type UiHintDef = {
 
 const uiHintMap = new Map<UiHint, UiHintDef>(uiHintDefinition);
 
-export interface UiHintTip {
+export interface Tip {
+  kind: string;
+  id: unknown;
+}
+export interface UiTip extends Tip {
   kind: 'uihint';
   id: UiHint;
 }
-
-export type Tip = UiHintTip;
+export const isUiTip = (x: Tip): x is UiTip =>
+  isNotNull(x) && x.kind === 'uihint';
 
 export type TipPopupId = `tooltip-${TipKind}`;
 
@@ -215,12 +220,20 @@ export type TipAttributes = {
   'data-tooltip-content'?: string;
 };
 
-export const tipToAttributes = (tip: Tip): TipAttributes => {
-  if (tip.kind === 'uihint') {
-    return {
-      'data-tooltip-id': `tooltip-uihint`,
-      'data-tooltip-content': tip.id,
-    };
+export const tipToAttributes = (tip?: Tip): TipAttributes => {
+  if (isNotUndefined(tip)) {
+    if (isUiTip(tip)) {
+      return {
+        'data-tooltip-id': `tooltip-uihint`,
+        'data-tooltip-content': tip.id,
+      };
+    }
+    if (isAnnotationTip(tip)) {
+      return {
+        'data-tooltip-id': `tooltip-annotation`,
+        'data-tooltip-content': tip.id,
+      };
+    }
   }
   return {};
 };

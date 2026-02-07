@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { TooltipBase } from './TooltipBase';
-import { isNotNullOrUndefined } from '../../util';
+import { isNotNull, isNotNullOrUndefined } from '../../util';
 import { translate } from '../../util/i18n';
 import { useHideTooltips } from './useHideTooltips';
+import type { Tip } from './tooltipId';
 
 const StyledTooltipBase = styled(TooltipBase)``;
 
@@ -39,13 +40,21 @@ type AnnotationTooltipDef = {
   desc: string;
 };
 
+export interface AnnotationTip {
+  kind: 'annotation';
+  id: AnnotationTooltipId;
+}
+
+export const isAnnotationTip = (x: Tip): x is AnnotationTip =>
+  isNotNull(x) && x.kind === 'annotation';
+
 const annotationToopltipMap = new Map<
   AnnotationTooltipId,
   AnnotationTooltipDef
 >(annotationTooltipDefinition);
 
 export const isAnnotationTooltipId = (x: string): x is AnnotationTooltipId =>
-  annotationToopltipMap.has(x);
+  (annotationToopltipMap as Map<string, unknown>).has(x);
 
 export const getAnnotationTooltip = (
   annotationTooltipId: AnnotationTooltipId,

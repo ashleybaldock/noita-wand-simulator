@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import type { CSSProperties } from 'react';
 import { tipToAttributes } from '../Tooltips/tooltipId';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const StyledDiv = styled.div`
+const StyledDiv = styled(BaseAnnotation)`
   display: flex;
   position: absolute;
   inset: -0.4em 0 auto 0;
@@ -36,8 +37,7 @@ export const ProjectileCountAnnotation = ({
     <StyledDiv
       style={style}
       className={className}
-      data-name={'ProjectileCountAnnotation'}
-      {...tipToAttributes({ kind: 'uihint', id: 'ProjectileCountAnnotation' })}
+      $dataName={'ProjectileCountAnnotation'}
     >
       {count}
     </StyledDiv>

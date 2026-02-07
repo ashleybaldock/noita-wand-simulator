@@ -10,8 +10,9 @@ import { isNotNullOrUndefined } from '../../util';
 import { getSpellByActionId } from '../../calc/spells';
 import type { SpriteName } from '../../calc/sprite';
 import { useIcon } from '../../calc/sprite';
+import { BaseAnnotation } from './BaseAnnotation';
 
-export const ProxyDiv = styled.div<{
+export const ProxyDiv = styled(BaseAnnotation)<{
   background: string;
 }>`
   --size: 0.58;
@@ -60,24 +61,24 @@ export const ActionProxyAnnotation = ({
   const icon: SpriteName | undefined = isWithTriggerActionId(spell?.id)
     ? `icon.trigger${spell?.permanently_attached ? '.disabled' : ''}`
     : isWithTimerActionId(spell?.id)
-    ? `icon.timer${spell?.permanently_attached ? '.disabled' : ''}`
-    : isWithExpirationActionId(spell?.id)
-    ? `icon.expiration${spell?.permanently_attached ? '.disabled' : ''}`
-    : undefined;
+      ? `icon.timer${spell?.permanently_attached ? '.disabled' : ''}`
+      : isWithExpirationActionId(spell?.id)
+        ? `icon.expiration${spell?.permanently_attached ? '.disabled' : ''}`
+        : undefined;
 
   const iconPath = useIcon(icon);
 
   if (showProxies && isNotNullOrUndefined(proxy)) {
     return (
       <ProxyDiv
-        data-name="ActionProxyAnnotation-Proxy"
+        $dataName="ActionProxyAnnotation-Proxy"
         background={getSpellByActionId(proxy.id).sprite}
       />
     );
   } else if (isNotNullOrUndefined(icon)) {
     return (
       <ProxyDiv
-        data-name="ActionProxyAnnotation"
+        $dataName="ActionProxyAnnotation"
         background={icon ? iconPath : 'none'}
       />
     );

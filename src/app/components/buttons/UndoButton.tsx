@@ -1,6 +1,7 @@
 import { useAppDispatch } from '../../redux/hooks';
 import { ActionCreators } from 'redux-undo';
 import { Button } from '../generic';
+import type { Tip } from '../Tooltips/tooltipId';
 
 export const UndoButton = () => {
   const dispatch = useAppDispatch();
@@ -12,7 +13,7 @@ export const UndoButton = () => {
       data-name="UndoButton"
       hotkeys={'u, ctrl+z, mod+z'}
       onHotkey={undo}
-      tip={{ kind: 'uihint', id: 'undo' }}
+      tip={{ kind: 'uihint', id: 'undo' } as Tip}
       icon={'icon.undo'}
       imgOnly={'500px'}
       onClick={undo}
