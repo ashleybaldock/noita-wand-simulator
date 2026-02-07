@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { useConfig } from '../../redux';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const DrawAnnotation = styled.div`
+const DrawAnnotation = styled(BaseAnnotation)`
   pointer-events: none;
   position: absolute;
   bottom: -12px;
@@ -13,16 +14,19 @@ const DrawAnnotation = styled.div`
   font-weight: normal;
   --shadow-bg: rgb(0 0 0);
   --shadow-w: 0px;
-  text-shadow: var(--shadow-bg) 1px 1px var(--shadow-w),
+  text-shadow:
+    var(--shadow-bg) 1px 1px var(--shadow-w),
     var(--shadow-bg) 1px -1px var(--shadow-w),
     var(--shadow-bg) -1px 1px var(--shadow-w),
-    var(--shadow-bg) -1px -1px var(--shadow-w), var(--shadow-bg) 1px 1px 1px,
-    var(--shadow-bg) 1px -1px 1px, var(--shadow-bg) -1px 1px 1px,
+    var(--shadow-bg) -1px -1px var(--shadow-w),
+    var(--shadow-bg) 1px 1px 1px,
+    var(--shadow-bg) 1px -1px 1px,
+    var(--shadow-bg) -1px 1px 1px,
     var(--shadow-bg) -1px -1px 1px;
 `;
 
-export const DrawAnnotationConsumed = styled.div``;
-export const DrawAnnotationDraws = styled.div``;
+export const DrawAnnotationConsumed = styled(DrawAnnotation)``;
+export const DrawAnnotationDraws = styled(DrawAnnotation)``;
 
 export const DrawAnnotations = ({
   draws = 0,
@@ -39,10 +43,12 @@ export const DrawAnnotations = ({
 
   return (
     <>
-      <DrawAnnotationConsumed data-name="draw-down">
+      <DrawAnnotationConsumed dataName="DrawAnnotationConsumed">
         {eats}
       </DrawAnnotationConsumed>
-      <DrawAnnotationDraws data-name="draw-up">{draws}</DrawAnnotationDraws>
+      <DrawAnnotationDraws dataName="DrawAnnotationDraws">
+        {draws}
+      </DrawAnnotationDraws>
     </>
   );
 };

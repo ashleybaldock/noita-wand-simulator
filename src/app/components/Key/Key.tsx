@@ -51,6 +51,7 @@ const StyledKeyExample = styled.div`
   display: flex;
   align-items: center;
   min-width: 1lh;
+  position: relative;
 `;
 
 const StyledKeyDescription = styled.div`

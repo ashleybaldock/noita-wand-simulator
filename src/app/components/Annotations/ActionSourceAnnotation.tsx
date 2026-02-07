@@ -2,9 +2,8 @@ import styled from 'styled-components';
 import type { ActionSource } from '../../calc/actionSources';
 import { useConfig } from '../../redux';
 import { BaseAnnotation } from './BaseAnnotation';
-import { StyledKeyContainer } from '../Key/Key';
 
-const SourceDiv = styled(BaseAnnotation)`
+const StyledBaseAnnotation = styled(BaseAnnotation)`
   pointer-events: none;
   font-size: 12px;
   text-align: center;
@@ -14,12 +13,6 @@ const SourceDiv = styled(BaseAnnotation)`
   top: 10%;
   transform: translateY(-50%);
   right: unset;
-
-  ${StyledKeyContainer} & {
-    position: relative;
-    inset: unset;
-    transform: none;
-  }
 `;
 
 const sourceDisplayMap: Record<ActionSource, [string, string, string]> = {
@@ -33,8 +26,10 @@ const sourceDisplayMap: Record<ActionSource, [string, string, string]> = {
 
 export const ActionSourceAnnotation = ({
   source,
+  className,
 }: {
   source?: ActionSource;
+  className?: string;
 }) => {
   const { showSources } = useConfig();
 
@@ -43,7 +38,8 @@ export const ActionSourceAnnotation = ({
   }
 
   return (
-    <SourceDiv
+    <StyledBaseAnnotation
+      className={className}
       data-name="ActionSource"
       data-source={source}
       data-content={sourceDisplayMap[source][0]}
@@ -51,6 +47,6 @@ export const ActionSourceAnnotation = ({
       data-desc={sourceDisplayMap[source][2]}
     >
       {sourceDisplayMap[source][0]}
-    </SourceDiv>
+    </StyledBaseAnnotation>
   );
 };
