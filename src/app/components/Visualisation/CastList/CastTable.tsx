@@ -38,11 +38,11 @@ export const Headings = styled.div`
 `;
 
 export const CastTable = ({
-  $castIndex,
-  $cast,
+  castIndex,
+  cast,
 }: {
-  $castIndex: number;
-  $cast: WandCastResult;
+  castIndex: number;
+  cast: WandCastResult;
 }) => {
   // const cast = useCast($cast.id);
   // const castTableGridCols = useMemo(() => {
@@ -53,10 +53,10 @@ export const CastTable = ({
   return (
     <StyledCastTable $rows={castTableGridRows()}>
       <CastTableHeadings
-        $castIndex={$castIndex}
-        $castId={$cast.id}
+        $castIndex={castIndex}
+        $castId={cast.id}
       ></CastTableHeadings>
-      <CastTableColumns castId={$cast.id}></CastTableColumns>
+      <CastTableColumns castId={cast.id}></CastTableColumns>
     </StyledCastTable>
   );
 };

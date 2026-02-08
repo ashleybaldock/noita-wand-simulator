@@ -161,7 +161,10 @@
   background-image: linear-gradient(45deg, #000, #111, #000);
   box-shadow: 0 0 0 2px #000;
   padding: var(--padding);
-  margin: 0;
+  margin: calc((var(--padding) + var(--bdw)) * -1)
+    calc(var(--ts-spell-pad) - var(--padding))
+    calc((var(--padding) + var(--bdw)) * -1)
+    calc(var(--ts-spell-pad) - var(--padding));
 }
 [data-name='ActionTreeRoot']
   > div

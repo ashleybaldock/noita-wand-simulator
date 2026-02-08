@@ -30,7 +30,7 @@ export const CastList = () => {
         >
           <SimulationSummary />
           {casts.map((cast, index) => (
-            <CastTable $cast={cast} $castIndex={index + 1} key={index} />
+            <CastTable cast={cast} castIndex={index + 1} key={index} />
           ))}
         </SectionDiv>
       </ScrollWrapper>
