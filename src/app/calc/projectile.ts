@@ -24,6 +24,7 @@ export type ProjectileComponent = {
   on_collision_die: boolean;
   lifetime: number;
   lifetime_randomness: number;
+  friendly_fire: boolean;
 };
 
 export type Projectile = {

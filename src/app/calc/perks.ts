@@ -30,7 +30,7 @@ export const perks = [
   'unlimited_spells',
 ] as const;
 
-const GameEffects = [
+export const GameEffects = [
   'DAMAGE_MULTIPLIER',
   'LOW_HP_DAMAGE_BOOST',
   'IRON_STOMACH',

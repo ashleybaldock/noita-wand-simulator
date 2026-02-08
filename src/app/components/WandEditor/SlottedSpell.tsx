@@ -79,7 +79,7 @@ export const SlottedSpell = ({
                     deleteSpell={() => handleDeleteSpell(wandIndex)}
                   />
                   {isMainWandIndex(wandIndex) && <NoManaAnnotation />}
-                  <FriendlyFireAnnotation />
+                  <FriendlyFireAnnotation friendlyFire={'no'} />
                 </>
               )}
             </>
