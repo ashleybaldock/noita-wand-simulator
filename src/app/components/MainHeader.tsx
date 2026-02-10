@@ -37,6 +37,16 @@ const HeaderDiv = styled.div<{
     clamp(2px, 0.5vmin, 14px);
   inset: 0 auto auto auto;
 
+  column-gap: max(1px, round(down, 0.3ch, 1px));
+  --pad-bottom: max(1px, round(down, clamp(3px, 0.5vmin, 14px), 1px));
+  --pad: max(1px, round(down, clamp(2px, 0.4vmin, 14px), 1px));
+  padding: var(--pad) var(--pad) var(--pad-bottom) var(--pad);
+
+  & > a {
+    width: max(1px, round(down, clamp(160px, 30vw, 300px), 1px));
+    margin: max(1px, round(down, 0.1em, 1px)) max(1px, round(down, 0.2ch, 1px))
+      0 max(1px, round(down, 0.2ch, 1px));
+  }
   &::after {
     content: '';
     z-index: var(--zindex-mainheader);

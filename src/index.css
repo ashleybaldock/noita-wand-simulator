@@ -21,8 +21,8 @@
 :root {
   --𝚽: 1.618; /* var(--𝚽) */
 
-  --ou: 0.16rem;
-  --top-banner-height: clamp(36px, 6vh, 50px);
+  --ou: max(1px, round(down, 0.16rem, 1px));
+  --top-banner-height: max(1px, round(down, clamp(36px, 6vh, 50px), 1px));
 
   --input-border: 2px solid #555555;
   --input-border-radius: 0 2px 0 2px;
