@@ -25,8 +25,12 @@ const DrawAnnotation = styled(BaseAnnotation)`
     var(--shadow-bg) -1px -1px 1px;
 `;
 
-export const DrawAnnotationConsumed = styled(DrawAnnotation)``;
-export const DrawAnnotationDraws = styled(DrawAnnotation)``;
+export const DrawAnnotationConsumed = styled(DrawAnnotation)`
+  color: #f00;
+`;
+export const DrawAnnotationDraws = styled(DrawAnnotation)`
+  color: #0f0;
+`;
 
 export const DrawAnnotations = ({
   draws = 0,

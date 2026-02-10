@@ -7,23 +7,23 @@ import { TreeArrow } from './TreeArrow';
 import styled from 'styled-components';
 import type { ActionSource } from '../../../calc/actionSources';
 
-export const ActionTreeSourceGroup = styled.div<{ $source: ActionSource }>`
+export const AcTreeRun = styled.div<{ source: ActionSource }>`
   display: flex;
-  flex-direction: ${(props) => (props.$source === 'action' ? 'row' : 'column')};
+  flex-direction: ${(props) => (props.source === 'action' ? 'row' : 'column')};
   border-top: 0;
   border-bottom: 0;
 `;
 
 export const ArrowColumn = styled.div``;
 
-export const ActionTreeCastResultNodeDiv = styled.div`
+export const ActionTreeCastResultNode = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
   border-left: 4px solid #777;
   border-width: 0px;
 `;
-export const ChildrenDiv = styled.div`
+export const SubTrees = styled.div`
   display: flex;
   flex-direction: column;
   border-top: 0;
@@ -56,16 +56,20 @@ export const ActionTreeComponent = ({
    * Find 'runs' of single draw actions,
    *  e.g. several modifiers in a row
    * (To be displayed in a more compact form)
+   *
+   * [[], [], []]
    */
   const runs = useMemo(
     () =>
       [...node.children].reduce<TreeNode<ActionCall>[][]>((runs, cur) => {
+        const latestRun = runs[runs.length - 1];
+        const latest = latestRun?.[latestRun?.length - 1]?.value;
         if (
           runs.length > 0 &&
-          runs[runs.length - 1][runs[runs.length - 1].length - 1]?.value
-            ?.source === cur.value?.source
+          latest?.source === cur.value?.source &&
+          latest?.spell?.id === cur.value?.spell?.id
         ) {
-          runs[runs.length - 1].push(cur);
+          latestRun.push(cur);
         } else {
           runs.push([cur]);
         }
@@ -78,7 +82,7 @@ export const ActionTreeComponent = ({
   return isUndefined(node.value) ? (
     <></>
   ) : (
-    <ActionTreeCastResultNodeDiv
+    <ActionTreeCastResultNode
       data-name="AcTreeNode"
       data-spell={node.value.spell.id}
       data-leaf={isLeaf}
@@ -115,19 +119,19 @@ export const ActionTreeComponent = ({
       </ArrowColumn>
       <WandActionCall data-name="AcTreeActionCall" actionCall={node.value} />
       {hasChildren && (
-        <ChildrenDiv
+        <SubTrees
           data-name="AcTreeChildren"
           data-twig={isTwig}
           data-trigger={isTriggerParent}
         >
           {runs.map((run, runIdx, runs) => (
-            <ActionTreeSourceGroup
+            <AcTreeRun
               data-name={'ActionSourceGroup'}
               data-source={run[0]?.value?.source}
               data-run={runIdx}
               data-has-siblings={runs.length > 1}
-              key={runIdx}
-              $source={run[0]?.value?.source ?? 'draw'}
+              key={`run-${runIdx}`}
+              source={run[0]?.value?.source ?? 'draw'}
             >
               {run.map((childNode, index, run) => (
                 <ActionTreeComponent
@@ -140,10 +144,10 @@ export const ActionTreeComponent = ({
                   triggerLevel={triggerLevel}
                 />
               ))}
-            </ActionTreeSourceGroup>
+            </AcTreeRun>
           ))}
-        </ChildrenDiv>
+        </SubTrees>
       )}
-    </ActionTreeCastResultNodeDiv>
+    </ActionTreeCastResultNode>
   );
 };

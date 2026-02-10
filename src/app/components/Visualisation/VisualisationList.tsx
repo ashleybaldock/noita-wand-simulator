@@ -76,7 +76,6 @@ export const VisualisationList = () => {
             />
             {/* <ShowKeyButton/> */}
           </SectionToolbar>
-          <ActionTreeKey />
           <ScrollWrapper>
             <SectionDiv ref={actionCallTreeRef} className={'saveImageRoot'}>
               {casts.map((cast, index) => (
@@ -84,6 +83,7 @@ export const VisualisationList = () => {
               ))}
             </SectionDiv>
           </ScrollWrapper>
+          <ActionTreeKey />
         </>
       )}
       <SectionToolbar title={'Simulation: Action Call Sequence'}>
