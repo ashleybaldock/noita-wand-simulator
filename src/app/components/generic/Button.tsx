@@ -8,6 +8,8 @@ import { HotkeyHint } from '../Tooltips/HotkeyHint';
 import type { SpriteName } from '../../calc/sprite';
 import { useIcon } from '../../calc/sprite';
 import type { MouseEventHandler } from 'react';
+import { isBreakpoint, type BreakPoint } from '../Breakpoint/Breakpoint';
+import { MobileHidden } from '../Breakpoint/MobileHidden';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ButtonShapes = [
@@ -34,27 +36,6 @@ const borderForShape = new Map<ButtonShape, string>([
   ['petal1', 'border-radius: 1.6em 0em 0em 10em / 14em 0em 0em 41em;'],
   ['petal2', 'border-radius: 3.2em 20em 3.2em 12em / 12em 12em 12em 12em;'],
 ]);
-/*
- *
-
---pad-other-side: 2.7em;
-padding-left: 0.6em;
-background-position: 100% 50%;
---background-size: 0.46em;
---pad-img-side: calc(var(--background-size) + 1.9em);
-
- */
-
-const breakpoints = ['500px', '600px', '700px'] as const;
-
-export type BreakPoint = (typeof breakpoints)[number];
-
-export const isBreakpoint = (
-  (breakpointSet) =>
-  (x: unknown): x is BreakPoint =>
-    isString(x) && (breakpointSet as Set<string>).has(x)
-)(new Set(breakpoints));
-
 export type ImgOnlyOption = 'never' | 'always' | BreakPoint;
 
 const StyledButton = styled.button<{
@@ -208,12 +189,6 @@ const StyledButton = styled.button<{
       : ''
   }
 `}
-`;
-
-const MobileHidden = styled.div<React.PropsWithChildren>`
-  @media screen and (max-width: 500px) {
-    display: none;
-  }
 `;
 
 export const Button = ({

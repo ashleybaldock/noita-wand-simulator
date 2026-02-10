@@ -33,7 +33,7 @@ export const SearchButton = ({ hotkeys = 'f, `, /' }: { hotkeys?: string }) => {
       <StyledButton
         data-name="FindSpellButton"
         hotkeys={hotkeys}
-        imgOnly={'600px'}
+        imgOnly={'500px'}
         icon={'icon.search'}
         onClick={() => showFindSpell()}
       >

@@ -300,33 +300,6 @@ button[data-tooltip-content='clear'] {
 :not(#u#n#i) [data-name='StickyGroup']:not(:has(~ [data-name='StickyGroup'])) {
   margin-bottom: var(--top-banner-height);
 }
-/* [data-name='Tab:Selected']::before { */
-/*   content: ''; */
-/*   position: absolute; */
-/*   inset: 0 auto auto calc((var(--ou) + var(--border-radius)) * -1); */
-/*   width: var(--border-radius); */
-/*   height: var(--border-radius); */
-/*   background-color: #800; */
-/*   border: var(--ou) solid var(--color-tab-border-active); */
-/*   border-radius: 0 var(--border-radius) 0 0; */
-/*   border-width: calc(var(--ou) * 0.7) var(--ou) 0 0; */
-/*   background-color: red; */
-/* } */
-/* [data-name='Tab:Selected'] { */
-/*   position: relative; */
-/*   z-index: 1; */
-/*   overflow: visible; */
-/*   border-top: calc(var(--ou) * 0.7) solid var(--bg-color-tab); */
-/*   border-top: calc(var(--ou) * 0.7) solid #00f; */
-/*   flex: 0 0 3em; */
-/*   padding: 0; */
-/*   height: 3em; */
-/*   width: 3em; */
-/*   place-content: center; */
-/*   place-items: center; */
-/*   background-color: #080; */
-/*   margin: calc(var(--ou) * -0.7) 0 0 0; */
-/* } */
 
 :not(#u#n#i) [data-name='ExportOptions'] {
   position: relative;
@@ -370,41 +343,20 @@ button[data-tooltip-content='clear'] {
   grid-auto-rows: 1fr;
 }
 
-.debug [data-name='Tab:Selected'] {
-  outline: 0.5px solid #fff;
+@media screen and (max-width: 600px) {
+  :not(#u#n#i) [data-name='TabTitles'] {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    min-width: unset;
+    width: auto;
+  }
 }
-.debug [data-name='Tab:Selected'] > div {
-  outline: 0.5px solid #f0f;
-}
-.debug [data-name='Tab:Selected']::before,
-.debug [data-name='Tab:Selected']::after {
-  outline: 0.5px solid #f0f;
-}
-
 :not(#u#n#i) [data-name='TabTitles'] {
   column-gap: 0;
+  --bdw-inline: max(1px, round(down, calc(var(--ou) * 1), 1px));
+  --bdw-above: max(1px, round(down, calc(var(--ou) * 0.7), 1px));
 }
 
-:not(#u#n#i) [data-name='TabTitles']::before {
-  content: '';
-  display: flex;
-  flex: 0 1 10px;
-  border-top: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
-}
-:not(#u#n#i) [data-name='TabTitles']::after {
-  content: '';
-  display: flex;
-  flex: 1 0 auto;
-  border-top: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
-  border-left: calc(var(--ou) * 1) solid var(--color-tab-border-active);
-  border-radius: 0;
-  height: 0;
-  /*   outline: 0.5px solid #ff0; */
-}
-:not(#u#n#i) [data-name='Tab:Selected'] + [data-name='TabTitles']::after {
-  height: var(--border-radius);
-  border-radius: var(--border-radius) 0 0 0;
-}
 :not(#u#n#i) [data-name='Tab'] {
   border-top: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
   padding: 0;
@@ -414,19 +366,17 @@ button[data-tooltip-content='clear'] {
   /*   border-top-color: red; */
 }
 :not(#u#n#i) [data-name='Tab']:has(+ [data-name='Tab:Selected']) {
-  border-radius: 0 var(--border-radius) 0 0;
-  margin: 0 calc(var(--border-radius) * 0.5) 0 0;
+  border-top-right-radius: calc(var(--border-radius) * 0.5);
 }
 :not(#u#n#i) [data-name='Tab:Selected'] + [data-name='Tab'] {
-  border-radius: var(--border-radius) 0 0 0;
-  margin: 0 0 0 calc(var(--border-radius) * 0.5);
+  border-top-left-radius: calc(var(--border-radius) * 0.5);
 }
 :not(#u#n#i) [data-name='ActiveTabContent'] {
   box-shadow:
     inset 0 3px 3px 3px #000,
     inset 0 0 2px 4px var(--bg-color);
+  margin-bottom: calc(var(--ou) * -1);
   border-bottom: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
-  border-bottom: 0 solid #0000;
 }
 :not(#u#n#i) [data-name='Tab'],
 :not(#u#n#i) [data-name='Tab:Selected'] {
@@ -438,7 +388,6 @@ button[data-tooltip-content='clear'] {
     )
     [after-end];
   column-gap: 0;
-  padding: 0;
   position: relative;
   overflow: visible;
   --padding-inline: calc(var(--border-radius) - var(--bdw-inline));
@@ -457,7 +406,6 @@ button[data-tooltip-content='clear'] {
   margin: calc(var(--border-radius)) calc(var(--border-radius) * -1) 0
     calc(var(--border-radius) * -1);
   border-top: 0;
-  box-shadow: 0 calc(var(--border-radius) * -1) 0 var(--color-base-background);
 }
 
 :not(#u#n#i) [data-name='Tab'] > div,
@@ -557,30 +505,6 @@ button[data-tooltip-content='clear'] {
   grid-column: c;
 }
 
-:not(#u#n#i) [data-name='Tab:Selected']::before,
-:not(#u#n#i) [data-name='Tab:Selected']::after {
-  content: '';
-  position: relative;
-  width: var(--w);
-  height: var(--h);
-  --w: calc(var(--border-radius));
-  --h: calc(var(--border-radius));
-  border: var(--ou) solid var(--color-tab-border-active);
-  box-sizing: border-box;
-  background-color: #0000;
-  overflow: visible;
-}
-:not(#u#n#i) [data-name='Tab:Selected']::before {
-  grid-column: before;
-  place-self: start;
-  border-radius: 0 var(--border-radius) 0 0;
-  border-width: calc(var(--ou) * 0.7) var(--ou) 0 0;
-  inset: calc(var(--border-radius) * -1) auto auto
-    calc(var(--border-radius) * -1);
-  padding: 0 var(--padding-inline) 0 0;
-  margin: 0 0 0 calc(var(--padding-inline) * -1);
-}
-
 :not(#u#n#i) [data-name='Tab:Selected']::after {
   position: relative;
   place-self: start end;
@@ -601,6 +525,16 @@ button[data-tooltip-content='clear'] {
   padding: 0 0 0 var(--padding-inline);
   margin: 0 calc(var(--padding-inline) * -1) 0 0;
 }
+:not(#u#n#i) [data-name='TabTitles'],
+:not(#u#n#i) [data-name='Tab:Selected'],
+:not(#u#n#i) [data-name='Tab'] {
+  margin: unset;
+  border: unset;
+  padding: unset;
+  box-shadow: unset;
+  position: unset;
+  inset: unset;
+}
 
 :not(#u#n#i) [data-name='SpellSelector'] {
   --border-radius: 5px;
@@ -613,6 +547,35 @@ button[data-tooltip-content='clear'] {
 }
 
 :not(#u#n#i) :is(:root, body, #root, [data-name='MainHeader']) {
-  width: 100vw;
-  max-width: 100vw;
+  width: auto;
+  max-width: max(1px, round(down, 100vw, 1px));
+  image-rendering: pixelated;
+}
+
+:not(#u#n#i) [data-name='Tab:Selected'] {
+  box-shadow: unset;
+}
+
+:not(#u#n#i) [data-name='ActiveTabContent'] {
+  border: max(1px, round(down, var(--ou), 1px)) solid
+    var(--color-tab-border-active);
+  margin-bottom: calc(var(--ou) * -1);
+}
+
+:not(#u#n#i) [data-name='MainHeader'] {
+  column-gap: max(1px, round(down, 0.3ch, 1px));
+  --pad-bottom: max(1px, round(down, clamp(3px, 0.5vmin, 14px), 1px));
+  --pad: max(1px, round(down, clamp(2px, 0.4vmin, 14px), 1px));
+  padding: var(--pad) var(--pad) var(--pad-bottom) var(--pad);
+}
+
+:not(#u#n#i) [data-name='MainHeader'] > a {
+  width: max(1px, round(down, clamp(160px, 30vw, 300px), 1px));
+  margin: max(1px, round(down, 0.1em, 1px)) max(1px, round(down, 0.2ch, 1px)) 0
+    max(1px, round(down, 0.2ch, 1px));
+}
+
+:not(#u#n#i) :root {
+  --ou: max(1px, round(down, 0.16rem, 1px));
+  --top-banner-height: max(1px, round(down, clamp(36px, 6vh, 50px), 1px));
 }

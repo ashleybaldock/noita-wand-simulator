@@ -8,7 +8,7 @@ export const ConfigButton = ({ className = '' }: { className?: string }) => {
       data-name={'ConfigButton'}
       hotkeys={'m'}
       icon={'icon.config'}
-      imgOnly={'600px'}
+      imgOnly={'500px'}
       onClick={() => setModalVisible(true)}
       className={className}
     >

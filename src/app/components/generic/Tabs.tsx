@@ -18,6 +18,8 @@ const MainDiv = styled.div`
 `;
 
 const TabTitlesDiv = styled.div`
+  --bdw-inline: calc(var(--ou) * 1);
+  --bdw-above: calc(var(--ou) * 0.7);
   --bsize-spell: 34px;
   display: flex;
   flex-wrap: nowrap;
@@ -30,6 +32,14 @@ const TabTitlesDiv = styled.div`
   padding: 0 1ch 0 1ch;
   justify-content: stretch;
   overflow: visible;
+
+  &::before {
+    border-top-right-radius: calc(var(--border-radius) * 0.5);
+  }
+
+  &::after {
+    border-top-left-radius: calc(var(--border-radius) * 0.5);
+  }
 `;
 
 /* TODO
@@ -51,29 +61,12 @@ const TabButton = styled.button<{
   box-sizing: content-box;
   color: var(--color-tab-inactive);
 
-  border-color: var(--color-tab-border-inactive);
-  border-top: calc(var(--ou) * 1) solid var(--bg-color-tab);
-  border-bottom: var(--ou) solid var(--color-tab-border-inactive);
-  border-radius: 0 0 0.5em 0.5em;
-  border-style: solid;
-  /* border-width: 0 0 var(--ou) 0; */
-  border-width: calc(var(--ou) * 0.5) 0 calc(var(--ou) * 0.5) 0;
-  border-block-end-style: hidden;
-
-  box-shadow:
-    calc(var(--ou) * -0.25) 0 0 calc(var(--ou) * 0)
-      var(--color-tab-border-inactive),
-    calc(var(--ou) * 0.25) 0 0 calc(var(--ou) * 0)
-      var(--color-tab-border-inactive);
-
   max-width: calc(100% / 8 * 3);
   width: clamp(2.4em, var(--pw), 3em);
   min-width: unset;
   min-height: 3em;
 
   flex: 0 0 100%;
-  margin: calc(var(--ou) * -1) 0 0 0;
-  padding: 0.36em 0.7em 0.32em 0.7em;
 
   display: grid;
   grid-template: 1fr / auto auto auto;
@@ -101,92 +94,76 @@ const TabButton = styled.button<{
       ? `
     cursor: default;
     pointer-events: none;
-    z-index: 0;
+    z-index: 2;
 
     color: var(--color-tab-active);
 
     border-color: var(--color-tab-border-active);
 
 
-        box-shadow: calc(var(--ou) * -1.5) calc(var(--ou) * 0.5) 0 calc(var(--ou) * -0.5) var(--color-tab-border-active),calc(var(--ou) * 1.5) calc(var(--ou) * 0.5) 0 calc(var(--ou) * -0.5) var(--color-tab-border-active);
-  flex: 0 0 3em;
-  padding: 0;
-  height: 3em;
-  width: 3em;
-  display: grid;
-  place-content: center;
-  margin: calc(var(--ou) * -1) 0 0 0;
-  place-items: center;
+    box-shadow: calc(var(--ou) * -1.5) calc(var(--ou) * 0.5) 0 calc(var(--ou) * -0.5) var(--color-tab-border-active),calc(var(--ou) * 1.5) calc(var(--ou) * 0.5) 0 calc(var(--ou) * -0.5) var(--color-tab-border-active);
+
+    flex: 0 0 3em;
+    padding: 0;
+    height: 3em;
+    width: 3em;
+    display: grid;
+    place-content: center;
+    margin: 0;
+    place-items: center;
   `
       : ``}
+
+  padding: 0;
+  margin: 0;
+  position: relative;
+  border-width: 0;
+`;
+
+const TabsWandActionFamily = styled.div`
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-template-columns: subgrid;
+  grid-auto-rows: 1fr;
+  --maxcols: round(down, 100cqw / var(--bsize-spell), var(--bsize-spell));
+  grid-row: auto/span 1;
+  grid-column: auto/span round(down, sqrt(var(--n)), 2);
+  grid-row: auto/span round(up, sqrt(var(--n)), 2);
 `;
 
 const TabsWandAction = styled(WandAction)`
   --transition-props: opacity;
   --sizes-spell: 2em;
+  --v: 0.3em;
 
   transform: none;
   opacity: 1;
   cursor: inherit;
 
-  border: 0;
-  background-size: 50%, 200%;
-  background-origin: content-box, border-box;
-  height: auto;
+  transform: rotate(0deg) scale(1) translate(1px);
+  height: 100%;
   width: auto;
-  aspect-ratio: 1;
-  background-position:
-    50% 20%,
-    105% 100%;
-  margin: 0;
-  background-clip: border-box;
-  background-repeat: no-repeat;
-  --v: 0.3em;
-  padding: 0 var(--v) var(--v) 0;
   min-width: calc(var(--v) * 0.25);
   min-height: calc(var(--v) * 0.25);
-  min-height: 2.4em;
-  border-image-width: 4px;
-  background-image: var(--data-spelltype-sprite);
-  background-repeat: space;
-  background-size: 12%;
-
-  border-image-outset: 2px;
-  padding: 0px;
-  border-image-source: var(--data-spelltype-sprite);
-  background-size: 10%;
-  background-repeat: round;
-
-  image-rendering: pixelated;
-  transform: rotate(0deg) scale(1) translate(1px);
-  border-image: var(--data-spelltype-sprite);
-  border-image-source: var(--data-spelltype-sprite);
   aspect-ratio: 1;
-  padding: 0;
-  margin: 0;
-  background-size: 60%, contain;
-  border-image-slice: 3 3 3 3;
-  border-image-outset: 4px;
-  border-image-width: 6px;
-  background-origin: content-box;
-  background-position: center;
-  width: auto;
-  height: 100%;
-
+  image-rendering: pixelated;
   background-size: 67%, 100%;
   background-clip: padding-box, border-box, border-box;
   background-repeat: no-repeat, space, space;
   background-origin: content-box, border-box, border-box;
-  --v: 0.3em;
+  background-position:
+    center,
+    bottom -11% right -11%;
+  background-image: var(--data-spelltype-sprite);
+  border-image-source: var(--data-spelltype-sprite);
+  border-image-slice: 3 3 3 3;
+  border-image-outset: 4px;
+  border-image-width: 6px;
+
   border: var(--v) solid #0000;
   border-width: var(--v) 0 0 var(--v);
   padding: 0 var(--v) var(--v) 0;
   margin: 0;
-  min-width: calc(var(--v) * 0.25);
-  min-height: calc(var(--v) * 0.25);
-  background-position:
-    center,
-    bottom -11% right -11%;
 
   &:hover {
     transform: none;
@@ -195,7 +172,7 @@ const TabsWandAction = styled(WandAction)`
 `;
 
 const ActiveTabContent = styled.div`
-  position: relative;
+  position: static;
   box-sizing: content-box;
   height: calc(
     round(down, min(30vh, var(--spellandgap) * 6), var(--spellandgap)) +
@@ -235,6 +212,9 @@ const ActiveTabContent = styled.div`
   scroll-snap-type: y mandatory;
   scroll-padding: 10px;
   overflow: scroll;
+
+  container-type: size;
+  contain-intrinsic-size: 100%;
 `;
 
 const HiddenContentDiv = styled.div`
@@ -261,11 +241,11 @@ export type Tab = {
   content: React.ReactElement;
 };
 
-export function Tabs({
+export const Tabs = ({
   tabs,
 }: React.PropsWithChildren<{
   tabs: Tab[];
-}>) {
+}>) => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const displayIndex = Math.min(tabs.length - 1, selectedTabIndex);
@@ -317,4 +297,4 @@ export function Tabs({
       </TabTitlesDiv>
     </MainDiv>
   );
-}
+};

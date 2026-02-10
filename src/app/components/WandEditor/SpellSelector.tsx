@@ -81,6 +81,15 @@ const SpellCategorySpellsDiv = styled.div`
   & > div {
     transform: scaleY(-1);
   }
+
+  --bsize-spell: max(
+    1px,
+    round(down, clamp(32px, calc(100cqmax / 16), 32px), 1px)
+  );
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(max(1px, round(down, var(--bsize-spell), 1px)), 1fr)
+  );
 `;
 
 const SpellSelectorWandActionBorder = styled(StyledWandActionBorder)`
