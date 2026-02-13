@@ -384,12 +384,12 @@ export const useEditMode = (): EditMode => {
   // const { 'editor.swapOnMove': swapOnMove } = useConfig();
 
   return {
-    insert: 'push',
-    direction: 'right',
-    replace: 'swap',
-    overflow: 'truncate',
-    delete: 'blank',
-    cursor: 'fixed',
+    insert: /* shift, */ 'push' /* pull, */,
+    direction: /*left, */ 'right',
+    replace: 'swap' /* replace, shift, push, pull */,
+    overflow: 'truncate' /*, virtual, expand, forbid */,
+    delete: 'blank' /* shift */,
+    cursor: 'fixed' /*, follow */,
   };
 };
 

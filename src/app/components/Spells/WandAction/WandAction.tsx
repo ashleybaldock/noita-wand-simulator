@@ -118,6 +118,8 @@ export const DraggableWandAction = styled(WandAction).attrs({
   transition-timing-function: var(--transition-out, ease-out);
   cursor: grab;
 
+  filter: drop-shadow(0.2ch 0.2ch 1px #000a) drop-shadow(0 0 1px #fff1);
+
   &:hover {
     background-size: 109%, 100%;
 

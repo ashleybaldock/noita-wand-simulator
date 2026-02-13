@@ -27,6 +27,7 @@ import { useDragRef } from '../../../hooks/useDragRef';
 import { useDropRef } from '../../../hooks/useDropRef';
 import { emptyBackgroundPart } from './Backgrounds/BackgroundPart';
 import { DropTargetOver } from './OverSpellDropTarget';
+import { WandAction } from './WandAction';
 
 // right: calc(var(--width) * -0.5);
 // z-index: var(--zindex-insert-after);
@@ -91,28 +92,7 @@ const DropTargetBackground = styled(DynamicBackground)<{
     grid-row: 1/-1;
     grid-column: 1/-1;
   }
-  & > [data-name='WandAction'] {
-    --size-spell: 33px;
-    inset: -15% auto auto auto;
-    place-self: end center;
-    background-color: #000c;
-    background-origin: content-box, content-box, padding-box;
-    background-repeat: no-repeat, no-repeat, no-repeat;
-    background-image:
-      var(--data-spell-sprite), var(--data-spelltype-sprite),
-      linear-gradient(#000, #222);
-    border-radius: 0;
-    padding: 0;
-    box-shadow:
-      0 0 0 1px #222,
-      -17px -16px 0 -14px #ffdf69,
-      16px -16px 0 -14px #ffdf69,
-      -16px 16px 0 -14px #ffdf69,
-      16px 16px 0 -14px #ffdf68,
-      0 0 0 4px #222;
-    border: 3px solid #0000;
-  }
-  & > [data-name='WandAction'] {
+  & ${WandAction} {
     --size-spell: 33px;
     inset: -15% auto auto auto;
     place-self: end center;
@@ -166,13 +146,13 @@ export const BetweenSpellsDropTarget = ({
   indexOfSpellAfter,
   className = '',
   ref,
-  $dataName = 'BetweenSpellsDropTarget',
+  dataName = 'BetweenSpellsDropTarget',
 }: {
   indexOfSpellBefore: WandIndex;
   indexOfSpellAfter: WandIndex;
   className?: string;
   ref?: MergableRef<HTMLDivElement>;
-  $dataName?: string;
+  dataName?: string;
 }) => {
   const dispatch = useAppDispatch();
 
@@ -184,8 +164,8 @@ export const BetweenSpellsDropTarget = ({
   const cursorForSpellAfter = useCaret(indexOfSpellAfter);
 
   // const editMode = useEditMode();
-  const insertIndex: MainWandIndex = isMainWandIndex(indexOfSpellBefore)
-    ? indexOfSpellBefore
+  const insertIndex: MainWandIndex = isMainWandIndex(indexOfSpellAfter)
+    ? indexOfSpellAfter
     : 0;
 
   const handleDropSpell = useCallback(
@@ -335,7 +315,7 @@ export const BetweenSpellsDropTarget = ({
     <DropTargetBackground
       className={className}
       style={merged}
-      data-name={$dataName}
+      data-name={dataName}
       onClick={() =>
         dispatch(
           moveCursorTo({

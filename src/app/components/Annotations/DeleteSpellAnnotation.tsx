@@ -3,7 +3,7 @@ import { StyledWandActionBorder } from '../Spells/WandAction';
 import { BaseAnnotation } from './BaseAnnotation';
 import { noop } from '../../util';
 
-const DeleteDiv = styled(BaseAnnotation)`
+const DeleteButton = styled(BaseAnnotation)`
   --transition-in: var(--transition-hover-in);
   --transition-out: var(--transition-hover-out);
   --transition-props: transform;
@@ -14,7 +14,7 @@ const DeleteDiv = styled(BaseAnnotation)`
   left: unset;
   color: black;
 
-  border-radius: 5px;
+  border-radius: 10%;
   border: 1px solid #cb3c3c;
   background-color: black;
 
@@ -27,11 +27,11 @@ const DeleteDiv = styled(BaseAnnotation)`
 
   z-index: var(--zindex-note-delete);
   padding: 2px;
-  width: 13px;
-  height: 13px;
+  width: 1.7em;
+  height: auto;
+  aspect-ratio: 1;
   background-image: url('/data/warnings/neutralized.png');
   background-repeat: no-repeat;
-  background-size: 11px 11px;
   background-size: 13px 13px;
   background-position: center center;
 
@@ -50,6 +50,20 @@ const DeleteDiv = styled(BaseAnnotation)`
     transition: var(--transition-out);
     transition-property: var(--transition-props);
   }
+
+  &::after {
+    content: '';
+    display: flex;
+    position: absolute;
+    inset: -50% -50% auto auto;
+    width: 150%;
+    height: 200%;
+    pointer-events: all;
+  }
+  &:hover::after {
+    width: 180%;
+    height: 200%;
+  }
 `;
 
 export const DeleteSpellAnnotation = ({
@@ -58,8 +72,9 @@ export const DeleteSpellAnnotation = ({
   deleteSpell?: () => void;
 }) => {
   return (
-    <button onClick={deleteSpell}>
-      <DeleteDiv data-name="DeleteSpellAnnotation"></DeleteDiv>
-    </button>
+    <DeleteButton
+      data-name="DeleteSpellAnnotation"
+      onClick={deleteSpell}
+    ></DeleteButton>
   );
 };
