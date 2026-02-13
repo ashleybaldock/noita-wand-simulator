@@ -48,7 +48,7 @@ const Value = styled.span`
 
 export const SimulationStatus = styled(
   ({ className }: { className?: string }) => {
-    const [simulationRunning] = useSimulationStatus();
+    const { simulationRunning } = useSimulationStatus();
     const { pauseCalculations } = useConfig();
     const {
       endConditions: lastRunEndConditions,
@@ -59,12 +59,12 @@ export const SimulationStatus = styled(
       <>
         <StyledStatus data-name={'SimulationStatus'} className={className}>
           <Value>
-            <Label>Simulation State</Label>
+            <Label>Simulation:</Label>
             {simulationRunning
-              ? 'Running'
+              ? 'Running...'
               : pauseCalculations
                 ? 'Paused'
-                : 'Ready'}
+                : 'Idle'}
           </Value>
           <Value>
             <Label>Time Elapsed</Label>

@@ -1,5 +1,9 @@
 import { clickWand } from '../calc/eval/clickWand';
-import { isNotNullOrUndefined, compareSequencesIter } from '../util';
+import {
+  isNotNullOrUndefined,
+  compareSequencesIter,
+  startTimer,
+} from '../util';
 import type { SpellId } from './Wand/spellId';
 import { wandsMatchForSimulation } from './Wand/wand';
 import type { AppStartListening } from './listenerMiddleware';
@@ -217,6 +221,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
 
       const simulationRequestId = nextSimulationRequestId();
 
+      const getElapsedTime = startTimer();
       console.group(`Simulation Request #${simulationRequestId}`);
       listenerApi.dispatch(
         newSimulation({
@@ -227,6 +232,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
             zetaId: zetaSpellId,
             wand,
           },
+          startTime: getElapsedTime(),
         }),
       );
 
@@ -266,6 +272,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
         listenerApi.dispatch(
           newResult({
             result: value,
+            endTime: performance.now(),
           }),
         );
       } else {

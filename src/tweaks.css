@@ -561,3 +561,150 @@ button[data-tooltip-content='clear'] {
     var(--color-tab-border-active);
   margin-bottom: calc(var(--ou) * -1);
 }
+
+[data-name='SimulationStatus'],
+[data-name='SpellSequence'] {
+  inset: 0 0 0 0;
+  position: sticky;
+  inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
+  position: sticky;
+}
+
+:not(#u#n#i)
+  [data-name='ExportOptions']
+  > :is([data-name='RevealExports'], [data-name='DefaultExport']) {
+  background-color: var(--color-base-background);
+}
+
+:not(#u#n#i) [data-name='StickyGroup']:has(> [data-name='SimulationStatus']) {
+  inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
+}
+
+:not(#u#n#i) [data-name='ActiveTabContent'] {
+  height: round(
+    down,
+    clamp(var(--spellandgap) * 2, 25vh, var(--spellandgap) * 6),
+    var(--spellandgap)
+  );
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(max(1px, round(down, var(--bsize-spell), 1px)), 1fr)
+  );
+  display:;
+  grid-template-rows: 1fr;
+  grid-auto-rows: 1fr;
+}
+
+:not(#u#n#i) [data-name='SpellCategorySpellsDiv']:hover {
+  outline: 1px solid pink;
+  outline-offset: -3px;
+}
+
+:not(#u#n#i) [data-name='SpellSelector'] {
+  top: unset;
+  position: relative;
+  position:;
+}
+
+:not(#u#n#i) [data-name='SpellCategorySpellsDiv'] {
+  justify-items: center;
+}
+
+:not(#u#n#i) [data-name='StickyGroup'] {
+  /* position: sticky; */
+  /* padding-bottom: 10px; */
+}
+
+:not(#u#n#i) [data-name='MainHeader'] + [data-name='StickyGroup'] {
+  margin-bottom: var(--top-banner-height);
+}
+
+:not(#u#n#i) [data-name='MainHeader'] {
+  position: fixed;
+}
+
+:not(#u#n#i) :root,
+:not(#u#n#i) [data-name='ActiveTabContent'] {
+  overscroll-behavior: unset;
+}
+
+.glUMOq {
+  /* box-shadow: 0 1px 4px 1px #000,0 -5px 0 0 #000; */
+}
+
+[data-name='ActiveTabContent'] {
+  container-type: unset;
+  overscroll-behavior: contain;
+}
+[data-name='ActiveTabContent'] > div:nth-child(1) {
+  overscroll-behavior: contain;
+}
+
+[data-name='SpellCategorySpellsDiv'] {
+  box-sizing: content-box;
+  overflow-y: hidden;
+  overscroll-behavior: auto;
+  overflow: visible;
+}
+
+[data-name='StickyHeading'] {
+  margin: 0;
+}
+
+[data-name='SimulationStatus'] {
+  inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
+  position: sticky;
+}
+[data-name='SpellSequence'] {
+  position: sticky;
+  inset: auto auto var(--footer-offset, 0) 0;
+  z-index: var(--zindex-status);
+}
+:not(#u#n#i) [data-name='ExportOptions'] {
+  background-color: var(--color-base-background);
+}
+:not(#u#n#i)
+  [data-name='ExportOptions']
+  > :is([data-name='RevealExports'], [data-name='DefaultExport']) {
+  background-color: var(--color-base-background);
+}
+:not(#u#n#i) [data-name='StickyGroup']:has(> [data-name='SimulationStatus']) {
+  inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
+}
+:not(#u#n#i) [data-name='ActiveTabContent'] {
+  height: round(
+    down,
+    clamp(var(--spellandgap) * 2, 25vh, var(--spellandgap) * 6),
+    var(--spellandgap)
+  );
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(max(1px, round(down, var(--bsize-spell), 1px)), 1fr)
+  );
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-auto-rows: 1fr;
+}
+.sc-sbQfA.dzBDBd:hover {
+  outline: 1px solid pink;
+  outline-offset: -3px;
+}
+:not(#u#n#i) [data-name='SpellSelector'] {
+  top: unset;
+  position: static;
+}
+[data-name='SpellCategorySpellsDiv'] {
+  justify-items: center;
+  /*! grid-template-columns: subgrid; */
+  /*! grid-template-rows: subgrid; */
+  /*! grid-row: auto/span 2; */
+  grid-column: span 15;
+  /*! display: contents; */
+}
+[data-name='SimulationStatus'] {
+  position: fixed;
+  inset: auto auto var(--footer-offset, 0) 0;
+  z-index: var(--zindex-status);
+  background-color: var(--color-base-background);
+  margin: 0;
+}

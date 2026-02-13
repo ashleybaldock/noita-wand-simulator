@@ -11,7 +11,9 @@ import { generateSearchFromWandState } from './Wand/toSearch';
 import type { KeyOfType } from '../util';
 import {
   isBoolean,
+  isNotNull,
   isNotUndefined,
+  isNull,
   isNumber,
   sequencesMatch,
   sequencesMatchIgnoringHoles,
@@ -80,7 +82,32 @@ export const useUIToggle = <TN extends UIToggle>(
   ];
 };
 
-export const useSimulationStatus = () => useUIToggle('simulationRunning');
+const selectResult = (state: RootState) => state.result;
+const selectSimulationRunning = createSelector(
+  selectResult,
+  ({ lastSimulationRequested, lastSimulationCompleted }) =>
+    isNotNull(lastSimulationRequested) &&
+    (isNull(lastSimulationCompleted) ||
+      lastSimulationCompleted < lastSimulationRequested),
+);
+const selectLastTimeElapsed = createSelector(
+  selectResult,
+  ({ lastStartTime, lastEndTime }) =>
+    isNull(lastEndTime)
+      ? isNull(lastStartTime)
+        ? null
+        : performance.now() - lastStartTime
+      : isNull(lastStartTime)
+        ? lastEndTime
+        : lastEndTime <= lastStartTime
+          ? performance.now() - lastStartTime
+          : lastEndTime - lastStartTime,
+);
+
+export const useSimulationStatus = () => ({
+  simulationRunning: useAppSelector(selectSimulationRunning),
+  elapsedTime: useAppSelector(selectLastTimeElapsed),
+});
 
 ///****************************************/
 //**            configSlice             **/

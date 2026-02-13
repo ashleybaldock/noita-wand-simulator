@@ -20,6 +20,13 @@ const StickyGroup = styled.div.attrs<DataAttributes>({
   flex-direction: column;
 `;
 
+const StickyHeading = styled.h2.attrs<DataAttributes>({
+  'data-name': 'StickyHeading',
+})`
+  display: flex;
+  flex-direction: column;
+`;
+
 const Overlays = styled.div.attrs<DataAttributes>({
   'data-name': 'Overlays',
 })`
@@ -49,6 +56,7 @@ export const WandSimulator = () => {
       <DndProvider options={HTML5toTouchPreview}>
         <FlexColumn>
           <MainHeader></MainHeader>
+          <StickyHeading></StickyHeading>
           <StickyGroup>
             <SpellSelector />
             <SpellShortcuts>
@@ -56,9 +64,7 @@ export const WandSimulator = () => {
             </SpellShortcuts>
             <WandBuilder />
           </StickyGroup>
-          <StickyGroup>
-            <SimulationStatus />
-          </StickyGroup>
+          <SimulationStatus />
           <StickyGroup>
             <CastConfigEditor />
           </StickyGroup>

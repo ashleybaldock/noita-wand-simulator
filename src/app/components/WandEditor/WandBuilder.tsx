@@ -113,15 +113,15 @@ export const WandBuilder = () => {
           <RedoButton />
           <ResetButton />
         </WandBuilderTopButtons>
+        <WandActionEditorWrapper ref={spellsRef} className={'saveImageRoot'}>
+          <WandActionEditor />
+        </WandActionEditorWrapper>
         <ContentDiv ref={wandRef} className={'saveImageRoot'}>
           <ColumnsContainer>
             <StyledWandStatsEditor />
             <StyledAlwaysCastEditor />
             <StyledZetaEditor />
           </ColumnsContainer>
-          <WandActionEditorWrapper ref={spellsRef} className={'saveImageRoot'}>
-            <WandActionEditor />
-          </WandActionEditorWrapper>
         </ContentDiv>
       </WandBorder>
     </MainDiv>

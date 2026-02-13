@@ -15,6 +15,8 @@ export type ResultState = {
   stats: SimulationStats;
   lastSimulationRequested: SimulationRequestId | null;
   lastSimulationCompleted: SimulationRequestId | null;
+  lastStartTime: DOMHighResTimeStamp | null;
+  lastEndTime: DOMHighResTimeStamp | null;
   last: SerializedSimulationResult;
   lastWand: Wand;
   lastSpellIds: SpellId[];
@@ -26,6 +28,8 @@ const initialState: ResultState = {
   stats: getEmptySimulationStats(),
   lastSimulationRequested: null,
   lastSimulationCompleted: null,
+  lastStartTime: null,
+  lastEndTime: null,
   last: {
     initialState: defaultSimulationConfig,
     simulationRequestId: 0,
@@ -59,6 +63,7 @@ export const resultSlice = createSlice({
         payload: {
           simulationRequestId,
           wandState: { spellIds, alwaysIds, zetaId, wand },
+          startTime,
         },
       }: PayloadAction<{
         simulationRequestId: SimulationRequestId;
@@ -68,6 +73,7 @@ export const resultSlice = createSlice({
           zetaId?: SpellId;
           wand: Wand;
         };
+        startTime: DOMHighResTimeStamp;
       }>,
     ) => {
       console.debug(
@@ -76,6 +82,7 @@ export const resultSlice = createSlice({
       );
 
       state.lastSimulationRequested = simulationRequestId;
+      state.lastStartTime = startTime;
 
       state.lastSpellIds = spellIds;
       state.lastAlwaysIds = alwaysIds;
@@ -85,9 +92,10 @@ export const resultSlice = createSlice({
     newResult: (
       state,
       {
-        payload: { result },
+        payload: { result, endTime },
       }: PayloadAction<{
         result: SerializedSimulationResult;
+        endTime: DOMHighResTimeStamp;
       }>,
     ) => {
       // console.log('serialized result:', result);
@@ -104,6 +112,7 @@ export const resultSlice = createSlice({
       }
 
       state.lastSimulationCompleted = result.simulationRequestId;
+      state.lastEndTime = endTime;
       state.last = result;
     },
   },

@@ -64,7 +64,7 @@ const totalDelayForSalvo = ({ casts, reloadTime = 1 }: WandSalvo) => {
 
 export const SimulationSummary = styled(
   ({ className }: { className?: string }) => {
-    const [simulationRunning] = useSimulationStatus();
+    const { simulationRunning } = useSimulationStatus();
     const { salvos, reloadTime = 0 } = useLatestResult();
 
     const salvoDelayTotals = salvos.map(totalDelayForSalvo);
