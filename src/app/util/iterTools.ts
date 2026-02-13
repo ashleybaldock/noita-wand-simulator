@@ -517,12 +517,37 @@ export function* transpose<T extends IterableIterator<unknown>[]>(
   ...iterables: T
 ): IterableIterator<{ [K in keyof T]: T[K] }> {
   while (true) {
-    const results = iterables.map((i) => i.next());
+    const result = [];
+    let alldone = true;
 
-    if (results.some(({ done }) => done)) {
-      break;
+    for (const i of iterables) {
+      const { done = false, value = undefined } = i.next();
+      alldone = alldone && done;
+      result.push(value);
     }
-    yield results.map(({ value }) => value) as T;
+    if (alldone) return result;
+    yield result as T;
+  }
+}
+/**
+ * Group sets of values from N inputs
+ *  to one output of tuples of length N
+ *
+ * [A1, A2, … An]  ⎫     [[A1, B1, … X1],
+ * [B1, B2, … Bn]  ⎬  ▬▶︎   [A2, B2, … X2],
+ * [X1, X2, … Xn]  ⎭        …[An, Bn, … Xn]]
+ */
+export function* zip<T extends unknown[]>(
+  ...iterables: { [I in keyof T]: Iterable<T[I]> }
+): Iterable<T> {
+  const iterators = iterables.map((i) => i[Symbol.iterator]());
+  while (true) {
+    let alldone = true;
+    const result = iterators.map((i) =>
+      (({ done, value = undefined }) => value)(i.next()),
+    );
+    if (alldone) return result;
+    yield result as T;
   }
 }
 
