@@ -1,21 +1,26 @@
 import styled from 'styled-components';
-import type { CSSProperties, PropsWithChildren } from 'react';
+import type { CSSProperties } from 'react';
+import { useSpellSequence } from '../../redux';
+import { WandAction } from '../Spells/WandAction';
 
 const StyledDiv = styled.div`
   display: flex;
 `;
 
 export const SpellSequence = ({
-  children,
   style,
   className,
 }: {
   style?: CSSProperties;
   className?: string;
-} & PropsWithChildren) => {
+}) => {
+  const spells = useSpellSequence();
+
   return (
     <StyledDiv style={style} className={className} data-name={'SpellSequence'}>
-      {children}
+      {spells.map(({ id, type }) => (
+        <WandAction spellId={id} spellType={type} />
+      ))}
     </StyledDiv>
   );
 };

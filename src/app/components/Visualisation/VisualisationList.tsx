@@ -63,7 +63,6 @@ export const VisualisationList = () => {
 
   return (
     <ParentDiv>
-      <SimulationStatus />
       <CastList />
       {showActionTree && (
         <>

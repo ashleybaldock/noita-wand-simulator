@@ -11,6 +11,7 @@ import { Modals } from './Modals/Modals';
 import { DragPreview } from './DragPreview';
 import { HTML5toTouchPreview } from './DragPipeline';
 import { SpellHotbar } from './SpellHotbar';
+import { SimulationStatus } from './SimulationStatus';
 
 const StickyGroup = styled.div.attrs<DataAttributes>({
   'data-name': 'StickyGroup',
@@ -54,6 +55,9 @@ export const WandSimulator = () => {
               <SpellHotbar></SpellHotbar>
             </SpellShortcuts>
             <WandBuilder />
+          </StickyGroup>
+          <StickyGroup>
+            <SimulationStatus />
           </StickyGroup>
           <StickyGroup>
             <CastConfigEditor />

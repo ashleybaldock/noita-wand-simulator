@@ -13,6 +13,7 @@ import {
   moveSpell,
   useAppDispatch,
   useCaret,
+  useEditMode,
   useSelection,
 } from '../../../redux';
 import { useCallback, useMemo } from 'react';
@@ -163,7 +164,7 @@ export const BetweenSpellsDropTarget = ({
   const selectionForSpellAfter = useSelection(indexOfSpellBefore, 'before');
   const cursorForSpellAfter = useCaret(indexOfSpellAfter);
 
-  // const editMode = useEditMode();
+  const editMode = useEditMode();
   const insertIndex: MainWandIndex = isMainWandIndex(indexOfSpellAfter)
     ? indexOfSpellAfter
     : 0;

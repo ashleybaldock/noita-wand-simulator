@@ -33,7 +33,7 @@ import type { UIState, UIToggle } from './uiSlice';
 import { flipUiToggle, setUiToggle } from './uiSlice';
 import type { CaretStyle } from '../components/Spells/WandAction/Backgrounds/Caret';
 import { defaultCaret } from '../components/Spells/WandAction/Backgrounds/Caret';
-import type { SpellId } from './Wand/spellId';
+import { isKnownSpell, type SpellId } from './Wand/spellId';
 import type { ChangeEvent } from 'react';
 import { useMemo } from 'react';
 import type { MainWandIndex, WandIndex } from './WandIndex';
@@ -51,6 +51,7 @@ import {
   isUsesRequirementHp,
   isUsesRequirementProjectile,
 } from '../calc/actionId';
+import { getSpellByActionId } from '../calc/spells';
 
 // Typed versions of `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
@@ -178,27 +179,31 @@ const selectWand = createSelector(
 export const useWand = () => useSelector(selectWand);
 
 /**
- * Full Spell sequence (Including empty slots)
- */
-const selectSpellSequence = createSelector(
-  selectWandState,
-  (wandState) => wandState.spellIds,
-);
-
-/**
  * Spell sequence as on the wand (Includes empty slots)
  *
  * Considered to have changed if any spell is moved,
  * even if the sequence is the same
  */
+const selectSpellLayout = createSelector(
+  selectWandState,
+  (wandState) => wandState.spellIds,
+);
 export const useSpellLayout = () =>
-  useSelector(selectSpellSequence, sequencesMatch);
+  useSelector(selectSpellLayout, sequencesMatch);
 
 /**
  * Spell sequence as executed (Ignores empty slots)
  *
  * Considered to have changed only if order changes
  */
+const selectSpellSequenceIds = createSelector(selectWandState, (wandState) =>
+  wandState.spellIds.filter(isKnownSpell),
+);
+const selectSpellSequence = createSelector(selectSpellSequenceIds, (spellIds) =>
+  spellIds.map((spellId) => getSpellByActionId(spellId)),
+);
+export const useSpellSequenceIds = () =>
+  useSelector(selectSpellSequenceIds, sequencesMatchIgnoringHoles);
 export const useSpellSequence = () =>
   useSelector(selectSpellSequence, sequencesMatchIgnoringHoles);
 
@@ -215,7 +220,7 @@ const selectWikiExportWand = createSelector(
 export const useWikiExportWand = () => useSelector(selectWikiExportWand);
 
 const selectWikiExportSeq = createSelector(
-  selectSpellSequence,
+  selectSpellLayout,
   generateWikiSpellSequence,
 );
 export const useWikiSequenceExport = () => useSelector(selectWikiExportSeq);
@@ -318,7 +323,7 @@ const selectCursorIndex = (state: RootState) => state.editor.cursorIndex;
 
 const selectCarets = createSelector(
   selectCursorIndex,
-  selectSpellSequence,
+  selectSpellLayout,
   (cursorIndex, spellIds): CaretStyle[] =>
     spellIds.map(
       (_, wandIndex: MainWandIndex): CaretStyle =>
@@ -344,7 +349,7 @@ const selectEditorState = (state: RootState) => state.editor;
 
 const selectSelections = createSelector(
   selectEditorState,
-  selectSpellSequence,
+  selectSpellLayout,
   ({ selectFrom, selectTo }, spellIds): WandSelectionSet[] =>
     spellIds.map((_, wandIndex) =>
       getSelectionForWandIndex(wandIndex, selectFrom, selectTo),

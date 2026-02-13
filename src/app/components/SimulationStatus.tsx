@@ -3,6 +3,7 @@ import { useConfig, useLatestResult, useSimulationStatus } from '../redux';
 import { TerminationWarning } from './Visualisation/TerminationWarning';
 import { FNSP } from '../util';
 import { Duration } from './Visualisation/Duration';
+import { SpellSequence } from './SpellSequence/SpellSequence';
 
 const StyledStatus = styled.div`
   margin: 0.4em 0 0.1em 0;
@@ -55,30 +56,33 @@ export const SimulationStatus = styled(
     } = useLatestResult();
 
     return (
-      <StyledStatus data-name={'SimulationStatus'} className={className}>
-        <Value>
-          <Label>Simulation State</Label>
-          {simulationRunning
-            ? 'Running'
-            : pauseCalculations
-            ? 'Paused'
-            : 'Ready'}
-        </Value>
-        <Value>
-          <Label>Time Elapsed</Label>
-          <>
-            {lastRunElapsedTime < 1 ? `<${FNSP}` : ''}
-            <Duration ms={Math.max(lastRunElapsedTime, 1)} />
-          </>
-        </Value>
-        <Value>
-          <Label>Result</Label>
-          <TerminationWarning
-            // TODO - use all
-            reason={lastRunEndConditions?.[0] ?? 'unknown'}
-          />
-        </Value>
-      </StyledStatus>
+      <>
+        <StyledStatus data-name={'SimulationStatus'} className={className}>
+          <Value>
+            <Label>Simulation State</Label>
+            {simulationRunning
+              ? 'Running'
+              : pauseCalculations
+                ? 'Paused'
+                : 'Ready'}
+          </Value>
+          <Value>
+            <Label>Time Elapsed</Label>
+            <>
+              {lastRunElapsedTime < 1 ? `<${FNSP}` : ''}
+              <Duration ms={Math.max(lastRunElapsedTime, 1)} />
+            </>
+          </Value>
+          <Value>
+            <Label>Result</Label>
+            <TerminationWarning
+              // TODO - use all
+              reason={lastRunEndConditions?.[0] ?? 'unknown'}
+            />
+          </Value>
+        </StyledStatus>
+        <SpellSequence></SpellSequence>
+      </>
     );
   },
 )``;
