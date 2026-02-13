@@ -5,6 +5,12 @@ import { WandAction } from '../Spells/WandAction';
 
 const StyledDiv = styled.div`
   display: flex;
+  padding: 4px 0.5ch;
+  column-gap: 2px;
+`;
+
+const SpellSequenceAction = styled(WandAction)`
+  --size-spell: 24px;
 `;
 
 export const SpellSequence = ({
@@ -19,7 +25,7 @@ export const SpellSequence = ({
   return (
     <StyledDiv style={style} className={className} data-name={'SpellSequence'}>
       {spells.map(({ id, type }) => (
-        <WandAction spellId={id} spellType={type} />
+        <SpellSequenceAction spellId={id} spellType={type} />
       ))}
     </StyledDiv>
   );
