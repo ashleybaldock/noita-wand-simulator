@@ -1,4 +1,4 @@
-import { useConfigSetting } from '../../../redux';
+import { useConfigSetting, useIsResetUsed } from '../../../redux';
 import { InputImageLabel } from '../../Input/ImageLabel/InputImageLabel';
 import {
   InputWrapper,
@@ -19,40 +19,50 @@ export const EndingConfigSection = () => {
   const [endSimulationOnRepeatCount, , handleRepeatCountConfig] =
     useConfigSetting('endSimulationOnRepeatCount');
 
-  return (
+  const usesReset = useIsResetUsed();
+
+  return usesReset ? (
     <SubSectionDiv data-section="ending">
       <SubSectionTitle>
         <span>End Simulation after:</span>
       </SubSectionTitle>
       <SubSectionContent>
-        <WrappedYesNoToggle
-          checked={endSimulationOnCastCount > 0}
-          onChange={handleEndOnShotCount}
-        >
-          <span>A single shot</span>
-        </WrappedYesNoToggle>
-        <WrappedYesNoToggle
-          checked={endSimulationOnReloadCount > 0}
-          onChange={handleReloadCountConfig}
-        >
-          <span>Reload</span>
-        </WrappedYesNoToggle>
-        <WrappedYesNoToggle
-          checked={endSimulationOnRefreshCount > 0}
-          onChange={handleRefreshCountConfig}
-        >
-          <InputWrapper>
-            <InputImageLabel $size={22} icon={'icon.spell.RESET'} />
-            <span>Wand Refresh</span>
-          </InputWrapper>
-        </WrappedYesNoToggle>
-        <WrappedYesNoToggle
-          checked={endSimulationOnRepeatCount > 0}
-          onChange={handleRepeatCountConfig}
-        >
-          <span>Repeat</span>
-        </WrappedYesNoToggle>
+        {false && (
+          <WrappedYesNoToggle
+            checked={endSimulationOnCastCount > 0}
+            onChange={handleEndOnShotCount}
+          >
+            <span>A single shot</span>
+          </WrappedYesNoToggle>
+        )}
+        {false && (
+          <WrappedYesNoToggle
+            checked={endSimulationOnReloadCount > 0}
+            onChange={handleReloadCountConfig}
+          >
+            <span>Reload</span>
+          </WrappedYesNoToggle>
+        )}
+        {usesReset && (
+          <WrappedYesNoToggle
+            checked={endSimulationOnRefreshCount > 0}
+            onChange={handleRefreshCountConfig}
+          >
+            <InputWrapper>
+              <InputImageLabel $size={22} icon={'icon.spell.RESET'} />
+              <span>Wand Refresh</span>
+            </InputWrapper>
+          </WrappedYesNoToggle>
+        )}
+        {false && (
+          <WrappedYesNoToggle
+            checked={endSimulationOnRepeatCount > 0}
+            onChange={handleRepeatCountConfig}
+          >
+            <span>Repeat</span>
+          </WrappedYesNoToggle>
+        )}
       </SubSectionContent>
     </SubSectionDiv>
-  );
+  ) : null;
 };

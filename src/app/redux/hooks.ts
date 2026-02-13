@@ -45,11 +45,12 @@ import type { WandCastId } from '../calc/eval/WandCast';
 import {
   isUsesGoldActionId,
   isUsesHealthActionId,
-  isUsesRandomActionId,
-  isUsesRequirementEnemy,
-  isUsesRequirementHalf,
-  isUsesRequirementHp,
-  isUsesRequirementProjectile,
+  isRandomActionId,
+  isRequirementEnemyActionId,
+  isRequirementHalfActionId,
+  isRequirementHpActionId,
+  isRequirementProjectileActionId,
+  isResetActionId,
 } from '../calc/actionId';
 import { getSpellByActionId } from '../calc/spells';
 
@@ -277,22 +278,29 @@ const selectIsGoldUsed = createSelector(selectWandState, (wandState) =>
 export const useIsGoldUsed = () => useSelector(selectIsGoldUsed) ?? false;
 
 const selectIsRandomUsed = createSelector(selectWandState, (wandState) =>
-  wandState.spellIds.some((spellId) => isUsesRandomActionId(spellId)),
+  wandState.spellIds.some((spellId) => isRandomActionId(spellId)),
 );
 export const useIsRandomUsed = () => useSelector(selectIsRandomUsed) ?? false;
+
+const selectIsResetUsed = createSelector(selectWandState, (wandState) =>
+  wandState.spellIds.some((spellId) => isResetActionId(spellId)),
+);
+export const useIsResetUsed = () => useSelector(selectIsResetUsed) ?? false;
 
 const selectIsRequirementUsed = createSelector(
   selectWandState,
   (wandState) => ({
     halfUsed: wandState.spellIds.some((spellId) =>
-      isUsesRequirementHalf(spellId),
+      isRequirementHalfActionId(spellId),
     ),
-    hpUsed: wandState.spellIds.some((spellId) => isUsesRequirementHp(spellId)),
+    hpUsed: wandState.spellIds.some((spellId) =>
+      isRequirementHpActionId(spellId),
+    ),
     enemyUsed: wandState.spellIds.some((spellId) =>
-      isUsesRequirementEnemy(spellId),
+      isRequirementEnemyActionId(spellId),
     ),
     projectileUsed: wandState.spellIds.some((spellId) =>
-      isUsesRequirementProjectile(spellId),
+      isRequirementProjectileActionId(spellId),
     ),
   }),
 );

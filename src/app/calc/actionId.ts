@@ -172,7 +172,7 @@ export const isUsesHealthActionId = (
 ): actionId is UsesHealthActionId =>
   isValidActionId(actionId) && usesHealthActionIdSet.has(actionId);
 
-export const usesRandomActionIds = [
+export const RandomActionIds = [
   'RANDOM_EXPLOSION',
   'RANDOM_PROJECTILE',
   'RANDOM_MODIFIER',
@@ -183,31 +183,35 @@ export const usesRandomActionIds = [
   'DRAW_3_RANDOM',
 ] as const;
 export type UsesRandomActionId = Extract<
-  (typeof usesRandomActionIds)[number],
+  (typeof RandomActionIds)[number],
   ActionId
 >;
-const usesRandomActionIdSet: Set<string> = new Set(
-  usesRandomActionIds.filter(isValidActionId),
+const RandomActionIdSet: Set<string> = new Set(
+  RandomActionIds.filter(isValidActionId),
 );
-export const isUsesRandomActionId = (
+export const isRandomActionId = (
   actionId: SpellId | null,
 ): actionId is UsesRandomActionId =>
-  isValidActionId(actionId) && usesRandomActionIdSet.has(actionId);
+  isValidActionId(actionId) && RandomActionIdSet.has(actionId);
 
-export const isUsesRequirementHalf = (
+export const isResetActionId = (
+  actionId: SpellId | null,
+): actionId is 'RESET' => isValidActionId(actionId) && actionId === 'RESET';
+
+export const isRequirementHalfActionId = (
   actionId: SpellId | null,
 ): actionId is 'IF_HALF' => isValidActionId(actionId) && actionId === 'IF_HALF';
 
-export const isUsesRequirementEnemy = (
+export const isRequirementEnemyActionId = (
   actionId: SpellId | null,
 ): actionId is 'IF_ENEMY' =>
   isValidActionId(actionId) && actionId === 'IF_ENEMY';
 
-export const isUsesRequirementHp = (
+export const isRequirementHpActionId = (
   actionId: SpellId | null,
 ): actionId is 'IF_HP' => isValidActionId(actionId) && actionId === 'IF_HP';
 
-export const isUsesRequirementProjectile = (
+export const isRequirementProjectileActionId = (
   actionId: SpellId | null,
 ): actionId is 'IF_PROJECTILE' =>
   isValidActionId(actionId) && actionId === 'IF_PROJECTILE';

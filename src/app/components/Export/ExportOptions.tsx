@@ -10,7 +10,7 @@ const Container = styled.div`
   padding: 0.2em 0.2em 0.2em 0.4em;
   border-radius: 1em / 8em;
   border: 1px solid #0000;
-  background-color: #000f;
+  background-color: #0000;
 
   @media screen and (min-width: 600px) {
     pointer-events: none;
@@ -22,7 +22,6 @@ const Container = styled.div`
     justify-content: end;
     align-items: end;
 
-    background-color: #0000;
     top: calc(100% - 1.4em);
     transition-property: visibility, background, padding, top, border;
     transition-delay: 500ms;
@@ -31,7 +30,7 @@ const Container = styled.div`
     &:hover {
       pointer-events: auto;
 
-      background-color: #000d;
+      background-color: var(--color-base-background);
 
       padding: 1em 0.2em 1em 0.6em;
       top: calc(100% - 2.2em);
@@ -76,6 +75,7 @@ const RevealExports = styled.div<{ $expanded: boolean }>`
   flex-direction: row;
   flex-wrap: wrap;
 
+  background-color: var(--color-base-background);
   visibility: hidden;
   column-gap: 0.3em;
   row-gap: 0.5em;
@@ -104,6 +104,7 @@ const DefaultExport = styled.div`
   flex-wrap: wrap;
   align-items: center;
   pointer-events: auto;
+  background-color: var(--color-base-background);
 
   &::before {
     content: 'Export as...';
