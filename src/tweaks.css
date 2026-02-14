@@ -202,11 +202,11 @@ button[data-tooltip-content='clear'] {
   --bwr: 0;
   --bwb: 0;
   --bwl: 0;
-  border-radius: max(0px, var(--brtl) + var(--bwl))
-    max(0px, var(--brtr) + var(--bwt)) max(0px, var(--brbr) + var(--bwr))
-    max(0px, var(--brbl) + var(--bwb)) / max(0px, var(--brt) - var(--bwl))
-    max(0px, var(--brr) - var(--bwt)) max(0px, var(--brb) - var(--bwr))
-    max(0px, var(--brl) - var(--bwb));
+  border-radius: max(0, var(--brtl) + var(--bwl))
+    max(0, var(--brtr) + var(--bwt)) max(0, var(--brbr) + var(--bwr))
+    max(0, var(--brbl) + var(--bwb)) / max(0, var(--brt) - var(--bwl))
+    max(0, var(--brr) - var(--bwt)) max(0, var(--brb) - var(--bwr))
+    max(0, var(--brl) - var(--bwb));
 }
 
 :not(#u#n#i) [data-name='Search'] > button {
@@ -564,8 +564,6 @@ button[data-tooltip-content='clear'] {
 
 [data-name='SimulationStatus'],
 [data-name='SpellSequence'] {
-  inset: 0 0 0 0;
-  position: sticky;
   inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
   position: sticky;
 }
@@ -590,7 +588,6 @@ button[data-tooltip-content='clear'] {
     auto-fit,
     minmax(max(1px, round(down, var(--bsize-spell), 1px)), 1fr)
   );
-  display:;
   grid-template-rows: 1fr;
   grid-auto-rows: 1fr;
 }
@@ -603,16 +600,10 @@ button[data-tooltip-content='clear'] {
 :not(#u#n#i) [data-name='SpellSelector'] {
   top: unset;
   position: relative;
-  position:;
 }
 
 :not(#u#n#i) [data-name='SpellCategorySpellsDiv'] {
   justify-items: center;
-}
-
-:not(#u#n#i) [data-name='StickyGroup'] {
-  /* position: sticky; */
-  /* padding-bottom: 10px; */
 }
 
 :not(#u#n#i) [data-name='MainHeader'] + [data-name='StickyGroup'] {
