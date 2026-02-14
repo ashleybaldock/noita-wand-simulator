@@ -1,5 +1,3 @@
-:root {
-}
 @media screen and (max-width: 500px) {
   :not(#u#n#i) div[data-name='MainHeader'] > [data-name='Search'] {
     display: contents;
@@ -41,12 +39,6 @@
   grid-column: 1 / span 2;
 }
 
-button[data-tooltip-content='undo'] {
-  grid-column: undo;
-}
-button[data-tooltip-content='redo'] {
-  grid-column: redo;
-}
 button[data-tooltip-content='clear'] {
   grid-column: clear;
 }
@@ -226,17 +218,6 @@ button[data-tooltip-content='clear'] {
   position: fixed;
   inset: 0 0 auto 0;
 }
-:not(#u#n#i) [data-name='StickyGroup'] {
-  position: sticky;
-  inset: var(--top-banner-height) auto auto auto;
-  background-color: var(--color-base-background);
-  padding-bottom: 10px;
-  margin-bottom: var(--top-banner-height);
-}
-:not(#u#n#i) [data-name='StickyGroup']:not(:has(~ [data-name='StickyGroup'])) {
-  margin-bottom: var(--top-banner-height);
-}
-
 :not(#u#n#i) [data-name='SpellSelector'] {
   --bsize-spell: 40px;
   --gap-multiplier: 0.12;
@@ -290,59 +271,6 @@ button[data-tooltip-content='clear'] {
   position: fixed;
   inset: 0 0 auto 0;
 }
-:not(#u#n#i) [data-name='StickyGroup'] {
-  position: sticky;
-  inset: var(--top-banner-height) auto auto auto;
-  background-color: var(--color-base-background);
-  padding-bottom: 10px;
-  margin-bottom: var(--top-banner-height);
-}
-:not(#u#n#i) [data-name='StickyGroup']:not(:has(~ [data-name='StickyGroup'])) {
-  margin-bottom: var(--top-banner-height);
-}
-
-:not(#u#n#i) [data-name='ExportOptions'] {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
-  grid-row: 1;
-  grid-column: 1;
-  inset: auto auto auto auto;
-  height: 1em;
-  overflow: visible;
-  padding: 0.2em 0.5ch;
-  margin: 0;
-}
-:not(#u#n#i) [data-name='ExportOptions']:hover {
-  inset: auto auto auto auto;
-  padding: 0.2em 0.5ch;
-  margin: 0;
-  border: none;
-}
-:not(#u#n#i) [data-name='ExportOptions'] > [data-name='DefaultExport'] {
-  position: relative;
-  inset: auto;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: 1fr;
-  grid-column: 1 / span 2;
-  grid-row: 1;
-}
-:not(#u#n#i) [data-name='ExportOptions'] > [data-name='DefaultExport']::before {
-  position: relative;
-  inset: auto;
-}
-:not(#u#n#i) [data-name='ExportOptions'] > [data-name='RevealExports'] {
-  position: relative;
-  inset: auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-column: 1;
-  grid-row: auto;
-  grid-auto-rows: 1fr;
-}
-
 @media screen and (max-width: 600px) {
   :not(#u#n#i) [data-name='TabTitles'] {
     display: grid;
@@ -408,103 +336,6 @@ button[data-tooltip-content='clear'] {
   border-top: 0;
 }
 
-:not(#u#n#i) [data-name='Tab'] > div,
-:not(#u#n#i) [data-name='Tab:Selected'] > div {
-  grid-column: a;
-}
-:not(#u#n#i) [data-name='Tab'] > [data-name='WandAction'],
-:not(#u#n#i) [data-name='Tab:Selected'] > [data-name='WandAction'] {
-  padding: 0;
-  margin: 0;
-  border-width: 0;
-  grid-column: a;
-  transform: none;
-}
-:not(#u#n#i)
-  [data-name='Tab']:has([data-name='WandAction'])
-  > [data-name='WandAction'],
-:not(#u#n#i)
-  [data-name='Tab:Selected']:has([data-name='WandAction'])
-  > [data-name='WandAction'] {
-  grid-column: a/c;
-}
-:not(#u#n#i)
-  [data-name='Tab']:has([data-name='WandAction'] + [data-name='WandAction'])
-  > [data-name='WandAction'],
-:not(#u#n#i)
-  [data-name='Tab:Selected']:has(
-    [data-name='WandAction'] + [data-name='WandAction']
-  )
-  > [data-name='WandAction'] {
-  grid-column: a;
-}
-:not(#u#n#i)
-  [data-name='Tab']:has([data-name='WandAction'] + [data-name='WandAction'])
-  > [data-name='WandAction']
-  + [data-name='WandAction'],
-:not(#u#n#i)
-  [data-name='Tab:Selected']:has(
-    [data-name='WandAction'] + [data-name='WandAction']
-  )
-  > [data-name='WandAction']
-  + [data-name='WandAction'] {
-  grid-column: b/c;
-}
-:not(#u#n#i)
-  [data-name='Tab']:has(
-    [data-name='WandAction']
-      + [data-name='WandAction']
-      + [data-name='WandAction']
-  )
-  > [data-name='WandAction'],
-:not(#u#n#i)
-  [data-name='Tab:Selected']:has(
-    [data-name='WandAction']
-      + [data-name='WandAction']
-      + [data-name='WandAction']
-  )
-  > [data-name='WandAction'] {
-  grid-column: a;
-}
-:not(#u#n#i)
-  [data-name='Tab']:has(
-    [data-name='WandAction']
-      + [data-name='WandAction']
-      + [data-name='WandAction']
-  )
-  > [data-name='WandAction']
-  + [data-name='WandAction'],
-:not(#u#n#i)
-  [data-name='Tab:Selected']:has(
-    [data-name='WandAction']
-      + [data-name='WandAction']
-      + [data-name='WandAction']
-  )
-  > [data-name='WandAction']
-  + [data-name='WandAction'] {
-  grid-column: b;
-}
-:not(#u#n#i)
-  [data-name='Tab']:has(
-    [data-name='WandAction']
-      + [data-name='WandAction']
-      + [data-name='WandAction']
-  )
-  > [data-name='WandAction']
-  + [data-name='WandAction']
-  + [data-name='WandAction'],
-:not(#u#n#i)
-  [data-name='Tab:Selected']:has(
-    [data-name='WandAction']
-      + [data-name='WandAction']
-      + [data-name='WandAction']
-  )
-  > [data-name='WandAction']
-  + [data-name='WandAction']
-  + [data-name='WandAction'] {
-  grid-column: c;
-}
-
 :not(#u#n#i) [data-name='Tab:Selected']::after {
   position: relative;
   place-self: start end;
@@ -539,12 +370,6 @@ button[data-tooltip-content='clear'] {
 :not(#u#n#i) [data-name='SpellSelector'] {
   --border-radius: 5px;
 }
-:not(#u#n#i) [data-name='StickyGroup'] {
-  margin-bottom: 0;
-}
-:not(#u#n#i) [data-name='MainHeader'] + [data-name='StickyGroup'] {
-  margin-bottom: var(--top-banner-height);
-}
 
 :not(#u#n#i) :is(:root, body, #root, [data-name='MainHeader']) {
   width: auto;
@@ -568,14 +393,59 @@ button[data-tooltip-content='clear'] {
   position: sticky;
 }
 
+:not(#u#n#i) [data-name='ExportOptions'] {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  grid-row: 1;
+  grid-column: 1;
+  inset: auto auto auto auto;
+  height: 1em;
+  overflow: visible;
+  padding: 0.2em 0.5ch;
+  margin: 0;
+}
+:not(#u#n#i) [data-name='ExportOptions']:hover {
+  inset: auto auto auto auto;
+  padding: 0.2em 0.5ch;
+  margin: 0;
+  border: none;
+}
+:not(#u#n#i) [data-name='ExportOptions'] > [data-name='DefaultExport'] {
+  position: relative;
+  inset: auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 1fr;
+  grid-column: 1 / span 2;
+  grid-row: 1;
+}
+:not(#u#n#i) [data-name='ExportOptions'] > [data-name='DefaultExport']::before {
+  position: relative;
+  inset: auto;
+}
+:not(#u#n#i) [data-name='ExportOptions'] > [data-name='RevealExports'] {
+  position: relative;
+  inset: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column: 1;
+  grid-row: auto;
+  grid-auto-rows: 1fr;
+}
+:not(#u#n#i) [data-name='ExportOptions'] {
+  background-color: var(--color-base-background);
+}
 :not(#u#n#i)
   [data-name='ExportOptions']
   > :is([data-name='RevealExports'], [data-name='DefaultExport']) {
   background-color: var(--color-base-background);
 }
-
-:not(#u#n#i) [data-name='StickyGroup']:has(> [data-name='SimulationStatus']) {
-  inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
+:not(#u#n#i)
+  [data-name='ExportOptions']
+  > :is([data-name='RevealExports'], [data-name='DefaultExport']) {
+  background-color: var(--color-base-background);
 }
 
 :not(#u#n#i) [data-name='ActiveTabContent'] {
@@ -592,35 +462,15 @@ button[data-tooltip-content='clear'] {
   grid-auto-rows: 1fr;
 }
 
-:not(#u#n#i) [data-name='SpellCategorySpellsDiv']:hover {
-  outline: 1px solid pink;
-  outline-offset: -3px;
-}
-
-:not(#u#n#i) [data-name='SpellSelector'] {
-  top: unset;
-  position: relative;
-}
-
-:not(#u#n#i) [data-name='SpellCategorySpellsDiv'] {
-  justify-items: center;
-}
-
-:not(#u#n#i) [data-name='MainHeader'] + [data-name='StickyGroup'] {
-  margin-bottom: var(--top-banner-height);
-}
-
 :not(#u#n#i) [data-name='MainHeader'] {
   position: fixed;
 }
 
-:not(#u#n#i) :root,
-:not(#u#n#i) [data-name='ActiveTabContent'] {
+:not(#u#n#i) :root {
   overscroll-behavior: unset;
 }
-
-.glUMOq {
-  /* box-shadow: 0 1px 4px 1px #000,0 -5px 0 0 #000; */
+:not(#u#n#i) [data-name='ActiveTabContent'] {
+  overscroll-behavior: unset;
 }
 
 [data-name='ActiveTabContent'] {
@@ -629,38 +479,6 @@ button[data-tooltip-content='clear'] {
 }
 [data-name='ActiveTabContent'] > div:nth-child(1) {
   overscroll-behavior: contain;
-}
-
-[data-name='SpellCategorySpellsDiv'] {
-  box-sizing: content-box;
-  overflow-y: hidden;
-  overscroll-behavior: auto;
-  overflow: visible;
-}
-
-[data-name='StickyHeading'] {
-  margin: 0;
-}
-
-[data-name='SimulationStatus'] {
-  inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
-  position: sticky;
-}
-[data-name='SpellSequence'] {
-  position: sticky;
-  inset: auto auto var(--footer-offset, 0) 0;
-  z-index: var(--zindex-status);
-}
-:not(#u#n#i) [data-name='ExportOptions'] {
-  background-color: var(--color-base-background);
-}
-:not(#u#n#i)
-  [data-name='ExportOptions']
-  > :is([data-name='RevealExports'], [data-name='DefaultExport']) {
-  background-color: var(--color-base-background);
-}
-:not(#u#n#i) [data-name='StickyGroup']:has(> [data-name='SimulationStatus']) {
-  inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
 }
 :not(#u#n#i) [data-name='ActiveTabContent'] {
   height: round(
@@ -676,26 +494,134 @@ button[data-tooltip-content='clear'] {
   grid-template-rows: 1fr;
   grid-auto-rows: 1fr;
 }
-.sc-sbQfA.dzBDBd:hover {
-  outline: 1px solid pink;
-  outline-offset: -3px;
-}
-:not(#u#n#i) [data-name='SpellSelector'] {
-  top: unset;
-  position: static;
-}
-[data-name='SpellCategorySpellsDiv'] {
-  justify-items: center;
-  /*! grid-template-columns: subgrid; */
-  /*! grid-template-rows: subgrid; */
-  /*! grid-row: auto/span 2; */
-  grid-column: span 15;
-  /*! display: contents; */
-}
+
 [data-name='SimulationStatus'] {
   position: fixed;
   inset: auto auto var(--footer-offset, 0) 0;
   z-index: var(--zindex-status);
   background-color: var(--color-base-background);
   margin: 0;
+}
+
+[data-name='SpellSequence'] {
+  position: sticky;
+  inset: auto auto var(--footer-offset, 0) 0;
+  z-index: var(--zindex-status);
+}
+
+:not(#u#n#i) [data-name='StickyGroup'] {
+  position: sticky;
+  inset: var(--top-banner-height) auto auto auto;
+  background-color: var(--color-base-background);
+  padding-bottom: 10px;
+  margin-bottom: 0;
+}
+:not(#u#n#i) [data-name='StickyGroup']:not(:has(~ [data-name='StickyGroup'])) {
+  margin-bottom: var(--top-banner-height);
+}
+
+:not(#u#n#i) [data-name='MainHeader'] + [data-name='StickyGroup'] {
+  margin-bottom: var(--top-banner-height);
+}
+:not(#u#n#i) [data-name='StickyGroup']:has(> [data-name='SimulationStatus']) {
+  inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
+}
+
+:not(#u#n#i) [data-name='StickyHeading'] {
+  margin: 0;
+}
+
+:not(#u#n#i) [data-name='SpellSelector'] {
+  top: unset;
+  position: static;
+}
+
+:not(#u#n#i) [data-name='SpellCategorySpellsDiv'] {
+  box-sizing: content-box;
+  overflow-y: hidden;
+  overscroll-behavior: auto;
+  overflow: visible;
+  justify-items: center;
+  grid-column: span 15;
+}
+
+:not(#u#n#i) :root {
+  overscroll-behavior: unset;
+  --filter-floating-shadow: drop-shadow(0 2px 2px var(--shadow, #000000dd))
+    drop-shadow(0 -2px 2px var(--shadow, #000000dd));
+  --footer-offset: 0px;
+  --zindex-status: 900;
+}
+
+:not(#u#n#i) [data-name='ActiveTabContent'] {
+  display:;
+  container-type: unset;
+  overscroll-behavior: contain;
+  height: round(
+    down,
+    clamp(var(--spellandgap) * 2, 25vh, var(--spellandgap) * 6),
+    var(--spellandgap)
+  );
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(max(1px, round(down, var(--bsize-spell), 1px)), 1fr)
+  );
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-auto-rows: 1fr;
+}
+:not(#u#n#i) [data-name='ActiveTabContent'] > div {
+  overscroll-behavior: contain;
+}
+
+:not(#u#n#i) [data-name='SpellSelector'] {
+  top: unset;
+  position: relative;
+}
+
+:not(#u#n#i) [data-name='SpellCategorySpellsDiv'] {
+  box-sizing: content-box;
+  overflow-y: hidden;
+  overscroll-behavior: auto;
+  overflow: visible;
+  justify-items: center;
+  grid-column: span 15;
+}
+
+:not(#u#n#i) [data-name='StickyGroup'] {
+  position: relative;
+}
+
+:not(#u#n#i) [data-name='MainHeader'] {
+  position: fixed;
+}
+
+:not(#u#n#i) [data-name='StickyHeading'] {
+  margin: 0;
+}
+
+:not(#u#n#i) [data-name='ExportOptions'],
+:not(#u#n#i)
+  [data-name='ExportOptions']
+  > :is([data-name='RevealExports'], [data-name='DefaultExport']) {
+  background-color: var(--color-base-background);
+}
+
+:not(#u#n#i) [data-name='StickyGroup']:has(> [data-name='SimulationStatus']) {
+  inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
+}
+:not(#u#n#i) [data-name='SimulationStatus'] {
+  position: fixed;
+  inset: auto auto var(--footer-offset, 0) 0;
+  z-index: var(--zindex-status);
+  background-color: var(--color-base-background);
+  margin: 0;
+}
+
+[data-name='SpellSequence'] {
+  inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
+  position: sticky;
+  /*   inset: auto auto var(--footer-offset, 0) 0; */
+  z-index: var(--zindex-status);
+  padding: 0 0.5ch 0 0.5ch;
 }

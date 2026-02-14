@@ -11,7 +11,9 @@ import { YesNo } from '../Presentation';
 import { useHideTooltips } from './useHideTooltips';
 import { InlineIcon } from '../Icon/Icon';
 
-const StyledTooltipBase = styled(TooltipBase)``;
+const StyledTooltipBase = styled(TooltipBase)`
+  --tip-show-delay: 800ms;
+`;
 
 const SpellTooltipContainer = styled.div`
   display: grid;
@@ -124,7 +126,8 @@ export const SpellInfoTooltip = ({
       hidden={hidden}
       ref={tooltipRef}
       disableStyleInjection={true}
-      offset={10}
+      offset={30}
+      place={'top-start'}
       closeEvents={{
         mouseleave: true,
         blur: true,

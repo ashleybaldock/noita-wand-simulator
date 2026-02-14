@@ -1,4 +1,3 @@
-import { StyledWandActionBorder } from './WandActionBorder';
 import { OverSpellDropTarget } from './OverSpellDropTarget';
 import { END, isMainWandIndex, type WandIndex } from '../../../redux/WandIndex';
 import { BetweenSpellsDropTarget } from './BetweenSpellsDropTarget';
@@ -12,7 +11,7 @@ export const WandActionDropTargets = ({
 }>) => {
   return (
     <OverSpellDropTarget wandIndex={wandIndex}>
-      <StyledWandActionBorder>{children}</StyledWandActionBorder>
+      {children}
       {isMainWandIndex(wandIndex) && (
         <>
           <BetweenSpellsDropTarget

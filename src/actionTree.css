@@ -801,145 +801,6 @@
 
 /* Divide By targeting */
 
-[data-spell^='DIVIDE_']
-  > [data-name='AcTreeChildren']
-  > [data-name='ActionSourceGroup'][data-source='action'] {
-  flex-direction: column;
-}
-/* Above limit */
-:is([data-spell^='DIVIDE_']):is([data-iteration])
-  > :is([data-name='WandActionBorder']) {
-  outline: 2px solid red;
-}
-/* At limit */
-:is(
-    :is([data-spell='DIVIDE_10']):is([data-iteration='3']),
-    :is([data-spell='DIVIDE_4'], [data-spell='DIVIDE_3']):is(
-      [data-iteration='4']
-    ),
-    :is([data-spell='DIVIDE_2']):is([data-iteration='5']),
-
-  )
-  > [data-name='WandActionBorder'] {
-  outline: 2px solid blue;
-}
-/* Below limit */
-:is(
-    :is([data-spell='DIVIDE_10']):is(
-      [data-iteration='1'],
-      [data-iteration='2']
-    ),
-    :is([data-spell='DIVIDE_4'], [data-spell='DIVIDE_3']):is(
-      [data-iteration='1'],
-      [data-iteration='2'],
-      [data-iteration='3']
-    ),
-    :is([data-spell='DIVIDE_2']):is(
-      [data-iteration='1'],
-      [data-iteration='2'],
-      [data-iteration='3'],
-      [data-iteration='4']
-    )
-  )
-  > [data-name='WandActionBorder'] {
-  outline: none;
-}
-
-/*{{{1 Greek Spell Targeting - Mu & Omega */
-:is(
-    [data-name='AcTreeNode'][data-spell='MU'],
-    [data-name='AcTreeNode'][data-spell='OMEGA'],
-
-  )
-  > div
-  > [data-name='ActionSourceGroup'][data-source='action'] {
-  --pad: 10px;
-  padding: var(--pad) var(--pad) var(--pad) calc(var(--bsize-spell) * 2);
-  margin-top: calc(var(--pad) * -1);
-  margin-left: calc(var(--bsize-spell) * -1.5);
-  border: 2px dotted #f9d470;
-  border-radius: 1em;
-}
-
-[data-name='AcTreeNode']:is(
-    [data-spell='ADD_TRIGGER'] [data-spell='ADD_TIMER'],
-    [data-spell='ADD_DEATH_TRIGGER'] [data-spell='MU'],
-    [data-spell='OMEGA'],
-
-  )
-  > div
-  > [data-name='ActionSourceGroup'][data-source='action']
-  > [data-name='AcTreeNode']
-  > [data-name='Arrows']::before {
-  border: none;
-}
-:is(
-    [data-name='AcTreeNode'][data-spell='MU'],
-    [data-name='AcTreeNode'][data-spell='OMEGA'],
-
-  )
-  > div
-  > [data-name='ActionSourceGroup'][data-source='action']
-  > [data-name='AcTreeNode']:first-of-type
-  > [data-name='Arrows']::before {
-  border-color: red;
-}
-:is(
-    [data-name='AcTreeNode'][data-spell='MU'],
-    [data-name='AcTreeNode'][data-spell='OMEGA'],
-
-  )
-  > div
-  > [data-name='ActionSourceGroup'][data-source='action']
-  > [data-name='AcTreeNode']
-  > [data-name='Arrows']::after {
-  border-left-width: 0;
-  border-radius: 0;
-}
-
-/*{{{1 Greek spell targeting - TAU */
-li:has([data-tooltip-content='TAU']):hover {
-  position: relative;
-  box-shadow:
-    -2px 0 0 #ff0,
-    0 2px 0 #ff0,
-    0 -2px 0 #ff0;
-}
-
-li:has([data-tooltip-content='TAU']):hover + li,
-li:has([data-tooltip-content='TAU']):hover + li + li {
-  position: relative;
-  box-shadow:
-    0 2px 0 #ff0,
-    0 -2px 0 #ff0;
-  border-radius: 8px;
-}
-li:has([data-tooltip-content='TAU']):hover + li::after,
-li:has([data-tooltip-content='TAU']):hover + li + li::after {
-  content: '1st';
-  position: absolute;
-  top: -8px;
-  display: block;
-  left: 50%;
-  text-align: center;
-  font-size: 0.7em;
-  transform: translateX(-50%);
-  background-color: #000;
-  border: 1px solid #ff0;
-  border-width: 1px 2px;
-  padding: 1px 4px 0 4px;
-  border-radius: 6px;
-}
-li:has([data-tooltip-content='TAU']):hover + li + li::after {
-  content: '2nd';
-}
-
-/* TODO */
-/*{{{1 Alpha & Gamma */
-/*{{{1 Phi & Sigma */
-/*{{{1 Zeta */
-
-/*{{{1 Wand Builder Hints - Divide By */
 li:not(:has([data-tooltip-content^='DIVIDE_']))
   + li:has([data-tooltip-content^='DIVIDE_']):hover,
 li:first-of-type:has([data-tooltip-content^='DIVIDE_']):hover,
@@ -990,5 +851,42 @@ li:has([data-tooltip-content^='DIVIDE_'])
               inset -1px 0 0 #fff, inset 0 1px 0 #fff, inset 0 -1px 0 #fff, inset 1px 0 0 #fff;
   border-radius: 8px;
 } */
+
+/* Greek spell targeting - TAU */
+li:has([data-tooltip-content='TAU']):hover {
+  position: relative;
+  box-shadow:
+    -2px 0 0 #ff0,
+    0 2px 0 #ff0,
+    0 -2px 0 #ff0;
+}
+
+li:has([data-tooltip-content='TAU']):hover + li,
+li:has([data-tooltip-content='TAU']):hover + li + li {
+  position: relative;
+  box-shadow:
+    0 2px 0 #ff0,
+    0 -2px 0 #ff0;
+  border-radius: 8px;
+}
+li:has([data-tooltip-content='TAU']):hover + li::after,
+li:has([data-tooltip-content='TAU']):hover + li + li::after {
+  content: '1st';
+  position: absolute;
+  top: -8px;
+  display: block;
+  left: 50%;
+  text-align: center;
+  font-size: 0.7em;
+  transform: translateX(-50%);
+  background-color: #000;
+  border: 1px solid #ff0;
+  border-width: 1px 2px;
+  padding: 1px 4px 0 4px;
+  border-radius: 6px;
+}
+li:has([data-tooltip-content='TAU']):hover + li + li::after {
+  content: '2nd';
+}
 
 /* vim: set fdl=3 fdm=marker: */

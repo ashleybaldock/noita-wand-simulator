@@ -3,12 +3,12 @@ import type { StopReason } from '../../types';
 import { isNotNullOrUndefined } from '../../util';
 
 const ResultError = styled.span`
-  font-weight: bold;
+  font-weight: normal;
   color: red;
   padding: 2px;
 `;
 const ResultSuccess = styled.span`
-  font-weight: bold;
+  font-weight: normal;
   padding: 2px;
 `;
 

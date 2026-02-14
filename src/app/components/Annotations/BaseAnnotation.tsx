@@ -55,6 +55,13 @@ const _BaseAnnotation = ({
 };
 
 export const BaseAnnotation = styled(_BaseAnnotation)`
+  border: 0;
+  margin: 0;
+  padding: 0;
+  box-shadow: 0;
+  color: var(--base-color);
+  font-family: noita;
+
   width: calc(var(--bsize-spell) / 4);
   height: calc(var(--bsize-spell) / 4);
   line-height: calc(var(--bsize-spell) / 3 - 2px);

@@ -59,9 +59,9 @@ export const SimulationStatus = styled(
       <>
         <StyledStatus data-name={'SimulationStatus'} className={className}>
           <Value>
-            <Label>Simulation:</Label>
+            <Label>Simulation</Label>
             {simulationRunning
-              ? 'Running...'
+              ? 'Running…'
               : pauseCalculations
                 ? 'Paused'
                 : 'Idle'}

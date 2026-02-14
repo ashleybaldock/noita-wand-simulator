@@ -1,32 +1,22 @@
+import styled from 'styled-components';
 import { useAppDispatch } from '../../redux/hooks';
-import { clearSpells, resetWand } from '../../redux/wandSlice';
+import { resetWand } from '../../redux/wandSlice';
 import { Button } from '../generic';
 
-export const ResetButton = () => {
+const _ResetButton = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
-
-  // const { shift } = useKeyState();
-
   return (
-    <>
-      <Button
-        imgOnly="500px"
-        hotkeys={'shift+t'}
-        tip={{ kind: 'uihint', id: 'clear' }}
-        icon={'icon.clear'}
-        onClick={() => dispatch(clearSpells())}
-      >
-        Clear
-      </Button>
-      <Button
-        imgOnly="500px"
-        hotkeys={'t'}
-        tip={{ kind: 'uihint', id: 'reset' }}
-        icon={'icon.reset'}
-        onClick={() => dispatch(resetWand())}
-      >
-        Reset
-      </Button>
-    </>
+    <Button
+      className={className}
+      imgOnly="500px"
+      hotkeys={'t'}
+      tip={{ kind: 'uihint', id: 'reset' }}
+      icon={'icon.reset'}
+      onClick={() => dispatch(resetWand())}
+    >
+      Reset
+    </Button>
   );
 };
+
+export const ResetButton = styled(_ResetButton)``;

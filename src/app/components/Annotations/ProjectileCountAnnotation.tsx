@@ -7,17 +7,19 @@ const StyledBaseAnnotation = styled(BaseAnnotation)`
   inset: -0.4em 0 auto 0;
   width: fit-content;
   justify-content: center;
-  font-size: 1.2em;
+  font-size: 1.1em;
   background-color: var(--color-base-background);
   margin: 0 auto;
-  padding: 0 0.25ch 0 0.25ch;
-  border-radius: 0.5em;
+  padding: 0.1em 0.25ch 0 0.25ch;
+  border-radius: 6px;
   box-shadow:
-    0 0 0 1px var(--color-arrow-action),
+    -1px -1.75px 0 -0.25px var(--color-arrow-action),
+    1px -1.75px 0 -0.25px var(--color-arrow-action),
     0 0 0 1.5px #000;
+  line-height: 0.9;
 
   &::before {
-    content: 'x';
+    content: '×';
     margin-right: 0.1ch;
   }
 `;

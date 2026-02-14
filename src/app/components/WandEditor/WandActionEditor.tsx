@@ -12,9 +12,8 @@ import {
   removeSpellAfterCursor,
   removeSpellBeforeCursor,
 } from '../../redux/editorThunks';
-import { /* moveSelection, */ clearSelection } from '../../redux/editorSlice';
+import { clearSelection } from '../../redux/editorSlice';
 import { getSpellByActionId } from '../../calc/spells';
-import { StyledWandActionBorder } from '../Spells/WandAction';
 import { getComputedColumns } from './hooks';
 import { isKnownSpell } from '../../redux/Wand/spellId';
 import { END } from '../../redux/WandIndex';
@@ -23,8 +22,9 @@ import { WandIndexAnnotation } from '../Annotations/WandIndexAnnotation';
 import { OverSpellDropTarget } from '../Spells/WandAction/OverSpellDropTarget';
 import { BetweenSpellsDropTarget } from '../Spells/WandAction/BetweenSpellsDropTarget';
 import { SlottedSpell } from './SlottedSpell';
+import { SpellSlot } from '../Spells/SpellSlot';
 
-const PlaceHolder = styled(StyledWandActionBorder)`
+const PlaceHolder = styled(SpellSlot)`
   background-image: none;
 `;
 const EndOfWand = ({ wandIndex }: { wandIndex: WandIndex }) => {
@@ -55,7 +55,7 @@ const SpellSlots = styled.ul`
 
   @media screen and (max-width: 800px) {
     & {
-      margin: 0.8em -0.5em 0.4em -0.5em;
+      margin: 0.8em 0 0.4em 0;
     }
   }
   column-span: all;
@@ -69,13 +69,13 @@ const SpellSlots = styled.ul`
   );
   grid-gap: 2px 0;
   padding-left: 0;
-  padding: 0 4px;
+  padding: 0 0.5ch;
 
   justify-content: center;
   align-items: center;
 `;
 
-const SpellSlot = styled.li`
+const SpellSlotListItem = styled.li`
   display: flex;
   flex: 0 1 auto;
   list-style-type: none;
@@ -196,18 +196,18 @@ export const WandActionEditor = () => {
   return (
     <SpellSlots ref={gridRef} data-name="WandActionEditor">
       {spellActions.map((spellAction, wandIndex) => (
-        <SpellSlot key={wandIndex}>
+        <SpellSlotListItem key={wandIndex}>
           <SlottedSpell
             spell={spellAction}
             wandIndex={wandIndex}
             deckIndex={spellAction !== undefined ? deckIndex++ : undefined}
             lastIndex={lastSpellIndex}
           />
-        </SpellSlot>
+        </SpellSlotListItem>
       ))}
-      <SpellSlot key={'endslot'}>
+      <SpellSlotListItem key={'endslot'}>
         <EndOfWand wandIndex={extraSpellIndex} />
-      </SpellSlot>
+      </SpellSlotListItem>
     </SpellSlots>
   );
 };

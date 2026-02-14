@@ -7,9 +7,7 @@ import { useCallback, useState } from 'react';
 const Container = styled.div`
   font-family: var(--font-family-noita-default);
   z-index: var(--zindex-copy-png);
-  padding: 0.2em 0.2em 0.2em 0.4em;
-  border-radius: 1em / 8em;
-  border: 1px solid #0000;
+  padding: 0.2em 1ch 0.2em 1ch;
   background-color: #0000;
 
   @media screen and (min-width: 600px) {
@@ -34,7 +32,6 @@ const Container = styled.div`
 
       padding: 1em 0.2em 1em 0.6em;
       top: calc(100% - 2.2em);
-      border: 1px solid #c98930;
       transition-property: visibility, background, padding, top, border;
       transition-delay: 0ms;
       transition-timing-function: ease;
@@ -74,6 +71,7 @@ const RevealExports = styled.div<{ $expanded: boolean }>`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  padding: 0.5em 1ch 0.5em 1ch;
 
   background-color: var(--color-base-background);
   visibility: hidden;
@@ -121,10 +119,6 @@ const DefaultExport = styled.div`
     transition-duration: 40ms;
     transition-timing-function: ease;
   }
-  &::after {
-    content: '...';
-    margin-left: 0.2em;
-  }
 
   ${Container}:hover &::before {
     visibility: visible;
@@ -135,9 +129,6 @@ const DefaultExport = styled.div`
   }
 
   @media screen and (max-width: 600px) {
-    &::after {
-      content: var(--icon-hamburger-menu);
-    }
     &::before {
       position: static;
       width: 100%;

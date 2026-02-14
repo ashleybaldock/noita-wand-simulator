@@ -3,15 +3,21 @@ import {
   isNotNullOrUndefined,
   compareSequencesIter,
   startTimer,
+  isNotUndefined,
 } from '../util';
 import type { SpellId } from './Wand/spellId';
 import { wandsMatchForSimulation } from './Wand/wand';
-import type { AppStartListening } from './listenerMiddleware';
+import {
+  resultCancelled,
+  resultOk,
+  type AppStartListening,
+} from './listenerMiddleware';
 import { newResult, newSimulation } from './resultSlice';
 import { configsMatchForSimulation } from './configSlice';
 import type { RootState } from './store';
 import { nextSimulationRequestId } from './SimulationRequestId';
 import type { ListenerPredicate } from './ListenerPredicate';
+import { TaskAbortError } from '@reduxjs/toolkit';
 
 /**
  * @returns true if main spell sequence has changed
@@ -237,47 +243,59 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
       );
 
       /* TODO spellsWithUses */
-      const task = listenerApi.fork(async (/*forkApi*/) =>
-        clickWand({
-          simulationRequestId,
-          wand,
-          spellIds,
-          alwaysCastSpellIds,
-          zetaSpellId,
-          req_enemies,
-          req_projectiles,
-          req_hp,
-          req_half,
-          rng_frameNumber,
-          rng_worldSeed,
-          wand_available_mana: wand.mana_max,
-          wand_cast_delay: wand.cast_delay,
-          endSimulationOnCastCount,
-          endSimulationOnReloadCount,
-          endSimulationOnRefreshCount,
-          limitSimulationIterations,
-          limitSimulationDuration,
-        }),);
+      const task = listenerApi.fork(async (/*forkApi*/) => {
+        try {
+          return clickWand({
+            simulationRequestId,
+            wand,
+            spellIds,
+            alwaysCastSpellIds,
+            zetaSpellId,
+            req_enemies,
+            req_projectiles,
+            req_hp,
+            req_half,
+            rng_frameNumber,
+            rng_worldSeed,
+            wand_available_mana: wand.mana_max,
+            wand_cast_delay: wand.cast_delay,
+            endSimulationOnCastCount,
+            endSimulationOnReloadCount,
+            endSimulationOnRefreshCount,
+            limitSimulationIterations,
+            limitSimulationDuration,
+          });
+        } catch (err) {
+          if (err instanceof TaskAbortError) {
+            console.log('simulation task aborted');
+          } else {
+            console.warn('error running simulation task', err);
+          }
+        }
+      });
 
-      console.group();
+      console.groupCollapsed(`await simulation #${simulationRequestId}`);
       const result = await task.result;
       console.groupEnd();
-      const { status } = result;
 
-      if (status === 'ok') {
+      if (resultOk(result)) {
         const { value } = result;
         console.debug('Simulation done, result: ', value);
 
-        console.debug('dispatch: newResult');
-        listenerApi.dispatch(
-          newResult({
-            result: value,
-            endTime: performance.now(),
-          }),
-        );
+        if (isNotUndefined(value)) {
+          console.debug('dispatch: newResult');
+          listenerApi.dispatch(
+            newResult({
+              result: value,
+              endTime: performance.now(),
+            }),
+          );
+        }
+      } else if (resultCancelled(result)) {
+        console.info('Child task cancelled');
       } else {
         const { error } = result;
-        console.warn('Child failed: ', status, error);
+        console.warn('Child failed: ', error);
       }
       console.groupEnd();
     },

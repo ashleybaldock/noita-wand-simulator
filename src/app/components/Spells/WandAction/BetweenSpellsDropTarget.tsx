@@ -119,7 +119,7 @@ const DropTargetBackground = styled(DynamicBackground)<{
 const HoverBackground = styled(DynamicBackground)`
   width: 100%;
   height: 100%;
-  opacity: 0.1;
+  opacity: 0;
 
   transition-property: background-image, opacity;
   transition-duration: 100ms;

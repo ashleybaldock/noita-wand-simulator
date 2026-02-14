@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { StyledWandActionBorder } from '../Spells/WandAction';
 import { BaseAnnotation } from './BaseAnnotation';
 import { noop } from '../../util';
+import { SpellSlot } from '../Spells/SpellSlot/SpellSlot';
 
 const DeleteButton = styled(BaseAnnotation)`
   --transition-in: var(--transition-hover-in);
@@ -40,7 +40,7 @@ const DeleteButton = styled(BaseAnnotation)`
   transition-property: var(--transition-props);
 
   display: none;
-  ${StyledWandActionBorder}:hover && {
+  ${SpellSlot}:hover && {
     display: block;
   }
 

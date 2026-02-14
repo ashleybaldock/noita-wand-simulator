@@ -8,8 +8,8 @@ import {
 import { WandAction } from '../../Spells/WandAction';
 import styled from 'styled-components';
 import { WithDebugHints } from '../../Debug';
-import { StyledWandActionBorder } from '../../Spells/WandAction';
 import { ProjectileCountAnnotation } from '../../Annotations/ProjectileCountAnnotation';
+import { SpellSlot } from '../../Spells/SpellSlot/SpellSlot';
 
 const ArrayGroupDiv = styled.div`
   display: flex;
@@ -51,7 +51,7 @@ export const MainDiv = styled.div`
 /*
   background-image: url(/data/inventory/action_tree_box.png);
  */
-const CastTableProjectileBorder = styled(StyledWandActionBorder)`
+const CastTableSpellSlot = styled(SpellSlot)`
   position: relative;
   padding: 3px;
   border: 3px dotted #656565;
@@ -69,8 +69,8 @@ export const CastTableProjectile = ({
   count: number;
 }) => {
   return (
-    <MainDiv>
-      <CastTableProjectileBorder
+    <MainDiv data-name="CastTableProjectile">
+      <CastTableSpellSlot
         data-grouping="none"
         data-type=""
         data-name="ProjActionGroup"
@@ -94,7 +94,7 @@ export const CastTableProjectile = ({
           wandIndex={projectile.spell?.always_cast_index}
         />
         <FriendlyFireAnnotation />
-      </CastTableProjectileBorder>
+      </CastTableSpellSlot>
     </MainDiv>
   );
 };

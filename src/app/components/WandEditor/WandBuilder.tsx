@@ -6,7 +6,7 @@ import { WandBorder } from './WandBorder';
 import { WandAlwaysCastEditor } from './WandAlwaysCastEditor';
 import { ZetaEditor } from './ZetaEditor';
 import { ExportOptions } from '../Export';
-import { RedoButton, ResetButton, UndoButton } from '../buttons';
+import { ClearButton, RedoButton, ResetButton, UndoButton } from '../buttons';
 
 const MainDiv = styled.div`
   display: flex;
@@ -52,6 +52,19 @@ const WandBuilderTopButtons = styled.div`
     padding-top: 0.4em;
     padding-bottom: 0.3em;
     border-bottom: none;
+  }
+
+  & > ${UndoButton} {
+    grid-column: undo;
+  }
+  & > ${RedoButton} {
+    grid-column: redo;
+  }
+  & > ${ResetButton} {
+    grid-column: reset;
+  }
+  & > ${ClearButton} {
+    grid-column: clear;
   }
 
   @media screen and (max-width: 500px) {
@@ -111,6 +124,7 @@ export const WandBuilder = () => {
           <ExportOptions wandRef={wandRef} spellsRef={spellsRef} />
           <UndoButton />
           <RedoButton />
+          <ClearButton />
           <ResetButton />
         </WandBuilderTopButtons>
         <WandActionEditorWrapper ref={spellsRef} className={'saveImageRoot'}>

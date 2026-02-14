@@ -1,4 +1,6 @@
 :root {
+  --zindex-spellsequence: 20;
+
   --zindex-insert-after: 58;
   --zindex-insert-before: 60;
   --zindex-cursor-select-from: 65;

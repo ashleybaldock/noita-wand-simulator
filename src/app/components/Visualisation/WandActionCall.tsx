@@ -10,14 +10,15 @@ import {
   RecursionAnnotation,
 } from '../Annotations/';
 import { WrapAnnotation } from '../Annotations/WrapAnnotation';
-import { WandAction, StyledWandActionBorder } from '../Spells/WandAction';
+import { WandAction } from '../Spells/WandAction';
 import type { ActionCall } from '../../calc/eval/ActionCall';
 import { getSpellByActionId } from '../../calc/spells';
+import { SpellSlot } from '../Spells/SpellSlot/SpellSlot';
 
 /*
   background-image: url(/data/inventory/action_tree_box.png);
  */
-const WandActionCallBorder = styled(StyledWandActionBorder)`
+const WandActionCallSpellSlot = styled(SpellSlot)`
   padding: var(--spell-pad);
   border: var(--spell-bdw) dotted #656565;
   border-radius: 12px;
@@ -30,7 +31,7 @@ const WandActionCallBorder = styled(StyledWandActionBorder)`
 export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
   const spell = getSpellByActionId(actionCall.spell.id);
   return (
-    <WandActionCallBorder
+    <WandActionCallSpellSlot
       data-grouping="none"
       data-type=""
       data-name="WandActionCall"
@@ -55,6 +56,6 @@ export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
         wasLastToBeDrawnBeforeWrapNr={actionCall.wasLastToBeDrawnBeforeWrapNr}
         wasLastToBeCalledBeforeWrapNr={actionCall.wasLastToBeCalledBeforeWrapNr}
       />
-    </WandActionCallBorder>
+    </WandActionCallSpellSlot>
   );
 };

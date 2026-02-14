@@ -5,14 +5,15 @@ import {
   DeckIndexAnnotation,
   FriendlyFireAnnotation,
 } from '../Annotations/';
-import { WandAction, StyledWandActionBorder } from '../Spells/WandAction';
+import { WandAction } from '../Spells/WandAction';
 import { getSpellByActionId } from '../../calc/spells';
 import type { WandCastProjectile } from '../../calc/eval/WandCastProjectile';
+import { SpellSlot } from '../Spells/SpellSlot/SpellSlot';
 
 /*
   background-image: url(/data/inventory/action_tree_box.png);
  */
-const WandActionProjectileBorder = styled(StyledWandActionBorder)`
+const WandActionProjectileSpellSlot = styled(SpellSlot)`
   padding: 3px;
   border: 3px dotted #656565;
   border-radius: 12px;
@@ -28,7 +29,7 @@ export const WandActionProjectile = ({
   projectile: WandCastProjectile;
 }) => {
   return (
-    <WandActionProjectileBorder
+    <WandActionProjectileSpellSlot
       data-grouping="none"
       data-type=""
       data-name="WandActionProjectile"
@@ -45,6 +46,6 @@ export const WandActionProjectile = ({
       <ActionProxyAnnotation proxy={projectile.proxy} />
       <DeckIndexAnnotation deckIndex={projectile.spell?.deck_index} />
       <FriendlyFireAnnotation />
-    </WandActionProjectileBorder>
+    </WandActionProjectileSpellSlot>
   );
 };

@@ -2,14 +2,16 @@ import { useAppDispatch } from '../../redux/hooks';
 import { ActionCreators } from 'redux-undo';
 import { Button } from '../generic';
 import type { Tip } from '../Tooltips/tooltipId';
+import styled from 'styled-components';
 
-export const UndoButton = () => {
+const _UndoButton = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
 
   const undo = () => dispatch(ActionCreators.undo());
 
   return (
     <Button
+      className={className}
       data-name="UndoButton"
       hotkeys={'u, ctrl+z, mod+z'}
       onHotkey={undo}
@@ -22,3 +24,5 @@ export const UndoButton = () => {
     </Button>
   );
 };
+
+export const UndoButton = styled(_UndoButton)``;

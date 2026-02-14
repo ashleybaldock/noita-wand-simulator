@@ -16,18 +16,21 @@ const UiHint = styled.div`
   background-color: rgba(5, 5, 5, 0.9);
   color: rgb(250, 250, 250);
 `;
+const UiHintTooltipBase = styled(TooltipBase)`
+  --tip-show-delay: 1200ms;
+`;
 
 export const UiHintTooltip = () => {
   const [hidden, tooltipRef] = useHideTooltips();
 
   return (
-    <TooltipBase
+    <UiHintTooltipBase
       id={'tooltip-uihint'}
       data-name={'UiHintTooltip'}
       hidden={hidden}
       ref={tooltipRef}
       disableStyleInjection={true}
-      offset={10}
+      offset={15}
       closeEvents={{
         mouseleave: true,
         blur: true,

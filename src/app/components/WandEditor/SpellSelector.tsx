@@ -10,13 +10,13 @@ import { Tabs } from '../generic';
 import {
   DraggableWandAction,
   LockedWandAction,
-  StyledWandActionBorder,
   WandActionDragSource,
 } from '../Spells/WandAction';
 import {
   insertSpellAfterCursor,
   insertSpellBeforeCursor,
 } from '../../redux/editorThunks';
+import { SpellSlot } from '../Spells/SpellSlot';
 
 const MainDiv = styled.div`
   --bsize-spell: 40px;
@@ -92,7 +92,7 @@ const SpellCategorySpellsDiv = styled.div`
   );
 `;
 
-const SpellSelectorWandActionBorder = styled(StyledWandActionBorder)`
+const SpellSelectorWandActionBorder = styled(SpellSlot)`
   --spellbg: var(--sprite-inventory-grid-box-unknown);
 
   &:hover {
