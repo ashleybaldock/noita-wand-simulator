@@ -1,13 +1,7 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
 import type { WandCastId } from '../../../calc/eval/WandCast';
-import type { WandCastProjectile } from '../../../calc/eval/WandCastProjectile';
 import { useCast, useCastLookup } from '../../../redux';
-import {
-  NBSP,
-  groupBy,
-  isNotNullOrUndefined,
-  objectEntries,
-} from '../../../util';
+import { NBSP, isNotNullOrUndefined } from '../../../util';
 import { CastTableProjectile } from './CastTableProjectile';
 import {
   CastIndexColumnHeading,
@@ -18,7 +12,6 @@ import {
   ProjectileHeading,
 } from './ColumnHeading';
 import { Headings } from './CastTable';
-import type { ProjectileId } from '../../../calc/projectile';
 import { useGroupedProjectiles } from './useGroupedProjectiles';
 
 // const castSubStateSummary = useMemo(() => {

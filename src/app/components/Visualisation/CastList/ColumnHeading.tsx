@@ -211,9 +211,7 @@ export const CastIndexColumnHeading = styled(BaseColumnHeading).attrs({
   index: number;
 }>`
   position: sticky;
-  left: 0px;
   background-color: black;
-  border: 1px dotted #b07ae5;
   left: -76px;
   z-index: 100;
   flex-direction: row;
