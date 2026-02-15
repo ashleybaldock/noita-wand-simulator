@@ -625,3 +625,72 @@ button[data-tooltip-content='clear'] {
   z-index: var(--zindex-status);
   padding: 0 0.5ch 0 0.5ch;
 }
+
+/* [data-name="WandActionEditor"] {
+  padding-left: unset;
+  justify-items: center;
+  grid-template-columns: repeat( auto-fill, minmax(var(--grid-item-width), 1fr) );
+  margin: 0 auto;
+} */
+
+:not(#u#n#i) @media screen and (max-width: 800px) {
+  [data-name='WandActionEditor'] {
+    margin: 0.8em auto 0.4em auto;
+  }
+}
+
+:not(#u#n#i) [data-name='WandActionEditor'] {
+  --grid-max-column-count: 10;
+  grid-template-columns: repeat(auto-fit, var(--grid-item-width));
+}
+:not(#u#n#i) [data-name='SpellSequence'] {
+  display: flex;
+  padding: 4px 0.5ch;
+  column-gap: 2px;
+  --size-spell: 24px;
+  height: var(--spellsequence-height);
+  background-color: var(--color-base-background);
+  inset: var(--top-banner-height) auto auto auto;
+  margin: 0;
+  box-shadow:
+    0 0 0 2px var(--color-base-background),
+    0 0 0 3px var(--color-tab-border-inactive);
+  z-index: calc(var(--zindex-spellsequence) + 1);
+}
+
+:not(#u#n#i)
+  [data-name='SpellSequence']
+  ~ :is([data-name='StickyGroup'], [data-name='StickyHeader']) {
+  top: calc(var(--top-banner-height) + var(--spellsequence-height));
+  padding-bottom: 0;
+}
+
+:not(#u#n#i) [data-name='SpellSequence'] {
+  height: var(--spellsequence-height);
+  margin: 0;
+}
+
+:not(#u#n#i) [data-name='SectionToolbar'] {
+  inset: var(--top-offset) auto auto auto;
+}
+
+:not(#u#n#i) :has(+ [data-name='SpellSequence']) {
+  z-index: calc(var(--zindex-spellsequence) + 1);
+}
+:not(#u#n#i)
+  [data-name='SpellSequence']
+  ~ :is([data-name='StickyGroup'], [data-name='StickyHeader']) {
+  top: calc(var(--top-banner-height) + var(--spellsequence-height));
+  position: sticky;
+  padding-bottom: 0;
+}
+:not(#u#n#i)
+  [data-name='SpellSequence']
+  ~ :is([data-name='StickyGroup'], [data-name='StickyHeader']),
+:not(#u#n#i)
+  [data-name='SpellSequence']
+  ~ :is([data-name='StickyGroup'], [data-name='StickyHeader'])
+  h2 {
+  top: calc(var(--top-banner-height) + var(--spellsequence-height));
+  position: sticky;
+}
