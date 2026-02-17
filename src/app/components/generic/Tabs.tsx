@@ -120,57 +120,6 @@ const TabButton = styled.button<{
   border-width: 0;
 `;
 
-const TabsWandActionFamily = styled.div`
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-template-columns: subgrid;
-  grid-auto-rows: 1fr;
-  --maxcols: round(down, 100cqw / var(--bsize-spell), var(--bsize-spell));
-  grid-row: auto/span 1;
-  grid-column: auto/span round(down, sqrt(var(--n)), 2);
-  grid-row: auto/span round(up, sqrt(var(--n)), 2);
-`;
-
-const TabsWandAction = styled(WandAction)`
-  --transition-props: opacity;
-  --sizes-spell: 2em;
-  --v: 0.3em;
-
-  transform: none;
-  opacity: 1;
-  cursor: inherit;
-
-  transform: rotate(0deg) scale(1) translate(1px);
-  height: 100%;
-  width: auto;
-  min-width: calc(var(--v) * 0.25);
-  min-height: calc(var(--v) * 0.25);
-  aspect-ratio: 1;
-  image-rendering: pixelated;
-  background-size: 67%, 100%;
-  background-clip: padding-box, border-box, border-box;
-  background-repeat: no-repeat, space, space;
-  background-origin: content-box, border-box, border-box;
-  background-position:
-    center,
-    bottom -11% right -11%;
-  background-image: var(--data-spelltype-sprite);
-  border-image-source: var(--data-spelltype-sprite);
-  border-image-slice: 3 3 3 3;
-  border-image-outset: 4px;
-  border-image-width: 6px;
-
-  border: var(--v) solid #0000;
-  border-width: var(--v) 0 0 var(--v);
-  padding: 0 var(--v) var(--v) 0;
-  margin: 0;
-
-  &:hover {
-    transform: none;
-    opacity: 1;
-  }
-`;
-
 const ActiveTabContent = styled.div`
   position: static;
   box-sizing: content-box;
@@ -228,17 +177,15 @@ const HiddenContentDiv = styled.div`
   z-index: -1000;
 `;
 
-type TabTitlePart = {
-  text: string;
+export type Tab = {
+  title: string;
+  key: string;
   type?: SpellType;
   bgSrc?: string;
   egSrc?: ActionId;
   style?: React.CSSProperties;
-};
-
-export type Tab = {
-  titleParts: TabTitlePart[];
   content: React.ReactElement;
+  buttonContent: React.ReactElement;
 };
 
 export const Tabs = ({
@@ -254,14 +201,18 @@ export const Tabs = ({
     if (displayIndex !== selectedTabIndex) {
       setSelectedTabIndex(displayIndex);
     }
-  }, [displayIndex, selectedTabIndex]);
+  }, [displayIndex, setSelectedTabIndex, selectedTabIndex]);
 
-  useHotkeys('2,3,4,5,6,7,8,9', (_, kEv) => {
-    const tabIdx = Number.parseInt(kEv.keys?.join('') ?? '', 10) - 1;
-    if (!Number.isNaN(tabIdx) && tabIdx > 0 && tabIdx <= tabs.length) {
-      setSelectedTabIndex(tabIdx - 1);
-    }
-  });
+  useHotkeys(
+    '2,3,4,5,6,7,8,9',
+    (_, kEv) => {
+      const tabIdx = Number.parseInt(kEv.keys?.join('') ?? '', 10) - 1;
+      if (!Number.isNaN(tabIdx) && tabIdx > 0 && tabIdx <= tabs.length) {
+        setSelectedTabIndex(tabIdx - 1);
+      }
+    },
+    [tabs, setSelectedTabIndex],
+  );
 
   if (tabs.length === 0) {
     return null;
@@ -273,24 +224,16 @@ export const Tabs = ({
         {tabs[displayIndex].content}
       </ActiveTabContent>
       <TabTitlesDiv data-name="TabTitles">
-        {tabs.map(({ titleParts }, index) => (
+        {tabs.map(({ title, key, content, buttonContent }, index) => (
           <TabButton
             data-name={`Tab${selectedTabIndex === index ? ':Selected' : ''}`}
             {...(selectedTabIndex === index ? { 'data-selected': '' } : {})}
             selected={selectedTabIndex === index}
             onClick={() => setSelectedTabIndex(index)}
-            key={titleParts.reduce((acc, { text }) => `${acc}-${text}`, 'tab-')}
+            key={key}
           >
-            <HiddenContentDiv>{tabs[index].content}</HiddenContentDiv>
-            {titleParts.map(({ type, egSrc }) => (
-              <TabsWandAction
-                key={type}
-                tooltip={false}
-                spellType={type}
-                spellId={egSrc}
-                keyHint={`Shortcut: ${index}`}
-              />
-            ))}
+            <HiddenContentDiv>{content}</HiddenContentDiv>
+            {buttonContent}
             <HotkeyHint hotkeys={`${index + 2}`} position={'ne-corner'} />
           </TabButton>
         ))}

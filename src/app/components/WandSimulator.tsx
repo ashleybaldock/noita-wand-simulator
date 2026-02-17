@@ -12,20 +12,9 @@ import { DragPreview } from './DragPreview';
 import { HTML5toTouchPreview } from './DragPipeline';
 import { SpellHotbar } from './SpellHotbar';
 import { SimulationStatus } from './SimulationStatus';
-
-const StickyGroup = styled.div.attrs<DataAttributes>({
-  'data-name': 'StickyGroup',
-})`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StickyHeading = styled.h2.attrs<DataAttributes>({
-  'data-name': 'StickyHeading',
-})`
-  display: flex;
-  flex-direction: column;
-`;
+import { SpellSequence } from './SpellSequence/SpellSequence';
+import { StickyHeading } from './Sticky/StickyHeading';
+import { StickyGroup } from './Sticky/StickyGroup';
 
 const Overlays = styled.div.attrs<DataAttributes>({
   'data-name': 'Overlays',
@@ -64,6 +53,7 @@ export const WandSimulator = () => {
             </SpellShortcuts>
             <WandBuilder />
           </StickyGroup>
+          <SpellSequence />
           <SimulationStatus />
           <StickyGroup>
             <CastConfigEditor />

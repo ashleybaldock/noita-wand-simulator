@@ -95,7 +95,7 @@ const selectLastTimeElapsed = createSelector(
   ({ lastStartTime, lastEndTime }) =>
     isNull(lastEndTime)
       ? isNull(lastStartTime)
-        ? null
+        ? undefined
         : performance.now() - lastStartTime
       : isNull(lastStartTime)
         ? lastEndTime

@@ -163,14 +163,12 @@ export const TotalsColumnHeading = styled(ColumnHeadingWithLineSpacer).attrs({
 
   font-size: 1em;
 
-  min-width: 5.6em;
   justify-content: start;
 
   border-left: 1px dotted var(--color-vis-cs-inborder);
   background-color: black;
 
   && ${HeadingInner}::before {
-    margin-top: 10px;
     display: initial;
 
     ${({ triggerType }) =>

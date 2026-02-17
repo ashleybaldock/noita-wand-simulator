@@ -10,6 +10,7 @@ import { Tabs } from '../generic';
 import {
   DraggableWandAction,
   LockedWandAction,
+  WandAction,
   WandActionDragSource,
 } from '../Spells/WandAction';
 import {
@@ -90,6 +91,57 @@ const SpellCategorySpellsDiv = styled.div`
     auto-fit,
     minmax(max(1px, round(down, var(--bsize-spell), 1px)), 1fr)
   );
+`;
+
+const TabsWandActionFamily = styled.div`
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-template-columns: subgrid;
+  grid-auto-rows: 1fr;
+  --maxcols: round(down, 100cqw / var(--bsize-spell), var(--bsize-spell));
+  grid-row: auto/span 1;
+  grid-column: auto/span round(down, sqrt(var(--n)), 2);
+  grid-row: auto/span round(up, sqrt(var(--n)), 2);
+`;
+
+const TabsWandAction = styled(WandAction)`
+  --transition-props: opacity;
+  --sizes-spell: 2em;
+  --v: 0.3em;
+
+  transform: none;
+  opacity: 1;
+  cursor: inherit;
+
+  transform: rotate(0deg) scale(1) translate(1px);
+  height: 100%;
+  width: auto;
+  min-width: calc(var(--v) * 0.25);
+  min-height: calc(var(--v) * 0.25);
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+  background-size: 67%, 100%;
+  background-clip: padding-box, border-box, border-box;
+  background-repeat: no-repeat, space, space;
+  background-origin: content-box, border-box, border-box;
+  background-position:
+    center,
+    bottom -11% right -11%;
+  background-image: var(--data-spelltype-sprite);
+  border-image-source: var(--data-spelltype-sprite);
+  border-image-slice: 3 3 3 3;
+  border-image-outset: 4px;
+  border-image-width: 6px;
+
+  border: var(--v) solid #0000;
+  border-width: var(--v) 0 0 var(--v);
+  padding: 0 var(--v) var(--v) 0;
+  margin: 0;
+
+  &:hover {
+    transform: none;
+    opacity: 1;
+  }
 `;
 
 const SpellSelectorWandActionBorder = styled(SpellSlot)`
@@ -195,68 +247,21 @@ export const SpellSelector = () => {
     return groupBy(spellsWithUnlockInfo, ({ spell: { type } }) => type);
   }, [spellsWithUnlockInfo]);
 
-  // const tabPerGroupedType = useMemo(
-  //   () =>
-  //     spellTypeGroupsOrdered
-  //       .map((spellTypeGroup) => {
-  //         const { contains } = spellTypeGroupInfoMap[spellTypeGroup];
-  //         return {
-  //           titleParts: contains.map((spellType) => {
-  //             const { name, sprite, exampleId } = spellTypeInfoMap[spellType];
-  //             return {
-  //               text: name,
-  //               type: spellType,
-  //               bgSrc: sprite,
-  //               egSrc: exampleId,
-  //               key: `part-${name}`,
-  //             };
-  //           }),
-  //           key: `tab-${spellTypeGroup}`,
-  //           iconSrc: '',
-  //           content: (
-  //             <>
-  //               {contains.map((spellType) => {
-  //                 return (
-  //                   <SpellCategorySpellsDiv
-  //                     key={spellType}
-  //                     data-name="SpellCategorySpellsDiv"
-  //                   >
-  //                     {spellsWithUnlockInfoByType[spellType].map(
-  //                       ({ locked, spell }) => (
-  //                         <WandActionSelect
-  //                           locked={locked}
-  //                           spell={spell}
-  //                           key={spell.id}
-  //                         />
-  //                       ),
-  //                     )}
-  //                   </SpellCategorySpellsDiv>
-  //                 );
-  //               })}
-  //             </>
-  //           ),
-  //         };
-  //       })
-  //       .reverse(),
-  //   [spellsWithUnlockInfoByType],
-  // );
-
   const tabPerType = useMemo(() => {
     return objectEntries(spellsWithUnlockInfoByType)
       .map(([spellType, actions]) => {
-        const { name, sprite } = spellTypeInfoMap[spellType];
+        const { sprite } = spellTypeInfoMap[spellType];
+        const key = `tab--${spellType}`;
+        const title = `Spells of type ${spellType}`;
 
         return {
-          titleParts: [
-            {
-              text: name,
-              type: spellType,
-              style: {
-                backgroundImage: getSpriteForSpellType(spellType),
-              },
-            },
-          ],
+          style: {
+            backgroundImage: getSpriteForSpellType(spellType),
+          },
           iconSrc: sprite,
+          title,
+          key,
+          buttonContent: <TabsWandAction key={key} tooltip={false} />,
           content: (
             <SpellCategorySpellsDiv data-name="SpellCategorySpellsDiv">
               {actions.map(({ spell, locked }) => (
@@ -276,14 +281,9 @@ export const SpellSelector = () => {
   const allInOneTab = useMemo(() => {
     return [
       {
-        titleParts: [
-          {
-            text: 'All Spells',
-            imgSrc: '',
-            spellSprite: '',
-          },
-        ],
-        iconSrc: '',
+        title: 'All Spells',
+        key: 'tab-all',
+        buttonContent: <TabsWandAction key={'tab--all'} tooltip={false} />,
         content: (
           <>
             {objectEntries(spellsWithUnlockInfoByType).map(([spellType]) => {
@@ -310,17 +310,55 @@ export const SpellSelector = () => {
     ];
   }, [spellsWithUnlockInfoByType]);
 
-  const tabs = useMemo(() => {
-    if (config.showSpellsInCategories) {
-      return tabPerType;
-    } else {
-      return allInOneTab;
-    }
-  }, [allInOneTab, config.showSpellsInCategories, tabPerType]);
-
   return (
     <MainDiv data-name="SpellSelector">
-      <Tabs tabs={tabs} />
+      <Tabs tabs={config.showSpellsInCategories ? tabPerType : allInOneTab} />
     </MainDiv>
   );
 };
+
+// const tabPerGroupedType = useMemo(
+//   () =>
+//     spellTypeGroupsOrdered
+//       .map((spellTypeGroup) => {
+//         const { contains } = spellTypeGroupInfoMap[spellTypeGroup];
+//         return {
+//           titleParts: contains.map((spellType) => {
+//             const { name, sprite, exampleId } = spellTypeInfoMap[spellType];
+//             return {
+//               text: name,
+//               type: spellType,
+//               bgSrc: sprite,
+//               egSrc: exampleId,
+//               key: `part-${name}`,
+//             };
+//           }),
+//           key: `tab-${spellTypeGroup}`,
+//           iconSrc: '',
+//           content: (
+//             <>
+//               {contains.map((spellType) => {
+//                 return (
+//                   <SpellCategorySpellsDiv
+//                     key={spellType}
+//                     data-name="SpellCategorySpellsDiv"
+//                   >
+//                     {spellsWithUnlockInfoByType[spellType].map(
+//                       ({ locked, spell }) => (
+//                         <WandActionSelect
+//                           locked={locked}
+//                           spell={spell}
+//                           key={spell.id}
+//                         />
+//                       ),
+//                     )}
+//                   </SpellCategorySpellsDiv>
+//                 );
+//               })}
+//             </>
+//           ),
+//         };
+//       })
+//       .reverse(),
+//   [spellsWithUnlockInfoByType],
+// );

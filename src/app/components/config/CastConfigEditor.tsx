@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { SectionToolbar } from '../SectionToolbar';
 import { EndingConfigSection } from './Sections/Ending';
-import { SimulationConfigSection } from './Sections/Simulation';
 import { MoneyConfigSection } from './Sections/Money';
 import { HealthConfigSection } from './Sections/Health';
 import { RequirementsConfigSection } from './Sections/Requirements';
@@ -24,7 +23,6 @@ export const CastConfigEditor = () => {
         <RandomConfigSection />
         <RequirementsConfigSection />
         <EndingConfigSection />
-        <SimulationConfigSection />
       </MainDiv>
     </>
   );

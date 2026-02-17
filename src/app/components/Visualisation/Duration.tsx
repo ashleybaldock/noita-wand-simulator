@@ -28,25 +28,23 @@ type DurationProps =
     };
 
 export const Duration = styled(
-  (props: DurationProps & { className?: string }) => {
+  ({ ms, f, s }: DurationProps & { className?: string }) => {
     const { showDurationsInFrames } = useConfig();
 
-    if (props.ms) {
-      return <>{`≈${FNSP}${props.ms}${FNSP}${SUFFIX_MILLISECOND}`}</>;
+    if (ms) {
+      return <>{`≈${FNSP}${ms}${FNSP}${SUFFIX_MILLISECOND}`}</>;
     }
-    if (props.f) {
+    if (f) {
       if (showDurationsInFrames) {
-        return <>{`${props.f}${FNSP}${SUFFIX_FRAME}`}</>;
+        return <>{`${f}${FNSP}${SUFFIX_FRAME}`}</>;
       }
-      return (
-        <>{`≈${FNSP}${round(toSeconds(props.f), 2)}${FNSP}${SUFFIX_SECOND}`}</>
-      );
+      return <>{`≈${FNSP}${round(toSeconds(f), 2)}${FNSP}${SUFFIX_SECOND}`}</>;
     }
-    if (props.s) {
+    if (s) {
       if (showDurationsInFrames) {
-        return <>{`≈${FNSP}${toFrames(props.s)}${FNSP}${SUFFIX_FRAME}`}</>;
+        return <>{`≈${FNSP}${toFrames(s)}${FNSP}${SUFFIX_FRAME}`}</>;
       }
-      return <>{`${round(props.s, 2)}${FNSP}${SUFFIX_SECOND}`}</>;
+      return <>{`${round(s, 2)}${FNSP}${SUFFIX_SECOND}`}</>;
     }
     return <>{`?`}</>;
   },

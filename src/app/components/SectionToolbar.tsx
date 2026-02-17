@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import type { ReactNode } from 'react';
 import { SectionHeader } from './SectionHeader';
+import { SpellSequence } from './SpellSequence/SpellSequence';
+import { StickyGroup } from './Sticky/StickyGroup';
 
 const StickyHeaderSep = styled.div`
   grid-row: line;
@@ -22,7 +24,17 @@ const SectionHeaderContainer = styled.div<{ $line: 'above' | 'below' }>`
   position: sticky;
   inset: var(--top-banner-height) auto auto auto;
   z-index: var(--zindex-stickyheader-controls, 220);
+
   display: grid;
+  margin: 0;
+
+  inset: calc(var(--top-banner-height) + var(--offset-spellsequence)) auto auto
+    auto;
+
+  ${SpellSequence} ~ ${StickyGroup} & {
+    z-index: calc(var(--zindex-spellsequence) - 1);
+  }
+
   grid-template-columns:
     [left
     title-start] auto [title-end
@@ -35,7 +47,6 @@ const SectionHeaderContainer = styled.div<{ $line: 'above' | 'below' }>`
     title-start buttons-start] 1fr [buttons-end title-end
     ${({ $line }) => ($line === 'below' ? `line-start] auto [line-end` : '')}
     bottom];
-  margin: 10px 0 10px 0;
 
   @media screen and (max-width: 500px) {
     grid-template-columns:

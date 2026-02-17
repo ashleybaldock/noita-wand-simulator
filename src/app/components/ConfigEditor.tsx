@@ -164,6 +164,11 @@ export const ConfigEditor = () => {
   return (
     <MainDiv data-name="ConfigEditor">
       <ConfigDiv>
+        <ConfigToggleGroup title={'Simulation'}>
+          <ConfigToggle field={'pauseCalculations'}>
+            {'Pause Simulation'}
+          </ConfigToggle>
+        </ConfigToggleGroup>
         <ConfigToggleGroup title={'Visualisation'}>
           <ConfigToggle field={'castShowChanged'}>
             {'Hide Unaltered State Variables'}

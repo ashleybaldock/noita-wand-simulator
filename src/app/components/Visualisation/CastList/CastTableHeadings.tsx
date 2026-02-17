@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import type { WandCastId } from '../../../calc/eval/WandCast';
 import { useCast, useCastLookup } from '../../../redux';
-import { NBSP, isNotNullOrUndefined } from '../../../util';
+import { isNotNullOrUndefined } from '../../../util';
 import { CastTableProjectile } from './CastTableProjectile';
 import {
   CastIndexColumnHeading,
@@ -112,13 +112,13 @@ export const CastTableHeadings = ({
             origin={true}
             nestingPrefix={$nestingPrefix}
           >
-            {`Cast${NBSP}Totals`}
+            {`Total`}
           </TotalsColumnHeading>
           <WandStatsColumnHeading
             data-name={'WandHeading'}
             nestingPrefix={$nestingPrefix}
           >
-            {`Wand Stats`}
+            {`Wand`}
           </WandStatsColumnHeading>
         </>
       ) : (
@@ -128,7 +128,7 @@ export const CastTableHeadings = ({
             nestingPrefix={[...$nestingPrefix, 1]}
             triggerType={triggerType}
           >
-            {`Payload${NBSP}Totals`}
+            {`Payload Total`}
           </SubTotalsColumnHeading>
         </>
       )}

@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import { useConfig, useLatestResult, useSimulationStatus } from '../redux';
-import { TerminationWarning } from './Visualisation/TerminationWarning';
 import { FNSP } from '../util';
 import { Duration } from './Visualisation/Duration';
-import { SpellSequence } from './SpellSequence/SpellSequence';
 
 const StyledStatus = styled.div`
   margin: 0.4em 0 0.1em 0;
@@ -15,7 +13,7 @@ const StyledStatus = styled.div`
 
 const Label = styled.span`
   color: var(--color-subdued);
-  font-size: 0.8em;
+  font-size: 0.7em;
   line-height: 1em;
   &::before {
   }
@@ -30,6 +28,7 @@ const Value = styled.span`
   white-space: nowrap;
   &::before {
     content: '«';
+    content: none;
     color: var(--color-subdued);
     margin: 0 0.4em 0 -0.4em;
   }
@@ -38,6 +37,7 @@ const Value = styled.span`
   }
   &::after {
     content: '»';
+    content: none;
     margin: 0 -0.4em 0 0.4em;
     color: var(--color-subdued);
   }
@@ -46,9 +46,15 @@ const Value = styled.span`
   }
 `;
 
+const Paused = styled.span`
+  color: #ffff00;
+  font-size: 1.1em;
+  line-height: 1em;
+`;
+
 export const SimulationStatus = styled(
   ({ className }: { className?: string }) => {
-    const { simulationRunning } = useSimulationStatus();
+    const { simulationRunning, elapsedTime } = useSimulationStatus();
     const { pauseCalculations } = useConfig();
     const {
       endConditions: lastRunEndConditions,
@@ -60,28 +66,32 @@ export const SimulationStatus = styled(
         <StyledStatus data-name={'SimulationStatus'} className={className}>
           <Value>
             <Label>Simulation</Label>
-            {simulationRunning
-              ? 'Running…'
-              : pauseCalculations
-                ? 'Paused'
-                : 'Idle'}
+            {simulationRunning ? (
+              'Running…'
+            ) : pauseCalculations ? (
+              <Paused>Paused</Paused>
+            ) : (
+              'Idle'
+            )}
           </Value>
-          <Value>
-            <Label>Time Elapsed</Label>
-            <>
-              {lastRunElapsedTime < 1 ? `<${FNSP}` : ''}
-              <Duration ms={Math.max(lastRunElapsedTime, 1)} />
-            </>
-          </Value>
-          <Value>
-            <Label>Result</Label>
-            <TerminationWarning
-              // TODO - use all
-              reason={lastRunEndConditions?.[0] ?? 'unknown'}
-            />
-          </Value>
+          {simulationRunning ? (
+            <Value>
+              <Label>Time Elapsed</Label>
+              <>
+                {elapsedTime && elapsedTime < 1 ? `<${FNSP}` : ''}
+                <Duration ms={Math.max(elapsedTime ?? 0, 1)} />
+              </>
+            </Value>
+          ) : (
+            <Value>
+              <Label>Last Run Time</Label>
+              <>
+                {lastRunElapsedTime < 1 ? `<${FNSP}` : ''}
+                <Duration ms={Math.max(lastRunElapsedTime, 1)} />
+              </>
+            </Value>
+          )}
         </StyledStatus>
-        <SpellSequence></SpellSequence>
       </>
     );
   },
