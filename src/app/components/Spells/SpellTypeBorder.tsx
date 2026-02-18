@@ -29,6 +29,8 @@ export const SpellTypeBorder = styled.div.attrs<{
   background-position: center;
   background-size: 100%;
   background-image: var(--data-spelltype-sprite);
+  background-origin: content-box;
+  background-repeat: no-repeat;
   font-family: monospace;
   font-weight: bold;
   user-select: none;
