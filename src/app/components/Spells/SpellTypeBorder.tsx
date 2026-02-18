@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 import type { SpellType } from '../../calc/spellTypes';
 import { getSpriteForSpellType } from '../../calc/spellTypes';
+import { useIcon } from '../../calc/sprite';
 
 export const SpellTypeBorder = styled.div.attrs<{
   spellType?: SpellType;
 }>(({ spellType }) => ({
   style: {
     borderImageSource: getSpriteForSpellType(spellType),
+    backgroundImage: getSpriteForSpellType(spellType),
+    '--data-spelltype-sprite': useIcon(getSpriteForSpellType(spellType)),
   },
 }))`
   display: block;
@@ -18,15 +21,16 @@ export const SpellTypeBorder = styled.div.attrs<{
   border-image-slice: 3 3;
   border-image-outset: 0.2em;
 
-  ::first-letter {
-    font-size: 34px;
-    color: white;
-    border-image-source: url('/data/spelltypes/item_bg_utility.png');
-    background-size: cover;
-    image-rendering: pixelated;
-    border-image-width: 0.54em;
-    border-image-slice: 2 2 2 2;
-    border-image-outset: 0.2em;
-    border-image-width: 0.2em 0.2em 0.2em 0.2em;
-  }
+  position: relative;
+  min-width: var(--size-spell);
+  width: var(--size-spell);
+  height: var(--size-spell);
+
+  background-position: center;
+  background-size: 100%;
+  background-image: var(--data-spelltype-sprite);
+  font-family: monospace;
+  font-weight: bold;
+  user-select: none;
+  image-rendering: pixelated;
 `;

@@ -205,10 +205,6 @@ button[data-tooltip-content='clear'] {
   border-left: var(--border-thickness) solid var(--color-button-border);
 }
 
-:not(#u#n#i) [data-name='Search']:hover {
-  box-shadow: -0.5px 0 0 0.5px #fff8;
-}
-
 :not(#u#n#i) [data-name='MainHeader'] {
   position: fixed;
   inset: 0 0 auto 0;
