@@ -18,14 +18,10 @@ const GridStack = styled.div`
   & > * {
     grid-row: 1/-1;
     grid-column: 1/-1;
-    width: 100%;
-    height: 100%;
   }
 `;
 
 const SpellSprite = styled.div`
-  --size-spell: var(--bsize-spell, 48px);
-
   position: relative;
   min-width: var(--size-spell);
   width: var(--size-spell);
