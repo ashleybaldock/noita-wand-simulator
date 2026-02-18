@@ -1,13 +1,42 @@
 import styled from 'styled-components';
 import type { ActionId } from '../../../calc/actionId';
 import type { SpellType } from '../../../calc/spellTypes';
-import { getSpriteForSpellType } from '../../../calc/spellTypes';
 import type { TooltipId } from '../../Tooltips/tooltipId';
 import type { CSSProperties } from 'react';
 import type { MergableRef } from '../../../util/mergeRefs';
 import { useIcon } from '../../../calc/sprite';
 import { getSpellByActionId } from '../../../calc/spells';
 import { isNotNullOrUndefined } from '../../../util';
+import { SpellTypeBorder } from '../SpellTypeBorder';
+
+const GridStack = styled.div`
+  display: grid;
+  grid-template: 1fr/1fr;
+  place-content: center;
+  place-items: center;
+
+  & > * {
+    grid-row: 1/-1;
+    grid-column: 1/-1;
+  }
+`;
+
+const SpellSprite = styled.div`
+  --size-spell: var(--bsize-spell, 48px);
+
+  position: relative;
+  min-width: var(--size-spell);
+  width: var(--size-spell);
+  height: var(--size-spell);
+
+  background-position: center;
+  background-size: 100%;
+  background-image: var(--data-spell-sprite);
+  font-family: monospace;
+  font-weight: bold;
+  user-select: none;
+  image-rendering: pixelated;
+`;
 
 const _WandAction = ({
   spellType,
@@ -30,15 +59,13 @@ const _WandAction = ({
   ref?: MergableRef<HTMLDivElement>;
   locked?: boolean;
 }) => {
-  const spellTypeSpriteName = getSpriteForSpellType(spellType);
-  const spellTypeSpritePath = useIcon(spellTypeSpriteName);
-
   const spellSpritePath = isNotNullOrUndefined(spellId)
     ? getSpellByActionId(spellId).sprite
     : useIcon('icon.spell.unidentified');
 
   return (
-    <div
+    <GridStack
+      className={className}
       ref={ref}
       data-name="WandAction"
       {...(tooltip && isNotNullOrUndefined(spellId)
@@ -47,13 +74,15 @@ const _WandAction = ({
             'data-tooltip-content': `${locked ? 'lockedspell' : spellId}`,
           }
         : {})}
-      className={className}
-      style={{
-        ...style,
-        '--data-spell-sprite': spellSpritePath,
-        '--data-spelltype-sprite': spellTypeSpritePath,
-      }}
-    />
+    >
+      <SpellTypeBorder spellType={spellType}></SpellTypeBorder>
+      <SpellSprite
+        style={{
+          ...style,
+          '--data-spell-sprite': spellSpritePath,
+        }}
+      ></SpellSprite>
+    </GridStack>
   );
 };
 
@@ -65,9 +94,6 @@ export const WandAction = styled(_WandAction)`
   width: var(--size-spell);
   height: var(--size-spell);
 
-  background-position: center, center;
-  background-size: 100%, 100%;
-  background-image: var(--data-spell-sprite), var(--data-spelltype-sprite);
   font-family: monospace;
   font-weight: bold;
   user-select: none;
@@ -111,7 +137,7 @@ export const DraggableWandAction = styled(WandAction).attrs({
 })`
   --transition-in: var(--transition-hover-in);
   --transition-out: var(--transition-hover-out);
-  --transition-props: background;
+  --transition-props: transform;
 
   transition-duration: 150ms;
   transition-property: var(--transition-props);
@@ -120,8 +146,10 @@ export const DraggableWandAction = styled(WandAction).attrs({
 
   filter: drop-shadow(0.2ch 0.2ch 1px #000a) drop-shadow(0 0 1px #fff1);
 
+  transform: scale(1);
+
   &:hover {
-    background-size: 109%, 100%;
+    transform: scale(1.09);
 
     transition-timing-function: var(--transition-out, ease-out);
     transition-property: var(--transition-props);
