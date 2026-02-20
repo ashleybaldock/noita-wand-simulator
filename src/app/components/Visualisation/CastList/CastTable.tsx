@@ -52,11 +52,8 @@ export const CastTable = ({
 
   return (
     <StyledCastTable $rows={castTableGridRows()}>
-      <CastTableHeadings
-        $castIndex={castIndex}
-        $castId={cast.id}
-      ></CastTableHeadings>
-      <CastTableColumns castId={cast.id}></CastTableColumns>
+      <CastTableHeadings castIndex={castIndex} cast={cast}></CastTableHeadings>
+      <CastTableColumns cast={cast}></CastTableColumns>
     </StyledCastTable>
   );
 };

@@ -1,5 +1,5 @@
 import type { WandState } from './wandState';
-import { isKnownSpell } from './spellId';
+import { isKnownSpell, matchNonSpellIdChars } from './spellId';
 import { v2WandStateMapping } from './wand';
 import {
   trimArray,
@@ -52,6 +52,7 @@ export function generateWandStateFromSearch(search: string): WandState {
         return trimArray(
           decodeParamAsString(raw, '', log.push)
             .split(',')
+            .map((s) => s.toUpperCase().replaceAll(matchNonSpellIdChars, ''))
             .map((s) => (isKnownSpell(s) ? s : null)),
           (s) => !s,
         );
@@ -64,6 +65,7 @@ export function generateWandStateFromSearch(search: string): WandState {
         return trimArray(
           decodeParamAsString(raw, '', log.push)
             .split(',')
+            .map((s) => s.toUpperCase().replaceAll(matchNonSpellIdChars, ''))
             .map((s) => (isKnownSpell(s) ? s : null)),
           (s) => !s,
         );

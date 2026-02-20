@@ -41,7 +41,7 @@ export const clickWand = ({
   wand_available_mana,
   wand_cast_delay,
   endSimulationOnCastCount = 30,
-  endSimulationOnReloadCount = 1,
+  endSimulationOnReloadCount = 2,
   endSimulationOnRefreshCount = 2,
   limitSimulationIterations = 200,
   limitSimulationDuration = 5000,

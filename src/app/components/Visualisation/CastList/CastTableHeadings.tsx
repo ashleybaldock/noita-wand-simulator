@@ -1,6 +1,4 @@
 import { Fragment } from 'react';
-import type { WandCastId } from '../../../calc/eval/WandCast';
-import { useCast, useCastLookup } from '../../../redux';
 import { isNotNullOrUndefined } from '../../../util';
 import { CastTableProjectile } from './CastTableProjectile';
 import {
@@ -13,6 +11,8 @@ import {
 } from './ColumnHeading';
 import { Headings } from './CastTable';
 import { useGroupedProjectiles } from './useGroupedProjectiles';
+import type { WandCastResult } from '../../../calc/eval/WandCastResult';
+import { useCastLookup } from '../../../redux';
 
 // const castSubStateSummary = useMemo(() => {
 /*
@@ -73,50 +73,46 @@ import { useGroupedProjectiles } from './useGroupedProjectiles';
  */
 
 export const CastTableHeadings = ({
-  $castIndex,
-  $castId,
-  $nestingPrefix = [],
+  castIndex,
+  cast,
+  nestingPrefix = [],
 }: {
-  $castIndex: number;
-  $castId: WandCastId;
-  $nestingPrefix?: Array<number>;
+  castIndex: number;
+  cast: WandCastResult;
+  nestingPrefix?: Array<number>;
 }) => {
-  const cast = useCast($castId);
-  if (!cast) {
-    return null;
-  }
-  const { triggerType, projectiles } = cast;
   const castLookup = useCastLookup();
 
+  const { triggerType, projectiles } = cast;
   const { triggerProjectiles, projectilesWithGroupedCounts } =
     useGroupedProjectiles(projectiles);
-  return (
+  return cast ? (
     <Headings>
-      {$nestingPrefix.length === 0 ? (
+      {nestingPrefix.length === 0 ? (
         <>
           <CastIndexColumnHeading
             data-name={'IndexHeading'}
-            index={$castIndex}
-            nestingPrefix={$nestingPrefix}
+            index={castIndex}
+            nestingPrefix={nestingPrefix}
           >
-            {$castIndex}
+            {castIndex}
           </CastIndexColumnHeading>
           <IconsColumnHeading
             data-name={'IconHeading'}
-            nestingPrefix={$nestingPrefix}
+            nestingPrefix={nestingPrefix}
           >
             {''}
           </IconsColumnHeading>
           <TotalsColumnHeading
             data-name={'TotalHeading'}
             origin={true}
-            nestingPrefix={$nestingPrefix}
+            nestingPrefix={nestingPrefix}
           >
             {`Total`}
           </TotalsColumnHeading>
           <WandStatsColumnHeading
             data-name={'WandHeading'}
-            nestingPrefix={$nestingPrefix}
+            nestingPrefix={nestingPrefix}
           >
             {`Wand`}
           </WandStatsColumnHeading>
@@ -125,7 +121,7 @@ export const CastTableHeadings = ({
         <>
           <SubTotalsColumnHeading
             data-name={'SubTotalHeading'}
-            nestingPrefix={[...$nestingPrefix, 1]}
+            nestingPrefix={[...nestingPrefix, 1]}
             triggerType={triggerType}
           >
             {`Payload Total`}
@@ -139,7 +135,7 @@ export const CastTableHeadings = ({
           <ProjectileHeading
             key={index}
             isEndOfTrigger={isEndOfTrigger}
-            nestingPrefix={[...$nestingPrefix, isEndOfTrigger ? 0 : 1]}
+            nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
           >
             <CastTableProjectile projectile={projectile} count={count} />
           </ProjectileHeading>
@@ -159,20 +155,20 @@ export const CastTableHeadings = ({
             <ProjectileHeading
               isStartOfTrigger={isStartOfTrigger}
               isEndOfTrigger={isEndOfTrigger}
-              nestingPrefix={[...$nestingPrefix, isEndOfTrigger ? 0 : 1]}
+              nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
             >
               <CastTableProjectile projectile={projectile} count={1} />
             </ProjectileHeading>
             {isNotNullOrUndefined(triggerCast) && (
               <CastTableHeadings
-                $castId={triggerCast.id}
-                $castIndex={index}
-                $nestingPrefix={[...$nestingPrefix, isEndOfTrigger ? 0 : 1]}
+                cast={triggerCast}
+                castIndex={index}
+                nestingPrefix={[...nestingPrefix, isEndOfTrigger ? 0 : 1]}
               />
             )}
           </Fragment>
         );
       })}
     </Headings>
-  );
+  ) : null;
 };
