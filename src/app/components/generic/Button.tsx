@@ -6,7 +6,7 @@ import type { Tip } from '../Tooltips/tooltipId';
 import type { HotkeyConfig } from '../Tooltips/HotkeyHint';
 import { HotkeyHint } from '../Tooltips/HotkeyHint';
 import type { SpriteName } from '../../calc/sprite';
-import { useIcon } from '../../calc/sprite';
+import { useSpritePath } from '../../calc/sprite';
 import type { MouseEventHandler } from 'react';
 import { isBreakpoint, type BreakPoint } from '../Breakpoint/Breakpoint';
 import { MobileHidden } from '../Breakpoint/MobileHidden';
@@ -39,16 +39,14 @@ const borderForShape = new Map<ButtonShape, string>([
 export type ImgOnlyOption = 'never' | 'always' | BreakPoint;
 
 const StyledButton = styled.button<{
-  $disabled: boolean;
-  $background: string;
-  $imgUrl: string;
-  $imgDataUrl: string;
-  $imgAfter: boolean;
-  $imgOnly: ImgOnlyOption;
-  $minimal: boolean;
-  $shape: ButtonShape;
+  disabled: boolean;
+  background: string;
+  imgAfter: boolean;
+  imgOnly: ImgOnlyOption;
+  minimal: boolean;
+  shape: ButtonShape;
 }>`
-  ${(props) => `
+  ${({ imgAfter, imgOnly, minimal, shape, background, disabled }) => `
   position: relative;
   color: var(--color-button);
   background-color: var(--color-button-background);
@@ -74,7 +72,7 @@ const StyledButton = styled.button<{
   padding-bottom: 0;
 
   ${
-    props.$imgAfter
+    imgAfter
       ? `
   padding-right: var(--pad-img-side);
   padding-left: var(--pad-other-side);
@@ -87,21 +85,9 @@ const StyledButton = styled.button<{
   `
   }
 
-  ${borderForShape.get(props.$shape)}
+  ${borderForShape.get(shape)}
 
-  ${
-    props.$imgUrl.length > 0
-      ? `background-image: url('/${props.$imgUrl}');`
-      : ''
-  }
-
-  ${
-    props.$imgDataUrl.length > 0
-      ? `background-image: url("${props.$imgDataUrl}");`
-      : ''
-  }
-
-  ${props.$background ? `background-image: ${props.$background};` : ''}
+  ${background ? `background-image: ${background};` : ''}
 
   & {
     transition: var(--transition-hover-out);
@@ -109,7 +95,7 @@ const StyledButton = styled.button<{
   }
 
   ${
-    props.$minimal
+    minimal
       ? `
   --background-size: 0.42em;
   --pad-img-side: calc(var(--background-size) + 1.9em);
@@ -137,7 +123,7 @@ const StyledButton = styled.button<{
   }
 
   ${
-    props.$minimal && !props.$disabled
+    minimal && !disabled
       ? `
   &:hover {
     opacity: 1;
@@ -149,7 +135,7 @@ const StyledButton = styled.button<{
 
 
   ${
-    props.$disabled
+    disabled
       ? `
   filter: grayscale(1) contrast(0.7) brightness(0.4);
   background-color: #222;
@@ -172,7 +158,7 @@ const StyledButton = styled.button<{
   `
   }
   ${
-    props.$imgOnly === 'always'
+    imgOnly === 'always'
       ? `
   background-position: center center;
   `
@@ -180,9 +166,9 @@ const StyledButton = styled.button<{
   }
 
   ${
-    isBreakpoint(props.$imgOnly)
+    isBreakpoint(imgOnly)
       ? `
-  @media screen and (max-width: ${props.$imgOnly}) {
+  @media screen and (max-width: ${imgOnly}) {
     background-position: center center;
   }
   `
@@ -238,28 +224,35 @@ export const Button = ({
   useHotkeys(isString(hotkeys) ? hotkeys : hotkeys.hotkeys, onHotkey, {
     enabled: hotkeys !== '',
   });
-  const iconPath = useIcon(icon);
+  const iconPath = useSpritePath(icon);
+
+  const background =
+    iconPath ??
+    (imgUrl.length
+      ? `url('/${imgUrl}')`
+      : imgDataUrl.length
+        ? `url("${imgDataUrl}")`
+        : 'none');
+
   return (
     <StyledButton
       data-name={$dataName}
       className={className}
-      $disabled={disabled}
-      $minimal={minimal}
-      $shape={shape}
-      $background={iconPath}
-      $imgUrl={imgUrl}
-      $imgDataUrl={imgDataUrl}
-      $imgAfter={imgAfter}
-      $imgOnly={imgOnly}
+      disabled={disabled}
+      minimal={minimal}
+      shape={shape}
+      background={background}
+      imgAfter={imgAfter}
+      imgOnly={imgOnly}
       onClick={onClick}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
       {...(tip ? tipToAttributes(tip) : {})}
     >
       {isBreakpoint(imgOnly) ? (
-        <MobileHidden>{children}</MobileHidden>
+        <MobileHidden breakpoint={imgOnly}>{children}</MobileHidden>
       ) : (
-        children
+        imgOnly !== 'always' && children
       )}
       {isString(hotkeys) ? (
         <HotkeyHint hotkeys={hotkeys} position={minimal ? 'above' : 'below'} />

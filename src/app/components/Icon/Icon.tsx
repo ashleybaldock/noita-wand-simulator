@@ -1,5 +1,9 @@
 import styled from 'styled-components';
-import { useIcon, type SpriteName, type SpritePath } from '../../calc/sprite';
+import {
+  useSpritePath,
+  type SpriteName,
+  type SpritePath,
+} from '../../calc/sprite';
 
 export const StyledIcon = styled.span.attrs<{
   $background: SpritePath;
@@ -16,7 +20,7 @@ export const Icon = ({
   className?: string;
   icon?: SpriteName;
 }>) => {
-  const iconPath = useIcon(icon);
+  const iconPath = useSpritePath(icon);
   return <StyledIcon $background={iconPath} className={className}></StyledIcon>;
 };
 

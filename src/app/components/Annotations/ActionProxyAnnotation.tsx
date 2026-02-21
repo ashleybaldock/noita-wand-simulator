@@ -9,7 +9,7 @@ import { useConfig } from '../../redux';
 import { isNotNullOrUndefined } from '../../util';
 import { getSpellByActionId } from '../../calc/spells';
 import type { SpriteName } from '../../calc/sprite';
-import { useIcon } from '../../calc/sprite';
+import { useSpritePath } from '../../calc/sprite';
 import { BaseAnnotation } from './BaseAnnotation';
 
 export const ProxyDiv = styled(BaseAnnotation)<{
@@ -66,7 +66,7 @@ export const ActionProxyAnnotation = ({
         ? `icon.expiration${spell?.permanently_attached ? '.disabled' : ''}`
         : undefined;
 
-  const iconPath = useIcon(icon);
+  const iconPath = useSpritePath(icon);
 
   if (showProxies && isNotNullOrUndefined(proxy)) {
     return (

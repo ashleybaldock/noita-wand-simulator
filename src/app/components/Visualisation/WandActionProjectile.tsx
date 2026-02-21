@@ -40,7 +40,7 @@ export const WandActionProjectile = ({
           (projectile.spell && getSpellByActionId(projectile.spell.id).type) ??
           'projectile'
         }
-        spellId={projectile.spell?.id}
+        spellId={projectile.spell?.id ?? null}
       />
 
       <ActionProxyAnnotation proxy={projectile.proxy} />

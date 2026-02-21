@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import type { SpellType } from '../../calc/spellTypes';
 import { getSpriteForSpellType } from '../../calc/spellTypes';
-import { useIcon } from '../../calc/sprite';
+import { useSpritePath } from '../../calc/sprite';
 
 export const SpellTypeBorder = styled.div.attrs<{
   spellType?: SpellType;
@@ -9,11 +9,10 @@ export const SpellTypeBorder = styled.div.attrs<{
   style: {
     borderImageSource: getSpriteForSpellType(spellType),
     backgroundImage: getSpriteForSpellType(spellType),
-    '--data-spelltype-sprite': useIcon(getSpriteForSpellType(spellType)),
+    '--data-spelltype-sprite': useSpritePath(getSpriteForSpellType(spellType)),
   },
 }))`
   display: block;
-  padding: 0.2em;
 
   background-size: cover;
   image-rendering: pixelated;

@@ -141,6 +141,8 @@ const uiSpriteDefinition = [
   ['icon.spelltype.utility', `url('/data/spelltypes/svg/item_bg_utility.svg')`],
   ['icon.spelltype.passive', `url('/data/spelltypes/svg/item_bg_passive.svg')`],
   ['icon.spell.unidentified', `url('/data/spellUnidentified.png')`],
+
+  ['icon.projectile.unidentified', `url('/data/projectile_unidentified.png')`],
 ] as const;
 
 export type UiSpriteName = (typeof uiSpriteDefinition)[number][0];

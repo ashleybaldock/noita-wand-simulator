@@ -81,7 +81,7 @@ export const CastTableProjectile = ({
               getSpellByActionId(projectile.spell.id).type) ??
             'projectile'
           }
-          spellId={projectile.spell?.id}
+          spellId={projectile.spell?.id ?? null}
         />
         <ProjectileCountAnnotation count={count}></ProjectileCountAnnotation>
 

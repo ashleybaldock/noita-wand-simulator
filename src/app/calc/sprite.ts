@@ -11,9 +11,12 @@ import { uiSprites } from './uiSprite';
 import type { UiSpriteName, UiSpritePath } from './uiSprite';
 
 /* This one is hard-coded in index.css */
-const missingSprite = ['missing', 'var(--sprite-missing)'] as const;
-export type MissingSprite = (typeof missingSprite)[0];
-export type MissingSpritePath = (typeof missingSprite)[1];
+const missingSprite = {
+  name: 'missing',
+  path: 'var(--sprite-missing)',
+} as const;
+export type MissingSprite = (typeof missingSprite)['name'];
+export type MissingSpritePath = (typeof missingSprite)['path'];
 
 export type SpriteName =
   | SpellSpriteName
@@ -52,6 +55,10 @@ const spriteMap = new Map<SpriteName, Sprite>(
     iterOne([noSprite.name, noSprite]),
   ),
 );
-export const useIcon = (spriteName: SpriteName | undefined) =>
+export const useSprite = (spriteName: SpriteName | undefined): Sprite =>
+  (isNotNullOrUndefined(spriteName) && spriteMap.get(spriteName)) ||
+  missingSprite;
+
+export const useSpritePath = (spriteName: SpriteName | undefined): SpritePath =>
   (isNotNullOrUndefined(spriteName) && spriteMap.get(spriteName)?.path) ||
-  missingSprite[1];
+  missingSprite.path;

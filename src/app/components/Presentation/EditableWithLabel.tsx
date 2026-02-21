@@ -91,19 +91,19 @@ export const EditableWithLabel = ({
   className,
   children,
   disabled = false,
-  $dataName = 'EditableWithLabel',
+  dataName = 'EditableWithLabel',
   tip,
 }: React.PropsWithChildren<{
   className?: string;
   disabled?: boolean;
-  $dataName?: string;
+  dataName?: string;
   tip?: Tip;
 }>) => {
   const [hideAccessibilityHints] = useConfigToggle('hideAccessibilityHints');
   // const [mirrorControls] = useConfigToggle('mirrorControls');
   return (
     <StyledEditableWithLabel
-      data-name={$dataName}
+      data-name={dataName}
       className={className}
       disabled={disabled}
       accessHints={!hideAccessibilityHints}

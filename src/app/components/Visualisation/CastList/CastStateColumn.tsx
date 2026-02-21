@@ -5,7 +5,7 @@ import { WithDebugHints } from '../../Debug';
 import { Unchanged } from '../../Presentation';
 import { useConfig, useWand } from '../../../redux';
 import type { SpriteName } from '../../../calc/sprite';
-import { useIcon } from '../../../calc/sprite';
+import { useSpritePath } from '../../../calc/sprite';
 import { castTableSections } from './ShotTableRowConfig';
 import { Fragment } from 'react/jsx-runtime';
 import { keyToRow } from '../../../util';
@@ -73,7 +73,7 @@ const PropertyIcon = styled(GridRowItem).attrs<{
   firstInGroup?: boolean;
   isTotal?: boolean;
 }>(({ icon }) => ({
-  background: useIcon(icon),
+  background: useSpritePath(icon),
   'data-name': 'PropertyIcon',
 }))`
   position: sticky;

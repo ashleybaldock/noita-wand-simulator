@@ -17,9 +17,8 @@ export const spellByIdMap = Object.fromEntries(
   ),
 ) as ActionIdToSpellMap;
 
-export function getSpellByActionId(id: Readonly<ActionId>) {
-  return spellByIdMap[id];
-}
+export const getSpellByActionId = (id: Readonly<ActionId>): Readonly<Spell> =>
+  spellByIdMap[id];
 
 export const unlockFlags = [
   ...new Set<string>(

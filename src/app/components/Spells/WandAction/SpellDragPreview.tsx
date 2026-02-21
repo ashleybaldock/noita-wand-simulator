@@ -1,7 +1,5 @@
 import { usePreview } from 'react-dnd-multi-backend';
-import { WandAction } from './';
-import { isKnownSpell } from '../../../redux/Wand/spellId';
-import { getSpellByActionId } from '../../../calc/spells';
+import { DragPreviewWandAction } from './';
 import type { DraggedSpell } from './DragItems';
 
 export const SpellDragPreview = () => {
@@ -13,18 +11,11 @@ export const SpellDragPreview = () => {
     item: { actionId },
     style,
   } = preview;
-  const spell = isKnownSpell(actionId)
-    ? getSpellByActionId(actionId)
-    : undefined;
-  if (!spell) {
-    return null;
-  }
 
   return (
-    <WandAction
-      spellId={spell.id}
-      spellType={spell.type}
+    <DragPreviewWandAction
+      spellId={actionId}
       style={style}
-    ></WandAction>
+    ></DragPreviewWandAction>
   );
 };
