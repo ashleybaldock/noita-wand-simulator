@@ -4,7 +4,6 @@ import { isValidEntityPath, entityToActions } from '../entityLookup';
 import { mana as gunMana, dont_draw_actions } from '../gun';
 import type { SpellDeckInfo } from '../spell';
 import { getSpellByActionId } from '../spells';
-import { isValidActionCallSource } from '../spellTypes';
 import { triggerConditionFor } from '../trigger';
 import { nextActionCallSequenceId, type ActionCall } from './ActionCall';
 import type { SimulationState } from './SimulationState';
@@ -14,6 +13,7 @@ import { observer } from './wandObserver';
 import { nextWandCastId } from './WandCast';
 import { isNotUndefined, isUndefined } from '../../util';
 import { MapTree } from '../../util/MapTree';
+import { isValidActionCallSource } from '../validActionCallSource';
 
 export const beginObservation = (
   result: SimulationResult,

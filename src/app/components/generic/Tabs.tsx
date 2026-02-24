@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import styled from 'styled-components';
 import type { SpellType } from '../../calc/spellTypes';
-import { WandAction } from '../Spells/WandAction';
 import { HotkeyHint } from '../Tooltips/HotkeyHint';
 import type { ActionId } from '../../calc/actionId';
 
@@ -224,7 +223,7 @@ export const Tabs = ({
         {tabs[displayIndex].content}
       </ActiveTabContent>
       <TabTitlesDiv data-name="TabTitles">
-        {tabs.map(({ title, key, content, buttonContent }, index) => (
+        {tabs.map(({ key, content, buttonContent }, index) => (
           <TabButton
             data-name={`Tab${selectedTabIndex === index ? ':Selected' : ''}`}
             {...(selectedTabIndex === index ? { 'data-selected': '' } : {})}
