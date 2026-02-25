@@ -144,7 +144,7 @@ const TabsWandAction = styled(WandAction)`
   }
 `;
 
-const SpellSelectorWandActionBorder = styled(SpellSlot)`
+const SpellSelectorSpellSlot = styled(SpellSlot)`
   --spellbg: var(--sprite-inventory-grid-box-unknown);
 
   &:hover {
@@ -216,18 +216,18 @@ const WandActionSelect = ({
     }
   };
   return locked ? (
-    <SpellSelectorWandActionBorder data-name="SpellSelectorWandActionBorder">
+    <SpellSelectorSpellSlot data-name="SpellSelectorWandActionBorder">
       <SpellSelectorLockedSpell spellType={type}></SpellSelectorLockedSpell>
-    </SpellSelectorWandActionBorder>
+    </SpellSelectorSpellSlot>
   ) : (
-    <SpellSelectorWandActionBorder data-name="SpellSelectorWandActionBorder">
+    <SpellSelectorSpellSlot data-name="SpellSelectorWandActionBorder">
       <SpellSelectorWandActionDragSource
         actionId={id}
         onClick={dragSourceOnClick}
       >
         <SpellSelectorWandAction spellId={id} spellType={type} />
       </SpellSelectorWandActionDragSource>
-    </SpellSelectorWandActionBorder>
+    </SpellSelectorSpellSlot>
   );
 };
 

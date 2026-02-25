@@ -120,19 +120,25 @@ const TabButton = styled.button<{
 `;
 
 const ActiveTabContent = styled.div`
-  position: static;
-  box-sizing: content-box;
-  height: calc(
-    round(down, min(30vh, var(--spellandgap) * 6), var(--spellandgap)) +
-      var(--bsize-padh)
-  );
   --bg-color: #3e1a1a;
   --bg-texture: url('/data/spelltypes/svg/item_bg_projectile.svg');
   --bsize-gap: 4px;
   --spellandgap: calc(var(--bsize-spell) + var(--bsize-gap));
   --bsize-padh: 6px;
 
-  gap: var(--bsize-gap);
+  position: static;
+  box-sizing: content-box;
+  height: calc(
+    round(down, min(30vh, var(--spellandgap) * 6), var(--spellandgap)) +
+      var(--bsize-padh)
+  );
+  overscroll-behavior: none;
+  scroll-snap-type: y mandatory;
+  scroll-padding: 10px;
+  overflow: scroll;
+  scroll-margin-top: var(--top-banner-height);
+
+  width: auto;
   height: calc(
     round(
         up,
@@ -141,7 +147,10 @@ const ActiveTabContent = styled.div`
       ) +
       calc(var(--bsize-padh) * 2)
   );
-  width: auto;
+  container-type: size;
+  contain-intrinsic-size: 100%;
+
+  gap: var(--bsize-gap);
   border: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
   border-radius: 0.26rem 0.46rem;
   background-image:
@@ -155,14 +164,6 @@ const ActiveTabContent = styled.div`
     inset 0 3px 3px 3px #000,
     inset 0 0 2px 4px var(--bg-color),
     1px 2px 1px 0 #000;
-
-  overscroll-behavior: none;
-  scroll-snap-type: y mandatory;
-  scroll-padding: 10px;
-  overflow: scroll;
-
-  container-type: size;
-  contain-intrinsic-size: 100%;
 `;
 
 const HiddenContentDiv = styled.div`

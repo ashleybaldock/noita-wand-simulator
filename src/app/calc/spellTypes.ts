@@ -1,5 +1,6 @@
 import { isNotNullOrUndefined } from '../util';
 import type { ActionId } from './actionId';
+import type { SpellFamily } from './spellFamily';
 
 const SpellTypeInfoMapDefinition = {
   projectile: {
@@ -8,6 +9,25 @@ const SpellTypeInfoMapDefinition = {
     exampleId: 'LIGHT_BULLET',
     description: '',
     url: '',
+    families: [
+      'spark',
+      'bombs',
+      'plasma',
+      'tele',
+      'saws',
+      'heal',
+      'spitter',
+      'hole',
+      'arrows',
+      'mist',
+      'nature',
+      'magicmissle',
+      'firebolt',
+      'physics',
+      'lightning',
+      'lumi',
+      'fire',
+    ],
   },
   static: {
     name: 'Static',
@@ -15,6 +35,17 @@ const SpellTypeInfoMapDefinition = {
     exampleId: 'DELAYED_SPELL',
     description: '',
     url: '',
+    families: [
+      'field',
+      'vacuum',
+      'projfield',
+      'cloud',
+      'sade',
+      'explosion',
+      'summon',
+      'barrier',
+      'bighole',
+    ],
   },
   modifier: {
     name: 'Modifier',
@@ -22,6 +53,31 @@ const SpellTypeInfoMapDefinition = {
     exampleId: 'MANA_REDUCE',
     description: '',
     url: '',
+    families: [
+      'trail',
+      'orbit',
+      'larpa',
+      'glimmer',
+      'thrower',
+      'personal',
+      'curse',
+      'arc',
+      'crit',
+      'hitfx',
+      'bundle',
+      'bounce',
+      'topowermod',
+      'shot',
+      'transmod',
+      'dmgtype',
+      'pathmod',
+      'gravity',
+      'warpmod',
+      'friendly',
+      'homing',
+      'lifetime',
+      'explodemod',
+    ],
   },
   multicast: {
     name: 'Multicast',
@@ -29,6 +85,7 @@ const SpellTypeInfoMapDefinition = {
     exampleId: 'BURST_2',
     description: '',
     url: '',
+    families: ['tuple', 'scatter', 'formation'],
   },
   material: {
     name: 'Material',
@@ -36,6 +93,7 @@ const SpellTypeInfoMapDefinition = {
     exampleId: 'MATERIAL_ACID',
     description: '',
     url: '',
+    families: ['sea', 'circle', 'touch', 'drop'],
   },
   other: {
     name: 'Other',
@@ -43,6 +101,14 @@ const SpellTypeInfoMapDefinition = {
     exampleId: 'ADD_TRIGGER',
     description: '',
     url: '',
+    families: [
+      'addtrigger',
+      'greek',
+      'divideby',
+      'random',
+      'kantele',
+      'ocarina',
+    ],
   },
   utility: {
     name: 'Utility',
@@ -50,6 +116,7 @@ const SpellTypeInfoMapDefinition = {
     exampleId: 'TELEPORT_CAST',
     description: '',
     url: '',
+    families: ['plicate', 'platform', 'cast', 'spellsto', 'topower'],
   },
   passive: {
     name: 'Passive',
@@ -64,6 +131,7 @@ export type SpellType = keyof typeof SpellTypeInfoMapDefinition;
 
 type PartialInfo = {
   exampleId: ActionId;
+  families: SpellFamily[];
 };
 
 export type SpellTypeInfo = (typeof SpellTypeInfoMapDefinition)[SpellType] &
