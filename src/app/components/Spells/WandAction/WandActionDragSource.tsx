@@ -27,9 +27,6 @@ const ActionDragSource = styled.div<{
     opacity: 1;
     pointer-events: auto;
     cursor: grab;
-    &&:hover > div > div {
-      z-index: 1000;
-    }
      `}
 `;
 

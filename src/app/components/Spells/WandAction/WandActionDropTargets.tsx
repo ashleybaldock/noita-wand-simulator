@@ -13,12 +13,10 @@ export const WandActionDropTargets = ({
     <OverSpellDropTarget wandIndex={wandIndex}>
       {children}
       {isMainWandIndex(wandIndex) && (
-        <>
-          <BetweenSpellsDropTarget
-            indexOfSpellBefore={wandIndex}
-            indexOfSpellAfter={wandIndex === 0 ? END : wandIndex - 1}
-          />
-        </>
+        <BetweenSpellsDropTarget
+          indexOfSpellBefore={wandIndex}
+          indexOfSpellAfter={wandIndex === 0 ? END : wandIndex - 1}
+        />
       )}
     </OverSpellDropTarget>
   );

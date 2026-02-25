@@ -188,9 +188,6 @@ const SpellSelectorLockedSpell = styled(LockedWandAction)`
 const SpellSelectorWandAction = styled(DraggableWandAction)`
   opacity: 1;
   padding: 0.04em;
-
-  &:hover {
-  }
 `;
 
 const isSpellUnlocked = (config: Config, spell: Spell) => {
@@ -316,49 +313,3 @@ export const SpellSelector = () => {
     </MainDiv>
   );
 };
-
-// const tabPerGroupedType = useMemo(
-//   () =>
-//     spellTypeGroupsOrdered
-//       .map((spellTypeGroup) => {
-//         const { contains } = spellTypeGroupInfoMap[spellTypeGroup];
-//         return {
-//           titleParts: contains.map((spellType) => {
-//             const { name, sprite, exampleId } = spellTypeInfoMap[spellType];
-//             return {
-//               text: name,
-//               type: spellType,
-//               bgSrc: sprite,
-//               egSrc: exampleId,
-//               key: `part-${name}`,
-//             };
-//           }),
-//           key: `tab-${spellTypeGroup}`,
-//           iconSrc: '',
-//           content: (
-//             <>
-//               {contains.map((spellType) => {
-//                 return (
-//                   <SpellCategorySpellsDiv
-//                     key={spellType}
-//                     data-name="SpellCategorySpellsDiv"
-//                   >
-//                     {spellsWithUnlockInfoByType[spellType].map(
-//                       ({ locked, spell }) => (
-//                         <WandActionSelect
-//                           locked={locked}
-//                           spell={spell}
-//                           key={spell.id}
-//                         />
-//                       ),
-//                     )}
-//                   </SpellCategorySpellsDiv>
-//                 );
-//               })}
-//             </>
-//           ),
-//         };
-//       })
-//       .reverse(),
-//   [spellsWithUnlockInfoByType],
-// );

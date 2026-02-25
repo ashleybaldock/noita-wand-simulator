@@ -22,6 +22,7 @@ export const SpellSlot = styled.div<
   background-size: cover;
   image-rendering: pixelated;
 `;
+
 export const WandEditorSpellSlot = styled(SpellSlot).attrs<{
   key?: string;
   droppable?: boolean;
@@ -59,41 +60,3 @@ export const WandEditorSpellSlot = styled(SpellSlot).attrs<{
         ? `background-image: var(--sprite-full-inventory-box-highlight), var(--sprite-full-inventory-box);`
         : `background-image: var(--sprite-full-inventory-box);`}
 `;
-
-// const _SpellSlot = ({
-//   className = '',
-//   children,
-//   droppable = true,
-//   key,
-// }: React.PropsWithChildren<{
-//   className?: string;
-//   droppable?: boolean;
-//   key?: Key | null;
-// }>) => {
-//   const [{ isOver }, dropConnector] = useDrop(
-//     () => ({
-//       accept: 'spell',
-//       canDrop: () => false,
-//       collect: (monitor) => ({
-//         canDrop: monitor.canDrop(),
-//         isOver: monitor.isOver(),
-//       }),
-//     }),
-//     [],
-//   );
-//   const dropRef = useDropRef(dropConnector);
-//   return (
-//     <StyledDiv
-//       key={key}
-//       ref={dropRef}
-//       data-name="WandActionBorder"
-//       highlight={droppable && isOver}
-//       disabled={!droppable}
-//       className={className}
-//     >
-//       {children}
-//     </StyledDiv>
-//   );
-// };
-
-// export const SpellSlot = styled(_SpellSlot)``;
