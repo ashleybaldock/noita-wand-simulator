@@ -51,12 +51,12 @@ export function RegisterGunShotEffects(recoil_knockback: number): void {
 }
 
 export function BeginProjectile(
-  actionId: ActionId | WandId,
+  sourceId: ActionId | WandId,
   entity_filename: ProjectileId,
 ): void {
   observer.onEvent({
     name: 'BeginProjectile',
-    payload: { actionId, projectileId: entity_filename },
+    payload: { sourceId, projectileId: entity_filename },
   });
 }
 
