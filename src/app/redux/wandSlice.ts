@@ -17,6 +17,7 @@ import {
   ZTA,
   type WandIndex,
 } from './WandIndex';
+import type { DeleteStrategy } from './EditMode';
 // TODO these could be surfaced in the UI for debugging wand urls
 // console.debug(messages);
 
@@ -123,11 +124,17 @@ export const wandSlice = createSlice({
     deleteSpellsInRange: (
       state,
       {
-        payload: { fromIndex, toIndex, shift = 'none' },
+        payload: {
+          fromIndex,
+          toIndex,
+          deleteStrategy = 'blank',
+          shiftDirection = 'left',
+        },
       }: PayloadAction<{
         fromIndex: MainWandIndex;
         toIndex: MainWandIndex;
-        shift: SpellShiftDirection;
+        shiftDirection?: SpellShiftDirection;
+        deleteStrategy?: DeleteStrategy;
       }>,
     ): void => {
       const [a, b] = [
@@ -136,9 +143,11 @@ export const wandSlice = createSlice({
       ];
       state.spellIds = fixedLengthCopy(
         [
-          ...(shift === 'right' ? new Array(b - a).fill(null) : []),
+          ...(deleteStrategy === 'shift' && shiftDirection === 'right'
+            ? new Array(b - a).fill(null)
+            : []),
           ...state.spellIds.slice(0, a),
-          ...(shift === 'none' ? new Array(b - a).fill(null) : []),
+          ...(deleteStrategy === 'blank' ? new Array(b - a).fill(null) : []),
           ...state.spellIds.slice(b + 1),
         ],
         state.wand.deck_capacity,

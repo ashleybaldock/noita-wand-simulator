@@ -111,17 +111,14 @@ export const WandActionEditor = () => {
    *   visual change from in-progress/active selection to none */
   useHotkeys('Backspace, r, shift+x', () => {
     if (isSelecting) {
-      dispatch(removeSelectedSpells({ shift: 'left' }));
-      dispatch(clearSelection());
+      dispatch(removeSelectedSpells({ deleteStrategy: 'shift' }));
     } else {
-      dispatch(removeSpellBeforeCursor({ shift: 'left' }));
-      dispatch(moveCursor({ by: -1 }));
+      dispatch(removeSpellBeforeCursor());
     }
   });
   useHotkeys('ctrl+Backspace, ctrl+r', () => {
     if (isSelecting) {
-      dispatch(removeSelectedSpells({ shift: 'right' }));
-      dispatch(clearSelection());
+      dispatch(removeSelectedSpells({ shiftDirection: 'right' }));
     } else {
       dispatch(removeSpellBeforeCursor({ shift: 'right' }));
     }
@@ -129,18 +126,15 @@ export const WandActionEditor = () => {
   useHotkeys('shift+Backspace, shift+r, x', () => {
     if (isSelecting) {
       dispatch(removeSelectedSpells({}));
-      dispatch(clearSelection());
     } else {
-      dispatch(removeSpellAfterCursor({ shift: 'left' }));
+      dispatch(removeSpellAfterCursor());
     }
   });
   useHotkeys('ctrl+shift+Backspace, ctrl+shift+r', () => {
     if (isSelecting) {
       dispatch(removeSelectedSpells({}));
-      dispatch(clearSelection());
     } else {
       dispatch(removeSpellAfterCursor({ shift: 'right' }));
-      dispatch(moveCursor({ by: 1 }));
     }
   });
 

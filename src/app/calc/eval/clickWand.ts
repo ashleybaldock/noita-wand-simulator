@@ -13,7 +13,7 @@ import { isValidActionId } from '../actionId';
 import type { WandCastResult } from './WandCastResult';
 import { AlwaysCastIndicies } from '../../redux/WandIndex';
 import { serializeSimulationResult } from './serialize';
-import { startTimer, type ChangeFields } from '../../util';
+import { startTimer, tee, type ChangeFields } from '../../util';
 import type { SimulationResult } from './SimulationResult';
 import { beginObservation } from './beginObservation';
 import { resetSimulationState } from './SimulationState';
@@ -163,5 +163,5 @@ export const clickWand = ({
     endObservation();
   }
 
-  return serializeSimulationResult(result);
+  return tee.log(serializeSimulationResult(result));
 };

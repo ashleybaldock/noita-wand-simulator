@@ -9,6 +9,8 @@ import {
   moveSpell,
 } from './wandSlice';
 import { isMainWandIndex } from './WandIndex';
+import { useEditMode } from './hooks';
+import type { DeleteStrategy } from './EditMode';
 
 /* Cursor shifts to the right, along with the rest
  *  of the spells on the wand
@@ -56,7 +58,7 @@ export const insertSpellAfterCursor =
   };
 
 export const removeSpellBeforeCursor =
-  ({ shift = 'left' }: { shift: SpellShiftDirection }): AppThunk =>
+  ({ shift = 'left' }: { shift?: SpellShiftDirection } = {}): AppThunk =>
   (dispatch, getState): void => {
     const state = getState();
     dispatch(
@@ -68,10 +70,14 @@ export const removeSpellBeforeCursor =
         shift,
       }),
     );
+    /* TODO - undo cursor position */
+    if (shift === 'left') {
+      dispatch(moveCursor({ by: -1 }));
+    }
   };
 
 export const removeSpellAfterCursor =
-  ({ shift = 'left' }: { shift: SpellShiftDirection }): AppThunk =>
+  ({ shift = 'left' }: { shift?: SpellShiftDirection } = {}): AppThunk =>
   (dispatch, getState): void => {
     const state = getState();
     dispatch(
@@ -80,8 +86,15 @@ export const removeSpellAfterCursor =
         shift,
       }),
     );
+    /* TODO - undo cursor position */
+    if (shift === 'right') {
+      dispatch(moveCursor({ by: 1 }));
+    }
   };
 
+/*
+ * Move insert cursor by some offset, with bounds checks
+ */
 export const moveCursor =
   ({
     by,
@@ -107,30 +120,31 @@ export const moveCursor =
 
 /**
  * Remove all spells in current selection
- *
- * TODO - if deleting spells from a selection
- *        make undo restore the selection
  */
 export const removeSelectedSpells =
   ({
-    shift = 'none',
+    shiftDirection = 'left',
+    deleteStrategy = 'blank',
     clear = true,
   }: {
-    shift?: SpellShiftDirection;
+    deleteStrategy?: DeleteStrategy;
+    shiftDirection?: SpellShiftDirection;
     clear?: boolean;
-  }): AppThunk =>
+  } = {}): AppThunk =>
   (dispatch, getState): void => {
     const {
       editor: { selectFrom, selectTo },
     } = getState();
+    useEditMode();
     if (isMainWandIndex(selectFrom) && isMainWandIndex(selectTo)) {
       dispatch(
         deleteSpellsInRange({
           fromIndex: selectFrom,
           toIndex: selectTo,
-          shift,
+          shiftDirection,
         }),
       );
+      /* TODO - on undo restore selection */
       if (clear) {
         dispatch(clearSelection());
       }
