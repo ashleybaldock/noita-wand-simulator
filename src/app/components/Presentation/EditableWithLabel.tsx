@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useConfigToggle } from '../../redux';
 import { type Tip, tipToAttributes } from '../Tooltips/tooltipId';
 
-const StyledEditableWithLabel = styled.label<{
+const StyledEditableWithLabel = styled.div<{
   accessHints?: boolean;
   disabled?: boolean;
 }>`

@@ -18,34 +18,37 @@ const missingSprite = {
 export type MissingSprite = (typeof missingSprite)['name'];
 export type MissingSpritePath = (typeof missingSprite)['path'];
 
+/* Explicitly no sprite, rather than a missing one */
+const noSprite = { name: 'none', path: 'linear-gradient(#0000 0 0)' } as const;
+export type NoSprite = (typeof noSprite)['name'];
+export type NoSpritePath = (typeof noSprite)['path'];
+
 export type SpriteName =
   | SpellSpriteName
   | SpellTypeSpriteName
   | UiSpriteName
   | Perk
   | MissingSprite
-  | 'none';
+  | NoSprite;
 export type SpritePath =
   | UiSpritePath
   | PerkSprite
   | SpellSpritePath
   | MissingSpritePath
-  | '';
+  | NoSpritePath;
 
 export type Sprite = {
   name: SpriteName;
   path: SpritePath;
 };
 
-/* Explicitly no sprite, rather than a missing one */
-const noSprite: Sprite = { name: 'none', path: '' } as const;
-
 export type IconUrl =
   | UiSpritePath
   | PerkSprite
   | SpellSpritePath
   | GenSprite
-  | MissingSprite;
+  | MissingSprite
+  | NoSpritePath;
 
 const spriteMap = new Map<SpriteName, Sprite>(
   concat(
@@ -60,5 +63,4 @@ export const useSprite = (spriteName: SpriteName | undefined): Sprite =>
   missingSprite;
 
 export const useSpritePath = (spriteName: SpriteName | undefined): SpritePath =>
-  (isNotNullOrUndefined(spriteName) && spriteMap.get(spriteName)?.path) ||
-  missingSprite.path;
+  useSprite(spriteName).path;

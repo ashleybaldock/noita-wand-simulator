@@ -10,9 +10,9 @@ import { useValidity } from '../../../hooks/useValidity';
 import { useInputValue } from '../../../hooks/useInputValue';
 import { noop } from '../../../util';
 
-const Buttons = styled.div<{ $vertical: boolean }>`
+const Buttons = styled.div<{ vertical: boolean }>`
   display: flex;
-  flex-direction: ${({ $vertical = false }) => ($vertical ? 'column' : 'row')};
+  flex-direction: ${({ vertical = false }) => (vertical ? 'column' : 'row')};
   position: absolute;
 
   border: 1px solid var(--color-bdshade-light);
@@ -118,7 +118,7 @@ const NumberInput = styled.input`
   }
 `;
 
-const NumericInputButton = styled(Button)<{ $vertical: boolean }>`
+const NumericInputButton = styled(Button)<{ vertical: boolean }>`
   --padding-sides: 1em;
   --hover-radius: 4px;
   aspect-ratio: 1;
@@ -127,23 +127,9 @@ const NumericInputButton = styled(Button)<{ $vertical: boolean }>`
   font-size: 1em;
   line-height: 1;
   background-color: black;
-  background-position: center center;
-  border: 1px solid #444;
-  border-radius: 0;
-  box-sizing: border-box;
-  flex: 0;
-  display: flex;
-  padding-top: 0.6em;
-  padding-left: var(--padding-sides);
-  padding-right: var(--padding-sides);
-  margin: 0;
   z-index: 8;
 
-  height: 2em;
-  background-size: 48%;
   align-self: center;
-  display: flex;
-  background-position: center;
   aspect-ratio: calc(var(--𝚽) * 2 / 3);
   text-align: center;
   padding: 0;
@@ -151,26 +137,40 @@ const NumericInputButton = styled(Button)<{ $vertical: boolean }>`
   font-size: 0.8em;
   line-height: normal;
   border-radius: 0;
-  border-left-width: 1px;
-  border-right-width: 1px;
 
   transition-property: box-shadow, border-radius;
   transition-duration: 60ms;
   transition-timing-function: ease;
 
   opacity: 1;
-  --padding-sides: 0;
-  justify-content: center;
+
+  margin: 0;
+  box-sizing: content-box;
   text-align: center;
-  align-content: center;
-  align-items: center;
+  line-height: 0;
+  max-height: unset;
+  min-height: unset;
+  --height: 4em;
+  height: var(--height);
+  padding: 0.2ch;
+  border: 1px solid var(--color-button-border);
+  --width: calc(var(--height) * var(--aspect-ratio));
+  min-width: var(--width);
+  max-width: var(--width);
+  --aspect-ratio: calc(var(--𝚽) * 2 / 3);
+  display: grid;
+  grid-template: 1fr/1fr;
+  place-content: center;
+  place-items: center;
+  background-position: center;
+  background-size: contain;
+  box-shadow: 0 0 0 0.2ch var(--color-button-border);
 
   ${({ disabled }) => (disabled ? 'pointer-events: none;' : ``)}
 
   &:hover {
     border-color: #444;
-    box-shadow: 0 0 0 1px var(--color-numeric-border-hover);
-    border-radius: var(--bdr);
+    box-shadow: 0 0 0 0.2ch var(--color-numeric-border-hover);
     z-index: 10;
     transform: scale(1.08);
 
@@ -180,8 +180,8 @@ const NumericInputButton = styled(Button)<{ $vertical: boolean }>`
   }
 
   &:first-of-type {
-    ${({ $vertical }) =>
-      $vertical
+    ${({ vertical }) =>
+      vertical
         ? `
       border-top-left-radius: var(--bdr);
       border-top-right-radius: var(--bdr);
@@ -197,8 +197,8 @@ const NumericInputButton = styled(Button)<{ $vertical: boolean }>`
     border-radius: var(--bdr);
   }
   &:last-of-type {
-    ${({ $vertical }) =>
-      $vertical
+    ${({ vertical }) =>
+      vertical
         ? `
       border-bottom-left-radius: var(--bdr);
       border-bottom-right-radius: var(--bdr);
@@ -227,18 +227,10 @@ const NumericInputButton = styled(Button)<{ $vertical: boolean }>`
 `;
 const ButtonSmallest = styled(NumericInputButton)``;
 const ButtonSmall = styled(NumericInputButton)``;
-const ButtonStepDown = styled(NumericInputButton)`
-  margin-left: -1px;
-`;
-const ButtonBigStepDown = styled(NumericInputButton)`
-  margin-left: -1px;
-`;
-const ButtonBigStepUp = styled(NumericInputButton)`
-  margin-right: -1px;
-`;
-const ButtonStepUp = styled(NumericInputButton)`
-  margin-right: -1px;
-`;
+const ButtonStepDown = styled(NumericInputButton)``;
+const ButtonBigStepDown = styled(NumericInputButton)``;
+const ButtonBigStepUp = styled(NumericInputButton)``;
+const ButtonStepUp = styled(NumericInputButton)``;
 const ButtonLarge = styled(NumericInputButton)``;
 const ButtonLargest = styled(NumericInputButton)``;
 
@@ -426,15 +418,16 @@ export const NumericInput = ({
       {...($tip ? tipToAttributes($tip) : {})}
     >
       {editing && (
-        <ButtonsBefore $vertical={vertical} data-name="ButtonsBefore">
+        <ButtonsBefore vertical={vertical} data-name="ButtonsBefore">
           {setSmallestButton && (
             <ButtonSmallest
-              $vertical={vertical}
+              vertical={vertical}
               dataName="SetMinimum"
               onClick={() => {
                 changeBy(Number.NEGATIVE_INFINITY);
                 refocus();
               }}
+              icon={'none'}
               minimal={true}
               disabled={value <= smallest}
               hotkeys={'shift+alt+down'}
@@ -444,12 +437,13 @@ export const NumericInput = ({
           )}
           {setSmallButton && (
             <ButtonSmall
-              $vertical={vertical}
+              vertical={vertical}
               dataName="SetSmall"
               onClick={() => {
                 changeTo(small);
                 refocus();
               }}
+              icon={'none'}
               minimal={true}
               disabled={value <= small}
               hotkeys={'shift+alt+down'}
@@ -459,7 +453,7 @@ export const NumericInput = ({
           )}
           {bigStepButtons && (
             <ButtonBigStepDown
-              $vertical={vertical}
+              vertical={vertical}
               dataName="BigStepDown"
               minimal={true}
               icon={'icon.chevron.d2x'}
@@ -473,7 +467,7 @@ export const NumericInput = ({
           )}
           {stepButtons && (
             <ButtonStepDown
-              $vertical={vertical}
+              vertical={vertical}
               dataName="StepDown"
               minimal={true}
               icon={'icon.chevron.d'}
@@ -507,10 +501,10 @@ export const NumericInput = ({
       {/*   (e.key === 'Esc' && abortChanges()) */}
       {/* } */}
       {editing && (
-        <ButtonsAfter $vertical={vertical} data-name="ButtonsAfter">
+        <ButtonsAfter vertical={vertical} data-name="ButtonsAfter">
           {stepButtons && (
             <ButtonStepUp
-              $vertical={vertical}
+              vertical={vertical}
               dataName="StepUp"
               minimal={true}
               disabled={atMaximum}
@@ -524,7 +518,7 @@ export const NumericInput = ({
           )}
           {bigStepButtons && (
             <ButtonBigStepUp
-              $vertical={vertical}
+              vertical={vertical}
               dataName="BigStepUp"
               minimal={true}
               disabled={atMaximum}
@@ -538,12 +532,13 @@ export const NumericInput = ({
           )}
           {setLargeButton && (
             <ButtonLarge
-              $vertical={vertical}
+              vertical={vertical}
               dataName="SetLarge"
               onClick={() => {
                 changeTo(large);
                 refocus();
               }}
+              icon={'none'}
               minimal={true}
               disabled={value >= large}
               hotkeys={'shift+alt+up'}
@@ -553,7 +548,7 @@ export const NumericInput = ({
           )}
           {setLargestButton && (
             <ButtonLargest
-              $vertical={vertical}
+              vertical={vertical}
               dataName="SetMaximum"
               onClick={(e) => {
                 e.stopPropagation();
@@ -561,6 +556,7 @@ export const NumericInput = ({
                 changeBy(Number.POSITIVE_INFINITY);
                 refocus();
               }}
+              icon={'none'}
               minimal={true}
               disabled={atMaximum}
               hotkeys={'shift+alt+up'}
