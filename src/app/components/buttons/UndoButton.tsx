@@ -32,4 +32,5 @@ export const UndoButton = styled(_UndoButton)`
   border-color: var(--color-button-border) var(--color-button-border)
     var(--color-button-border) var(--color-button-border);
   border-style: solid solid solid solid;
+  grid-column: undo;
 `;

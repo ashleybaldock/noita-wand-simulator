@@ -7,19 +7,21 @@ import { Button } from './Button';
 import { toPng } from 'html-to-image';
 import type { HotkeyConfig } from '../Tooltips/HotkeyHint';
 
-function _SaveImageButton({
+const _SaveImageButton = ({
   fileName,
   targetRef,
   hotkeys,
+  dataName = 'SaveImageButton',
   className = '',
 }: {
   targetRef: RefObject<HTMLElement | null>;
   name: string;
+  dataName?: string;
   fileName: string;
   enabled: boolean;
   hotkeys?: string | HotkeyConfig;
   className?: string;
-}) {
+}) => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleClick = useCallback(() => {
@@ -57,21 +59,23 @@ function _SaveImageButton({
     <>
       <Button
         minimal
+        dataName={dataName}
         onClick={() => handleClick()}
         imgAfter
         icon={'icon.download.png'}
         hotkeys={hotkeys}
         className={className}
       >
-        <span>.PNG</span>
+        <span>Download .PNG</span>
       </Button>
       <ProcessingModal visible={isProcessing}>Processing...</ProcessingModal>
     </>
   );
-}
+};
 
 export const SaveImageButton = styled(_SaveImageButton)`
   cursor: pointer;
+  --pad-img-side: calc(var(--background-size) + 2.6em);
 `;
 
 // const stateHash = useMemo(() => {

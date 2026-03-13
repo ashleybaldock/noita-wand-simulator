@@ -12,7 +12,7 @@ const _RedoButton = ({ className }: { className?: string }) => {
   return (
     <Button
       className={className}
-      data-name="RedoButton"
+      dataName="RedoButton"
       hotkeys={'r, ctrl+r, shift+mod+z'}
       onHotkey={redo}
       tip={{ kind: 'uihint', id: 'redo' } as Tip}
@@ -25,4 +25,12 @@ const _RedoButton = ({ className }: { className?: string }) => {
   );
 };
 
-export const RedoButton = styled(_RedoButton)``;
+export const RedoButton = styled(_RedoButton)`
+  margin-left: 0;
+  border-radius: var(--bdr-br);
+  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) calc(var(--ou) * 0.5);
+  border-color: var(--color-button-border) var(--color-button-border)
+    var(--color-button-border) var(--color-button-border);
+  border-style: solid;
+  grid-column: redo;
+`;

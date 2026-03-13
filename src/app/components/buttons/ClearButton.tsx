@@ -25,5 +25,6 @@ export const ClearButton = styled(_ClearButton)`
   border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) var(--ou);
   border-color: var(--color-button-border) var(--color-button-border)
     var(--color-button-border) var(--color-button-border);
-  border-style: solid solid solid solid;
+  border-style: solid;
+  grid-column: clear;
 `;

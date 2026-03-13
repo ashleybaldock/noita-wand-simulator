@@ -51,7 +51,7 @@ export function RegisterGunShotEffects(recoil_knockback: number): void {
 }
 
 export function BeginProjectile(
-  sourceId: ActionId | WandId,
+  sourceId: ActionId,
   entity_filename: ProjectileId,
 ): void {
   observer.onEvent({
@@ -65,7 +65,7 @@ export function EndProjectile(actionId: ActionId | WandId): void {
 }
 
 export function BeginTriggerTimer(
-  actionId: ActionId | WandId,
+  actionId: ActionId,
   entity_filename: ProjectileId,
   action_draw_count: number,
   delay_frames: number,
@@ -73,7 +73,7 @@ export function BeginTriggerTimer(
   observer.onEvent({
     name: 'BeginTriggerTimer',
     payload: {
-      actionId,
+      sourceId: actionId,
       projectileId: entity_filename,
       action_draw_count,
       delay_frames,
@@ -82,24 +82,32 @@ export function BeginTriggerTimer(
 }
 
 export function BeginTriggerHitWorld(
-  actionId: ActionId | WandId,
+  actionId: ActionId,
   entity_filename: ProjectileId,
   action_draw_count: number,
 ) {
   observer.onEvent({
     name: 'BeginTriggerHitWorld',
-    payload: { actionId, projectileId: entity_filename, action_draw_count },
+    payload: {
+      sourceId: actionId,
+      projectileId: entity_filename,
+      action_draw_count,
+    },
   });
 }
 
 export function BeginTriggerDeath(
-  actionId: ActionId | WandId,
+  actionId: ActionId,
   entity_filename: ProjectileId,
   action_draw_count: number,
 ) {
   observer.onEvent({
     name: 'BeginTriggerDeath',
-    payload: { actionId, projectileId: entity_filename, action_draw_count },
+    payload: {
+      sourceId: actionId,
+      projectileId: entity_filename,
+      action_draw_count,
+    },
   });
 }
 export function OnCreateShot(

@@ -22,25 +22,27 @@ export const beginObservation = (
   observer.subscribe(({ name, payload }: WandEvent) => {
     switch (name) {
       case 'BeginProjectile': {
-        const { sourceId: sourceActionId, projectileId } = payload;
+        const { sourceId, projectileId } = payload;
 
-        let sourceAction =
-          state.validSourceCalledActions[
-            state.validSourceCalledActions.length - 1
-          ]?.spell;
+        // let sourceAction =
+        //   state.validSourceCalledActions[
+        //     state.validSourceCalledActions.length - 1
+        //   ]?.spell;
+
+        //         if (!sourceAction) {
+        //           // fallback to most likely entity source if no action
+        //           // if (!entityToActions(entity)) {
+        //           if (
+        //             !isValidEntityPath(projectileId) ||
+        //             entityToActions(projectileId) === undefined
+        //           ) {
+        //             throw Error(`missing entity: ${projectileId}`);
+        //           }
+        //         }
+
         let proxy: SpellDeckInfo | undefined = undefined;
 
-        if (!sourceAction) {
-          // fallback to most likely entity source if no action
-          // if (!entityToActions(entity)) {
-          if (
-            !isValidEntityPath(projectileId) ||
-            entityToActions(projectileId) === undefined
-          ) {
-            throw Error(`missing entity: ${projectileId}`);
-          }
-          sourceAction = getSpellByActionId(entityToActions(projectileId)?.[0]);
-        }
+        let sourceAction = getSpellByActionId(sourceId);
 
         if (
           projectileId !==

@@ -28,7 +28,7 @@ const _ExportWikiButton = () => {
         }
         icon={'icon.copy'}
       >
-        <span>WIKI:Wand</span>
+        <span>Copy WIKI:Wand</span>
       </Button>
       <Button
         hotkeys={{ hotkeys: 'ctrl+shift+e', position: 'bottom' }}
@@ -41,7 +41,7 @@ const _ExportWikiButton = () => {
         }
         icon={'icon.copy'}
       >
-        <span>WIKI:SpellSequence</span>
+        <span>Copy WIKI:SpellSequence</span>
       </Button>
       <Button // hotkeys={{ hotkeys: 'ctrl+e', position: 'bottom' }}
         minimal
@@ -53,7 +53,7 @@ const _ExportWikiButton = () => {
         }
         icon={'icon.copy'}
       >
-        <span>WIKI:Example</span>
+        <span>Copy WIKI:Example</span>
       </Button>
     </>
   );

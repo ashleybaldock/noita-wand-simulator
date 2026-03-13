@@ -41,7 +41,7 @@ const WandActionEditorWrapper = styled.div`
 
 const WandBuilderTopButtons = styled.div`
   display: grid;
-  grid-template-columns: [left title-start] auto [title-end] 1fr [ undo-start] auto [undo-end redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end reset-start] auto [reset-end] 1ch [ right];
+  grid-template-columns: [left export-start] auto [export-end] 1fr [ undo-start] auto [undo-end redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end reset-start] auto [reset-end] 1ch [ right];
   grid-template-rows: [top title-start] 1fr [ title-end bottom];
   margin: 0;
   filter: none;

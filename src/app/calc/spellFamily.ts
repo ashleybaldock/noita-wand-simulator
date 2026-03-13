@@ -1,4 +1,4 @@
-import { invertMap, invertOneToManyMap, objectEntries } from '../util';
+import { invertOneToManyMap, objectEntries } from '../util';
 import type { ActionId } from './actionId';
 
 const SpellFamilyInfoMapDefinition = {
@@ -360,17 +360,16 @@ const SpellFamilyInfoMapDefinition = {
 
 export type SpellFamily = keyof typeof SpellFamilyInfoMapDefinition;
 
-export type SpellFamilyInfo =
-  (typeof SpellFamilyInfoMapDefinition)[SpellFamily];
-
 export type SpellFamilyInfoRecord = Record<SpellFamily, readonly ActionId[]>;
 
 const spellFamilyInfoRecord =
   SpellFamilyInfoMapDefinition as SpellFamilyInfoRecord;
 
-const spellFamilyInfoMap = new Map([...objectEntries(spellFamilyInfoRecord)]);
+const spellFamilyInfoMap = new Map<SpellFamily, readonly ActionId[]>([
+  ...objectEntries(spellFamilyInfoRecord),
+]);
 
 const inverseSpellFamilyInfoMap = invertOneToManyMap(spellFamilyInfoMap);
 
-export const getSpellFamilyForActionId = (id: ActionId) =>
-  inverseSpellFamilyInfoMap.get(id);
+export const getSpellFamilyForActionId = (id: ActionId): SpellFamily | null =>
+  inverseSpellFamilyInfoMap.get(id) ?? null;

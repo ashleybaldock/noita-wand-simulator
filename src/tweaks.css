@@ -39,31 +39,6 @@
   grid-column: 1 / span 2;
 }
 
-button[data-tooltip-content='clear'] {
-  grid-column: clear;
-}
-button[data-tooltip-content='reset'] {
-  grid-column: reset;
-}
-button[data-tooltip-content='redo'],
-button[data-tooltip-content='reset'] {
-  margin-left: 0;
-  border-radius: var(--bdr-br);
-  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) calc(var(--ou) * 0.5);
-  border-color: var(--color-button-border) var(--color-button-border)
-    var(--color-button-border) var(--color-button-border);
-  border-style: solid solid solid solid;
-}
-button[data-tooltip-content='undo'],
-button[data-tooltip-content='clear'] {
-  margin-left: 0;
-  border-radius: var(--bdr-bl);
-  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) var(--ou);
-  border-color: var(--color-button-border) var(--color-button-border)
-    var(--color-button-border) var(--color-button-border);
-  border-style: solid solid solid solid;
-}
-
 .debug
   :is(
     [data-name='NumberInput']:valid,
@@ -378,61 +353,6 @@ button[data-tooltip-content='clear'] {
   position: sticky;
 }
 
-:not(#u#n#i) [data-name='ExportOptions'] {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
-  grid-row: 1;
-  grid-column: 1;
-  inset: auto auto auto auto;
-  height: 1em;
-  overflow: visible;
-  padding: 0.2em 0.5ch;
-  margin: 0;
-}
-:not(#u#n#i) [data-name='ExportOptions']:hover {
-  inset: auto auto auto auto;
-  padding: 0.2em 0.5ch;
-  margin: 0;
-  border: none;
-}
-:not(#u#n#i) [data-name='ExportOptions'] > [data-name='DefaultExport'] {
-  position: relative;
-  inset: auto;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: 1fr;
-  grid-column: 1 / span 2;
-  grid-row: 1;
-}
-:not(#u#n#i) [data-name='ExportOptions'] > [data-name='DefaultExport']::before {
-  position: relative;
-  inset: auto;
-}
-:not(#u#n#i) [data-name='ExportOptions'] > [data-name='RevealExports'] {
-  position: relative;
-  inset: auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-column: 1;
-  grid-row: auto;
-  grid-auto-rows: 1fr;
-}
-:not(#u#n#i) [data-name='ExportOptions'] {
-  background-color: var(--color-base-background);
-}
-:not(#u#n#i)
-  [data-name='ExportOptions']
-  > :is([data-name='RevealExports'], [data-name='DefaultExport']) {
-  background-color: var(--color-base-background);
-}
-:not(#u#n#i)
-  [data-name='ExportOptions']
-  > :is([data-name='RevealExports'], [data-name='DefaultExport']) {
-  background-color: var(--color-base-background);
-}
-
 :not(#u#n#i) [data-name='ActiveTabContent'] {
   height: round(
     down,
@@ -576,13 +496,6 @@ button[data-tooltip-content='clear'] {
 
 :not(#u#n#i) [data-name='StickyHeading'] {
   margin: 0;
-}
-
-:not(#u#n#i) [data-name='ExportOptions'],
-:not(#u#n#i)
-  [data-name='ExportOptions']
-  > :is([data-name='RevealExports'], [data-name='DefaultExport']) {
-  background-color: var(--color-base-background);
 }
 
 :not(#u#n#i) [data-name='StickyGroup']:has(> [data-name='SimulationStatus']) {

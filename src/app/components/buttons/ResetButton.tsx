@@ -8,6 +8,7 @@ const _ResetButton = ({ className }: { className?: string }) => {
   return (
     <Button
       className={className}
+      dataName="ResetButton"
       imgOnly="500px"
       hotkeys={'t'}
       tip={{ kind: 'uihint', id: 'reset' }}
@@ -19,4 +20,12 @@ const _ResetButton = ({ className }: { className?: string }) => {
   );
 };
 
-export const ResetButton = styled(_ResetButton)``;
+export const ResetButton = styled(_ResetButton)`
+  margin-left: 0;
+  border-radius: var(--bdr-br);
+  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) calc(var(--ou) * 0.5);
+  border-color: var(--color-button-border) var(--color-button-border)
+    var(--color-button-border) var(--color-button-border);
+  border-style: solid;
+  grid-column: reset;
+`;
