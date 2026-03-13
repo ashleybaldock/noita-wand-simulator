@@ -12,7 +12,7 @@ const _UndoButton = ({ className }: { className?: string }) => {
   return (
     <Button
       className={className}
-      data-name="UndoButton"
+      dataName="UndoButton"
       hotkeys={'u, ctrl+z, mod+z'}
       onHotkey={undo}
       tip={{ kind: 'uihint', id: 'undo' } as Tip}
@@ -25,4 +25,11 @@ const _UndoButton = ({ className }: { className?: string }) => {
   );
 };
 
-export const UndoButton = styled(_UndoButton)``;
+export const UndoButton = styled(_UndoButton)`
+  margin-left: 0;
+  border-radius: var(--bdr-bl);
+  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) var(--ou);
+  border-color: var(--color-button-border) var(--color-button-border)
+    var(--color-button-border) var(--color-button-border);
+  border-style: solid solid solid solid;
+`;

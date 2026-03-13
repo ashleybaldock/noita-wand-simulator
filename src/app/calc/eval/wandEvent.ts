@@ -38,18 +38,22 @@ export type WandEventBase = {
 
   /* Begin Sequence: Projectile */
   BeginProjectile: {
+    sourceId: ActionId;
     projectileId: ProjectileId;
   };
   BeginTriggerHitWorld: {
+    sourceId: ActionId;
     projectileId: ProjectileId;
     action_draw_count: number;
   };
   BeginTriggerTimer: {
+    sourceId: ActionId;
     projectileId: ProjectileId;
     action_draw_count: number;
     delay_frames: number;
   };
   BeginTriggerDeath: {
+    sourceId: ActionId;
     projectileId: ProjectileId;
     action_draw_count: number;
   };

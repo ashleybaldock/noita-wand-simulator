@@ -18,6 +18,9 @@ import {
   insertSpellBeforeCursor,
 } from '../../redux/editorThunks';
 import { SpellSlot } from '../Spells/SpellSlot';
+import { getSpellFamilyForActionId } from '../../calc/spellFamily';
+import { isNotUndefined, isUndefined } from '../../util';
+import { isValidActionId } from '../../calc/actionId';
 
 const MainDiv = styled.div`
   --bsize-spell: 40px;
@@ -240,9 +243,25 @@ export const SpellSelector = () => {
     [config],
   );
 
-  const spellsWithUnlockInfoByType = useMemo(() => {
-    return groupBy(spellsWithUnlockInfo, ({ spell: { type } }) => type);
-  }, [spellsWithUnlockInfo]);
+  const spellFamiliesWithUnlockInfo = useMemo(
+    () =>
+      groupBy(
+        spellsWithUnlockInfo,
+        ({ spell: { id } }) =>
+          (isValidActionId(id) && (getSpellFamilyForActionId(id) ?? false)) ||
+          id,
+      ),
+    [spellsWithUnlockInfo],
+  );
+
+  const spellsWithUnlockInfoByType = useMemo(
+    () => groupBy(spellsWithUnlockInfo, ({ spell: { type } }) => type),
+    [spellsWithUnlockInfo],
+  );
+
+  // const spellFamiliesWithUnlockInfoByType = useMemo(() => {
+  //   return groupBy(spellsWithUnlockInfoByType, ({ spell: { type } }) => type);
+  // }, [spellsWithUnlockInfoByType]);
 
   const tabPerType = useMemo(() => {
     return objectEntries(spellsWithUnlockInfoByType)

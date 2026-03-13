@@ -21,12 +21,8 @@ export const beginObservation = (
 ) =>
   observer.subscribe(({ name, payload }: WandEvent) => {
     switch (name) {
-      /**
-       * Projectiles can be added by excuting a spell's action (which
-       * calls add_projectilezx..)
-       */
       case 'BeginProjectile': {
-        const { projectileId } = payload;
+        const { sourceId: sourceActionId, projectileId } = payload;
 
         let sourceAction =
           state.validSourceCalledActions[

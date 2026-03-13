@@ -8,6 +8,7 @@ const _ClearButton = ({ className }: { className?: string }) => {
   return (
     <Button
       className={className}
+      dataName="ClearButton"
       imgOnly="500px"
       hotkeys={'shift+t'}
       tip={{ kind: 'uihint', id: 'clear' }}
@@ -18,4 +19,11 @@ const _ClearButton = ({ className }: { className?: string }) => {
     </Button>
   );
 };
-export const ClearButton = styled(_ClearButton)``;
+export const ClearButton = styled(_ClearButton)`
+  margin-left: 0;
+  border-radius: var(--bdr-bl);
+  border-width: var(--ou) calc(var(--ou) * 0.5) var(--ou) var(--ou);
+  border-color: var(--color-button-border) var(--color-button-border)
+    var(--color-button-border) var(--color-button-border);
+  border-style: solid solid solid solid;
+`;

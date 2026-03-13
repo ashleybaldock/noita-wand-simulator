@@ -268,7 +268,7 @@ function create_shot(
 }
 
 function draw_shot(
-  actionId: ActionId | WandId,
+  sourceId: ActionId | WandId,
   shot: Shot,
   instant_reload_if_empty: boolean,
 ) {
@@ -277,7 +277,7 @@ function draw_shot(
   c = shot.state;
 
   shot_structure = {};
-  draw_actions(actionId, shot.num_of_cards_to_draw, instant_reload_if_empty);
+  draw_actions(sourceId, shot.num_of_cards_to_draw, instant_reload_if_empty);
   register_action(shot.state);
   SetProjectileConfigs();
 
@@ -286,9 +286,9 @@ function draw_shot(
 
 // helper functions. actions may call these
 
-export function order_deck(actionId: ActionId | WandId) {
+export function order_deck(sourceId: ActionId | WandId) {
   if (gun.shuffle_deck_when_empty) {
-    SetRandomSeed(actionId, GameGetFrameNum(), GameGetFrameNum());
+    SetRandomSeed(sourceId, GameGetFrameNum(), GameGetFrameNum());
     // shuffle the deck
     // state_shuffled = true;
 
@@ -323,13 +323,13 @@ export function order_deck(actionId: ActionId | WandId) {
   }
 }
 
-function play_action(actionId: ActionId | WandId, spell: Readonly<Spell>) {
-  OnActionPlayed(actionId, spell, c, playing_permanent_card);
+function play_action(sourceId: ActionId | WandId, spell: Readonly<Spell>) {
+  OnActionPlayed(sourceId, spell, c, playing_permanent_card);
 
   hand.push(spell);
 
   set_current_action(spell);
-  call_action(actionId, 'draw', spell, c);
+  call_action(sourceId, 'draw', spell, c);
 
   let is_projectile = false;
 
@@ -359,7 +359,7 @@ function play_action(actionId: ActionId | WandId, spell: Readonly<Spell>) {
 }
 
 export function draw_action(
-  actionId: ActionId | WandId,
+  sourceId: ActionId | WandId,
   instant_reload_if_empty: boolean,
 ) {
   let action = null;
@@ -373,12 +373,12 @@ export function draw_action(
 
   if (deck.length <= 0) {
     if (instant_reload_if_empty && !force_stop_draws) {
-      OnWrap(actionId, deck, hand, discarded);
-      move_discarded_to_deck(actionId);
-      order_deck(actionId);
+      OnWrap(sourceId, deck, hand, discarded);
+      move_discarded_to_deck(sourceId);
+      order_deck(sourceId);
       start_reload = true;
     } else {
-      OnCantWrap(actionId);
+      OnCantWrap(sourceId);
       reloading = true;
       return true;
     }
@@ -412,7 +412,7 @@ export function draw_action(
 
   //- add the action to hand and execute it //-
   if (action !== null) {
-    play_action(actionId, action);
+    play_action(sourceId, action);
   }
 
   return true;
@@ -429,7 +429,7 @@ function handle_mana_addition(action: Spell) {
 }
 
 export function draw_actions(
-  actionId: ActionId | WandId,
+  sourceId: ActionId | WandId,
   how_many: number,
   instant_reload_if_empty: boolean,
 ) {
@@ -445,11 +445,11 @@ export function draw_actions(
     }
 
     for (let i = 0; i < how_many; i++) {
-      const ok = draw_action(actionId, instant_reload_if_empty);
+      const ok = draw_action(sourceId, instant_reload_if_empty);
       if (!ok) {
         // attempt to draw other actions
         while (deck.length > 0) {
-          if (draw_action(actionId, instant_reload_if_empty)) {
+          if (draw_action(sourceId, instant_reload_if_empty)) {
             break;
           }
         }
@@ -463,52 +463,52 @@ export function draw_actions(
 }
 
 export function add_projectile(
-  actionId: ActionId | WandId,
+  sourceId: ActionId,
   entity_filename: ProjectileId,
 ) {
-  BeginProjectile(actionId, entity_filename);
-  EndProjectile(actionId);
+  BeginProjectile(sourceId, entity_filename);
+  EndProjectile(sourceId);
 }
 
 export function add_projectile_trigger_timer(
-  actionId: ActionId | WandId,
+  sourceId: ActionId,
   entity_filename: ProjectileId,
   delay_frames: number,
   action_draw_count: number,
 ) {
-  BeginProjectile(actionId, entity_filename);
-  BeginTriggerTimer(actionId, entity_filename, action_draw_count, delay_frames);
-  draw_shot(actionId, create_shot(actionId, action_draw_count), true);
-  EndTrigger(actionId);
-  EndProjectile(actionId);
+  BeginProjectile(sourceId, entity_filename);
+  BeginTriggerTimer(sourceId, entity_filename, action_draw_count, delay_frames);
+  draw_shot(sourceId, create_shot(sourceId, action_draw_count), true);
+  EndTrigger(sourceId);
+  EndProjectile(sourceId);
 }
 
 export function add_projectile_trigger_hit_world(
-  actionId: ActionId | WandId,
+  sourceId: ActionId,
   entity_filename: ProjectileId,
   action_draw_count: number,
 ) {
-  BeginProjectile(actionId, entity_filename);
-  BeginTriggerHitWorld(actionId, entity_filename, action_draw_count);
-  draw_shot(actionId, create_shot(actionId, action_draw_count), true);
-  EndTrigger(actionId);
-  EndProjectile(actionId);
+  BeginProjectile(sourceId, entity_filename);
+  BeginTriggerHitWorld(sourceId, entity_filename, action_draw_count);
+  draw_shot(sourceId, create_shot(sourceId, action_draw_count), true);
+  EndTrigger(sourceId);
+  EndProjectile(sourceId);
 }
 
 export function add_projectile_trigger_death(
-  actionId: ActionId | WandId,
+  sourceId: ActionId,
   entity_filename: ProjectileId,
   action_draw_count: number,
 ) {
-  BeginProjectile(actionId, entity_filename);
-  BeginTriggerDeath(actionId, entity_filename, action_draw_count);
-  draw_shot(actionId, create_shot(actionId, action_draw_count), true);
-  EndTrigger(actionId);
-  EndProjectile(actionId);
+  BeginProjectile(sourceId, entity_filename);
+  BeginTriggerDeath(sourceId, entity_filename, action_draw_count);
+  draw_shot(sourceId, create_shot(sourceId, action_draw_count), true);
+  EndTrigger(sourceId);
+  EndProjectile(sourceId);
 }
 
-export function move_discarded_to_deck(actionId: ActionId | WandId) {
-  OnMoveDiscardedToDeck(actionId, discarded);
+export function move_discarded_to_deck(sourceId: ActionId | WandId) {
+  OnMoveDiscardedToDeck(sourceId, discarded);
   discarded.forEach((action) => {
     deck.push(action);
   });

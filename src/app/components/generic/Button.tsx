@@ -196,10 +196,10 @@ export const Button = ({
   shape = 'pill',
   children,
   className = '',
-  $dataName,
+  dataName,
 }: React.PropsWithChildren<{
   className?: string;
-  $dataName?: string;
+  dataName?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onHotkey?: HotkeyCallback;
   onMouseOver?: MouseEventHandler<HTMLButtonElement>;
@@ -236,7 +236,7 @@ export const Button = ({
 
   return (
     <StyledButton
-      data-name={$dataName}
+      data-name={dataName}
       className={className}
       disabled={disabled}
       minimal={minimal}

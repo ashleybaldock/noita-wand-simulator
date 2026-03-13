@@ -430,7 +430,7 @@ export const NumericInput = ({
           {setSmallestButton && (
             <ButtonSmallest
               $vertical={vertical}
-              $dataName="SetMinimum"
+              dataName="SetMinimum"
               onClick={() => {
                 changeBy(Number.NEGATIVE_INFINITY);
                 refocus();
@@ -445,7 +445,7 @@ export const NumericInput = ({
           {setSmallButton && (
             <ButtonSmall
               $vertical={vertical}
-              $dataName="SetSmall"
+              dataName="SetSmall"
               onClick={() => {
                 changeTo(small);
                 refocus();
@@ -460,7 +460,7 @@ export const NumericInput = ({
           {bigStepButtons && (
             <ButtonBigStepDown
               $vertical={vertical}
-              $dataName="BigStepDown"
+              dataName="BigStepDown"
               minimal={true}
               icon={'icon.chevron.d2x'}
               disabled={atMinimum}
@@ -474,7 +474,7 @@ export const NumericInput = ({
           {stepButtons && (
             <ButtonStepDown
               $vertical={vertical}
-              $dataName="StepDown"
+              dataName="StepDown"
               minimal={true}
               icon={'icon.chevron.d'}
               disabled={atMinimum}
@@ -511,7 +511,7 @@ export const NumericInput = ({
           {stepButtons && (
             <ButtonStepUp
               $vertical={vertical}
-              $dataName="StepUp"
+              dataName="StepUp"
               minimal={true}
               disabled={atMaximum}
               icon={'icon.chevron.u'}
@@ -525,7 +525,7 @@ export const NumericInput = ({
           {bigStepButtons && (
             <ButtonBigStepUp
               $vertical={vertical}
-              $dataName="BigStepUp"
+              dataName="BigStepUp"
               minimal={true}
               disabled={atMaximum}
               icon={'icon.chevron.u2x'}
@@ -539,7 +539,7 @@ export const NumericInput = ({
           {setLargeButton && (
             <ButtonLarge
               $vertical={vertical}
-              $dataName="SetLarge"
+              dataName="SetLarge"
               onClick={() => {
                 changeTo(large);
                 refocus();
@@ -554,7 +554,7 @@ export const NumericInput = ({
           {setLargestButton && (
             <ButtonLargest
               $vertical={vertical}
-              $dataName="SetMaximum"
+              dataName="SetMaximum"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();

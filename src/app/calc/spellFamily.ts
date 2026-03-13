@@ -1,39 +1,22 @@
+import { invertMap, invertOneToManyMap, objectEntries } from '../util';
 import type { ActionId } from './actionId';
 
 const SpellFamilyInfoMapDefinition = {
-  addtrigger: {
-    spells: ['ADD_TRIGGER', 'ADD_TIMER', 'ADD_DEATH_TRIGGER'],
-  },
-  greek: {
-    spells: ['ALPHA', 'GAMMA', 'TAU', 'OMEGA', 'MU', 'PHI', 'SIGMA', 'ZETA'],
-  },
-  divideby: {
-    spells: ['DIVIDE_2', 'DIVIDE_3', 'DIVIDE_4', 'DIVIDE_10'],
-  },
-  random: {
-    spells: ['RANDOM_SPELL', 'DRAW_RANDOM', 'DRAW_RANDOM_X3', 'DRAW_3_RANDOM'],
-  },
-  kantele: {
-    spells: [
-      'KANTELE_A',
-      'KANTELE_D',
-      'KANTELE_DIS',
-      'KANTELE_E',
-      'KANTELE_G]',
-    ],
-  },
-  ocarina: {
-    spells: [
-      'OCARINA_A',
-      'OCARINA_B',
-      'OCARINA_C',
-      'OCARINA_D',
-      'OCARINA_E',
-      'OCARINA_F',
-      'OCARINA_GSHARP',
-      'OCARINA_A2',
-    ],
-  },
+  addtrigger: ['ADD_TRIGGER', 'ADD_TIMER', 'ADD_DEATH_TRIGGER'],
+  greek: ['ALPHA', 'GAMMA', 'TAU', 'OMEGA', 'MU', 'PHI', 'SIGMA', 'ZETA'],
+  divideby: ['DIVIDE_2', 'DIVIDE_3', 'DIVIDE_4', 'DIVIDE_10'],
+  random: ['RANDOM_SPELL', 'DRAW_RANDOM', 'DRAW_RANDOM_X3', 'DRAW_3_RANDOM'],
+  kantele: ['KANTELE_A', 'KANTELE_D', 'KANTELE_DIS', 'KANTELE_E', 'KANTELE_G]'],
+  ocarina: [
+    'OCARINA_A',
+    'OCARINA_B',
+    'OCARINA_C',
+    'OCARINA_D',
+    'OCARINA_E',
+    'OCARINA_F',
+    'OCARINA_GSHARP',
+    'OCARINA_A2',
+  ],
   spark: [
     'LIGHT_BULLET',
     'LIGHT_BULLET_TRIGGER',
@@ -377,14 +360,17 @@ const SpellFamilyInfoMapDefinition = {
 
 export type SpellFamily = keyof typeof SpellFamilyInfoMapDefinition;
 
-type PartialSpellFamilyInfo = {
-  spells: ActionId[];
-};
-
 export type SpellFamilyInfo =
-  (typeof SpellFamilyInfoMapDefinition)[SpellFamily] & PartialSpellFamilyInfo;
+  (typeof SpellFamilyInfoMapDefinition)[SpellFamily];
 
-export type SpellFamilyInfoMap = Record<SpellFamily, Readonly<SpellFamilyInfo>>;
+export type SpellFamilyInfoRecord = Record<SpellFamily, readonly ActionId[]>;
 
-export const spellTypeInfoMap =
-  SpellFamilyInfoMapDefinition as SpellFamilyInfoMap;
+const spellFamilyInfoRecord =
+  SpellFamilyInfoMapDefinition as SpellFamilyInfoRecord;
+
+const spellFamilyInfoMap = new Map([...objectEntries(spellFamilyInfoRecord)]);
+
+const inverseSpellFamilyInfoMap = invertOneToManyMap(spellFamilyInfoMap);
+
+export const getSpellFamilyForActionId = (id: ActionId) =>
+  inverseSpellFamilyInfoMap.get(id);

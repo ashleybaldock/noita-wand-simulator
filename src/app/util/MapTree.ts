@@ -70,8 +70,8 @@ export class MapTree<T> implements TreeRoot<T>, SerializableTree<T> {
   protected _root: MapTreeNode<T> | null = null;
 
   constructor(init: Readonly<SerializedTree<T>> = []) {
-    let i = 0;
     const lookup = new Map<ParentIdx, MapTreeNode<T>>();
+    let i = 0;
     for (const [parentIdx, value] of init) {
       lookup.set(i++, (lookup.get(parentIdx) ?? this).appendChild(value));
     }

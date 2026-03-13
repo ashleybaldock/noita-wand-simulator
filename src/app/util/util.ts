@@ -1,5 +1,5 @@
 import { FPS } from './constants';
-import { mapIter, sequentialIter } from './iterTools';
+import { flatMapIter, mapIter, sequentialIter } from './iterTools';
 import { isFunction, isNotNullOrUndefined, isUndefined } from './Predicate';
 export { tee } from './teebug';
 export type { TeeBug } from './teebug';
@@ -89,10 +89,10 @@ export type KeyOf<T extends object> = KeyOfType<Required<T>, ObjectKey>;
 export const objectKeys = <T extends object>(obj: T): (keyof T)[] =>
   Object.keys(obj) as (keyof T)[];
 
-export type ObjectEntries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
+export type ObjectEntries<T> = { [K in keyof T]: [K, T[K]] }[keyof T][];
 
-export const objectEntries = <T extends object>(obj: T): ObjectEntries<T>[] =>
-  Object.entries(obj) as ObjectEntries<T>[];
+export const objectEntries = <T extends object>(obj: T): ObjectEntries<T> =>
+  Object.entries(obj) as ObjectEntries<T>;
 
 export const groupBy = <T, K extends string>(arr: T[], keyFn: (x: T) => K) =>
   arr.reduce(
@@ -175,6 +175,15 @@ export class DefaultedMap<K, V> extends Map<K, V> {
  */
 export const invertMap = <K, V>(obj: Map<K, V>): Map<V, K> =>
   new Map<V, K>(mapIter(obj.entries(), ([key, value]) => [value, key]));
+
+export const invertOneToManyMap = <K, V>(
+  obj: Map<K, readonly V[]>,
+): Map<V, K> =>
+  new Map<V, K>(
+    flatMapIter(obj.entries(), ([key, values]) =>
+      values.map((value) => [value, key]),
+    ),
+  );
 
 export function constToDisplayString(c: string) {
   return c.replace(/_/g, ' ').replace(/\w\S*/g, function (txt) {
