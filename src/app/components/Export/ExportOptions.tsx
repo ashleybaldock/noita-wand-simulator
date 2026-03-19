@@ -5,18 +5,21 @@ import type { RefObject } from 'react';
 import { useCallback, useState } from 'react';
 
 const Container = styled.div`
+  --pad: 0.2em;
+
   font-family: var(--font-family-noita-default);
   z-index: var(--zindex-copy-png);
   padding: 0.2em 1ch 0.2em 1ch;
   background-color: #0000;
 
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
-  grid-row: 1;
-  grid-column: export;
   inset: auto;
+
+  display: grid;
+  grid-column: export;
+  grid-row: 1;
+  grid-template-columns: 1fr;
+  grid-auto-rows: 1fr;
   max-height: 1lh;
   overflow: visible;
   padding: 0.2em 0.5ch;
@@ -28,13 +31,11 @@ const Container = styled.div`
     border: none;
   }
 
+  align-items: start;
+  justify-content: end;
+
   @media screen and (min-width: 600px) {
     pointer-events: none;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-    align-items: end;
 
     transition-property: visibility, background, padding, top, border;
     transition-delay: 500ms;
@@ -46,7 +47,6 @@ const Container = styled.div`
 
       background-color: var(--color-base-background);
 
-      padding: 1em 0.2em 1em 0.6em;
       transition-property: visibility, background, padding, top, border;
       transition-delay: 0ms;
       transition-timing-function: ease;
@@ -82,26 +82,50 @@ const Container = styled.div`
 
 const OpenExportOptionsButton = styled(Button)``;
 
+const DefaultExport = styled.div`
+  align-items: center;
+  pointer-events: auto;
+  background-color: var(--color-base-background);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr;
+  grid-column: 1/-1;
+  grid-row: 1 / auto;
+  grid-auto-rows: 1fr;
+  padding: var(--pad) 0.5ch var(--pad) 0.5ch;
+  column-gap: var(--pad);
+
+  @media screen and (max-width: 600px) {
+    &::before {
+      position: static;
+      width: 100%;
+      display: block;
+      padding-left: 1em;
+    }
+  }
+`;
+
 const RevealExports = styled.div<{ expanded: boolean }>`
-  padding: 0.5em 1ch 0.5em 1ch;
+  padding: var(--pad) 0.5ch var(--pad) 0.5ch;
+  row-gap: var(--pad);
+  column-gap: 0;
 
   background-color: var(--color-base-background);
   visibility: hidden;
-  column-gap: 0.3em;
-  row-gap: 0.5em;
+  z-index: 1;
+
   max-width: 40vw;
   transition-property: visibility;
   transition-delay: 500ms;
   transition-timing-function: ease;
   transition-duration: 40ms;
 
-  position: absolute;
-  inset: 0 auto auto 0;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: subgrid;
   grid-auto-rows: 1fr;
-  grid-column: 1;
-  grid-row: auto;
+  grid-column: 1/-1;
+  grid-row: 1/-1;
+  background-color: #000;
 
   ${Container}:hover & {
     visibility: visible;
@@ -116,53 +140,6 @@ const RevealExports = styled.div<{ expanded: boolean }>`
   }
 `;
 
-const DefaultExport = styled.div`
-  align-items: center;
-  pointer-events: auto;
-  background-color: var(--color-base-background);
-  position: absolute;
-  inset: 0 auto auto 0;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: 1fr;
-  grid-column: 1 / span 2;
-  grid-row: 1;
-
-  &::before {
-    content: 'Export as...';
-    letter-spacing: 0.06em;
-    font-size: 0.8em;
-    margin-right: 0.2em;
-    pointer-events: none;
-    top: 0.9em;
-    left: 1em;
-    transition-property: visibility;
-    transition-delay: 500ms;
-    transition-duration: 40ms;
-    transition-timing-function: ease;
-    position: relative;
-    inset: auto;
-    visibility: hidden;
-    white-space: nowrap;
-  }
-
-  ${Container}:hover &::before {
-    visibility: visible;
-    transition-property: visibility;
-    transition-delay: 0ms;
-    transition-duration: 40ms;
-    transition-timing-function: ease;
-  }
-
-  @media screen and (max-width: 600px) {
-    &::before {
-      position: static;
-      width: 100%;
-      display: block;
-      padding-left: 1em;
-    }
-  }
-`;
 export const ExportOptions = ({
   spellsRef,
   className,
@@ -178,14 +155,6 @@ export const ExportOptions = ({
   return (
     <Container data-name="ExportOptions" className={className}>
       <DefaultExport data-name="DefaultExport">
-        <SaveImageButton
-          name={'Wand'}
-          dataName="SaveImageButton"
-          targetRef={spellsRef}
-          fileName={'wand'}
-          enabled={true}
-          hotkeys={{ hotkeys: 'p', position: 'top' }}
-        />
         <OpenExportOptionsButton
           minimal
           dataName="OpenExportOptionsButton"
@@ -194,6 +163,14 @@ export const ExportOptions = ({
           imgAfter
           icon={'icon.hamburger.menu'}
           hotkeys={'e'}
+        />
+        <SaveImageButton
+          name={'Wand'}
+          dataName="SaveImageButton"
+          targetRef={spellsRef}
+          fileName={'wand'}
+          enabled={true}
+          hotkeys={{ hotkeys: 'p', position: 'top' }}
         />
       </DefaultExport>
       <RevealExports expanded={expanded} data-name="RevealExports">
