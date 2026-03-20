@@ -27,15 +27,14 @@ const HeaderDiv = styled.div<{
   margin: 0;
   background-color: var(--color-base-background);
   z-index: var(--zindex-mainheader);
-  position: sticky;
-  inset: -20px auto auto auto;
+  position: fixed;
+  inset: 0 0 auto 0;
   height: calc(var(--top-banner-height) - var(--pad-bottom));
   column-gap: 0.3ch;
   margin: 0;
   --pad-bottom: clamp(3px, 0.5vmin, 14px);
   padding: clamp(2px, 0.4vmin, 14px) clamp(2px, 0.5vmin, 14px) var(--pad-bottom)
     clamp(2px, 0.5vmin, 14px);
-  inset: 0 auto auto auto;
 
   column-gap: max(1px, round(down, 0.3ch, 1px));
   --pad-bottom: max(1px, round(down, clamp(3px, 0.5vmin, 14px), 1px));

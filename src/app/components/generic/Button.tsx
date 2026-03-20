@@ -57,7 +57,7 @@ const StyledButton = styled.button<{
   font-variant: small-caps;
   cursor: pointer;
 
-  --border-thickness: 0.16em;
+  --border-thickness: clamp(0.5px, max(0.1lh, 0.1em), 2px);
   --background-size: 1.4em;
   --pad-img-side: 2.2em;
   --pad-other-side: 0.6em;

@@ -43,10 +43,13 @@ const WandBuilderTopButtons = styled.div`
   display: grid;
   grid-template-columns: [left export-start] auto [export-end] 1fr [ undo-start] auto [undo-end redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end reset-start] auto [reset-end] 1ch [ right];
   grid-template-rows: [top title-start] 1fr [ title-end bottom];
-  margin: 0;
   filter: none;
   background-color: var(--color-base-background);
   padding: 0 0 0.3em 0;
+  grid-column: -2;
+  grid-row-end: span 2;
+  justify-self: end;
+  margin: 0 0 0.4em 0;
 
   & > button {
     padding-top: 0.4em;

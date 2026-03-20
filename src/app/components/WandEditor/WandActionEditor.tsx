@@ -46,18 +46,16 @@ const SpellSlots = styled.ul`
   --grid-item-width: 62px;
 
   margin: 0;
-  padding: 0 16px;
   background-color: var(--color-wand-editor-bg);
 
   @media screen and (max-width: 500px) {
-    padding: 0 0;
+    padding: 0;
   }
 
   @media screen and (max-width: 800px) {
-    & {
-      margin: 0.8em 0 0.4em 0;
-    }
+    margin: 0.8em auto 0.4em auto;
   }
+
   column-span: all;
 
   --gap-count: calc(var(--grid-max-column-count) - 1);
@@ -68,11 +66,12 @@ const SpellSlots = styled.ul`
     minmax(var(--grid-item-width), var(--grid-item-width))
   );
   grid-gap: 2px 0;
-  padding-left: 0;
-  padding: 0.4em 0.5ch;
+  padding: 0.4em 0.5ch 0.4em 0;
 
   justify-content: center;
   align-items: center;
+  --grid-max-column-count: 10;
+  grid-template-columns: repeat(auto-fit, var(--grid-item-width));
 `;
 
 const SpellSlotListItem = styled.li`
