@@ -205,7 +205,7 @@ export const Button = ({
   onMouseOver?: MouseEventHandler<HTMLButtonElement>;
   onMouseOut?: MouseEventHandler<HTMLButtonElement>;
   hotkeys?: string | HotkeyConfig;
-  icon?: SpriteName | 'none';
+  icon?: SpriteName;
   imgAfter?: boolean;
   imgOnly?: ImgOnlyOption;
   disabled?: boolean;
