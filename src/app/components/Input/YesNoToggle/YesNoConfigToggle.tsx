@@ -19,7 +19,7 @@ export const YesNoConfigToggle = ({
   customNo?: React.JSX.Element;
   className?: string;
 }>) => {
-  const [toggleState, , , handleToggle] = useConfigToggle(field);
+  const [toggleState, , , handleToggle, { name, tip }] = useConfigToggle(field);
   // customYes, TODO get from configuration of toggle field
   // customNo,
   return (
@@ -28,7 +28,10 @@ export const YesNoConfigToggle = ({
       dataName="YesNoConfigToggle"
       className={className}
     >
-      {children}
+      <span>
+        {name}
+        {children}
+      </span>
       <YesNoCheckbox
         hidden={true}
         checked={toggleState}

@@ -187,9 +187,7 @@ export const ConfigEditor = () => {
         section={'unlocks'}
       >
         {sortedUnlocks.map(({ key, name, field }) => (
-          <YesNoConfigToggle key={key} field={field}>
-            {name}
-          </YesNoConfigToggle>
+          <YesNoConfigToggle key={key} field={field}></YesNoConfigToggle>
         ))}
       </ConfigToggleGroup>
       <ConfigToggleGroup title={'Accessibility'}>
