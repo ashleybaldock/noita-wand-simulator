@@ -3,17 +3,17 @@ import type { ChangeEventHandler, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import { YesNo } from '../../Presentation';
 import { EditableWithLabel } from '../../Presentation/EditableWithLabel';
-import type { ConfigToggleField } from '../../../redux';
-import { useConfigToggle } from '../../../redux';
 import { tipToAttributes, type Tip } from '../../Tooltips/tooltipId';
 import React from 'react';
 
-const InteractiveYesNo = styled(YesNo)``;
+export const InteractiveYesNo = styled(YesNo)``;
 
 type CheckboxProps = {
   $hidden?: boolean;
 };
-export const Checkbox = styled.input.attrs({ type: 'checkbox' })<CheckboxProps>`
+export const YesNoCheckbox = styled.input.attrs({
+  type: 'checkbox',
+})<CheckboxProps>`
   --form-control-color: white;
 
   appearance: none;
@@ -52,7 +52,7 @@ export const Checkbox = styled.input.attrs({ type: 'checkbox' })<CheckboxProps>`
   }
 `;
 
-const EditableWrapper = styled(EditableWithLabel)``;
+export const EditableWrapper = styled(EditableWithLabel)``;
 
 export const YesNoToggle = ({
   checked,
@@ -82,7 +82,7 @@ export const YesNoToggle = ({
       disabled={$disabled}
     >
       {children}
-      <Checkbox
+      <YesNoCheckbox
         disabled={$disabled}
         hidden={true}
         checked={checked}
@@ -98,66 +98,3 @@ export const YesNoToggle = ({
     </EditableWrapper>
   );
 };
-
-export const YesNoConfigToggle = ({
-  configToggle,
-  onClick = noop,
-  children,
-  className,
-  customYes,
-  customNo,
-}: React.PropsWithChildren<{
-  configToggle: ConfigToggleField;
-  onClick?: MouseEventHandler<HTMLInputElement>;
-  customYes?: React.JSX.Element;
-  customNo?: React.JSX.Element;
-  className?: string;
-}>) => {
-  const [toggleState, , , handleToggle] = useConfigToggle(configToggle);
-  // customYes, TODO get from configuration of toggle field
-  // customNo,
-  return (
-    <EditableWrapper data-name="YesNoConfigToggle" className={className}>
-      {children}
-      <Checkbox
-        hidden={true}
-        checked={toggleState}
-        onChange={handleToggle}
-        onClick={onClick}
-      />
-      <InteractiveYesNo
-        yes={toggleState}
-        customYes={customYes}
-        customNo={customNo}
-      />
-    </EditableWrapper>
-  );
-};
-
-/*
-.khukTi {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-.jqbwYa > :first-child {
-  flex: 1 1 50%;
-}
-
-
-.gowlYD > :last-child::before {
-}
-
-.jqbwYa > :last-child {
-  flex: 1 1 50%;
-}
-
-.jcCOeu {
-  position: relative;
-  display: grid;
-  place-items: center start;
-}
-
-.gowlYD > :last-child:hover::before {
-}
- */

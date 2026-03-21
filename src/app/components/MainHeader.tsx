@@ -30,15 +30,15 @@ const HeaderDiv = styled.div<{
   z-index: var(--zindex-mainheader);
   position: fixed;
   inset: 0 0 auto 0;
-  height: calc(var(--top-banner-height) - var(--pad-bottom));
   column-gap: 0.3ch;
   margin: 0;
-  --pad-bottom: clamp(3px, 0.5vmin, 14px);
-  padding: clamp(2px, 0.4vmin, 14px) clamp(2px, 0.5vmin, 14px) var(--pad-bottom)
-    clamp(2px, 0.5vmin, 14px);
+
+  width: auto;
+  max-width: max(1px, round(down, 100vw, 1px));
+  image-rendering: pixelated;
 
   column-gap: max(1px, round(down, 0.3ch, 1px));
-  --pad-bottom: max(1px, round(down, clamp(3px, 0.5vmin, 14px), 1px));
+  --pad-bottom: max(1px, round(down, clamp(2px, 0.3vmin, 4px), 1px));
   --pad: max(1px, round(down, clamp(2px, 0.4vmin, 14px), 1px));
   padding: var(--pad) var(--pad) var(--pad-bottom) var(--pad);
 

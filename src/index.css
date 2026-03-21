@@ -22,7 +22,7 @@
   --𝚽: 1.618; /* var(--𝚽) */
 
   --ou: max(1px, round(down, 0.16rem, 1px));
-  --top-banner-height: max(1px, round(down, clamp(36px, 6vh, 50px), 1px));
+  --top-banner-height: max(1px, round(down, clamp(42px, 5.5vh, 56px), 1px));
   --spellsequence-height: 24px;
 
   --input-border: 2px solid #555555;
@@ -176,4 +176,16 @@ code {
     1px -1px 0 var(--shadow-bg), 0 1px 0 var(--shadow-bg),
     0 -1px 0 var(--shadow-bg), -1px 1px 0 var(--shadow-bg),
     -1px 0 0 var(--shadow-bg), -1px -1px 0 var(--shadow-bg);
+
+  font-size: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-tab-border-active) #0000;
+  overscroll-behavior: none;
+}
+:root,
+body,
+#root {
+  width: auto;
+  max-width: max(1px, round(down, 100vw, 1px));
+  image-rendering: pixelated;
 }

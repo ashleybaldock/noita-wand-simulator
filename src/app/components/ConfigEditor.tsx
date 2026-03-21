@@ -6,10 +6,10 @@ import {
   enableAllUnlocks,
   toggleConfigSetting,
 } from '../redux/configSlice';
-import { YesNoToggle } from './Input';
 import { Button } from './generic';
 import { getUnlockName, unlockConditions } from '../calc/unlocks';
 import { useMemo } from 'react';
+import { YesNoToggle } from './Input';
 
 const MainDiv = styled.div`
   display: grid;
