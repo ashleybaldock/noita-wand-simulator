@@ -25,8 +25,9 @@ import {
   type WandSelection,
 } from './Wand/wandSelection';
 import { getSelectionForWandIndex } from './Wand/toSelection';
-import type { Config, ConfigToggleField } from './configSlice';
+import type { Config, ConfigInfo, ConfigToggleField } from './configSlice';
 import {
+  configInfoMap,
   setConfigSetting,
   toggleConfigSetting,
   updateConfig,
@@ -123,6 +124,7 @@ export const useConfigToggle = <N extends ConfigToggleField>(
   set: (newValue: Config[N]) => void,
   toggle: () => void,
   changeHandler: (e: ChangeEvent<HTMLInputElement>) => void,
+  info: ConfigInfo,
 ] => {
   const dispatch = useAppDispatch();
   return [
@@ -137,7 +139,7 @@ export const useConfigToggle = <N extends ConfigToggleField>(
         }),
       );
     },
-    configInfoMap.get(fieldName),
+    configInfoMap.get(fieldName) ?? { name: fieldName },
   ];
 };
 

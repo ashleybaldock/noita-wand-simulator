@@ -13,14 +13,14 @@ export const UnlockGroups = [
   'Secrets',
 ] as const;
 
-type UnlockGroup = (typeof UnlockGroups)[number];
+export type UnlockGroup = (typeof UnlockGroups)[number];
 
-type UnlockInfo = {
+export type UnlockInfo = {
   name: string;
   group: UnlockGroup;
 };
 
-const unlockInfo: Record<UnlockCondition, UnlockInfo> = {
+export const unlockInfo: Record<UnlockCondition, UnlockInfo> = {
   card_unlocked_alchemy: { name: 'Dark Chest', group: 'Quests' },
   card_unlocked_black_hole: {
     name: 'As Above, So Below',

@@ -146,64 +146,27 @@ export const ConfigEditor = () => {
   return (
     <MainDiv data-name="ConfigEditor">
       <ConfigToggleGroup title={'Simulation'}>
-        <YesNoConfigToggle field={'pauseCalculations'}>
-          {'Pause Simulation'}
-        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'pauseCalculations'}></YesNoConfigToggle>
       </ConfigToggleGroup>
       <ConfigToggleGroup title={'Visualisation'}>
-        <YesNoConfigToggle field={'castShowChanged'}>
-          {'Hide Unaltered State Variables'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showDurationsInFrames'}>
-          {'Show Durations in Frames'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'condenseShots'}>
-          {'Combine Repeated Actions'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'condenseShots'}>
-          {'Group Projectiles'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showActionTree'}>
-          {'Show Action Tree'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showDirectActionCalls'}>
-          {'Show Direct Action Calls'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showDivides'}>
-          {'Show Divide By Spells'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showGreekSpells'}>
-          {'Show Greek Spells'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showDeckIndexes'}>
-          {'Show Deck Indexes'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showRecursion'}>
-          {'Show Recursion'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showRecursion'}>
-          {'Show Iteration'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showProxies'}>
-          {'Show Projectile Proxies'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showSources'}>
-          {'Show Action Sources'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showDontDraw'}>
-          {'Show Draw Inhibition'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showChargeUsage'}>
-          {'Highlight spells that consume charges'}
-        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'castShowChanged'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showDurationsInFrames'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'condenseShots'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showActionTree'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showDirectActionCalls'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showDivides'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showGreekSpells'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showDeckIndexes'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showRecursion'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showIteration'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showProxies'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showSources'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showDontDraw'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showChargeUsage'}></YesNoConfigToggle>
       </ConfigToggleGroup>
       <ConfigToggleGroup title={'Cast Config'}>
-        <YesNoConfigToggle field={'unlimitedSpells'}>
-          {'Unlimited Spells'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'infiniteSpells'}>
-          {'Ignore spell charge limits'}
-        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'unlimitedSpells'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'infiniteSpells'}></YesNoConfigToggle>
       </ConfigToggleGroup>
       {/* <ConfigToggleGroup title={'End Simulation'}> */}
       {/*   <YesNoConfigToggle field={'endSimulationOnRefresh'}> */}
@@ -211,18 +174,12 @@ export const ConfigEditor = () => {
       {/*   </YesNoConfigToggle> */}
       {/* </ConfigToggleGroup> */}
       <ConfigToggleGroup title={'Wand Editor'}>
-        <YesNoConfigToggle field={'swapOnMove'}>
-          {'Swap Spell Position on move'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showLockedSpellPlaceholders'}>
-          {'Display placeholder for locked spells'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showSpellsInCategories'}>
-          {'Show Spells in Categories'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'showExtra'}>
-          {'Show Debug Spells'}
-        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'swapOnMove'}></YesNoConfigToggle>
+        <YesNoConfigToggle
+          field={'showLockedSpellPlaceholders'}
+        ></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showSpellsInCategories'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'showExtra'}></YesNoConfigToggle>
       </ConfigToggleGroup>
       <ConfigToggleGroup
         title={'Unlockable Spells'}
@@ -236,12 +193,8 @@ export const ConfigEditor = () => {
         ))}
       </ConfigToggleGroup>
       <ConfigToggleGroup title={'Accessibility'}>
-        <YesNoConfigToggle field={'hideAccessibilityHints'}>
-          {'Hide hints on input fields'}
-        </YesNoConfigToggle>
-        <YesNoConfigToggle field={'mirrorControls'}>
-          {'UI elements swap sides'}
-        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'hideAccessibilityHints'}></YesNoConfigToggle>
+        <YesNoConfigToggle field={'mirrorControls'}></YesNoConfigToggle>
       </ConfigToggleGroup>
     </MainDiv>
   );

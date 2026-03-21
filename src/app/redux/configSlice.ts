@@ -1,10 +1,10 @@
 import type { PayloadAction, WritableDraft } from '@reduxjs/toolkit';
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 import type { UnlockCondition } from '../calc/unlocks';
-import { unlockConditions } from '../calc/unlocks';
+import { unlockConditions, unlockInfo } from '../calc/unlocks';
 import { loadState, saveState } from '../localStorage';
 import type { KeyOfType } from '../util';
-import { objectFromKeys, objectKeys } from '../util';
+import { objectEntries, objectFromKeys, objectKeys } from '../util';
 import { startAppListening } from './listenerMiddleware';
 
 type ConfigBase = {
@@ -18,6 +18,7 @@ type ConfigBase = {
   showDirectActionCalls: boolean;
   showDeckIndexes: boolean;
   showRecursion: boolean;
+  showIteration: boolean;
   showProxies: boolean;
   showSources: boolean;
   showDontDraw: boolean;
@@ -26,7 +27,6 @@ type ConfigBase = {
   showDraw: boolean;
   showSpellsInCategories: boolean;
   showLockedSpellPlaceholders: boolean;
-  showBeta: boolean;
   showExtra: boolean;
   showChargeUsage: boolean;
   castShowChanged: boolean;
@@ -81,15 +81,162 @@ const unlocksFalse = objectFromKeys(unlockConditions, false);
 const unlocksTrue = objectFromKeys(unlockConditions, true);
 
 export type ConfigInfo = {
-  title: string;
-  tip?: string;
-  customYes?: string;
-  customNo?: string;
+  readonly name: string;
+  readonly tip?: string;
+  readonly group?: string;
+  readonly customYes?: string;
+  readonly customNo?: string;
 };
 
-export const configInfo: Record<keyof Config, ConfigInfo> = {} as const;
+export const configInfoDefinition: Record<keyof Config, ConfigInfo> = {
+  ...unlockInfo,
+  condenseShots: {
+    name: 'Combine Repeated Actions',
+  },
+  unlimitedSpells: {
+    name: 'Unlimited Spells',
+  },
+  infiniteSpells: {
+    name: 'Ignore spell charge limits',
+  },
+  infiniteMoney: {
+    name: 'Gold considered to be ∞',
+  },
+  infiniteHp: {
+    name: 'Hp considered to be ∞',
+  },
+  showDivides: {
+    name: 'Show Divide By Spells',
+  },
+  showGreekSpells: {
+    name: 'Show Greek Spells',
+  },
+  showDirectActionCalls: {
+    name: 'Show Direct Action Calls',
+  },
+  showDeckIndexes: {
+    name: 'Show Deck Indexes',
+  },
+  showRecursion: {
+    name: 'Show Recursion',
+  },
+  showIteration: {
+    name: 'Show Iteration',
+  },
+  showProxies: {
+    name: 'Show Projectile Proxies',
+  },
+  showSources: {
+    name: 'Show Action Sources',
+  },
+  showDontDraw: {
+    name: 'Show Draw Inhibition',
+  },
+  showActionTree: {
+    name: 'Show Action Tree',
+  },
+  showWraps: {
+    name: 'Show where wand wraps happen',
+  },
+  showDraw: {
+    name: 'Show draw',
+  },
+  showSpellsInCategories: {
+    name: 'Show Spells in Categories',
+  },
+  showLockedSpellPlaceholders: {
+    name: 'Display placeholder for locked spells',
+  },
+  showExtra: {
+    name: 'Show Debug Spells',
+  },
+  showChargeUsage: {
+    name: 'Highlight spells that consume charges',
+  },
+  castShowChanged: {
+    name: 'Hide Unaltered State Variables',
+  },
+  showDurationsInFrames: {
+    name: 'Show Durations in Frames',
+  },
+  var_money: {
+    name: 'Amount of money to use for spells that consider it',
+  },
+  var_hp: {
+    name: 'Amount of hp to use for spells that consider it',
+  },
+  var_hp_max: {
+    name: 'Max hp value to use for spells that consider it',
+  },
+  pauseCalculations: {
+    name: 'Pause Simulation',
+  },
+  endSimulationOnCastCount: {
+    name: 'End after this many casts',
+  },
+  endSimulationOnReloadCount: {
+    name: 'End after this many reloads',
+  },
+  endSimulationOnRefreshCount: {
+    name: 'End after this many calls of Wand Refresh',
+  },
+  endSimulationOnRepeatCount: {
+    name: 'End when wand starts to repeat',
+  },
+  limitSimulationIterations: {
+    name: 'End after this many simulation iterations',
+  },
+  limitSimulationDuration: {
+    name: 'Limit total runtime of each simulation',
+  },
+  hideAccessibilityHints: {
+    name: 'Hide hints on input fields',
+  },
+  mirrorControls: {
+    name: 'UI elements swap sides',
+  },
+  swapOnMove: {
+    name: 'Swap Spell Position on move',
+  },
+  'requirements.enemies': {
+    name: 'requirement enemies',
+  },
+  'requirements.projectiles': {
+    name: 'requirement projectiles',
+  },
+  'requirements.hp': {
+    name: 'requirement hp',
+  },
+  'requirements.half': {
+    name: 'requirement every other',
+  },
+  'random.worldSeed': {
+    name: 'world seed value given to spells that request it',
+  },
+  'random.frameNumber': {
+    name: 'frame number value given to spells that request it',
+  },
+  'editor.swapOnMove': {
+    name: 'Swap Spell Position on move',
+  },
+  'editor.enableSelection': {
+    name: 'Enable Selection',
+  },
+  'debug.dragHint': {
+    name: 'Debug: Show hints when dragging',
+  },
+  'debug.keyHints': {
+    name: 'Debug: Show key hints',
+  },
+} as const;
 
-export const configInfoMap = new Map<keyof Config, ConfigInfo>();
+export type ConfigInfoRecord = Record<keyof Config, ConfigInfo>;
+
+const configInfoRecord = configInfoDefinition as ConfigInfoRecord;
+
+export const configInfoMap = new Map<keyof Config, ConfigInfo>([
+  ...objectEntries(configInfoRecord),
+]);
 
 export const configAffectsSimulation: Record<keyof Config, boolean> = {
   card_unlocked_alchemy: false,
@@ -139,6 +286,7 @@ export const configAffectsSimulation: Record<keyof Config, boolean> = {
   showDirectActionCalls: false,
   showDeckIndexes: false,
   showRecursion: false,
+  showIteration: false,
   showProxies: false,
   showSources: false,
   showDontDraw: false,
@@ -147,7 +295,6 @@ export const configAffectsSimulation: Record<keyof Config, boolean> = {
   showDraw: false,
   showSpellsInCategories: false,
   showLockedSpellPlaceholders: false,
-  showBeta: false,
   showExtra: false,
   showChargeUsage: false,
   castShowChanged: false,
@@ -210,6 +357,7 @@ export const initialState: ConfigState = {
     showDirectActionCalls: true,
     showDeckIndexes: true,
     showRecursion: true,
+    showIteration: true,
     showProxies: true,
     showSources: true,
     showDontDraw: true,
@@ -225,7 +373,6 @@ export const initialState: ConfigState = {
     endSimulationOnRepeatCount: 0,
     limitSimulationIterations: 10,
     limitSimulationDuration: 10,
-    showBeta: true,
     showExtra: false,
     showChargeUsage: true,
     castShowChanged: true,
