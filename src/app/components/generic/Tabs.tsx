@@ -117,6 +117,10 @@ const TabButton = styled.button<{
   margin: 0;
   position: relative;
   border-width: 0;
+
+  &:only-of-type {
+    display: none !important;
+  }
 `;
 
 const ActiveTabContent = styled.div`
@@ -129,7 +133,7 @@ const ActiveTabContent = styled.div`
   position: static;
   box-sizing: content-box;
   height: calc(
-    round(down, min(30vh, var(--spellandgap) * 6), var(--spellandgap)) +
+    round(down, min(30vh, var(--spellandgap) * 8), var(--spellandgap)) +
       var(--bsize-padh)
   );
   overscroll-behavior: none;

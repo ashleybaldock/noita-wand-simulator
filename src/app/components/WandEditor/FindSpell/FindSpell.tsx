@@ -88,13 +88,17 @@ const Container = styled.div`
   margin: 0;
   width: fit-content;
   flex: 1 1 content;
-}
+
+  @media screen and (max-width: 500px) {
+    grid-column: searchinput;
+    grid-row: 1;
+    visibility: hidden;
+  }
 `;
 
 const SearchInput = styled.input.attrs({ type: 'text' })`
   flex: 1 1 auto;
 
-  padding: 0.3em 0.5em 0.2em 0.5em;
   box-sizing: border-box;
 
   width: 33vw;
@@ -113,13 +117,22 @@ const SearchInput = styled.input.attrs({ type: 'text' })`
 
   outline: none;
 
-  border: 1px solid var(--color-tab-border-active);
   border-style: inset groove;
-  border-radius: 0 0 0 15.1em/12em 0 0 54.4em;
   border-right-color: transparent;
 
   align-self: stretch;
   justify-self: stretch;
+
+  padding: 0.1em 0.5em 0.1em 0.5em;
+  --bwt: 1px;
+  --bwr: 0;
+  --bwb: 1px;
+  --bwl: 2px;
+  border: 0 solid var(--color-button-border);
+  border-width: var(--bwt) var(--bwr) var(--bwb) var(--bwl);
+  box-shadow: inset -0.5px 0 2px -0.5px #000;
+  border-radius: var(--brtl) var(--brtr) var(--brbr) var(--brbl) / var(--brt)
+    var(--brr) var(--brb) var(--brl);
 
   &:focus {
     box-shadow:

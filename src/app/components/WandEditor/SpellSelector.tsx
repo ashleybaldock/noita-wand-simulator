@@ -19,7 +19,6 @@ import {
 } from '../../redux/editorThunks';
 import { SpellSlot } from '../Spells/SpellSlot';
 import { getSpellFamilyForActionId } from '../../calc/spellFamily';
-import { isNotUndefined, isUndefined } from '../../util';
 import { isValidActionId } from '../../calc/actionId';
 
 const MainDiv = styled.div`
@@ -176,6 +175,7 @@ const SpellSelectorSpellSlot = styled(SpellSlot)`
   scroll-snap-stop: normal;
   scroll-snap-align: center;
 `;
+
 const SpellSelectorWandActionDragSource = styled(WandActionDragSource)`
   padding: 0.04em 0 0 0.04em;
 `;

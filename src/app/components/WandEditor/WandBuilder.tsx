@@ -49,7 +49,7 @@ const WandBuilderTopButtons = styled.div`
   grid-column: -2;
   grid-row-end: span 2;
   justify-self: end;
-  margin: 0 0 0.4em 0;
+  margin: 0;
 
   & > button {
     padding-top: 0.4em;
@@ -122,14 +122,14 @@ export const WandBuilder = () => {
   // <GridSectionHeader title={'Wand Editor'} />
   return (
     <MainDiv data-name="WandBuilder">
+      <WandBuilderTopButtons data-name="WandBuilderTopButtons">
+        <ExportOptions wandRef={wandRef} spellsRef={spellsRef} />
+        <UndoButton />
+        <RedoButton />
+        <ClearButton />
+        <ResetButton />
+      </WandBuilderTopButtons>
       <WandBorder data-name="WandBorder">
-        <WandBuilderTopButtons data-name="WandBuilderTopButtons">
-          <ExportOptions wandRef={wandRef} spellsRef={spellsRef} />
-          <UndoButton />
-          <RedoButton />
-          <ClearButton />
-          <ResetButton />
-        </WandBuilderTopButtons>
         <WandActionEditorWrapper ref={spellsRef} className={'saveImageRoot'}>
           <WandActionEditor />
         </WandActionEditorWrapper>
