@@ -54,6 +54,7 @@ const EditableInterval = ({
 const StyledListItem = styled(EditableWrapper)<{
   $backgroundImage: string;
 }>`
+  grid-column: auto/span 1;
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;

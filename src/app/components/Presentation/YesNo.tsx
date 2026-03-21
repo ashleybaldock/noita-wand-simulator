@@ -46,7 +46,7 @@ const Combiner = styled.div`
   &::before,
   &::after {
     grid-row: 1/1;
-    grid-column: 1/1;
+    grid-column: -2;
   }
 `;
 
@@ -91,7 +91,10 @@ export const YesNo = styled(
       </Combiner>
     );
   },
-)``;
+)`
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr;
+`;
 
 export const YesOr = styled(
   ({

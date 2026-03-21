@@ -14,6 +14,8 @@ const _EditableWrapper = styled.div<{
   flex-direction: row;
   cursor: pointer;
 
+  grid-column: 1/span 3;
+  
   @media screen and (max-width: 500px) {
     background-position: 0.25ch 50%;
     border-bottom: var(--ou) dotted #222;
@@ -60,6 +62,12 @@ const _EditableWrapper = styled.div<{
     align-content: center;
     align-items: center;
     text-decoration: none;
+
+    width: 100%;
+    grid-column: 1;
+    grid-row: 1/-1;
+    justify-self: end;
+    min-width: 2ch;
 
     transform: translateX(calc(var(--w) * -1)) scaleY(0);
     opacity: 0;
@@ -132,16 +140,18 @@ export const EditableWrapper = styled(
     const [hideAccessibilityHints] = useConfigToggle('hideAccessibilityHints');
 
     return (
-      <_EditableWrapper
-        accessHints={accessHintsOverride ?? !hideAccessibilityHints}
-        disabled={disabled}
-        style={style}
-        className={className}
-        data-name={dataName}
-        {...(tip ? tipToAttributes(tip) : {})}
-      >
-        <WithLabel label={label}>{children}</WithLabel>
-      </_EditableWrapper>
+      <WithLabel label={label}>
+        <_EditableWrapper
+          accessHints={accessHintsOverride ?? !hideAccessibilityHints}
+          disabled={disabled}
+          style={style}
+          className={className}
+          data-name={dataName}
+          {...(tip ? tipToAttributes(tip) : {})}
+        >
+          {children}
+        </_EditableWrapper>
+      </WithLabel>
     );
   },
 )``;
