@@ -12,9 +12,9 @@ import {
   SUFFIX_SECOND,
 } from '../../util';
 import { NumericInput } from '../Input/NumericInput/NumericInput';
-import { EditableWithLabel } from '../Presentation/EditableWithLabel';
 import { useSpritePath } from '../../calc/sprite';
 import { WrappedYesNoConfigToggle } from '../config/Components';
+import { EditableWrapper } from '../Presentation';
 
 const EditableInterval = ({
   field,
@@ -51,7 +51,7 @@ const EditableInterval = ({
   );
 };
 
-const StyledListItem = styled(EditableWithLabel)<{
+const StyledListItem = styled(EditableWrapper)<{
   $backgroundImage: string;
 }>`
   display: flex;
@@ -306,7 +306,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         <StyledValue>
           <WrappedYesNoConfigToggle
             data-toggle="unlimitedSpells"
-            configToggle={'unlimitedSpells'}
+            field={'unlimitedSpells'}
           ></WrappedYesNoConfigToggle>
         </StyledValue>
       </StyledListItem>

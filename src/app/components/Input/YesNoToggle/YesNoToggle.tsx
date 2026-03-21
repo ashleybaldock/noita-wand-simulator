@@ -1,9 +1,8 @@
 import { noop } from '../../../util';
 import type { ChangeEventHandler, MouseEventHandler } from 'react';
 import styled from 'styled-components';
-import { YesNo } from '../../Presentation';
-import { EditableWithLabel } from '../../Presentation/EditableWithLabel';
-import { tipToAttributes, type Tip } from '../../Tooltips/tooltipId';
+import { EditableWrapper, YesNo } from '../../Presentation';
+import type { Tip } from '../../Tooltips/tooltipId';
 import React from 'react';
 
 export const InteractiveYesNo = styled(YesNo)``;
@@ -52,11 +51,9 @@ export const YesNoCheckbox = styled.input.attrs({
   }
 `;
 
-export const EditableWrapper = styled(EditableWithLabel)``;
-
 export const YesNoToggle = ({
   checked,
-  $disabled = false,
+  disabled = false,
   onChange,
   onClick = noop,
   customYes,
@@ -66,7 +63,7 @@ export const YesNoToggle = ({
   tip,
 }: React.PropsWithChildren<{
   checked: boolean;
-  $disabled?: boolean;
+  disabled?: boolean;
   onChange: ChangeEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
   customYes?: React.JSX.Element;
@@ -76,21 +73,22 @@ export const YesNoToggle = ({
 }>) => {
   return (
     <EditableWrapper
-      data-name="YesNoToggle"
-      {...(tip ? tipToAttributes(tip) : {})}
+      dataName="YesNoToggle"
+      tip={tip}
       className={className}
-      disabled={$disabled}
+      disabled={disabled}
+      label={true}
     >
       {children}
       <YesNoCheckbox
-        disabled={$disabled}
+        disabled={disabled}
         hidden={true}
         checked={checked}
         onChange={onChange}
         onClick={onClick}
       />
       <InteractiveYesNo
-        $disabled={$disabled}
+        $disabled={disabled}
         yes={checked}
         customYes={customYes}
         customNo={customNo}

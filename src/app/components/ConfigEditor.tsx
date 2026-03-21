@@ -1,15 +1,11 @@
 import styled from 'styled-components';
-import { useAppDispatch, useConfig } from '../redux/hooks';
-import type { ConfigBooleanField, ConfigSection } from '../redux/configSlice';
-import {
-  disableAllUnlocks,
-  enableAllUnlocks,
-  toggleConfigSetting,
-} from '../redux/configSlice';
+import { useAppDispatch } from '../redux/hooks';
+import type { ConfigSection } from '../redux/configSlice';
+import { disableAllUnlocks, enableAllUnlocks } from '../redux/configSlice';
 import { Button } from './generic';
 import { getUnlockName, unlockConditions } from '../calc/unlocks';
 import { useMemo } from 'react';
-import { YesNoToggle } from './Input';
+import { YesNoConfigToggle } from './Input/YesNoToggle';
 
 const MainDiv = styled.div`
   display: grid;
@@ -17,20 +13,20 @@ const MainDiv = styled.div`
   height: 100%;
 `;
 
-const ConfigDiv = styled.div`
-  columns: 1;
-  column-fill: auto;
-  column-rule-color: transparent;
-  column-rule-style: solid;
-  column-rule-width: 2em;
+// const ConfigDiv = styled.div`
+//   columns: 1;
+//   column-fill: auto;
+//   column-rule-color: transparent;
+//   column-rule-style: solid;
+//   column-rule-width: 2em;
 
-  padding: 0.6em;
-  gap: 2em;
-  @media screen and (min-width: 500px) {
-    columns: min(18em, 30vw) 3;
-    height: 80vh;
-  }
-`;
+//   padding: 0.6em;
+//   gap: 2em;
+//   @media screen and (min-width: 500px) {
+//     columns: min(18em, 30vw) 3;
+//     height: 80vh;
+//   }
+// `;
 
 const ConfigSectionHeading = styled.div`
   font-weight: normal;
@@ -50,58 +46,39 @@ const ConfigSectionHeading = styled.div`
   }
 `;
 
-const ToggleWrap = styled.div`
-  &::after {
-    content: ':';
-    padding-right: 1em;
-    margin-right: 0.4em;
-    flex: 1 1 100%;
-    border-bottom: 3px dotted #222;
-    height: 0.9em;
-  }
+// const ToggleWrap = styled.div`
+//   &::after {
+//     content: ':';
+//     padding-right: 1em;
+//     margin-right: 0.4em;
+//     flex: 1 1 100%;
+//     border-bottom: 3px dotted #222;
+//     height: 0.9em;
+//   }
 
-  white-space: nowrap;
-  display: flex;
-  flex: 1 1 auto;
+//   white-space: nowrap;
+//   display: flex;
+//   flex: 1 1 auto;
 
-  color: var(--color-toggle-chosen);
-  &:hover {
-    color: var(--color-toggle-hover);
-  }
-  text-decoration: none;
-`;
+//   color: var(--color-toggle-chosen);
+//   &:hover {
+//     color: var(--color-toggle-hover);
+//   }
+//   text-decoration: none;
+// `;
 
-const StyledYesNoToggle = styled(YesNoToggle)`
-  color: var(--color-toggle-chosen);
+// const StyledYesNoToggle = styled(YesNoToggle)`
+//   color: var(--color-toggle-chosen);
 
-  display: flex;
-  align-items: last baseline;
+//   display: flex;
+//   align-items: last baseline;
 
-  margin: 0.5em 0 0.3em 0.4em;
+//   margin: 0.5em 0 0.3em 0.4em;
 
-  &:hover {
-    color: var(--color-toggle-hover);
-  }
-`;
-
-const ConfigToggle = ({
-  field,
-  children,
-}: React.PropsWithChildren<{
-  field: ConfigBooleanField;
-}>) => {
-  const config = useConfig();
-  const dispatch = useAppDispatch();
-
-  return (
-    <StyledYesNoToggle
-      checked={config[field]}
-      onChange={() => dispatch(toggleConfigSetting({ name: field }))}
-    >
-      <ToggleWrap>{children}</ToggleWrap>
-    </StyledYesNoToggle>
-  );
-};
+//   &:hover {
+//     color: var(--color-toggle-hover);
+//   }
+// `;
 
 export const ConfigToggleGroup = styled(
   ({
@@ -169,77 +146,83 @@ export const ConfigEditor = () => {
   return (
     <MainDiv data-name="ConfigEditor">
       <ConfigToggleGroup title={'Simulation'}>
-        <ConfigToggle field={'pauseCalculations'}>
+        <YesNoConfigToggle field={'pauseCalculations'}>
           {'Pause Simulation'}
-        </ConfigToggle>
+        </YesNoConfigToggle>
       </ConfigToggleGroup>
       <ConfigToggleGroup title={'Visualisation'}>
-        <ConfigToggle field={'castShowChanged'}>
+        <YesNoConfigToggle field={'castShowChanged'}>
           {'Hide Unaltered State Variables'}
-        </ConfigToggle>
-        <ConfigToggle field={'showDurationsInFrames'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showDurationsInFrames'}>
           {'Show Durations in Frames'}
-        </ConfigToggle>
-        <ConfigToggle field={'condenseShots'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'condenseShots'}>
           {'Combine Repeated Actions'}
-        </ConfigToggle>
-        <ConfigToggle field={'condenseShots'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'condenseShots'}>
           {'Group Projectiles'}
-        </ConfigToggle>
-        <ConfigToggle field={'showActionTree'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showActionTree'}>
           {'Show Action Tree'}
-        </ConfigToggle>
-        <ConfigToggle field={'showDirectActionCalls'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showDirectActionCalls'}>
           {'Show Direct Action Calls'}
-        </ConfigToggle>
-        <ConfigToggle field={'showDivides'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showDivides'}>
           {'Show Divide By Spells'}
-        </ConfigToggle>
-        <ConfigToggle field={'showGreekSpells'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showGreekSpells'}>
           {'Show Greek Spells'}
-        </ConfigToggle>
-        <ConfigToggle field={'showDeckIndexes'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showDeckIndexes'}>
           {'Show Deck Indexes'}
-        </ConfigToggle>
-        <ConfigToggle field={'showRecursion'}>{'Show Recursion'}</ConfigToggle>
-        <ConfigToggle field={'showRecursion'}>{'Show Iteration'}</ConfigToggle>
-        <ConfigToggle field={'showProxies'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showRecursion'}>
+          {'Show Recursion'}
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showRecursion'}>
+          {'Show Iteration'}
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showProxies'}>
           {'Show Projectile Proxies'}
-        </ConfigToggle>
-        <ConfigToggle field={'showSources'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showSources'}>
           {'Show Action Sources'}
-        </ConfigToggle>
-        <ConfigToggle field={'showDontDraw'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showDontDraw'}>
           {'Show Draw Inhibition'}
-        </ConfigToggle>
-        <ConfigToggle field={'showChargeUsage'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showChargeUsage'}>
           {'Highlight spells that consume charges'}
-        </ConfigToggle>
+        </YesNoConfigToggle>
       </ConfigToggleGroup>
       <ConfigToggleGroup title={'Cast Config'}>
-        <ConfigToggle field={'unlimitedSpells'}>
+        <YesNoConfigToggle field={'unlimitedSpells'}>
           {'Unlimited Spells'}
-        </ConfigToggle>
-        <ConfigToggle field={'infiniteSpells'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'infiniteSpells'}>
           {'Ignore spell charge limits'}
-        </ConfigToggle>
+        </YesNoConfigToggle>
       </ConfigToggleGroup>
       {/* <ConfigToggleGroup title={'End Simulation'}> */}
-      {/*   <ConfigToggle field={'endSimulationOnRefresh'}> */}
+      {/*   <YesNoConfigToggle field={'endSimulationOnRefresh'}> */}
       {/*     {'...on Wand Refresh'} */}
-      {/*   </ConfigToggle> */}
+      {/*   </YesNoConfigToggle> */}
       {/* </ConfigToggleGroup> */}
       <ConfigToggleGroup title={'Wand Editor'}>
-        <ConfigToggle field={'swapOnMove'}>
+        <YesNoConfigToggle field={'swapOnMove'}>
           {'Swap Spell Position on move'}
-        </ConfigToggle>
-        <ConfigToggle field={'showLockedSpellPlaceholders'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showLockedSpellPlaceholders'}>
           {'Display placeholder for locked spells'}
-        </ConfigToggle>
-        <ConfigToggle field={'showSpellsInCategories'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showSpellsInCategories'}>
           {'Show Spells in Categories'}
-        </ConfigToggle>
-        <ConfigToggle field={'showExtra'}>{'Show Debug Spells'}</ConfigToggle>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'showExtra'}>
+          {'Show Debug Spells'}
+        </YesNoConfigToggle>
       </ConfigToggleGroup>
       <ConfigToggleGroup
         title={'Unlockable Spells'}
@@ -247,18 +230,18 @@ export const ConfigEditor = () => {
         section={'unlocks'}
       >
         {sortedUnlocks.map(({ key, name, field }) => (
-          <ConfigToggle key={key} field={field}>
+          <YesNoConfigToggle key={key} field={field}>
             {name}
-          </ConfigToggle>
+          </YesNoConfigToggle>
         ))}
       </ConfigToggleGroup>
       <ConfigToggleGroup title={'Accessibility'}>
-        <ConfigToggle field={'hideAccessibilityHints'}>
+        <YesNoConfigToggle field={'hideAccessibilityHints'}>
           {'Hide hints on input fields'}
-        </ConfigToggle>
-        <ConfigToggle field={'mirrorControls'}>
+        </YesNoConfigToggle>
+        <YesNoConfigToggle field={'mirrorControls'}>
           {'UI elements swap sides'}
-        </ConfigToggle>
+        </YesNoConfigToggle>
       </ConfigToggleGroup>
     </MainDiv>
   );

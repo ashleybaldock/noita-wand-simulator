@@ -137,6 +137,7 @@ export const useConfigToggle = <N extends ConfigToggleField>(
         }),
       );
     },
+    configInfoMap.get(fieldName),
   ];
 };
 

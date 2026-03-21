@@ -2,31 +2,32 @@ import type React from 'react';
 import type { MouseEventHandler } from 'react';
 import { type ConfigToggleField, useConfigToggle } from '../../../redux';
 import { noop } from '../../../util';
-import {
-  EditableWrapper,
-  YesNoCheckbox,
-  InteractiveYesNo,
-} from './YesNoToggle';
+import { YesNoCheckbox, InteractiveYesNo } from './YesNoToggle';
+import { EditableWrapper } from '../../Presentation';
 
 export const YesNoConfigToggle = ({
-  configToggle,
+  field,
   onClick = noop,
   children,
   className,
   customYes,
   customNo,
 }: React.PropsWithChildren<{
-  configToggle: ConfigToggleField;
+  field: ConfigToggleField;
   onClick?: MouseEventHandler<HTMLInputElement>;
   customYes?: React.JSX.Element;
   customNo?: React.JSX.Element;
   className?: string;
 }>) => {
-  const [toggleState, , , handleToggle] = useConfigToggle(configToggle);
+  const [toggleState, , , handleToggle] = useConfigToggle(field);
   // customYes, TODO get from configuration of toggle field
   // customNo,
   return (
-    <EditableWrapper data-name="YesNoConfigToggle" className={className}>
+    <EditableWrapper
+      label={true}
+      dataName="YesNoConfigToggle"
+      className={className}
+    >
       {children}
       <YesNoCheckbox
         hidden={true}

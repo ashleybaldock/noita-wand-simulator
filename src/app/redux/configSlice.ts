@@ -80,6 +80,17 @@ export type ConfigSection = 'unlocks' | 'requirements' | 'debug' | 'random';
 const unlocksFalse = objectFromKeys(unlockConditions, false);
 const unlocksTrue = objectFromKeys(unlockConditions, true);
 
+export type ConfigInfo = {
+  title: string;
+  tip?: string;
+  customYes?: string;
+  customNo?: string;
+};
+
+export const configInfo: Record<keyof Config, ConfigInfo> = {} as const;
+
+export const configInfoMap = new Map<keyof Config, ConfigInfo>();
+
 export const configAffectsSimulation: Record<keyof Config, boolean> = {
   card_unlocked_alchemy: false,
   card_unlocked_black_hole: false,

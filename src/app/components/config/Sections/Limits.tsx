@@ -34,7 +34,7 @@ export const LimitsConfigSection = () => {
       <SubSectionContent data-subsection="spellcharges">
         <WrappedYesNoConfigToggle
           data-toggle="unlimitedSpells"
-          configToggle={'unlimitedSpells'}
+          field={'unlimitedSpells'}
         >
           <InputWrapper>
             <InputImageLabel $size={42} icon={'unlimited_spells'} />
