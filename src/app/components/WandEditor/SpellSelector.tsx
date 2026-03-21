@@ -34,52 +34,62 @@ const MainDiv = styled.div`
   top: -100px;
   --top-offset: -8px;
 
+  --bsize-spell: 40px;
+  --gap-multiplier: 0.12;
+  --fake-top-height: calc(var(--ou) * 2);
+  --border-radius: 5px;
+  top: unset;
+  position: relative;
+
   &::before {
     content: '';
     width: auto;
-    height: 6px;
-    background-color: transparent;
+    height: var(--border-radius);
+    background-color: #0000;
     display: flex;
     position: sticky;
     z-index: 10;
-    box-shadow:
-      inset 0 3px 3px 0px #000,
-      0 -4px 0 0 var(--color-base-background);
     border: var(--ou) solid var(--color-tab-border-active);
-    border-width: calc(var(--ou) * 1) calc(var(--ou) * 0.7) 0;
-    border-radius: 0.26rem 0.46rem 0 0;
+    border-width: calc(var(--ou) * 0.7) calc(var(--ou) * 0.7) 0
+      calc(var(--ou) * 0.7);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
     border-bottom: 0 hidden transparent;
-
     font-size: 14px;
-    padding: calc(var(--ou) * 1);
-    inset: var(--top-banner-height) auto auto auto;
-    margin: calc(var(--top-offset) * 0) calc(var(--ou) * 1)
-      calc(var(--top-offset) * 1);
+    inset: calc(var(--top-banner-height) - var(--border-radius)) auto auto auto;
+    margin: 0 calc(var(--ou) * 1) 0 calc(var(--ou) * 1);
+    padding: 0 var(--ou);
+    box-sizing: border-box;
+    box-shadow: 0 calc(var(--border-radius) * -1) 0 var(--border-radius)
+      var(--color-base-background);
   }
 `;
 
 const SpellCategorySpellsDiv = styled.div`
-  grid-template-columns: repeat(auto-fill, minmax(var(--bsize-spell), 1fr));
   align-content: start;
   justify-content: stretch;
+  justify-items: center;
+  grid-column: span 15;
   display: grid;
-  transform: scaleY(-1);
-  overflow-y: scroll;
-  overflow-x: hidden;
-  padding: 6px 8px;
-  gap: 2px;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(max(1px, round(down, var(--bsize-spell), 1px)), 1fr)
+  );
 
   padding: var(--bsize-padh);
   gap: var(--bsize-gap);
-  overscroll-behavior: none;
-  box-sizing: content-box;
   height: fit-content;
   background: none;
+  transform: scaleY(-1);
   box-shadow: none;
+  box-sizing: content-box;
 
   position: sticky;
   scroll-snap-stop: normal;
   scroll-snap-align: start end;
+
+  overflow-y: hidden;
+  overflow: visible;
+  overscroll-behavior: auto;
 
   & > div {
     transform: scaleY(-1);
@@ -88,10 +98,6 @@ const SpellCategorySpellsDiv = styled.div`
   --bsize-spell: max(
     1px,
     round(down, clamp(32px, calc(100cqmax / 16), 32px), 1px)
-  );
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(max(1px, round(down, var(--bsize-spell), 1px)), 1fr)
   );
 `;
 

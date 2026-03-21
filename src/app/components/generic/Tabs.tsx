@@ -164,10 +164,39 @@ const ActiveTabContent = styled.div`
     90% 100%,
     6px;
   background-position: center, center;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-tab-border-active) #0000;
+  border-radius: var(--border-radius);
   box-shadow:
     inset 0 3px 3px 3px #000,
-    inset 0 0 2px 4px var(--bg-color),
-    1px 2px 1px 0 #000;
+    inset 0 0 2px 4px var(--bg-color);
+  border: var(--bdw) solid var(--color-tab-border-active);
+  margin-bottom: calc(var(--ou) * -1);
+  height: round(
+    down,
+    clamp(var(--spellandgap) * 2, 25vh, var(--spellandgap) * 6),
+    var(--spellandgap)
+  );
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(max(1px, round(down, var(--bsize-spell), 1px)), 1fr)
+  );
+  container-type: unset;
+  overscroll-behavior: contain;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-auto-rows: 1fr;
+
+  & > div,
+  & > div:nth-child(1) {
+    overscroll-behavior: contain;
+  }
+  box-shadow:
+    inset -5px 0 0px var(--bdw) #000a,
+    inset 0 3px 3px 3px #000,
+    inset 0 0 2px 4px var(--bg-color);
+  --bdw: max(1px, round(down, var(--ou), 1px));
 `;
 
 const HiddenContentDiv = styled.div`

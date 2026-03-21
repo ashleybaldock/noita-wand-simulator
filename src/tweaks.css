@@ -1,10 +1,12 @@
 :not(#u#n#i) :root {
-  overscroll-behavior: unset;
   --filter-floating-shadow: drop-shadow(0 2px 2px var(--shadow, #000000dd))
     drop-shadow(0 -2px 2px var(--shadow, #000000dd));
   --footer-offset: 0px;
   --zindex-status: 900;
   font-size: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-tab-border-active) #0000;
+  overscroll-behavior: none;
 }
 
 :not(#u#n#i) :is(:root, body, #root, [data-name='MainHeader']) {
@@ -13,27 +15,23 @@
   image-rendering: pixelated;
 }
 
+li:not(:has([data-tooltip-content^='DIVIDE_']))
+  + li:has([data-tooltip-content^='DIVIDE_']):hover,
+li:first-of-type:has([data-tooltip-content^='DIVIDE_']):hover,
+li:has([data-tooltip-content^='DIVIDE_']):has(+ li:hover) {
+  box-shadow:
+    inset 1px 0 0 1px #fff9,
+    inset 0 -3px 0 0 #fff9,
+    inset 0 3px 0 0 #fff9,
+    -1px 0 0 0 #fff9,
+    0 -1px 0 0 #fff9,
+    0 1px 0 0 #fff9;
+  border-radius: var(--bdr) 0 0 var(--bdr);
+  --bdr: 8px;
+}
+
 :has(> [data-name='ConfigEditor']) {
   display: contents;
-}
-[data-name='ConfigEditor'] {
-  display: grid;
-  grid-template-rows: subgrid;
-}
-[data-name='ConfigEditor'] > div {
-  display: contents;
-}
-[data-name='ConfigToggleGroup'] {
-  display: grid;
-  grid-template-columns: auto;
-}
-[data-name='ConfigToggleGroup'] > div:first-of-type {
-  grid-column: 1 / span 2;
-}
-[data-name='ConfigToggleGroup'] [data-name='EditableWithLabel'] {
-  display: grid;
-  grid-template-columns: subgrid;
-  grid-column: 1 / span 2;
 }
 
 [data-name='WandBorder'] > .saveImageRoot {
@@ -63,51 +61,10 @@
   display: block;
 }
 
-:not(#u#n#i) [data-name='SpellSelector'] {
-  --bsize-spell: 40px;
-  --gap-multiplier: 0.12;
-  --fake-top-height: calc(var(--ou) * 2);
-  --border-radius: 5px;
-  top: unset;
-  position: relative;
-}
-:not(#u#n#i) [data-name='SpellSelector']::before {
-  content: '';
-  width: auto;
-  height: var(--border-radius);
-  background-color: #0000;
-  display: flex;
-  position: sticky;
-  z-index: 10;
-  border: var(--ou) solid var(--color-tab-border-active);
-  border-width: calc(var(--ou) * 0.7) calc(var(--ou) * 0.7) 0
-    calc(var(--ou) * 0.7);
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
-  border-bottom: 0 hidden transparent;
-  font-size: 14px;
-  inset: calc(var(--top-banner-height) - var(--border-radius)) auto auto auto;
-  margin: 0 calc(var(--ou) * 1) 0 calc(var(--ou) * 1);
-  padding: 0 var(--ou);
-  box-sizing: border-box;
-  box-shadow: 0 calc(var(--border-radius) * -1) 0 var(--border-radius)
-    var(--color-base-background);
-}
-
 :not(#u#n#i) [data-name='Tabs'] {
   font-size: 14px;
   padding: 0 var(--ou);
   margin-top: calc(var(--border-radius) * -1);
-}
-
-:not(#u#n#i) :root,
-:not(#u#n#i) [data-name='ActiveTabContent'] {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-tab-border-active) #0000;
-  overscroll-behavior: contain;
-}
-
-:not(#u#n#i) [data-name='ActiveTabContent'] {
-  border-radius: var(--border-radius);
 }
 
 @media screen and (max-width: 600px) {
@@ -138,13 +95,7 @@
 :not(#u#n#i) [data-name='Tab:Selected'] + [data-name='Tab'] {
   border-top-left-radius: calc(var(--border-radius) * 0.5);
 }
-:not(#u#n#i) [data-name='ActiveTabContent'] {
-  box-shadow:
-    inset 0 3px 3px 3px #000,
-    inset 0 0 2px 4px var(--bg-color);
-  margin-bottom: calc(var(--ou) * -1);
-  border-bottom: calc(var(--ou) * 0.7) solid var(--color-tab-border-active);
-}
+
 :not(#u#n#i) [data-name='Tab'],
 :not(#u#n#i) [data-name='Tab:Selected'] {
   display: grid;
@@ -210,46 +161,6 @@
   box-shadow: unset;
 }
 
-:not(#u#n#i) [data-name='ActiveTabContent'] {
-  border: max(1px, round(down, var(--ou), 1px)) solid
-    var(--color-tab-border-active);
-  margin-bottom: calc(var(--ou) * -1);
-  height: round(
-    down,
-    clamp(var(--spellandgap) * 2, 25vh, var(--spellandgap) * 6),
-    var(--spellandgap)
-  );
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(max(1px, round(down, var(--bsize-spell), 1px)), 1fr)
-  );
-  grid-template-rows: 1fr;
-  grid-auto-rows: 1fr;
-}
-
-[data-name='ActiveTabContent'] {
-  container-type: unset;
-  overscroll-behavior: contain;
-  height: round(
-    down,
-    clamp(var(--spellandgap) * 2, 25vh, var(--spellandgap) * 6),
-    var(--spellandgap)
-  );
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(max(1px, round(down, var(--bsize-spell), 1px)), 1fr)
-  );
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-auto-rows: 1fr;
-}
-:not(#u#n#i) [data-name='ActiveTabContent'] > div {
-  overscroll-behavior: contain;
-}
-[data-name='ActiveTabContent'] > div:nth-child(1) {
-  overscroll-behavior: contain;
-}
-
 :not(#u#n#i) [data-name='TabTitles'],
 :not(#u#n#i) [data-name='Tab:Selected'],
 :not(#u#n#i) [data-name='Tab'] {
@@ -283,70 +194,4 @@
   grid-template-columns: repeat(8, 1fr) auto;
   grid-template-rows: 1fr;
   grid-auto-rows: 0;
-}
-
-:not(#u#n#i) [data-name='StickyHeading'] {
-  margin: 0;
-}
-:not(#u#n#i) [data-name='StickyGroup'] {
-  inset: var(--top-banner-height) auto auto auto;
-  background-color: var(--color-base-background);
-  padding-bottom: 10px;
-  margin-bottom: 0;
-  position: relative;
-}
-:not(#u#n#i) [data-name='StickyGroup']:not(:has(~ [data-name='StickyGroup'])) {
-  margin-bottom: var(--top-banner-height);
-}
-
-:not(#u#n#i) [data-name='MainHeader'] + [data-name='StickyGroup'] {
-  margin-bottom: var(--top-banner-height);
-}
-:not(#u#n#i) [data-name='StickyGroup']:has(> [data-name='SimulationStatus']) {
-  inset: var(--top-banner-height) auto var(--footer-offset, 0) auto;
-}
-
-[data-name='SimulationStatus'] {
-  position: fixed;
-  inset: auto auto var(--footer-offset, 0) 0;
-  z-index: var(--zindex-status);
-  background-color: var(--color-base-background);
-  margin: 0;
-}
-
-:not(#u#n#i) [data-name='SimulationStatus'] > span {
-  display: flex;
-  background-color: var(--color-base-background);
-}
-
-:not(#u#n#i) [data-name='SpellCategorySpellsDiv'] {
-  box-sizing: content-box;
-  overflow-y: hidden;
-  overscroll-behavior: auto;
-  overflow: visible;
-  justify-items: center;
-  grid-column: span 15;
-}
-
-[data-name='TotalsHeading'] > div:nth-child(2) {
-  height: 100%;
-  box-sizing: unset;
-}
-[data-name='TotalsHeading'] {
-  min-width: unset;
-}
-
-li:not(:has([data-tooltip-content^='DIVIDE_']))
-  + li:has([data-tooltip-content^='DIVIDE_']):hover,
-li:first-of-type:has([data-tooltip-content^='DIVIDE_']):hover,
-li:has([data-tooltip-content^='DIVIDE_']):has(+ li:hover) {
-  box-shadow:
-    inset 1px 0 0 1px #fff9,
-    inset 0 -3px 0 0 #fff9,
-    inset 0 3px 0 0 #fff9,
-    -1px 0 0 0 #fff9,
-    0 -1px 0 0 #fff9,
-    0 1px 0 0 #fff9;
-  border-radius: var(--bdr) 0 0 var(--bdr);
-  --bdr: 8px;
 }

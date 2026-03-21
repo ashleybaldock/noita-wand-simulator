@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useConfigToggle } from '../../redux';
 import { type Tip, tipToAttributes } from '../Tooltips/tooltipId';
+import { ConfigToggleGroup } from '../ConfigEditor';
 
 const StyledEditableWithLabel = styled.div<{
   accessHints?: boolean;
@@ -85,6 +86,12 @@ const StyledEditableWithLabel = styled.div<{
   & &:hover :last-child::before {
     display: none;
   }
+
+  ${ConfigToggleGroup} & {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / span 2;
+  §}
 `;
 
 export const EditableWithLabel = ({

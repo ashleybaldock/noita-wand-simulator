@@ -5,4 +5,5 @@ export const StickyHeading = styled.h2.attrs<DataAttributes>({
 })`
   display: flex;
   flex-direction: column;
+  margin: 0;
 `;

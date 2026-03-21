@@ -160,6 +160,7 @@ export const TotalsColumnHeading = styled(ColumnHeadingWithLineSpacer).attrs({
   'data-name': 'TotalsHeading',
 })`
   height: 100%;
+  min-width: unset;
 
   font-size: 1em;
 
@@ -181,6 +182,11 @@ export const TotalsColumnHeading = styled(ColumnHeadingWithLineSpacer).attrs({
         `
         : `
         `}
+  }
+
+  & > div:nth-child(2) {
+    height: 100%;
+    box-sizing: unset;
   }
 
   ${WithDebugHints} && {

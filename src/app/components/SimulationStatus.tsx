@@ -9,6 +9,11 @@ const StyledStatus = styled.div`
   position: sticky;
   left: 1em;
   right: 1em;
+  position: fixed;
+  inset: auto auto var(--footer-offset, 0) 0;
+  z-index: var(--zindex-status);
+  background-color: var(--color-base-background);
+  margin: 0;
 `;
 
 const Label = styled.span`
@@ -24,8 +29,9 @@ const Label = styled.span`
 `;
 
 const Value = styled.span`
-  display: inline-block;
   white-space: nowrap;
+  display: flex;
+  background-color: var(--color-base-background);
   &::before {
     content: '«';
     content: none;

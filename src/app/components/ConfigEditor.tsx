@@ -12,9 +12,8 @@ import { getUnlockName, unlockConditions } from '../calc/unlocks';
 import { useMemo } from 'react';
 
 const MainDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 10;
+  display: grid;
+  grid-template-rows: subgrid;
   height: 100%;
 `;
 
@@ -104,7 +103,7 @@ const ConfigToggle = ({
   );
 };
 
-const ConfigToggleGroup = styled(
+export const ConfigToggleGroup = styled(
   ({
     title = '',
     bulkSelectControls = false,
@@ -138,6 +137,9 @@ const ConfigToggleGroup = styled(
     );
   },
 )`
+  display: grid;
+  grid-template-columns: auto;
+
   break-inside: avoid-column;
   margin-bottom: 0.5em;
 
@@ -147,6 +149,9 @@ const ConfigToggleGroup = styled(
   }
   &:first-child {
     margin-top: 1.5em;
+  }
+  & > div:first-of-type {
+    grid-column: 1 / span 2;
   }
 `;
 
@@ -163,104 +168,98 @@ export const ConfigEditor = () => {
 
   return (
     <MainDiv data-name="ConfigEditor">
-      <ConfigDiv>
-        <ConfigToggleGroup title={'Simulation'}>
-          <ConfigToggle field={'pauseCalculations'}>
-            {'Pause Simulation'}
+      <ConfigToggleGroup title={'Simulation'}>
+        <ConfigToggle field={'pauseCalculations'}>
+          {'Pause Simulation'}
+        </ConfigToggle>
+      </ConfigToggleGroup>
+      <ConfigToggleGroup title={'Visualisation'}>
+        <ConfigToggle field={'castShowChanged'}>
+          {'Hide Unaltered State Variables'}
+        </ConfigToggle>
+        <ConfigToggle field={'showDurationsInFrames'}>
+          {'Show Durations in Frames'}
+        </ConfigToggle>
+        <ConfigToggle field={'condenseShots'}>
+          {'Combine Repeated Actions'}
+        </ConfigToggle>
+        <ConfigToggle field={'condenseShots'}>
+          {'Group Projectiles'}
+        </ConfigToggle>
+        <ConfigToggle field={'showActionTree'}>
+          {'Show Action Tree'}
+        </ConfigToggle>
+        <ConfigToggle field={'showDirectActionCalls'}>
+          {'Show Direct Action Calls'}
+        </ConfigToggle>
+        <ConfigToggle field={'showDivides'}>
+          {'Show Divide By Spells'}
+        </ConfigToggle>
+        <ConfigToggle field={'showGreekSpells'}>
+          {'Show Greek Spells'}
+        </ConfigToggle>
+        <ConfigToggle field={'showDeckIndexes'}>
+          {'Show Deck Indexes'}
+        </ConfigToggle>
+        <ConfigToggle field={'showRecursion'}>{'Show Recursion'}</ConfigToggle>
+        <ConfigToggle field={'showRecursion'}>{'Show Iteration'}</ConfigToggle>
+        <ConfigToggle field={'showProxies'}>
+          {'Show Projectile Proxies'}
+        </ConfigToggle>
+        <ConfigToggle field={'showSources'}>
+          {'Show Action Sources'}
+        </ConfigToggle>
+        <ConfigToggle field={'showDontDraw'}>
+          {'Show Draw Inhibition'}
+        </ConfigToggle>
+        <ConfigToggle field={'showChargeUsage'}>
+          {'Highlight spells that consume charges'}
+        </ConfigToggle>
+      </ConfigToggleGroup>
+      <ConfigToggleGroup title={'Cast Config'}>
+        <ConfigToggle field={'unlimitedSpells'}>
+          {'Unlimited Spells'}
+        </ConfigToggle>
+        <ConfigToggle field={'infiniteSpells'}>
+          {'Ignore spell charge limits'}
+        </ConfigToggle>
+      </ConfigToggleGroup>
+      {/* <ConfigToggleGroup title={'End Simulation'}> */}
+      {/*   <ConfigToggle field={'endSimulationOnRefresh'}> */}
+      {/*     {'...on Wand Refresh'} */}
+      {/*   </ConfigToggle> */}
+      {/* </ConfigToggleGroup> */}
+      <ConfigToggleGroup title={'Wand Editor'}>
+        <ConfigToggle field={'swapOnMove'}>
+          {'Swap Spell Position on move'}
+        </ConfigToggle>
+        <ConfigToggle field={'showLockedSpellPlaceholders'}>
+          {'Display placeholder for locked spells'}
+        </ConfigToggle>
+        <ConfigToggle field={'showSpellsInCategories'}>
+          {'Show Spells in Categories'}
+        </ConfigToggle>
+        <ConfigToggle field={'showExtra'}>{'Show Debug Spells'}</ConfigToggle>
+      </ConfigToggleGroup>
+      <ConfigToggleGroup
+        title={'Unlockable Spells'}
+        bulkSelectControls={true}
+        section={'unlocks'}
+      >
+        {sortedUnlocks.map(({ key, name, field }) => (
+          <ConfigToggle key={key} field={field}>
+            {name}
           </ConfigToggle>
-        </ConfigToggleGroup>
-        <ConfigToggleGroup title={'Visualisation'}>
-          <ConfigToggle field={'castShowChanged'}>
-            {'Hide Unaltered State Variables'}
-          </ConfigToggle>
-          <ConfigToggle field={'showDurationsInFrames'}>
-            {'Show Durations in Frames'}
-          </ConfigToggle>
-          <ConfigToggle field={'condenseShots'}>
-            {'Combine Repeated Actions'}
-          </ConfigToggle>
-          <ConfigToggle field={'condenseShots'}>
-            {'Group Projectiles'}
-          </ConfigToggle>
-          <ConfigToggle field={'showActionTree'}>
-            {'Show Action Tree'}
-          </ConfigToggle>
-          <ConfigToggle field={'showDirectActionCalls'}>
-            {'Show Direct Action Calls'}
-          </ConfigToggle>
-          <ConfigToggle field={'showDivides'}>
-            {'Show Divide By Spells'}
-          </ConfigToggle>
-          <ConfigToggle field={'showGreekSpells'}>
-            {'Show Greek Spells'}
-          </ConfigToggle>
-          <ConfigToggle field={'showDeckIndexes'}>
-            {'Show Deck Indexes'}
-          </ConfigToggle>
-          <ConfigToggle field={'showRecursion'}>
-            {'Show Recursion'}
-          </ConfigToggle>
-          <ConfigToggle field={'showRecursion'}>
-            {'Show Iteration'}
-          </ConfigToggle>
-          <ConfigToggle field={'showProxies'}>
-            {'Show Projectile Proxies'}
-          </ConfigToggle>
-          <ConfigToggle field={'showSources'}>
-            {'Show Action Sources'}
-          </ConfigToggle>
-          <ConfigToggle field={'showDontDraw'}>
-            {'Show Draw Inhibition'}
-          </ConfigToggle>
-          <ConfigToggle field={'showChargeUsage'}>
-            {'Highlight spells that consume charges'}
-          </ConfigToggle>
-        </ConfigToggleGroup>
-        <ConfigToggleGroup title={'Cast Config'}>
-          <ConfigToggle field={'unlimitedSpells'}>
-            {'Unlimited Spells'}
-          </ConfigToggle>
-          <ConfigToggle field={'infiniteSpells'}>
-            {'Ignore spell charge limits'}
-          </ConfigToggle>
-        </ConfigToggleGroup>
-        {/* <ConfigToggleGroup title={'End Simulation'}> */}
-        {/*   <ConfigToggle field={'endSimulationOnRefresh'}> */}
-        {/*     {'...on Wand Refresh'} */}
-        {/*   </ConfigToggle> */}
-        {/* </ConfigToggleGroup> */}
-        <ConfigToggleGroup title={'Wand Editor'}>
-          <ConfigToggle field={'swapOnMove'}>
-            {'Swap Spell Position on move'}
-          </ConfigToggle>
-          <ConfigToggle field={'showLockedSpellPlaceholders'}>
-            {'Display placeholder for locked spells'}
-          </ConfigToggle>
-          <ConfigToggle field={'showSpellsInCategories'}>
-            {'Show Spells in Categories'}
-          </ConfigToggle>
-          <ConfigToggle field={'showExtra'}>{'Show Debug Spells'}</ConfigToggle>
-        </ConfigToggleGroup>
-        <ConfigToggleGroup
-          title={'Unlockable Spells'}
-          bulkSelectControls={true}
-          section={'unlocks'}
-        >
-          {sortedUnlocks.map(({ key, name, field }) => (
-            <ConfigToggle key={key} field={field}>
-              {name}
-            </ConfigToggle>
-          ))}
-        </ConfigToggleGroup>
-        <ConfigToggleGroup title={'Accessibility'}>
-          <ConfigToggle field={'hideAccessibilityHints'}>
-            {'Hide hints on input fields'}
-          </ConfigToggle>
-          <ConfigToggle field={'mirrorControls'}>
-            {'UI elements swap sides'}
-          </ConfigToggle>
-        </ConfigToggleGroup>
-      </ConfigDiv>
+        ))}
+      </ConfigToggleGroup>
+      <ConfigToggleGroup title={'Accessibility'}>
+        <ConfigToggle field={'hideAccessibilityHints'}>
+          {'Hide hints on input fields'}
+        </ConfigToggle>
+        <ConfigToggle field={'mirrorControls'}>
+          {'UI elements swap sides'}
+        </ConfigToggle>
+      </ConfigToggleGroup>
     </MainDiv>
   );
 };

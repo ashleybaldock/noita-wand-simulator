@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { ConfigButton } from './buttons';
 import { Search } from './Search';
+import { StickyGroup } from './Sticky/StickyGroup';
 
 const logoVariants = [
   '/logo/logo-blue.png',
@@ -53,6 +54,10 @@ const HeaderDiv = styled.div<{
     position: absolute;
     inset: 0 0 0 0;
     pointer-events: none;
+  }
+
+  & + ${StickyGroup} {
+    margin-bottom: var(--top-banner-height);
   }
 
   @media screen and (max-width: 500px) {
