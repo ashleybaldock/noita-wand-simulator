@@ -8,6 +8,15 @@ export const WandBorder = styled.div<{
 }>`
   position: relative;
   border: ${({ width = DEFAULT_WIDTH }) => width} solid transparent;
+  margin: 0 auto;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 0 var(--pad);
+  --usedw: calc(var(--pad) * 2 + var(--bdw) * 2);
+  --pad: 1ch;
+  --bdw: 3px;
+  border: var(--bdw) solid transparent;
+  margin: 0;
 
   &::before {
     content: '';

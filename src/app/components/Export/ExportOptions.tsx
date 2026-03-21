@@ -9,7 +9,6 @@ const Container = styled.div`
 
   font-family: var(--font-family-noita-default);
   z-index: var(--zindex-copy-png);
-  padding: 0.2em 1ch 0.2em 1ch;
   background-color: #0000;
 
   position: relative;
@@ -18,7 +17,7 @@ const Container = styled.div`
   display: grid;
   grid-column: export;
   grid-row: 1;
-  grid-template-columns: 1fr;
+  grid-template-columns: 2fr 10fr;
   grid-auto-rows: 1fr;
   max-height: 1lh;
   overflow: visible;
@@ -80,19 +79,23 @@ const Container = styled.div`
   }
 `;
 
-const OpenExportOptionsButton = styled(Button)``;
+const OpenExportOptionsButton = styled(Button)`
+  grid-column: 1;
+  grid-row: 1;
+  padding: 0 0.5ch;
+`;
 
 const DefaultExport = styled.div`
   align-items: center;
   pointer-events: auto;
   background-color: var(--color-base-background);
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto;
   grid-template-rows: 1fr;
-  grid-column: 1/-1;
-  grid-row: 1 / auto;
+  grid-column: -2;
+  grid-row: 1/1;
   grid-auto-rows: 1fr;
-  padding: var(--pad) 0.5ch var(--pad) 0.5ch;
+  padding: 0 0.5ch;
   column-gap: var(--pad);
 
   @media screen and (max-width: 600px) {
@@ -121,7 +124,7 @@ const RevealExports = styled.div<{ expanded: boolean }>`
   transition-duration: 40ms;
 
   display: grid;
-  grid-template-columns: subgrid;
+  grid-template-columns: 1fr;
   grid-auto-rows: 1fr;
   grid-column: 1/-1;
   grid-row: 1/-1;
@@ -154,16 +157,16 @@ export const ExportOptions = ({
 
   return (
     <Container data-name="ExportOptions" className={className}>
+      <OpenExportOptionsButton
+        minimal
+        dataName="OpenExportOptionsButton"
+        imgOnly="always"
+        onClick={() => handleClick()}
+        imgAfter
+        icon={'icon.hamburger.menu'}
+        hotkeys={'e'}
+      />
       <DefaultExport data-name="DefaultExport">
-        <OpenExportOptionsButton
-          minimal
-          dataName="OpenExportOptionsButton"
-          imgOnly="always"
-          onClick={() => handleClick()}
-          imgAfter
-          icon={'icon.hamburger.menu'}
-          hotkeys={'e'}
-        />
         <SaveImageButton
           name={'Wand'}
           dataName="SaveImageButton"

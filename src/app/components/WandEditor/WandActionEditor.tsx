@@ -72,6 +72,12 @@ const SpellSlots = styled.ul`
   align-items: center;
   --grid-max-column-count: 10;
   grid-template-columns: repeat(auto-fit, var(--grid-item-width));
+
+  padding: 0 var(--pad);
+  --usedw: calc(var(--pad) * 2 + var(--bdw) * 2);
+  --pad: 1ch;
+  --bdw: 3px;
+  border: var(--bdw) solid transparent;
 `;
 
 const SpellSlotListItem = styled.li`

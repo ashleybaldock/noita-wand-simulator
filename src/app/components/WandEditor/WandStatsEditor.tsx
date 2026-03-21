@@ -3,7 +3,7 @@ import { setWand } from '../../redux/wandSlice';
 import styled from 'styled-components';
 import { round, toSeconds } from '../../util/util';
 import { useConfig } from '../../redux';
-import { YesNoToggle } from '../Input';
+import { YesNoConfigToggle, YesNoToggle } from '../Input';
 import {
   FNSP,
   PREFIX_MULTI,
@@ -303,13 +303,10 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         tip={{ kind: 'uihint', id: 'unlimited_spells' }}
         dataName="ToggleUnlimitedSpells"
       >
-        <StyledName>{'Unlimited Spells'}</StyledName>
-        <StyledValue>
-          <WrappedYesNoConfigToggle
-            data-toggle="unlimitedSpells"
-            field={'unlimitedSpells'}
-          ></WrappedYesNoConfigToggle>
-        </StyledValue>
+        <YesNoConfigToggle
+          data-toggle="unlimitedSpells"
+          field={'unlimitedSpells'}
+        ></YesNoConfigToggle>
       </StyledListItem>
     </>
   );

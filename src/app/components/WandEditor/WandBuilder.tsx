@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import styled from 'styled-components';
+import styled, { type DataAttributes } from 'styled-components';
 import { WandActionEditor } from './WandActionEditor';
 import { WandStatsEditor } from './WandStatsEditor';
 import { WandBorder } from './WandBorder';
@@ -12,7 +12,9 @@ const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
   background-color: var(--color-base-background);
-  margin: 4px 2px;
+
+  margin: 4px 0;
+  align-items: center;
 
   @media screen and (max-width: 500px) {
     margin: 10px 0;
@@ -27,6 +29,8 @@ const ContentDiv = styled.div`
   background-color: var(--color-button-background);
 
   padding: 0.8em 1em 0.6em 1em;
+  padding: 0;
+  width: 100%;
 `;
 
 const WandActionEditorWrapper = styled.div`
@@ -79,13 +83,21 @@ const WandBuilderTopButtons = styled.div`
     }
   }
 `;
-const ColumnsContainer = styled.div`
+const ColumnsContainer = styled.div.attrs<DataAttributes>(() => ({
+  'data-name': 'ColumnsContainer',
+}))`
   --child-unit-height: 1.44em;
   padding: 0;
 
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: 1fr;
+
+  row-gap: round(nearest, clamp(1px, 0.2em, 4px), 1px);
+  font-size: round(nearest, clamp(1em, calc(1.6em - 2vw), 1.2em), 1px);
+  margin: 0;
+  grid-template-columns: repeat(auto-fill, minmax(24ch, 1fr));
+  column-gap: round(up, clamp(1px, 1vw, 0.5ch), 1px);
 
   @media screen and (max-width: 500px) {
     grid-template-columns: 1fr;
