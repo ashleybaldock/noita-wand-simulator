@@ -23,21 +23,15 @@ import { isValidActionId } from '../../calc/actionId';
 
 const MainDiv = styled.div`
   --bsize-spell: 40px;
+  --top-offset: -8px;
+  --gap-multiplier: 0.12;
+  --fake-top-height: calc(var(--ou) * 2);
+  --border-radius: 5px;
 
   display: flex;
   flex-direction: column;
   flex: 1 1;
   background-color: #100e0e;
-  --gap-multiplier: 0.12;
-
-  position: sticky;
-  top: -100px;
-  --top-offset: -8px;
-
-  --bsize-spell: 40px;
-  --gap-multiplier: 0.12;
-  --fake-top-height: calc(var(--ou) * 2);
-  --border-radius: 5px;
   top: unset;
   position: relative;
 
@@ -55,7 +49,7 @@ const MainDiv = styled.div`
     border-radius: var(--border-radius) var(--border-radius) 0 0;
     border-bottom: 0 hidden transparent;
     font-size: 14px;
-    inset: calc(var(--top-banner-height) - var(--border-radius)) auto auto auto;
+    inset: calc(var(--top-banner-height)) auto auto auto;
     margin: 0 calc(var(--ou) * 1) 0 calc(var(--ou) * 1);
     padding: 0 var(--ou);
     box-sizing: border-box;
@@ -84,11 +78,12 @@ const SpellCategorySpellsDiv = styled.div`
   box-sizing: content-box;
 
   position: sticky;
-  scroll-snap-stop: normal;
-  scroll-snap-align: start end;
 
   overflow-y: hidden;
   overflow: visible;
+
+  scroll-snap-stop: normal;
+  scroll-snap-align: start end;
   overscroll-behavior: auto;
 
   & > div {
