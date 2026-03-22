@@ -61,10 +61,6 @@ const SpellSlots = styled.ul`
   --gap-count: calc(var(--grid-max-column-count) - 1);
   --total-gap-width: calc(var(--grid-layout-gap) * var(--gap-count));
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(var(--grid-item-width), var(--grid-item-width))
-  );
   grid-gap: 2px 0;
 
   justify-content: center;
@@ -72,7 +68,6 @@ const SpellSlots = styled.ul`
   --grid-max-column-count: 10;
   grid-template-columns: repeat(auto-fit, var(--grid-item-width));
 
-  padding: 0 var(--pad);
   --usedw: calc(var(--pad) * 2 + var(--bdw) * 2);
   --pad: 1ch;
   --bdw: 3px;

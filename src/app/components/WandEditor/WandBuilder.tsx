@@ -28,8 +28,7 @@ const ContentDiv = styled.div`
   position: relative;
   background-color: var(--color-button-background);
 
-  padding: 0.8em 1em 0.6em 1em;
-  padding: 0;
+  padding: 0.8em 0 0.6em 0;
   width: 100%;
 `;
 
@@ -50,10 +49,11 @@ const WandBuilderTopButtons = styled.div`
   filter: none;
   background-color: var(--color-base-background);
   padding: 0 0 0.3em 0;
+  margin: 0;
+  width: 100%;
   grid-column: -2;
   grid-row-end: span 2;
   justify-self: end;
-  margin: 0;
 
   & > button {
     padding-top: 0.4em;
@@ -83,6 +83,7 @@ const WandBuilderTopButtons = styled.div`
     }
   }
 `;
+
 const ColumnsContainer = styled.div.attrs<DataAttributes>(() => ({
   'data-name': 'ColumnsContainer',
 }))`
