@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled, { type DataAttributes } from 'styled-components';
 import { TooltipBase } from './TooltipBase';
 import { getSpellByActionId } from '../../calc/spells';
-import { isValidActionId } from '../../calc/actionId';
+import { isValidActionId, type ActionId } from '../../calc/actionId';
 import { isNotNullOrUndefined } from '../../util';
 import { translate } from '../../util/i18n';
 import { spellTypeInfoMap } from '../../calc/spellTypes';
@@ -10,6 +10,11 @@ import { getUnlockName } from '../../calc/unlocks';
 import { YesNo } from '../Presentation';
 import { useHideTooltips } from './useHideTooltips';
 import { InlineIcon } from '../Icon/Icon';
+import {
+  getInfoForSpellField,
+  type Spell,
+  type SpellField,
+} from '../../calc/spell';
 
 const StyledTooltipBase = styled(TooltipBase)`
   --tip-show-delay: 800ms;
@@ -66,9 +71,9 @@ const SpellId = styled.div`
   margin-top: -0.3em;
   font-size: 0.6em;
 `;
-// const WikiLink = styled.a`
-//   https: ; //noita.wiki.gg/wiki/${actionId}
-// `;
+const WikiLink = styled.a.attrs<{ actionId: ActionId }>(({ actionId }) => ({
+  href: `https://noita.wiki.gg/wiki/${actionId}`,
+}))``;
 
 const Label = styled.div.attrs<{ iconSrc?: string }>(({ iconSrc }) => ({
   style:
@@ -93,6 +98,36 @@ const Value = styled.div`
 
   padding: 0.1em 0em 0.1em 0.6em;
 `;
+
+const Stat = styled(
+  ({
+    label,
+    value,
+    className,
+  }: {
+    label: string;
+    value: string;
+    className: string;
+  }) => {
+    return (
+      <>
+        <Label className={className}>{label}</Label>
+        <Value>{value}</Value>
+      </>
+    );
+  },
+).attrs<{
+  actionId: ActionId;
+  field: SpellField;
+}>(({ actionId, field }) => {
+  const spell = getSpellByActionId(actionId);
+  const { name, render = (v: unknown) => JSON.stringify(v) } =
+    getInfoForSpellField(field);
+  return {
+    label: name,
+    value: render(spell[field]),
+  };
+})``;
 
 const SpellImage = styled.img.attrs<{ $src?: string }>(({ $src = '' }) => ({
   style: {
@@ -129,7 +164,7 @@ export const SpellInfoTooltip = ({
       offset={30}
       place={'top-start'}
       closeEvents={{
-        mouseleave: true,
+        // mouseleave: true,
         blur: true,
         click: true,
       }}
@@ -158,6 +193,9 @@ export const SpellInfoTooltip = ({
             <Description>{translate(description)}</Description>
             <SpellId>{actionId}</SpellId>
             <SpellImage $src={sprite} />
+
+            <Stat actionId={actionId} field={'type'}></Stat>
+
             <Label>Type</Label>
             <Value>{spellTypeInfoMap[type].name}</Value>
             <Label iconSrc={'data/wand/icon_mana_drain.png'}>Mana Drain</Label>
@@ -171,7 +209,6 @@ export const SpellInfoTooltip = ({
               ) : (
                 <>
                   {`${max_uses}`}
-                  <InlineIcon icon={'unlimited_spells'} />
                   <YesNo yes={Boolean(never_unlimited)} />
                 </>
               )}

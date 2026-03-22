@@ -11,7 +11,7 @@ export const WandBorder = styled.div<{
   margin: 0 auto;
   width: fit-content;
   margin: 0 auto;
-  padding: 0 var(--pad);
+  padding: var(--vpad) var(--pad);
   --usedw: calc(var(--pad) * 2 + var(--bdw) * 2);
   --pad: 1ch;
   --bdw: 3px;
@@ -29,4 +29,9 @@ export const WandBorder = styled.div<{
   border-image-slice: 2;
   border-image-width: 2;
   image-rendering: pixelated;
+
+  --vpad: round(nearest, 0.4em, 1px);
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--vpad);
 `;

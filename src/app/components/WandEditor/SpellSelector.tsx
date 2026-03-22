@@ -216,18 +216,18 @@ const WandActionSelect = ({
       dispatch(insertSpellBeforeCursor({ spellId: id }));
     }
   };
-  return locked ? (
+  return (
     <SpellSelectorSpellSlot data-name="SpellSelectorWandActionBorder">
-      <SpellSelectorLockedSpell spellType={type}></SpellSelectorLockedSpell>
-    </SpellSelectorSpellSlot>
-  ) : (
-    <SpellSelectorSpellSlot data-name="SpellSelectorWandActionBorder">
-      <SpellSelectorWandActionDragSource
-        actionId={id}
-        onClick={dragSourceOnClick}
-      >
-        <SpellSelectorWandAction spellId={id} spellType={type} />
-      </SpellSelectorWandActionDragSource>
+      {locked ? (
+        <SpellSelectorLockedSpell spellType={type}></SpellSelectorLockedSpell>
+      ) : (
+        <SpellSelectorWandActionDragSource
+          actionId={id}
+          onClick={dragSourceOnClick}
+        >
+          <SpellSelectorWandAction spellId={id} spellType={type} />
+        </SpellSelectorWandActionDragSource>
+      )}
     </SpellSelectorSpellSlot>
   );
 };

@@ -6,6 +6,8 @@ import type { SpellSpritePath } from './spellSprite';
 import type { AlwaysCastWandIndex, MainWandIndex } from '../redux/WandIndex';
 import type { ExtraEntity } from './extraEntities';
 import type { ProjectileId } from './projectile';
+import { useSprite, type Sprite, type SpriteName } from './sprite';
+import {objectEntries} from '../util';
 
 export type SpellDeckInfo = {
   id: ActionId;
@@ -60,3 +62,51 @@ export type Spell = SpellDeckInfo &
   SpellExtraInfo &
   SpellProperties &
   SpellUnusedProperties;
+
+export type SpellField = keyof Spell;
+export type SpellFieldInfo = <T extends typeof Spell[SpellField]>{
+  readonly name: string;
+  readonly renderValue: (v: T) => string;
+  readonly tip?: string;
+  readonly icon?: SpriteName;
+  readonly group?: string;
+  readonly customYes?: string;
+  readonly customNo?: string;
+};
+
+export const spellFieldInfoDefinition: Partial<
+  Record<SpellField, SpellFieldInfo>
+> = {
+  name: { name: 'Name' },
+  description: { name: 'Description' },
+  sprite: { name: 'Sprite' },
+  action: { name: 'Action' },
+  type: { name: 'Type' },
+  custom_xml_file: { name: 'Custom XML File', icon: 'icon.xmlfile' },
+  related_projectiles: { name: 'Related Projectiles' },
+  related_extra_entities: { name: 'Related Extra Entities' },
+  mana: { name: 'Mana Cost', icon: 'icon.manadrain' },
+  max_uses: { name: 'Max Charges', icon: 'icon.maxuse' },
+  uses_remaining: { name: 'Charges Remaining', icon: 'icon.remaininguses' },
+  never_unlimited: {
+    name: 'Not Affected by Unlimited Spells',
+    icon: 'icon.neverunlimited',
+  },
+  recursive: { name: 'Recursive', icon: 'icon.recursion' },
+  iterative: { name: 'Iterative', icon: 'icon.iteration' },
+  spawn_requires_flag: { name: 'Unlock Condition', icon: 'icon.unlock' },
+  spawn_level: { name: 'Spell Tier' },
+  spawn_probability: { name: 'Spawn Probability' },
+  price: { name: 'Base Cost' },
+  ai_never_uses: { name: 'AI Never Uses' },
+} as const;
+
+export type SpellFieldInfoRecord = Record<SpellField, SpellFieldInfo>;
+
+const spellFieldInfoRecord = spellFieldInfoDefinition as SpellFieldInfoRecord;
+
+export const spellFieldInfoMap = new Map<SpellField, SpellFieldInfo>([
+  ...objectEntries(spellFieldInfoRecord),
+]);
+
+export const getInfoForSpellField = (field: SpellField) => spellFieldInfoMap.get(field);
