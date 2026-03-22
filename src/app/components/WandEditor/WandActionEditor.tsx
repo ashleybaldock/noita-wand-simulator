@@ -66,7 +66,6 @@ const SpellSlots = styled.ul`
     minmax(var(--grid-item-width), var(--grid-item-width))
   );
   grid-gap: 2px 0;
-  padding: 0.8em 0 0.6em 0;
 
   justify-content: center;
   align-items: center;
@@ -80,11 +79,10 @@ const SpellSlots = styled.ul`
   border: var(--bdw) solid transparent;
 
   width: auto;
-  outline: 0.5px solid red;
-  outline-offset: -1.5px;
   --available: calc(100vw - var(--usedw));
   width: round(down, var(--available), var(--grid-item-width));
-  margin: 0 auto;
+  margin: 0;
+  padding: 0;
 `;
 
 const SpellSlotListItem = styled.li`

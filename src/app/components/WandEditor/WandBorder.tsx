@@ -18,14 +18,6 @@ export const WandBorder = styled.div<{
   border: var(--bdw) solid transparent;
   margin: 0;
 
-  width: fit-content;
-  padding: 0 var(--pad);
-  --usedw: calc(var(--pad) * 2 + var(--bdw) * 2);
-  --pad: 1ch;
-  --bdw: 3px;
-  border: var(--bdw) solid transparent;
-  margin: 0;
-
   &::before {
     content: '';
     pointer-events: none;
