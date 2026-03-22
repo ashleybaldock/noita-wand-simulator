@@ -35,6 +35,7 @@ const HeaderDiv = styled.div<{
 
   width: auto;
   max-width: max(1px, round(down, 100vw, 1px));
+  height: var(--top-banner-height);
   image-rendering: pixelated;
 
   column-gap: max(1px, round(down, 0.3ch, 1px));

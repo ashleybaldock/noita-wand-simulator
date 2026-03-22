@@ -78,6 +78,13 @@ const SpellSlots = styled.ul`
   --pad: 1ch;
   --bdw: 3px;
   border: var(--bdw) solid transparent;
+
+  width: auto;
+  outline: 0.5px solid red;
+  outline-offset: -1.5px;
+  --available: calc(100vw - var(--usedw));
+  width: round(down, var(--available), var(--grid-item-width));
+  margin: 0 auto;
 `;
 
 const SpellSlotListItem = styled.li`

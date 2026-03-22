@@ -83,6 +83,11 @@ const OpenExportOptionsButton = styled(Button)`
   grid-column: 1;
   grid-row: 1;
   padding: 0 0.5ch;
+
+  height: 100%;
+  grid-row: 1;
+  max-height: 1lh;
+  box-sizing: border-box;
 `;
 
 const DefaultExport = styled.div`
