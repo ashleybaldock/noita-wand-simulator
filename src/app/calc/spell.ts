@@ -6,20 +6,18 @@ import type { SpellSpritePath } from './spellSprite';
 import type { AlwaysCastWandIndex, MainWandIndex } from '../redux/WandIndex';
 import type { ExtraEntity } from './extraEntities';
 import type { ProjectileId } from './projectile';
-import { useSprite, type Sprite, type SpriteName } from './sprite';
+import type { SpriteName } from './sprite';
 import { objectEntries, type ValueOf } from '../util';
 
 export type SpellDeckInfo = {
   id: ActionId;
   deck_index?: MainWandIndex;
-  /* Always Cast */
   permanently_attached?: boolean;
   always_cast_index?: AlwaysCastWandIndex;
 };
 
 export type SpellExtraInfo = {
   id: ActionId;
-  beta?: boolean;
 };
 
 export type SpellProperties = {
@@ -75,19 +73,23 @@ export type FieldInfo<T extends object, V extends ValueOf<T>> = {
   readonly customNo?: string;
 };
 type InfoFor<T extends object> = {
-  [Property in keyof T]: FieldInfo<T, T[Property]>;
+  +readonly [Property in keyof T]-?: FieldInfo<T, T[Property]>;
 };
 
 type SpellFieldInfo = InfoFor<Spell>;
 
-export const spellFieldInfoDefinition: Partial<SpellFieldInfo> = {
+export const spellFieldInfoDefinition: SpellFieldInfo = {
+  id: { name: 'Id' },
   name: { name: 'Name' },
   description: { name: 'Description' },
   sprite: { name: 'Sprite' },
-  action: { name: 'Action' },
+  action: { name: 'Action', render: () => '' },
   type: { name: 'Type' },
   custom_xml_file: { name: 'Custom XML File', icon: 'icon.xmlfile' },
-  related_projectiles: { name: 'Related Projectiles' },
+  related_projectiles: {
+    name: 'Related Projectiles',
+    // render: ([id, count = 1]:[ProjectileId, number?]) => `${id} ×${count}`,
+  },
   related_extra_entities: { name: 'Related Extra Entities' },
   mana: { name: 'Mana Cost', icon: 'icon.manadrain' },
   max_uses: { name: 'Max Charges', icon: 'icon.maxuse' },
@@ -103,13 +105,24 @@ export const spellFieldInfoDefinition: Partial<SpellFieldInfo> = {
   spawn_probability: { name: 'Spawn Probability' },
   price: { name: 'Base Cost' },
   ai_never_uses: { name: 'AI Never Uses' },
+  deck_index: { name: 'Deck Index' },
+  permanently_attached: { name: 'Always Cast' },
+  always_cast_index: { name: 'Always Cast Index' },
+
+  spawn_manual_unlock: { name: '' },
+  is_dangerous_blast: { name: '' },
+  sprite_unidentified: { name: '' },
+  custom_uses_logic: { name: '' },
+  is_identified: { name: '' },
+  sound_loop_tag: { name: '' },
+  inventoryitem_id: { name: '' },
 } as const;
 
 // export type SpellFieldInfoRecord = Record<SpellField, SpellFieldInfo>;
 
 // const spellFieldInfoRecord = spellFieldInfoDefinition as SpellFieldInfoRecord;
 
-export const spellFieldInfoMap = new Map<SpellField, SpellFieldInfo>([
+export const spellFieldInfoMap = new Map<SpellField, InfoFor>([
   ...objectEntries(spellFieldInfoDefinition),
 ]);
 
