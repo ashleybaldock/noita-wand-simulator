@@ -7,7 +7,7 @@ import type { AlwaysCastWandIndex, MainWandIndex } from '../redux/WandIndex';
 import type { ExtraEntity } from './extraEntities';
 import type { ProjectileId } from './projectile';
 import { useSprite, type Sprite, type SpriteName } from './sprite';
-import {objectEntries} from '../util';
+import { objectEntries, type ValueOf } from '../util';
 
 export type SpellDeckInfo = {
   id: ActionId;
@@ -64,19 +64,23 @@ export type Spell = SpellDeckInfo &
   SpellUnusedProperties;
 
 export type SpellField = keyof Spell;
-export type SpellFieldInfo = <T extends typeof Spell[SpellField]>{
+
+export type FieldInfo<T extends object, V extends ValueOf<T>> = {
   readonly name: string;
-  readonly renderValue: (v: T) => string;
+  readonly render?: (v: V) => string;
   readonly tip?: string;
   readonly icon?: SpriteName;
   readonly group?: string;
   readonly customYes?: string;
   readonly customNo?: string;
 };
+type InfoFor<T extends object> = {
+  [Property in keyof T]: FieldInfo<T, T[Property]>;
+};
 
-export const spellFieldInfoDefinition: Partial<
-  Record<SpellField, SpellFieldInfo>
-> = {
+type SpellFieldInfo = InfoFor<Spell>;
+
+export const spellFieldInfoDefinition: Partial<SpellFieldInfo> = {
   name: { name: 'Name' },
   description: { name: 'Description' },
   sprite: { name: 'Sprite' },
@@ -101,12 +105,13 @@ export const spellFieldInfoDefinition: Partial<
   ai_never_uses: { name: 'AI Never Uses' },
 } as const;
 
-export type SpellFieldInfoRecord = Record<SpellField, SpellFieldInfo>;
+// export type SpellFieldInfoRecord = Record<SpellField, SpellFieldInfo>;
 
-const spellFieldInfoRecord = spellFieldInfoDefinition as SpellFieldInfoRecord;
+// const spellFieldInfoRecord = spellFieldInfoDefinition as SpellFieldInfoRecord;
 
 export const spellFieldInfoMap = new Map<SpellField, SpellFieldInfo>([
-  ...objectEntries(spellFieldInfoRecord),
+  ...objectEntries(spellFieldInfoDefinition),
 ]);
 
-export const getInfoForSpellField = (field: SpellField) => spellFieldInfoMap.get(field);
+export const getInfoForSpellField = (field: SpellField) =>
+  spellFieldInfoMap.get(field);
