@@ -81,7 +81,7 @@ export class MapTree<T> implements TreeRoot<T>, SerializableTree<T> {
       );
       ancestors.push([
         parentIdx,
-        (ancestors[ancestors.length - 1][1] ?? this).appendChild(value),
+        (ancestors[ancestors.length - 1]?.[1] ?? this).appendChild(value),
       ]);
     }
 
