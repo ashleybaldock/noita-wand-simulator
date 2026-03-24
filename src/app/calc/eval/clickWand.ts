@@ -163,5 +163,5 @@ export const clickWand = ({
     endObservation();
   }
 
-  return tee.log(serializeSimulationResult(result));
+  return tee.log(serializeSimulationResult(tee.log(result)));
 };

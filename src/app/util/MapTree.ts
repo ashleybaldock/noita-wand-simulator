@@ -1,4 +1,4 @@
-import { isNotNull } from './Predicate';
+import { isNotNull, isNull } from './Predicate';
 import type { TreeNode, TreeRoot } from './Tree';
 import { mapIter } from './iterTools';
 
@@ -119,36 +119,45 @@ export class MapTree<T> implements TreeRoot<T>, SerializableTree<T> {
     return 0;
   }
 
-  appendChild = (value: T): MapTreeNode<T> => {
+  get isEmpty(): boolean {
+    return isNull(this._root);
+  }
+
+  appendChild(value: T): MapTreeNode<T> {
     if (isNotNull(this._root)) {
       return this._root.appendChild(value);
     } else {
       this._root = new MapTreeNode(value);
       return this._root;
     }
-  };
+  }
 
   *serializer(): IterableIterator<[parentIdx: ParentIdx, value: T]> {
     yield* mapIter(this.iter(), (n, i) => [i, n.value]);
   }
 
-  serialize = (): SerializedTree<T> => {
+  serialize(): SerializedTree<T> {
     return [...this.serializer()];
-  };
+  }
 }
 
 export class MapTreeNode<T> extends MapTree<T> implements TreeNode<T> {
   protected readonly _value: T;
+  protected readonly _root: MapTreeNode<T>;
   protected readonly _parent: MapTreeNode<T>;
   protected readonly _children: MapTreeNode<T>[];
 
+  private _childCount: number = 0;
+
   constructor(
     value: T,
+    root?: MapTreeNode<T>,
     parent?: MapTreeNode<T>,
     children: MapTreeNode<T>[] = [],
   ) {
     super();
     this._value = value;
+    this._root = root ?? this;
     this._parent = parent ?? this;
     this._children = children;
   }
@@ -174,13 +183,22 @@ export class MapTreeNode<T> extends MapTree<T> implements TreeNode<T> {
     return this.iterChildren();
   }
 
-  appendChild = (value: T): MapTreeNode<T> => {
-    const baby = new MapTreeNode(value, this);
+  get childCount(): number {
+    return this._childCount;
+  }
+
+  appendChild(value: T): MapTreeNode<T> {
+    const baby = new MapTreeNode(value, this._root, this);
     this._children.push(baby);
+    this._childCount += 1;
     return baby;
-  };
+  }
 
   get parent(): TreeNode<T> {
     return this._parent;
+  }
+
+  get root(): TreeNode<T> {
+    return this._root;
   }
 }
