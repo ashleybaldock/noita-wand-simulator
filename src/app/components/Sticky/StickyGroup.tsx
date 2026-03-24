@@ -1,5 +1,4 @@
 import styled, { type DataAttributes } from 'styled-components';
-import { MainHeader } from '../MainHeader';
 
 export const StickyGroup = styled.div.attrs<DataAttributes>({
   'data-name': 'StickyGroup',

@@ -50,7 +50,6 @@ import {
   OnSetMana,
 } from './eval/dispatch';
 import type { AlwaysCastWandIndex } from '../redux/WandIndex';
-import type { EntityId } from '@reduxjs/toolkit';
 import type { ProjectileId } from './projectile';
 
 // constants
@@ -785,9 +784,8 @@ export function call_action(
 }
 
 // custom mock for find_the_wand_held() in gun_action_utils
-export function find_the_wand_held(
-  actionId: ActionId | WandId,
-  caster_entity: EntityId,
-) {
+export function find_the_wand_held() {
+/* actionId: ActionId | WandId, */
+/* caster_entity: EntityId, */
   return 1;
 }

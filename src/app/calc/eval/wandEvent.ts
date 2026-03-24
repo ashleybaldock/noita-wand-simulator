@@ -303,12 +303,12 @@ export type WandEventOverrideCbRecord = {
   ) => WandEventReturnTypeRecord[W] | undefined;
 };
 
-type WandEventPayload = {
-  [K in keyof WandEventPayloadRecord]: WandEventPayloadRecord[K];
-}[keyof WandEventPayloadRecord];
-type WandEventReturnType = {
-  [K in keyof WandEventReturnTypeRecord]: WandEventReturnTypeRecord[K];
-}[keyof WandEventReturnTypeRecord];
+// type WandEventPayload = {
+//   [K in keyof WandEventPayloadRecord]: WandEventPayloadRecord[K];
+// }[keyof WandEventPayloadRecord];
+// type WandEventReturnType = {
+//   [K in keyof WandEventReturnTypeRecord]: WandEventReturnTypeRecord[K];
+// }[keyof WandEventReturnTypeRecord];
 export type OverridableWandEvent = {
   [K in keyof OverridableWandEventRecord]: OverridableWandEventRecord[K];
 }[keyof OverridableWandEventRecord];

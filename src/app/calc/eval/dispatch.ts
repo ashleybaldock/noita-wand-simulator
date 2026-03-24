@@ -316,6 +316,7 @@ export function EntityLoad(
   });
 }
 
+// Used by Zeta
 export function EntityGetAllChildren(
   actionId: ActionId | WandId,
   entityId: EntityId,
