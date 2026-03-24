@@ -14,9 +14,9 @@ export const SpellTypeBorder = styled.div.attrs<{
   background-size: cover;
   image-rendering: pixelated;
   border-image-source: var(--sprite-spelltype);
-  border-image-width: 0.54em;
-  border-image-slice: 3 3;
-  border-image-outset: 0.2em;
+  border-image-width: 6px;
+  border-image-slice: 6 6;
+  border-image-outset: 0;
 
   position: relative;
   min-width: var(--size-spell);
