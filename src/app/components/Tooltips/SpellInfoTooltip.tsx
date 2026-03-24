@@ -15,19 +15,15 @@ const StyledTooltipBase = styled(TooltipBase)`
 
 const SpellTooltipContainer = styled.div`
   display: grid;
-  grid-template-areas:
-    'sname  sname  sname'
-    'sdesc  sdesc  sdesc'
-    'sid    sid    simage'
-    'label  value  simage'
-    'label  value  simage'
-    'label  value  simage'
-    'label  value  simage'
-    'label  value  simage'
-    'label  value  simage'
-    'label  value  simage'
-    'label  value  simage'
-    'label  value  simage';
+  grid-template-columns: [left sname-start sdesc-start label-start] auto [label-end value-start] auto [value-end simage-start] auto [simage-end sdesc-end sname-end right];
+  grid-template-rows: [top sname-start] 1fr [sname-end sdesc-start] auto [sdesc-end stats-start] repeat(
+      10,
+      auto
+    ) [stats-end] 1fr [bottom];
+  grid-auto-rows: auto;
+  grid-auto-flow: row;
+  row-gap: 0;
+  column-gap: 0;
 
   border: 3px solid #928167;
   border-radius: 0px 7.5px 0px 7.5px;
