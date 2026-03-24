@@ -7,7 +7,7 @@ import type { AlwaysCastWandIndex, MainWandIndex } from '../redux/WandIndex';
 import type { ExtraEntity } from './extraEntities';
 import type { ProjectileId } from './projectile';
 import type { SpriteName } from './sprite';
-import { isUndefined } from '../util';
+import { isNotUndefined, isObject, isUndefined } from '../util';
 
 export type SpellDeckInfo = {
   id: ActionId;
@@ -84,8 +84,25 @@ export const spellFieldInfo: InfoFor<Spell> = {
   custom_xml_file: { name: 'Custom XML File', icon: 'icon.xmlfile' },
   related_projectiles: {
     name: 'Related Projectiles',
+    render: ({ related_projectiles }) =>
+      isNotUndefined(related_projectiles)
+        ? [related_projectiles]
+            .map(
+              ([projectile, count = 1]) =>
+                `${projectile.match(/[^/]*\.xml/)?.[0] ?? projectile} ×${count}`,
+            )
+            .join(', ')
+        : '',
   },
-  related_extra_entities: { name: 'Related Extra Entities' },
+  related_extra_entities: {
+    name: 'Related Extra Entities',
+    render: ({ related_extra_entities }) =>
+      isNotUndefined(related_extra_entities)
+        ? related_extra_entities
+            .map((entity) => entity.match(/[^/]*\.xml/)?.[0] ?? entity)
+            .join(', ')
+        : '',
+  },
   mana: { name: 'Mana Cost', icon: 'icon.manadrain' },
   max_uses: {
     name: 'Max. Uses',
@@ -126,6 +143,7 @@ export const spellFieldInfo: InfoFor<Spell> = {
 } as const;
 
 export const getInfoForSpellField = (field: keyof Spell) => ({
-  render: (spell: Spell) => JSON.stringify(spell[field]),
+  render: (spell: Spell) =>
+    isObject(spell[field]) ? JSON.stringify(spell[field]) : `${spell[field]}`,
   ...spellFieldInfo[field],
 });

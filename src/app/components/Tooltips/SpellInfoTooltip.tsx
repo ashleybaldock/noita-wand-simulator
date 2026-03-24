@@ -7,7 +7,7 @@ import { translate } from '../../util/i18n';
 import { WithDebugHints } from '../Debug';
 import { useHideTooltips } from './useHideTooltips';
 import { getInfoForSpellField, type Spell } from '../../calc/spell';
-import type { SpritePath } from '../../calc/sprite';
+import { useSprite, type Sprite, type SpritePath } from '../../calc/sprite';
 import {
   getColoursForSpellType,
   getSpriteForSpellType,
@@ -30,26 +30,16 @@ const SpellTooltipContainer = styled.div.attrs<{
   image-rendering: pixelated;
 
   display: grid;
-  grid-template-columns: [left sname-start sdesc-start label-start] auto [label-end value-start] auto [value-end simage-start] auto [simage-end sdesc-end sname-end right];
-  grid-template-rows:
-    [top sname-start] 1fr [sname-end sdesc-start] auto [sdesc-end stats-start] repeat(
-      10,
-      auto
-    )
-    [stats-end] 1fr [bottom];
   grid-auto-rows: auto;
   grid-auto-flow: row;
   row-gap: 0;
   column-gap: 0;
 
-  grid-template-columns: [left sname-start sdesc-start label-start] 1fr 1fr [label-end value-start] 1fr [sdesc-end] 1fr [simage-start] 0 [simage-end value-end sdesc-end sname-end right];
-  grid-template-rows:
-    [top sname-start simage-start] 1fr [sname-end sdesc-start] auto [sdesc-end simage-end stats-start] repeat(
-      10,
-      auto
-    )
-    [stats-end] 1fr [bottom];
-  grid-auto-flow: row dense;
+  grid-auto-rows: 100fr;
+  grid-auto-flow: row;
+  row-gap: 0;
+  column-gap: 0;
+
   white-space: normal;
 
   border-image-source: var(--sprite-spelltype);
@@ -75,6 +65,34 @@ const SpellTooltipContainer = styled.div.attrs<{
   font-family: var(--font-family-noita-default);
   font-size: 0.9em;
   pointer-events: none;
+
+  grid-auto-rows: 100fr;
+  grid-auto-flow: row;
+  row-gap: 0;
+  column-gap: 0;
+  grid-template-columns: [left sname-start sdesc-start label-start] 1fr 1fr [label-end value-start] 1fr [sdesc-end sname-end] 1fr [simage-start] 0 [simage-end value-end right];
+  grid-template-rows: [top sname-start simage-start] 200fr [sname-end sdesc-start] auto [sdesc-end simage-end stats-start] repeat( 8, 100fr ) [stats-end bottom];
+  grid-auto-flow: row;
+  white-space: normal;
+  border-image-source: var(--sprite-spelltype);
+  border-image-width: 8px 8px 0 0;
+  border-image-slice: 8 8 0 24;
+  border-image-outset: 0px 4px;
+  border-radius: 2px;
+  background-color: rgba(5, 5, 5, 0.9);
+  color: rgb(250, 250, 250);
+  filter: var(--filter-floating-shadow);
+  box-shadow: inset 2px -2px 6px -2px var(--color-spelltype-light),3px 3px 2px 0 #000;
+  min-width: unset;
+  max-height: round(down, clamp(200px, 30vmax, 100vh), 1px);
+  max-width: round(down, clamp(200px, 30vmax, 100vw), 1px);
+  width: fit-content;
+  height: fit-content;
+  padding: 18px 18px 9px 18px;
+  font-family: var(--font-family-noita-default);
+  font-size: 0.9em;
+  pointer-events: none;
+}
 `;
 const Name = styled.div`
   font-size: 1.3em;
@@ -101,8 +119,8 @@ const WikiLink = styled.a.attrs<{ actionId: ActionId }>(({ actionId }) => ({
 
 const Label = styled.div.attrs<{ icon?: SpritePath }>(() => ({}))`
   grid-column: label;
-  margin-bottom: 0.2em;
   white-space: nowrap;
+  margin-right: 1ch;
 
   ${({ icon }) =>
     icon &&
@@ -120,21 +138,26 @@ const Value = styled.div`
 
   padding: 0;
   justify-self: end;
+  margin-right: 1ch;
 `;
 
 const Stat = styled(
   ({
     label,
+    icon,
     value,
     className,
   }: {
     label: string;
+    icon?: Sprite;
     value: string;
     className?: string;
   }) => {
     return (
       <>
-        <Label className={className}>{label}</Label>
+        <Label className={className} icon={icon?.path}>
+          {label}
+        </Label>
         <Value>{value}</Value>
       </>
     );
@@ -148,9 +171,10 @@ const SpellStat = styled(Stat).attrs<{
   value?: string;
 }>(({ actionId, field }) => {
   const spell = getSpellByActionId(actionId);
-  const { name, render } = getInfoForSpellField(field);
+  const { name, icon: sprite = 'none', render } = getInfoForSpellField(field);
   return {
     label: name,
+    icon: useSprite(sprite),
     value: render(spell),
   };
 })``;
@@ -224,6 +248,10 @@ export const SpellInfoTooltip = ({
           max_uses,
           never_unlimited,
           spawn_requires_flag,
+          recursive,
+          iterative,
+          related_projectiles,
+          related_extra_entities,
         } = getSpellByActionId(content);
         return (
           <SpellTooltipContainer spellType={type}>
@@ -240,15 +268,30 @@ export const SpellInfoTooltip = ({
               actionId={actionId}
               field={'never_unlimited'}
             ></SpellStat>
-            <SpellStat actionId={actionId} field={'recursive'}></SpellStat>
-            <SpellStat actionId={actionId} field={'iterative'}></SpellStat>
+            {recursive && (
+              <SpellStat actionId={actionId} field={'recursive'}></SpellStat>
+            )}
+            {iterative && (
+              <SpellStat actionId={actionId} field={'iterative'}></SpellStat>
+            )}
             {isNotUndefined(spawn_requires_flag) && (
               <SpellStat
                 actionId={actionId}
                 field={'spawn_requires_flag'}
               ></SpellStat>
             )}
-            <SpellStat actionId={actionId} field={'type'}></SpellStat>
+            {related_extra_entities && (
+              <SpellStat
+                actionId={actionId}
+                field={'related_extra_entities'}
+              ></SpellStat>
+            )}
+            {related_projectiles && (
+              <SpellStat
+                actionId={actionId}
+                field={'related_projectiles'}
+              ></SpellStat>
+            )}
           </SpellTooltipContainer>
         );
       }}
