@@ -12,8 +12,7 @@ import {
   SUFFIX_SECOND,
 } from '../../util';
 import { NumericInput } from '../Input/NumericInput/NumericInput';
-import { useSpritePath } from '../../calc/sprite';
-import { WrappedYesNoConfigToggle } from '../config/Components';
+import { useSprite, type Sprite } from '../../calc/sprite';
 import { EditableWrapper } from '../Presentation';
 
 const EditableInterval = ({
@@ -52,7 +51,7 @@ const EditableInterval = ({
 };
 
 const StyledListItem = styled(EditableWrapper)<{
-  $backgroundImage: string;
+  sprite?: Sprite;
 }>`
   grid-column: auto/span 1;
   display: flex;
@@ -63,10 +62,14 @@ const StyledListItem = styled(EditableWrapper)<{
   align-items: center;
   height: auto;
 
-  background-image: ${({ $backgroundImage }) => $backgroundImage};
+  ${({ sprite }) =>
+    sprite &&
+    `
+  background-image: ${sprite.path};
   background-position: 0.6em 50%;
   background-size: 1em;
   background-repeat: no-repeat;
+  `}
   image-rendering: pixelated;
   font-family: var(--font-family-noita-default);
   font-size: 1em;
@@ -109,7 +112,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
   return (
     <>
       <StyledListItem
-        $backgroundImage={useSpritePath('icon.wand.shuffle')}
+        sprite={useSprite('icon.wand.shuffle')}
         className={className}
         tip={{ kind: 'uihint', id: 'shuffle_deck_when_empty' }}
         dataName="EditStatShuffle"
@@ -133,7 +136,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        $backgroundImage={useSpritePath('icon.wand.capacity')}
+        sprite={useSprite('icon.wand.capacity')}
         tip={{ kind: 'uihint', id: 'deck_capacity' }}
         dataName="EditStatCapacity"
       >
@@ -156,7 +159,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        $backgroundImage={useSpritePath('icon.wand.spellscast')}
+        sprite={useSprite('icon.wand.spellscast')}
         tip={{ kind: 'uihint', id: 'actions_per_round' }}
         dataName="EditStatSpellsCast"
       >
@@ -180,7 +183,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        $backgroundImage={useSpritePath('icon.wand.castdelay')}
+        sprite={useSprite('icon.wand.castdelay')}
         tip={{ kind: 'uihint', id: 'cast_delay' }}
       >
         <StyledName>{'Cast delay'}</StyledName>
@@ -190,7 +193,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        $backgroundImage={useSpritePath('icon.wand.reloadtime')}
+        sprite={useSprite('icon.wand.reloadtime')}
         tip={{ kind: 'uihint', id: 'reload_time' }}
       >
         <StyledName>{'Recharge Time'}</StyledName>
@@ -200,7 +203,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        $backgroundImage={useSpritePath('icon.wand.manamax')}
+        sprite={useSprite('icon.wand.manamax')}
         tip={{ kind: 'uihint', id: 'mana_max' }}
       >
         <StyledName>{'Mana max'}</StyledName>
@@ -223,7 +226,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        $backgroundImage={useSpritePath('icon.wand.regen')}
+        sprite={useSprite('icon.wand.regen')}
         tip={{ kind: 'uihint', id: 'mana_charge_speed' }}
       >
         <StyledName>{'Mana Charge Speed'}</StyledName>
@@ -246,7 +249,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       </StyledListItem>
       <StyledListItem
         className={className}
-        $backgroundImage={useSpritePath('icon.wand.spread')}
+        sprite={useSprite('icon.wand.spread')}
         tip={{ kind: 'uihint', id: 'wand_spread' }}
       >
         <StyledName>{'Spread'}</StyledName>
@@ -273,7 +276,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         data-name={'EditSpeed'}
-        $backgroundImage={useSpritePath('icon.wand.speed')}
+        sprite={useSprite('icon.wand.speed')}
         tip={{ kind: 'uihint', id: 'wand_speed' }}
       >
         <StyledName>{'Speed'}</StyledName>
@@ -298,7 +301,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         </StyledValue>
       </StyledListItem>
       <StyledListItem
-        $backgroundImage={useSpritePath('icon.unlimitedspells')}
+        sprite={useSprite('icon.unlimitedspells')}
         className={className}
         tip={{ kind: 'uihint', id: 'unlimited_spells' }}
         dataName="ToggleUnlimitedSpells"

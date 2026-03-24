@@ -219,7 +219,10 @@ const WandActionSelect = ({
   return (
     <SpellSelectorSpellSlot data-name="SpellSelectorWandActionBorder">
       {locked ? (
-        <SpellSelectorLockedSpell spellType={type}></SpellSelectorLockedSpell>
+        <SpellSelectorLockedSpell
+          spellId={id}
+          spellType={type}
+        ></SpellSelectorLockedSpell>
       ) : (
         <SpellSelectorWandActionDragSource
           actionId={id}
@@ -278,7 +281,13 @@ export const SpellSelector = () => {
           iconSrc: sprite,
           title,
           key,
-          buttonContent: <TabsWandAction key={key} tooltip={false} />,
+          buttonContent: (
+            <TabsWandAction
+              spellId={actions[0].spell.id}
+              key={key}
+              tooltip={false}
+            />
+          ),
           content: (
             <SpellCategorySpellsDiv data-name="SpellCategorySpellsDiv">
               {actions.map(({ spell, locked }) => (
@@ -300,7 +309,13 @@ export const SpellSelector = () => {
       {
         title: 'All Spells',
         key: 'tab-all',
-        buttonContent: <TabsWandAction key={'tab--all'} tooltip={false} />,
+        buttonContent: (
+          <TabsWandAction
+            spellId={'MANA_REDUCE'}
+            key={'tab--all'}
+            tooltip={false}
+          />
+        ),
         content: (
           <>
             {objectEntries(spellsWithUnlockInfoByType).map(([spellType]) => {
