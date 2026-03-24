@@ -1,4 +1,3 @@
-import { isNotNullOrUndefined } from '../util';
 import type { ActionId } from './actionId';
 import type { SpellFamily } from './spellFamily';
 import { useSprite, type Sprite } from './sprite';
@@ -7,6 +6,8 @@ const SpellTypeInfoMapDefinition = {
   projectile: {
     name: 'Projectile',
     sprite: 'icon.spelltype.projectile',
+    light: 'rgb(90 35 35 / 1)',
+    dark: 'rgb(65 25 25 / 1)',
     exampleId: 'LIGHT_BULLET',
     description: '',
     url: '',
@@ -33,6 +34,8 @@ const SpellTypeInfoMapDefinition = {
   static: {
     name: 'Static',
     sprite: 'icon.spelltype.static',
+    light: 'rgb(141 63 24 / 1)',
+    dark: 'rgb(85 52 34 / 1)',
     exampleId: 'DELAYED_SPELL',
     description: '',
     url: '',
@@ -51,6 +54,8 @@ const SpellTypeInfoMapDefinition = {
   modifier: {
     name: 'Modifier',
     sprite: 'icon.spelltype.modifier',
+    light: 'rgb(45 58 144 / 1)',
+    dark: 'rgb(32 41 82 / 1)',
     exampleId: 'MANA_REDUCE',
     description: '',
     url: '',
@@ -83,6 +88,8 @@ const SpellTypeInfoMapDefinition = {
   multicast: {
     name: 'Multicast',
     sprite: 'icon.spelltype.multicast',
+    light: 'rgb(28 109 115 / 1)',
+    dark: 'rgb(33 67 70 / 1)',
     exampleId: 'BURST_2',
     description: '',
     url: '',
@@ -91,6 +98,8 @@ const SpellTypeInfoMapDefinition = {
   material: {
     name: 'Material',
     sprite: 'icon.spelltype.material',
+    light: 'rgb(53 111 68 / 1)',
+    dark: 'rgb( 47 72 54 / 1)',
     exampleId: 'MATERIAL_ACID',
     description: '',
     url: '',
@@ -99,6 +108,8 @@ const SpellTypeInfoMapDefinition = {
   other: {
     name: 'Other',
     sprite: 'icon.spelltype.other',
+    light: 'rgb(113 75 51 / 1)',
+    dark: 'rgb(73 57 46 / 1)',
     exampleId: 'ADD_TRIGGER',
     description: '',
     url: '',
@@ -114,6 +125,8 @@ const SpellTypeInfoMapDefinition = {
   utility: {
     name: 'Utility',
     sprite: 'icon.spelltype.utility',
+    light: 'rgb(123 42 116 / 1)',
+    dark: 'rgb(77 42 74 / 1)',
     exampleId: 'TELEPORT_CAST',
     description: '',
     url: '',
@@ -122,6 +135,8 @@ const SpellTypeInfoMapDefinition = {
   passive: {
     name: 'Passive',
     sprite: 'icon.spelltype.passive',
+    light: 'rgb(33 47 38 / 1)',
+    dark: 'rgb(24 33 27 / 1)',
     exampleId: 'TINY_GHOST',
     description: '',
     url: '',
@@ -148,6 +163,12 @@ export type SpellTypeDescription =
 export type SpellTypeUrl =
   (typeof SpellTypeInfoMapDefinition)[SpellType]['url'];
 
+export type SpellTypeLight =
+  (typeof SpellTypeInfoMapDefinition)[SpellType]['light'];
+
+export type SpellTypeDark =
+  (typeof SpellTypeInfoMapDefinition)[SpellType]['dark'];
+
 export type SpellTypeSpriteName =
   (typeof SpellTypeInfoMapDefinition)[SpellType]['sprite'];
 
@@ -160,3 +181,10 @@ export const isValidSpellType = (x: string): x is SpellType =>
 
 export const getSpriteForSpellType = (spellType: SpellType): Sprite =>
   useSprite(spellTypeInfoMap[spellType].sprite);
+
+export const getColoursForSpellType = (
+  spellType: SpellType,
+): { light: string; dark: string } => ({
+  light: spellTypeInfoMap[spellType].light,
+  dark: spellTypeInfoMap[spellType].dark,
+});

@@ -75,6 +75,16 @@
 
   --color-scrollbar: #3b362d #bada55;
 
+  --color-spell-projectile: #5a2323;
+  --color-spell-static: #8d3f18;
+  --color-spell-passive: #212f26;
+  --color-spell-utility: #7b2a74;
+  --color-spell-modifier: #2d3a72;
+  --color-spell-material: #356f44;
+  --color-spell-multicast: #1c6d73;
+  --color-spell-other: #714b33;
+  --color-spell-unknown: #928167;
+
   --color-valid: #0f0;
   --color-invalid: #f00;
   --color-bdshade-darker: #633d00;

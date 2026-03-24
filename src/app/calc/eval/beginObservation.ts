@@ -1,6 +1,6 @@
 import { isValidActionId, isIterativeActionId } from '../actionId';
 import { defaultGunActionState } from '../defaultActionState';
-import { isValidEntityPath, entityToActions } from '../entityLookup';
+import { entityToActions } from '../entityLookup';
 import { mana as gunMana, dont_draw_actions } from '../gun';
 import type { SpellDeckInfo } from '../spell';
 import { getSpellByActionId } from '../spells';
@@ -306,10 +306,16 @@ export const beginObservation = (
         // break;
       }
       // Used by Zeta
+      //
+      // GetUpdatedEntityID -> !null
+      // EntityGetTransform -> !null
+      //children = EntityGetAllChildren() -> !null
+      //inventory = EntityGetFirstComponent() -> !null
+      //
+      //
       case 'EntityGetAllChildren': {
         // const { actionId, entityId } = payload;
-        break;
+        return [];
       }
-      default:
     }
   });

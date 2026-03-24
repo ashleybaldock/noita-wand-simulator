@@ -8,15 +8,18 @@ export const TooltipBase = styled(Tooltip)`
 
   --tip-show-delay: 400ms;
   --tip-hide-delay: 100ms;
-  --tip-opacity: 0.9;
+  --tip-opacity: 1;
 
-  --rt-opacity: var(--tip-opacity, 0.9);
+  --rt-opacity: var(--tip-opacity, 1);
   --rt-transition-show-delay: var(--tip-show-delay, 400ms);
 
   &.react-tooltip__show {
     opacity: var(--rt-opacity);
 
-    transition: transform 200ms, visibility 300ms, opacity 300ms;
+    transition:
+      transform 200ms,
+      visibility 300ms,
+      opacity 300ms;
     transition-delay: var(--tip-show-delay, 400ms);
     transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
 
@@ -29,7 +32,10 @@ export const TooltipBase = styled(Tooltip)`
   }
 
   &.react-tooltip__closing {
-    transition: transform 200ms, visibility 100ms, opacity 100ms;
+    transition:
+      transform 200ms,
+      visibility 100ms,
+      opacity 100ms;
     transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
     transition-delay: var(--tip-hide-delay, 100ms);
 

@@ -8,12 +8,27 @@ import { WithDebugHints } from '../Debug';
 import { useHideTooltips } from './useHideTooltips';
 import { getInfoForSpellField, type Spell } from '../../calc/spell';
 import type { SpritePath } from '../../calc/sprite';
+import {
+  getColoursForSpellType,
+  getSpriteForSpellType,
+  type SpellType,
+} from '../../calc/spellTypes';
 
 const StyledTooltipBase = styled(TooltipBase)`
   --tip-show-delay: 800ms;
 `;
 
-const SpellTooltipContainer = styled.div`
+const SpellTooltipContainer = styled.div.attrs<{
+  spellType: SpellType;
+}>(({ spellType }) => ({
+  style: {
+    '--sprite-spelltype': getSpriteForSpellType(spellType).path,
+    '--color-spelltype-light': getColoursForSpellType(spellType).light,
+    '--color-spelltype-dark': getColoursForSpellType(spellType).dark,
+  },
+}))`
+  image-rendering: pixelated;
+
   display: grid;
   grid-template-columns: [left sname-start sdesc-start label-start] auto [label-end value-start] auto [value-end simage-start] auto [simage-end sdesc-end sname-end right];
   grid-template-rows:
@@ -37,17 +52,25 @@ const SpellTooltipContainer = styled.div`
   grid-auto-flow: row dense;
   white-space: normal;
 
-  border: 3px solid #928167;
-  border-radius: 0px 7.5px 0px 7.5px;
-  background-color: rgba(5, 5, 5, 0.96);
+  border-image-source: var(--sprite-spelltype);
+  border-image-width: 8px 8px 0 0;
+  border-image-slice: 8 8 0 24;
+  border-image-outset: 0px 4px;
+  border-radius: 2px;
+  background-color: rgba(5, 5, 5, 0.9);
   color: rgb(250, 250, 250);
   filter: var(--filter-floating-shadow);
 
-  max-width: 300px;
-  min-width: 240px;
-  height: min-content;
-  width: auto;
-  padding: 1em;
+  box-shadow:
+    inset 2px -2px 6px -2px var(--color-spelltype-light),
+    3px 3px 2px 0 #000;
+
+  min-width: unset;
+  max-height: round(down, clamp(200px, 30vmax, 100vh), 1px);
+  max-width: round(down, clamp(200px, 30vmax, 100vw), 1px);
+  width: fit-content;
+  height: fit-content;
+  padding: 18px 18px 9px 18px;
 
   font-family: var(--font-family-noita-default);
   font-size: 0.9em;
@@ -95,7 +118,8 @@ const Label = styled.div.attrs<{ icon?: SpritePath }>(() => ({}))`
 const Value = styled.div`
   grid-column: value;
 
-  padding: 0.1em 0em 0.1em 0.6em;
+  padding: 0;
+  justify-self: end;
 `;
 
 const Stat = styled(
@@ -137,15 +161,27 @@ const SpellImage = styled.img.attrs<{ $src?: string }>(({ $src = '' }) => ({
   },
 }))`
   grid-column: simage;
-  grid-row: simage / -1;
+  grid-row: simage;
+  justify-self: center;
+  align-self: center;
+
   display: flex;
   flex-direction: column;
-  place-self: center center;
-  margin-left: 0.6em;
 
   image-rendering: pixelated;
-  width: 64px;
-  height: 64px;
+
+  width: auto;
+  height: round(down, clamp(48px, 9vmax, 128px), 1px);
+
+  display: flex;
+  image-rendering: pixelated;
+  margin: -2.8em 1em 1em -1em;
+  filter: drop-shadow(4px 0 0 #000) drop-shadow(-4px 0 0 #000)
+    drop-shadow(0 -4px 0 #000) drop-shadow(0 4px 0 #000)
+    drop-shadow(0 0 4px #fff4);
+  filter: drop-shadow(0 0 0.1px #fff) drop-shadow(4px 0 0 #000)
+    drop-shadow(-4px 0 0 #000) drop-shadow(0 -4px 0 #000)
+    drop-shadow(0 4px 0 #000) drop-shadow(0 0 4px #fff4);
 `;
 
 export const SpellInfoTooltip = ({
@@ -190,7 +226,7 @@ export const SpellInfoTooltip = ({
           spawn_requires_flag,
         } = getSpellByActionId(content);
         return (
-          <SpellTooltipContainer>
+          <SpellTooltipContainer spellType={type}>
             <Name>{translate(name)}</Name>
             <Description>{translate(description)}</Description>
             <SpellId>{actionId}</SpellId>
