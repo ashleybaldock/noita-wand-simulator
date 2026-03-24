@@ -29,7 +29,7 @@ const SpellSprite = styled.div`
 
   background-position: center;
   background-size: 100%;
-  background-image: var(--data-spell-sprite);
+  background-image: var(--sprite-spell);
   font-family: monospace;
   font-weight: bold;
   user-select: none;
@@ -38,7 +38,7 @@ const SpellSprite = styled.div`
 
 const _WandAction = ({
   spellId = null,
-  spellType,
+  spellType = 'other',
   spellTypeBorder = true,
   spellSprite,
   className,
@@ -51,7 +51,7 @@ const _WandAction = ({
   onDeleteSpell?: () => void;
   className?: string;
   style?: CSSProperties;
-  spellId?: SpellId;
+  spellId: SpellId;
   spellType?: SpellType;
   spellTypeBorder?: boolean;
   spellSprite?: Sprite;
@@ -92,7 +92,7 @@ const _WandAction = ({
       <SpellSprite
         style={{
           ...style,
-          '--data-spell-sprite': spell.sprite,
+          '--sprite-spell': spell.sprite,
         }}
       ></SpellSprite>
     </GridStack>

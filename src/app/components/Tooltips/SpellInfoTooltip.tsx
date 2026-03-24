@@ -1,13 +1,10 @@
-import styled, { type DataAttributes } from 'styled-components';
+import styled from 'styled-components';
 import { TooltipBase } from './TooltipBase';
 import { getSpellByActionId } from '../../calc/spells';
 import { isValidActionId, type ActionId } from '../../calc/actionId';
-import { isNotNullOrUndefined } from '../../util';
+import { isNotNullOrUndefined, isNotUndefined } from '../../util';
 import { translate } from '../../util/i18n';
-import { spellTypeInfoMap } from '../../calc/spellTypes';
 import { WithDebugHints } from '../Debug';
-import { getUnlockName } from '../../calc/unlocks';
-import { YesNo } from '../Presentation';
 import { useHideTooltips } from './useHideTooltips';
 import { getInfoForSpellField, type Spell } from '../../calc/spell';
 import type { SpritePath } from '../../calc/sprite';
@@ -115,6 +112,8 @@ const Stat = styled(
 const SpellStat = styled(Stat).attrs<{
   actionId: ActionId;
   field: keyof Spell;
+  label?: string;
+  value?: string;
 }>(({ actionId, field }) => {
   const spell = getSpellByActionId(actionId);
   const { name, render } = getInfoForSpellField(field);
@@ -199,18 +198,13 @@ export const SpellInfoTooltip = ({
             ></SpellStat>
             <SpellStat actionId={actionId} field={'recursive'}></SpellStat>
             <SpellStat actionId={actionId} field={'iterative'}></SpellStat>
-            <SpellStat
-              actionId={actionId}
-              field={'spawn_requires_flag'}
-            ></SpellStat>
-            <SpellStat actionId={actionId} field={'type'}></SpellStat>
-
-            {spawn_requires_flag !== undefined && (
-              <>
-                <Label>Unlock</Label>
-                <Value>{getUnlockName(spawn_requires_flag)}</Value>
-              </>
+            {isNotUndefined(spawn_requires_flag) && (
+              <SpellStat
+                actionId={actionId}
+                field={'spawn_requires_flag'}
+              ></SpellStat>
             )}
+            <SpellStat actionId={actionId} field={'type'}></SpellStat>
           </SpellTooltipContainer>
         );
       }}
