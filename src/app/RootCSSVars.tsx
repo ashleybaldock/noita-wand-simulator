@@ -2,6 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 import { DEFAULT_SIZE, NESTING_OFFSET } from './util';
 
 import 'react';
+import type { SpritePath } from './calc/sprite';
 
 /* Allow style={{}} prop objects to contain custom CSS
  * variables prefixed with '--data-', e.g.
@@ -12,6 +13,7 @@ import 'react';
 declare module 'react' {
   interface CSSProperties {
     [key: `--data-${string}`]: string | number;
+    [key: `--sprite-${string}`]: SpritePath;
   }
 }
 

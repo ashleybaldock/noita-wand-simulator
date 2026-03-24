@@ -1,6 +1,7 @@
 import { isNotNullOrUndefined } from '../util';
 import type { ActionId } from './actionId';
 import type { SpellFamily } from './spellFamily';
+import { useSprite, type Sprite } from './sprite';
 
 const SpellTypeInfoMapDefinition = {
   projectile: {
@@ -132,6 +133,7 @@ export type SpellType = keyof typeof SpellTypeInfoMapDefinition;
 type PartialInfo = {
   exampleId: ActionId;
   families: SpellFamily[];
+  sprite: Sprite;
 };
 
 export type SpellTypeInfo = (typeof SpellTypeInfoMapDefinition)[SpellType] &
@@ -156,9 +158,5 @@ export const spellTypeInfoMap = SpellTypeInfoMapDefinition as SpellTypeInfoMap;
 export const isValidSpellType = (x: string): x is SpellType =>
   Object.prototype.hasOwnProperty.call(spellTypeInfoMap, x);
 
-export const getSpriteForSpellType = (
-  spellType?: SpellType,
-): SpellTypeSpriteName | 'missing' =>
-  isNotNullOrUndefined(spellType)
-    ? spellTypeInfoMap[spellType].sprite
-    : 'missing';
+export const getSpriteForSpellType = (spellType: SpellType): Sprite =>
+  useSprite(spellTypeInfoMap[spellType].sprite);

@@ -1,13 +1,13 @@
 import type { ActionId } from './actionId';
 import type { Action } from './action';
 import type { SpellType } from './spellTypes';
-import type { UnlockCondition } from './unlocks';
+import { getUnlockName, type UnlockCondition } from './unlocks';
 import type { SpellSpritePath } from './spellSprite';
 import type { AlwaysCastWandIndex, MainWandIndex } from '../redux/WandIndex';
 import type { ExtraEntity } from './extraEntities';
 import type { ProjectileId } from './projectile';
 import type { SpriteName } from './sprite';
-import { objectEntries, type ValueOf } from '../util';
+import { isUndefined } from '../util';
 
 export type SpellDeckInfo = {
   id: ActionId;
@@ -61,38 +61,38 @@ export type Spell = SpellDeckInfo &
   SpellProperties &
   SpellUnusedProperties;
 
-export type SpellField = keyof Spell;
-
-export type FieldInfo<T extends object, V extends ValueOf<T>> = {
+export type FieldInfo<T extends object> = {
   readonly name: string;
-  readonly render?: (v: V) => string;
   readonly tip?: string;
   readonly icon?: SpriteName;
+  readonly render?: (thing: T) => string;
   readonly group?: string;
   readonly customYes?: string;
   readonly customNo?: string;
 };
 type InfoFor<T extends object> = {
-  +readonly [Property in keyof T]-?: FieldInfo<T, T[Property]>;
+  +readonly [Property in keyof T]-?: FieldInfo<T>;
 };
 
-type SpellFieldInfo = InfoFor<Spell>;
-
-export const spellFieldInfoDefinition: SpellFieldInfo = {
+export const spellFieldInfo: InfoFor<Spell> = {
   id: { name: 'Id' },
   name: { name: 'Name' },
   description: { name: 'Description' },
   sprite: { name: 'Sprite' },
-  action: { name: 'Action', render: () => '' },
+  action: { name: 'Action' },
   type: { name: 'Type' },
   custom_xml_file: { name: 'Custom XML File', icon: 'icon.xmlfile' },
   related_projectiles: {
     name: 'Related Projectiles',
-    // render: ([id, count = 1]:[ProjectileId, number?]) => `${id} ×${count}`,
   },
   related_extra_entities: { name: 'Related Extra Entities' },
   mana: { name: 'Mana Cost', icon: 'icon.manadrain' },
-  max_uses: { name: 'Max Charges', icon: 'icon.maxuse' },
+  max_uses: {
+    name: 'Max. Uses',
+    icon: 'icon.maxuse',
+    render: ({ max_uses }) =>
+      isUndefined(max_uses) ? 'Unlimited' : `${max_uses}`,
+  },
   uses_remaining: { name: 'Charges Remaining', icon: 'icon.remaininguses' },
   never_unlimited: {
     name: 'Not Affected by Unlimited Spells',
@@ -100,7 +100,14 @@ export const spellFieldInfoDefinition: SpellFieldInfo = {
   },
   recursive: { name: 'Recursive', icon: 'icon.recursion' },
   iterative: { name: 'Iterative', icon: 'icon.iteration' },
-  spawn_requires_flag: { name: 'Unlock Condition', icon: 'icon.unlock' },
+  spawn_requires_flag: {
+    name: 'Unlock Condition',
+    icon: 'icon.unlock',
+    render: ({ spawn_requires_flag }) =>
+      isUndefined(spawn_requires_flag)
+        ? 'No'
+        : `${getUnlockName(spawn_requires_flag)}`,
+  },
   spawn_level: { name: 'Spell Tier' },
   spawn_probability: { name: 'Spawn Probability' },
   price: { name: 'Base Cost' },
@@ -118,13 +125,7 @@ export const spellFieldInfoDefinition: SpellFieldInfo = {
   inventoryitem_id: { name: '' },
 } as const;
 
-// export type SpellFieldInfoRecord = Record<SpellField, SpellFieldInfo>;
-
-// const spellFieldInfoRecord = spellFieldInfoDefinition as SpellFieldInfoRecord;
-
-export const spellFieldInfoMap = new Map<SpellField, InfoFor>([
-  ...objectEntries(spellFieldInfoDefinition),
-]);
-
-export const getInfoForSpellField = (field: SpellField) =>
-  spellFieldInfoMap.get(field);
+export const getInfoForSpellField = (field: keyof Spell) => ({
+  render: (spell: Spell) => JSON.stringify(spell[field]),
+  ...spellFieldInfo[field],
+});

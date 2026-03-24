@@ -47,19 +47,20 @@ export type SerializedTree<T> = [parentIdx: ParentIdx, value: T][];
  * This is enough information to reconstruct the tree, but can also
  * be used as a cached representation of the traversal
  *
- *            ╭──────────╴◁️╮️╶︎─────╴◁️╮️╶︎╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴╶╴ ◁️╮️
- * [(n0, 0), (n1, 0), (n2, 1), (n3, 1), (n4, 0), …️ (n-1, x)]
- *   ╰──────────╴◁️╯️─︎───────────────────────╴◁️╯️
+ *           ╭────────╴◁️╮️╶︎────╴◁️╮️            ╶╴╶╴╶╴◁️╮️
+ * [(0, 0), (1, 0), (2, 1), (3, 1), (4, 0), …️ (n-1, x)]
+ *   ╰╴◁️╯️─────╴◁️╯️─︎────────────────────╴◁️╯️
  *
- *       n0     n0 n0 n0 n0 n0
- *      ╱️ ╲️        n1 n1 n1 n4
- *    n1   n4         n2 n3
- *   ╱️ ╲️
- *  n2  n3
+ *   𐍬  ⓐ︎⃝           init n0                   n0: parent(0) > stack(-1) - push 0
+ *  /️  ╱️  ╲   [-1][0] 0  0  0  0 [0]    n1: parent(0) = stack(0)  ->
+ *    ⓑ︎⃝   ⓒ         [1] 1  1 [4]
+ *   ╱ ╲                [2][3]
+ *  d   e   ✣⃟⃝ ✣⃘⃝ ✣⃞⃝ ✣꛰ ✣͍⃝ ✣⃣  ✴︎⃣ ⁕⃟＊⃟❊⃟ ✳︎⃟ ✢⃟ 𐌖 ㄩ⃟⃝ 𐌡꛰  ㄇ꛰
  *
+ * serialise
  * if parent id > top id, push current node
  * if parent id = top id, pop + push
- * if parent id < top id, pop + repeat
+ * if parent id < top id, pop (parent id) + repeat
  */
 export interface SerializableTree<T> {
   serializer(): IterableIterator<[parentIdx: ParentIdx, value: T]>;
@@ -70,11 +71,25 @@ export class MapTree<T> implements TreeRoot<T>, SerializableTree<T> {
   protected _root: MapTreeNode<T> | null = null;
 
   constructor(init: Readonly<SerializedTree<T>> = []) {
-    const lookup = new Map<ParentIdx, MapTreeNode<T>>();
-    let i = 0;
+    /* Used to locate the parent of the node currently being deserialised */
+    const ancestors: Array<[ParentIdx, MapTreeNode<T>]> = [];
+
     for (const [parentIdx, value] of init) {
-      lookup.set(i++, (lookup.get(parentIdx) ?? this).appendChild(value));
+      ancestors.splice(
+        ancestors.findLastIndex(([idx]) => idx === parentIdx) + 1,
+        Infinity,
+      );
+      ancestors.push([
+        parentIdx,
+        (ancestors[ancestors.length - 1][1] ?? this).appendChild(value),
+      ]);
     }
+
+    // const lookup = new Map<ParentIdx, MapTreeNode<T>>();
+    // let i = 0;
+    // for (const [parentIdx, value] of init) {
+    //   lookup.set(i++, (lookup.get(parentIdx) ?? this).appendChild(value));
+    // }
   }
 
   *iter(): IterableIterator<TreeNode<T>> {

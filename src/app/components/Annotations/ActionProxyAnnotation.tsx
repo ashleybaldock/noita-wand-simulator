@@ -8,12 +8,12 @@ import type { SpellDeckInfo } from '../../calc/spell';
 import { useConfig } from '../../redux';
 import { isNotNullOrUndefined } from '../../util';
 import { getSpellByActionId } from '../../calc/spells';
-import type { SpriteName } from '../../calc/sprite';
+import type { SpriteName, SpritePath } from '../../calc/sprite';
 import { useSpritePath } from '../../calc/sprite';
 import { BaseAnnotation } from './BaseAnnotation';
 
 export const ProxyDiv = styled(BaseAnnotation)<{
-  background: string;
+  background: SpritePath;
 }>`
   --size: 0.58;
   --bsize: calc(var(--size-spell) * var(--size));
@@ -58,13 +58,13 @@ export const ActionProxyAnnotation = ({
 }) => {
   const { showProxies } = useConfig();
 
-  const icon: SpriteName | undefined = isWithTriggerActionId(spell?.id)
+  const icon: SpriteName = isWithTriggerActionId(spell?.id)
     ? `icon.trigger${spell?.permanently_attached ? '.disabled' : ''}`
     : isWithTimerActionId(spell?.id)
       ? `icon.timer${spell?.permanently_attached ? '.disabled' : ''}`
       : isWithExpirationActionId(spell?.id)
         ? `icon.expiration${spell?.permanently_attached ? '.disabled' : ''}`
-        : undefined;
+        : 'none';
 
   const iconPath = useSpritePath(icon);
 
@@ -76,12 +76,7 @@ export const ActionProxyAnnotation = ({
       />
     );
   } else if (isNotNullOrUndefined(icon)) {
-    return (
-      <ProxyDiv
-        dataName="ActionProxyAnnotation"
-        background={icon ? iconPath : 'none'}
-      />
-    );
+    return <ProxyDiv dataName="ActionProxyAnnotation" background={iconPath} />;
   }
   return null;
 };

@@ -9,12 +9,8 @@ import { WithDebugHints } from '../Debug';
 import { getUnlockName } from '../../calc/unlocks';
 import { YesNo } from '../Presentation';
 import { useHideTooltips } from './useHideTooltips';
-import { InlineIcon } from '../Icon/Icon';
-import {
-  getInfoForSpellField,
-  type Spell,
-  type SpellField,
-} from '../../calc/spell';
+import { getInfoForSpellField, type Spell } from '../../calc/spell';
+import type { SpritePath } from '../../calc/sprite';
 
 const StyledTooltipBase = styled(TooltipBase)`
   --tip-show-delay: 800ms;
@@ -75,23 +71,21 @@ const WikiLink = styled.a.attrs<{ actionId: ActionId }>(({ actionId }) => ({
   href: `https://noita.wiki.gg/wiki/${actionId}`,
 }))``;
 
-const Label = styled.div.attrs<{ iconSrc?: string }>(({ iconSrc }) => ({
-  style:
-    iconSrc !== undefined
-      ? {
-          backgroundImage: `url('/${iconSrc}')`,
-        }
-      : {},
-}))`
+const Label = styled.div.attrs<{ icon?: SpritePath }>(() => ({}))`
   grid-column: label;
   margin-bottom: 0.2em;
   white-space: nowrap;
 
+  ${({ icon }) =>
+    icon &&
+    `
+  background-image: ${icon};
   background-size: 1.2em;
   background-position: left center;
   background-repeat: no-repeat;
   image-rendering: pixelated;
   padding: 0.1em 0.6em 0.1em 2.2em;
+  `}
 `;
 const Value = styled.div`
   grid-column: value;
@@ -107,7 +101,7 @@ const Stat = styled(
   }: {
     label: string;
     value: string;
-    className: string;
+    className?: string;
   }) => {
     return (
       <>
@@ -116,16 +110,17 @@ const Stat = styled(
       </>
     );
   },
-).attrs<{
+)``;
+
+const SpellStat = styled(Stat).attrs<{
   actionId: ActionId;
-  field: SpellField;
+  field: keyof Spell;
 }>(({ actionId, field }) => {
   const spell = getSpellByActionId(actionId);
-  const { name, render = (v: unknown) => JSON.stringify(v) } =
-    getInfoForSpellField(field);
+  const { name, render } = getInfoForSpellField(field);
   return {
     label: name,
-    value: render(spell[field]),
+    value: render(spell),
   };
 })``;
 
@@ -194,25 +189,22 @@ export const SpellInfoTooltip = ({
             <SpellId>{actionId}</SpellId>
             <SpellImage $src={sprite} />
 
-            <Stat actionId={actionId} field={'type'}></Stat>
+            <SpellStat actionId={actionId} field={'type'}></SpellStat>
+            <SpellStat actionId={actionId} field={'mana'}></SpellStat>
+            <SpellStat actionId={actionId} field={'max_uses'}></SpellStat>
+            <SpellStat actionId={actionId} field={'uses_remaining'}></SpellStat>
+            <SpellStat
+              actionId={actionId}
+              field={'never_unlimited'}
+            ></SpellStat>
+            <SpellStat actionId={actionId} field={'recursive'}></SpellStat>
+            <SpellStat actionId={actionId} field={'iterative'}></SpellStat>
+            <SpellStat
+              actionId={actionId}
+              field={'spawn_requires_flag'}
+            ></SpellStat>
+            <SpellStat actionId={actionId} field={'type'}></SpellStat>
 
-            <Label>Type</Label>
-            <Value>{spellTypeInfoMap[type].name}</Value>
-            <Label iconSrc={'data/wand/icon_mana_drain.png'}>Mana Drain</Label>
-            <Value>{mana}</Value>
-            <Label iconSrc={'data/wand/icon_action_max_uses.png'}>
-              Max. Uses
-            </Label>
-            <Value>
-              {max_uses === undefined ? (
-                `Unlimited`
-              ) : (
-                <>
-                  {`${max_uses}`}
-                  <YesNo yes={Boolean(never_unlimited)} />
-                </>
-              )}
-            </Value>
             {spawn_requires_flag !== undefined && (
               <>
                 <Label>Unlock</Label>
