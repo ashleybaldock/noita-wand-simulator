@@ -53,12 +53,32 @@ export const YesNoCheckbox = styled.input.attrs({
   }
 `;
 
+const StyledName = styled.div`
+  text-align: left;
+  flex: 0 1 auto;
+  width: 7.4em;
+  white-space: nowrap;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  &::after {
+    content: '';
+    border-bottom: 3px dotted #222222;
+    height: 0.7em;
+    display: inline-block;
+    flex: 1 1 auto;
+  }
+`;
+
 export const YesNoToggle = ({
   sprite,
   checked,
   disabled = false,
   onChange,
   onClick = noop,
+  title,
   customYes,
   customNo,
   children,
@@ -72,6 +92,7 @@ export const YesNoToggle = ({
     disabled?: boolean;
     onChange: ChangeEventHandler<HTMLInputElement>;
     onClick?: MouseEventHandler<HTMLInputElement>;
+    title?: string;
     customYes?: React.JSX.Element;
     customNo?: React.JSX.Element;
     tip?: Tip;
@@ -83,7 +104,9 @@ export const YesNoToggle = ({
       className={className}
       disabled={disabled}
       label={true}
+      sprite={sprite}
     >
+      <StyledName>{title}</StyledName>
       {children}
       <YesNoCheckbox
         disabled={disabled}
@@ -93,7 +116,7 @@ export const YesNoToggle = ({
         onClick={onClick}
       />
       <InteractiveYesNo
-        $disabled={disabled}
+        disabled={disabled}
         yes={checked}
         customYes={customYes}
         customNo={customNo}

@@ -329,12 +329,30 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         tip={{ kind: 'uihint', id: 'unlimited_spells' }}
         dataName="ToggleUnlimitedSpells"
       >
-        <StyledName>{'Speed'}</StyledName>
         <YesNoConfigToggle
           data-toggle="unlimitedSpells"
           field={'unlimitedSpells'}
         ></YesNoConfigToggle>
       </StyledListItem>
+
+      <StyledYesNoToggle
+        sprite={useSprite('icon.unlimitedspells')}
+        tip={{ kind: 'uihint', id: 'unlimited_spells' }}
+        dataName="ToggleUnlimitedSpells"
+        checked={false && wand.shuffle_deck_when_empty}
+        onChange={(e) =>
+          dispatch(
+            setWand({
+              wand: {
+                ...wand,
+                shuffle_deck_when_empty: e.target.checked,
+              },
+            }),
+          )
+        }
+      >
+        <StyledName>{'Shuffle'}</StyledName>
+      </StyledYesNoToggle>
     </>
   );
 };

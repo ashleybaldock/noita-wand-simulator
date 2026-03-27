@@ -2,10 +2,26 @@ import type React from 'react';
 import type { MouseEventHandler } from 'react';
 import { type ConfigToggleField, useConfigToggle } from '../../../redux';
 import { noop } from '../../../util';
-import { YesNoCheckbox, InteractiveYesNo } from './YesNoToggle';
+import { YesNoCheckbox, InteractiveYesNo, YesNoToggle } from './YesNoToggle';
 import { EditableWrapper } from '../../Presentation';
+import styled from 'styled-components';
 
-export const YesNoConfigToggle = ({
+export const YesNoConfigToggle = styled(YesNoToggle).attrs<{
+  configField: ConfigToggleField;
+}>(({ configField }) => {
+  const [toggleState, , , handleToggle, { name, tip }] =
+    useConfigToggle(configField);
+
+  return {
+    dataName: 'YesNoConfigToggle',
+    checked: toggleState,
+    onChange: handleToggle,
+    title: name,
+    tip: tip,
+  };
+})``;
+
+export const YesNoConfigToggl = ({
   field,
   onClick = noop,
   children,

@@ -15,11 +15,11 @@ const Sizer = styled.div`
   }
 `;
 
-const Overlay = styled.div<{ $warning?: boolean; $disabled?: boolean }>`
+const Overlay = styled.div<{ warning?: boolean; disabled?: boolean }>`
   position: absolute;
   text-decoration: inherit;
-  ${({ $warning }) =>
-    $warning
+  ${({ warning }) =>
+    warning
       ? `
     color: var(--color-value-warning);
     background-color: red;
@@ -28,8 +28,8 @@ const Overlay = styled.div<{ $warning?: boolean; $disabled?: boolean }>`
     }
     `
       : ''}
-  ${({ $disabled }) =>
-    $disabled
+  ${({ disabled }) =>
+    disabled
       ? `
     color: var(--color-value-disabled);
     `
@@ -53,7 +53,7 @@ const Combiner = styled.div`
 export const YesNo = styled(
   ({
     yes,
-    $disabled = false,
+    disabled = false,
     className,
     warnIf,
     customYes = <>{'Yes'}</>,
@@ -61,7 +61,7 @@ export const YesNo = styled(
     customMaybe = <Unchanged />,
   }: {
     yes?: boolean;
-    $disabled?: boolean;
+    disabled?: boolean;
     className?: string;
     warnIf?: 'yes' | 'no';
     customYes?: React.JSX.Element;
@@ -76,8 +76,8 @@ export const YesNo = styled(
           <Size>{customMaybe}</Size>
         </Sizer>
         <Overlay
-          $disabled={$disabled}
-          $warning={
+          disabled={disabled}
+          warning={
             (warnIf === 'yes' && yes === true) ||
             (warnIf === 'no' && yes === false)
           }
