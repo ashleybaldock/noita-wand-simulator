@@ -99,9 +99,23 @@ const Name = styled.div`
   grid-area: sname;
   margin-bottom: 0.6em;
 `;
-const Description = styled.div`
+const GameDescription = styled.div`
   grid-area: sdesc;
   margin-bottom: 0.6em;
+
+  &::before {
+    content: '"';
+    font-size: 0.9em;
+    margin: 0 0.25ch 0 -0.5ch;
+    vertical-align: top;
+  }
+
+  &::after {
+    content: '"';
+    font-size: 0.9em;
+    margin: 0 0 0 0.25ch;
+    vertical-align: top;
+  }
 `;
 const SpellId = styled.div`
   display: none;
@@ -256,7 +270,7 @@ export const SpellInfoTooltip = ({
         return (
           <SpellTooltipContainer spellType={type}>
             <Name>{translate(name)}</Name>
-            <Description>{translate(description)}</Description>
+            <GameDescription>{translate(description)}</GameDescription>
             <SpellId>{actionId}</SpellId>
             <SpellImage $src={sprite} />
 

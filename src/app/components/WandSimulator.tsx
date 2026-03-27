@@ -15,6 +15,7 @@ import { SimulationStatus } from './SimulationStatus';
 import { SpellSequence } from './SpellSequence/SpellSequence';
 import { StickyHeading } from './Sticky/StickyHeading';
 import { StickyGroup } from './Sticky/StickyGroup';
+import { Column } from './generic';
 
 const Overlays = styled.div.attrs<DataAttributes>({
   'data-name': 'Overlays',
@@ -22,35 +23,16 @@ const Overlays = styled.div.attrs<DataAttributes>({
   display: contents;
 `;
 
-const FlexColumn = styled.div.attrs<DataAttributes>({
-  'data-name': 'FlexColumn',
-})`
-  display: flex;
-  flex-direction: column;
-`;
-
-const SpellShortcuts = styled.div.attrs<DataAttributes>({
-  'data-name': 'SpellShortcuts',
-})`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-self: center;
-  width: 100%;
-`;
-
 export const WandSimulator = () => {
   return (
     <DebugHints>
       <DndProvider options={HTML5toTouchPreview}>
-        <FlexColumn>
-          <MainHeader></MainHeader>
-          <StickyHeading></StickyHeading>
+        <Column>
+          <MainHeader />
+          <StickyHeading />
           <StickyGroup>
             <SpellSelector />
-            <SpellShortcuts>
-              <SpellHotbar></SpellHotbar>
-            </SpellShortcuts>
+            <SpellHotbar />
             <WandBuilder />
           </StickyGroup>
           <SpellSequence />
@@ -61,12 +43,12 @@ export const WandSimulator = () => {
           <StickyGroup>
             <VisualisationList />
           </StickyGroup>
-          <Overlays>
-            <Modals />
-            <Tooltips />
-            <ReleaseInfo />
-          </Overlays>
-        </FlexColumn>
+        </Column>
+        <Overlays>
+          <Modals />
+          <Tooltips />
+          <ReleaseInfo />
+        </Overlays>
         <DragPreview />
       </DndProvider>
     </DebugHints>

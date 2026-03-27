@@ -7,6 +7,7 @@ import './app/sprites.css';
 import './index.css';
 import './zindex.css';
 import './actionTree.css';
+import './multiSpellAnnotations.css';
 import './tweaks.css';
 import './fonts/NoitaPixel.ttf';
 import './fonts/NoitaGlyphScaled.ttf';

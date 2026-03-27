@@ -1,6 +1,6 @@
 import type { ActionId } from './actionId';
 import type { Action } from './action';
-import type { SpellType } from './spellTypes';
+import { spellTypeInfoMap, type SpellType } from './spellTypes';
 import { getUnlockName, type UnlockCondition } from './unlocks';
 import type { SpellSpritePath } from './spellSprite';
 import type { AlwaysCastWandIndex, MainWandIndex } from '../redux/WandIndex';
@@ -80,7 +80,10 @@ export const spellFieldInfo: InfoFor<Spell> = {
   description: { name: 'Description' },
   sprite: { name: 'Sprite' },
   action: { name: 'Action' },
-  type: { name: 'Type' },
+  type: {
+    name: 'Type',
+    render: ({ type }) => `${spellTypeInfoMap[type].name}`,
+  },
   custom_xml_file: { name: 'Custom XML File', icon: 'icon.xmlfile' },
   related_projectiles: {
     name: 'Related Projectiles',
@@ -105,17 +108,22 @@ export const spellFieldInfo: InfoFor<Spell> = {
   },
   mana: { name: 'Mana Cost', icon: 'icon.manadrain' },
   max_uses: {
-    name: 'Max. Uses',
+    name: 'Uses',
     icon: 'icon.maxuse',
     render: ({ max_uses }) =>
       isUndefined(max_uses) ? 'Unlimited' : `${max_uses}`,
   },
-  uses_remaining: { name: 'Charges Remaining', icon: 'icon.remaininguses' },
+  uses_remaining: { name: 'Uses Remaining', icon: 'icon.remaininguses' },
   never_unlimited: {
     name: 'Not Affected by Unlimited Spells',
     icon: 'icon.neverunlimited',
   },
-  recursive: { name: 'Recursive', icon: 'icon.recursion' },
+  recursive: {
+    name: 'Recursive',
+    icon: 'icon.recursion',
+    render: ({ recursive }) =>
+      recursive ? 'This spell is subject to the Recursion limit.' : '',
+  },
   iterative: { name: 'Iterative', icon: 'icon.iteration' },
   spawn_requires_flag: {
     name: 'Unlock Condition',

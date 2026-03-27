@@ -1,0 +1,139 @@
+/*{{{1 Add Trigger targeting */
+:is(
+    [data-spell='ADD_TRIGGER'],
+    [data-spell='ADD_TIMER'],
+    [data-spell='ADD_DEATH_TRIGGER']
+  )
+  > [data-name='AcTreeChildren']
+  > [data-name='ActionSourceGroup'][data-source='action'] {
+  flex-direction: row;
+}
+
+/* [data-name='AcTreeNode'][data-iteration='3'] > [data-name='WandActionBorder'], [data-name='AcTreeNode'][data-iteration='4'] > [data-name='WandActionBorder'], [data-name='AcTreeNode'][data-spell^='DIVIDE_'] { */
+/* box-shadow: 0 0 2px pink; */
+/* outline: 2px dotted #d300a2; */
+/* outline-offset: 0; */
+/* } */
+
+/* Row of spells copied by add trigger */
+
+/* Arrows */
+/* [data-spell='ADD_TRIGGER'] */
+/*   > [data-name='AcTreeChildren'] */
+/*   > [data-name='ActionSourceGroup'][data-source='action'] */
+/*   > div */
+/*   > [data-name='Arrows'] { */
+/*     outline: 2px solid orange; */
+/* } */
+/* after */
+[data-spell='ADD_TRIGGER']
+  > [data-name='AcTreeChildren']
+  > [data-name='ActionSourceGroup'][data-source='action']
+  > div
+  > [data-name='Arrows']::after {
+  --width: calc(var(--arrow-right-w) + var(--arrow-left-w));
+  top: calc((var(--spell-size) / 2) + (var(--arrow-line-w) / 2) * -1);
+  left: 0;
+  border-radius: var(--arrow-radius-➜);
+  border-width: var(--arrow-line-➜);
+}
+/* before */
+[data-spell='ADD_TRIGGER']
+  > [data-name='AcTreeChildren']
+  > [data-name='ActionSourceGroup'][data-source='action']
+  > div
+  > [data-name='Arrows']::before {
+  content: none;
+}
+
+/* Divide By targeting */
+
+li:not(:has([data-tooltip-content^='DIVIDE_']))
+  + li:has([data-tooltip-content^='DIVIDE_']):hover,
+li:first-of-type:has([data-tooltip-content^='DIVIDE_']):hover,
+li:has([data-tooltip-content^='DIVIDE_']):has(+ li:hover) {
+  box-shadow:
+    inset 1px 0 0 #fff9,
+    inset 0 -1px 0 #fff9,
+    inset 0 1px 0 #fff9,
+    -2px 0 0 #fff9,
+    0 -2px 0 #fff9,
+    0 2px 0 #fff9;
+  border-radius: 8px 0 0 8px;
+}
+li:has([data-tooltip-content^='DIVIDE_']):hover,
+li:has([data-tooltip-content^='DIVIDE_']):hover
+  + li:has([data-tooltip-content^='DIVIDE_']),
+li:has([data-tooltip-content^='DIVIDE_']):has(
+    + li:hover [data-tooltip-content^='DIVIDE_']
+  ) {
+  box-shadow:
+    inset 0 1px 0 #fff9,
+    inset 0 -1px 0 #fff9,
+    0 2px 0 #fff9,
+    0 -2px 0 #fff9,
+    -2px 0 1px #fff9,
+    inset 2px 0 1px #fff9;
+  border-radius: 8px 0 0 8px;
+}
+li:has([data-tooltip-content^='DIVIDE_']):hover
+  + li:has([data-tooltip-content^='DIVIDE_'])
+  + li:not(:has([data-tooltip-content^='DIVIDE_'])),
+li:has([data-tooltip-content^='DIVIDE_'])
+  + li:has([data-tooltip-content^='DIVIDE_']):hover
+  + li:not(:has([data-tooltip-content^='DIVIDE_'])) {
+  box-shadow:
+    -1px 0 0 #fff,
+    0 1px 0 #fff,
+    0 -1px 0 #fff,
+    1px 0 0 #fff,
+    inset -1px 0 0 #fff,
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 #fff,
+    inset 1px 0 0 #fff;
+  border-radius: 8px;
+}
+/* li:has([data-tooltip-content^='DIVIDE_']) + li:has([data-tooltip-content='TAU']):not(#not) {
+  box-shadow: -1px 0 0 #ff0, 0 1px 0 #ff0, 0 -1px 0 #ff0, 1px 0 0 #ff0,
+              inset -1px 0 0 #fff, inset 0 1px 0 #fff, inset 0 -1px 0 #fff, inset 1px 0 0 #fff;
+  border-radius: 8px;
+} */
+
+/* Greek spell targeting - TAU */
+li:has([data-tooltip-content='TAU']):hover {
+  position: relative;
+  box-shadow:
+    -2px 0 0 #ff0,
+    0 2px 0 #ff0,
+    0 -2px 0 #ff0;
+}
+
+li:has([data-tooltip-content='TAU']):hover + li,
+li:has([data-tooltip-content='TAU']):hover + li + li {
+  position: relative;
+  box-shadow:
+    0 2px 0 #ff0,
+    0 -2px 0 #ff0;
+  border-radius: 8px;
+}
+li:has([data-tooltip-content='TAU']):hover + li::after,
+li:has([data-tooltip-content='TAU']):hover + li + li::after {
+  content: '1st';
+  position: absolute;
+  top: -8px;
+  display: block;
+  left: 50%;
+  text-align: center;
+  font-size: 0.7em;
+  transform: translateX(-50%);
+  background-color: #000;
+  border: 1px solid #ff0;
+  border-width: 1px 2px;
+  padding: 1px 4px 0 4px;
+  border-radius: 6px;
+}
+li:has([data-tooltip-content='TAU']):hover + li + li::after {
+  content: '2nd';
+}
+
+/* vim: set fdl=3 fdm=marker: */

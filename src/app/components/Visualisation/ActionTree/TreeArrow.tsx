@@ -4,8 +4,8 @@ import type { ActionSource } from '../../../calc/actionSources';
 import { StyledKeyContainer } from '../../Key/Key';
 import { WithDebugHints } from '../../Debug';
 
-const StyledDiv = styled.div<{ $source: ActionSource; $arrow: Arrow }>`
-  --hue: var(--hue-arrow-${(props) => props.$source});
+const StyledDiv = styled.div<{ source: ActionSource; arrow: Arrow }>`
+  --hue: var(--hue-arrow-${(props) => props.source});
   --height: 15px;
 
   display: flex;
@@ -25,7 +25,7 @@ const StyledDiv = styled.div<{ $source: ActionSource; $arrow: Arrow }>`
   border: 0 solid hsl(var(--hue) 67% 40%);
 
   ${(props) =>
-    props.$arrow === '⭢ '
+    props.arrow === '⭢ '
       ? `
       --height: var(--row-height);
       height: calc(var(--height) * 0.5);
@@ -39,7 +39,7 @@ const StyledDiv = styled.div<{ $source: ActionSource; $arrow: Arrow }>`
     `
       : ''}
   ${(props) =>
-    props.$arrow === '⤵︎'
+    props.arrow === '⤵︎'
       ? `
     width: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2));
     top: calc((var(--row-height) * 0.5) - (var(--arrow-line-w) * 0.5));
@@ -53,7 +53,7 @@ const StyledDiv = styled.div<{ $source: ActionSource; $arrow: Arrow }>`
     `
       : ''}
   ${(props) =>
-    props.$arrow === '⤷ '
+    props.arrow === '⤷ '
       ? `
     top: calc((var(--row-height) * 0.5) - (var(--arrow-line-w) * 0.5));
     border-width: var(--arrow-line-⤷);
@@ -90,27 +90,27 @@ const StyledDiv = styled.div<{ $source: ActionSource; $arrow: Arrow }>`
       drop-shadow(0 0 0 #000);
 
     ${(props) =>
-      props.$arrow === '⭢ '
+      props.arrow === '⭢ '
         ? `
 
       `
         : ''}
     ${(props) =>
-      props.$arrow === '⤵︎'
-        ? `
-        background-image: none;
-
-      `
-        : ''}
-    ${(props) =>
-      props.$arrow === 'ↆ'
+      props.arrow === '⤵︎'
         ? `
         background-image: none;
 
       `
         : ''}
     ${(props) =>
-      props.$arrow === '⤷ '
+      props.arrow === 'ↆ'
+        ? `
+        background-image: none;
+
+      `
+        : ''}
+    ${(props) =>
+      props.arrow === '⤷ '
         ? `
       --width: var(--arrow-right-w);
         left: calc(var(--arrow-left-w) - (var(--arrow-line-w) / 2));
@@ -154,8 +154,8 @@ export const TreeArrow = ({
 } & PropsWithChildren) => {
   return (
     <StyledDiv
-      $arrow={arrow}
-      $source={source}
+      arrow={arrow}
+      source={source}
       style={style}
       className={className}
       data-name={'TreeArrow'}
