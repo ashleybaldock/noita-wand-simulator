@@ -1,13 +1,5 @@
-import styled, {
-  type CSSProperties,
-  type DataAttributes,
-} from 'styled-components';
-
-type UsualAttrs = DataAttributes & {
-  style?: CSSProperties;
-  className?: string;
-  dataName?: string;
-};
+import styled from 'styled-components';
+import type { UsualAttrs } from '../Types/UsualAttrs';
 
 export const Column = styled.div.attrs<UsualAttrs>(
   ({ dataName = 'Column' }) => ({

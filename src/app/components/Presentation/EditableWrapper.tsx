@@ -3,20 +3,40 @@ import type { CSSProperties, PropsWithChildren } from 'react';
 import { ConfigToggleGroup } from '../ConfigEditor';
 import { tipToAttributes, type Tip } from '../Tooltips/tooltipId';
 import { useConfigToggle } from '../../redux';
+import type { Sprite } from '../../calc/sprite';
 
 const _EditableWrapper = styled.div<{
+  sprite?: Sprite;
   accessHints?: boolean;
   disabled?: boolean;
 }>`
   --w: 30px;
 
+  grid-column: auto/span 1;
   display: flex;
   flex-direction: row;
   cursor: pointer;
 
-  grid-column: 1/span 3;
+  align-content: center;
+  align-items: center;
+  height: auto;
   
+  ${({ sprite }) =>
+    sprite &&
+    `
+  background-image: ${sprite.path};
+  background-position: 0.6em 50%;
+  background-size: 1em;
+  background-repeat: no-repeat;
+  `}
+  image-rendering: pixelated;
+  font-family: var(--font-family-noita-default);
+  font-size: 1em;
+  color: var(--color-base);
+  padding: 0 0.6em 0 2.2em;
+
   @media screen and (max-width: 500px) {
+    font-size: 1.2em;
     background-position: 0.25ch 50%;
     border-bottom: var(--ou) dotted #222;
     padding: var(--ou) 0.2ch var(--ou) 2.5ch;
@@ -120,6 +140,7 @@ const WithLabel = ({
 
 export const EditableWrapper = styled(
   ({
+    sprite,
     accessHintsOverride,
     disabled = false,
     label = false,
@@ -129,6 +150,7 @@ export const EditableWrapper = styled(
     dataName = 'EditableWithLabel',
     tip,
   }: {
+    sprite?: Sprite;
     accessHintsOverride?: boolean;
     disabled?: boolean;
     label?: boolean;
@@ -142,6 +164,7 @@ export const EditableWrapper = styled(
     return (
       <WithLabel label={label}>
         <_EditableWrapper
+          sprite={sprite}
           accessHints={accessHintsOverride ?? !hideAccessibilityHints}
           disabled={disabled}
           style={style}

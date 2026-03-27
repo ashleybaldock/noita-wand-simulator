@@ -7,6 +7,7 @@ import { WandAlwaysCastEditor } from './WandAlwaysCastEditor';
 import { ZetaEditor } from './ZetaEditor';
 import { ExportOptions } from '../Export';
 import { ClearButton, RedoButton, ResetButton, UndoButton } from '../buttons';
+import { WandBuilderTopButtons } from './WandBuilderTopButtons';
 
 const MainDiv = styled.div`
   display: flex;
@@ -39,48 +40,6 @@ const WandActionEditorWrapper = styled.div`
   grid-area: spells;
   @media screen and (max-width: 800px) {
     margin: 0.8em 0 0.4em 0;
-  }
-`;
-
-const WandBuilderTopButtons = styled.div`
-  display: grid;
-  grid-template-columns: [left export-start] auto [export-end] 1fr [ undo-start] auto [undo-end redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end reset-start] auto [reset-end] 1ch [ right];
-  grid-template-rows: [top title-start] 1fr [ title-end bottom];
-  filter: none;
-  background-color: var(--color-base-background);
-  padding: 0 0 0.3em 0;
-  margin: 0;
-  width: 100%;
-  grid-column: -2;
-  grid-row-end: span 2;
-  justify-self: end;
-
-  & > button {
-    padding-top: 0.4em;
-    padding-bottom: 0.3em;
-    border-bottom: none;
-  }
-
-  & > ${UndoButton} {
-    grid-column: undo;
-  }
-  & > ${RedoButton} {
-    grid-column: redo;
-  }
-  & > ${ResetButton} {
-    grid-column: reset;
-  }
-  & > ${ClearButton} {
-    grid-column: clear;
-  }
-
-  @media screen and (max-width: 500px) {
-    height: 1.8lh;
-    grid-template-columns: [left] 1ch [undo-start] auto [undo-end redo-start] auto [redo-end] 1ch [clear-start] auto [clear-end reset-start] auto [reset-end] 1ch [right];
-
-    & > button {
-      background-size: 1.6em;
-    }
   }
 `;
 
@@ -132,16 +91,12 @@ export const WandBuilder = () => {
   const wandRef = useRef<HTMLDivElement>(null);
   const spellsRef = useRef<HTMLDivElement>(null);
 
-  // <GridSectionHeader title={'Wand Editor'} />
   return (
     <MainDiv data-name="WandBuilder">
-      <WandBuilderTopButtons data-name="WandBuilderTopButtons">
-        <ExportOptions wandRef={wandRef} spellsRef={spellsRef} />
-        <UndoButton />
-        <RedoButton />
-        <ClearButton />
-        <ResetButton />
-      </WandBuilderTopButtons>
+      <WandBuilderTopButtons
+        spellsRef={spellsRef}
+        wandRef={wandRef}
+      ></WandBuilderTopButtons>
       <WandBorder data-name="WandBorder">
         <WandActionEditorWrapper ref={spellsRef} className={'saveImageRoot'}>
           <WandActionEditor />

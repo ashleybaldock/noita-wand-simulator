@@ -80,6 +80,7 @@ const StyledListItem = styled(EditableWrapper)<{
     font-size: 1.2em;
   }
 `;
+
 const StyledName = styled.div`
   text-align: left;
   flex: 0 1 auto;
@@ -98,6 +99,7 @@ const StyledName = styled.div`
     flex: 1 1 auto;
   }
 `;
+
 const StyledValue = styled.span`
   text-align: right;
   display: flex;
@@ -105,35 +107,32 @@ const StyledValue = styled.span`
   white-space: nowrap;
 `;
 
+const StyledYesNoToggle = styled(YesNoToggle)``;
+
 export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
   const wand = useWand();
   const dispatch = useAppDispatch();
 
   return (
     <>
-      <StyledListItem
+      <StyledYesNoToggle
         sprite={useSprite('icon.wand.shuffle')}
-        className={className}
         tip={{ kind: 'uihint', id: 'shuffle_deck_when_empty' }}
         dataName="EditStatShuffle"
+        checked={false && wand.shuffle_deck_when_empty}
+        onChange={(e) =>
+          dispatch(
+            setWand({
+              wand: {
+                ...wand,
+                shuffle_deck_when_empty: e.target.checked,
+              },
+            }),
+          )
+        }
       >
         <StyledName>{'Shuffle'}</StyledName>
-        <StyledValue>
-          <YesNoToggle
-            checked={false && wand.shuffle_deck_when_empty}
-            onChange={(e) =>
-              dispatch(
-                setWand({
-                  wand: {
-                    ...wand,
-                    shuffle_deck_when_empty: e.target.checked,
-                  },
-                }),
-              )
-            }
-          />
-        </StyledValue>
-      </StyledListItem>
+      </StyledYesNoToggle>
       <StyledListItem
         className={className}
         sprite={useSprite('icon.wand.capacity')}
@@ -300,12 +299,37 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
           ></NumericInput>
         </StyledValue>
       </StyledListItem>
+
       <StyledListItem
         sprite={useSprite('icon.unlimitedspells')}
         className={className}
         tip={{ kind: 'uihint', id: 'unlimited_spells' }}
         dataName="ToggleUnlimitedSpells"
       >
+        <StyledName>{'Shuffle'}</StyledName>
+        <StyledValue>
+          <YesNoToggle
+            checked={false && wand.shuffle_deck_when_empty}
+            onChange={(e) =>
+              dispatch(
+                setWand({
+                  wand: {
+                    ...wand,
+                    shuffle_deck_when_empty: e.target.checked,
+                  },
+                }),
+              )
+            }
+          />
+        </StyledValue>
+      </StyledListItem>
+      <StyledListItem
+        sprite={useSprite('icon.unlimitedspells')}
+        className={className}
+        tip={{ kind: 'uihint', id: 'unlimited_spells' }}
+        dataName="ToggleUnlimitedSpells"
+      >
+        <StyledName>{'Speed'}</StyledName>
         <YesNoConfigToggle
           data-toggle="unlimitedSpells"
           field={'unlimitedSpells'}

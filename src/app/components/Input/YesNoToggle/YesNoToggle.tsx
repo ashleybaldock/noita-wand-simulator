@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { EditableWrapper, YesNo } from '../../Presentation';
 import type { Tip } from '../../Tooltips/tooltipId';
 import React from 'react';
+import type { Sprite } from '../../../calc/sprite';
+import type { UsualAttrs } from '../../Types/UsualAttrs';
 
 export const InteractiveYesNo = styled(YesNo)``;
 
@@ -52,6 +54,7 @@ export const YesNoCheckbox = styled.input.attrs({
 `;
 
 export const YesNoToggle = ({
+  sprite,
   checked,
   disabled = false,
   onChange,
@@ -60,20 +63,22 @@ export const YesNoToggle = ({
   customNo,
   children,
   className,
+  dataName,
   tip,
-}: React.PropsWithChildren<{
-  checked: boolean;
-  disabled?: boolean;
-  onChange: ChangeEventHandler<HTMLInputElement>;
-  onClick?: MouseEventHandler<HTMLInputElement>;
-  customYes?: React.JSX.Element;
-  customNo?: React.JSX.Element;
-  className?: string;
-  tip?: Tip;
-}>) => {
+}: UsualAttrs &
+  React.PropsWithChildren<{
+    sprite?: Sprite;
+    checked: boolean;
+    disabled?: boolean;
+    onChange: ChangeEventHandler<HTMLInputElement>;
+    onClick?: MouseEventHandler<HTMLInputElement>;
+    customYes?: React.JSX.Element;
+    customNo?: React.JSX.Element;
+    tip?: Tip;
+  }>) => {
   return (
     <EditableWrapper
-      dataName="YesNoToggle"
+      dataName={dataName}
       tip={tip}
       className={className}
       disabled={disabled}
