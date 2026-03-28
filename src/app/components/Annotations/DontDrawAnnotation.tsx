@@ -60,7 +60,7 @@ export const DontDrawAnnotation = ({
 }: {
   dont_draw_actions?: boolean;
   className?: string;
-} & Partial<ActionCall>) => {
+} & ActionCall) => {
   const { showDontDraw } = useConfig();
 
   if (!dont_draw_actions || !showDontDraw) {
