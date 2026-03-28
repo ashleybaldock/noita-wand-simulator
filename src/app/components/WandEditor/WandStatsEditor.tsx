@@ -14,6 +14,7 @@ import {
 import { NumericInput } from '../Input/NumericInput/NumericInput';
 import { useSprite, type Sprite } from '../../calc/sprite';
 import { EditableWrapper } from '../Presentation';
+import { WandStatName } from './WandStatName';
 
 const EditableInterval = ({
   field,
@@ -81,25 +82,6 @@ const StyledListItem = styled(EditableWrapper)<{
   }
 `;
 
-const StyledName = styled.div`
-  text-align: left;
-  flex: 0 1 auto;
-  width: 7.4em;
-  white-space: nowrap;
-
-  width: 100%;
-  display: flex;
-  align-items: center;
-
-  &::after {
-    content: '';
-    border-bottom: 3px dotted #222222;
-    height: 0.7em;
-    display: inline-block;
-    flex: 1 1 auto;
-  }
-`;
-
 const StyledValue = styled.span`
   text-align: right;
   display: flex;
@@ -131,7 +113,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
           )
         }
       >
-        <StyledName>{'Shuffle'}</StyledName>
+        <WandStatName>{'Shuffle'}</WandStatName>
       </StyledYesNoToggle>
       <StyledListItem
         className={className}
@@ -139,7 +121,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         tip={{ kind: 'uihint', id: 'deck_capacity' }}
         dataName="EditStatCapacity"
       >
-        <StyledName>{'Capacity'}</StyledName>
+        <WandStatName>{'Capacity'}</WandStatName>
         <StyledValue>
           <NumericInput
             value={wand.deck_capacity}
@@ -162,7 +144,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         tip={{ kind: 'uihint', id: 'actions_per_round' }}
         dataName="EditStatSpellsCast"
       >
-        <StyledName>{'Spells/Cast'}</StyledName>
+        <WandStatName>{'Spells/Cast'}</WandStatName>
         <StyledValue>
           <NumericInput
             value={wand.actions_per_round}
@@ -185,7 +167,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         sprite={useSprite('icon.wand.castdelay')}
         tip={{ kind: 'uihint', id: 'cast_delay' }}
       >
-        <StyledName>{'Cast delay'}</StyledName>
+        <WandStatName>{'Cast delay'}</WandStatName>
         <StyledValue>
           <EditableInterval field="cast_delay" />
         </StyledValue>
@@ -195,7 +177,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         sprite={useSprite('icon.wand.reloadtime')}
         tip={{ kind: 'uihint', id: 'reload_time' }}
       >
-        <StyledName>{'Recharge Time'}</StyledName>
+        <WandStatName>{'Recharge Time'}</WandStatName>
         <StyledValue>
           <EditableInterval field="reload_time" />
         </StyledValue>
@@ -205,7 +187,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         sprite={useSprite('icon.wand.manamax')}
         tip={{ kind: 'uihint', id: 'mana_max' }}
       >
-        <StyledName>{'Mana max'}</StyledName>
+        <WandStatName>{'Mana max'}</WandStatName>
         <StyledValue>
           <NumericInput
             value={wand.mana_max}
@@ -228,7 +210,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         sprite={useSprite('icon.wand.regen')}
         tip={{ kind: 'uihint', id: 'mana_charge_speed' }}
       >
-        <StyledName>{'Mana Charge Speed'}</StyledName>
+        <WandStatName>{'Mana Charge Speed'}</WandStatName>
         <StyledValue>
           <NumericInput
             value={wand.mana_charge_speed}
@@ -251,7 +233,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         sprite={useSprite('icon.wand.spread')}
         tip={{ kind: 'uihint', id: 'wand_spread' }}
       >
-        <StyledName>{'Spread'}</StyledName>
+        <WandStatName>{'Spread'}</WandStatName>
         <StyledValue>
           <NumericInput
             value={wand.spread}
@@ -278,7 +260,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         sprite={useSprite('icon.wand.speed')}
         tip={{ kind: 'uihint', id: 'wand_speed' }}
       >
-        <StyledName>{'Speed'}</StyledName>
+        <WandStatName>{'Speed'}</WandStatName>
         <StyledValue>
           <NumericInput
             value={wand.speed}
@@ -300,59 +282,14 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         </StyledValue>
       </StyledListItem>
 
-      <StyledListItem
+      <YesNoConfigToggle
         sprite={useSprite('icon.unlimitedspells')}
         className={className}
         tip={{ kind: 'uihint', id: 'unlimited_spells' }}
         dataName="ToggleUnlimitedSpells"
-      >
-        <StyledName>{'Shuffle'}</StyledName>
-        <StyledValue>
-          <YesNoToggle
-            checked={false && wand.shuffle_deck_when_empty}
-            onChange={(e) =>
-              dispatch(
-                setWand({
-                  wand: {
-                    ...wand,
-                    shuffle_deck_when_empty: e.target.checked,
-                  },
-                }),
-              )
-            }
-          />
-        </StyledValue>
-      </StyledListItem>
-      <StyledListItem
-        sprite={useSprite('icon.unlimitedspells')}
-        className={className}
-        tip={{ kind: 'uihint', id: 'unlimited_spells' }}
-        dataName="ToggleUnlimitedSpells"
-      >
-        <YesNoConfigToggle
-          data-toggle="unlimitedSpells"
-          configField={'unlimitedSpells'}
-        ></YesNoConfigToggle>
-      </StyledListItem>
-
-      <StyledYesNoToggle
-        sprite={useSprite('icon.unlimitedspells')}
-        tip={{ kind: 'uihint', id: 'unlimited_spells' }}
-        dataName="ToggleUnlimitedSpells"
-        checked={false && wand.shuffle_deck_when_empty}
-        onChange={(e) =>
-          dispatch(
-            setWand({
-              wand: {
-                ...wand,
-                shuffle_deck_when_empty: e.target.checked,
-              },
-            }),
-          )
-        }
-      >
-        <StyledName>{'Shuffle'}</StyledName>
-      </StyledYesNoToggle>
+        data-toggle="unlimitedSpells"
+        configField={'unlimitedSpells'}
+      ></YesNoConfigToggle>
     </>
   );
 };

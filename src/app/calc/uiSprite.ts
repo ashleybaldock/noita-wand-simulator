@@ -87,6 +87,7 @@ const uiSpriteDefinition = [
   ['icon.wand.reloadtime', `url('/data/wand/icon_gun_reload_time.png')`],
   ['icon.wand.castdelay', `url('/data/wand/icon_fire_rate_wait.png')`],
   ['icon.wand.manamax', `url('/data/wand/icon_mana_max.png')`],
+  ['icon.wand.regen', `url('/data/wand/icon_mana_charge_speed.png')`],
   ['icon.wand.spread', `url('data/wand/icon_spread_degrees.png')`],
   ['icon.wand.speed', `url('data/wand/icon_speed_multiplier.png')`],
   ['icon.maxuses'],

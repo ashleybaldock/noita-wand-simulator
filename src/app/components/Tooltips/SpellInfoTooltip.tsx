@@ -258,9 +258,6 @@ export const SpellInfoTooltip = ({
           description,
           sprite,
           type,
-          mana,
-          max_uses,
-          never_unlimited,
           spawn_requires_flag,
           recursive,
           iterative,
@@ -273,6 +270,7 @@ export const SpellInfoTooltip = ({
             <GameDescription>{translate(description)}</GameDescription>
             <SpellId>{actionId}</SpellId>
             <SpellImage $src={sprite} />
+            <WikiLink actionId={actionId}>Noita Wiki</WikiLink>
 
             <SpellStat actionId={actionId} field={'type'}></SpellStat>
             <SpellStat actionId={actionId} field={'mana'}></SpellStat>

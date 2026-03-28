@@ -152,6 +152,7 @@ export const useConfigSetting = <
   value: Config[N],
   set: (newValue: T) => void,
   changeHandler: (e: ChangeEvent<HTMLInputElement>) => void,
+  info: ConfigInfo,
 ] => {
   const dispatch = useAppDispatch();
   return [
@@ -173,6 +174,7 @@ export const useConfigSetting = <
         );
       }
     },
+    configInfoMap.get(fieldName) ?? { name: fieldName },
   ];
 };
 

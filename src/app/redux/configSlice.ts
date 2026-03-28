@@ -11,9 +11,14 @@ import type { Tip } from '../components/Tooltips/tooltipId';
 type ConfigBase = {
   condenseShots: boolean;
   unlimitedSpells: boolean;
+  showChargeUsage: boolean;
   infiniteSpells: boolean;
+  zeroCharges: boolean;
   infiniteMoney: boolean;
+  var_money: number;
   infiniteHp: boolean;
+  var_hp: number;
+  var_hp_max: number;
   showDivides: boolean;
   showGreekSpells: boolean;
   showDirectActionCalls: boolean;
@@ -28,13 +33,10 @@ type ConfigBase = {
   showDraw: boolean;
   showSpellsInCategories: boolean;
   showLockedSpellPlaceholders: boolean;
+  searchFiltersSpellList: boolean;
   showExtra: boolean;
-  showChargeUsage: boolean;
   castShowChanged: boolean;
   showDurationsInFrames: boolean;
-  var_money: number;
-  var_hp: number;
-  var_hp_max: number;
   pauseCalculations: boolean;
   endSimulationOnCastCount: number;
   endSimulationOnReloadCount: number;
@@ -95,17 +97,20 @@ export const configInfoDefinition: Record<keyof Config, ConfigInfo> = {
     name: 'Combine Repeated Actions',
   },
   unlimitedSpells: {
-    name: 'Unlimited Spells',
+    name: 'Perk: Unlimited Spells',
     tip: { kind: 'uihint', id: 'unlimited_spells' },
   },
   infiniteSpells: {
-    name: 'Ignore spell charge limits',
+    name: 'Ignore spell charge limits.',
+    tip: { kind: 'uihint', id: 'infiniteSpells' },
   },
-  infiniteMoney: {
-    name: 'Infinte Gold',
+  zeroCharges: {
+    name: 'Assume all charge-limited spells have zero charges.',
+    tip: { kind: 'uihint', id: 'zeroCharges' },
   },
-  infiniteHp: {
-    name: 'Infinite Hp considered to be ∞',
+  showChargeUsage: {
+    name: 'Highlight spells that consume charges',
+    tip: { kind: 'uihint', id: 'showChargeUsage' },
   },
   showDivides: {
     name: 'Show Divide By Spells',
@@ -153,29 +158,41 @@ export const configInfoDefinition: Record<keyof Config, ConfigInfo> = {
   showSpellsInCategories: {
     name: 'Show Spells in Categories',
   },
+  searchFiltersSpellList: {
+    name: 'Filter Spell List when searching',
+  },
   showLockedSpellPlaceholders: {
-    name: 'Display placeholder for locked spells',
+    name: 'Display placeholders for locked spells',
   },
   showExtra: {
     name: 'Show Debug Spells',
-  },
-  showChargeUsage: {
-    name: 'Highlight spells that consume charges',
   },
   castShowChanged: {
     name: 'Hide Unaltered State Variables',
   },
   showDurationsInFrames: {
     name: 'Show Durations in Frames',
+    tip: { kind: 'uihint', id: 'showDurationsInFrames' },
+  },
+  infiniteMoney: {
+    name: 'Treat gold as infinite the same way the game does.',
+    tip: { kind: 'uihint', id: 'infiniteMoney' },
   },
   var_money: {
-    name: 'Amount of money to use for spells that consider it',
+    name: 'Simulation starts with this much gold available.',
+    tip: { kind: 'uihint', id: 'var_money' },
+  },
+  infiniteHp: {
+    name: 'Treat Hp as infinite the same way the game does.',
+    tip: { kind: 'uihint', id: 'infiniteHp' },
   },
   var_hp: {
-    name: 'Amount of hp to use for spells that consider it',
+    name: 'Simulation starts with this much Hp available.',
+    tip: { kind: 'uihint', id: 'var_hp' },
   },
   var_hp_max: {
-    name: 'Max hp value to use for spells that consider it',
+    name: 'Simulation starts with this max Hp value.',
+    tip: { kind: 'uihint', id: 'var_hp_max' },
   },
   pauseCalculations: {
     name: 'Pause Simulation',
@@ -288,8 +305,12 @@ export const configAffectsSimulation: Record<keyof Config, boolean> = {
   condenseShots: false,
   unlimitedSpells: true,
   infiniteSpells: true,
+  zeroCharges: true,
   infiniteMoney: true,
+  var_money: true,
   infiniteHp: true,
+  var_hp: true,
+  var_hp_max: true,
   showDivides: false,
   showGreekSpells: false,
   showDirectActionCalls: false,
@@ -303,14 +324,12 @@ export const configAffectsSimulation: Record<keyof Config, boolean> = {
   showWraps: false,
   showDraw: false,
   showSpellsInCategories: false,
+  searchFiltersSpellList: false,
   showLockedSpellPlaceholders: false,
   showExtra: false,
   showChargeUsage: false,
   castShowChanged: false,
   showDurationsInFrames: false,
-  var_money: true,
-  var_hp: true,
-  var_hp_max: true,
   pauseCalculations: true,
   endSimulationOnCastCount: true,
   endSimulationOnReloadCount: true,
@@ -358,9 +377,14 @@ export const initialState: ConfigState = {
     'debug.keyHints': false,
     condenseShots: true,
     unlimitedSpells: true,
-    infiniteSpells: true,
+    infiniteSpells: false,
+    zeroCharges: true,
+    showChargeUsage: true,
     infiniteMoney: true,
+    var_money: 10000,
     infiniteHp: true,
+    var_hp: 100,
+    var_hp_max: 100,
     showDivides: true,
     showGreekSpells: true,
     showDirectActionCalls: true,
@@ -375,6 +399,7 @@ export const initialState: ConfigState = {
     showWraps: true,
     showDraw: true,
     showSpellsInCategories: true,
+    searchFiltersSpellList: true,
     showLockedSpellPlaceholders: true,
     endSimulationOnCastCount: 0,
     endSimulationOnReloadCount: 0,
@@ -383,12 +408,8 @@ export const initialState: ConfigState = {
     limitSimulationIterations: 10,
     limitSimulationDuration: 10,
     showExtra: false,
-    showChargeUsage: true,
     castShowChanged: true,
-    showDurationsInFrames: false,
-    var_money: 10000,
-    var_hp: 100,
-    var_hp_max: 100,
+    showDurationsInFrames: true,
     'requirements.enemies': false,
     'requirements.projectiles': false,
     'requirements.hp': false,

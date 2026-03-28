@@ -146,53 +146,63 @@ export const ConfigEditor = () => {
   return (
     <MainDiv data-name="ConfigEditor">
       <ConfigToggleGroup title={'Simulation'}>
-        <YesNoConfigToggle field={'pauseCalculations'}></YesNoConfigToggle>
+        <YesNoConfigToggle
+          configField={'pauseCalculations'}
+        ></YesNoConfigToggle>
       </ConfigToggleGroup>
       <ConfigToggleGroup title={'Visualisation'}>
-        <YesNoConfigToggle field={'castShowChanged'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showDurationsInFrames'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'condenseShots'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showActionTree'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showDirectActionCalls'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showDivides'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showGreekSpells'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showDeckIndexes'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showRecursion'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showIteration'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showProxies'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showSources'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showDontDraw'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showChargeUsage'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'castShowChanged'}></YesNoConfigToggle>
+        <YesNoConfigToggle
+          configField={'showDurationsInFrames'}
+        ></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'condenseShots'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'showActionTree'}></YesNoConfigToggle>
+        <YesNoConfigToggle
+          configField={'showDirectActionCalls'}
+        ></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'showDivides'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'showGreekSpells'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'showDeckIndexes'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'showRecursion'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'showIteration'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'showProxies'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'showSources'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'showDontDraw'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'showChargeUsage'}></YesNoConfigToggle>
       </ConfigToggleGroup>
       <ConfigToggleGroup title={'Cast Config'}>
-        <YesNoConfigToggle field={'unlimitedSpells'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'infiniteSpells'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'unlimitedSpells'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'infiniteSpells'}></YesNoConfigToggle>
       </ConfigToggleGroup>
       {/* <ConfigToggleGroup title={'End Simulation'}> */}
-      {/*   <YesNoConfigToggle field={'endSimulationOnRefresh'}> */}
+      {/*   <YesNoConfigToggle configField={'endSimulationOnRefresh'}> */}
       {/*     {'...on Wand Refresh'} */}
       {/*   </YesNoConfigToggle> */}
       {/* </ConfigToggleGroup> */}
       <ConfigToggleGroup title={'Wand Editor'}>
-        <YesNoConfigToggle field={'swapOnMove'}></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'swapOnMove'}></YesNoConfigToggle>
         <YesNoConfigToggle
-          field={'showLockedSpellPlaceholders'}
+          configField={'showLockedSpellPlaceholders'}
         ></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showSpellsInCategories'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'showExtra'}></YesNoConfigToggle>
+        <YesNoConfigToggle
+          configField={'showSpellsInCategories'}
+        ></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'showExtra'}></YesNoConfigToggle>
       </ConfigToggleGroup>
       <ConfigToggleGroup
         title={'Unlockable Spells'}
         bulkSelectControls={true}
         section={'unlocks'}
       >
-        {sortedUnlocks.map(({ key, name, field }) => (
-          <YesNoConfigToggle key={key} field={field}></YesNoConfigToggle>
+        {sortedUnlocks.map(({ key, field }) => (
+          <YesNoConfigToggle key={key} configField={field}></YesNoConfigToggle>
         ))}
       </ConfigToggleGroup>
       <ConfigToggleGroup title={'Accessibility'}>
-        <YesNoConfigToggle field={'hideAccessibilityHints'}></YesNoConfigToggle>
-        <YesNoConfigToggle field={'mirrorControls'}></YesNoConfigToggle>
+        <YesNoConfigToggle
+          configField={'hideAccessibilityHints'}
+        ></YesNoConfigToggle>
+        <YesNoConfigToggle configField={'mirrorControls'}></YesNoConfigToggle>
       </ConfigToggleGroup>
     </MainDiv>
   );
