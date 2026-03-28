@@ -331,7 +331,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       >
         <YesNoConfigToggle
           data-toggle="unlimitedSpells"
-          field={'unlimitedSpells'}
+          configField={'unlimitedSpells'}
         ></YesNoConfigToggle>
       </StyledListItem>
 

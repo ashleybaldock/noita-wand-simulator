@@ -96,15 +96,16 @@ export const configInfoDefinition: Record<keyof Config, ConfigInfo> = {
   },
   unlimitedSpells: {
     name: 'Unlimited Spells',
+    tip: { kind: 'uihint', id: 'unlimited_spells' },
   },
   infiniteSpells: {
     name: 'Ignore spell charge limits',
   },
   infiniteMoney: {
-    name: 'Gold considered to be ∞',
+    name: 'Infinte Gold',
   },
   infiniteHp: {
-    name: 'Hp considered to be ∞',
+    name: 'Infinite Hp considered to be ∞',
   },
   showDivides: {
     name: 'Show Divide By Spells',
@@ -120,27 +121,34 @@ export const configInfoDefinition: Record<keyof Config, ConfigInfo> = {
   },
   showRecursion: {
     name: 'Show Recursion',
+    tip: { kind: 'uihint', id: 'Reursion ' },
   },
   showIteration: {
     name: 'Show Iteration',
+    tip: { kind: 'uihint', id: 'ActionProxyAnnotation' },
   },
   showProxies: {
     name: 'Show Projectile Proxies',
+    tip: { kind: 'uihint', id: 'ActionProxyAnnotation' },
   },
   showSources: {
     name: 'Show Action Sources',
+    tip: { kind: 'uihint', id: 'ActionSourceAnnotation' },
   },
   showDontDraw: {
     name: 'Show Draw Inhibition',
+    tip: { kind: 'uihint', id: 'DontDrawAnnotation' },
   },
   showActionTree: {
     name: 'Show Action Tree',
   },
   showWraps: {
     name: 'Show where wand wraps happen',
+    tip: { kind: 'uihint', id: 'WrapAnnotation' },
   },
   showDraw: {
     name: 'Show draw',
+    tip: { kind: 'uihint', id: 'DrawAnnotation' },
   },
   showSpellsInCategories: {
     name: 'Show Spells in Categories',

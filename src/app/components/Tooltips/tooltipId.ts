@@ -162,6 +162,20 @@ const uiHintDefinition = [
     },
   ],
   [
+    'infiniteMoney',
+    {
+      title: 'Gold considered to be ∞',
+      desc: 'For spells that vary their behaviour based on your wealth.',
+    },
+  ],
+  [
+    'infiniteHp',
+    {
+      title: 'Hp considered to be ∞',
+      desc: 'For spells that vary their behaviour based on your health.',
+    },
+  ],
+  [
     'ProjectileCountAnnotation',
     {
       title: 'Projectile Count',

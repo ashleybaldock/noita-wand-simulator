@@ -89,8 +89,8 @@ export const YesNoToggle = ({
   React.PropsWithChildren<{
     sprite?: Sprite;
     checked: boolean;
+    onChange?: ChangeEventHandler<HTMLInputElement>;
     disabled?: boolean;
-    onChange: ChangeEventHandler<HTMLInputElement>;
     onClick?: MouseEventHandler<HTMLInputElement>;
     title?: string;
     customYes?: React.JSX.Element;
