@@ -6,6 +6,7 @@ import { loadState, saveState } from '../localStorage';
 import type { KeyOfType } from '../util';
 import { objectEntries, objectFromKeys, objectKeys } from '../util';
 import { startAppListening } from './listenerMiddleware';
+import type { Tip } from '../components/Tooltips/tooltipId';
 
 type ConfigBase = {
   condenseShots: boolean;
@@ -82,7 +83,7 @@ const unlocksTrue = objectFromKeys(unlockConditions, true);
 
 export type ConfigInfo = {
   readonly name: string;
-  readonly tip?: string;
+  readonly tip?: Tip;
   readonly group?: string;
   readonly customYes?: string;
   readonly customNo?: string;
