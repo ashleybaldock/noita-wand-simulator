@@ -60,15 +60,16 @@ export const DontDrawAnnotation = ({
 }: {
   dont_draw_actions?: boolean;
   className?: string;
-} & ActionCall) => {
-  const { showDontDraw } = useConfig();
+} & Partial<ActionCall>) => {
+  const { showDontDraw: configShowDontDraw } = useConfig();
 
-  if (!dont_draw_actions || !showDontDraw) {
+  if (!dont_draw_actions || !configShowDontDraw) {
     return null;
   }
 
   return (
     <StyledBaseAnnotation
+      hidden={!dont_draw_actions || !configShowDontDraw}
       className={className}
       dataName="DontDrawAnnotation"
     ></StyledBaseAnnotation>

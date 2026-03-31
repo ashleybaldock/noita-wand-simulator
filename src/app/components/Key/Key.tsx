@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-export const StyledKeyContainer = styled.div`
+export const _KeyContainer = styled.div`
   margin: 0.4em 0;
 
   &::before {
@@ -16,9 +16,7 @@ export const KeyContainer = ({
   children,
   className = '',
 }: { className?: string } & PropsWithChildren) => {
-  return (
-    <StyledKeyContainer className={className}>{children}</StyledKeyContainer>
-  );
+  return <_KeyContainer className={className}>{children}</_KeyContainer>;
 };
 export const KeyNote = styled.p``;
 
@@ -38,7 +36,7 @@ export const KeyGroup = styled.ul`
   }
 `;
 
-const StyledKeyItem = styled.li`
+const _KeyItem = styled.li`
   display: flex;
   padding: 0.2em;
   line-height: 1.2;
@@ -47,14 +45,14 @@ const StyledKeyItem = styled.li`
   column-gap: 1ch;
 `;
 
-const StyledKeyExample = styled.div`
+export const KeyExample = styled.div`
   display: flex;
   align-items: center;
   min-width: 1lh;
   position: relative;
 `;
 
-const StyledKeyDescription = styled.div`
+const KeyDescription = styled.div`
   display: flex;
 `;
 
@@ -64,9 +62,9 @@ export const KeyItem = ({
   className = '',
 }: { description: string; className?: string } & PropsWithChildren) => {
   return (
-    <StyledKeyItem className={className}>
-      <StyledKeyExample>{children}</StyledKeyExample>
-      <StyledKeyDescription>{description}</StyledKeyDescription>
-    </StyledKeyItem>
+    <_KeyItem className={className}>
+      <KeyExample>{children}</KeyExample>
+      <KeyDescription>{description}</KeyDescription>
+    </_KeyItem>
   );
 };

@@ -1,9 +1,10 @@
 import styled, { type DataAttributes } from 'styled-components';
 import { isAnnotationTooltipId } from '../Tooltips/AnnotationTooltip';
 import { tipToAttributes, type Tip } from '../Tooltips/tooltipId';
-import type { MouseEventHandler, PropsWithChildren } from 'react';
-import { StyledKeyContainer } from '../Key/Key';
+import { type MouseEventHandler, type PropsWithChildren } from 'react';
+import { _KeyContainer, KeyNote, KeyExample } from '../Key/Key';
 import type { HotkeyCallback } from 'react-hotkeys-hook';
+import { useIsDemo } from '../Demo';
 
 // const StyledDiv = styled.div`
 //   width: calc(var(--bsize-spell) / 4);
@@ -18,6 +19,7 @@ import type { HotkeyCallback } from 'react-hotkeys-hook';
 //   }
 // `;
 const _BaseAnnotation = ({
+  hidden = true,
   dataName,
   className,
   tip,
@@ -28,6 +30,7 @@ const _BaseAnnotation = ({
   children,
   ...rest
 }: {
+  hidden?: boolean;
   dataName?: string;
   tip?: Tip;
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -37,7 +40,8 @@ const _BaseAnnotation = ({
   className?: string;
 } & DataAttributes &
   PropsWithChildren) => {
-  return (
+  const isDemo = useIsDemo();
+  return hidden && !isDemo ? null : (
     <button
       data-name={dataName}
       className={className}
@@ -67,9 +71,17 @@ export const BaseAnnotation = styled(_BaseAnnotation)`
   line-height: calc(var(--bsize-spell) / 3 - 2px);
   text-align: center;
 
-  ${StyledKeyContainer} & {
+  ${KeyExample} & {
     position: relative;
     inset: unset;
     transform: none;
+  }
+
+  ${KeyNote} & {
+    position: static;
+    display: inline !important;
+    inset: unset;
+    transform: none;
+    margin: 0 0.5ch;
   }
 `;

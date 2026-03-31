@@ -158,7 +158,7 @@ export const EditableWrapper = styled(
     className?: string;
     dataName?: string;
     tip?: Tip;
-  }) => {
+  } & PropsWithChildren) => {
     const [hideAccessibilityHints] = useConfigToggle('hideAccessibilityHints');
 
     return (

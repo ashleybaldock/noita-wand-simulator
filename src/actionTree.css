@@ -634,13 +634,12 @@
   color: #0000;
   background-color: #0000;
   border: none;
-  font-size: 2em;
   position: absolute;
   border-bottom: var(--bdw) dotted #eee;
   display: flex;
   background-image:
     url('data:image/svg+xml,%3Csvg style=%22fill: %23ff0000%22 xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22%3E%3Cpath d=%22M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z%22%3E%3C/path%3E%3C/svg%3E'),
-    var(--icon-arrowhead-right), var(--data-inventory-icon-draw-plus);
+    var(--icon-arrowhead-right); /*, var(--data-inventory-icon-draw-plus);*/
   left: calc(-1 * var(--bsize-spell) / 4 + 6px);
   width: calc(var(--bsize-spell) / 5);
   height: calc(var(--bsize-spell) / 5);

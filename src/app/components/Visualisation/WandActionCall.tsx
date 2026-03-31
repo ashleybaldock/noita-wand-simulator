@@ -39,7 +39,10 @@ export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
       <NextActionArrow />
       <WandAction spellType={spell.type} spellId={actionCall.spell.id} />
       <IterationAnnotation spell={spell} iteration={actionCall.iteration} />
-      <RecursionAnnotation spell={spell} recursion={actionCall.recursion} />
+      <RecursionAnnotation
+        recursive={spell.recursive}
+        recursion={actionCall.recursion}
+      />
       <ActionSourceAnnotation {...actionCall} />
       <DontDrawAnnotation
         {...actionCall}

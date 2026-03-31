@@ -46,6 +46,11 @@ export const isObject = (x: unknown): x is object => 'object' === typeof x;
 export const isFunction = (x: unknown): x is () => unknown =>
   'function' === typeof x;
 
+export const isIterable = (x: unknown): x is Iterable<unknown> =>
+  isObject(x) &&
+  Symbol.iterator in x &&
+  typeof x[Symbol.iterator] === 'function';
+
 // const a = (y?: object) => {
 //   if (never(y)) {
 //     typeof y;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import type { CSSProperties, PropsWithChildren } from 'react';
 import type { DiscardReason } from '../../calc/discardReasons';
-import { StyledKeyContainer } from '../Key/Key';
+import { _KeyContainer } from '../Key/Key';
 
 const StyledDiv = styled.div<{ $reason: DiscardReason }>`
   display: flex;
@@ -14,7 +14,7 @@ const StyledDiv = styled.div<{ $reason: DiscardReason }>`
 
   --hue: var(--arrow-hue-${(props) => props.$reason});
 
-  ${StyledKeyContainer} & {
+  ${_KeyContainer} & {
     transform: none;
     position: relative;
     top: unset;

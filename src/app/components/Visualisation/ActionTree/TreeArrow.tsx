@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import type { CSSProperties, PropsWithChildren } from 'react';
 import type { ActionSource } from '../../../calc/actionSources';
-import { StyledKeyContainer } from '../../Key/Key';
+import { _KeyContainer } from '../../Key/Key';
 import { WithDebugHints } from '../../Debug';
 
 const StyledDiv = styled.div<{ source: ActionSource; arrow: Arrow }>`
@@ -121,7 +121,7 @@ const StyledDiv = styled.div<{ source: ActionSource; arrow: Arrow }>`
         : ''}
   }
 
-  ${StyledKeyContainer} & {
+  ${_KeyContainer} & {
     transform: none;
     position: relative;
     top: unset;

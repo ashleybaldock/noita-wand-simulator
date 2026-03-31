@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { useConfig } from '../../redux';
-import type { Spell } from '../../calc/spell';
-import { StyledKeyContainer } from '../Key/Key';
+import { _KeyContainer } from '../Key/Key';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const RecursionDiv = styled.div`
+const StyledBaseAnnotation = styled(BaseAnnotation)`
   pointer-events: none;
   position: absolute;
   bottom: -7px;
@@ -18,28 +18,28 @@ const RecursionDiv = styled.div`
   text-align: center;
   font-family: var(--font-family-noita-default);
 
-  ${StyledKeyContainer} & {
-    position: relative;
-    inset: unset;
-    transform: none;
+  ${_KeyContainer} & {
   }
 `;
-export const RecursionAnnotation = (props: {
-  size?: number;
-  spell: Spell;
+export const RecursionAnnotation = ({
+  recursive = false,
+  recursion,
+}: {
+  recursive?: boolean;
   recursion?: number;
-  iteration?: number;
 }) => {
-  const { spell, recursion } = props;
   const { showRecursion: configShowRecursion } = useConfig();
 
   if (!configShowRecursion) {
     return null;
   }
 
-  const recursive = spell?.recursive ?? false;
-
-  return configShowRecursion && recursive ? (
-    <RecursionDiv data-name="Recursion">{recursion}</RecursionDiv>
-  ) : null;
+  return (
+    <StyledBaseAnnotation
+      hidden={!recursive || !configShowRecursion}
+      dataName="RecursionAnnotation"
+    >
+      {recursion}
+    </StyledBaseAnnotation>
+  );
 };

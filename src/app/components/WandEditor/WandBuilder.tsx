@@ -6,6 +6,7 @@ import { WandBorder } from './WandBorder';
 import { WandAlwaysCastEditor } from './WandAlwaysCastEditor';
 import { ZetaEditor } from './ZetaEditor';
 import { WandBuilderTopButtons } from './WandBuilderTopButtons';
+import { HealthEditor } from './HealthEditor';
 
 const MainDiv = styled.div`
   display: flex;
@@ -84,6 +85,14 @@ const StyledZetaEditor = styled(ZetaEditor)`
     }
   }
 `;
+const StyledHealthEditor = styled(HealthEditor)`
+  ${ColumnsContainer} > & {
+    grid-row-end: span 3;
+    @media screen and (max-width: 500px) {
+      grid-row-end: span 1;
+    }
+  }
+`;
 
 export const WandBuilder = () => {
   const wandRef = useRef<HTMLDivElement>(null);
@@ -104,6 +113,7 @@ export const WandBuilder = () => {
             <StyledWandStatsEditor />
             <StyledAlwaysCastEditor />
             <StyledZetaEditor />
+            <StyledHealthEditor />
           </ColumnsContainer>
         </ContentDiv>
       </WandBorder>

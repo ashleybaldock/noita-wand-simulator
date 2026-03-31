@@ -1,7 +1,7 @@
 import { isIterativeActionId } from '../../calc/actionId';
 import type { SpellDeckInfo } from '../../calc/spell';
 import styled from 'styled-components';
-import { StyledKeyContainer } from '../Key/Key';
+import { _KeyContainer } from '../Key/Key';
 
 // export const IterationAnnotationOld = ({
 //   iteration,
@@ -33,7 +33,7 @@ export const IterationDiv = styled.div`
   text-align: center;
   font-family: var(--font-family-noita-default);
 
-  ${StyledKeyContainer} & {
+  ${_KeyContainer} & {
     position: relative;
     inset: unset;
     transform: none;

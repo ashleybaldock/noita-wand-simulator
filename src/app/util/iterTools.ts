@@ -1,4 +1,4 @@
-import { always, isObject, isUndefined } from './Predicate';
+import { always, isIterable, isObject, isUndefined } from './Predicate';
 
 /**
  * Iterator utility functions
@@ -159,11 +159,6 @@ export type Callback<T> = (t: T, i: number) => void;
 export type SequenceComparisonOptions<T> = {
   filterPredicate?: ValueFilterPredicate<T>;
 };
-
-export const isIterable = (x: unknown): x is Iterable<unknown> =>
-  isObject(x) &&
-  Symbol.iterator in x &&
-  typeof x[Symbol.iterator] === 'function';
 
 // export const isIterator = (x: unknown): x is Iterator<unknown> => isObject(x) && 'next' in x && typeof x['next'] === 'function';
 
@@ -461,6 +456,7 @@ export function* reduceIter<T>(
 export function* tallyIter<T>(
   source: IterableIterator<T>,
 ): IterableIterator<[T, number]> {
+  /* TODO use WeakMap for object references */
   const seen = new Map<T, number>();
   for (const s of source) {
     const count = (seen.get(s) ?? 0) + 1;
