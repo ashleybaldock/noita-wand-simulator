@@ -183,15 +183,15 @@ export const configInfoDefinition: Record<keyof Config, ConfigInfo> = {
     tip: { kind: 'uihint', id: 'var_money' },
   },
   infiniteHp: {
-    name: 'Treat Hp as infinite the same way the game does.',
+    name: 'Hp is infinite',
     tip: { kind: 'uihint', id: 'infiniteHp' },
   },
   var_hp: {
-    name: 'Simulation starts with this much Hp available.',
+    name: 'HP',
     tip: { kind: 'uihint', id: 'var_hp' },
   },
   var_hp_max: {
-    name: 'Simulation starts with this max Hp value.',
+    name: 'Max HP',
     tip: { kind: 'uihint', id: 'var_hp_max' },
   },
   pauseCalculations: {

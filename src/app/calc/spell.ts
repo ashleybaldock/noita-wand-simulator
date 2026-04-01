@@ -109,24 +109,28 @@ export const spellFieldInfo: InfoFor<Spell> = {
   mana: { name: 'Mana Cost', icon: 'icon.manadrain' },
   max_uses: {
     name: 'Uses',
-    icon: 'icon.maxuse',
+    icon: 'icon.maxuses',
     render: ({ max_uses }) =>
       isUndefined(max_uses) ? 'Unlimited' : `${max_uses}`,
   },
-  uses_remaining: { name: 'Uses Remaining', icon: 'icon.remaininguses' },
+  uses_remaining: { name: 'Uses Remaining', icon: 'icon.remaininguses',
+    render: ({ uses_remaining, max_uses }) =>
+      isNotUndefined(uses_remaining) ? `${uses_remaining}` : isNotUndefined(max_uses) ? `${max_uses}` : 'Unlimited',
+  },
   never_unlimited: {
     name: 'Not Affected by Unlimited Spells',
     icon: 'icon.neverunlimited',
+    render: () => '',
   },
   recursive: {
     name: 'Recursive',
     icon: 'icon.recursion',
     render: ({ recursive }) =>
-      recursive ? 'This spell is subject to the Recursion limit.' : '',
+      recursive ? 'Recursion limited' : '',
   },
   iterative: { name: 'Iterative', icon: 'icon.iteration' },
   spawn_requires_flag: {
-    name: 'Unlock Condition',
+    name: 'Unlock',
     icon: 'icon.unlock',
     render: ({ spawn_requires_flag }) =>
       isUndefined(spawn_requires_flag)

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const WandStatName = styled.div`
   text-align: left;
   flex: 0 1 auto;
-  width: 7.4em;
   white-space: nowrap;
 
   width: 100%;

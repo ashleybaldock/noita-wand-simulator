@@ -70,8 +70,8 @@ const SpellTooltipContainer = styled.div.attrs<{
   grid-auto-flow: row;
   row-gap: 0;
   column-gap: 0;
-  grid-template-columns: [left sname-start sdesc-start label-start] 1fr 1fr [label-end value-start] 1fr [sdesc-end sname-end] 1fr [simage-start] 0 [simage-end value-end right];
-  grid-template-rows: [top sname-start simage-start] 200fr [sname-end sdesc-start] auto [sdesc-end simage-end stats-start] repeat( 8, 100fr ) [stats-end bottom];
+  grid-template-columns: [left sname-start sdesc-start label-start link-start] 1fr 1fr [label-end value-start] 1fr [sdesc-end sname-end link-end] 1fr [simage-start] 0 [simage-end value-end right];
+  grid-template-rows: [top sname-start simage-start] 200fr [sname-end sdesc-start] auto [sdesc-end simage-end stats-start] repeat( 8, 100fr ) [stats-end link-start] 100fr [link-end bottom];
   grid-auto-flow: row;
   white-space: normal;
   border-image-source: var(--sprite-spelltype);
@@ -129,7 +129,10 @@ const SpellId = styled.div`
 `;
 const WikiLink = styled.a.attrs<{ actionId: ActionId }>(({ actionId }) => ({
   href: `https://noita.wiki.gg/wiki/${actionId}`,
-}))``;
+}))`
+  grid-row: link;
+  grid-column: link;
+  `;
 
 const Label = styled.div.attrs<{ icon?: SpritePath }>(() => ({}))`
   grid-column: label;
@@ -147,6 +150,11 @@ const Label = styled.div.attrs<{ icon?: SpritePath }>(() => ({}))`
   padding: 0.1em 0.6em 0.1em 2.2em;
   `}
 `;
+
+const Statement = styled(Label)`
+  grid-column: label-start/value-end;
+`;
+
 const Value = styled.div`
   grid-column: value;
 
@@ -193,6 +201,18 @@ const SpellStat = styled(Stat).attrs<{
   };
 })``;
 
+const SpellStatement = styled(Statement).attrs<{
+  actionId: ActionId;
+  field: keyof Spell;
+  label?: string;
+}>(({ actionId, field }) => {
+  const spell = getSpellByActionId(actionId);
+  const { name, icon: sprite = 'none', render } = getInfoForSpellField(field);
+  return {
+    children: render(spell),
+    icon: useSprite(sprite).path,
+  };
+})``;
 const SpellImage = styled.img.attrs<{ $src?: string }>(({ $src = '' }) => ({
   style: {
     content: `${$src ?? ''}`,
@@ -261,6 +281,7 @@ export const SpellInfoTooltip = ({
           spawn_requires_flag,
           recursive,
           iterative,
+          never_unlimited,
           related_projectiles,
           related_extra_entities,
         } = getSpellByActionId(content);
@@ -272,37 +293,37 @@ export const SpellInfoTooltip = ({
             <SpellImage $src={sprite} />
             <WikiLink actionId={actionId}>Noita Wiki</WikiLink>
 
-            <SpellStat actionId={actionId} field={'type'}></SpellStat>
-            <SpellStat actionId={actionId} field={'mana'}></SpellStat>
-            <SpellStat actionId={actionId} field={'max_uses'}></SpellStat>
-            <SpellStat actionId={actionId} field={'uses_remaining'}></SpellStat>
-            <SpellStat
+            <SpellStat actionId={actionId} field={'type'}/>
+            <SpellStat actionId={actionId} field={'mana'}/>
+            <SpellStat actionId={actionId} field={'max_uses'}/>
+            {false && <SpellStat actionId={actionId} field={'uses_remaining'}/>}
+            {never_unlimited && (<SpellStat
               actionId={actionId}
               field={'never_unlimited'}
-            ></SpellStat>
+            />)}
             {recursive && (
-              <SpellStat actionId={actionId} field={'recursive'}></SpellStat>
+              <SpellStatement actionId={actionId} field={'recursive'}/>
             )}
             {iterative && (
-              <SpellStat actionId={actionId} field={'iterative'}></SpellStat>
+              <SpellStatement actionId={actionId} field={'iterative'}/>
             )}
             {isNotUndefined(spawn_requires_flag) && (
               <SpellStat
                 actionId={actionId}
                 field={'spawn_requires_flag'}
-              ></SpellStat>
+              />
             )}
             {related_extra_entities && (
               <SpellStat
                 actionId={actionId}
                 field={'related_extra_entities'}
-              ></SpellStat>
+              />
             )}
             {related_projectiles && (
               <SpellStat
                 actionId={actionId}
                 field={'related_projectiles'}
-              ></SpellStat>
+              />
             )}
           </SpellTooltipContainer>
         );
@@ -327,39 +348,8 @@ export const SpellInfoTooltip = ({
     fields: [
 // {field: 'action_id', displayName: 'ID', render: ({: v}) => `${v}`},
       {
-        field: 'action_name',
-        displayName: 'Name',
-render: ({: v}) => `${v}`,
-      },
-      {
-        field: 'action_description',
-        displayName: 'Desc.',
-render: ({: v}) => `${v}`,
-      },
-      {
-        field: 'action_type',
-        displayName: 'Type',
-render: ({: v}) => `${v}`,
-      },
-
-      {
         field: 'action_draw_many_count',
         displayName: 'Draw',
-render: ({: v}) => `${v}`,
-      },
-      {
-        field: 'action_never_unlimited',
-        displayName: 'Never Unlimited',
-render: ({: v}) => `${v}`,
-      },
-      {
-        field: 'action_max_uses',
-        displayName: 'Max. Charges',
-render: ({: v}) => `${v}`,
-      },
-      {
-        field: 'action_mana_drain',
-        displayName: 'Mana',
 render: ({: v}) => `${v}`,
       },
       {
