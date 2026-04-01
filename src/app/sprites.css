@@ -63,7 +63,6 @@
   --icon-expiration: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAADY3uqcqsIsN0o/Sl9tSm6TAAAAAXRSTlMAQObYZgAAAFhJREFUeF610MENwCAIBVDrBAUdQBoXME5g9x+qcoEmRGNi/MDhvyPuXC7oucfAXcSAdpYx4EN9JxBqLXwb4CkU5EsWRDC/JF1BO8QWG4gorH/M+cRj4Vg+kswRzcxbXKsAAAAASUVORK5CYII=');
   --icon-manadrain: url('/data/wand/icon_mana_drain.png');
   --icon-lifetime: url('/data/wand/icon_lifetime.png');
-  --icon-infinite-lifetime: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEUAAAAAAADr6+v/////tQenp6f/57uCVwDCggBdPgA+KgB6VwNxcXFQUFB6b1q4ewCoRdtyAAAAAnRSTlMAhetBupcAAAB9SURBVHheTYq7CcMwEEAvYIhLh9tAIAnS2IcXUBGHpBW5BQz2BP60aVSlTJctjOfwIp4iOld61ePxICH71IBVlPP3R4SS8ISFSL4+qRJp9npBii9ft+FSAARv7fiOy13ZuXey+HJidxTTGpHglWJ5Mtb6BULTde6Q/PaAhD/RyxRkOaYYYwAAAABJRU5ErkJggg==');
 
   --icon-discarded-mana: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAALElEQVQImWNgQAL/////j8xnxCbByMjICJdE1wFTwIQuiAzwSuK1EwWg2w0AonYUALgX+aEAAAAASUVORK5CYII=');
   --icon-discarded-charges: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAIAAABLMMCEAAAABnRSTlMAAAAAAABupgeRAAAAHElEQVR4nGNggIH///8zIANkProcToUkKsdnJwAxyxfpXRshNwAAAABJRU5ErkJggg==');
@@ -94,7 +93,6 @@
   --icon-trail-oil: url('/data/trail/trail_oil.png');
   --icon-trail-water: url('/data/trail/trail_water.png');
   --icon-trail-acid: url('/data/trail/trail_acid.png');
-  --icon-trail-poison: url('/data/trail/trail_poison.png');
   --icon-trail-fire: url('/data/trail/trail_fire.png');
 
   --icon-download-png: url('data:image/svg+xml,%3Csvg\
@@ -149,4 +147,15 @@
   --icon-config-die2: url('/data/config/die2.png');
   --icon-config-req: url('/data/config/req.png');
   --icon-config-goldnugget2: url('/data/config/goldnugget2.png');
+
+  --icon-speed-damage-bonus: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqBAMAAAA37dRoAAAAElBMVEUAAAAAAAAAAAD///8AAAABAQFyxzLfAAAAA3RSTlMA/votIRPvAAAAuklEQVR4Xq2QUQ7CIBBE0dR/PjiCN1gOoOV5A73/VWQT6EhJ2h8nhEleJsOywXWFKO+6wyrvwgz5OSXKRaH5KlqF/JwSuw907S7qvPtfKdB8oprsBh9cid9WaWxtR9uZaJyptx7QZXsJoNM00IcKquBlgqIUgB0tGbB9g8eLZdG2mIzt6buY1UMUbUG/w0CNUqkmS85aK6Hr4lRZhVt0DmsGhdG8CgPD35QvmYWtQbt/BCCMSk+viuFAXz4yeXjWyKPyAAAAAElFTkSuQmCC');
+  --icon-crit-damage-bonus: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqBAMAAAA37dRoAAAAFVBMVEUAAAAAAAAAAAAAAAD///8BAQEAAAChs91JAAAABHRSTlMA/vqbhUd7uwAAAMRJREFUeF6V0MGpwzAQhGEpB591Ugkp4NUwuIScbaP8/ZfwBEvYxeskZBA6fAzLSuWVG7SScocjKxK/KNCykmZ3kNKUmtRi+gctq+8dFYlveuNK71n9FdJHrdDhARxBOx5XJDtmcFxqu9JJ77RikcD/vbvuAM0/RfCcahSVAXDSsQKysqsEQ+t2/pYVnfUxpHniBKw4b0pUiSGJ7aUdWS1WS0WKXS9bNZd9By/Hfb0M/raYPlYWbIJnga0ABl7e56hYzfkHkIeatvvLlQEAAAAASUVORK5CYII=');
+  --icon-radius-damage-bonus: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqBAMAAAA37dRoAAAAFVBMVEUAAAAAAAAAAAAAAAD///8BAQEAAAChs91JAAAABHRSTlMA/vrRE07TNQAAAMNJREFUeF6tkUEKg0AQBNccPBsCPsF7/jDsD5KzyqT//4QwNjLbSyAE0ihIURSrFu6CY1ORLaS7UtgxfKGskkp5SbpLFcekoTSrdNCUF6FR1ueZjaS3oHehefp/0g14AFdgEvfc1hd4/UJHfKJIOoAz4006d3RtfiTwCs9pJoUjptRrVHoaultdk/IIFdbTp5u5GVpKMfQi1OBGlZth1Fq1DKTiUs6uyucZppTlvCkD8m7pe8UIFnIjsBZ+MpG3SIna7w0FtaCIpsPI9gAAAABJRU5ErkJggg==');
+  --icon-damage-nulled: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkBAMAAAATLoWrAAAAD1BMVEUAAACQPDdQIB7IQUHdWVlwVJruAAAAAXRSTlMAQObYZgAAAFhJREFUeF6t0bENwDAIRFFWuBX+CrcC+88UKylcRGAXfFGg117MlmwgK2IbSUG/p6DACq0z0VDISFjREhisnrSyGSKMfCRrZVrCeksaIvmIpKLzQpdrj/YA7socKfPPPc4AAAAASUVORK5CYII=');
+  --icon-draw: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkBAMAAAATLoWrAAAAGFBMVEUAAAAAAAAAAAAAAAAAAAAAAAD///8AAACmknabAAAABnRSTlMA/sv59YOfgQ+XAAAAXElEQVR4Xs3SMQ6AIBBEUZdoOAKtR9hbeBNrqOb6BtismLGUxF++CrKzvLQd8MreaMWQNoojZaPTm0z9bURQpmx09xUBf6Ja/7KRMIVEVItOcw7HUxEeVEiP2XEXoMTZAiqDVVMAAAAASUVORK5CYII=');
+  --icon-gravity: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAAh0lEQVR42u2WwQqAMAxD0/3/N7deFLHSgYo2QgI97bBHoGlQyAFEGkeDEgwB1PZ50g71soPjpoOGswyANzg0f3/uEJlG4RDM7DCrogNoFB8Ho6N1LNTjDFD8+UW3ZQKaSUf5am0R3O86ldZeOaRM+qieOGOB864MKjNJay8gAemWdQcj/elYAMWsERINKTpeAAAAAElFTkSuQmCC');
+  --icon-infinite-lifetime: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAABB0lEQVR42u2YMQrCQBBFFy28iJUHsPQM6QKCZ5C0AZuAvbeIF7BKCvEyFvEOkUx4zZdlJYWwaz68YmImyGNmDbo5c36Z/rbqBx6VM8p8aWjcZ84DgfssCxdzqtz1A4fdCKHebUYIZrTW6/EbCs2EXveaIcka8m0X26ezpSbSNYSBuq6N8rg32CoJBr1bpQbFUMRmoOs6A0NFURhZlhmcV/RjQon2pGabvGYAE1oDfTzPSeI0xOwYz8ZQM2pEoQ94XmyGwl/oen8Zbdsamu16hJwujUEfkL+bIT733RecoUTPoTDSFz6Hkv0t89Xw9ewk9z7E9mg92Ux679QYUHSbJhma/yCYk1reJaO88UEnRv8AAAAASUVORK5CYII=');
+  --icon-never-unlimited: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAPFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8URmtbrOYgICCq4/f/AABAQEADAwMVHB83iscFBwgGFx7FBbzUAAAAB3RSTlMA/N+/+/73afeywwAAAL1JREFUeF6Fkm2PwyAMg89cOwfo23b//7+eQ6hEK23LJ+PHiQji52MlkEijiiKrmYFSkNjInue6CyiZSBcrowdSdAsQJgXQgJQyMhv81WlngOpkAoXwcF07sEboYG6+ncAYOW4tYR1AopHIO8C5nsW0mGNkX5GwTs5VxyeZ+7jxSbz8+i8ncu8+jyPI3a/L8ncnMX1ZSClcGjjBASaOLR5DKc9nKbi0eOoEiQNI6k5gzkRqh2shZ7z5Esp/r3/8RAohaldu+gAAAABJRU5ErkJggg==');
+  --icon-perk-unlimited: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAaElEQVR42mMYnuA/GqBEHdOAuBy/OGF1A+8DCuTp7wMmUnzGCAUwPlEWjOYDqoJVj7//B2FC6gZjKvr3H4RhfIPdb/6DMLq60TigHYhe8+w/CJt3HQdjKH8IxoGIW/Z/ICYxDkYBAQAAd763jbDy9NgAAAAASUVORK5CYII=');
+  --icon-trail-poison: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAZklEQVR42mMYBaNgFIwCSsCtjA3/QXixUycKhomjq4MBZDOYhoQPcfFhPsYVImg+h4mjhcBQAgRDggzANKh9huFDKoGhmwtGRghg+pxwuUBRCIxWKKO5YAiEA+EScTQXjIJRMKQBAD9TiS1LM9gsAAAAAElFTkSuQmCC');
 }

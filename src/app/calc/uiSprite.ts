@@ -38,7 +38,7 @@ const uiSpriteDefinition = [
 
   ['icon.arrowhead.r', 'var(--icon-arrowhead-right)'],
 
-  ['icon.unlimitedspells', 'var(--icon-unlimited-spells)'],
+  ['icon.unlimitedspells', 'var(--icon-perk-unlimited)'],
   ['icon.neverunlimited', 'var(--icon-never-unlimited)'],
 
   ['icon.trigger', 'var(--icon-trigger)'],
@@ -61,7 +61,7 @@ const uiSpriteDefinition = [
   ['icon.speed.base', 'var(--icon-speed-base)'],
   ['icon.speed.initial', 'var(--icon-speed-initial)'],
   ['icon.speed.multi', 'var(--icon-speed-multi)'],
-  ['icon.speed.bonus', 'var(--icon-speed-bonus)'],
+  ['icon.speed.bonus', 'var(--icon-speed-damage-bonus)'],
 
   ['icon.stain.wet', 'var(--icon-stain-wet)'],
   ['icon.stain.oiled', 'var(--icon-stain-oiled)'],
@@ -69,9 +69,11 @@ const uiSpriteDefinition = [
   ['icon.stain.burning', 'var(--icon-stain-burning)'],
 
   ['icon.critchance', 'var(--icon-critchance)'],
+  ['icon.critbonus', 'var(--icon-crit-damage-bonus)'],
   ['icon.danger', 'var(--icon-danger)'],
-  ['icon.zerodamage', 'var(--icon-zerodamage)'],
+  ['icon.zerodamage', 'var(--icon-damage-nulled)'],
   ['icon.explosionradius', 'var(--icon-explosionradius)'],
+  ['icon.radiusbonus', 'var(--icon-radius-damage-bonus)'],
   ['icon.recoil', 'var(--icon-recoil)'],
   ['icon.knockback', 'var(--icon-knockback)'],
 
