@@ -368,6 +368,7 @@ export const castTableSections: FieldSection[] = [
         ),
       },
       {
+        icon: `icon.speed.base`,
         hidden: true, // TODO
         key: 'gravity',
         displayName: 'Gravity',
@@ -435,7 +436,7 @@ export const castTableSections: FieldSection[] = [
       },
       {
         // TODO - needs extended spell info
-        icon: `icon.speed.bonus`,
+        icon: `icon.speed.damage.bonus`,
         key: 'speed_damage_multiplier',
         displayName: 'Speed Bonus',
         toolTip: 'Speed Scaled Damage Multiplier',
@@ -519,6 +520,7 @@ export const castTableSections: FieldSection[] = [
         render: ({ damage_critical_chance: v }) => `${Number(v)}%`,
       },
       {
+        icon: `icon.crit.damage.bonus`,
         key: 'damage_critical_multiplier',
         displayName: 'Crit Mult.',
         toolTip: 'Critical Hit Damage Multiplier',
@@ -526,7 +528,7 @@ export const castTableSections: FieldSection[] = [
           return `${v}`;
         },
       },
-    ],
+    ],  
   },
   {
     title: 'Damage',
@@ -654,6 +656,7 @@ export const castTableSections: FieldSection[] = [
         ),
       },
       {
+        icon: 'icon.radius.damage.bonus',
         key: 'explosion_radius_bonus',
         displayName: 'Explosion Threshold',
         render: ({ explosion_radius: v }) => (
@@ -713,6 +716,26 @@ export const castTableSections: FieldSection[] = [
       // },
 
       /* TODO + memoise */
+      {
+        icon: `icon.trail.fire`,
+        key: 'trail_material_fire',
+        displayName: 'Fire Trail',
+        render: ({ trail_material: v, isTotal }) =>
+          isString(v) ? (
+            <>
+              {tally(v.split(',').filter((v) => v.length > 0)).map(
+                ([name, count]) =>
+                  isTrailMaterial(name) && name === 'fire' ? (
+                    <MaterialTrail $material={name} key={name}>
+                      {isTotal && `${SIGN_MULTIPLY}${FNSP}${count}`}
+                    </MaterialTrail>
+                  ) : null,
+              )}
+            </>
+          ) : (
+            <>{`${v}`}</>
+          ),
+      },
       {
         icon: `icon.trail.oil`,
         key: 'trail_material_oil',
@@ -783,26 +806,6 @@ export const castTableSections: FieldSection[] = [
               {tally(v.split(',').filter((v) => v.length > 0)).map(
                 ([name, count]) =>
                   isTrailMaterial(name) && name === 'poison' ? (
-                    <MaterialTrail $material={name} key={name}>
-                      {isTotal && `${SIGN_MULTIPLY}${FNSP}${count}`}
-                    </MaterialTrail>
-                  ) : null,
-              )}
-            </>
-          ) : (
-            <>{`${v}`}</>
-          ),
-      },
-      {
-        icon: `icon.trail.fire`,
-        key: 'trail_material_fire',
-        displayName: 'Fire Trail',
-        render: ({ trail_material: v, isTotal }) =>
-          isString(v) ? (
-            <>
-              {tally(v.split(',').filter((v) => v.length > 0)).map(
-                ([name, count]) =>
-                  isTrailMaterial(name) && name === 'fire' ? (
                     <MaterialTrail $material={name} key={name}>
                       {isTotal && `${SIGN_MULTIPLY}${FNSP}${count}`}
                     </MaterialTrail>

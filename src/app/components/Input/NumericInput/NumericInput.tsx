@@ -34,7 +34,7 @@ const ButtonsAfter = styled(Buttons)`
   inset: auto auto auto 100%;
 `;
 
-const NumericInputWrapper = styled.fieldset<{ $valid: boolean }>`
+const NumericInputWrapper = styled.fieldset<{ valid: boolean }>`
   --bdr: 0px;
   --chint: var(--hint-color, #fff);
 
@@ -287,7 +287,7 @@ export const NumericInput = ({
    * @see largeButton
    */
   large?: number;
-  /**
+  /** 
    * Small, but reasonable, default
    * @see smallButton
    */
@@ -413,7 +413,7 @@ export const NumericInput = ({
   return (
     <NumericInputWrapper
       data-name={$dataName}
-      $valid={valid}
+      valid={valid}
       className={className}
       {...($tip ? tipToAttributes($tip) : {})}
     >

@@ -57,6 +57,10 @@ const uiSpriteDefinition = [
   ['icon.spread', 'var(--icon-spread)'],
   ['icon.tshape', 'var(--icon-tshape)'],
   ['icon.bounces', 'var(--icon-bounces)'],
+  ['icon.gravity', 'var(--icon-gravity)'],
+  ['icon.speed.damage.bonus', 'var(--icon-speed-damage-bonus)'],
+  ['icon.crit.damage.bonus', 'var(--icon-crit-damage-bonus)'],
+  ['icon.radius.damage.bonus', 'var(--icon-radius-damage-bonus)'],
 
   ['icon.speed.base', 'var(--icon-speed-base)'],
   ['icon.speed.initial', 'var(--icon-speed-initial)'],

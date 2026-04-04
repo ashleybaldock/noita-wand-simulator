@@ -6,7 +6,9 @@ import { useSprite } from '../../calc/sprite';
 import { WandStatName } from './WandStatName';
 import { NumericInput } from '../Input';
 
-const StatDivider = styled.div.attrs(() => ({children: '|'}))``;
+const StatSep = styled.div.attrs(() => ({children: '/'}))`
+`;
+
 
 const _HealthEditor = ({
   children,
@@ -26,7 +28,6 @@ const _HealthEditor = ({
   const usesHealth = useIsHealthUsed();
 
   return usesHealth ? (
-    <>
     <EditableWrapper
       dataName={dataName}
       sprite={useSprite('icon.config.heart2')}
@@ -36,28 +37,25 @@ const _HealthEditor = ({
       label={true}
       style={style}
     >
-      <WandStatName>{name}</WandStatName>
+      <WandStatName>{name}<StatSep/>max</WandStatName>
       {children}
-      <NumericInput
+      <ABNumericInput
         smallest={0}
         largest={Number.POSITIVE_INFINITY}
-        value={value}
-        setValue={setValue}
-        onChange={changeHandler}
-      ></NumericInput>
-      <StatDivider/>
-      <NumericInput
-        smallest={0}
-        largest={Number.POSITIVE_INFINITY}
-        value={maxHpValue}
-        setValue={setMaxHpValue}
-        onChange={changeMaxHpHandler}
-      ></NumericInput>
+        valueMin={hpValue}
+        valueMax={maxHpValue}
+        separator={<StatSep/>}
+        setValueMin={setHpValue}
+        setValueMax={setMaxHpValue}
+        onChangeMin={changeHpHandler}
+        onChangeMax={changeMaxHpHandler}
+      >
+      </ABNumericInput>
     </EditableWrapper>
-    </>
   ) : null;
 };
 
 export const HealthEditor = styled(_HealthEditor)`
   display: flex;
+
 `;
