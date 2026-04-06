@@ -1,30 +1,25 @@
 import styled from 'styled-components';
-import type { CSSProperties, PropsWithChildren } from 'react';
-import { EditableWrapper }  from '../Presentation';
-import { useSprite } from '../../calc/sprite';
-import { WandStatName } from './WandStatName';
-import { NumericInput } from '../Input';
+import { ABNumericInput } from './';
 
-const MinMaxNumericInput = styled(ABNumericInput).attrs<{
-valueMin,
+export const MinMaxNumericInput = styled(ABNumericInput).attrs<{
+  valueMin: typeof ABNumericInput['valueA'],
 valueMax,
 setValueMin,
 setValueMax,
 changeHandlerValueMin,
 changeHandlerValueMax}>(({
-  valueMin,
-valueMax,
-stValueMin,
-setValueMax,
-changeHandlerValueMin,
-changeHandlerValueMax
-}) => (,
-value: AvalueMin,
- value BvalueMax,
- setValueA: setValueMin ,
-setValueB: setValueMax ,
-changeHandlerValueA: changeHandlerValueMin,
-changeHandlerValueB: changeHandlerValueMax
-
-))
-)``;
+  valueA,
+valueB,
+setValueA,
+setValueB,
+changeHandlerValueA,
+changeHandlerValueB
+}) => ({
+valueMin: valueA,
+valueMax: valueB,
+ setValueMin: setValueA,
+ setValueMax: setValueB,
+ changeHandlerValueMin: changeHandlerValueA,
+ changeHandlerValueMax: changeHandlerValueB
+}
+))``;

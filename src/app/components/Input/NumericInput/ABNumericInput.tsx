@@ -1,17 +1,19 @@
+import type { ChangeEvent, ChangeEventHandler, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import type { CSSProperties, PropsWithChildren } from 'react';
 import { EditableWrapper } from '../../Presentation';
 import { useSprite } from '../../../calc/sprite';
-import { WandStatName } from './WandStatName';
-import { NumericInput } from './NumericInput';
+import type { UsualAttrs } from '../../Types/UsualAttrs';
+import { NumericInput, StatSep } from '.';
 
 const Inputs = styled.div.attrs<UsualAttrs>(({dataName}) => ({'data-name': dataName}))`
   display: contents;
   `;
 
 export const ABNumericInput = ({
-  className,dataName,
-  separator={'/'}
+  className,
+  dataName,
+  separator = <StatSep/>,
   smallest,
   largest,
   valueA,
@@ -19,13 +21,17 @@ export const ABNumericInput = ({
   setValueA,
   setValueB,
   changeHandlerValueA,
-  changeHandlerValueB,
-   ): UsualAttrs & {
- separator?: string | JSX;
+  changeHandlerValueB
+} : UsualAttrs & {
+ separator?: string | React.JSX.Element;
  smallest?: number,
  largest?: number;
- valueA?: number;
- valueB?: number;
+ valueA: number;
+ valueB: number;
+setValueA: (to: number) => void;
+setValueB: (to: number) => void;
+changeHandlerValueA?: ChangeEventHandler<HTMLInputElement>;
+changeHandlerValueB?: ChangeEventHandler<HTMLInputElement>
 
 }) => {
   return (
@@ -37,7 +43,7 @@ export const ABNumericInput = ({
         setValue={setValueA}
         onChange={changeHandlerValueA}
       ></NumericInput>
-      <StatDivider/>
+      {separator}
       <NumericInput
         smallest={0}
         largest={Number.POSITIVE_INFINITY}

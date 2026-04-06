@@ -267,6 +267,7 @@ export const NumericInput = ({
   formatForDisplay = (v) =>
     v.toFixed(minStep.toString().split('.')?.[1]?.length ?? 0),
   onChange = noop,
+  onInput = noop,
   className = '',
   $tip,
   children,
@@ -340,6 +341,7 @@ export const NumericInput = ({
   setValue: (to: number) => void;
   clamp?: (n: number, min: number, max: number) => number;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  onInput?: InputEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
   className?: string;
   $tip?: Tip;
@@ -359,9 +361,10 @@ export const NumericInput = ({
 
   const saveChanges = () => {
     if (valid) {
-      setEditing(false);
-      blurInput();
+      setValue(value);
     }
+    setEditing(false);
+    blurInput();
   };
 
   const abortChanges = () => {
@@ -371,13 +374,15 @@ export const NumericInput = ({
 
   const refocus = () => focusInput();
 
-  const onInput = useCallback(() => {
+  const handleInputEvent = useCallback(
+    (e: InputEvent<HTMLInputElement>) => {
     const parsed = clamp(parseInput(inputValue ?? 'NaN'), smallest, largest);
     setValid(!Number.isNaN(parsed));
     setLastInput(parsed.toString());
+    onInput(e);
   }, [inputValue, parseInput, clamp, smallest, largest]);
 
-  const onInputChange = useCallback(
+  const handleChangeEvent = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const parsed = clamp(parseInput(inputValue ?? 'NaN'), smallest, largest);
       setValid(!Number.isNaN(parsed));
@@ -492,8 +497,8 @@ export const NumericInput = ({
         hidden={true}
         onFocus={() => onFocus()}
         onBlur={() => onBlur()}
-        onInput={() => onInput()}
-        onChange={(e) => onInputChange(e)}
+        onInput={(e) => handleInputEvent(e)}
+        onChange={(e) => handleChangeEvent(e)}
         enterKeyHint="done"
       />
       {/* onKeyDown={(e) => */}
