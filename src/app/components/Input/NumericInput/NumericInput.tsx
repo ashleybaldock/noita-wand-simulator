@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import type { ChangeEvent, ChangeEventHandler, MouseEventHandler } from 'react';
+import type {FormEvent, ChangeEvent, ChangeEventHandler, InputEventHandler, MouseEventHandler } from 'react';
 import { useCallback, useState } from 'react';
 import { Button } from '../../generic';
 import { tipToAttributes, type Tip } from '../../Tooltips/tooltipId';
@@ -99,7 +99,7 @@ const NumberInput = styled.input`
   width: 100%;
   max-width: unset;
   margin: 0;
-  padding: 0 1ch 0 0.5ch;
+  padding: 0 0.5ch 0 0;
 
   &:focus-visible {
     outline: max(0.2ch, 2px) inset var(--color-bdshade-light);
@@ -121,21 +121,16 @@ const NumberInput = styled.input`
 const NumericInputButton = styled(Button)<{ vertical: boolean }>`
   --padding-sides: 1em;
   --hover-radius: 4px;
-  aspect-ratio: 1;
   color: white;
   font: inherit;
-  font-size: 1em;
   line-height: 1;
+  font-size: 0.8em;
+  text-align: center;
+  line-height: 0;
   background-color: black;
   z-index: 8;
 
   align-self: center;
-  aspect-ratio: calc(var(--𝚽) * 2 / 3);
-  text-align: center;
-  padding: 0;
-  width: auto;
-  font-size: 0.8em;
-  line-height: normal;
   border-radius: 0;
 
   transition-property: box-shadow, border-radius;
@@ -145,14 +140,12 @@ const NumericInputButton = styled(Button)<{ vertical: boolean }>`
   opacity: 1;
 
   margin: 0;
+  padding: 0.2ch;
   box-sizing: content-box;
-  text-align: center;
-  line-height: 0;
   max-height: unset;
   min-height: unset;
   --height: 4em;
   height: var(--height);
-  padding: 0.2ch;
   border: 1px solid var(--color-button-border);
   --width: calc(var(--height) * var(--aspect-ratio));
   min-width: var(--width);
@@ -267,7 +260,6 @@ export const NumericInput = ({
   formatForDisplay = (v) =>
     v.toFixed(minStep.toString().split('.')?.[1]?.length ?? 0),
   onChange = noop,
-  onInput = noop,
   className = '',
   $tip,
   children,
@@ -341,7 +333,6 @@ export const NumericInput = ({
   setValue: (to: number) => void;
   clamp?: (n: number, min: number, max: number) => number;
   onChange?: ChangeEventHandler<HTMLInputElement>;
-  onInput?: InputEventHandler<HTMLInputElement>;
   onClick?: MouseEventHandler<HTMLInputElement>;
   className?: string;
   $tip?: Tip;
@@ -375,11 +366,10 @@ export const NumericInput = ({
   const refocus = () => focusInput();
 
   const handleInputEvent = useCallback(
-    (e: InputEvent<HTMLInputElement>) => {
+    (e: FormEvent<HTMLInputElement>) => {
     const parsed = clamp(parseInput(inputValue ?? 'NaN'), smallest, largest);
     setValid(!Number.isNaN(parsed));
     setLastInput(parsed.toString());
-    onInput(e);
   }, [inputValue, parseInput, clamp, smallest, largest]);
 
   const handleChangeEvent = useCallback(

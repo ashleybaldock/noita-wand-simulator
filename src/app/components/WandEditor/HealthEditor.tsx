@@ -4,10 +4,9 @@ import { useConfigSetting, useIsHealthUsed } from '../../redux';
 import { EditableWrapper } from '../Presentation';
 import { useSprite } from '../../calc/sprite';
 import { WandStatName } from './WandStatName';
-import { NumericInput } from '../Input';
+import { ABNumericInput } from '../Input';
 
-const StatSep = styled.div.attrs(() => ({children: '/'}))`
-`;
+const StatSep = styled.div.attrs(() => ({children: '/'}))``;
 
 
 const _HealthEditor = ({
@@ -22,8 +21,8 @@ const _HealthEditor = ({
   className?: string;
   dataName?: string;
 } & PropsWithChildren) => {
-  const [value, setValue, changeHandler, { name, tip }] = useConfigSetting('var_hp');
-  const [maxHpValue, setMaxHpValue, changeMaxHpHandler, { name: maxHpName, tip: maxHpTip }] = useConfigSetting('var_hp_max');
+  const [hpValue, setHpValue, changeHpValueHandler, { name, tip }] = useConfigSetting('var_hp');
+  const [maxHpValue, setMaxHpValue, changeMaxHpValueHandler, { name: maxHpName, tip: maxHpTip }] = useConfigSetting('var_hp_max');
 
   const usesHealth = useIsHealthUsed();
 
@@ -37,18 +36,18 @@ const _HealthEditor = ({
       label={true}
       style={style}
     >
-      <WandStatName>{name}<StatSep/>max</WandStatName>
+      <WandStatName>{name}<StatSep/>{maxHpName}</WandStatName>
       {children}
       <ABNumericInput
         smallest={0}
         largest={Number.POSITIVE_INFINITY}
-        valueMin={hpValue}
-        valueMax={maxHpValue}
+        valueA={hpValue}
+        valueB={maxHpValue}
         separator={<StatSep/>}
-        setValueMin={setHpValue}
-        setValueMax={setMaxHpValue}
-        onChangeMin={changeHpHandler}
-        onChangeMax={changeMaxHpHandler}
+        setValueA={setHpValue}
+        setValueB={setMaxHpValue}
+        changeHandlerValueA={changeHpValueHandler}
+        changeHandlerValueB={changeMaxHpValueHandler}
       >
       </ABNumericInput>
     </EditableWrapper>

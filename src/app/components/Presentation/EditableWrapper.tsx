@@ -71,18 +71,18 @@ const _EditableWrapper = styled.div<{
 
   & > :last-child::before {
     content: '>';
-    padding-left: 0px;
-    color: yellow;
     position: static;
-    width: var(--w);
-    flex: 1 0 var(--w);
-    text-align: end;
     display: flex;
     justify-content: end;
     align-content: center;
     align-items: center;
+
+    color: yellow;
+    text-align: end;
     text-decoration: none;
 
+    flex: 1 0 var(--w);
+    padding-left: 0px;
     width: 100%;
     grid-column: 1;
     grid-row: 1/-1;

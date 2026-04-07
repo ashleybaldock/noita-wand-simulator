@@ -31,7 +31,7 @@ export const ABNumericInput = ({
 setValueA: (to: number) => void;
 setValueB: (to: number) => void;
 changeHandlerValueA?: ChangeEventHandler<HTMLInputElement>;
-changeHandlerValueB?: ChangeEventHandler<HTMLInputElement>
+changeHandlerValueB?: ChangeEventHandler<HTMLInputElement>;
 
 }) => {
   return (
