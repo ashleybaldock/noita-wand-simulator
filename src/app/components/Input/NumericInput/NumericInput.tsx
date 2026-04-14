@@ -131,11 +131,6 @@ const NumericInputButton = styled(Button)<{ vertical: boolean }>`
   z-index: 8;
 
   align-self: center;
-  border-radius: 0;
-
-  transition-property: box-shadow, border-radius;
-  transition-duration: 60ms;
-  transition-timing-function: ease;
 
   opacity: 1;
 
@@ -146,7 +141,6 @@ const NumericInputButton = styled(Button)<{ vertical: boolean }>`
   min-height: unset;
   --height: 4em;
   height: var(--height);
-  border: 1px solid var(--color-button-border);
   --width: calc(var(--height) * var(--aspect-ratio));
   min-width: var(--width);
   max-width: var(--width);
@@ -158,8 +152,14 @@ const NumericInputButton = styled(Button)<{ vertical: boolean }>`
   background-position: center;
   background-size: contain;
   box-shadow: 0 0 0 0.2ch var(--color-button-border);
+  border: 1px solid var(--color-button-border);
+  border-radius: 0;
 
   ${({ disabled }) => (disabled ? 'pointer-events: none;' : ``)}
+
+  transition-property: box-shadow, border-radius;
+  transition-duration: 60ms;
+  transition-timing-function: ease;
 
   &:hover {
     border-color: #444;
