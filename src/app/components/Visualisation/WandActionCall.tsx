@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { NextActionArrow } from '../Visualisation/Arrows';
+import {NextActionArrow} from '../Visualisation/Arrows';
 import {
   ActionSourceAnnotation,
   DeckIndexAnnotation,
@@ -9,11 +9,12 @@ import {
   IterationAnnotation,
   RecursionAnnotation,
 } from '../Annotations/';
-import { WrapAnnotation } from '../Annotations/WrapAnnotation';
-import { WandAction } from '../Spells/WandAction';
-import type { ActionCall } from '../../calc/eval/ActionCall';
-import { getSpellByActionId } from '../../calc/spells';
-import { SpellSlot } from '../Spells/SpellSlot/SpellSlot';
+import {WrapAnnotation} from '../Annotations/WrapAnnotation';
+import {WandAction} from '../Spells/WandAction';
+import type {ActionCall} from '../../calc/eval/ActionCall';
+import {getSpellByActionId} from '../../calc/spells';
+import {SpellSlot} from '../Spells/SpellSlot/SpellSlot';
+import {iterationLimitFor} from '../../calc/actionId';
 
 /*
   background-image: url(/data/inventory/action_tree_box.png);
@@ -28,7 +29,7 @@ const WandActionCallSpellSlot = styled(SpellSlot)`
   position: relative;
 `;
 
-export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
+export const WandActionCall = ({actionCall}: {actionCall: ActionCall}) => {
   const spell = getSpellByActionId(actionCall.spell.id);
   return (
     <WandActionCallSpellSlot
@@ -38,7 +39,7 @@ export const WandActionCall = ({ actionCall }: { actionCall: ActionCall }) => {
     >
       <NextActionArrow />
       <WandAction spellType={spell.type} spellId={actionCall.spell.id} />
-      <IterationAnnotation spell={spell} iteration={actionCall.iteration} />
+      <IterationAnnotation iterative={spell.iterative} limit={iterationLimitFor(spell.id)} iteration={actionCall.iteration} />
       <RecursionAnnotation
         recursive={spell.recursive}
         recursion={actionCall.recursion}

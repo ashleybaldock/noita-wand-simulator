@@ -1,10 +1,10 @@
 // It would be ideal to be able to switch between the beta and release versions of actions at runtime, but that seems like excessive complexity given the current changes mostly add entirely new spells
 
 import * as main from './__generated__/main/actionIds';
-import { isNotNullOrUndefined, isString } from '../util';
-import type { CustomActionId } from './customActionIds';
-import { customActionIds } from './customActionIds';
-import type { SpellId } from '../redux/Wand/spellId';
+import {DefaultedMap, isNotNullOrUndefined, isString, objectEntries} from '../util';
+import type {CustomActionId} from './customActionIds';
+import {customActionIds} from './customActionIds';
+import type {SpellId} from '../redux/Wand/spellId';
 // import * as beta from './__generated__/beta/actionIds';
 
 export type ActionId = main.ActionId | CustomActionId;
@@ -102,27 +102,25 @@ export function isWithExpirationActionId(
   );
 }
 
-const iterativeActionIds = [
-  'DIVIDE_2',
-  'DIVIDE_3',
-  'DIVIDE_4',
-  'DIVIDE_10',
-  'DIVIDE_12',
-] as const;
+type IterationLimit = 2 | 3 | 4 | typeof Infinity;
+
+const iterativeActionIdLimits = {
+  DIVIDE_2: 4,
+  DIVIDE_3: 3,
+  DIVIDE_4: 3,
+  DIVIDE_10: 2,
+} as const;
 
 export type IterativeActionId = Extract<
-  (typeof iterativeActionIds)[number],
+  keyof typeof iterativeActionIdLimits,
   ActionId
 >;
-const iterativeActionIdSet: Set<IterativeActionId> = new Set(
-  iterativeActionIds.flatMap((id) => (isValidActionId(id) ? id : [])),
-);
 
-export function isIterativeActionId(
-  actionId: ActionId,
-): actionId is IterativeActionId {
-  return (iterativeActionIdSet as Set<ActionId>).has(actionId);
-}
+const iterativeActionIdMap: Map<ActionId, IterationLimit> = new DefaultedMap(Infinity,
+  objectEntries(iterativeActionIdLimits).filter(isValidActionId),
+);
+export const iterationLimitFor = (actionId: ActionId) => iterativeActionIdMap.get(actionId);
+
 
 export const greekActionIds = [
   'ALPHA',

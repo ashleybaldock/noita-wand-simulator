@@ -1,7 +1,7 @@
-import { isIterativeActionId } from '../../calc/actionId';
-import type { SpellDeckInfo } from '../../calc/spell';
 import styled from 'styled-components';
-import { _KeyContainer } from '../Key/Key';
+import {_KeyContainer} from '../Key/Key';
+import {useConfig} from '../../redux';
+import {BaseAnnotation} from './BaseAnnotation';
 
 // export const IterationAnnotationOld = ({
 //   iteration,
@@ -18,7 +18,11 @@ import { _KeyContainer } from '../Key/Key';
 //   return <div className={className}>{children}</div>;
 // };
 
-export const IterationDiv = styled.div`
+const Iteration = styled.div``;
+
+const Limit = styled.div``;
+
+const StyledBaseAnnotation = styled(BaseAnnotation)`
   position: absolute;
   bottom: -7px;
 
@@ -41,17 +45,19 @@ export const IterationDiv = styled.div`
 `;
 
 export const IterationAnnotation = ({
-  spell,
+  iterative = false,
+  limit,
   iteration,
 }: {
-  spell: SpellDeckInfo;
+  iterative?: boolean;
+  limit?: number;
   iteration?: number;
 }) => {
-  const iterative = spell && isIterativeActionId(spell?.id);
+  const {showIteration: configShowIteration} = useConfig();
 
-  const showIteration = iteration !== undefined && iterative;
-
-  return showIteration ? (
-    <IterationDiv data-name="Iteration">{iteration}</IterationDiv>
-  ) : null;
+  return (
+    <StyledBaseAnnotation
+      hidden={!iterative || !configShowIteration}
+      data-name="IterationAnnotation"><Iteration>{iteration}</Iteration><Limit>{limit}</Limit></StyledBaseAnnotation >
+  );
 };

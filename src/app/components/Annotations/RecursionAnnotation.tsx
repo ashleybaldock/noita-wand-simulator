@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { useConfig } from '../../redux';
-import { _KeyContainer } from '../Key/Key';
-import { BaseAnnotation } from './BaseAnnotation';
+import {useConfig} from '../../redux';
+import {_KeyContainer} from '../Key/Key';
+import {BaseAnnotation} from './BaseAnnotation';
 
 const StyledBaseAnnotation = styled(BaseAnnotation)`
   pointer-events: none;
@@ -28,11 +28,7 @@ export const RecursionAnnotation = ({
   recursive?: boolean;
   recursion?: number;
 }) => {
-  const { showRecursion: configShowRecursion } = useConfig();
-
-  if (!configShowRecursion) {
-    return null;
-  }
+  const {showRecursion: configShowRecursion} = useConfig();
 
   return (
     <StyledBaseAnnotation

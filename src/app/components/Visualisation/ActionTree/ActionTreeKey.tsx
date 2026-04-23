@@ -1,4 +1,4 @@
-import { getSpellByActionId } from '../../../calc/spells';
+import {getSpellByActionId} from '../../../calc/spells';
 import {
   ActionSourceAnnotation,
   DiscardedAnnotation,
@@ -11,9 +11,9 @@ import {
   RecallValueAnnotation,
   RecursionAnnotation,
 } from '../../Annotations';
-import { Demo } from '../../Demo';
-import { KeyContainer, KeyGroup, KeyItem, KeyNote } from '../../Key/Key';
-import { TreeArrow } from './TreeArrow';
+import {Demo} from '../../Demo';
+import {KeyContainer, KeyGroup, KeyItem, KeyNote} from '../../Key/Key';
+import {TreeArrow} from './TreeArrow';
 
 export const ActionTreeKey = () => {
   return (
@@ -203,7 +203,8 @@ export const ActionTreeKey = () => {
           >
             <IterationAnnotation
               iteration={3}
-              spell={getSpellByActionId('DIVIDE_3')}
+              limit={3}
+              iterative={true}
             />
           </KeyItem>
           <KeyItem
@@ -213,7 +214,8 @@ export const ActionTreeKey = () => {
           >
             <IterationAnnotation
               iteration={4}
-              spell={getSpellByActionId('DIVIDE_3')}
+              limit={3}
+              iterative={true}
             />
           </KeyItem>
           <KeyItem
@@ -223,7 +225,8 @@ export const ActionTreeKey = () => {
           >
             <IterationAnnotation
               iteration={5}
-              spell={getSpellByActionId('DIVIDE_3')}
+              limit={3}
+              iterative={true}
             />
           </KeyItem>
         </KeyGroup>
