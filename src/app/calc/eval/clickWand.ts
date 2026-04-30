@@ -114,7 +114,7 @@ export const clickWand = ({
       state.currentCastScope.actionCallTrees = state.rootNodes;
       state.currentCastScope.manaDrain = state.wand_available_mana - gunMana;
       console.debug(
-        `cast#${result.castCount}, .manaDrain: ${state.currentCastScope.manaDrain} (${state.wand_available_mana} - ${gunMana})`,
+        `cast ${result.castCount}, .manaDrain: ${state.currentCastScope.manaDrain} (${state.wand_available_mana} - ${gunMana})`,
       );
       result.casts.push(state.currentCastScope);
       state.wand_available_mana = gunMana;
