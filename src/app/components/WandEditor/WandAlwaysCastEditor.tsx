@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { useRef } from 'react';
-import { useAlwaysCastLayout } from '../../redux/hooks';
-import { getSpellByActionId } from '../../calc/spells';
-import { isKnownSpell } from '../../redux/Wand/spellId';
-import { SlottedSpell } from './SlottedSpell';
-import { AlwaysCastIndicies } from '../../redux/WandIndex';
-import { isNotNullOrUndefined } from '../../util';
+import {useRef} from 'react';
+import {useAlwaysCastLayout} from '../../redux/hooks';
+import {getSpellByActionId} from '../../calc/spells';
+import {isKnownSpell} from '../../redux/Wand/spellId';
+import {SlottedSpell} from './SlottedSpell';
+import {AlwaysCastIndicies} from '../../redux/WandIndex';
+import {isNotNullOrUndefined} from '../../util';
 
 const SpellSlots = styled.ul`
   --grid-layout-gap: 0px;
@@ -60,7 +60,7 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0.3em 0.6em 0.2em 2.2em;
+  padding: 0 0.6em 0 2.2em;
 
   background-image: var(--icon-alwayscast);
   background-position: 0.6em 50%;
@@ -70,7 +70,7 @@ const Container = styled.div`
 `;
 
 export const WandAlwaysCastEditor = styled(
-  ({ className = '' }: { className?: string }) => {
+  ({className = ''}: {className?: string}) => {
     const alwaysIds = useAlwaysCastLayout();
     const gridRef = useRef(null);
 

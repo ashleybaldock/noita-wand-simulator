@@ -1,12 +1,12 @@
-import type { PayloadAction, WritableDraft } from '@reduxjs/toolkit';
-import { createSlice, isAnyOf } from '@reduxjs/toolkit';
-import type { UnlockCondition } from '../calc/unlocks';
-import { unlockConditions, unlockInfo } from '../calc/unlocks';
-import { loadState, saveState } from '../localStorage';
-import type { KeyOfType } from '../util';
-import { objectEntries, objectFromKeys, objectKeys } from '../util';
-import { startAppListening } from './listenerMiddleware';
-import type { Tip } from '../components/Tooltips/tooltipId';
+import type {PayloadAction, WritableDraft} from '@reduxjs/toolkit';
+import {createSlice, isAnyOf} from '@reduxjs/toolkit';
+import type {UnlockCondition} from '../calc/unlocks';
+import {unlockConditions, unlockInfo} from '../calc/unlocks';
+import {loadState, saveState} from '../localStorage';
+import type {KeyOfType} from '../util';
+import {objectEntries, objectFromKeys, objectKeys} from '../util';
+import {startAppListening} from './listenerMiddleware';
+import type {Tip} from '../components/Tooltips/tooltipId';
 
 type ConfigBase = {
   condenseShots: boolean;
@@ -85,6 +85,7 @@ const unlocksTrue = objectFromKeys(unlockConditions, true);
 
 export type ConfigInfo = {
   readonly name: string;
+  readonly desc?: string;
   readonly tip?: Tip;
   readonly group?: string;
   readonly customYes?: string;
@@ -98,19 +99,19 @@ export const configInfoDefinition: Record<keyof Config, ConfigInfo> = {
   },
   unlimitedSpells: {
     name: 'Perk: Unlimited Spells',
-    tip: { kind: 'uihint', id: 'unlimited_spells' },
+    tip: {kind: 'uihint', id: 'unlimited_spells'},
   },
   infiniteSpells: {
     name: 'Ignore spell charge limits.',
-    tip: { kind: 'uihint', id: 'infiniteSpells' },
+    tip: {kind: 'uihint', id: 'infiniteSpells'},
   },
   zeroCharges: {
     name: 'Assume all charge-limited spells have zero charges.',
-    tip: { kind: 'uihint', id: 'zeroCharges' },
+    tip: {kind: 'uihint', id: 'zeroCharges'},
   },
   showChargeUsage: {
     name: 'Highlight spells that consume charges',
-    tip: { kind: 'uihint', id: 'showChargeUsage' },
+    tip: {kind: 'uihint', id: 'showChargeUsage'},
   },
   showDivides: {
     name: 'Show Divide By Spells',
@@ -126,34 +127,34 @@ export const configInfoDefinition: Record<keyof Config, ConfigInfo> = {
   },
   showRecursion: {
     name: 'Show Recursion',
-    tip: { kind: 'uihint', id: 'Reursion ' },
+    tip: {kind: 'uihint', id: 'Reursion '},
   },
   showIteration: {
     name: 'Show Iteration',
-    tip: { kind: 'uihint', id: 'ActionProxyAnnotation' },
+    tip: {kind: 'uihint', id: 'ActionProxyAnnotation'},
   },
   showProxies: {
     name: 'Show Projectile Proxies',
-    tip: { kind: 'uihint', id: 'ActionProxyAnnotation' },
+    tip: {kind: 'uihint', id: 'ActionProxyAnnotation'},
   },
   showSources: {
     name: 'Show Action Sources',
-    tip: { kind: 'uihint', id: 'ActionSourceAnnotation' },
+    tip: {kind: 'uihint', id: 'ActionSourceAnnotation'},
   },
   showDontDraw: {
     name: 'Show Draw Inhibition',
-    tip: { kind: 'uihint', id: 'DontDrawAnnotation' },
+    tip: {kind: 'uihint', id: 'DontDrawAnnotation'},
   },
   showActionTree: {
     name: 'Show Action Tree',
   },
   showWraps: {
     name: 'Show where wand wraps happen',
-    tip: { kind: 'uihint', id: 'WrapAnnotation' },
+    tip: {kind: 'uihint', id: 'WrapAnnotation'},
   },
   showDraw: {
     name: 'Show draw',
-    tip: { kind: 'uihint', id: 'DrawAnnotation' },
+    tip: {kind: 'uihint', id: 'DrawAnnotation'},
   },
   showSpellsInCategories: {
     name: 'Show Spells in Categories',
@@ -172,27 +173,31 @@ export const configInfoDefinition: Record<keyof Config, ConfigInfo> = {
   },
   showDurationsInFrames: {
     name: 'Show Durations in Frames',
-    tip: { kind: 'uihint', id: 'showDurationsInFrames' },
+    tip: {kind: 'uihint', id: 'showDurationsInFrames'},
   },
   infiniteMoney: {
-    name: 'Treat gold as infinite the same way the game does.',
-    tip: { kind: 'uihint', id: 'infiniteMoney' },
+    name: 'Infinite Gold',
+    desc: 'Treat Gold as infinite the same way the game does.',
+    tip: {kind: 'uihint', id: 'infiniteMoney'},
   },
   var_money: {
-    name: 'Simulation starts with this much gold available.',
-    tip: { kind: 'uihint', id: 'var_money' },
+    name: 'Gold',
+    desc: 'Simulation starts with this much Gold available.',
+    tip: {kind: 'uihint', id: 'var_money'},
   },
   infiniteHp: {
-    name: 'Hp is infinite',
-    tip: { kind: 'uihint', id: 'infiniteHp' },
+    name: 'Infinite Health',
+    desc: 'Treat Health as infinite the same way the game does.',
+    tip: {kind: 'uihint', id: 'infiniteHp'},
   },
   var_hp: {
-    name: 'HP',
-    tip: { kind: 'uihint', id: 'var_hp' },
+    name: 'Health',
+    desc: 'Simulation starts with this much Health available.',
+    tip: {kind: 'uihint', id: 'var_hp'},
   },
   var_hp_max: {
-    name: 'Max HP',
-    tip: { kind: 'uihint', id: 'var_hp_max' },
+    name: 'Max Health',
+    tip: {kind: 'uihint', id: 'var_hp_max'},
   },
   pauseCalculations: {
     name: 'Pause Simulation',
@@ -237,10 +242,14 @@ export const configInfoDefinition: Record<keyof Config, ConfigInfo> = {
     name: 'requirement every other',
   },
   'random.worldSeed': {
-    name: 'world seed value given to spells that request it',
+    name: 'Seed',
+    desc: 'World seed value given to spells that request it',
+    tip: {kind: 'uihint', id: 'random.worldSeed'},
   },
   'random.frameNumber': {
-    name: 'frame number value given to spells that request it',
+    name: 'Frame',
+    desc: 'Frame number value given to spells that request it',
+    tip: {kind: 'uihint', id: 'random.frameNumber'},
   },
   'editor.swapOnMove': {
     name: 'Swap Spell Position on move',
@@ -432,17 +441,17 @@ export const configSlice = createSlice({
       state,
       action: PayloadAction<Partial<ConfigState['config']>>,
     ) => {
-      state.config = { ...state.config, ...action.payload };
+      state.config = {...state.config, ...action.payload};
     },
     setConfigSetting: <T extends Config[N], N extends KeyOfType<Config, T>>(
       state: WritableDraft<ConfigState>,
-      { payload: { name, newValue } }: PayloadAction<{ name: N; newValue: T }>,
+      {payload: {name, newValue}}: PayloadAction<{name: N; newValue: T}>,
     ) => {
       state.config[name] = newValue;
     },
     toggleConfigSetting: (
       state,
-      { payload: { name } }: PayloadAction<{ name: ConfigToggleField }>,
+      {payload: {name}}: PayloadAction<{name: ConfigToggleField}>,
     ) => {
       state.config[name] = !state.config[name];
     },

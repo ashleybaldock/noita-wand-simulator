@@ -1,6 +1,6 @@
-import type { SpellId } from '../../redux/Wand/spellId';
-import { isNotNull, isNotUndefined, isString } from '../../util';
-import { isAnnotationTip } from './AnnotationTooltip';
+import type {SpellId} from '../../redux/Wand/spellId';
+import {isNotNull, isNotUndefined, isString} from '../../util';
+import {isAnnotationTip} from './AnnotationTooltip';
 
 export const tooltipIds = ['tooltip-spellinfo', 'tooltip-actionhint'] as const;
 
@@ -173,6 +173,20 @@ const uiHintDefinition = [
     {
       title: 'Hp considered to be ∞',
       desc: 'For spells that vary their behaviour based on your health.',
+    },
+  ],
+  [
+    'random.worldSeed',
+    {
+      title: 'World Seed',
+      desc: 'Used to seed random number generation.',
+    },
+  ],
+  [
+    'random.frameNumber',
+    {
+      title: 'Frame Number',
+      desc: 'Used to seed random number generation.',
     },
   ],
   [

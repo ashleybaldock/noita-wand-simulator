@@ -1,22 +1,7 @@
 import styled from 'styled-components';
-import {_KeyContainer} from '../Key/Key';
 import {useConfig} from '../../redux';
+import {_KeyContainer} from '../Key/Key';
 import {BaseAnnotation} from './BaseAnnotation';
-
-// export const IterationAnnotationOld = ({
-//   iteration,
-//   limit = 5,
-//   children,
-//   style,
-//   className = '',
-// }: {
-//   iteration: number;
-//   limit?: number;
-//   style?: string;
-//   className?: string;
-// } & PropsWithChildren) => {
-//   return <div className={className}>{children}</div>;
-// };
 
 const Iteration = styled.div``;
 

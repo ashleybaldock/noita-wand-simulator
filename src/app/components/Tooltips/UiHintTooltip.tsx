@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { TooltipBase } from './TooltipBase';
-import { useHideTooltips } from './useHideTooltips';
-import { getUiHintDescription, isUiHint } from './tooltipId';
+import {TooltipBase} from './TooltipBase';
+import {useHideTooltips} from './useHideTooltips';
+import {getUiHintDescription, isUiHint} from './tooltipId';
 
 const UiHint = styled.div`
   font-size: 0.7em;
@@ -36,7 +36,7 @@ export const UiHintTooltip = () => {
         blur: true,
         click: true,
       }}
-      render={({ content }) =>
+      render={({content}) =>
         isUiHint(content) ? (
           <UiHint>{getUiHintDescription(content)}</UiHint>
         ) : null

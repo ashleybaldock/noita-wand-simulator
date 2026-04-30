@@ -1,10 +1,7 @@
-import type { ChangeEvent, ChangeEventHandler, MouseEventHandler } from 'react';
+import type {ChangeEventHandler} from 'react';
 import styled from 'styled-components';
-import type { CSSProperties, PropsWithChildren } from 'react';
-import { EditableWrapper } from '../../Presentation';
-import { useSprite } from '../../../calc/sprite';
-import type { UsualAttrs } from '../../Types/UsualAttrs';
-import { NumericInput, StatSep } from '.';
+import type {UsualAttrs} from '../../Types/UsualAttrs';
+import {NumericInput, StatSep} from '.';
 
 const Inputs = styled.div.attrs<UsualAttrs>(({dataName}) => ({'data-name': dataName}))`
   display: contents;
@@ -13,7 +10,7 @@ const Inputs = styled.div.attrs<UsualAttrs>(({dataName}) => ({'data-name': dataN
 export const ABNumericInput = ({
   className,
   dataName,
-  separator = <StatSep/>,
+  separator = <StatSep />,
   smallest,
   largest,
   valueA,
@@ -22,16 +19,16 @@ export const ABNumericInput = ({
   setValueB,
   changeHandlerValueA,
   changeHandlerValueB
-} : UsualAttrs & {
- separator?: string | React.JSX.Element;
- smallest?: number,
- largest?: number;
- valueA: number;
- valueB: number;
-setValueA: (to: number) => void;
-setValueB: (to: number) => void;
-changeHandlerValueA?: ChangeEventHandler<HTMLInputElement>;
-changeHandlerValueB?: ChangeEventHandler<HTMLInputElement>;
+}: UsualAttrs & {
+  separator?: string | React.JSX.Element;
+  smallest?: number,
+  largest?: number;
+  valueA: number;
+  valueB: number;
+  setValueA: (to: number) => void;
+  setValueB: (to: number) => void;
+  changeHandlerValueA?: ChangeEventHandler<HTMLInputElement>;
+  changeHandlerValueB?: ChangeEventHandler<HTMLInputElement>;
 
 }) => {
   return (
@@ -52,5 +49,6 @@ changeHandlerValueB?: ChangeEventHandler<HTMLInputElement>;
         onChange={changeHandlerValueB}
       ></NumericInput>
     </Inputs>
-  )};
+  )
+};
 

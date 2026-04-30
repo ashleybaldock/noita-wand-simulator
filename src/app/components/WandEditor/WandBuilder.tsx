@@ -1,12 +1,14 @@
-import { useRef } from 'react';
-import styled, { type DataAttributes } from 'styled-components';
-import { WandActionEditor } from './WandActionEditor';
-import { WandStatsEditor } from './WandStatsEditor';
-import { WandBorder } from './WandBorder';
-import { WandAlwaysCastEditor } from './WandAlwaysCastEditor';
-import { ZetaEditor } from './ZetaEditor';
-import { WandBuilderTopButtons } from './WandBuilderTopButtons';
-import { HealthEditor } from './HealthEditor';
+import {useRef} from 'react';
+import styled, {type DataAttributes} from 'styled-components';
+import {WandActionEditor} from './WandActionEditor';
+import {WandStatsEditor} from './WandStatsEditor';
+import {WandBorder} from './WandBorder';
+import {WandAlwaysCastEditor} from './WandAlwaysCastEditor';
+import {ZetaEditor} from './ZetaEditor';
+import {WandBuilderTopButtons} from './WandBuilderTopButtons';
+import {HealthEditor} from './HealthEditor';
+import {GoldEditor} from './GoldEditor';
+import {RandomEditor} from './RandomEditor';
 
 const MainDiv = styled.div`
   display: flex;
@@ -71,10 +73,7 @@ const StyledWandStatsEditor = styled(WandStatsEditor)`
 `;
 const StyledAlwaysCastEditor = styled(WandAlwaysCastEditor)`
   ${ColumnsContainer} > & {
-    grid-row-end: span 3;
-    @media screen and (max-width: 500px) {
-      grid-row-end: span 2;
-    }
+    grid-row-end: span 2;
   }
 `;
 const StyledZetaEditor = styled(ZetaEditor)`
@@ -86,6 +85,24 @@ const StyledZetaEditor = styled(ZetaEditor)`
   }
 `;
 const StyledHealthEditor = styled(HealthEditor)`
+  ${ColumnsContainer} > & {
+    grid-row-end: span 3;
+    @media screen and (max-width: 500px) {
+      grid-row-end: span 1;
+    }
+  }
+`;
+
+const StyledGoldEditor = styled(GoldEditor)`
+  ${ColumnsContainer} > & {
+    grid-row-end: span 3;
+    @media screen and (max-width: 500px) {
+      grid-row-end: span 1;
+    }
+  }
+`;
+
+const StyledRandomEditor = styled(RandomEditor)`
   ${ColumnsContainer} > & {
     grid-row-end: span 3;
     @media screen and (max-width: 500px) {
@@ -114,6 +131,8 @@ export const WandBuilder = () => {
             <StyledAlwaysCastEditor />
             <StyledZetaEditor />
             <StyledHealthEditor />
+            <StyledGoldEditor />
+            <StyledRandomEditor />
           </ColumnsContainer>
         </ContentDiv>
       </WandBorder>

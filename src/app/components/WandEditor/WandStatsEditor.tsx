@@ -1,9 +1,9 @@
-import { useAppDispatch, useWand } from '../../redux/hooks';
-import { setWand } from '../../redux/wandSlice';
+import {useAppDispatch, useWand} from '../../redux/hooks';
+import {setWand} from '../../redux/wandSlice';
 import styled from 'styled-components';
-import { round, toSeconds } from '../../util/util';
-import { useConfig } from '../../redux';
-import { YesNoConfigToggle, YesNoToggle } from '../Input';
+import {round, toSeconds} from '../../util/util';
+import {useConfig} from '../../redux';
+import {YesNoConfigToggle, YesNoToggle} from '../Input';
 import {
   FNSP,
   PREFIX_MULTI,
@@ -11,24 +11,24 @@ import {
   SUFFIX_FRAME,
   SUFFIX_SECOND,
 } from '../../util';
-import { NumericInput } from '../Input/NumericInput/NumericInput';
-import { useSprite, type Sprite } from '../../calc/sprite';
-import { EditableWrapper } from '../Presentation';
-import { WandStatName } from './WandStatName';
+import {NumericInput} from '../Input/NumericInput/NumericInput';
+import {useSprite, type Sprite} from '../../calc/sprite';
+import {EditableWrapper} from '../Presentation';
+import {WandStatName} from './WandStatName';
 
 const EditableInterval = ({
   field,
 }: {
   field: 'cast_delay' | 'reload_time';
 }) => {
-  const { showDurationsInFrames: frames } = useConfig();
+  const {showDurationsInFrames: frames} = useConfig();
   const wand = useWand();
   const dispatch = useAppDispatch();
   return (
     <NumericInput
       value={wand[field]}
       setValue={(value) =>
-        dispatch(setWand({ wand: { ...wand, [field]: value } }))
+        dispatch(setWand({wand: {...wand, [field]: value}}))
       }
       onChange={() => {}}
       minStep={frames ? 1 : 0.01}
@@ -51,7 +51,7 @@ const EditableInterval = ({
   );
 };
 
-const StyledListItem = styled(EditableWrapper)<{
+const StyledListItem = styled(EditableWrapper) <{
   sprite?: Sprite;
 }>`
   grid-column: auto/span 1;
@@ -63,7 +63,7 @@ const StyledListItem = styled(EditableWrapper)<{
   align-items: center;
   height: auto;
 
-  ${({ sprite }) =>
+  ${({sprite}) =>
     sprite &&
     `
   background-image: ${sprite.path};
@@ -89,17 +89,16 @@ const StyledValue = styled.span`
   white-space: nowrap;
 `;
 
-const StyledYesNoToggle = styled(YesNoToggle)``;
-
-export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
+export const WandStatsEditor = ({className = ''}: {className?: string}) => {
   const wand = useWand();
   const dispatch = useAppDispatch();
 
   return (
     <>
-      <StyledYesNoToggle
+      <YesNoToggle
+        title={'Shuffle'}
         sprite={useSprite('icon.wand.shuffle')}
-        tip={{ kind: 'uihint', id: 'shuffle_deck_when_empty' }}
+        tip={{kind: 'uihint', id: 'shuffle_deck_when_empty'}}
         dataName="EditStatShuffle"
         checked={false && wand.shuffle_deck_when_empty}
         onChange={(e) =>
@@ -113,12 +112,11 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
           )
         }
       >
-        <WandStatName>{'Shuffle'}</WandStatName>
-      </StyledYesNoToggle>
+      </YesNoToggle>
       <StyledListItem
         className={className}
         sprite={useSprite('icon.wand.capacity')}
-        tip={{ kind: 'uihint', id: 'deck_capacity' }}
+        tip={{kind: 'uihint', id: 'deck_capacity'}}
         dataName="EditStatCapacity"
       >
         <WandStatName>{'Capacity'}</WandStatName>
@@ -126,7 +124,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
           <NumericInput
             value={wand.deck_capacity}
             setValue={(value) =>
-              dispatch(setWand({ wand: { ...wand, deck_capacity: value } }))
+              dispatch(setWand({wand: {...wand, deck_capacity: value}}))
             }
             onChange={() => {}}
             minStep={1}
@@ -141,7 +139,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         sprite={useSprite('icon.wand.spellscast')}
-        tip={{ kind: 'uihint', id: 'actions_per_round' }}
+        tip={{kind: 'uihint', id: 'actions_per_round'}}
         dataName="EditStatSpellsCast"
       >
         <WandStatName>{'Spells/Cast'}</WandStatName>
@@ -149,7 +147,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
           <NumericInput
             value={wand.actions_per_round}
             setValue={(value) =>
-              dispatch(setWand({ wand: { ...wand, actions_per_round: value } }))
+              dispatch(setWand({wand: {...wand, actions_per_round: value}}))
             }
             onChange={() => {}}
             minStep={1}
@@ -165,7 +163,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         sprite={useSprite('icon.wand.castdelay')}
-        tip={{ kind: 'uihint', id: 'cast_delay' }}
+        tip={{kind: 'uihint', id: 'cast_delay'}}
       >
         <WandStatName>{'Cast delay'}</WandStatName>
         <StyledValue>
@@ -175,7 +173,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         sprite={useSprite('icon.wand.reloadtime')}
-        tip={{ kind: 'uihint', id: 'reload_time' }}
+        tip={{kind: 'uihint', id: 'reload_time'}}
       >
         <WandStatName>{'Recharge Time'}</WandStatName>
         <StyledValue>
@@ -185,14 +183,14 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         sprite={useSprite('icon.wand.manamax')}
-        tip={{ kind: 'uihint', id: 'mana_max' }}
+        tip={{kind: 'uihint', id: 'mana_max'}}
       >
         <WandStatName>{'Mana max'}</WandStatName>
         <StyledValue>
           <NumericInput
             value={wand.mana_max}
             setValue={(value) =>
-              dispatch(setWand({ wand: { ...wand, mana_max: value } }))
+              dispatch(setWand({wand: {...wand, mana_max: value}}))
             }
             onChange={() => {}}
             smallest={0}
@@ -208,14 +206,14 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         sprite={useSprite('icon.wand.regen')}
-        tip={{ kind: 'uihint', id: 'mana_charge_speed' }}
+        tip={{kind: 'uihint', id: 'mana_charge_speed'}}
       >
         <WandStatName>{'Mana Charge Speed'}</WandStatName>
         <StyledValue>
           <NumericInput
             value={wand.mana_charge_speed}
             setValue={(value) =>
-              dispatch(setWand({ wand: { ...wand, mana_charge_speed: value } }))
+              dispatch(setWand({wand: {...wand, mana_charge_speed: value}}))
             }
             onChange={() => {}}
             smallest={0}
@@ -231,14 +229,14 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <StyledListItem
         className={className}
         sprite={useSprite('icon.wand.spread')}
-        tip={{ kind: 'uihint', id: 'wand_spread' }}
+        tip={{kind: 'uihint', id: 'wand_spread'}}
       >
         <WandStatName>{'Spread'}</WandStatName>
         <StyledValue>
           <NumericInput
             value={wand.spread}
             setValue={(value) =>
-              dispatch(setWand({ wand: { ...wand, spread: value } }))
+              dispatch(setWand({wand: {...wand, spread: value}}))
             }
             formatForDisplay={(v) =>
               `${round(Number(v), 1)}${FNSP}${SUFFIX_DEGREE}`
@@ -258,14 +256,14 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
         className={className}
         data-name={'EditSpeed'}
         sprite={useSprite('icon.wand.speed')}
-        tip={{ kind: 'uihint', id: 'wand_speed' }}
+        tip={{kind: 'uihint', id: 'wand_speed'}}
       >
         <WandStatName>{'Speed'}</WandStatName>
         <StyledValue>
           <NumericInput
             value={wand.speed}
             setValue={(value) =>
-              dispatch(setWand({ wand: { ...wand, speed: value } }))
+              dispatch(setWand({wand: {...wand, speed: value}}))
             }
             formatForDisplay={(v) =>
               `${PREFIX_MULTI}${FNSP}${round(Number(v), 1)}`
@@ -285,7 +283,7 @@ export const WandStatsEditor = ({ className = '' }: { className?: string }) => {
       <YesNoConfigToggle
         sprite={useSprite('icon.unlimitedspells')}
         className={className}
-        tip={{ kind: 'uihint', id: 'unlimited_spells' }}
+        tip={{kind: 'uihint', id: 'unlimited_spells'}}
         dataName="ToggleUnlimitedSpells"
         data-toggle="unlimitedSpells"
         configField={'unlimitedSpells'}

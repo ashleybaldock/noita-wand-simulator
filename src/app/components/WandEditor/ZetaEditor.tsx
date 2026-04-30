@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { SlottedSpell } from './SlottedSpell';
-import { useZeta } from '../../redux';
-import { isKnownSpell } from '../../redux/Wand/spellId';
-import { getSpellByActionId } from '../../calc/spells';
-import { WandStatName } from './WandStatName';
+import {SlottedSpell} from './SlottedSpell';
+import {useZeta} from '../../redux';
+import {isKnownSpell} from '../../redux/Wand/spellId';
+import {getSpellByActionId} from '../../calc/spells';
+import {WandStatName} from './WandStatName';
 
 const SpellSlot = styled.li`
   --grid-layout-gap: 0px;
@@ -27,7 +27,7 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0.3em 0.6em 0.2em 2.2em;
+  padding: 0 0.6em 0 2.2em;
 
   background-image: var(--sprite-action-zeta);
   background-position: 0.6em 50%;
@@ -37,7 +37,7 @@ const Container = styled.div`
 `;
 
 export const ZetaEditor = styled(
-  ({ className = '' }: { className?: string }) => {
+  ({className = ''}: {className?: string}) => {
     const [showZetaSlot, zetaSpellId] = useZeta();
     return showZetaSlot ? (
       <Container className={className}>

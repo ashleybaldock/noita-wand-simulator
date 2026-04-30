@@ -97,7 +97,7 @@ export const clickWand = ({
       state_from_game.fire_rate_wait = wand_cast_delay;
 
       console.debug(
-        `cast#${result.castCount}->_start_shot(): mana: ${state.wand_available_mana}, cast_delay: ${wand_cast_delay}`,
+        `cast ${result.castCount}->_start_shot(): mana: ${state.wand_available_mana}, cast_delay: ${wand_cast_delay}`,
       );
 
       /* Simulate cast */

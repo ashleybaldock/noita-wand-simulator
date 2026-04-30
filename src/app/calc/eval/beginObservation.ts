@@ -1,28 +1,28 @@
-import { isValidActionId, isIterativeActionId } from '../actionId';
-import { defaultGunActionState } from '../defaultActionState';
-import { entityToActions } from '../entityLookup';
-import { mana as gunMana, dont_draw_actions } from '../gun';
-import type { SpellDeckInfo } from '../spell';
-import { getSpellByActionId } from '../spells';
-import { triggerConditionFor } from '../trigger';
-import { nextActionCallSequenceId, type ActionCall } from './ActionCall';
-import type { SimulationState } from './SimulationState';
-import type { SimulationResult } from './SimulationResult';
-import type { WandEvent } from './wandEvent';
-import { observer } from './wandObserver';
-import { nextWandCastId } from './WandCast';
-import { isNotUndefined, isUndefined } from '../../util';
-import { MapTree } from '../../util/MapTree';
-import { isValidActionCallSource } from '../validActionCallSource';
+import {defaultGunActionState} from '../defaultActionState';
+import {entityToActions} from '../entityLookup';
+import {mana as gunMana, dont_draw_actions} from '../gun';
+import type {SpellDeckInfo} from '../spell';
+import {getSpellByActionId} from '../spells';
+import {triggerConditionFor} from '../trigger';
+import {nextActionCallSequenceId, type ActionCall} from './ActionCall';
+import type {SimulationState} from './SimulationState';
+import type {SimulationResult} from './SimulationResult';
+import type {WandEvent} from './wandEvent';
+import {observer} from './wandObserver';
+import {nextWandCastId} from './WandCast';
+import {isNotUndefined, isUndefined} from '../../util';
+import {MapTree} from '../../util/MapTree';
+import {isValidActionCallSource} from '../validActionCallSource';
+import {isValidActionId} from '../actionId';
 
 export const beginObservation = (
   result: SimulationResult,
   state: SimulationState,
 ) =>
-  observer.subscribe(({ name, payload }: WandEvent) => {
+  observer.subscribe(({name, payload}: WandEvent) => {
     switch (name) {
       case 'BeginProjectile': {
-        const { sourceId, projectileId } = payload;
+        const {sourceId, projectileId} = payload;
 
         // let sourceAction =
         //   state.validSourceCalledActions[
@@ -73,7 +73,7 @@ export const beginObservation = (
       case 'BeginTriggerTimer':
       case 'BeginTriggerHitWorld':
       case 'BeginTriggerDeath': {
-        const { projectileId, action_draw_count } = payload;
+        const {projectileId, action_draw_count} = payload;
         const delay_frames =
           name === 'BeginTriggerTimer' ? payload.delay_frames : undefined;
         state.parentCastScope = state.currentCastScope;
@@ -86,7 +86,7 @@ export const beginObservation = (
           projectiles: [],
           actionCalls: [],
           actionCallTrees: [],
-          castState: { ...defaultGunActionState },
+          castState: {...defaultGunActionState},
           triggerType: triggerConditionFor(name),
           triggerEntity: projectileId,
           triggerActionDrawCount: action_draw_count,
@@ -114,12 +114,12 @@ export const beginObservation = (
         break;
       }
       case 'RegisterGunAction': {
-        const { s: castState } = payload;
+        const {s: castState} = payload;
         state.currentCastScope.castState = Object.assign({}, castState);
         break;
       }
       case 'OnDraw': {
-        const { state_cards_drawn: totalDrawn } = payload;
+        const {state_cards_drawn: totalDrawn} = payload;
         if (state.currentCastScope.castState) {
           state.currentCastScope.castState.state_cards_drawn =
             (totalDrawn ??
@@ -129,7 +129,7 @@ export const beginObservation = (
         break;
       }
       case 'OnNotEnoughManaForAction': {
-        const { /*mana_required, mana_available,*/ spell } = payload;
+        const { /*mana_required, mana_available,*/ spell} = payload;
         state.lastPlayed = spell;
         if (isNotUndefined(state.lastCalledAction)) {
           state.lastCalledAction.direct_discard = true;
@@ -138,7 +138,7 @@ export const beginObservation = (
         break;
       }
       case 'OnNoUsesRemaining': {
-        const { spell /*, c: castState, playing_permanent_card*/ } = payload;
+        const {spell /*, c: castState, playing_permanent_card*/} = payload;
         state.lastPlayed = spell;
         if (isNotUndefined(state.lastCalledAction)) {
           state.lastCalledAction.direct_discard = true;
@@ -147,19 +147,19 @@ export const beginObservation = (
         break;
       }
       case 'OnActionPlayed': {
-        const { spell /*, c: castState, playing_permanent_card*/ } = payload;
+        const {spell /*, c: castState, playing_permanent_card*/} = payload;
         state.lastPlayed = spell;
         break;
       }
       case 'OnPlayPermanentCard': {
-        const { actionId, always_cast_index /*, c: castState*/ } = payload;
+        const {actionId, always_cast_index /*, c: castState*/} = payload;
         if (isValidActionId(actionId)) {
-          state.alwaysCastsPlayed.push({ id: actionId, always_cast_index });
+          state.alwaysCastsPlayed.push({id: actionId, always_cast_index});
         }
         break;
       }
       case 'OnWrap': {
-        const { /* deck, hand,*/ discarded } = payload;
+        const { /* deck, hand,*/ discarded} = payload;
         result.wraps += 1;
         state.currentCastScope.wraps.push(result.wraps);
         if (isNotUndefined(state.lastDrawnAndCalledAction)) {
@@ -181,7 +181,7 @@ export const beginObservation = (
         break;
       }
       case 'OnCallActionPre': {
-        const { source, spell /*, c: castState */, recursion, iteration } =
+        const {source, spell /*, c: castState */, recursion, iteration} =
           payload;
         const {
           id,
@@ -206,7 +206,7 @@ export const beginObservation = (
           recursion: getSpellByActionId(id).recursive
             ? (recursion ?? 0)
             : undefined,
-          iteration: isIterativeActionId(id) ? (iteration ?? 1) : undefined,
+          iteration,
           dont_draw_actions,
         };
 
@@ -255,7 +255,7 @@ export const beginObservation = (
         return state.rng_worldSeed;
       }
       case 'EntityGetWithTag': {
-        const { tag } = payload;
+        const {tag} = payload;
         if (tag === 'black_hole_giga') {
           return [0];
         }
@@ -266,7 +266,7 @@ export const beginObservation = (
       }
       // These are used currently only by requirements
       case 'EntityGetInRadiusWithTag': {
-        const { /*x, y, radius,*/ tag } = payload;
+        const { /*x, y, radius,*/ tag} = payload;
         if (tag === 'homing_target') {
           return state.req_enemies ? new Array(15) : [];
         } else if (tag === 'projectile') {
@@ -275,14 +275,14 @@ export const beginObservation = (
         break;
       }
       case 'EntityGetFirstComponent': {
-        const { /*entity_id,*/ component } = payload;
+        const { /*entity_id,*/ component} = payload;
         if (component === 'DamageModelComponent') {
           return 'IF_HP'; // just has to be non-null
         }
         break;
       }
       case 'ComponentGetValue2': {
-        const { component_id, key } = payload;
+        const {component_id, key} = payload;
         if (component_id === 'IF_HP') {
           if (key === 'hp') {
             return state.req_hp ? 25000 / 25 : 100000 / 25;
@@ -293,7 +293,7 @@ export const beginObservation = (
         break;
       }
       case 'GlobalsGetValue': {
-        const { key /*, defaultValue*/ } = payload;
+        const {key /*, defaultValue*/} = payload;
         if (key === 'GUN_ACTION_IF_HALF_STATUS') {
           return `${state.req_half ? 1 : 0}`;
         }
