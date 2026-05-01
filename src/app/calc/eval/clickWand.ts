@@ -158,6 +158,7 @@ export const clickWand = ({
     }
   } catch (err) {
     console.error(err);
+    result.exception = `${err}`;
     result.endConditions.push('exception');
   } finally {
     endObservation();

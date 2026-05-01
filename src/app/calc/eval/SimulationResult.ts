@@ -26,6 +26,7 @@ export type SimulationResult = {
 
   casts: WandCast[];
   endConditions: StopReason[];
+  exception?: string;
   wraps: number;
   castCount: number;
   reloadCount: number;

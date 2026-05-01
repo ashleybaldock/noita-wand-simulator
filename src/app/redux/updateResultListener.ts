@@ -228,7 +228,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
       const simulationRequestId = nextSimulationRequestId();
 
       const getElapsedTime = startTimer();
-      console.group(`Simulation Request #${simulationRequestId}`);
+      console.group(`Simulation Request ${simulationRequestId}`);
       listenerApi.dispatch(
         newSimulation({
           simulationRequestId,
@@ -244,6 +244,7 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
 
       /* TODO spellsWithUses */
       const task = listenerApi.fork(async (/*forkApi*/) => {
+        console.groupCollapsed(`await simulation ${simulationRequestId}`);
         try {
           return clickWand({
             simulationRequestId,
@@ -271,18 +272,22 @@ export const startUpdateListener = (startAppListening: AppStartListening) =>
           } else {
             console.warn('error running simulation task', err);
           }
+        } finally {
+          console.groupEnd();
         }
       });
 
-      console.groupCollapsed(`await simulation #${simulationRequestId}`);
       const result = await task.result;
-      console.groupEnd();
 
       if (resultOk(result)) {
         const { value } = result;
         console.debug('Simulation done, result: ', value);
 
         if (isNotUndefined(value)) {
+          if (value.endConditions.includes('exception')) {
+            console.warn('Simulation ended due to exception', value.exception);
+          }
+
           console.debug('dispatch: newResult');
           listenerApi.dispatch(
             newResult({
