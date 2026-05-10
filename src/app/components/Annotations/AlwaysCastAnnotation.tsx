@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const Wrapped = styled.div`
+const StyledBaseAnnotation = styled(BaseAnnotation)`
   pointer-events: none;
   position: absolute;
   bottom: -12px;
@@ -29,10 +30,10 @@ export const AlwaysCastAnnotation = ({
   deckIndex?: number | string;
 }) => {
   return (
-    <Wrapped data-name="AlwaysCastAnnotation">
+    <StyledBaseAnnotation data-name="AlwaysCastAnnotation">
       <span>{'A'}</span>
       <span>{'C'}</span>
       <span>{deckIndex}</span>
-    </Wrapped>
+    </StyledBaseAnnotation>
   );
 };

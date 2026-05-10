@@ -1,19 +1,20 @@
-import {getSpellByActionId} from '../../../calc/spells';
+import { getSpellByActionId } from '../../../calc/spells';
 import {
   ActionSourceAnnotation,
   DiscardedAnnotation,
   DontDrawAnnotation,
   DrawAnnotationConsumed,
   DrawAnnotationDraws,
+  DrawAnnotationReplacement,
   IterationAnnotation,
   MemoriseValueAnnotation,
   ProjectileAddedAnnotation,
   RecallValueAnnotation,
   RecursionAnnotation,
 } from '../../Annotations';
-import {Demo} from '../../Demo';
-import {KeyContainer, KeyGroup, KeyItem, KeyNote} from '../../Key/Key';
-import {TreeArrow} from './TreeArrow';
+import { Demo } from '../../Demo';
+import { KeyContainer, KeyGroup, KeyItem, KeyNote } from '../../Key/Key';
+import { TreeArrow } from './TreeArrow';
 
 export const ActionTreeKey = () => {
   return (
@@ -131,10 +132,10 @@ export const ActionTreeKey = () => {
           </KeyItem>
           <KeyItem
             description={
-              'Wrap #N - This action was the last one called before the wand wrapped for the Nth time'
+              'This spell was drawn as a replacement for a spell discarded due to lack of charges or mana.'
             }
           >
-            {/* <WrapAnnotation scope={'cast'} /> */}
+            <DrawAnnotationReplacement></DrawAnnotationReplacement>
           </KeyItem>
           <KeyItem
             description={
@@ -142,6 +143,15 @@ export const ActionTreeKey = () => {
             }
           >
             <DontDrawAnnotation dont_draw_actions={true} />
+          </KeyItem>
+        </KeyGroup>
+        <KeyGroup title={'Wrapping'}>
+          <KeyItem
+            description={
+              'Wrap #N - This action was the last one called before the wand wrapped for the Nth time'
+            }
+          >
+            {/* <WrapAnnotation scope={'cast'} /> */}
           </KeyItem>
         </KeyGroup>
         <KeyGroup title={'Spell Copying Spells & Recursion limits'}>
@@ -201,33 +211,21 @@ export const ActionTreeKey = () => {
               'Iteration counter value when action was called (only shown for Divide By). If the Iteration count exceeds its limit, Divide By makes only a single copy. Limits: D10: 2, D4: 3, D3: 3, D2: 4'
             }
           >
-            <IterationAnnotation
-              iteration={3}
-              limit={3}
-              iterative={true}
-            />
+            <IterationAnnotation iteration={3} limit={3} iterative={true} />
           </KeyItem>
           <KeyItem
             description={
               'Iteration count 1 above limit (chain is Draw Cancelled)'
             }
           >
-            <IterationAnnotation
-              iteration={4}
-              limit={3}
-              iterative={true}
-            />
+            <IterationAnnotation iteration={4} limit={3} iterative={true} />
           </KeyItem>
           <KeyItem
             description={
               'Iteration count 2 or more above limit (often this is a waste of Divides)'
             }
           >
-            <IterationAnnotation
-              iteration={5}
-              limit={3}
-              iterative={true}
-            />
+            <IterationAnnotation iteration={5} limit={3} iterative={true} />
           </KeyItem>
         </KeyGroup>
         <KeyGroup title={'Spell Memory'}>

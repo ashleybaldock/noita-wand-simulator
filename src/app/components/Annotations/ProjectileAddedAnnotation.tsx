@@ -1,25 +1,23 @@
 import styled from 'styled-components';
-import type { CSSProperties, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const StyledDiv = styled.div`
+const StyledBaseAnnotation = styled(BaseAnnotation)`
   display: flex;
 `;
 
 export const ProjectileAddedAnnotation = ({
   children,
-  style,
   className = '',
 }: {
-  style?: CSSProperties;
   className?: string;
 } & PropsWithChildren) => {
   return (
-    <StyledDiv
-      style={style}
+    <StyledBaseAnnotation
       className={className}
       data-name={'ProjectileAddedAnnotation'}
     >
       {children}
-    </StyledDiv>
+    </StyledBaseAnnotation>
   );
 };

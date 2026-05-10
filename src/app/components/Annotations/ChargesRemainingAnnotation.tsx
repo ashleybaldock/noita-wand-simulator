@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { useConfig } from '../../redux';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const Base = styled.div`
+const StyledBaseAnnotation = styled(BaseAnnotation)`
   position: absolute;
   top: 5px;
   left: 7px;
@@ -17,35 +18,35 @@ const Base = styled.div`
   background-position: center center;
 `;
 
-const Zero = styled(Base)`
+const Zero = styled(StyledBaseAnnotation)`
   width: 7px;
   height: 9px;
 
   background-image: url('/data/inventory/0charges.png');
 `;
 
-const Infinite = styled(Base)`
+const Infinite = styled(StyledBaseAnnotation)`
   width: 9px;
   height: 8px;
 
   background-image: url('/data/inventory/infcharges.png');
 `;
 
-const Unlimited = styled(Base)`
+const Unlimited = styled(StyledBaseAnnotation)`
   width: 16px;
   height: 16px;
 
   background-image: url('/data/inventory/unlimitedcharges.png');
 `;
 
-const ShouldNotDeplete = styled(Base)`
+const ShouldNotDeplete = styled(StyledBaseAnnotation)`
   width: 11px;
   height: 9px;
 
   background-image: url('/data/inventory/shouldnotdeplete.png');
 `;
 
-const AtLeastOne = styled(Base)`
+const AtLeastOne = styled(StyledBaseAnnotation)`
   width: 7px;
   height: 8px;
   background-image: url('/data/inventory/atleastone.png');

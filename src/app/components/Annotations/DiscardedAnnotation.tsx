@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import type { CSSProperties, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import type { DiscardReason } from '../../calc/discardReasons';
 import { _KeyContainer } from '../Key/Key';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const StyledDiv = styled.div<{ $reason: DiscardReason }>`
+const StyledBaseAnnotation = styled(BaseAnnotation)<{ reason: DiscardReason }>`
   display: flex;
   background-size: contain;
   background-repeat: no-repeat;
@@ -12,7 +13,7 @@ const StyledDiv = styled.div<{ $reason: DiscardReason }>`
   background-repeat: no-repeat;
   background-position: center;
 
-  --hue: var(--arrow-hue-${(props) => props.$reason});
+  --hue: var(--arrow-hue-${({ reason }) => reason});
 
   ${_KeyContainer} & {
     transform: none;
@@ -27,22 +28,19 @@ const StyledDiv = styled.div<{ $reason: DiscardReason }>`
 export const DiscardedAnnotation = ({
   reason,
   children,
-  style,
   className = '',
 }: {
   reason: DiscardReason;
-  style?: CSSProperties;
   className?: string;
 } & PropsWithChildren) => {
   return (
-    <StyledDiv
-      $reason={reason}
-      style={style}
+    <StyledBaseAnnotation
+      reason={reason}
       className={className}
       data-name={'Discarded'}
       data-reason={reason}
     >
       {children}
-    </StyledDiv>
+    </StyledBaseAnnotation>
   );
 };

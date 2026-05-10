@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const StyledDiv = styled.div``;
+const StyledBaseAnnotation = styled(BaseAnnotation)``;
 
 export const DeltaDrawAnnotation = () => {
-  // const { config } = useConfig();
-  //
-  return <StyledDiv data-name="DeltaDrawAnnotation"></StyledDiv>;
+  return (
+    <StyledBaseAnnotation data-name="DeltaDrawAnnotation"></StyledBaseAnnotation>
+  );
 };

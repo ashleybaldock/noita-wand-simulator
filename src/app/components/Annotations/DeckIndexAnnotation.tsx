@@ -6,8 +6,9 @@ import {
   type WandIndex,
 } from '../../redux/WandIndex';
 import { isNotNullOrUndefined, isNumber } from '../../util';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const IndexDiv = styled.div`
+const StyledBaseAnnotation = styled(BaseAnnotation)`
   pointer-events: none;
   user-select: none;
   position: absolute;
@@ -35,12 +36,12 @@ const IndexDiv = styled.div`
   background-color: #0000;
 `;
 
-const SpecialIndexDiv = styled(IndexDiv)`
+const SpecialIndexDiv = styled(StyledBaseAnnotation)`
   font-size: 0.5em;
   line-height: 2;
   align-content: end;
 `;
-const AlwaysCastIndexDiv = styled(IndexDiv)`
+const AlwaysCastIndexDiv = styled(StyledBaseAnnotation)`
   & > span {
     font-size: 0.5em;
     line-height: 2;
@@ -82,9 +83,9 @@ export const DeckIndexAnnotation = ({
     }
     if (isNotNullOrUndefined(deckIndex)) {
       return (
-        <IndexDiv data-name="DeckIndex">
+        <StyledBaseAnnotation data-name="DeckIndex">
           {isNumber(deckIndex) ? deckIndex + 1 : deckIndex}
-        </IndexDiv>
+        </StyledBaseAnnotation>
       );
     }
   }

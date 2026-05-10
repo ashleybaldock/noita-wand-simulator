@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import type { WandIndex } from '../../redux/WandIndex';
 import { WithDebugHints } from '../Debug';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const IndexDiv = styled.div`
+const StyledBaseAnnotation = styled(BaseAnnotation)`
   display: none;
 
   ${WithDebugHints} && {
@@ -21,11 +22,14 @@ const IndexDiv = styled.div`
     font-weight: normal;
     --shadow-bg: rgb(0, 0, 0);
     --shadow-w: 0px;
-    text-shadow: var(--shadow-bg) 1px 1px var(--shadow-w),
+    text-shadow:
+      var(--shadow-bg) 1px 1px var(--shadow-w),
       var(--shadow-bg) 1px -1px var(--shadow-w),
       var(--shadow-bg) -1px 1px var(--shadow-w),
-      var(--shadow-bg) -1px -1px var(--shadow-w), var(--shadow-bg) 1px 1px 1px,
-      var(--shadow-bg) 1px -1px 1px, var(--shadow-bg) -1px 1px 1px,
+      var(--shadow-bg) -1px -1px var(--shadow-w),
+      var(--shadow-bg) 1px 1px 1px,
+      var(--shadow-bg) 1px -1px 1px,
+      var(--shadow-bg) -1px 1px 1px,
       var(--shadow-bg) -1px -1px 1px;
   }
 `;
@@ -35,5 +39,9 @@ export const WandIndexAnnotation = ({
 }: {
   wandIndex?: WandIndex;
 }) => {
-  return <IndexDiv data-name="WandIndexAnnotation">{wandIndex}</IndexDiv>;
+  return (
+    <StyledBaseAnnotation data-name="WandIndexAnnotation">
+      {wandIndex}
+    </StyledBaseAnnotation>
+  );
 };

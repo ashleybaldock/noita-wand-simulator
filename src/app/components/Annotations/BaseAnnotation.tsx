@@ -1,8 +1,8 @@
 import styled, { type DataAttributes } from 'styled-components';
 import { isAnnotationTooltipId } from '../Tooltips/AnnotationTooltip';
 import { tipToAttributes, type Tip } from '../Tooltips/tooltipId';
-import { type MouseEventHandler, type PropsWithChildren } from 'react';
-import { _KeyContainer, KeyNote, KeyExample } from '../Key/Key';
+import type { MouseEventHandler, PropsWithChildren } from 'react';
+import { KeyNote, KeyExample } from '../Key/Key';
 import type { HotkeyCallback } from 'react-hotkeys-hook';
 import { useIsDemo } from '../Demo';
 
@@ -41,10 +41,11 @@ const _BaseAnnotation = ({
 } & DataAttributes &
   PropsWithChildren) => {
   const isDemo = useIsDemo();
-  return hidden && !isDemo ? null : (
+  return (
     <button
       data-name={dataName}
       className={className}
+      hidden={hidden}
       {...((tip ?? isAnnotationTooltipId(dataName ?? ''))
         ? tipToAttributes({ kind: 'annotation', id: dataName })
         : {})}
@@ -70,6 +71,13 @@ export const BaseAnnotation = styled(_BaseAnnotation)`
   height: calc(var(--bsize-spell) / 4);
   line-height: calc(var(--bsize-spell) / 3 - 2px);
   text-align: center;
+
+  ${({ hidden }) =>
+    hidden &&
+    `
+    visibility: hidden;
+    pointer-events: none;
+    `}
 
   ${KeyExample} & {
     position: relative;

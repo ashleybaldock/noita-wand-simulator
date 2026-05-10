@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import type { CSSProperties, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import type { ActionStateKey } from '../../calc/actionState';
 import { _KeyContainer } from '../Key/Key';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const StyledDiv = styled.div<{ $stat: ActionStateKey }>`
+const StyledBaseAnnotation = styled(BaseAnnotation)<{ stat: ActionStateKey }>`
   display: flex;
   background-size: contain;
   background-repeat: no-repeat;
@@ -12,7 +13,7 @@ const StyledDiv = styled.div<{ $stat: ActionStateKey }>`
   background-repeat: no-repeat;
   background-position: center;
 
-  --hue: var(--arrow-hue-${(props) => props.$stat});
+  --hue: var(--arrow-hue-${(props) => props.stat});
 
   ${_KeyContainer} & {
     transform: none;
@@ -27,22 +28,19 @@ const StyledDiv = styled.div<{ $stat: ActionStateKey }>`
 export const MemoriseValueAnnotation = ({
   stat,
   children,
-  style,
   className = '',
 }: {
   stat: ActionStateKey;
-  style?: CSSProperties;
   className?: string;
 } & PropsWithChildren) => {
   return (
-    <StyledDiv
-      $stat={stat}
-      style={style}
+    <StyledBaseAnnotation
+      stat={stat}
       className={className}
       data-name={'MemoriseValue'}
       data-stat={stat}
     >
       {children}
-    </StyledDiv>
+    </StyledBaseAnnotation>
   );
 };

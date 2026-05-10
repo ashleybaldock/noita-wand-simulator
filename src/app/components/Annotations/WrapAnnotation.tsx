@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { useConfig } from '../../redux';
 import type { SpellDeckInfo } from '../../calc/spell';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const Wrapped = styled.div`
+const StyledBaseAnnotation = styled(BaseAnnotation)`
   pointer-events: none;
   position: absolute;
   bottom: -12px;
@@ -34,9 +35,9 @@ export const WrapAnnotation = ({
 }) => {
   const { showWraps } = useConfig();
 
-  if (!showWraps) {
-    return null;
-  }
-
-  return <Wrapped data-name="Wrapped">{wasLastToBeCalledBeforeWrapNr}</Wrapped>;
+  return showWraps ? (
+    <StyledBaseAnnotation data-name="Wrapped">
+      {wasLastToBeCalledBeforeWrapNr}
+    </StyledBaseAnnotation>
+  ) : null;
 };

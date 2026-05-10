@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { BaseAnnotation } from './BaseAnnotation';
 
-export const SourceDiv = styled.div<{
+const StyledBaseAnnotation = styled(BaseAnnotation)<{
   colors: [string, string];
 }>`
   pointer-events: none;
@@ -23,12 +24,10 @@ export const SourceDiv = styled.div<{
 `;
 
 export const NoManaAnnotation = () => {
-  // const { config } = useConfig();
-  //
   return (
-    <SourceDiv
+    <StyledBaseAnnotation
       colors={['#000', '#fff']}
       data-name="NoManaAnnotation"
-    ></SourceDiv>
+    ></StyledBaseAnnotation>
   );
 };

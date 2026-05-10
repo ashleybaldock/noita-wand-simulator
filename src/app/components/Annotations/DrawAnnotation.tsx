@@ -32,12 +32,18 @@ export const DrawAnnotationDraws = styled(DrawAnnotation)`
   color: #0f0;
 `;
 
+export const DrawAnnotationReplacement = styled(DrawAnnotation)`
+  color: #0ff;
+`;
+
 export const DrawAnnotations = ({
   draws = 0,
   eats = 1,
+  replacement = false,
 }: {
   draws: number;
   eats: number;
+  replacement?: boolean;
 }) => {
   const { showDraw } = useConfig();
 
@@ -53,6 +59,9 @@ export const DrawAnnotations = ({
       <DrawAnnotationDraws dataName="DrawAnnotationDraws">
         {draws}
       </DrawAnnotationDraws>
+      <DrawAnnotationReplacement dataName="DrawAnnotationReplacement">
+        {replacement ? 'R' : null}
+      </DrawAnnotationReplacement>
     </>
   );
 };

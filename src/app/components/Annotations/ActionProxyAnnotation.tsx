@@ -12,7 +12,7 @@ import type { SpriteName, SpritePath } from '../../calc/sprite';
 import { useSpritePath } from '../../calc/sprite';
 import { BaseAnnotation } from './BaseAnnotation';
 
-export const ProxyDiv = styled(BaseAnnotation)<{
+export const StyledBaseAnnotation = styled(BaseAnnotation)<{
   background: SpritePath;
 }>`
   --size: 0.58;
@@ -33,21 +33,6 @@ export const ProxyDiv = styled(BaseAnnotation)<{
   border-radius: 50%;
   box-sizing: border-box;
 `;
-
-// const ProxyDivNoBorder = styled.div<{
-//   imgUrl: string;
-// }>`
-//   --size-spell: var(--bsize-spell, 48px);
-//   position: relative;
-//   min-width: var(--size-spell);
-//   width: var(--size-spell);
-//   height: var(--size-spell);
-//   background-size: cover;
-//   font-family: monospace;
-//   font-weight: bold;
-//   user-select: none;
-//   image-rendering: pixelated;
-// `;
 
 export const ActionProxyAnnotation = ({
   proxy,
@@ -70,13 +55,18 @@ export const ActionProxyAnnotation = ({
 
   if (showProxies && isNotNullOrUndefined(proxy)) {
     return (
-      <ProxyDiv
+      <StyledBaseAnnotation
         dataName="ActionProxyAnnotation-Proxy"
         background={getSpellByActionId(proxy.id).sprite}
       />
     );
   } else if (isNotNullOrUndefined(icon)) {
-    return <ProxyDiv dataName="ActionProxyAnnotation" background={iconPath} />;
+    return (
+      <StyledBaseAnnotation
+        dataName="ActionProxyAnnotation"
+        background={iconPath}
+      />
+    );
   }
   return null;
 };

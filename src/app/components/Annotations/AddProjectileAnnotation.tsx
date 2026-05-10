@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import type { CSSProperties } from 'react';
+import { BaseAnnotation } from './BaseAnnotation';
 
 export type ProjectileSource = 'action' | 'related';
 
-const StyledDiv = styled.div``;
+const StyledBaseAnnotation = styled(BaseAnnotation)``;
 
 /**
  * Shows the mechanism by which the projectile was added
@@ -12,17 +12,15 @@ const StyledDiv = styled.div``;
  */
 export const AddProjectileAnnotation = ({
   source,
-  style,
   className = '',
 }: {
   source: ProjectileSource;
-  style?: CSSProperties;
   className?: string;
 }) => {
   return (
-    <StyledDiv style={style} className={className}>
+    <StyledBaseAnnotation className={className}>
       {source === 'action' ? 'AC' : ''}
       {source === 'related' ? 'RP' : ''}
-    </StyledDiv>
+    </StyledBaseAnnotation>
   );
 };

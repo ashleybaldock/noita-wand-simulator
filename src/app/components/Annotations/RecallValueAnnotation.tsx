@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import type { CSSProperties, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import type { ActionStateKey } from '../../calc/actionState';
 import { _KeyContainer } from '../Key/Key';
+import { BaseAnnotation } from './BaseAnnotation';
 
-const StyledDiv = styled.div<{ $stat: ActionStateKey }>`
+const StyledDiv = styled(BaseAnnotation)<{ stat: ActionStateKey }>`
   display: flex;
   background-size: contain;
   background-repeat: no-repeat;
@@ -12,7 +13,7 @@ const StyledDiv = styled.div<{ $stat: ActionStateKey }>`
   background-repeat: no-repeat;
   background-position: center;
 
-  --hue: var(--arrow-hue-${(props) => props.$stat});
+  --hue: var(--arrow-hue-${({ stat }) => stat});
 
   ${_KeyContainer} & {
     transform: none;
@@ -27,17 +28,14 @@ const StyledDiv = styled.div<{ $stat: ActionStateKey }>`
 export const RecallValueAnnotation = ({
   stat,
   children,
-  style,
   className = '',
 }: {
   stat: ActionStateKey;
-  style?: CSSProperties;
   className?: string;
 } & PropsWithChildren) => {
   return (
     <StyledDiv
-      $stat={stat}
-      style={style}
+      stat={stat}
       className={className}
       data-name={'RecallValue'}
       data-stat={stat}
